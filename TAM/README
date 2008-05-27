@@ -1,0 +1,15 @@
+$Id:$
+
+The Tree-Analysis-Module (TAM) framework is an independent package 
+developed with three main goals in mind:
+    * First, to provide a very general, modular framework for analyzing data in Root trees.
+    * Second, to ensure compatibility with Proof and allow users to switch between Proof-based 
+      and Proof-less analysis with as much ease as possible.
+    * Third, to hide, as much as possible, all direct interaction with the tree itself from the user. 
+
+Its main twiki page is at http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM.
+The current revision we use is: Revision 5120
+
+If you think you found a bug, please send an email to loizides@mit.edu.
+Please note that the coding conventions used for TAM do not necessarily
+coincide with what we use for MitAna.

@@ -1,0 +1,9 @@
+# -*- Makefile -*-
+# $Id:$
+
+<include_path path=${CMSSW_BASE}/src/MitAna/TAM/interface>
+<use name=root>
+<export>
+  <lib name=MitAnaTAM>
+  <use name=root>
+</export>
