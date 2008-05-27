@@ -1,0 +1,8 @@
+# -*- Makefile -*-
+# $Id:$
+
+<use name=root>
+<export>
+   <lib name=MitAnaDataTree>
+   <use name=root>
+</export>
