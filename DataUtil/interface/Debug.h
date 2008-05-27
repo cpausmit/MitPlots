@@ -1,4 +1,4 @@
-// $Id: THIDebug.h 2637 2006-03-06 23:53:38Z loizides $
+// $Id: Debug.h,v 1.1 2008/05/27 19:36:05 loizides Exp $
 
 #ifndef DATAUTIL_DEBUG_H
 #define DATAUTIL_DEBUG_H
@@ -23,7 +23,8 @@
 //
 //--------------------------------------------------------------------------------------------------
 
-namespace mithep {
+namespace mithep 
+{
   class Debug 
   {
     public:
@@ -41,8 +42,10 @@ namespace mithep {
      Debug(const Debug &cpy);
 
      ClassDef(Debug, 0) // Defines different debug masks
-  };
-}
+
+  }; 
+
+} /*namespace mithep*/
 
 R__EXTERN mithep::Debug::EDebugMask gDebugMask;
 R__EXTERN Int_t gDebugLevel;

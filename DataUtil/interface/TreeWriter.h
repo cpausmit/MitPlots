@@ -1,4 +1,4 @@
-// $Id: THITreeBase.h 4114 2007-06-14 13:25:51Z loizides $
+// $Id: TreeWriter.h,v 1.1 2008/05/27 19:36:05 loizides Exp $
 
 #ifndef DATATREE_TREEWRITER_H
 #define DATATREE_TREEWRITER_H
@@ -24,7 +24,8 @@
 //
 //--------------------------------------------------------------------------------------------------
 
-namespace mithep {
+namespace mithep 
+{
   class TreeWriter : public TNamed 
   {
     public:

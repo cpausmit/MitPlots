@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: Collection.h,v 1.1 2008/05/27 19:24:49 loizides Exp $
 
 #ifndef DATATREE_COLLECTION_H
 #define DATATREE_COLLECTION_H
@@ -16,8 +16,8 @@
 //
 //--------------------------------------------------------------------------------------------------
 
-namespace mithep {
-
+namespace mithep 
+{
   template<class ArrayElement>
   class Collection : public TObject 
   {

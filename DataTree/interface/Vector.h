@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: Vector.h,v 1.1 2008/05/27 19:24:49 loizides Exp $
 
 #ifndef DATATREE_VECTOR_H
 #define DATATREE_VECTOR_H
@@ -16,8 +16,8 @@
 //
 //--------------------------------------------------------------------------------------------------
 
-namespace mithep {
-
+namespace mithep 
+{
   template<class ArrayElement>
   class Vector : public Collection<ArrayElement>
   {
