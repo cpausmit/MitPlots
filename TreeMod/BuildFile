@@ -1,0 +1,15 @@
+# -*- Makefile -*-
+# $Id:$
+
+<use name=MitAna/TAM>
+<use name=MitAna/DataTree>
+<use name=MitAna/DataUtil>
+<use root>
+<lib name=Proof>
+<export>
+   <lib name=MitAnaTreeMod>
+   <use name=MitAna/TAM>
+   <use name=MitAna/DataTree>
+   <use name=MitAna/DataUtil>
+   <use root>
+</export>
