@@ -1,4 +1,4 @@
-// $Id: Types.h,v 1.1 2008/05/27 19:24:49 loizides Exp $
+// $Id: Types.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
 
 #ifndef DATATREE_TYPES_H
 #define DATATREE_TYPES_H
@@ -18,6 +18,6 @@ namespace mithep
       using namespace ::ROOT::Math;
     }
   }
-}
+} /*namespace mithep*/
 
 #endif /*DATATREE_TYPES_H*/
