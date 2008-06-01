@@ -1,9 +1,22 @@
-// $Id: THIAnalysis.h 4604 2007-11-01 15:21:50Z loizides $
+// $Id: Analysis.h,v 1.1 2008/05/27 19:50:16 loizides Exp $
 
 #ifndef DATAUTIL_ANALYSIS_H
 #define DATAUTIL_ANALYSIS_H
 
-//////////////////////////////////////////////////////////////////////////
+#include <TObject.h>
+#include <TString.h>
+
+class TList;
+class TChain;
+class TDSet;
+class TString;
+class TAModule;
+class TAMSelector;
+class TAMVirtualLoader;
+class TObjArray;
+class TProof;
+
+//--------------------------------------------------------------------------------------------------
 //
 // Analysis
 //
@@ -22,20 +35,7 @@
 // Authors: M.Ballintijn
 //          C.Loizides
 //
-//////////////////////////////////////////////////////////////////////////
-
-#include <TObject.h>
-#include <TString.h>
-
-class TList;
-class TChain;
-class TDSet;
-class TString;
-class TAModule;
-class TAMSelector;
-class TAMVirtualLoader;
-class TObjArray;
-class TProof;
+//--------------------------------------------------------------------------------------------------
 
 namespace mithep 
 {
