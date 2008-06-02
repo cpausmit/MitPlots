@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cxx 4071 2007-06-06 08:39:13Z loizides $
+// $Id: TreeWriter.cc,v 1.1 2008/05/27 19:36:05 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -27,13 +27,11 @@ TreeWriter::TreeWriter(const char *tname, Bool_t doreset)
     fIsInit(kFALSE), 
     fDoObjNumReset(doreset), 
     fFile(0), 
-    fTree(0)
+    fTrees(0)
 {
   // Constructor.
 
-  TDirectory::TContext context(0); 
-  fTree = new TTree(GetName(), GetTitle());
-  fTree->SetDirectory(0);
+  fTrees.SetOwner();
 }
 
 //__________________________________________________________________________________________________
@@ -41,39 +39,94 @@ TreeWriter::~TreeWriter()
 {
   // Destructor.
    
-  if(fIsInit) {
+  if (fIsInit) {
     CloseFile();
   }
 
   TDirectory::TContext context(0); 
-  delete fTree;
+  fTrees.Clear();
 }
 
 //__________________________________________________________________________________________________
-void TreeWriter::AddBranch(const char *name, const char *cname, void *obj, Int_t bsize, Int_t level)
+void TreeWriter::AddBranch(const char *name, const char *cname, 
+                           void *obj, Int_t bsize, Int_t level)
 {
-  // Add branch with name "name" into tree and set its address to object pointer 
-  // for class name "cname" using a given buffer size and splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and splitlevel.
 
-  fTree->Bronch(name, cname, obj, bsize, level);
+  MyTree *t = AddOrGetMyTree(GetName());
+  t->Bronch(name, cname, obj, bsize, level);
 }
 
 //__________________________________________________________________________________________________
-void TreeWriter::AddBranch(const char *name, const char *cname, void *obj, Int_t bsize)
+void TreeWriter::AddBranch(const char *name, const char *cname, 
+                           void *obj, Int_t bsize)
 {
-  // Add branch with name "name" into tree and set its address to object pointer 
-  // for class name "cname" using a given buffer size and default splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
 
-  fTree->Bronch(name, cname, obj, bsize, fDefSL);
+  MyTree *t = AddOrGetMyTree(GetName());
+  t->Bronch(name, cname, obj, bsize, fDefSL);
 }
 
 //__________________________________________________________________________________________________
-void TreeWriter::AddBranch(const char *name, const char *cname, void *obj)
+void TreeWriter::AddBranch(const char *name, const char *cname, 
+                           void *obj)
 {
-  // Add branch with name "name" into tree and set its address to object pointer 
-  // for class name "cname" using a given buffer size and default splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
 
-  fTree->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+  MyTree *t = AddOrGetMyTree(GetName());
+  t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
+                                 void *obj, Int_t bsize, Int_t level)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and splitlevel.
+
+  MyTree *t = AddOrGetMyTree(tname);
+  t->Bronch(name, cname, obj, bsize, level);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
+                           void *obj, Int_t bsize)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
+
+  MyTree *t = AddOrGetMyTree(tname);
+  t->Bronch(name, cname, obj, bsize, fDefSL);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
+                           void *obj)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
+
+  MyTree *t = AddOrGetMyTree(tname);
+  t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+}
+
+//__________________________________________________________________________________________________
+MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
+{
+  // Add new tree if not present in array of trees or return
+  // present tree.
+
+  MyTree *tree = dynamic_cast<MyTree*>(fTrees.FindObject(tn));
+  if (tree) return tree;
+
+  TDirectory::TContext context(fFile); 
+  tree = new MyTree(tn, tn);
+  tree->SetDirectory(fFile);
+  fTrees.AddLast(tree);  
+  return tree;
 }
 
 //__________________________________________________________________________________________________
@@ -86,7 +139,7 @@ Bool_t TreeWriter::BeginEvent(Bool_t doreset)
     OpenFile();
   }
 
-  if(doreset || fDoObjNumReset) {
+  if (doreset || fDoObjNumReset) {
     fEvtObjNum = TProcessID::GetObjectCount();
   }
 
@@ -96,7 +149,7 @@ Bool_t TreeWriter::BeginEvent(Bool_t doreset)
 //__________________________________________________________________________________________________
 void TreeWriter::CloseFile()
 {
-  // Write tree and close file.
+  // Write tree(s) and close file.
 
   if (!fIsInit) {
     Fatal("CloseFile", "File was not opened, call OpenFile() first!");
@@ -106,9 +159,12 @@ void TreeWriter::CloseFile()
   TDirectory::TContext context(fFile); // cd fFile && 
                                        // automatically restore gDirectory
 
-  fTree->Write(fTree->GetName(),TObject::kOverwrite);
-  fTree->Reset();
-  fTree->SetDirectory(0);   
+  for (Int_t i=0;i<fTrees.GetEntries();++i) {
+    MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
+    mt->Write(mt->GetName(),TObject::kOverwrite);
+    mt->Reset();
+    mt->SetDirectory(0);   
+  }
 
   fFile->Close();
   delete fFile; 
@@ -130,10 +186,14 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
     return kFALSE;
   }
 
-  //TDirectory::TContext context(fFile);
-  Int_t r = fTree->Fill();
+  Int_t r = 0;
+  for (Int_t i=0;i<fTrees.GetEntries();++i) {
+    MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
+    if (mt->GetAutoFill()==0) continue;
+    r += mt->Fill();
+  }
 
-  if(IsFull())
+  if (IsFull())
     CloseFile();
 
   if (doreset || fDoObjNumReset) {
@@ -148,13 +208,93 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
   return (r >= 0);
 }
 
+//-------------------------------------------------------------------------------------------------
+Long64_t TreeWriter::GetEntries(const char *tn) const
+{ 
+  //
+
+   if (fTrees.GetEntries()==0) return -1;
+
+   if (tn) {
+     const TTree *mt=GetTree(tn);
+     if (mt) return mt->GetEntries();
+     else return -1;
+   }
+
+   Long64_t ret = 0;
+   for (Int_t i=0;i<fTrees.GetEntries();++i) {
+      const MyTree *mt = static_cast<const MyTree*>(fTrees.At(i));
+      ret += mt->GetEntries();
+   }
+   return ret;
+}
+
+//-------------------------------------------------------------------------------------------------
+MyTree *mithep::TreeWriter::GetMyTree(const char *tn)
+{
+  // Return MyTree with given name from array.
+
+  if (fTrees.GetEntries()==0) 
+    return 0;
+
+  TObject *obj = 0;
+  if (tn==0) {
+    obj = fTrees.At(0);
+  } else {
+    obj = fTrees.FindObject(tn);
+  }
+  
+  if (obj)  
+    return static_cast<MyTree*>(obj);
+  return 0;
+}   
+
+//-------------------------------------------------------------------------------------------------
+const TTree *mithep::TreeWriter::GetTree(const char *tn) const
+{
+  // Return TTree with given name from array.
+
+  if (fTrees.GetEntries()==0) 
+    return 0;
+
+  TObject *obj = 0;
+  if (tn==0) {
+    obj = fTrees.At(0);
+  } else {
+    obj = fTrees.FindObject(tn);
+  }
+  
+  if (obj)  
+    return dynamic_cast<const TTree*>(obj);
+  return 0;
+}   
+
+//-------------------------------------------------------------------------------------------------
+TTree *mithep::TreeWriter::GetTree(const char *tn)
+{
+  // Return TTree with given name from array.
+
+  if (fTrees.GetEntries()==0) 
+    return 0;
+
+  TObject *obj = 0;
+  if (tn==0) {
+    obj = fTrees.At(0);
+  } else {
+    obj = fTrees.FindObject(tn);
+  }
+  
+  if (obj)  
+    return dynamic_cast<TTree*>(obj);
+  return 0;
+}   
+
 //__________________________________________________________________________________________________
 Bool_t TreeWriter::IsFull() const
 {
   // Check if the maximum file size has been reached.
 
   Long64_t entries = GetEntries();
-   
   if (entries < 1) return kFALSE;
    
   Long64_t avgSize = GetFileSize() / entries;
@@ -187,7 +327,12 @@ void TreeWriter::OpenFile()
   }
 
   fFile->SetCompressionLevel(fCompressLevel);
-  fTree->SetDirectory(fFile);
+
+  for (Int_t i=0;i<fTrees.GetEntries();++i) {
+    MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
+    mt->SetDirectory(fFile);
+  }
+
   fIsInit = kTRUE;
 }
 
@@ -196,7 +341,7 @@ void TreeWriter::Print(Option_t *option) const
 {
   // Print the contents of the tree writer.
 
-  if(option) {
+  if (option) {
     cout << ClassName() << " with members " << endl;
     cout << "   fBaseURL:       " << fBaseURL << endl; 
     cout << "   fPreFix:        " << fPrefix << endl; 
@@ -211,6 +356,19 @@ void TreeWriter::Print(Option_t *option) const
 
   cout << ClassName() << ": " << GetEntries() 
        << (GetEntries() == 1 ? " event" : " events") << endl;
+}
+
+//-------------------------------------------------------------------------------------------------
+void TreeWriter::SetAutoFill(const char *tn, Bool_t b)
+{
+  // Set auto-fill mode of tree with given name.
+
+  if (fTrees.GetEntries()==0) return;
+
+  MyTree *mt = GetMyTree(tn);
+  if (!mt) return;
+
+  mt->SetAutoFill(b);
 }
 
 //__________________________________________________________________________________________________
