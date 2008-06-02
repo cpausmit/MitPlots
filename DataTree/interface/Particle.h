@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: Particle.h,v 1.1 2008/05/27 19:24:49 loizides Exp $
 
 #ifndef DATATREE_PARTICLE_H
 #define DATATREE_PARTICLE_H
@@ -25,7 +25,7 @@ namespace mithep
       virtual ~Particle() {}
 
       Particle(double x, double y, double z, double t) {
-         SetPxPyPzE(x,y,z,t); 
+         SetXYZT(x,y,z,t); 
       }
   
       ClassDef(Particle, 1) // Particle class
