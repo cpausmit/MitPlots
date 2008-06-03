@@ -1,4 +1,4 @@
-// $Id: Vector.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
+// $Id: Vector.h,v 1.3 2008/06/01 10:03:39 loizides Exp $
 
 #ifndef DATATREE_VECTOR_H
 #define DATATREE_VECTOR_H
@@ -10,7 +10,9 @@
 //
 // Vector
 //
-// Implementation of Collection interface using std:vector class.
+// Implementation of Collection interface using std:vector class. 
+// Note, in case you one to store pointers to allocated objects on heap, 
+// you should use the class PVector.
 //
 // Authors: C.Loizides
 //

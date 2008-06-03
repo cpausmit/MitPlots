@@ -1,4 +1,4 @@
-// $Id: PVector.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
+// $Id: PVector.h,v 1.1 2008/06/01 10:05:04 loizides Exp $
 
 #ifndef DATATREE_PVECTOR_H
 #define DATATREE_PVECTOR_H
@@ -11,7 +11,8 @@
 // PVector
 //
 // Implementation of Collection interface using std:vector class
-// for pointers to objects. Persistency not tested.
+// for pointers to objects. Persistency not tested, like to not
+// work, ask Constantin for a solution.
 //
 // Authors: C.Loizides
 //
@@ -50,6 +51,7 @@ namespace mithep
 
 } /*namespace mithep*/
 
+//__________________________________________________________________________________________________
 template<class ArrayElement>
 inline void mithep::PVector<ArrayElement>::Delete()
 {
