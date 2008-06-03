@@ -1,4 +1,4 @@
-// $Id: Analysis.cxx 4604 2007-11-01 15:21:50Z loizides $
+// $Id: Analysis.cc,v 1.1 2008/05/27 19:50:16 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -11,6 +11,7 @@
 #include <TProof.h>
 #include <TROOT.h>
 #include "MitAna/DataUtil/interface/Debug.h"
+#include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TAM/interface/TAMSelector.h"
@@ -22,7 +23,7 @@ using namespace mithep;
 //__________________________________________________________________________________________________
 Analysis::Analysis(Bool_t up) :
    fUseProof(up), 
-   fHierachy(kFALSE), 
+   fHierachy(kTRUE), 
    fState(kPristine), 
    fNFriends(0), 
    fList(new TList), 
@@ -34,7 +35,7 @@ Analysis::Analysis(Bool_t up) :
    fChain(0), 
    fSet(0), 
    fDeleteList(new TList),
-   fTreeName("todo"), 
+   fTreeName(Names::mittree),
    fCompLevel(2), 
    fProof(0)
 {

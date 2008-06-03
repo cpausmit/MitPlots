@@ -1,4 +1,4 @@
-// $Id: Analysis.h,v 1.1 2008/05/27 19:50:16 loizides Exp $
+// $Id: Analysis.h,v 1.2 2008/06/01 18:43:25 loizides Exp $
 
 #ifndef DATAUTIL_ANALYSIS_H
 #define DATAUTIL_ANALYSIS_H
@@ -25,15 +25,15 @@ class TProof;
 // In addition it provides an almost transparent interface
 // in the case you want to do mixing of different events.
 // 
-// The class can operate in two distinct modes:
-//  a) Non-mixing (use AddFile())
-//  b) Mixing (use MixFiles())
+// The class can operate in following modes:
+//  a) Add single files to be analyzed using Analysis::AddFile
+//  b) Use a text file to point to files to be analyzed using Analysis::AddFiles (to be done)
+//  c) Add files using a catalogue (to be done)
 //
-// See macros/ana/runAna.C and macros/ana/runAnaMixer.C
-// for its usage.
+// See $CMSSW_BASE/src/MitAna/macros/examples/runSimpleExample.C
+// for an example of how to use this class.
 //
-// Authors: M.Ballintijn
-//          C.Loizides
+// Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -74,8 +74,8 @@ namespace mithep
                      kTerminate  //after terminate
                   };
 
-      Bool_t                    fUseProof;        //=true if PROOF is to be used
-      Bool_t                    fHierachy;        //=true if module hierachy to be stored
+      Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
+      Bool_t                    fHierachy;        //=true if module hierachy to be stored (def=1)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names
@@ -91,7 +91,7 @@ namespace mithep
       TString                   fAnaOutput;       //path name of output file
       TString                   fMaster;          //hostname of PROOF master
       TString                   fConfig;          //config file name for PROOF
-      Int_t                     fCompLevel;       //compression level for output file
+      Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
 
       void                      AddFile(const char *pname, Int_t eventlist);
