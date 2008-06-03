@@ -1,15 +1,27 @@
-// $Id: Types.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
+// $Id: Names.h,v 1.1 2008/06/01 10:03:39 loizides Exp $
 
 #ifndef DATATREE_NAMES_H
 #define DATATREE_NAMES_H
  
 #include "MitAna/DataTree/interface/Types.h"
 
+//--------------------------------------------------------------------------------------------------
+//
+// Names
+//
+// This class defines the standard names for branches,
+// collections and what else we will standardize.
+//
+// Authors: C.Loizides
+//
+//--------------------------------------------------------------------------------------------------
+
 namespace mithep 
 {
   class Names 
   {
-    static const char *mittree;
+    public:
+      static const char *mittree;
   };
 
 } /*namespace mithep*/
