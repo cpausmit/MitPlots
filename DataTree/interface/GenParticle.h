@@ -1,13 +1,13 @@
 // $Id: Particle.h,v 1.2 2008/06/02 04:43:14 loizides Exp $
 
-#ifndef DATATREE_PARTICLE_H
-#define DATATREE_PARTICLE_H
+#ifndef DATATREE_GENPARTICLE_H
+#define DATATREE_GENPARTICLE_H
  
-#include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/Particle.h"
 
 //--------------------------------------------------------------------------------------------------
 //
-// Particle
+// GenParticle
 //
 // Details to be worked out...
 //
@@ -17,19 +17,15 @@
 
 namespace mithep 
 {
-  class Particle : public DataObject
+  class GenParticle : public Particle
   {
     public:
-      Particle() {}
-      ~Particle() {}
+      GenParticle() {}
+      ~GenParticle() {}
 
-      Particle(double x, double y, double z, double t) {
-        /*SetXYZT(x,y,z,t);*/
-      }
-  
-      ClassDef(Particle, 1) // Particle class
+      ClassDef(GenParticle,1) // Generated particle class
   };
    
 } /*namespace mithep*/
 
-#endif /*DATATREE_PARTICLE_H*/
+#endif /*DATATREE_GENPARTICLE_H*/

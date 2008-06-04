@@ -1,13 +1,13 @@
 // $Id: Particle.h,v 1.2 2008/06/02 04:43:14 loizides Exp $
 
-#ifndef DATATREE_PARTICLE_H
-#define DATATREE_PARTICLE_H
+#ifndef DATATREE_MUON_H
+#define DATATREE_MUON_H
  
-#include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/Lepton.h"
 
 //--------------------------------------------------------------------------------------------------
 //
-// Particle
+// Muon
 //
 // Details to be worked out...
 //
@@ -17,19 +17,15 @@
 
 namespace mithep 
 {
-  class Particle : public DataObject
+  class Muon : public Lepton
   {
     public:
-      Particle() {}
-      ~Particle() {}
+      Muon() {}
+      ~Muon() {}
 
-      Particle(double x, double y, double z, double t) {
-        /*SetXYZT(x,y,z,t);*/
-      }
-  
-      ClassDef(Particle, 1) // Particle class
+      ClassDef(Muon, 1) // Muon class
   };
    
 } /*namespace mithep*/
 
-#endif /*DATATREE_PARTICLE_H*/
+#endif /*DATATREE_MUON_H*/
