@@ -1,4 +1,4 @@
-// $Id: Particle.h,v 1.2 2008/06/02 04:43:14 loizides Exp $
+// $Id: Particle.h,v 1.3 2008/06/04 09:08:36 loizides Exp $
 
 #ifndef DATATREE_PARTICLE_H
 #define DATATREE_PARTICLE_H
@@ -24,9 +24,15 @@ namespace mithep
       ~Particle() {}
 
       Particle(double x, double y, double z, double t) {
-        /*SetXYZT(x,y,z,t);*/
+        fFourVector.SetXYZT(x,y,z,t);
       }
-  
+    
+      Double_t         Pt()  const { return fFourVector.Pt(); }
+      Double_t         Eta() const { return fFourVector.Eta(); }
+      
+    protected:
+      FourVector       fFourVector; //momentum vector
+      
       ClassDef(Particle, 1) // Particle class
   };
    

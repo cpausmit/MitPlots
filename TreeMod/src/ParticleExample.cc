@@ -1,4 +1,4 @@
-// $Id: ParticleExample.cc,v 1.1 2008/05/27 19:50:16 loizides Exp $
+// $Id: ParticleExample.cc,v 1.2 2008/06/04 09:08:37 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
@@ -36,8 +36,8 @@ void ParticleExampleMod::Process()
   Int_t ents=fParticles->GetEntries();
   for(Int_t i=0;i<ents;++i) {
      Particle &p = fParticles->At(i);
-//     fPtHist->Fill(p.Pt());
-//     fEtaHist->Fill(p.Eta());
+     fPtHist->Fill(p.Pt());
+     fEtaHist->Fill(p.Eta());
   }
 
 }
