@@ -1,7 +1,8 @@
-// $Id: ParticleExample.cc,v 1.2 2008/06/04 09:08:37 loizides Exp $
+// $Id: ParticleExample.cc,v 1.3 2008/06/04 14:04:47 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
+#include "MitAna/DataTree/interface/Names.h"
 
 using namespace mithep;
 
@@ -11,7 +12,7 @@ ClassImp(mithep::ParticleExampleMod)
 ParticleExampleMod::ParticleExampleMod(const char *name, const char *title)
   : TAModule(name,title),
     fParticles(0),
-    fPartName("Particles"),
+    fPartName(Names::gkGenPartBrn),
     fPtHist(0),
     fEtaHist(0)
 {

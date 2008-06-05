@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.1 2008/05/27 19:50:16 loizides Exp $
+// $Id: Analysis.cc,v 1.2 2008/06/03 09:58:32 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -35,7 +35,7 @@ Analysis::Analysis(Bool_t up) :
    fChain(0), 
    fSet(0), 
    fDeleteList(new TList),
-   fTreeName(Names::mittree),
+   fTreeName(Names::gkMitTreeName),
    fCompLevel(2), 
    fProof(0)
 {

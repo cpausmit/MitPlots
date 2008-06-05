@@ -1,4 +1,4 @@
-// $Id: ParticleExampleMod.h,v 1.1 2008/05/27 19:50:16 loizides Exp $
+// $Id: ParticleExampleMod.h,v 1.2 2008/06/04 09:08:36 loizides Exp $
 
 #ifndef TREEMOD_PARTICLEXAMPLEMOD_H
 #define TREEMOD_PARTICLEXAMPLEMOD_H
@@ -38,7 +38,7 @@ namespace mithep
       void                     SetPartName(const char *n)       { fPartName=n; }
 
     protected:
-      ParticleCol             *fParticles;  //!point to particle branch
+      GenParticleCol          *fParticles;  //!point to generated particle branch
       TString                  fPartName;   //name of particle collection
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
