@@ -1,4 +1,4 @@
-// $Id: Vector.h,v 1.3 2008/06/01 10:03:39 loizides Exp $
+// $Id: Vector.h,v 1.4 2008/06/03 10:04:27 loizides Exp $
 
 #ifndef DATATREE_VECTOR_H
 #define DATATREE_VECTOR_H
@@ -29,18 +29,21 @@ namespace mithep
       ~Vector() { fV.clear(); }
 
       void                             Add(const ArrayElement &ae)          { fV.push_back(ae); }
-      ArrayElement                    &At(const UInt_t idx)                 { return fV.at(idx); }
-      const ArrayElement              &At(const UInt_t idx)           const { return fV.at(idx); }
+      void                             Add(const ArrayElement *ae)          { fV.push_back(*ae); }
+      ArrayElement                    *At(const UInt_t idx)                 { return &fV.at(idx); }
+      const ArrayElement              *At(const UInt_t idx)           const { return &fV.at(idx); }
       UInt_t                           GetEntries()                   const { return fV.size(); }
+      ArrayElement                    &Ref(const UInt_t idx)                { return fV.at(idx); }
+      const ArrayElement              &Ref(const UInt_t idx)          const { return fV.at(idx); }
       void                             Reset()                              { fV.clear(); }
       void                             Trim()                               { fV.resize(fV.size()); }
-      ArrayElement                    &UncheckedAt(const UInt_t idx)        { return fV[idx]; }
-      const ArrayElement              &UncheckedAt(const UInt_t idx)  const { return fV[idx]; }
+      ArrayElement                    *UncheckedAt(const UInt_t idx)        { return &fV[idx]; }
+      const ArrayElement              *UncheckedAt(const UInt_t idx)  const { return &fV[idx]; }
       const std::vector<ArrayElement> &Vect() const { return fV; }
       std::vector<ArrayElement>       &Vect()       { return fV; }
 
-      ArrayElement                    &operator[](const UInt_t idx)         { return fV.at(idx); }
-      const ArrayElement              &operator[](const UInt_t idx)   const { return fV.at(idx); }
+      ArrayElement                    *operator[](const UInt_t idx)         { return &fV.at(idx); }
+      const ArrayElement              *operator[](const UInt_t idx)   const { return &fV.at(idx); }
 
     protected:
       std::vector<ArrayElement>        fV;      //std::vector
