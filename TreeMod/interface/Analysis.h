@@ -1,4 +1,4 @@
-// $Id: Analysis.h,v 1.2 2008/06/01 18:43:25 loizides Exp $
+// $Id: Analysis.h,v 1.3 2008/06/03 09:58:32 loizides Exp $
 
 #ifndef DATAUTIL_ANALYSIS_H
 #define DATAUTIL_ANALYSIS_H
@@ -42,7 +42,7 @@ namespace mithep
   class Analysis : public TObject 
   {
     public:
-      Analysis(Bool_t up=kFALSE);
+      Analysis(Bool_t useproof=kFALSE);
       ~Analysis();
 
       void                      AddLoader(TAMVirtualLoader *l);
@@ -57,6 +57,7 @@ namespace mithep
       Bool_t                    IsRun()                       const { return fState==kRun; }
       Bool_t                    IsTerminated()                const { return fState==kTerminate; }
       void                      Run();
+      Bool_t                    Run(Bool_t browse);
       void                      SetOutputName(const char *name)     { fAnaOutput = name; }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel = level; }
       void                      SetConfigName(const char* name)     { fConfig    = name; }
