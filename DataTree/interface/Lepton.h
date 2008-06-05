@@ -1,9 +1,10 @@
-// $Id: Particle.h,v 1.2 2008/06/02 04:43:14 loizides Exp $
+// $Id: Lepton.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
 
 #ifndef DATATREE_LEPTON_H
 #define DATATREE_LEPTON_H
  
 #include "MitAna/DataTree/interface/Particle.h"
+#include "MitAna/DataTree/interface/Track.h"
 
 //--------------------------------------------------------------------------------------------------
 //
@@ -11,7 +12,7 @@
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides, xxx
+// Authors: C.Loizides, J.Bendavid...
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -23,6 +24,14 @@ namespace mithep
       Lepton() {}
       ~Lepton() {}
 
+      Lepton(Double_t x, Double_t y, Double_t z, Double_t t) {fFourVector.SetXYZT(x,y,z,t);}
+      
+      Track* GetTrack() {return &fTrack;}
+      Int_t Charge() {return fTrack.Charge();}
+
+    protected:
+      Track fTrack;
+      
       ClassDef(Lepton, 1) // Lepton class
   };
    

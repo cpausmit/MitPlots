@@ -1,4 +1,4 @@
-// $Id: Collections.h,v 1.3 2008/06/03 10:04:27 loizides Exp $
+// $Id: Collections.h,v 1.4 2008/06/04 09:08:36 loizides Exp $
 
 #ifndef DATATREE_COLLECTIONS_H
 #define DATATREE_COLLECTIONS_H
@@ -11,6 +11,7 @@
 #include "MitAna/DataTree/interface/GenParticle.h"
 #include "MitAna/DataTree/interface/Lepton.h"
 #include "MitAna/DataTree/interface/Muon.h"
+#include "MitAna/DataTree/interface/Electron.h"
 
 //--------------------------------------------------------------------------------------------------
 //
@@ -30,6 +31,7 @@ namespace mithep
   typedef Collection<GenParticle> GenParticleCol;
   typedef Collection<Lepton>      LeptonCol;
   typedef Collection<Muon>        MuonCol;
+  typedef Collection<Electron>    ElectronCol;
 } /*namespace mithep*/
 
 #endif /*DATATREE_COLLECTIONS_H*/

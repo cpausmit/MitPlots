@@ -1,4 +1,4 @@
-// $Id: runSimpleExample.C,v 1.2 2008/06/03 07:21:28 paus Exp $
+// $Id: runSimpleExample.C,v 1.3 2008/06/05 09:46:57 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -8,7 +8,7 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-void runSimpleExample(const char *files = "mit-gen_000.root")
+void runSimpleExample(const char *files = "mit-gen-ZMuMuExample_000.root")
 {
   using namespace mithep;
   gDebugMask  = Debug::kAnalysis;

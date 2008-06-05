@@ -1,7 +1,7 @@
 // $Id: Muon.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
 
-#ifndef DATATREE_MUON_H
-#define DATATREE_MUON_H
+#ifndef DATATREE_ELECTRON_H
+#define DATATREE_ELECTRON_H
  
 #include "MitAna/DataTree/interface/Lepton.h"
 
@@ -17,15 +17,15 @@
 
 namespace mithep 
 {
-  class Muon : public Lepton
+  class Electron : public Lepton
   {
     public:
-      Muon() {}
-      ~Muon() {}
+      Electron() {}
+      ~Electron() {}
       
-      Muon(Double_t x, Double_t y, Double_t z, Double_t t) {fFourVector.SetXYZT(x,y,z,t);}
+      Electron(Double_t x, Double_t y, Double_t z, Double_t t) {fFourVector.SetXYZT(x,y,z,t);}
       
-      ClassDef(Muon, 1) // Muon class
+      ClassDef(Electron, 1) // Muon class
   };
    
 } /*namespace mithep*/
