@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.1 2008/05/27 19:36:05 loizides Exp $
+// $Id: TreeWriter.cc,v 1.2 2008/06/02 08:58:52 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -6,6 +6,8 @@
 #include <TObject.h>
 #include <TSystem.h>
 #include <TProcessID.h>
+
+#include "MitAna/DataUtil/interface/Debug.h"
 
 using namespace mithep;
 
@@ -58,6 +60,16 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   t->Bronch(name, cname, obj, bsize, level);
 }
 
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer using a given buffer size and splitlevel.
+
+  AddBranch(name, CName(obj), obj, bsize, level);
+}
+
 //__________________________________________________________________________________________________
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj, Int_t bsize)
@@ -70,14 +82,32 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
 }
 
 //__________________________________________________________________________________________________
+void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer using a given buffer size and default splitlevel.
+
+  AddBranch(name, CName(obj), obj, bsize);
+}
+
+//__________________________________________________________________________________________________
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
-  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
+  // to object pointer for class name "cname" using a default buffer size and splitlevel.
 
   MyTree *t = AddOrGetMyTree(GetName());
   t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranch(const char *name, void *obj)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer using a default buffer size and splitlevel.
+
+  AddBranch(name, CName(obj), obj);
 }
 
 //__________________________________________________________________________________________________
@@ -92,8 +122,18 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
 }
 
 //__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj, 
+                                 Int_t bsize, Int_t level)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer using a given buffer size and splitlevel.
+
+  AddBranchToTree(tname, name, CName(obj), obj, bsize, level);
+}
+
+//__________________________________________________________________________________________________
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
-                           void *obj, Int_t bsize)
+                                 void *obj, Int_t bsize)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a given buffer size and default splitlevel.
@@ -103,14 +143,33 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
 }
 
 //__________________________________________________________________________________________________
-void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
-                           void *obj)
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj,
+                                 Int_t bsize)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
-  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
+  // to object pointer using a given buffer size and default splitlevel.
+
+  AddBranchToTree(tname, name, CName(obj), obj, bsize);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
+                                 void *obj)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a default buffer size and splitlevel.
 
   MyTree *t = AddOrGetMyTree(tname);
   t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj)
+{
+  // Add branch with name "name" into tree with name "tname" and set its address 
+  // to object pointer for class name "cname" using a default buffer size and splitlevel.
+
+  AddBranchToTree(tname, name, CName(obj), obj);
 }
 
 //__________________________________________________________________________________________________
@@ -172,6 +231,18 @@ void TreeWriter::CloseFile()
 
   fIsInit = kFALSE; 
   fFileNumber++;  
+}
+
+//__________________________________________________________________________________________________
+const char *TreeWriter::CName(void *obj) const 
+{
+  // Dereference void* pointer into TObject* pointer
+
+  TObject *tobj = dynamic_cast<TObject*>(*(TObject**)obj);
+  if(tobj==0) {
+    Fatal("ClassName", "Given void* ptr can not be dereferenced into TObject*");
+  }
+  return tobj->ClassName();
 }
 
 //__________________________________________________________________________________________________

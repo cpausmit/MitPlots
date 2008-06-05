@@ -1,4 +1,4 @@
-// $Id: TreeWriter.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
+// $Id: TreeWriter.h,v 1.3 2008/06/02 08:58:52 loizides Exp $
 
 #ifndef DATATREE_TREEWRITER_H
 #define DATATREE_TREEWRITER_H
@@ -47,16 +47,24 @@ namespace mithep
 
       void                 AddBranch(const char *name, const char *cname, 
                                      void *obj,  Int_t bsize, Int_t level);
+      void                 AddBranch(const char *name, void *obj, Int_t bsize, Int_t level);
       void                 AddBranch(const char *name, const char *cname, 
                                      void *obj, Int_t bsize);
+      void                 AddBranch(const char *name, void *obj, Int_t bsize);
       void                 AddBranch(const char *name, const char *cname, 
                                      void *obj);
+      void                 AddBranch(const char *name, void *obj);
       void                 AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                            void *obj,  Int_t bsize, Int_t level);
+      void                 AddBranchToTree(const char *tname, const char *name, void *obj,  
+                                           Int_t bsize, Int_t level);
       void                 AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                            void *obj, Int_t bsize);
+      void                 AddBranchToTree(const char *tname, const char *name, void *obj, 
+                                           Int_t bsize);
       void                 AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                            void *obj);
+      void                 AddBranchToTree(const char *tname, const char *name, void *obj);
       Bool_t               BeginEvent(Bool_t doreset=kFALSE);
       Bool_t               EndEvent(Bool_t doreset=kFALSE);
       const char          *GetBaseURL()                 const { return fBaseURL.IsNull() ? "." : fBaseURL; }  
@@ -104,6 +112,9 @@ namespace mithep
       Bool_t               IsFull()                     const;
       void                 OpenFile();
       void                 CloseFile();
+
+    private:
+      const char          *CName(void *obj)             const; 
 
       ClassDef(TreeWriter,0) // Tree writer class
   };
