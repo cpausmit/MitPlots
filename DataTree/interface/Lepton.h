@@ -1,4 +1,4 @@
-// $Id: Lepton.h,v 1.2 2008/06/05 16:03:35 bendavid Exp $
+// $Id: Lepton.h,v 1.3 2008/06/09 00:06:36 bendavid Exp $
 
 #ifndef DATATREE_LEPTON_H
 #define DATATREE_LEPTON_H
@@ -12,7 +12,7 @@
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides, J.Bendavid...
+// Authors: C.Loizides, J.Bendavid
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ namespace mithep
       Int_t	Charge() const {return fTrack.Charge();}
 
     protected:
-      Track	fTrack; //track associated with lepton
+      Track	fTrack; // track associated with lepton
       
       ClassDef(Lepton, 1) // Lepton class
   };

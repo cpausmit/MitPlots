@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.2 2008/06/02 08:58:52 loizides Exp $
+// $Id: TreeWriter.cc,v 1.3 2008/06/05 07:55:55 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -179,7 +179,8 @@ MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
   // present tree.
 
   MyTree *tree = dynamic_cast<MyTree*>(fTrees.FindObject(tn));
-  if (tree) return tree;
+  if (tree)
+    return tree;
 
   TDirectory::TContext context(fFile); 
   tree = new MyTree(tn, tn);
@@ -239,7 +240,7 @@ const char *TreeWriter::CName(void *obj) const
   // Dereference void* pointer into TObject* pointer
 
   TObject *tobj = dynamic_cast<TObject*>(*(TObject**)obj);
-  if(tobj==0) {
+  if (tobj==0) {
     Fatal("ClassName", "Given void* ptr can not be dereferenced into TObject*");
   }
   return tobj->ClassName();
@@ -260,7 +261,8 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
   Int_t r = 0;
   for (Int_t i=0;i<fTrees.GetEntries();++i) {
     MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
-    if (mt->GetAutoFill()==0) continue;
+    if (mt->GetAutoFill()==0)
+      continue;
     r += mt->Fill();
   }
 
@@ -288,8 +290,10 @@ Long64_t TreeWriter::GetEntries(const char *tn) const
 
    if (tn) {
      const TTree *mt=GetTree(tn);
-     if (mt) return mt->GetEntries();
-     else return -1;
+     if (mt)
+       return mt->GetEntries();
+     else
+       return -1;
    }
 
    Long64_t ret = 0;
@@ -434,10 +438,12 @@ void TreeWriter::SetAutoFill(const char *tn, Bool_t b)
 {
   // Set auto-fill mode of tree with given name.
 
-  if (fTrees.GetEntries()==0) return;
+  if (fTrees.GetEntries()==0)
+    return;
 
   MyTree *mt = GetMyTree(tn);
-  if (!mt) return;
+  if (!mt)
+    return;
 
   mt->SetAutoFill(b);
 }

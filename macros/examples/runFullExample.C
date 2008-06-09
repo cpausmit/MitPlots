@@ -1,4 +1,4 @@
-// $Id: runSimpleExample.C,v 1.4 2008/06/05 16:03:35 bendavid Exp $
+// $Id: runFullExample.C,v 1.1 2008/06/09 00:06:36 bendavid Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -24,5 +24,5 @@ void runFullExample(const char *files = "mit-full_000.root")
   ana->SetOutputName("mit-full-hist.root");
 
   // run the analysis after successful initialisation
-  ana->Run(!gROOT->IsBatch());
+  ana->Run(! gROOT->IsBatch());
 }

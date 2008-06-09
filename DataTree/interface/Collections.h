@@ -1,4 +1,4 @@
-// $Id: Collections.h,v 1.4 2008/06/04 09:08:36 loizides Exp $
+// $Id: Collections.h,v 1.5 2008/06/05 16:03:35 bendavid Exp $
 
 #ifndef DATATREE_COLLECTIONS_H
 #define DATATREE_COLLECTIONS_H
@@ -25,6 +25,7 @@
 
 namespace mithep 
 {
+
   typedef Collection<DataObject>  DataObjectCol;
   typedef Collection<Track>       TrackCol;
   typedef Collection<Particle>    ParticleCol;
@@ -32,6 +33,7 @@ namespace mithep
   typedef Collection<Lepton>      LeptonCol;
   typedef Collection<Muon>        MuonCol;
   typedef Collection<Electron>    ElectronCol;
+
 } /*namespace mithep*/
 
 #endif /*DATATREE_COLLECTIONS_H*/

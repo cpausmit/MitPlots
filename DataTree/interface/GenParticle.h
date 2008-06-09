@@ -1,4 +1,4 @@
-// $Id: GenParticle.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: GenParticle.h,v 1.2 2008/06/05 07:53:44 loizides Exp $
 
 #ifndef DATATREE_GENPARTICLE_H
 #define DATATREE_GENPARTICLE_H
@@ -29,9 +29,9 @@ namespace mithep
       Int_t               GetStatus() const { return fStatus; }
 
     protected:
-      Int_t               fPdgId;        //pdg identifier
-      Int_t               fStatus;       //status flag of generator
-      Short_t             fMother;       //mother index
+      Int_t               fPdgId;        // pdg identifier
+      Int_t               fStatus;       // status flag of generator
+      Short_t             fMother;       // mother index
 
       ClassDef(GenParticle,1) // Generated particle class
   };

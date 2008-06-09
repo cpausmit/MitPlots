@@ -1,4 +1,4 @@
-// $Id: Electron.h,v 1.1 2008/06/05 16:03:35 bendavid Exp $
+// $Id: Electron.h,v 1.2 2008/06/09 00:06:36 bendavid Exp $
 
 #ifndef DATATREE_ELECTRON_H
 #define DATATREE_ELECTRON_H
@@ -7,7 +7,7 @@
 
 //--------------------------------------------------------------------------------------------------
 //
-// Muon
+// Electron
 //
 // Details to be worked out...
 //
