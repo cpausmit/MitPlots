@@ -1,4 +1,4 @@
-// $Id: Muon.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: Electron.h,v 1.1 2008/06/05 16:03:35 bendavid Exp $
 
 #ifndef DATATREE_ELECTRON_H
 #define DATATREE_ELECTRON_H
@@ -21,9 +21,8 @@ namespace mithep
   {
     public:
       Electron() {}
+      Electron(Double_t px, Double_t py, Double_t pz, Double_t e) : Lepton(px,py,pz,e) {}
       ~Electron() {}
-      
-      Electron(Double_t x, Double_t y, Double_t z, Double_t t) {fFourVector.SetXYZT(x,y,z,t);}
       
       ClassDef(Electron, 1) // Muon class
   };

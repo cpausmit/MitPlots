@@ -1,4 +1,4 @@
-// $Id: Track.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: Track.h,v 1.2 2008/06/05 16:03:35 bendavid Exp $
 
 #ifndef DATATREE_TRACK_H
 #define DATATREE_TRACK_H
@@ -21,61 +21,42 @@ namespace mithep
   {
     public:
       Track() {}
-      Track(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) {
-      	fPhi=phi;
-	fD0=d0;
-	fPt=pt;
-	fDz=dz;
-	fTheta=theta;
-      }
+      Track(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) : fPhi(phi), fD0(d0), fPt(pt), fDz(dz), fTheta(theta) {}
       ~Track() {}
 
-      void SetHelix(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) {
-      	fPhi=phi;
-	fD0=d0;
-	fPt=pt;
-	fDz=dz;
-	fTheta=theta;
-      }
+      void	SetHelix(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta);
+      void	SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, Double_t dzErr, Double_t thetaErr);
       
-      void SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, Double_t dzErr, Double_t thetaErr) {
-      	fPhiErr=phiErr;
-	fD0Err=d0Err;
-	fPtErr=ptErr;
-	fDzErr=dzErr;
-	fThetaErr=thetaErr;
-      }
+      Double_t	Phi() const {return fPhi;}
+      Double_t	D0() const {return fD0;}
+      Double_t	Pt() const {return fPt;}
+      Double_t	Dz() const {return fDz;}
+      Double_t	Theta() {return fTheta;}
       
-      Double_t Phi() {return fPhi;}
-      Double_t D0() {return fD0;}
-      Double_t Pt() {return fPt;}
-      Double_t Dz() {return fDz;}
-      Double_t Theta() {return fTheta;}
+      Double_t	PhiErr() const {return fPhiErr;}
+      Double_t	D0Err() const {return fD0Err;}
+      Double_t	PtErr() const {return fPtErr;}
+      Double_t	DzErr() const {return fDzErr;}
+      Double_t	ThetaErr() const {return fThetaErr;}
       
-      Double_t PhiErr() {return fPhiErr;}
-      Double_t D0Err() {return fD0Err;}
-      Double_t PtErr() {return fPtErr;}
-      Double_t DzErr() {return fDzErr;}
-      Double_t ThetaErr() {return fThetaErr;}
+      Int_t	Charge() const {return fCharge;}
       
-      Int_t Charge() {return fCharge;}
-      
-      void SetCharge(Int_t charge) {fCharge=charge;}
+      void	SetCharge(Int_t charge) {fCharge=charge;}
       
     protected:
-    	Double_t fPhi;
-    	Double_t fD0;
-	Double_t fPt;
-	Double_t fDz;
-	Double_t fTheta;
+    	Double_t fPhi; //azimuthal angle
+    	Double_t fD0;  //raw impact parameter
+	Double_t fPt;  //transverse momentum
+	Double_t fDz;  //z-displacement
+	Double_t fTheta; //polar angle
 	
-	Double_t fPhiErr;
-    	Double_t fD0Err;
-	Double_t fPtErr;
-	Double_t fDzErr;
-	Double_t fThetaErr;
+	Double_t fPhiErr; //uncertainy on phi
+    	Double_t fD0Err;  //uncertainty on D0
+	Double_t fPtErr;  //uncertainty on pt
+	Double_t fDzErr;  //uncertainty on dz
+	Double_t fThetaErr;  //uncertainty on theta
 	
-	Int_t fCharge;
+	Int_t fCharge; //electric charge of reconstructed track
 	
 	
       

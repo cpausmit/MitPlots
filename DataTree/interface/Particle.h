@@ -1,4 +1,4 @@
-// $Id: Particle.h,v 1.4 2008/06/04 14:04:47 loizides Exp $
+// $Id: Particle.h,v 1.5 2008/06/05 07:53:44 loizides Exp $
 
 #ifndef DATATREE_PARTICLE_H
 #define DATATREE_PARTICLE_H
@@ -31,6 +31,7 @@ namespace mithep
       Double_t         Px()  const { return fFourVector.Px(); }
       Double_t         Py()  const { return fFourVector.Py(); }
       Double_t         Pz()  const { return fFourVector.Pz(); }
+      Double_t         Mass()  const { return sqrt(fFourVector.M2()); }
       
     protected:
       FourVector       fFourVector; //momentum vector

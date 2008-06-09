@@ -1,9 +1,10 @@
-// $Id: LinkDef.h 2272 2006-01-08 17:16:44Z loizides $
+// $Id: MitAnaTreeModLinkDef.h,v 1.1 2008/05/27 19:50:16 loizides Exp $
 
 #ifndef TREEMOD_LINKDEF_H
 #define TREEMOD_LINKDEF_H
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
+#include "MitAna/TreeMod/interface/FullExampleMod.h"
 #endif
 
 #ifdef __CINT__
@@ -16,4 +17,5 @@
 
 #pragma link C++ class mithep::Analysis+;
 #pragma link C++ class mithep::ParticleExampleMod+;
+#pragma link C++ class mithep::FullExampleMod+;
 #endif

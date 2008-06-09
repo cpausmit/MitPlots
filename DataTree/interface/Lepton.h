@@ -1,4 +1,4 @@
-// $Id: Lepton.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: Lepton.h,v 1.2 2008/06/05 16:03:35 bendavid Exp $
 
 #ifndef DATATREE_LEPTON_H
 #define DATATREE_LEPTON_H
@@ -22,15 +22,14 @@ namespace mithep
   {
     public:
       Lepton() {}
+      Lepton(Double_t px, Double_t py, Double_t pz, Double_t e) : Particle(px,py,pz,e) {}
       ~Lepton() {}
-
-      Lepton(Double_t x, Double_t y, Double_t z, Double_t t) {fFourVector.SetXYZT(x,y,z,t);}
       
-      Track* GetTrack() {return &fTrack;}
-      Int_t Charge() {return fTrack.Charge();}
+      Track*	GetTrack() {return &fTrack;}
+      Int_t	Charge() const {return fTrack.Charge();}
 
     protected:
-      Track fTrack;
+      Track	fTrack; //track associated with lepton
       
       ClassDef(Lepton, 1) // Lepton class
   };
