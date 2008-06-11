@@ -1,13 +1,5 @@
-// $Id: rootlogon.C,v 1.1 2008/05/27 19:59:54 loizides Exp $
+// $Id: rootlogon.C,v 1.2 2008/06/03 07:21:28 paus Exp $
 
 {
-  if (gSystem->Getenv("CMSSW_VERSION")) {
-    TString str = gSystem->GetMakeSharedLib();
-    if (str.Contains("-m32")==0 && str.Contains("-m64")==0) {
-      str.ReplaceAll("g++", "g++ -m32");
-      gSystem->SetMakeSharedLib(str);
-    }
-  }
-  
   gROOT->Macro("$CMSSW_BASE/src/MitAna/macros/setRootEnv.C+");
 }

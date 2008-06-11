@@ -1,4 +1,4 @@
-// $Id: setRootEnv.C,v 1.1 2008/05/27 19:59:54 loizides Exp $
+// $Id: setRootEnv.C,v 1.2 2008/06/03 07:21:28 paus Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
@@ -16,6 +16,10 @@
 
 void setIncludes();
 void loadLibraries();
+void loadmylib(const char *name);
+void loadmylib(const char *pkgname, const char *subpkgname);
+
+//__________________________________________________________________________________________________
 
 void setRootEnv()
 {
@@ -31,6 +35,7 @@ void setRootEnv()
   setIncludes();
   loadLibraries();
 
+  // have a friendly welcome message
   if (gClassTable->GetID("mithep::Particle") >= 0) {
     ::Info("setRootEnv", "Welcome to MITROOT!\n");
   }
@@ -38,6 +43,14 @@ void setRootEnv()
 
 void setIncludes()
 {
+  if (gSystem->Getenv("CMSSW_VERSION")) {
+    TString str = gSystem->GetMakeSharedLib();
+    if (str.Contains("-m32")==0 && str.Contains("-m64")==0) {
+      str.ReplaceAll("g++", "g++ -m32");
+      gSystem->SetMakeSharedLib(str);
+    }
+  }
+
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/");
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/TreeMod/inc");
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/macros");
@@ -76,10 +89,35 @@ void loadLibraries()
         gROOT->Error("setRootEnv", "could not load \"%s\" for use in ACLiC", tmpstr);
       } else {
         if (gDebug)
-          Info("setRootEnv","Loaded \"%s\" and its dependencies", tmpstr);
+          Info("setRootEnv","Loaded \"%s\" for use in ACLiC", tmpstr);
       }
     }
     delete[] tmpstr;
   }
   gSystem->FreeDirectory(dir);
+}
+
+void loadmylib(const char *name)
+{
+  TString libstr(Form("%s/lib/%s/%s",
+                      gSystem->Getenv("CMSSW_BASE"),
+                      gSystem->Getenv("SCRAM_ARCH"),
+                      name));
+
+  Int_t slevel=gErrorIgnoreLevel;
+  gErrorIgnoreLevel=kFatal;
+  Int_t suc = gSystem->Load(libstr);
+  gErrorIgnoreLevel=slevel;
+  
+  if (suc<0) {
+    gROOT->Error("loadmylib", "could not load \"%s\" for use in ACLiC", libstr.Data());
+  } else {
+    if (gDebug)
+      Info("loadmylib","Loaded \"%s\" for use in ACLiC", name);
+  }
+}
+
+void loadmylib(const char *pkgname, const char *subpkgname)
+{
+  loadmylib(Form("lib%s%s.so", pkgname, subpkgname));
 }
