@@ -1,4 +1,4 @@
-// $Id: Analysis.h,v 1.3 2008/06/03 09:58:32 loizides Exp $
+// $Id: Analysis.h,v 1.4 2008/06/05 09:46:40 loizides Exp $
 
 #ifndef DATAUTIL_ANALYSIS_H
 #define DATAUTIL_ANALYSIS_H
@@ -27,7 +27,7 @@ class TProof;
 // 
 // The class can operate in following modes:
 //  a) Add single files to be analyzed using Analysis::AddFile
-//  b) Use a text file to point to files to be analyzed using Analysis::AddFiles (to be done)
+//  b) Use a text file to point to files to be analyzed using Analysis::AddFiles
 //  c) Add files using a catalogue (to be done)
 //
 // See $CMSSW_BASE/src/MitAna/macros/examples/runSimpleExample.C
@@ -47,6 +47,7 @@ namespace mithep
 
       void                      AddLoader(TAMVirtualLoader *l);
       Bool_t                    AddFile(const char *pname);
+      Bool_t                    AddFiles(const char *pname, Int_t nmax=-1);
       void                      AddPackage(const char* name);
       void                      AddPackages(TList *list);
       const char               *GetAnaOutputName()            const { return fAnaOutput;}
@@ -58,11 +59,12 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate; }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetOutputName(const char *name)     { fAnaOutput = name; }
+      void                      SetProcessNevents(Int_t n)          { fDoNEvents = n; }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel = level; }
       void                      SetConfigName(const char* name)     { fConfig    = name; }
       void                      SetKeepHierachy(Bool_t b)           { fHierachy  = b; }
       void                      SetMasterName(const char* name)     { fMaster    = name; }
+      void                      SetOutputName(const char *name)     { fAnaOutput = name; }
       void                      SetSuperModule(TAModule *mod)       { fSuperMod  = mod; }
       void                      SetTreeName(const char *name)       { fTreeName  = name; }
       void                      SetUseProof(Bool_t up)              { fUseProof  = up; }
@@ -94,6 +96,7 @@ namespace mithep
       TString                   fConfig;          //config file name for PROOF
       Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
+      Int_t                     fDoNEvents;       //number of events to process (def=-1)
 
       void                      AddFile(const char *pname, Int_t eventlist);
       void                      AddFile(const TObject *oname, Int_t eventlist);
@@ -104,7 +107,5 @@ namespace mithep
 
       ClassDef(Analysis,0) // Top-level analysis class 
   };
-
-} /*namespace mithep*/
-
-#endif /*HIROOT_Analysis*/
+}
+#endif

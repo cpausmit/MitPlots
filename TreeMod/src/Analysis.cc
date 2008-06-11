@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.3 2008/06/05 07:54:21 loizides Exp $
+// $Id: Analysis.cc,v 1.4 2008/06/05 09:46:40 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -22,23 +22,24 @@ ClassImp(mithep::Analysis)
 using namespace mithep;
 
 //__________________________________________________________________________________________________
-Analysis::Analysis(Bool_t useproof) 
-  : fUseProof(useproof), 
-    fHierachy(kTRUE), 
-    fState(kPristine), 
-    fNFriends(0), 
-    fList(new TList), 
-    fOutput(0), 
-    fPackages(new TList), 
-    fLoaders(new TList),
-    fSuperMod(0), 
-    fSelector(0), 
-    fChain(0), 
-    fSet(0), 
-    fDeleteList(new TList),
-    fTreeName(Names::gkMitTreeName),
-    fCompLevel(2), 
-    fProof(0)
+Analysis::Analysis(Bool_t useproof) : 
+  fUseProof(useproof), 
+  fHierachy(kTRUE), 
+  fState(kPristine), 
+  fNFriends(0), 
+  fList(new TList), 
+  fOutput(0), 
+  fPackages(new TList), 
+  fLoaders(new TList),
+  fSuperMod(0), 
+  fSelector(0), 
+  fChain(0), 
+  fSet(0), 
+  fDeleteList(new TList),
+  fTreeName(Names::gkMitTreeName),
+  fCompLevel(2), 
+  fProof(0),
+  fDoNEvents(-1)
 {
   // Default constructor.
 
@@ -70,7 +71,7 @@ Analysis::~Analysis()
 }
 
 //__________________________________________________________________________________________________
-Bool_t  Analysis::AddFile(const char *pname)
+Bool_t Analysis::AddFile(const char *pname)
 {
   // Add file with given name to the list of files to be processed. 
   // Using the token "|", you can specify an arbritray number
@@ -152,6 +153,45 @@ void Analysis::AddFile(const TObject *oname, Int_t eventlist)
   MitAssert("AddFile", oname != 0);
 
   return AddFile(oname->GetName(), eventlist);
+}
+
+//________________________________________________________________________
+Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
+{
+  // Add files from text file with given name. If nmax>0, 
+  // maximum nmax files will be added.
+
+  MitAssert("AddFiles", pname != 0);
+
+  ifstream in;
+  in.open(pname);
+  if (!in) {
+    Error("AddFiles", "Can not open file with name %s", pname);
+    return kFALSE;
+  }
+
+  Int_t fc = 0;
+  while (in) {
+    TString line;
+    line.ReadLine(in);
+    cout << line << endl;
+    if (!line.EndsWith(".root")) 
+      continue;
+    cout << line << endl;
+
+    if (!AddFile(line)) {
+      Error("AddFiles", "Error adding file with name %s", line.Data());
+      return kFALSE;
+    }
+
+    ++fc;
+    if(nmax>0 && fc>=nmax) {
+      Info("AddFiles", "Maximal number (%d) of files added", nmax);
+      break;
+    }
+  } 
+
+  return kTRUE;
 }
 
 //__________________________________________________________________________________________________
@@ -356,14 +396,14 @@ void Analysis::Run()
     MDB(kAnalysis, 1)
       Info("Run", "Start processing with PROOF...");
 
-    fSet->Process("TAMSelector");
+    fSet->Process("TAMSelector","",fDoNEvents);
 
   } else {
 
     MDB(kAnalysis, 1)
       Info("Run", "Start processing (no PROOF)...");
 
-    fChain->Process(fSelector);
+    fChain->Process(fSelector,"",fDoNEvents);
   }
 
   MDB(kAnalysis, 1)
