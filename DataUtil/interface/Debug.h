@@ -1,4 +1,4 @@
-// $Id: Debug.h,v 1.1 2008/05/27 19:36:05 loizides Exp $
+// $Id: Debug.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
 
 #ifndef DATAUTIL_DEBUG_H
 #define DATAUTIL_DEBUG_H
@@ -45,7 +45,7 @@ namespace mithep
 
   }; 
 
-} /*namespace mithep*/
+}
 
 R__EXTERN mithep::Debug::EDebugMask gDebugMask;
 R__EXTERN Int_t gDebugLevel;
@@ -59,4 +59,4 @@ R__EXTERN Int_t gDebugLevel;
 #define MitAssertStatic(f,e) \
         if (!(e)) ::Fatal(f, kAssertMsg, _QUOTE_(e), __LINE__, __FILE__)
 
-#endif /*DATAUTIL_DEBUG_H*/
+#endif

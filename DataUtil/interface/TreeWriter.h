@@ -1,4 +1,4 @@
-// $Id: TreeWriter.h,v 1.4 2008/06/05 07:55:55 loizides Exp $
+// $Id: TreeWriter.h,v 1.5 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_TREEWRITER_H
 #define DATATREE_TREEWRITER_H
@@ -120,6 +120,5 @@ namespace mithep
 
       ClassDef(TreeWriter,0) // Tree writer class
   };
-
-} /*namespace mithep*/
-#endif /*DATATREE_TREEWRITER_H*/
+}
+#endif
