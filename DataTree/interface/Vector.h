@@ -1,4 +1,4 @@
-// $Id: Vector.h,v 1.5 2008/06/05 10:07:06 loizides Exp $
+// $Id: Vector.h,v 1.6 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_VECTOR_H
 #define DATATREE_VECTOR_H
@@ -51,7 +51,5 @@ namespace mithep
 
       ClassDefT(Vector, 1) // Wrapper around std::vector class
   };
-
-} /*namespace mithep*/
-
-#endif /*DATATREE_VECTOR_H*/
+}
+#endif

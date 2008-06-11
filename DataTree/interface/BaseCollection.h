@@ -1,4 +1,4 @@
-// $Id: Collection.h,v 1.3 2008/06/01 10:03:39 loizides Exp $
+// $Id: BaseCollection.h,v 1.1 2008/06/05 10:06:29 loizides Exp $
 
 #ifndef DATATREE_BASECOLLECTION_H
 #define DATATREE_BASECOLLECTION_H
@@ -28,7 +28,5 @@ namespace mithep
 
       ClassDef(BaseCollection,1) // Base class of all our collections
   };
-
-} /*namespace mithep*/
-
-#endif /*DATATREE_BASECOLLECTION_H*/
+}
+#endif

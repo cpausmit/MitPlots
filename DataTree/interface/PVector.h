@@ -1,4 +1,4 @@
-// $Id: PVector.h,v 1.3 2008/06/05 10:07:06 loizides Exp $
+// $Id: PVector.h,v 1.4 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_PVECTOR_H
 #define DATATREE_PVECTOR_H
@@ -50,8 +50,7 @@ namespace mithep
 
       ClassDefT(PVector, 1) // Wrapper around std::vector class
   };
-
-} /*namespace mithep*/
+}
 
 //__________________________________________________________________________________________________
 template<class ArrayElement>
@@ -63,4 +62,4 @@ inline void mithep::PVector<ArrayElement>::Delete()
   fV.clear();
 }
 
-#endif /*DATATREE_PVECTOR_H*/
+#endif

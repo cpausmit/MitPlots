@@ -1,4 +1,4 @@
-// $Id: Particle.h,v 1.2 2008/06/02 04:43:14 loizides Exp $
+// $Id: DataObject.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
 
 #ifndef DATATREE_DATAOBJECT_H
 #define DATATREE_DATAOBJECT_H
@@ -9,6 +9,8 @@
 //--------------------------------------------------------------------------------------------------
 //
 // DataObject
+//
+// This is the common base class for all objects in the tree. 
 //
 // Authors: C.Loizides
 //
@@ -24,7 +26,5 @@ namespace mithep
   
       ClassDef(DataObject, 1) // Basic data object class
   };
-   
-} /*namespace mithep*/
-
+}
 #endif /*DATATREE_DATAOBJECT_H*/

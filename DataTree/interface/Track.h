@@ -1,4 +1,4 @@
-// $Id: Track.h,v 1.3 2008/06/09 00:06:36 bendavid Exp $
+// $Id: Track.h,v 1.4 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_TRACK_H
 #define DATATREE_TRACK_H
@@ -11,7 +11,7 @@
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides, J. Bendavid, C. Paus
+// Authors: C.Loizides, J.Bendavid, C.Paus
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -51,24 +51,21 @@ namespace mithep
       Double_t fPt;       // transverse momentum
       Double_t fDz;       // z-displacement
       Double_t fTheta;    // polar angle
-      
       Double_t fPhiErr;   // uncertainy on phi
       Double_t fD0Err;    // uncertainty on D0
       Double_t fPtErr;    // uncertainty on pt
       Double_t fDzErr;    // uncertainty on dz
       Double_t fThetaErr; // uncertainty on theta
-      
       Int_t    fCharge;   // electric charge of reconstructed track
-	
-	
-      
+	      
       ClassDef(Track, 1) // Track class
   };
-   
-} /*namespace mithep*/
+}
 
+//--------------------------------------------------------------------------------------------------
 inline
-void mithep::Track::SetHelix(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) {
+void mithep::Track::SetHelix(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) 
+{
   fPhi   = phi;
   fD0    = d0;
   fPt    = pt;
@@ -76,9 +73,11 @@ void mithep::Track::SetHelix(Double_t phi, Double_t d0, Double_t pt, Double_t dz
   fTheta = theta;
 }
 
+//--------------------------------------------------------------------------------------------------
 inline
 void mithep::Track::SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, Double_t dzErr,
-			      Double_t thetaErr) {
+			      Double_t thetaErr) 
+{
   fPhiErr   = phiErr;
   fD0Err    = d0Err;
   fPtErr    = ptErr;
@@ -86,4 +85,4 @@ void mithep::Track::SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, D
   fThetaErr = thetaErr;
 }
 
-#endif /*DATATREE_TRACK_H*/
+#endif

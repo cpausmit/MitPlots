@@ -1,4 +1,4 @@
-// $Id: GenParticle.h,v 1.2 2008/06/05 07:53:44 loizides Exp $
+// $Id: GenParticle.h,v 1.3 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_GENPARTICLE_H
 #define DATATREE_GENPARTICLE_H
@@ -35,7 +35,5 @@ namespace mithep
 
       ClassDef(GenParticle,1) // Generated particle class
   };
-   
-} /*namespace mithep*/
-
-#endif /*DATATREE_GENPARTICLE_H*/
+}
+#endif

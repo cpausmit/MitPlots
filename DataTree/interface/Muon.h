@@ -1,4 +1,4 @@
-// $Id: Muon.h,v 1.2 2008/06/05 16:03:35 bendavid Exp $
+// $Id: Muon.h,v 1.3 2008/06/09 00:06:36 bendavid Exp $
 
 #ifndef DATATREE_MUON_H
 #define DATATREE_MUON_H
@@ -26,7 +26,5 @@ namespace mithep
       
       ClassDef(Muon, 1) // Muon class
   };
-   
-} /*namespace mithep*/
-
-#endif /*DATATREE_MUON_H*/
+}
+#endif

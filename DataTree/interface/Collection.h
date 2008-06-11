@@ -1,4 +1,4 @@
-// $Id: Collection.h,v 1.3 2008/06/01 10:03:39 loizides Exp $
+// $Id: Collection.h,v 1.4 2008/06/05 10:07:06 loizides Exp $
 
 #ifndef DATATREE_COLLECTION_H
 #define DATATREE_COLLECTION_H
@@ -39,7 +39,5 @@ namespace mithep
 
       ClassDefT(Collection,1) // Generic access to a collection of ArrayElements
   };
-
-} /*namespace mithep*/
-
-#endif /*DATATREE_COLLECTION_H*/
+}
+#endif
