@@ -1,4 +1,4 @@
-// $Id: FullExample.cc,v 1.1 2008/06/09 00:06:36 bendavid Exp $
+// $Id: FullExample.cc,v 1.2 2008/06/09 11:47:03 paus Exp $
 
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -45,20 +45,20 @@ void FullExampleMod::Process()
   // fill the histograms.
 
   LoadBranch(fGenPartName);
-  for (Int_t i=0; i<fParticles->GetEntries(); ++i) {
+  for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
     GenParticle* p = fParticles->At(i);
     fGenPtHist->Fill(p->Pt());
     fGenEtaHist->Fill(p->Eta());
   }
   
   LoadBranch(fTrackName);
-  for (Int_t i=0; i<fTracks->GetEntries(); ++i) {
+  for (UInt_t i=0; i<fTracks->GetEntries(); ++i) {
     Track* p = fTracks->At(i);
     fTrackPtHist->Fill(p->Pt());
   }
   
   LoadBranch(fMuonName);
-  for (Int_t i=0; i<fMuons->GetEntries(); ++i) {
+  for (UInt_t i=0; i<fMuons->GetEntries(); ++i) {
     Muon *p = fMuons->At(i);
     fMuonPtHist->Fill(p->Pt());
     fMuonEtaHist->Fill(p->Eta());
@@ -68,7 +68,7 @@ void FullExampleMod::Process()
   
   
   LoadBranch(fElectronName);
-  for (Int_t i=0; i<fElectrons->GetEntries(); ++i) {
+  for (UInt_t i=0; i<fElectrons->GetEntries(); ++i) {
     Electron *p = fElectrons->At(i);
     fElectronPtHist->Fill(p->Pt());
   }
