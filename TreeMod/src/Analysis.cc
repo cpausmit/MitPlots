@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.4 2008/06/05 09:46:40 loizides Exp $
+// $Id: Analysis.cc,v 1.5 2008/06/11 14:52:43 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -39,7 +39,7 @@ Analysis::Analysis(Bool_t useproof) :
   fTreeName(Names::gkMitTreeName),
   fCompLevel(2), 
   fProof(0),
-  fDoNEvents(-1)
+  fDoNEvents(TChain::kBigNumber)
 {
   // Default constructor.
 
