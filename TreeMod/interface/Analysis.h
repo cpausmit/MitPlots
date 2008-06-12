@@ -1,4 +1,4 @@
-// $Id: Analysis.h,v 1.4 2008/06/05 09:46:40 loizides Exp $
+// $Id: Analysis.h,v 1.5 2008/06/11 14:52:43 loizides Exp $
 
 #ifndef DATAUTIL_ANALYSIS_H
 #define DATAUTIL_ANALYSIS_H
@@ -59,7 +59,7 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate; }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNevents(Int_t n)          { fDoNEvents = n; }
+      void                      SetProcessNevents(Long64_t n)       { fDoNEvents = n; }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel = level; }
       void                      SetConfigName(const char* name)     { fConfig    = name; }
       void                      SetKeepHierachy(Bool_t b)           { fHierachy  = b; }
@@ -96,7 +96,7 @@ namespace mithep
       TString                   fConfig;          //config file name for PROOF
       Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
-      Int_t                     fDoNEvents;       //number of events to process (def=-1)
+      Long64_t                  fDoNEvents;       //number of events to process (def=TChain::kBigNumber)
 
       void                      AddFile(const char *pname, Int_t eventlist);
       void                      AddFile(const TObject *oname, Int_t eventlist);
