@@ -1,4 +1,4 @@
-// $Id: ParticleExample.cc,v 1.6 2008/06/09 00:06:36 bendavid Exp $
+// $Id: ParticleExampleMod.cc,v 1.1 2008/06/12 09:24:09 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
@@ -9,12 +9,12 @@ using namespace mithep;
 ClassImp(mithep::ParticleExampleMod)
 
 //__________________________________________________________________________________________________
-ParticleExampleMod::ParticleExampleMod(const char *name, const char *title)
-  : TAModule(name,title),
-    fParticles(0),
-    fPartName(Names::gkGenPartBrn),
-    fPtHist(0),
-    fEtaHist(0)
+ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) : 
+  BaseMod(name,title),
+  fPartName(Names::gkGenPartBrn),
+  fParticles(0),
+  fPtHist(0),
+  fEtaHist(0)
 {
   // Constructor.
 }

@@ -1,4 +1,4 @@
-// $Id: FullExample.cc,v 1.3 2008/06/11 23:37:20 paus Exp $
+// $Id: FullExampleMod.cc,v 1.1 2008/06/12 09:24:09 loizides Exp $
 
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -9,24 +9,24 @@ using namespace mithep;
 ClassImp(mithep::FullExampleMod)
 
 //__________________________________________________________________________________________________
-FullExampleMod::FullExampleMod(const char *name, const char *title)
-  : TAModule(name,title),
-    fParticles(0),
-    fTracks(0),
-    fMuons(0),
-    fElectrons(0),
-    fGenPartName(Names::gkGenPartBrn),
-    fTrackName(Names::gkTrackBrn),
-    fMuonName(Names::gkMuonBrn),
-    fElectronName(Names::gkElectronBrn),
-    fGenPtHist(0),
-    fGenEtaHist(0),
-    fTrackPtHist(0),
-    fMuonPtHist(0),
-    fMuonEtaHist(0),
-    fMuonTrackPtHist(0),
-    fMuonTrackPtErrHist(0),
-    fElectronPtHist(0)
+FullExampleMod::FullExampleMod(const char *name, const char *title) : 
+  BaseMod(name,title),
+  fGenPartName(Names::gkGenPartBrn),
+  fTrackName(Names::gkTrackBrn),
+  fMuonName(Names::gkMuonBrn),
+  fElectronName(Names::gkElectronBrn),
+  fParticles(0),
+  fTracks(0),
+  fMuons(0),
+  fElectrons(0),
+  fGenPtHist(0),
+  fGenEtaHist(0),
+  fTrackPtHist(0),
+  fTrackEtaHist(0),
+  fMuonPtHist(0),
+  fMuonEtaHist(0),
+  fElectronPtHist(0),
+  fElectronEtaHist(0)
 {
   // Constructor.
 }
@@ -41,7 +41,7 @@ void FullExampleMod::Begin()
 //__________________________________________________________________________________________________
 void FullExampleMod::Process()
 {
-  // Process entries of the tree. For this module, we just load the branch and
+  // Process entries of the tree. For this module, we just load the branches and
   // fill the histograms.
 
   LoadBranch(fGenPartName);
@@ -62,15 +62,13 @@ void FullExampleMod::Process()
     Muon *p = fMuons->At(i);
     fMuonPtHist->Fill(p->Pt());
     fMuonEtaHist->Fill(p->Eta());
-    fMuonTrackPtHist->Fill(p->GetTrack()->Pt());
-    fMuonTrackPtErrHist->Fill(p->GetTrack()->PtErr());
   }
-  
   
   LoadBranch(fElectronName);
   for (UInt_t i=0; i<fElectrons->GetEntries(); ++i) {
     Electron *p = fElectrons->At(i);
     fElectronPtHist->Fill(p->Pt());
+    fElectronEtaHist->Fill(p->Eta());
   }
 
 }
@@ -91,22 +89,18 @@ void FullExampleMod::SlaveBegin()
   AddOutput(fGenPtHist);
   fGenEtaHist          = new TH1D("hGenEtaHist",";#eta;#",160,-8.,8.);
   AddOutput(fGenEtaHist);
-  
   fTrackPtHist         = new TH1D("hTrackPtHist",";p_{t};#",100,0.,25.);
   AddOutput(fTrackPtHist);
-  
+  fTrackEtaHist      = new TH1D("hTrakEtaHist",";#eta;#",160,-8.,8.);
+  AddOutput(fTrackEtaHist);
   fMuonPtHist          = new TH1D("hMuonPtHist",";p_{t};#",100,0.,25.);
   AddOutput(fMuonPtHist);
   fMuonEtaHist         = new TH1D("hMuonEtaHist",";#eta;#",160,-8.,8.);
   AddOutput(fMuonEtaHist);
-  
-  fMuonTrackPtHist     = new TH1D("hMuonTrackPtHist",";p_{t};#",100,0.,25.);
-  AddOutput(fMuonTrackPtHist);
-  fMuonTrackPtErrHist  = new TH1D("hMuonTrackPtErrHist",";p_{t};#",100,0.,25.);
-  AddOutput(fMuonTrackPtErrHist);
-  
   fElectronPtHist      = new TH1D("hElectronPtHist",";p_{t};#",100,0.,25.);
   AddOutput(fElectronPtHist);
+  fElectronEtaHist      = new TH1D("hElectronEtaHist",";#eta;#",160,-8.,8.);
+  AddOutput(fElectronEtaHist);
 }
 
 //__________________________________________________________________________________________________

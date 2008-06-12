@@ -1,19 +1,22 @@
-// $Id: ParticleExampleMod.h,v 1.3 2008/06/05 07:54:21 loizides Exp $
+// $Id: ParticleExampleMod.h,v 1.5 2008/06/09 00:06:36 bendavid Exp $
 
 #ifndef TREEMOD_PARTICLEXAMPLEMOD_H
 #define TREEMOD_PARTICLEXAMPLEMOD_H
 
-#include "MitAna/TAM/interface/TAModule.h" 
+#include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/Collections.h"
 
 class TH1D;
 
 //--------------------------------------------------------------------------------------------------
 //
-// THIExampleAnaMod
+// ParticleExampleAnaMod
 //
-// This TAM module shows how to use TAM:
-//   See http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM
+// This TAM module shows how to use TAM. It takes the GenParticle branch
+// and produces a pt and eta distribution.
+//
+// More information about TAM in general can be found at
+// http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM
 //
 // Authors: C.Loizides
 //
@@ -21,12 +24,21 @@ class TH1D;
 
 namespace mithep 
 {
-  class ParticleExampleMod : public TAModule 
+  class ParticleExampleMod : public BaseMod 
   {
     public:
       ParticleExampleMod(const char *name="ParticleExampleMod", 
                          const char *title="Particle example analysis module");
       ~ParticleExampleMod() {}
+
+      const char              *GetPartName()              const { return fPartName; }
+      void                     SetPartName(const char *n)       { fPartName=n; }
+
+    protected:
+      TString                  fPartName;   //branch name of GenParticle collection
+      GenParticleCol          *fParticles;  //!point to generated particle branch
+      TH1D                    *fPtHist;     //!pt histogram
+      TH1D                    *fEtaHist;    //!eta histogram
 
       void                     Begin();
       void                     Process();
@@ -34,18 +46,7 @@ namespace mithep
       void                     SlaveTerminate();
       void                     Terminate();
 
-      const char              *GetPartName()              const { return fPartName; }
-      void                     SetPartName(const char *n)       { fPartName=n; }
-
-    protected:
-      GenParticleCol          *fParticles;  //!point to generated particle branch
-      TString                  fPartName;   //name of particle collection
-      TH1D                    *fPtHist;     //!pt histogram
-      TH1D                    *fEtaHist;    //!eta histogram
-
       ClassDef(ParticleExampleMod,1) // TAM example analysis module
   };
-
-} /*namespace mithep*/
-
-#endif /*TREEMOD_PARTICLEXAMPLEMOD_H*/
+}
+#endif
