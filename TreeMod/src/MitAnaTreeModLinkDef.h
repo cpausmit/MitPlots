@@ -1,8 +1,9 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.1 2008/05/27 19:50:16 loizides Exp $
+// $Id: MitAnaTreeModLinkDef.h,v 1.2 2008/06/09 00:06:36 bendavid Exp $
 
 #ifndef TREEMOD_LINKDEF_H
 #define TREEMOD_LINKDEF_H
 #include "MitAna/TreeMod/interface/Analysis.h"
+#include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #endif
@@ -16,6 +17,7 @@
 #pragma link C++ namespace mithep;
 
 #pragma link C++ class mithep::Analysis+;
+#pragma link C++ class mithep::BaseMod+;
 #pragma link C++ class mithep::ParticleExampleMod+;
 #pragma link C++ class mithep::FullExampleMod+;
 #endif
