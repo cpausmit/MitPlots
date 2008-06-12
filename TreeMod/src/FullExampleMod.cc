@@ -1,4 +1,4 @@
-// $Id: FullExample.cc,v 1.2 2008/06/09 11:47:03 paus Exp $
+// $Id: FullExample.cc,v 1.3 2008/06/11 23:37:20 paus Exp $
 
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include <TH1D.h>
