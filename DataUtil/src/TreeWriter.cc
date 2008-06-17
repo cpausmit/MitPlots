@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.3 2008/06/05 07:55:55 loizides Exp $
+// $Id: TreeWriter.cc,v 1.4 2008/06/09 11:47:03 paus Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -14,22 +14,22 @@ using namespace mithep;
 ClassImp(mithep::TreeWriter)
 
 //__________________________________________________________________________________________________
-TreeWriter::TreeWriter(const char *tname, Bool_t doreset)
-  : TNamed(tname,Form("%s written by mithep::TreeWriter", tname)),
-    fBaseURL("."), 
-    fPrefix("mithep"), 
-    fFileNumber(0),
-    fCompressLevel(9),
-    fDefBrSize(64*1024),
-    fDefSL(99),
-    fMaxSize((Long64_t)(0.99 * TTree::GetMaxTreeSize())),
-    fkMinFreeSpace(1024*1024), 
-    fkMinAvgSize(10*1024), 
-    fEvtObjNum(-1), 
-    fIsInit(kFALSE), 
-    fDoObjNumReset(doreset), 
-    fFile(0), 
-    fTrees(0)
+TreeWriter::TreeWriter(const char *tname, Bool_t doreset) : 
+  TNamed(tname,Form("%s written by mithep::TreeWriter", tname)),
+  fBaseURL("."), 
+  fPrefix("mithep"), 
+  fFileNumber(0),
+  fCompressLevel(9),
+  fDefBrSize(64*1024),
+  fDefSL(99),
+  fMaxSize((Long64_t)(0.99 * TTree::GetMaxTreeSize())),
+  fkMinFreeSpace(1024*1024), 
+  fkMinAvgSize(10*1024), 
+  fEvtObjNum(-1), 
+  fIsInit(kFALSE), 
+  fDoObjNumReset(doreset), 
+  fFile(0), 
+  fTrees(0)
 {
   // Constructor.
 
@@ -446,6 +446,23 @@ void TreeWriter::SetAutoFill(const char *tn, Bool_t b)
     return;
 
   mt->SetAutoFill(b);
+}
+
+
+//-------------------------------------------------------------------------------------------------
+void TreeWriter::SetMaxSize(Long64_t s) 
+{ 
+  // Set maximum file size. Check if this exceeds the ROOT file size and if, 
+  // print a warning and adjust it.
+
+  if (s>=(Long64_t)(0.99 * TTree::GetMaxTreeSize())) {
+    Long64_t news = (Long64_t)(s/0.99);
+    Warning("SetMaxSize", "Maximum tree size increased from %lld to %lld",
+            TTree::GetMaxTreeSize(), news);
+    TTree::SetMaxTreeSize(news);
+  }
+
+  fMaxSize=s; 
 }
 
 //__________________________________________________________________________________________________

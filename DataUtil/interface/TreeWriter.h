@@ -1,4 +1,4 @@
-// $Id: TreeWriter.h,v 1.5 2008/06/09 11:47:03 paus Exp $
+// $Id: TreeWriter.h,v 1.6 2008/06/11 13:27:48 loizides Exp $
 
 #ifndef DATATREE_TREEWRITER_H
 #define DATATREE_TREEWRITER_H
@@ -88,7 +88,7 @@ namespace mithep
       void                 SetCompressLevel(Int_t l)          { fCompressLevel = l; }
       void                 SetDefaultBrSize(Int_t s)          { fDefBrSize=s; }
       void                 SetDefaultSL(Int_t s)              { fDefSL=s;}
-      void                 SetMaxSize(Long64_t s)             { fMaxSize=s; }
+      void                 SetMaxSize(Long64_t s);
       void                 SetPrefix(const char *p)           { fPrefix = p; }
       void                 StoreObject(const TObject *obj);
 
