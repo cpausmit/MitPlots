@@ -1,5 +1,3 @@
-// $Id: Collections.cxx,v 1.1 2008/05/27 19:24:49 loizides Exp $
+// $Id: Collections.cc,v 1.1 2008/06/01 10:05:04 loizides Exp $
 
 #include "MitAna/DataTree/interface/Collections.h"
-
-template class mithep::Vector<mithep::Particle>;

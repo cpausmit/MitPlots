@@ -1,4 +1,4 @@
-// $Id: Vector.h,v 1.6 2008/06/09 11:47:03 paus Exp $
+// $Id: Vector.h,v 1.7 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_VECTOR_H
 #define DATATREE_VECTOR_H
@@ -12,8 +12,8 @@
 //
 // Implementation of Collection interface using std:vector class. 
 //
-// Note, in case you one to store pointers to allocated objects on heap, you should use the class
-// PVector.
+// Note, in case you one to store pointers to allocated objects on heap, 
+// you should use the class PVector.
 //
 // Authors: C.Loizides
 //
@@ -27,27 +27,31 @@ namespace mithep
     public:
       Vector(UInt_t rsv=0) : fV(0) { fV.reserve(rsv); }
       Vector(std::vector<ArrayElement> &v) : fV(v) {}
-      ~Vector() { fV.clear(); }
+      ~Vector() {}
 
-      void                             Add(const ArrayElement &ae)         { fV.push_back(ae); }
-      void                             Add(const ArrayElement *ae)         { fV.push_back(*ae); }
-      ArrayElement                    *At(const UInt_t idx)                { return &fV.at(idx); }
-      const ArrayElement              *At(const UInt_t idx)          const { return &fV.at(idx); }
+      void                             AddCopy(const ArrayElement &ae)     { fV.push_back(ae); }
+      void                             AddCopy(const ArrayElement *ae)     { fV.push_back(*ae); }
+      ArrayElement                    *At(UInt_t idx)                      { return &fV.at(idx); }
+      const ArrayElement              *At(UInt_t idx)                const { return &fV.at(idx); }
       UInt_t                           GetEntries()                  const { return fV.size(); }
-      ArrayElement                    &Ref(const UInt_t idx)               { return fV.at(idx); }
-      const ArrayElement              &Ref(const UInt_t idx)         const { return fV.at(idx); }
+      Bool_t                           IsOwner()                     const { return kTRUE; }
+      ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
+      const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
       void                             Reset()                             { fV.clear(); }
       void                             Trim()                              { fV.resize(fV.size()); }
-      ArrayElement                    *UncheckedAt(const UInt_t idx)       { return &fV[idx]; }
-      const ArrayElement              *UncheckedAt(const UInt_t idx) const { return &fV[idx]; }
+      ArrayElement                    *UncheckedAt(UInt_t idx)             { return &fV[idx]; }
+      const ArrayElement              *UncheckedAt(UInt_t idx)       const { return &fV[idx]; }
       const std::vector<ArrayElement> &Vect()                        const { return fV; }
       std::vector<ArrayElement>       &Vect()                              { return fV; }
 
-      ArrayElement                    *operator[](const UInt_t idx)        { return &fV.at(idx); }
-      const ArrayElement              *operator[](const UInt_t idx)  const { return &fV.at(idx); }
+      ArrayElement                    *operator[](UInt_t idx)              { return &fV.at(idx); }
+      const ArrayElement              *operator[](UInt_t idx)        const { return &fV.at(idx); }
 
     protected:
-      std::vector<ArrayElement>        fV;      // std::vector
+      std::vector<ArrayElement>        fV;           //std::vector
+
+    private:
+      Vector(const Vector &v);
 
       ClassDefT(Vector, 1) // Wrapper around std::vector class
   };

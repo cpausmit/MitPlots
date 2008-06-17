@@ -1,4 +1,4 @@
-// $Id: BaseCollection.h,v 1.1 2008/06/05 10:06:29 loizides Exp $
+// $Id: BaseCollection.h,v 1.2 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_BASECOLLECTION_H
 #define DATATREE_BASECOLLECTION_H
@@ -24,6 +24,7 @@ namespace mithep
       BaseCollection() {}
       ~BaseCollection() {}
 
+      virtual UInt_t               GetEntries()                   const = 0;
       virtual void                 Reset()                              = 0;
 
       ClassDef(BaseCollection,1) // Base class of all our collections

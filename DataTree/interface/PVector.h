@@ -1,17 +1,18 @@
-// $Id: PVector.h,v 1.4 2008/06/09 11:47:03 paus Exp $
+// $Id: PVector.h,v 1.5 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_PVECTOR_H
 #define DATATREE_PVECTOR_H
  
-#include <vector>
-#include "MitAna/DataTree/interface/Collection.h"
+#include "MitAna/DataTree/interface/Vector.h"
 
 //--------------------------------------------------------------------------------------------------
 //
 // PVector
 //
-// Implementation of Collection interface using std:vector class for pointers to objects.
-// Persistency not tested, likely to not work, ask Constantin for a solution.
+// Implementation of Collection interface using std:vector class for pointers pointing
+// to allocated objects on heap.
+//
+// Persistency not tested, likely to not work, ask Constantin for help if you are in trouble.
 //
 // Authors: C.Loizides
 //
@@ -20,33 +21,17 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class PVector : public Collection<ArrayElement>
+  class PVector : public Vector<ArrayElement>
   {
     public:
-      PVector(UInt_t rsv=0) : fV(0) { fV.reserve(rsv); }
-      PVector(std::vector<ArrayElement> &v) : fV(v) {}
+      PVector(UInt_t rsv=0) : Vector<ArrayElement>(0) {}
+      PVector(std::vector<ArrayElement> &v) : Vector<ArrayElement>(v) {}
       ~PVector() { Delete(); }
 
-      void                             Add(const ArrayElement &ae)         { fV.push_back(ae); }
-      void                             Add(const ArrayElement *ae)         { fV.push_back(*ae); }
-      ArrayElement                    *At(const UInt_t idx)                { return &fV.at(idx); }
-      const ArrayElement              *At(const UInt_t idx)          const { return &fV.at(idx); }
-      void                             Delete();
-      UInt_t                           GetEntries()                  const { return fV.size(); }
       void                             Reset()                             { Delete(); }
-      ArrayElement                    &Ref(const UInt_t idx)               { return fV.at(idx); }
-      const ArrayElement              &Ref(const UInt_t idx)         const { return fV.at(idx); }
-      void                             Trim()                              { fV.resize(fV.size()); }
-      ArrayElement                    *UncheckedAt(const UInt_t idx)       { return &fV[idx]; }
-      const ArrayElement              *UncheckedAt(const UInt_t idx) const { return &fV[idx]; }
-      const std::vector<ArrayElement> &Vect() const { return fV; }
-      std::vector<ArrayElement>       &Vect()       { return fV; }
-
-      ArrayElement                    *operator[](const UInt_t idx)        { return &fV.at(idx); }
-      const ArrayElement              *operator[](const UInt_t idx)  const { return &fV.at(idx); }
 
     protected:
-      std::vector<ArrayElement>        fV; // std::vector
+      void                             Delete();
 
       ClassDefT(PVector, 1) // Wrapper around std::vector class
   };
@@ -56,10 +41,9 @@ namespace mithep
 template<class ArrayElement>
 inline void mithep::PVector<ArrayElement>::Delete()
 {
-  for (UInt_t i=0; i<GetEntries(); ++i) {
-    delete fV.at(i);
+  for (UInt_t i=0; i<Vector<ArrayElement>::GetEntries(); ++i) {
+    delete Vector<ArrayElement>::fV[i];
   }
-  fV.clear();
+  Vector<ArrayElement>::fV.clear();
 }
-
 #endif
