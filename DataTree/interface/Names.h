@@ -1,4 +1,4 @@
-// $Id: Names.h,v 1.4 2008/06/05 16:03:35 bendavid Exp $
+// $Id: Names.h,v 1.5 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_NAMES_H
 #define DATATREE_NAMES_H
@@ -22,6 +22,7 @@ namespace mithep
   {
     public:
       static const char *gkMitTreeName;
+      static const char *gkEvtHeaderBrn;
       static const char *gkGenPartBrn;
       static const char *gkTrackBrn;
       static const char *gkMuonBrn;

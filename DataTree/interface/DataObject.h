@@ -1,4 +1,4 @@
-// $Id: DataObject.h,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: DataObject.h,v 1.2 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_DATAOBJECT_H
 #define DATATREE_DATAOBJECT_H
@@ -27,4 +27,4 @@ namespace mithep
       ClassDef(DataObject, 1) // Basic data object class
   };
 }
-#endif /*DATATREE_DATAOBJECT_H*/
+#endif

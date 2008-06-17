@@ -1,4 +1,4 @@
-// $Id: Electron.h,v 1.3 2008/06/09 11:47:03 paus Exp $
+// $Id: Electron.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
 
 #ifndef DATATREE_ELECTRON_H
 #define DATATREE_ELECTRON_H
@@ -24,7 +24,7 @@ namespace mithep
       Electron(Double_t px, Double_t py, Double_t pz, Double_t e) : Lepton(px,py,pz,e) {}
       ~Electron() {}
       
-      ClassDef(Electron, 1) // Muon class
+      ClassDef(Electron, 1) // Electron class
   };
 }
 #endif

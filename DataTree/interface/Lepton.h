@@ -1,4 +1,4 @@
-// $Id: Lepton.h,v 1.3 2008/06/09 00:06:36 bendavid Exp $
+// $Id: Lepton.h,v 1.4 2008/06/09 11:47:03 paus Exp $
 
 #ifndef DATATREE_LEPTON_H
 #define DATATREE_LEPTON_H
@@ -33,7 +33,5 @@ namespace mithep
       
       ClassDef(Lepton, 1) // Lepton class
   };
-   
-} /*namespace mithep*/
-
-#endif /*DATATREE_LEPTON_H*/
+}
+#endif
