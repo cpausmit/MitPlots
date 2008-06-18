@@ -1,4 +1,12 @@
-// $Id: Collections.h,v 1.6 2008/06/09 11:47:03 paus Exp $
+//--------------------------------------------------------------------------------------------------
+// $Id: Collections.h,v 1.7 2008/06/11 13:48:37 loizides Exp $
+//
+// Collections
+//
+// This header file defines the standard types for the collections we want to use.
+//
+// Authors: C.Loizides
+//--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_COLLECTIONS_H
 #define DATATREE_COLLECTIONS_H
@@ -12,20 +20,10 @@
 #include "MitAna/DataTree/interface/Lepton.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
-
-//--------------------------------------------------------------------------------------------------
-//
-// Collections
-//
-// This header file defines the standard types for the collections we want to use.
-//
-// Authors: C.Loizides
-//
-//--------------------------------------------------------------------------------------------------
+#include "MitAna/DataTree/interface/GlobalMuon.h"
 
 namespace mithep 
 {
-
   typedef Collection<DataObject>  DataObjectCol;
   typedef Collection<Track>       TrackCol;
   typedef Collection<Particle>    ParticleCol;
@@ -33,5 +31,6 @@ namespace mithep
   typedef Collection<Lepton>      LeptonCol;
   typedef Collection<Muon>        MuonCol;
   typedef Collection<Electron>    ElectronCol;
+  typedef Collection<GlobalMuon>  GlobalMuonCol;
 }
 #endif

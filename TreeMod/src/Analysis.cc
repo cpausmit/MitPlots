@@ -1,6 +1,5 @@
-// $Id: Analysis.cc,v 1.5 2008/06/11 14:52:43 loizides Exp $
+// $Id: Analysis.cc,v 1.6 2008/06/11 23:36:37 paus Exp $
 
-#include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
 #include <TFile.h>
 #include <TList.h>
@@ -16,6 +15,7 @@
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TAM/interface/TAMSelector.h"
+#include "MitAna/TreeMod/interface/Analysis.h"
 
 ClassImp(mithep::Analysis)
 
@@ -60,10 +60,10 @@ Analysis::~Analysis()
     Terminate();
 
   delete fList;
-  delete fDeleteList;
-  delete fLoaders;
-  delete fSelector;
   delete fPackages;
+  delete fLoaders;
+  delete fDeleteList;
+  delete fSelector;
   fOutput   = 0;   // owned by TAM
   fSuperMod = 0;   // owned by user
 
@@ -73,10 +73,8 @@ Analysis::~Analysis()
 //__________________________________________________________________________________________________
 Bool_t Analysis::AddFile(const char *pname)
 {
-  // Add file with given name to the list of files to be processed. 
-  // Using the token "|", you can specify an arbritray number
-  // of paths to tree files that will be concatenated as friend 
-  // trees.
+  // Add file with given name to the list of files to be processed. Using the token "|", you can
+  // specify an arbritray number of paths to tree files that will be concatenated as friend trees.
 
   if (fState != kPristine) {
     Error("AddFile", "Analysis already initialized");
@@ -105,12 +103,12 @@ Bool_t Analysis::AddFile(const char *pname)
   return kTRUE;
 }
 
-//________________________________________________________________________
+//__________________________________________________________________________________________________
 void Analysis::AddFile(const char *pname, Int_t eventlist)
 {
-  // Add file name to the event list specified by eventlist. The lists
-  // are used to hold filenames of different types of events. In case
-  // you dont want friend trees, just give no eventlist argument (default 0).
+  // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
+  // different types of events. In case you dont want friend trees, just give no eventlist argument
+  // (default 0).
 
   MitAssert("AddFile", pname != 0);
 
@@ -146,9 +144,9 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
 //__________________________________________________________________________________________________
 void Analysis::AddFile(const TObject *oname, Int_t eventlist)
 {
-  // Add file name to the event list specified by eventlist. The lists
-  // are used to hold filenames of  different types of events. In case
-  // you dont want mixing, just give no eventlist argument (default 0).
+  // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
+  // different types of events. In case you dont want mixing, just give no eventlist argument
+  // (default 0).
 
   MitAssert("AddFile", oname != 0);
 
@@ -158,8 +156,7 @@ void Analysis::AddFile(const TObject *oname, Int_t eventlist)
 //________________________________________________________________________
 Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
 {
-  // Add files from text file with given name. If nmax>0, 
-  // maximum nmax files will be added.
+  // Add files from text file with given name. If nmax>0, maximum nmax files will be added.
 
   MitAssert("AddFiles", pname != 0);
 
@@ -197,9 +194,9 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
 //__________________________________________________________________________________________________
 void Analysis::AddList(TList *list, Int_t eventlist)
 {
-  // Add file name to the event list specified by eventlist. The lists
-  // are used to hold filenames of  different types of events. In case
-  // you dont want mixing, just give no eventlist argument (default 0).
+  // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
+  // different types of events. In case you dont want mixing, just give no eventlist argument
+  // (default 0).
 
   MitAssert("AddList", list != 0);
 
@@ -241,9 +238,8 @@ void Analysis::AddPackages(TList *list)
 //__________________________________________________________________________________________________
 Bool_t Analysis::Init()
 {
-  // Setup the TDSet and TChain to be used for the analysis
-  // with or without PROOF. If more than one list of 
-  // file names was given, friend trees are supported.
+  // Setup the TDSet and TChain to be used for the analysis with or without PROOF. If more than one
+  // list of file names was given, friend trees are supported.
 
   if (fState == kRun || fState == kInit) {
     Error("Init", "Init in state %d is not possible! Call Terminate() first.",
@@ -420,7 +416,7 @@ Bool_t Analysis::Run(Bool_t browse)
   if (Init()) {
     Run();
     Terminate();
-    if(browse) {
+    if (browse) {
       new TBrowser;
     }
     return kTRUE;
@@ -492,36 +488,37 @@ Bool_t Analysis::UploadPackages(TList *packages)
 
   MitAssert("UploadPackages", packages != 0);
 
-  for(Int_t i=0; i < packages->GetEntries(); i++) {
+  for (Int_t i=0; i<packages->GetEntries(); i++) {
 
     TObject* objstr = packages->At(i); 
-    if (!objstr){
+    if (!objstr) {
       Error("InitProof", "Problem at package number %d!", i);
       return kFALSE;
     }
 
     TString packname = objstr->GetName();
-    Int_t en = 0;
+    Int_t   en       = 0;
     if (packname.EndsWith("+")) { 
       en=1;
       packname.Resize(packname.Length()-1);
     }
 
     ifstream ftest(gSystem->ExpandPathName(packname.Data()),ios_base::binary);
-    if (!ftest.good()){
+    if (!ftest.good()) {
       Error("InitProof", "Could not open %s for upload!", packname.Data());
       return kFALSE;
     }
 
-    if(fProof->UploadPackage(packname)<0) {
+    if (fProof->UploadPackage(packname)<0) {
       Error("UploadPackage", "Upload for %s failed!", packname.Data());
       return kFALSE;
     }
 
     if (en == 1) {
       Int_t pos=packname.Last('/')+1;
-      if (pos) packname.Remove(0,pos);
-      if(fProof->EnablePackage(packname)<0) {
+      if (pos)
+	packname.Remove(0,pos);
+      if (fProof->EnablePackage(packname)<0) {
         Error("UploadPackage", "Enabling for %s failed!", packname.Data());
         return kFALSE;
       }

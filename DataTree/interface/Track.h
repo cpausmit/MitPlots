@@ -1,19 +1,16 @@
-// $Id: Track.h,v 1.4 2008/06/09 11:47:03 paus Exp $
-
+//--------------------------------------------------------------------------------------------------
+// $Id: Track.h,v 1.5 2008/06/11 13:48:37 loizides Exp $
+//
+// Track
+//
+// This will be re-written :-)
+//
+// Authors: C.Loizides, J.Bendavid, C.Paus
+//--------------------------------------------------------------------------------------------------
 #ifndef DATATREE_TRACK_H
 #define DATATREE_TRACK_H
  
 #include "MitAna/DataTree/interface/DataObject.h"
-
-//--------------------------------------------------------------------------------------------------
-//
-// Track
-//
-// Details to be worked out...
-//
-// Authors: C.Loizides, J.Bendavid, C.Paus
-//
-//--------------------------------------------------------------------------------------------------
 
 namespace mithep 
 {
@@ -84,5 +81,4 @@ void mithep::Track::SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, D
   fDzErr    = dzErr;
   fThetaErr = thetaErr;
 }
-
 #endif

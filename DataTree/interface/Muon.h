@@ -1,19 +1,16 @@
-// $Id: Muon.h,v 1.3 2008/06/09 00:06:36 bendavid Exp $
-
-#ifndef DATATREE_MUON_H
-#define DATATREE_MUON_H
- 
-#include "MitAna/DataTree/interface/Lepton.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Muon.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
 //
 // Muon
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides, J. Bendavid
-//
+// Authors: C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
+#ifndef DATATREE_MUON_H
+#define DATATREE_MUON_H
+ 
+#include "MitAna/DataTree/interface/Lepton.h"
 
 namespace mithep 
 {
