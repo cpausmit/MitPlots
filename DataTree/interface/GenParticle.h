@@ -1,11 +1,5 @@
-// $Id: GenParticle.h,v 1.3 2008/06/09 11:47:03 paus Exp $
-
-#ifndef DATATREE_GENPARTICLE_H
-#define DATATREE_GENPARTICLE_H
- 
-#include "MitAna/DataTree/interface/Particle.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: GenParticle.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
 //
 // GenParticle
 //
@@ -14,6 +8,11 @@
 // Authors: C.Loizides, xxx
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_GENPARTICLE_H
+#define DATATREE_GENPARTICLE_H
+ 
+#include "MitAna/DataTree/interface/Particle.h"
 
 namespace mithep 
 {

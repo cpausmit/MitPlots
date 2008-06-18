@@ -1,14 +1,5 @@
-// $Id: FullExampleMod.h,v 1.1 2008/06/09 00:06:36 bendavid Exp $
-
-#ifndef TREEMOD_FULLEXAMPLEMOD_H
-#define TREEMOD_FULLEXAMPLEMOD_H
-
-#include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
-
-class TH1D;
-
 //--------------------------------------------------------------------------------------------------
+// $Id: FullExampleMod.h,v 1.2 2008/06/12 10:22:29 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -21,6 +12,14 @@ class TH1D;
 // Authors: C.Loizides, J.Bendavid
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef TREEMOD_FULLEXAMPLEMOD_H
+#define TREEMOD_FULLEXAMPLEMOD_H
+
+#include "MitAna/TreeMod/interface/BaseMod.h" 
+#include "MitAna/DataTree/interface/Collections.h"
+
+class TH1D;
 
 namespace mithep 
 {

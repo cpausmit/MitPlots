@@ -1,12 +1,5 @@
-// $Id: THIArray.h 4233 2007-07-19 15:00:58Z loizides $
-
-#ifndef DATATREE_ARRAY_H
-#define DATATREE_ARRAY_H
-
-#include <TClonesArray.h>
-#include "MitAna/DataTree/interface/Collection.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Array.h,v 1.1 2008/06/17 13:30:36 loizides Exp $
 //
 // Array
 //
@@ -15,6 +8,12 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_ARRAY_H
+#define DATATREE_ARRAY_H
+
+#include <TClonesArray.h>
+#include "MitAna/DataTree/interface/Collection.h"
 
 namespace mithep 
 {

@@ -1,13 +1,6 @@
-// $Id: PVector.h,v 1.5 2008/06/11 13:48:37 loizides Exp $
-
-#ifndef DATATREE_PVECTOR_H
-#define DATATREE_PVECTOR_H
- 
-#include "MitAna/DataTree/interface/Vector.h"
-
 //--------------------------------------------------------------------------------------------------
 //
-// PVector
+// $Id: PVector.h,v 1.6 2008/06/17 13:30:37 loizides Exp $
 //
 // Implementation of Collection interface using std:vector class for pointers pointing
 // to allocated objects on heap.
@@ -17,6 +10,11 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_PVECTOR_H
+#define DATATREE_PVECTOR_H
+ 
+#include "MitAna/DataTree/interface/Vector.h"
 
 namespace mithep 
 {

@@ -1,15 +1,5 @@
-// $Id: TreeWriter.h,v 1.6 2008/06/11 13:27:48 loizides Exp $
-
-#ifndef DATATREE_TREEWRITER_H
-#define DATATREE_TREEWRITER_H
-
-#include <TNamed.h>
-#include <TString.h>
-#include <TFile.h>
-#include <TTree.h>
-#include <TObjArray.h>
-
 //--------------------------------------------------------------------------------------------------
+// $Id: TreeWriter.h,v 1.7 2008/06/17 08:22:41 loizides Exp $
 //
 // TreeWriter
 //
@@ -25,6 +15,15 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_TREEWRITER_H
+#define DATATREE_TREEWRITER_H
+
+#include <TNamed.h>
+#include <TString.h>
+#include <TFile.h>
+#include <TTree.h>
+#include <TObjArray.h>
 
 namespace mithep 
 {

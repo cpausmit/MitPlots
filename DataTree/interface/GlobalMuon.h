@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GlobalMuon.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
+// $Id: GlobalMuon.h,v 1.1 2008/06/18 13:23:13 paus Exp $
 //
 // GlobalMuon
 //
@@ -9,6 +9,7 @@
 // Authors: C.Loizides, J. Bendavid, C.Paus
 //
 //--------------------------------------------------------------------------------------------------
+
 #ifndef DATATREE_GLOBALMUON_H
 #define DATATREE_GLOBALMUON_H
  

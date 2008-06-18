@@ -1,12 +1,5 @@
-// $Id: Debug.h,v 1.2 2008/05/27 19:59:54 loizides Exp $
-
-#ifndef DATAUTIL_DEBUG_H
-#define DATAUTIL_DEBUG_H
-
-#include <Rtypes.h>
-#include <TError.h>
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Debug.h,v 1.3 2008/06/11 13:27:48 loizides Exp $
 //
 // Debug
 //
@@ -22,6 +15,12 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATAUTIL_DEBUG_H
+#define DATAUTIL_DEBUG_H
+
+#include <Rtypes.h>
+#include <TError.h>
 
 namespace mithep 
 {

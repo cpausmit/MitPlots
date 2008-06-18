@@ -1,12 +1,5 @@
-// $Id: Lepton.h,v 1.4 2008/06/09 11:47:03 paus Exp $
-
-#ifndef DATATREE_LEPTON_H
-#define DATATREE_LEPTON_H
- 
-#include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Track.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Lepton.h,v 1.5 2008/06/17 14:47:16 loizides Exp $
 //
 // Lepton
 //
@@ -15,6 +8,12 @@
 // Authors: C.Loizides, J.Bendavid
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_LEPTON_H
+#define DATATREE_LEPTON_H
+ 
+#include "MitAna/DataTree/interface/Particle.h"
+#include "MitAna/DataTree/interface/Track.h"
 
 namespace mithep 
 {

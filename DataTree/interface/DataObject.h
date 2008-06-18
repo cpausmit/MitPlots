@@ -1,12 +1,5 @@
-// $Id: DataObject.h,v 1.2 2008/06/11 13:48:37 loizides Exp $
-
-#ifndef DATATREE_DATAOBJECT_H
-#define DATATREE_DATAOBJECT_H
- 
-#include <TObject.h>
-#include "MitAna/DataTree/interface/Types.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: DataObject.h,v 1.3 2008/06/17 14:47:16 loizides Exp $
 //
 // DataObject
 //
@@ -15,6 +8,12 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_DATAOBJECT_H
+#define DATATREE_DATAOBJECT_H
+ 
+#include <TObject.h>
+#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {

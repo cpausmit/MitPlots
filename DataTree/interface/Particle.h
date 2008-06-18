@@ -1,12 +1,5 @@
-// $Id: Particle.h,v 1.7 2008/06/09 11:47:03 paus Exp $
-
-#ifndef DATATREE_PARTICLE_H
-#define DATATREE_PARTICLE_H
- 
-#include <TMath.h>
-#include "MitAna/DataTree/interface/DataObject.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Particle.h,v 1.8 2008/06/11 13:48:37 loizides Exp $
 //
 // Particle
 //
@@ -15,6 +8,12 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_PARTICLE_H
+#define DATATREE_PARTICLE_H
+ 
+#include <TMath.h>
+#include "MitAna/DataTree/interface/DataObject.h"
 
 namespace mithep 
 {

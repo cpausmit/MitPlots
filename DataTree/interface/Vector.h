@@ -1,13 +1,5 @@
-// $Id: Vector.h,v 1.7 2008/06/11 13:48:37 loizides Exp $
-
-#ifndef DATATREE_VECTOR_H
-#define DATATREE_VECTOR_H
- 
-#include <vector>
-#include "MitAna/DataTree/interface/Collection.h"
-
 //--------------------------------------------------------------------------------------------------
-//
+// $Id: Vector.h,v 1.8 2008/06/17 13:30:37 loizides Exp $
 // Vector
 //
 // Implementation of Collection interface using std:vector class. 
@@ -18,6 +10,12 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_VECTOR_H
+#define DATATREE_VECTOR_H
+ 
+#include <vector>
+#include "MitAna/DataTree/interface/Collection.h"
 
 namespace mithep 
 {

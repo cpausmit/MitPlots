@@ -1,22 +1,5 @@
-// $Id: Analysis.h,v 1.5 2008/06/11 14:52:43 loizides Exp $
-
-#ifndef DATAUTIL_ANALYSIS_H
-#define DATAUTIL_ANALYSIS_H
-
-#include <TObject.h>
-#include <TString.h>
-
-class TList;
-class TChain;
-class TDSet;
-class TString;
-class TAModule;
-class TAMSelector;
-class TAMVirtualLoader;
-class TObjArray;
-class TProof;
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Analysis.h,v 1.6 2008/06/12 04:10:36 loizides Exp $
 //
 // Analysis
 //
@@ -36,6 +19,22 @@ class TProof;
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATAUTIL_ANALYSIS_H
+#define DATAUTIL_ANALYSIS_H
+
+#include <TObject.h>
+#include <TString.h>
+
+class TList;
+class TChain;
+class TDSet;
+class TString;
+class TAModule;
+class TAMSelector;
+class TAMVirtualLoader;
+class TObjArray;
+class TProof;
 
 namespace mithep 
 {

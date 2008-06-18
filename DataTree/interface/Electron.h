@@ -1,11 +1,5 @@
-// $Id: Electron.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
-
-#ifndef DATATREE_ELECTRON_H
-#define DATATREE_ELECTRON_H
- 
-#include "MitAna/DataTree/interface/Lepton.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Electron.h,v 1.5 2008/06/17 14:47:16 loizides Exp $
 //
 // Electron
 //
@@ -14,6 +8,11 @@
 // Authors: C.Loizides, J. Bendavid
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_ELECTRON_H
+#define DATATREE_ELECTRON_H
+ 
+#include "MitAna/DataTree/interface/Lepton.h"
 
 namespace mithep 
 {

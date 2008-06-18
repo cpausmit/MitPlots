@@ -1,14 +1,5 @@
-// $Id: ParticleExampleMod.h,v 1.5 2008/06/09 00:06:36 bendavid Exp $
-
-#ifndef TREEMOD_PARTICLEXAMPLEMOD_H
-#define TREEMOD_PARTICLEXAMPLEMOD_H
-
-#include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
-
-class TH1D;
-
 //--------------------------------------------------------------------------------------------------
+// $Id: ParticleExampleMod.h,v 1.6 2008/06/12 10:22:29 loizides Exp $
 //
 // ParticleExampleAnaMod
 //
@@ -21,6 +12,14 @@ class TH1D;
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef TREEMOD_PARTICLEXAMPLEMOD_H
+#define TREEMOD_PARTICLEXAMPLEMOD_H
+
+#include "MitAna/TreeMod/interface/BaseMod.h" 
+#include "MitAna/DataTree/interface/Collections.h"
+
+class TH1D;
 
 namespace mithep 
 {

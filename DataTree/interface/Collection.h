@@ -1,11 +1,5 @@
-// $Id: Collection.h,v 1.5 2008/06/11 13:48:37 loizides Exp $
-
-#ifndef DATATREE_COLLECTION_H
-#define DATATREE_COLLECTION_H
- 
-#include "MitAna/DataTree/interface/BaseCollection.h"
-
 //--------------------------------------------------------------------------------------------------
+// $Id: Collection.h,v 1.6 2008/06/17 13:30:37 loizides Exp $
 //
 // Collection
 //
@@ -14,6 +8,11 @@
 // Authors: C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
+
+#ifndef DATATREE_COLLECTION_H
+#define DATATREE_COLLECTION_H
+ 
+#include "MitAna/DataTree/interface/BaseCollection.h"
 
 namespace mithep 
 {

@@ -1,4 +1,14 @@
-// $Id: THIAnaBaseMod.h 4980 2008-01-25 12:03:31Z loizides $
+//--------------------------------------------------------------------------------------------------
+// $Id: BaseMod.h,v 1.1 2008/06/12 08:47:57 loizides Exp $
+//
+// BaseMod
+//
+// This TAM module is the base module for all our TAM modules.
+//
+// Authors: C.Loizides
+//
+//--------------------------------------------------------------------------------------------------
+
 
 #ifndef TREEMOD_BASEMOD_H
 #define TREEMOD_BASEMOD_H
