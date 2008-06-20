@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.8 2008/06/18 13:23:13 paus Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.9 2008/06/18 14:10:06 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -10,8 +10,9 @@
 #include "MitAna/DataTree/interface/Array.h"
 #include "MitAna/DataTree/interface/ObjArray.h"
 #include "MitAna/DataTree/interface/Vector.h"
-#include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
+#include "MitAna/DataTree/interface/RunInfo.h"
+#include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/GenParticle.h"
@@ -31,8 +32,9 @@
 
 #pragma link C++ class mithep::Names+;
 
-#pragma link C++ class mithep::DataObject+;
 #pragma link C++ class mithep::EventHeader+;
+#pragma link C++ class mithep::RunInfo+;
+#pragma link C++ class mithep::DataObject+;
 #pragma link C++ class mithep::Track+;
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::GenParticle+;
@@ -58,7 +60,6 @@
 #pragma link C++ class mithep::Array<mithep::Muon>+;
 #pragma link C++ class mithep::Array<mithep::Electron>+;
 #pragma link C++ class mithep::Array<mithep::GlobalMuon>+;
-#pragma link C++ class mithep::Vector<mithep::EventHeader>+;
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::TrackCol;
 #pragma link C++ typedef mithep::ParticleCol;
