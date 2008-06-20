@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.7 2008/06/18 13:23:13 paus Exp $
+// $Id: Names.h,v 1.8 2008/06/18 19:08:14 loizides Exp $
 //
 // Names
 //
@@ -19,13 +19,16 @@ namespace mithep
   class Names 
   {
     public:
-      static const char *gkMitTreeName;
+      static const char *gkEvtTreeName;
       static const char *gkEvtHeaderBrn;
       static const char *gkGenPartBrn;
       static const char *gkTrackBrn;
       static const char *gkMuonBrn;
       static const char *gkElectronBrn;
       static const char *gkGlobalMuonBrn;
+
+      static const char *gkRunTreeName;
+      static const char *gkRunInfoBrn;
   };
 }
 #endif

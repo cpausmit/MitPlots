@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.6 2008/06/11 23:36:37 paus Exp $
+// $Id: Analysis.cc,v 1.7 2008/06/18 13:23:13 paus Exp $
 
 #include <Riostream.h>
 #include <TFile.h>
@@ -36,7 +36,7 @@ Analysis::Analysis(Bool_t useproof) :
   fChain(0), 
   fSet(0), 
   fDeleteList(new TList),
-  fTreeName(Names::gkMitTreeName),
+  fTreeName(Names::gkEvtTreeName),
   fCompLevel(2), 
   fProof(0),
   fDoNEvents(TChain::kBigNumber)
