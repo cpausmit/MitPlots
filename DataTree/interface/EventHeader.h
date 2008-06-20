@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.1 2008/06/17 14:45:22 loizides Exp $
+// $Id: EventHeader.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
 //
 // EventHeader
 //
@@ -24,13 +24,20 @@ namespace mithep
 
       UInt_t              EvtNum()       const { return fEvtNum; }
       UInt_t              LumiSec()      const { return fLumiSec; }
+      Int_t               RunEntry()     const { return fRunEntry; }
       UInt_t              RunNum()       const { return fRunNum; }
+
+      void                SetEvtNum(UInt_t i)  { fEvtNum=i; }
+      void                SetLumiSec(UInt_t i) { fLumiSec=i; }
+      void                SetRunEntry(Int_t i) { fRunEntry=i; }
+      void                SetRunNum(UInt_t i)  { fRunNum=i; }
 
     protected:
       UInt_t              fRunNum;          // run number
       UInt_t              fEvtNum;          // event number
       UInt_t              fLumiSec;         // luminosity block number
-
+      Int_t               fRunEntry;        // entry for run block
+      
       ClassDef(EventHeader, 1) // Event header class
   };
 }
