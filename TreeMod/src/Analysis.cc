@@ -1,5 +1,6 @@
-// $Id: Analysis.cc,v 1.7 2008/06/18 13:23:13 paus Exp $
+// $Id: Analysis.cc,v 1.8 2008/06/20 17:50:52 loizides Exp $
 
+#include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
 #include <TFile.h>
 #include <TList.h>
@@ -14,8 +15,8 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #include "MitAna/TAM/interface/TAModule.h"
-#include "MitAna/TAM/interface/TAMSelector.h"
-#include "MitAna/TreeMod/interface/Analysis.h"
+//#include "MitAna/TAM/interface/TAMSelector.h"
+#include "MitAna/TreeMod/interface/Selector.h"
 
 ClassImp(mithep::Analysis)
 
@@ -321,7 +322,7 @@ Bool_t Analysis::Init()
   } else {
 
     // when not running Proof, we must make a selector
-    fSelector = new TAMSelector; 
+    fSelector = new Selector; 
     fSelector->AddInput(fSuperMod);
     MDB(kAnalysis, 2)
       fSelector->SetVerbosity(1);
@@ -392,7 +393,7 @@ void Analysis::Run()
     MDB(kAnalysis, 1)
       Info("Run", "Start processing with PROOF...");
 
-    fSet->Process("TAMSelector","",fDoNEvents);
+    fSet->Process("Selector","",fDoNEvents);
 
   } else {
 
