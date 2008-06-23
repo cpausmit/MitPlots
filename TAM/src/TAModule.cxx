@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx 3999 2007-05-17 17:41:42Z loizides $
+// $Id: TAModule.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "TAModule.h"
@@ -94,8 +94,10 @@ ClassImp(TAModule)
 const Char_t TAModule::kExecBegin          = 10;
 const Char_t TAModule::kExecSlaveBegin     = 20;
 const Char_t TAModule::kExecProcess        = 30;
-const Char_t TAModule::kExecSlaveTerminate = 40;
-const Char_t TAModule::kExecTerminate      = 50;
+const Char_t TAModule::kExecBeginRun       = 40;
+const Char_t TAModule::kExecEndRun         = 50;
+const Char_t TAModule::kExecSlaveTerminate = 60;
+const Char_t TAModule::kExecTerminate      = 70;
 
 
 //______________________________________________________________________________
@@ -268,6 +270,10 @@ void TAModule::Exec(Option_t* option)
       SlaveBegin();
    } else if (option == &kExecProcess) {
       Process();
+   } else if (option == &kExecBeginRun) {
+      BeginRun();
+   } else if (option == &kExecEndRun) {
+      EndRun();
    } else if (option == &kExecSlaveTerminate) {
       SlaveTerminate();
    } else if (option == &kExecTerminate) {

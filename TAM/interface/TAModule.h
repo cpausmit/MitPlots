@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h 3594 2007-01-05 22:52:44Z loizides $
+// $Id: TAModule.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -50,6 +50,8 @@ private:
    static const Char_t kExecBegin;           //!key to mark Begin
    static const Char_t kExecSlaveBegin;      //!key to mark SlaveBegin
    static const Char_t kExecProcess;         //!key to mark Process
+   static const Char_t kExecBeginRun;        //!key to mark BeginRun
+   static const Char_t kExecEndRun;          //!key to mark EndRun
    static const Char_t kExecSlaveTerminate;  //!key to mark SlaveTerminate
    static const Char_t kExecTerminate;       //!key to mark Terminate
    
@@ -90,6 +92,8 @@ protected:
    virtual void        Begin()           {}
    virtual void        SlaveBegin()      {}
    virtual void        Process()         {}
+   virtual void        BeginRun()        {}
+   virtual void        EndRun()          {}
    virtual void        SlaveTerminate()  {}
    virtual void        Terminate()       {}
 
