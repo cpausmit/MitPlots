@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
+// $Id: RunInfo.h,v 1.1 2008/06/20 17:46:41 loizides Exp $
 //
 // RunInfo
 //
@@ -26,7 +26,7 @@ namespace mithep
       void                SetRunNum(UInt_t i)  { fRunNum=i; }
 
     protected:
-      UInt_t              fRunNum;          // run number
+      UInt_t              fRunNum; // run number
       
       ClassDef(RunInfo, 1) // Run info class
   };

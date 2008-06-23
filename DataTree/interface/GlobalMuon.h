@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GlobalMuon.h,v 1.1 2008/06/18 13:23:13 paus Exp $
+// $Id: GlobalMuon.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
 //
 // GlobalMuon
 //
 // Global muons are muons which have been reconstructed using a combination of as many as possible
 // detector elements.
 //
-// Authors: C.Loizides, J. Bendavid, C.Paus
+// Authors: C.Loizides, J.Bendavid, C.Paus
 //
 //--------------------------------------------------------------------------------------------------
 
