@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx 4001 2007-05-17 22:14:23Z loizides $
+// $Id: TAMSelector.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -457,7 +457,7 @@ void TAMSelector::LoadBranch(const Char_t *bname)
    
    if(fCurEvt==-1) {
       Error("LoadBranch",
-            "Can not load branch with name [%s] at this point (fCurEvt==1).",
+            "Can not load branch with name [%s] at this point (fCurEvt==-1).",
             bname);
       AbortAnalysis();
    }
@@ -609,36 +609,47 @@ Bool_t TAMSelector::Process(Long64_t entry)
       // There is currently no reliable way to exit cleanly back to the
       // interpreter, so simply return immediately.
       return kFALSE;
-
-   } else {
-
-      // Store object counter
-      fObjCounter=TProcessID::GetObjectCount();;
-
-      fCurEvt = entry;
-      ZeroAllBranches();
-      if (fModAborted) {
-         fAModules->ResetAllActiveFlags();
-         fModAborted = kFALSE;
-      } else if (fEventAborted) {
-         fAModules->ResetAllActiveFlags();
-         fEventAborted = kFALSE;
-      }
-      
-      if (fVerbosity>9) {
-         if ((entry % 100)==0) {
-            fprintf(stderr,"Processing entry %lld...                       \r",
-                    entry);
-         }
-      }
-      fAModules->ExecuteTask(&TAModule::kExecProcess);
-
-      ClearAllLoaders();
-      if (fEventObjs.IsEmpty()==kFALSE) fEventObjs.Delete();
-
-      // Restore object counter
-      TProcessID::SetObjectCount(fObjCounter);
    }
+
+   fCurEvt = entry;
+   ZeroAllBranches();
+   if (fModAborted) {
+     fAModules->ResetAllActiveFlags();
+     fModAborted = kFALSE;
+   } else if (fEventAborted) {
+     fAModules->ResetAllActiveFlags();
+     fEventAborted = kFALSE;
+   }
+
+   // store object counter
+   if (BeginRun()) {
+     fObjCounterRun=TProcessID::GetObjectCount();;
+     fAModules->ExecuteTask(&TAModule::kExecBeginRun);
+   }
+
+   // store object counter
+   fObjCounter=TProcessID::GetObjectCount();;
+      
+   if (fVerbosity>9) {
+     if ((entry % 100)==0) {
+       fprintf(stderr,"Processing entry %lld...                       \r",
+               entry);
+     }
+   }
+   fAModules->ExecuteTask(&TAModule::kExecProcess);
+
+   if (EndRun()) {
+     //fObjCounterRun=TProcessID::GetObjectCount();;
+     fAModules->ExecuteTask(&TAModule::kExecEndRun);
+     fObjCounter=fObjCounterRun;
+   }
+
+   ClearAllLoaders();
+   if (fEventObjs.IsEmpty()==kFALSE) 
+     fEventObjs.Delete();
+
+   // restore object counter
+   TProcessID::SetObjectCount(fObjCounter);
 
    return kTRUE;
 }

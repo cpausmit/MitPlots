@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h 3116 2006-07-30 22:11:44Z loizides $
+// $Id: TAMSelector.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -37,7 +37,7 @@ class TAMOutput;
 
 
 class TAMSelector : public TSelector {
-private:
+protected:
    
    struct TAMEvtObj : TNamed {
       // Class for storing event objects:
@@ -62,6 +62,7 @@ private:
    Bool_t            fEventAborted;    //!true if the current event should be aborted
    Bool_t            fActNotify;       //!true if notify is active (avoiding recursive calls of Notify())
    UInt_t            fObjCounter;      //keep object counter for resetting it in the process loop
+   UInt_t            fObjCounterRun;   //keep object counter for resetting it in the process loop when end of run is reached
    UInt_t            fVerbosity;       //true if one wants to print debug info
    TList             fLoaders;         //list of data loaders
 
@@ -85,6 +86,8 @@ public:
    virtual Bool_t    AddObjThisEvt(TObject* obj);
    virtual Bool_t    AddObjThisEvt(TObject* obj, const char *name);
    void              Begin(TTree* tree);
+   virtual Bool_t    BeginRun()                { return kFALSE; }
+   virtual Bool_t    EndRun()                  { return kFALSE; }
    TAMOutput        *FindModOutput(const TAModule* mod);
    virtual TObject  *FindObjThisEvt(const Char_t* name) const;
    virtual TObject  *FindPublicObj(const Char_t* name)  const;
