@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.6 2008/06/20 17:50:52 loizides Exp $
+// $Id: Names.cc,v 1.7 2008/06/24 14:01:41 loizides Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -15,5 +15,5 @@ const char *Names::gkGlobalMuonBrn = "GlobalMuons";
 const char *Names::gkRunTreeName   = "Runs";
 const char *Names::gkRunInfoBrn    = "RunInfo";
 
-const char *Names::gkLATreeName    = "EventsLA";
-const char *Names::gkLAHeaderBrn   = "Header";
+const char *Names::gkLATreeName    = "FrameWork";
+const char *Names::gkLAHeaderBrn   = "LAHeader";
