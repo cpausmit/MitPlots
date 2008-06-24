@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Debug.h,v 1.3 2008/06/11 13:27:48 loizides Exp $
+// $Id: Debug.h,v 1.4 2008/06/18 19:08:14 loizides Exp $
 //
 // Debug
 //
@@ -13,7 +13,6 @@
 //  Please, do not introduce more levels!
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATAUTIL_DEBUG_H
@@ -40,10 +39,8 @@ namespace mithep
      virtual ~Debug() {}
      Debug(const Debug &cpy);
 
-     ClassDef(Debug, 0) // Defines different debug masks
-
+   ClassDef(Debug, 0) // Defines different debug masks
   }; 
-
 }
 
 R__EXTERN mithep::Debug::EDebugMask gDebugMask;

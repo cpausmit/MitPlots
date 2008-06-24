@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.4 2008/06/09 11:47:03 paus Exp $
+// $Id: TreeWriter.cc,v 1.5 2008/06/17 08:22:41 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -284,7 +284,8 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
 //-------------------------------------------------------------------------------------------------
 Long64_t TreeWriter::GetEntries(const char *tn) const
 { 
-  //
+  // Return entries of tree with given name. If no tree is given, return sum of entries
+  // of all trees.
 
    if (fTrees.GetEntries()==0) return -1;
 

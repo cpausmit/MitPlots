@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.7 2008/06/17 08:22:41 loizides Exp $
+// $Id: TreeWriter.h,v 1.8 2008/06/18 19:08:14 loizides Exp $
 //
 // TreeWriter
 //
@@ -13,7 +13,6 @@
 // tree(s) in the same file using the TreeWriter::AddBranchToTree member functions.
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_TREEWRITER_H
@@ -117,7 +116,7 @@ namespace mithep
     private:
       const char          *CName(void *obj)             const; 
 
-      ClassDef(TreeWriter,0) // Tree writer class
+    ClassDef(TreeWriter,0) // Tree writer class
   };
 }
 #endif

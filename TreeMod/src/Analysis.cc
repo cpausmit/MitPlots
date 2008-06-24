@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.8 2008/06/20 17:50:52 loizides Exp $
+// $Id: Analysis.cc,v 1.9 2008/06/23 10:54:20 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -15,7 +15,6 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #include "MitAna/TAM/interface/TAModule.h"
-//#include "MitAna/TAM/interface/TAMSelector.h"
 #include "MitAna/TreeMod/interface/Selector.h"
 
 ClassImp(mithep::Analysis)

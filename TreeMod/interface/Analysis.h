@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.6 2008/06/12 04:10:36 loizides Exp $
+// $Id: Analysis.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
 //
 // Analysis
 //
@@ -17,7 +17,6 @@
 // for an example of how to use this class.
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATAUTIL_ANALYSIS_H
@@ -104,7 +103,7 @@ namespace mithep
       Bool_t                    InitProof();
       Bool_t                    UploadPackages(TList *packages);
 
-      ClassDef(Analysis,0) // Top-level analysis class 
+    ClassDef(Analysis,0) // Top-level analysis class 
   };
 }
 #endif
