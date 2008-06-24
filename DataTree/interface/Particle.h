@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.8 2008/06/11 13:48:37 loizides Exp $
+// $Id: Particle.h,v 1.9 2008/06/18 19:08:14 loizides Exp $
 //
 // Particle
 //
 // Details to be worked out...
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_PARTICLE_H
@@ -37,7 +36,7 @@ namespace mithep
     protected:
       FourVector       fFourVector; // four momentum vector
       
-      ClassDef(Particle, 1) // Particle class
+    ClassDef(Particle, 1) // Particle class
   };
 }
 #endif

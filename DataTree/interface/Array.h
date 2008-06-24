@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.1 2008/06/17 13:30:36 loizides Exp $
+// $Id: Array.h,v 1.2 2008/06/18 19:08:13 loizides Exp $
 //
 // Array
 //
 // Implementation of Collection interface using TClonesArray class. 
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_ARRAY_H
@@ -52,7 +51,7 @@ namespace mithep
     private:
       Array(const Array &a);
 
-      ClassDefT(Array,1) // Wrapper around TClonesArray class
+    ClassDefT(Array,1) // Wrapper around TClonesArray class
   };
 }
 

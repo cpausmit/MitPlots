@@ -1,11 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
+// $Id: EventHeader.h,v 1.3 2008/06/20 17:50:41 loizides Exp $
 //
 // EventHeader
 //
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_EVENTHEADER_H
@@ -38,7 +37,7 @@ namespace mithep
       UInt_t              fLumiSec;         // luminosity block number
       Int_t               fRunEntry;        // entry for run block
       
-      ClassDef(EventHeader, 1) // Event header class
+    ClassDef(EventHeader, 1) // Event header class
   };
 }
 #endif

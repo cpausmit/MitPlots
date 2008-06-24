@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.3 2008/06/17 13:30:37 loizides Exp $
+// $Id: BaseCollection.h,v 1.4 2008/06/18 19:08:13 loizides Exp $
 //
 // BaseCollection
 //
 // Base collection class (virtual) to allow efficient resetting in TAM.
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_BASECOLLECTION_H
@@ -26,7 +25,7 @@ namespace mithep
       virtual UInt_t               GetEntries()                   const = 0;
       virtual void                 Reset()                              = 0;
 
-      ClassDef(BaseCollection,1) // Base class of all our collections
+    ClassDef(BaseCollection,1) // Base class of all our collections
   };
 }
 #endif

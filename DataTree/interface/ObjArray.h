@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.1 2008/06/17 13:30:37 loizides Exp $
+// $Id: ObjArray.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
 //
 // ObjArray
 //
 // Implementation of Collection interface using TObjArray class. 
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_OBJARRAY_H
@@ -54,7 +53,7 @@ namespace mithep
     private:
       ObjArray(const ObjArray &a);
 
-      ClassDefT(ObjArray,1) // Wrapper around TClonesArray class
+    ClassDefT(ObjArray,1) // Wrapper around TClonesArray class
   };
 }
 

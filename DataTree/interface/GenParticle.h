@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
+// $Id: GenParticle.h,v 1.5 2008/06/18 19:08:14 loizides Exp $
 //
 // GenParticle
 //
 // Details to be worked out...
 //
 // Authors: C.Loizides, xxx
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_GENPARTICLE_H
@@ -32,7 +31,7 @@ namespace mithep
       Int_t               fStatus;       // status flag of generator
       Short_t             fMother;       // mother index
 
-      ClassDef(GenParticle,1) // Generated particle class
+    ClassDef(GenParticle,1) // Generated particle class
   };
 }
 #endif

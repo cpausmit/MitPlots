@@ -1,11 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.1 2008/06/20 17:46:41 loizides Exp $
+// $Id: RunInfo.h,v 1.2 2008/06/23 19:39:51 loizides Exp $
 //
 // RunInfo
 //
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_RUNINFO_H
@@ -28,7 +27,7 @@ namespace mithep
     protected:
       UInt_t              fRunNum; // run number
       
-      ClassDef(RunInfo, 1) // Run info class
+    ClassDef(RunInfo, 1) // Run info class
   };
 }
 #endif

@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.5 2008/06/17 14:47:16 loizides Exp $
+// $Id: Lepton.h,v 1.6 2008/06/18 19:08:14 loizides Exp $
 //
 // Lepton
 //
 // Details to be worked out...
 //
 // Authors: C.Loizides, J.Bendavid
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_LEPTON_H
@@ -30,7 +29,7 @@ namespace mithep
     protected:
       Track	fTrack; // track associated with lepton
       
-      ClassDef(Lepton, 1) // Lepton class
+    ClassDef(Lepton, 1) // Lepton class
   };
 }
 #endif

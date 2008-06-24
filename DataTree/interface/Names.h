@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.8 2008/06/18 19:08:14 loizides Exp $
+// $Id: Names.h,v 1.9 2008/06/20 17:50:52 loizides Exp $
 //
 // Names
 //
@@ -29,6 +29,9 @@ namespace mithep
 
       static const char *gkRunTreeName;
       static const char *gkRunInfoBrn;
+
+      static const char *gkLATreeName;
+      static const char *gkLAHeaderBrn;
   };
 }
 #endif

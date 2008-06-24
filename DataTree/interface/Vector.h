@@ -1,5 +1,6 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.8 2008/06/17 13:30:37 loizides Exp $
+// $Id: Vector.h,v 1.9 2008/06/18 19:08:14 loizides Exp $
+//
 // Vector
 //
 // Implementation of Collection interface using std:vector class. 
@@ -8,7 +9,6 @@
 // you should use the class PVector.
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_VECTOR_H
@@ -51,7 +51,7 @@ namespace mithep
     private:
       Vector(const Vector &v);
 
-      ClassDefT(Vector, 1) // Wrapper around std::vector class
+    ClassDefT(Vector, 1) // Wrapper around std::vector class
   };
 }
 #endif

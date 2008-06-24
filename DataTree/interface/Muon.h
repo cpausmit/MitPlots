@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.5 2008/06/18 13:23:13 paus Exp $
+// $Id: Muon.h,v 1.6 2008/06/18 19:08:14 loizides Exp $
 //
 // Muon
 //
@@ -22,7 +22,7 @@ namespace mithep
       Muon(Double_t px, Double_t py, Double_t pz, Double_t e) : Lepton(px,py,pz,e) {}
       ~Muon() {}
       
-      ClassDef(Muon, 1) // Muon class
+    ClassDef(Muon, 1) // Muon class
   };
 }
 #endif

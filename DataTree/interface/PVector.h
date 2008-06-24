@@ -1,6 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-//
-// $Id: PVector.h,v 1.6 2008/06/17 13:30:37 loizides Exp $
+// $Id: PVector.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
 //
 // Implementation of Collection interface using std:vector class for pointers pointing
 // to allocated objects on heap.
@@ -8,7 +7,6 @@
 // Persistency not tested, likely to not work, ask Constantin for help if you are in trouble.
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_PVECTOR_H
@@ -31,7 +29,7 @@ namespace mithep
     protected:
       void                             Delete();
 
-      ClassDefT(PVector, 1) // Wrapper around std::vector class
+    ClassDefT(PVector, 1) // Wrapper around std::vector class
   };
 }
 

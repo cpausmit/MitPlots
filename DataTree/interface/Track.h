@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.6 2008/06/18 13:23:13 paus Exp $
+// $Id: Track.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
 //
 // Track
 //
@@ -56,7 +56,7 @@ namespace mithep
       Double_t fThetaErr; // uncertainty on theta
       Int_t    fCharge;   // electric charge of reconstructed track
 	      
-      ClassDef(Track, 1) // Track class
+    ClassDef(Track, 1) // Track class
   };
 }
 

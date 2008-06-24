@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.6 2008/06/17 13:30:37 loizides Exp $
+// $Id: Collection.h,v 1.7 2008/06/18 19:08:13 loizides Exp $
 //
 // Collection
 //
 // Unification of access to a collection of objects (ArrayElements)
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_COLLECTION_H
@@ -37,7 +36,7 @@ namespace mithep
       virtual ArrayElement        *operator[](UInt_t idx)               = 0;
       virtual const ArrayElement  *operator[](UInt_t idx)         const = 0;
 
-      ClassDefT(Collection,1) // Generic access to a collection of ArrayElements
+    ClassDefT(Collection,1) // Generic access to a collection of ArrayElements
   };
 }
 #endif
