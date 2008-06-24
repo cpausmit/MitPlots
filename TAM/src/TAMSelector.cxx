@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.2 2008/06/23 19:39:14 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -639,7 +639,6 @@ Bool_t TAMSelector::Process(Long64_t entry)
    fAModules->ExecuteTask(&TAModule::kExecProcess);
 
    if (EndRun()) {
-     //fObjCounterRun=TProcessID::GetObjectCount();;
      fAModules->ExecuteTask(&TAModule::kExecEndRun);
      fObjCounter=fObjCounterRun;
    }

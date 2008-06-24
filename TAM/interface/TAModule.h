@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAModule.h,v 1.2 2008/06/23 10:53:00 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -74,6 +74,7 @@ protected:
    virtual Bool_t      AddObjThisEvt(TObject* obj, const char *name);
    template <class OC>
    void                AddOutput(OC* const & obj);
+   const TAMSelector  *GetSelector()       const { return fSelector; }
    Bool_t              IsEventAborted()    const { return (fSelector==0) ? kFALSE : fSelector->IsEventAborted(); }
    Bool_t              IsAnalysisAborted() const { return (fSelector==0) ? kFALSE : fSelector->IsAnalysisAborted(); }
    void                LoadBranch(const Char_t* bname);
