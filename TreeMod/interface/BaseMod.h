@@ -1,18 +1,18 @@
-//--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
+//---------------------------------------------------------------------------------------------------
+// $Id: BaseMod.h,v 1.3 2008/06/23 10:54:20 loizides Exp $
 //
 // BaseMod
 //
 // This TAM module is the base module for all our TAM modules.
 //
 // Authors: C.Loizides
-//
-//--------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------
 
 #ifndef TREEMOD_BASEMOD_H
 #define TREEMOD_BASEMOD_H
 
 #include "MitAna/TAM/interface/TAModule.h" 
+#include "MitAna/TreeMod/interface/Selector.h" 
 
 namespace mithep 
 {
@@ -20,9 +20,21 @@ namespace mithep
     public:
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module") 
         : TAModule(name,title) {}
-      ~BaseMod() {};
+      ~BaseMod() {}
 
-      ClassDef(BaseMod,1) // Base TAM module
+    protected:
+      const EventHeader   *GetEventHeader()    const { return GetSel()->GetEventHeader(); }
+      const RunInfo       *GetRunInfo()        const { return GetSel()->GetRunInfo(); }
+      const Selector      *GetSel()            const;
+      Bool_t               ValidRunInfo()      const { return GetSel()->ValidRunInfo(); } 
+
+    ClassDef(BaseMod,1) // Base TAM module
   };
+
+  //---------------------------------------------------------------------------------------------------
+  inline const Selector *BaseMod::GetSel() const 
+  { 
+    return static_cast<const Selector*>(GetSelector()); 
+  }
 }
 #endif
