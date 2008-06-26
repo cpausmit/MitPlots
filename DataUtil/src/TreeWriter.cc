@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.5 2008/06/17 08:22:41 loizides Exp $
+// $Id: TreeWriter.cc,v 1.6 2008/06/24 14:05:03 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -56,8 +56,9 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a given buffer size and splitlevel.
 
-  MyTree *t = AddOrGetMyTree(GetName());
-  t->Bronch(name, cname, obj, bsize, level);
+  MyTree  *t = AddOrGetMyTree(GetName());
+  TBranch *b = t->Bronch(name, cname, obj, bsize, level);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 
@@ -77,8 +78,9 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a given buffer size and default splitlevel.
 
-  MyTree *t = AddOrGetMyTree(GetName());
-  t->Bronch(name, cname, obj, bsize, fDefSL);
+  MyTree  *t = AddOrGetMyTree(GetName());
+  TBranch *b = t->Bronch(name, cname, obj, bsize, fDefSL);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 //__________________________________________________________________________________________________
@@ -97,8 +99,9 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a default buffer size and splitlevel.
 
-  MyTree *t = AddOrGetMyTree(GetName());
-  t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+  MyTree  *t = AddOrGetMyTree(GetName());
+  TBranch *b = t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 //__________________________________________________________________________________________________
@@ -117,8 +120,9 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a given buffer size and splitlevel.
 
-  MyTree *t = AddOrGetMyTree(tname);
-  t->Bronch(name, cname, obj, bsize, level);
+  MyTree  *t = AddOrGetMyTree(tname);
+  TBranch *b = t->Bronch(name, cname, obj, bsize, level);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 //__________________________________________________________________________________________________
@@ -138,8 +142,9 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a given buffer size and default splitlevel.
 
-  MyTree *t = AddOrGetMyTree(tname);
-  t->Bronch(name, cname, obj, bsize, fDefSL);
+  MyTree  *t = AddOrGetMyTree(tname);
+  TBranch *b = t->Bronch(name, cname, obj, bsize, fDefSL);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 //__________________________________________________________________________________________________
@@ -159,8 +164,9 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   // Add branch with name "name" into tree with name "tname" and set its address 
   // to object pointer for class name "cname" using a default buffer size and splitlevel.
 
-  MyTree *t = AddOrGetMyTree(tname);
-  t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+  MyTree  *t = AddOrGetMyTree(tname);
+  TBranch *b = t->Bronch(name, cname, obj, fDefBrSize, fDefSL);
+  b->SetCompressionLevel(GetCompressLevel());
 }
 
 //__________________________________________________________________________________________________
