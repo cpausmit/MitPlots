@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.7 2008/06/18 19:08:13 loizides Exp $
+// $Id: Collection.h,v 1.8 2008/06/24 14:01:41 loizides Exp $
 //
 // Collection
 //
-// Unification of access to a collection of objects (ArrayElements)
+// Unification of read access to a collection of objects (ArrayElements).
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -22,8 +22,6 @@ namespace mithep
       Collection() {}
       ~Collection() {}
 
-      virtual void                 AddCopy(const ArrayElement &)        = 0;
-      virtual void                 AddCopy(const ArrayElement *)        = 0;
       virtual ArrayElement        *At(UInt_t idx)                       = 0;
       virtual const ArrayElement  *At(UInt_t idx)                 const = 0;
       virtual UInt_t               GetEntries()                   const = 0;

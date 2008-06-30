@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
+// $Id: RefArray.h,v 1.1 2008/06/30 13:09:21 loizides Exp $
 //
 // RefArray
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_ARRAY_H
-#define DATATREE_ARRAY_H
+#ifndef DATATREE_REFARRAY_H
+#define DATATREE_REFARRAY_H
 
 #include <TClonesArray.h>
 #include <TRef.h>
@@ -41,14 +41,14 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)                  const;
 
     protected:
-      ArrayElement        *Allocate();
+      TRef                *Allocate();
       void                 Clear(Option_t *opt="");
 
       TClonesArray         fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
 
     private:
-      RefArray(const RefArray &a);
+      //RefArray(const RefArray &a);
 
     ClassDefT(RefArray,1) // Wrapper around TClonesArray class to hold TRef object pointers
   };
@@ -79,7 +79,7 @@ inline void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement *mithep::RefArray<ArrayElement>::Allocate()
+inline TRef *mithep::RefArray<ArrayElement>::Allocate()
 {
    // Allocate a slot in the array, *only* to be used in placement new operator.
    

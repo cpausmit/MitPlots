@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.2 2008/06/18 19:08:13 loizides Exp $
+// $Id: Array.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
 //
 // Array
 //
@@ -22,9 +22,7 @@ namespace mithep
       Array(const char *name=0, Int_t size=0);
       ~Array() {}
 
-      ArrayElement        *Add();
-      void                 AddCopy(const ArrayElement &ae);
-      void                 AddCopy(const ArrayElement *ae);
+      ArrayElement        *AddNew();
       const TClonesArray  &Arr()                                   const { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                          const;
@@ -71,7 +69,7 @@ inline mithep::Array<ArrayElement>::Array(const char *name, Int_t size) :
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement *mithep::Array<ArrayElement>::Add()
+inline ArrayElement *mithep::Array<ArrayElement>::AddNew()
 {
   // Add new entry and return pointer to it.
 
@@ -82,28 +80,9 @@ inline ArrayElement *mithep::Array<ArrayElement>::Add()
 template<class ArrayElement>
 inline ArrayElement *mithep::Array<ArrayElement>::Allocate()
 {
-   // Allocate a slot in the array, *only* to be used in
-   // placement new by derived classes.
+   // Allocate a slot in the array, *only* to be used in placement new operator.
    
    return static_cast<ArrayElement*>(fArray[fNumEntries++]);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::Array<ArrayElement>::AddCopy(const ArrayElement &ae)
-{
-  // Add new entry (by using copy constructor).
-
-  new(Allocate()) ArrayElement(ae); 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::Array<ArrayElement>::AddCopy(const ArrayElement *ae)
-{
-  // Add new entry (by using copy constructor).
-
-  new(Allocate()) ArrayElement(*ae); 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,6 +122,7 @@ inline void mithep::Array<ArrayElement>::Clear(Option_t *opt)
    fArray.Clear(opt); //TClonesArray with opt=="C" will call clear for every entry
                       //(TObjArray would delete objects if owner)
 
+   //fArray.Delete();
    fNumEntries = 0;
 }
 
@@ -169,6 +149,7 @@ template<class ArrayElement>
 inline ArrayElement* mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
+
   return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 }
 

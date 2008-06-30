@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.2 2008/06/18 19:08:14 loizides Exp $
+// $Id: ObjArray.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
 //
 // ObjArray
 //
@@ -23,8 +23,6 @@ namespace mithep
       ~ObjArray() {}
 
       void                 Add(ArrayElement *ae);
-      void                 AddCopy(const ArrayElement &ae);
-      void                 AddCopy(const ArrayElement *ae);
       const TObjArray     &Arr()                                   const { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                          const;
@@ -76,31 +74,6 @@ inline void mithep::ObjArray<ArrayElement>::Add(ArrayElement *ae)
   // Add new entry to array.
 
   AddLast(ae); 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::AddCopy(const ArrayElement &ae)
-{
-  // Add new entry (by using copy constructor).
-
-  if (!IsOwner()) {
-    ObjArray::Warning("AddCopy", "Adding element using heap although array is not owner.");
-  }
-  AddLast(new ArrayElement(ae)); 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::AddCopy(const ArrayElement *ae)
-{
-  // Add new entry (by using copy constructor).
-
-  if (!IsOwner()) {
-    ObjArray::Warning("AddCopy", "Adding element using heap although array is not owner.");
-    return;
-  }
-  AddLast(new ArrayElement(*ae)); 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,17 +135,6 @@ inline void mithep::ObjArray<ArrayElement>::Clear(Option_t *opt)
    fNumEntries = 0;
 }
 
-#if 0
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::ObjArray<ArrayElement>::New()
-{
-  // Add new entry and return pointer to it.
-
-  return new(Allocate()) ArrayElement(); 
-}
-#endif
-
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline const ArrayElement* mithep::ObjArray<ArrayElement>::operator[](UInt_t idx) const
@@ -196,6 +158,7 @@ template<class ArrayElement>
 inline ArrayElement* mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
+
   return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 }
 
