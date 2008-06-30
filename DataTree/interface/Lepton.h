@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.6 2008/06/18 19:08:14 loizides Exp $
+// $Id: Lepton.h,v 1.7 2008/06/24 14:01:41 loizides Exp $
 //
 // Lepton
 //
@@ -20,14 +20,22 @@ namespace mithep
   {
     public:
       Lepton() {}
-      Lepton(Double_t px, Double_t py, Double_t pz, Double_t e) : Particle(px,py,pz,e) {}
       ~Lepton() {}
-      
-      Track*	GetTrack() {return &fTrack;}
-      Int_t	Charge() const {return fTrack.Charge();}
 
+      virtual Track    *GetTrack()  const { return 0; }
+      
+      FourVector        Mom()    const { return FourVector(Px(),Py(),Pz(),E()); }
+      Double_t          E()      const { return sqrt(GetTrack()->P()*GetTrack()->P() + Mass()*Mass()); }
+      Double_t          Eta()    const { return GetTrack()->Mom().Eta(); }
+      Double_t          Phi()    const { return GetTrack()->Phi(); }
+      Double_t          Pt()     const { return GetTrack()->Pt(); }
+      Double_t          Px()     const { return GetTrack()->Px(); }
+      Double_t          Py()     const { return GetTrack()->Py(); }
+      Double_t          Pz()     const { return GetTrack()->Pz(); }
+      Double_t          P()      const { return GetTrack()->P(); }
+      Int_t             Charge() const { return GetTrack()->Charge(); }
+      
     protected:
-      Track	fTrack; // track associated with lepton
       
     ClassDef(Lepton, 1) // Lepton class
   };

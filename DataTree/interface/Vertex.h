@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
+// $Id: Vertex.h,v 1.1 2008/06/30 11:30:27 loizides Exp $
 //
 // Vertex
 //
@@ -18,7 +18,7 @@ namespace mithep
   class Vertex : public DataObject
   {
     public:
-      Vertex() {}
+      Vertex() : fPoint(0,0,0) {}
       Vertex(Double_t x, Double_t y, Double_t z) : fPoint(x,y,z) {}
       ~Vertex() {}
       

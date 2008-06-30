@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
+// $Id: Track.h,v 1.8 2008/06/24 14:01:41 loizides Exp $
 //
 // Track
 //
@@ -12,6 +12,8 @@
 #define DATATREE_TRACK_H
  
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/SimParticle.h"
+#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {
@@ -38,10 +40,22 @@ namespace mithep
       Double_t	PtErr()    const { return fPtErr; }
       Double_t	DzErr()    const { return fDzErr; }
       Double_t	ThetaErr() const { return fThetaErr; }
+
+      Double_t  Px() { return cos(fPhi)*fabs(fPt); }      
+      Double_t  Py() { return sin(fPhi)*fabs(fPt); }
+      Double_t  Pz() { return fabs(fPt)/tan(fTheta); }
+      Double_t  P() { return sqrt( Px()*Px() + Py()*Py() + Pz()*Pz() ); }
+      
+      ThreeVector Mom() { return ThreeVector(Px(),Py(),Pz()); }
       
       Int_t	Charge()   const { return fCharge; }
       
       void	SetCharge(Int_t charge) { fCharge = charge; }
+      
+      SimParticle* GetSimParticle() { return (SimParticle*)fSimParticleRef.GetObject(); }
+      
+      void	SetSimParticle(SimParticle* simPart) { fSimParticleRef = simPart; }
+      
       
     protected:
       Double_t fPhi;      // azimuthal angle
@@ -55,6 +69,7 @@ namespace mithep
       Double_t fDzErr;    // uncertainty on dz
       Double_t fThetaErr; // uncertainty on theta
       Int_t    fCharge;   // electric charge of reconstructed track
+      TRef     fSimParticleRef; //reference to sim particle (for monte carlo)
 	      
     ClassDef(Track, 1) // Track class
   };

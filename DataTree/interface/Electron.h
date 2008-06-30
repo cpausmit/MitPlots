@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.6 2008/06/18 19:08:14 loizides Exp $
+// $Id: Electron.h,v 1.7 2008/06/24 14:01:41 loizides Exp $
 //
 // Electron
 //
@@ -19,10 +19,33 @@ namespace mithep
   {
     public:
       Electron() {}
-      Electron(Double_t px, Double_t py, Double_t pz, Double_t e) : Lepton(px,py,pz,e) {}
       ~Electron() {}
+      
+      Track*	GetGsfTrack() const { return (Track*)fGsfTrackRef.GetObject(); }
+      Track*	GetTrackerTrack() const { return (Track*)fTrackerTrackRef.GetObject(); }
+      
+      Track*	GetTrack() const {return 0;}
+      
+      Double_t  Mass() const { return 0.51099892e-3; }
+      
+      void	SetGsfTrack(Track* gsfTrack) { fGsfTrackRef = gsfTrack; }
+      void	SetTrackerTrack(Track* trackerTrack) { fTrackerTrackRef = trackerTrack; }
+      
+    protected:
+    	TRef	fGsfTrackRef;
+	TRef	fTrackerTrackRef;
       
     ClassDef(Electron, 1) // Electron class
   };
 }
+#endif
+
+#if 0
+> Track* Electron::GetTrack() const {
+>       if (GetGsfTrack())
+>               return GetGsfTrack();
+>       else if (GetTrackerTrack())
+>               return GetTrackerTrack();
+>       else return (Track*)0;
+> }
 #endif

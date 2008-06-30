@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.7 2008/06/11 13:48:37 loizides Exp $
+// $Id: Collections.h,v 1.8 2008/06/18 13:23:13 paus Exp $
 //
 // Collections
 //
@@ -20,7 +20,6 @@
 #include "MitAna/DataTree/interface/Lepton.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
-#include "MitAna/DataTree/interface/GlobalMuon.h"
 
 namespace mithep 
 {
@@ -31,6 +30,5 @@ namespace mithep
   typedef Collection<Lepton>      LeptonCol;
   typedef Collection<Muon>        MuonCol;
   typedef Collection<Electron>    ElectronCol;
-  typedef Collection<GlobalMuon>  GlobalMuonCol;
 }
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.9 2008/06/18 19:08:14 loizides Exp $
+// $Id: Particle.h,v 1.10 2008/06/24 14:01:41 loizides Exp $
 //
 // Particle
 //
@@ -20,22 +20,22 @@ namespace mithep
   {
     public:
       Particle() {}
-      Particle(Double_t px, Double_t py, Double_t pz, Double_t e) : fFourVector(px,py,pz,e) {}
       ~Particle() {}
-    
-      Double_t          E()    const { return fFourVector.E(); }
-      Double_t          Eta()  const { return fFourVector.Eta(); }
-      Double_t          Mass() const { return TMath::Sqrt(fFourVector.M2()); }
-      const FourVector &Mom()  const { return fFourVector; }      
-      Double_t          Phi()  const { return fFourVector.Phi(); }
-      Double_t          Pt()   const { return fFourVector.Pt(); }
-      Double_t          Px()   const { return fFourVector.Px(); }
-      Double_t          Py()   const { return fFourVector.Py(); }
-      Double_t          Pz()   const { return fFourVector.Pz(); }
+     
+      virtual Int_t 		Charge() const { return 0; }
+      virtual Double_t		E()      const { return Mom().E();}
+      virtual Double_t		Eta()    const { return Mom().Eta();}
+      virtual Double_t		Mass()   const { return TMath::Sqrt(Mom().M2()); }
+      virtual FourVector	Mom()    const { return FourVector(0,0,0,0); }
+      virtual Double_t		Phi()    const { return Mom().Phi();}
+      virtual Double_t		Pt()     const { return Mom().Pt();}
+      virtual Double_t		Px()     const { return Mom().Px();}
+      virtual Double_t		Py()     const { return Mom().Py();}
+      virtual Double_t		Pz()     const { return Mom().Pz();}
+      virtual Double_t		P()      const { return Mom().P();}
 
     protected:
-      FourVector       fFourVector; // four momentum vector
-      
+     
     ClassDef(Particle, 1) // Particle class
   };
 }
