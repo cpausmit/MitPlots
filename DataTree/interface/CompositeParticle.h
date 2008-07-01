@@ -1,21 +1,20 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.2 2008/06/05 16:03:35 bendavid Exp $
+// $Id: CompositeParticle.h,v 1.1 2008/06/30 16:49:49 loizides Exp $
 //
 // Composite Particle
 //
 // Details to be worked out...
 //
-// Authors: J.Bendavid...
+// Authors: J.Bendavid, C.Loizides
 //
 //--------------------------------------------------------------------------------------------------
-
 
 #ifndef DATATREE_COMPOSITEPARTICLE_H
 #define DATATREE_COMPOSITEPARTICLE_H
  
+#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/RefArray.h"
 #include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {
@@ -25,19 +24,19 @@ namespace mithep
       CompositeParticle() {}
       ~CompositeParticle() {}
     
-      const RefArray<Particle> *GetDaughters() const { return &fDaughters; }
-    
-      void			AddDaughter(Particle* p) { fDaughters.Add(p); }
-      virtual Int_t		Charge() const;
-      Bool_t			HasDaughter(const Particle* p) const;
-      Bool_t			HasSameDaughters(CompositeParticle* p) const;
-      Bool_t			HasCommonDaughter(CompositeParticle* p) const;
-      virtual FourVector	Mom() const;
+      void			AddDaughter(Particle *p) { fDaughters.Add(p); }
+      Int_t		        Charge()              const;
+      const Particle           *GetDaughter(UInt_t i) const { return fDaughters.At(i); }
+      UInt_t                    GetNDaughters()       const { return fDaughters.GetEntries(); }
+      Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
+      Bool_t			HasSameDaughters(const CompositeParticle *p)  const;
+      Bool_t			IsDaughter(const Particle *p)                 const;
+      FourVector	        Mom()                 const;
         
     protected:
-      RefArray<Particle>        fDaughters; //
+      RefArray<Particle>        fDaughters; //references to daughter particles
       
-    ClassDef(CompositeParticle, 1)
+    ClassDef(CompositeParticle, 1) // Composite particle class
   };
 }
 #endif

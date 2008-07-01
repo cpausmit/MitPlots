@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.4 2008/06/11 13:48:37 loizides Exp $
+// $Id: FitVertex.h,v 1.1 2008/06/30 11:40:44 loizides Exp $
 //
-// FutVertex
+// FitVertex
 //
-// Details to be worked out...
+// This class holds reconstructed vertex information.
 //
-// Authors: J. Bendavid
-//
+// Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_FITVERTEX_H
@@ -46,12 +45,15 @@ namespace mithep
 	
     ClassDef(FitVertex, 1) // Reconstructed vertex class
   };
+}
 
-  inline void FitVertex::SetErrors(Double_t xErr, Double_t yErr, Double_t zErr) 
-  {
-    fXErr = xErr;
-    fYErr = yErr;
-    fZErr = zErr;
-  }
+//--------------------------------------------------------------------------------------------------
+inline void mithep::FitVertex::SetErrors(Double_t xErr, Double_t yErr, Double_t zErr) 
+{
+  // Set errors of vertex fix.
+
+  fXErr = xErr;
+  fYErr = yErr;
+  fZErr = zErr;
 }
 #endif

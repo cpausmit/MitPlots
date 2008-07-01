@@ -1,61 +1,79 @@
-// $Id: Muon.cc,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: CompositeParticle.cc,v 1.1 2008/06/30 16:49:50 loizides Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
-
 
 ClassImp(mithep::CompositeParticle)
 
 using namespace mithep;
 
-Int_t CompositeParticle::Charge() const {
-	Int_t charge = 0;
-	for (Int_t i=0; i<GetDaughters()->GetEntries(); i++)
-		charge += ((Particle*)GetDaughters()->At(i))->Charge();
+//--------------------------------------------------------------------------------------------------
+Int_t CompositeParticle::Charge() const 
+{
+  // Return sum of charge of daughter particles.
+
+  Int_t charge = 0;
+  for (UInt_t i=0; i<GetNDaughters(); ++i)
+    charge += GetDaughter(i)->Charge();
+  
+  return charge;
+}
+
+//--------------------------------------------------------------------------------------------------
+Bool_t CompositeParticle::HasCommonDaughter(const CompositeParticle *p) const 
+{
+  // Return true if a common daughter exists.
+
+  if(!p) return kFALSE;
+
+  for (UInt_t i=0; i<p->GetNDaughters(); ++i)
+    if (IsDaughter(p->GetDaughter(i)))
+      return kTRUE;
 	
-	return charge;
+  return kFALSE;
 }
 
-// Bool_t CompositeParticle::HasDaughter(const Particle* p) {
-// 	if ( fDaughters.IndexOf(p) >= 0 )
-// 		return true;
-// 	else
-// 		return false;
-// }
+//--------------------------------------------------------------------------------------------------
+Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle* p) const 
+{
+  // Return true if daughters are the same.
 
-Bool_t CompositeParticle::HasDaughter(const Particle* p) const {
-	if ( fDaughters.GetEntries() == 0 )
-		return false;
+  if(!p) return kFALSE;
 
-	for (UInt_t i=0; i<fDaughters.GetEntries(); i++)
-		if (fDaughters.At(i)==p)
-			return true;
-
-	return false;
-}
-
-Bool_t CompositeParticle::HasSameDaughters(CompositeParticle* p) const {
-	if ( fDaughters.GetEntries() != p->GetDaughters()->GetEntries())
-		return false;
+  if (GetNDaughters()!= p->GetNDaughters())
+    return kFALSE;
 		
-	for (Int_t i=0; i<p->GetDaughters()->GetEntries();i++)
-		if (!HasDaughter( (Particle*)p->GetDaughters()->At(i) ) )
-			return false;
+  for (UInt_t i=0; i<p->GetNDaughters(); ++i)
+    if (!IsDaughter(p->GetDaughter(i))) 
+        return kFALSE;
 	
-	return true;
+  return kTRUE;
 }
 
-Bool_t CompositeParticle::HasCommonDaughter(CompositeParticle* p) const {
-	for (Int_t i=0; i<p->GetDaughters()->GetEntries();i++)
-		if (HasDaughter( (Particle*)p->GetDaughters()->At(i) ) )
-			return true;
-	
-	return false;
+//--------------------------------------------------------------------------------------------------
+Bool_t CompositeParticle::IsDaughter(const Particle* p) const 
+{
+  // Return true if given particle is among daughters.
+
+  if(!p) return kFALSE;
+
+  if (!GetNDaughters())
+    return kFALSE;
+
+  for (UInt_t i=0; i<GetNDaughters(); ++i)
+    if (GetDaughter(i)==p)
+      return kTRUE;
+  
+  return kFALSE;
 }
 
-FourVector CompositeParticle::Mom() const {
-	FourVector mom;
-	for (Int_t i=0; i<GetDaughters()->GetEntries(); i++)
-		mom += ((Particle*)GetDaughters()->At(i))->Mom();
-	
-	return mom;
+//--------------------------------------------------------------------------------------------------
+FourVector CompositeParticle::Mom() const 
+{
+  // Return the vector sum of the momenta of the daughters.
+
+  FourVector mom;
+  for (UInt_t i=0; i<GetNDaughters(); ++i)
+    mom += (GetDaughter(i))->Mom();
+  
+  return mom;
 }
