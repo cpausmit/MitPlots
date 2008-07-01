@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.1 2008/06/30 13:09:21 loizides Exp $
+// $Id: RefArray.h,v 1.2 2008/06/30 16:54:11 loizides Exp $
 //
 // RefArray
 //
@@ -18,7 +18,8 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class RefArray : public Collection<ArrayElement> {
+  class RefArray : public Collection<ArrayElement> 
+  {
     public:
       RefArray(const char *name=0, Int_t size=0);
       ~RefArray() {}
@@ -48,7 +49,7 @@ namespace mithep
       UInt_t               fNumEntries;   //number of entries in the array
 
     private:
-      //RefArray(const RefArray &a);
+      RefArray(const RefArray &a);
 
     ClassDefT(RefArray,1) // Wrapper around TClonesArray class to hold TRef object pointers
   };
@@ -120,8 +121,7 @@ inline void mithep::RefArray<ArrayElement>::Clear(Option_t *opt)
 {
    // Default implementation for clearing the array.
 
-   fArray.Clear(opt); //TClonesArray with opt=="C" will call clear for every entry
-                      //(TObjArray would delete objects if owner)
+   fArray.Clear(opt);
 
    fNumEntries = 0;
 }

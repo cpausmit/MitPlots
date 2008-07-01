@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.10 2008/06/24 14:01:41 loizides Exp $
+// $Id: Particle.h,v 1.11 2008/06/30 16:54:40 loizides Exp $
 //
 // Particle
 //
@@ -36,7 +36,7 @@ namespace mithep
 
     protected:
      
-    ClassDef(Particle, 1) // Particle class
+    ClassDef(Particle, 1) // Generic particle class
   };
 }
 #endif

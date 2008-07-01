@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.4 2008/06/18 19:08:13 loizides Exp $
+// $Id: BaseCollection.h,v 1.5 2008/06/24 14:01:41 loizides Exp $
 //
 // BaseCollection
 //
@@ -23,7 +23,9 @@ namespace mithep
       ~BaseCollection() {}
 
       virtual UInt_t               GetEntries()                   const = 0;
+      virtual Bool_t               IsOwner()                      const = 0;
       virtual void                 Reset()                              = 0;
+      virtual void                 Trim()                               = 0;
 
     ClassDef(BaseCollection,1) // Base class of all our collections
   };

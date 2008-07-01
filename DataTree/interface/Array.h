@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
+// $Id: Array.h,v 1.4 2008/06/30 16:54:11 loizides Exp $
 //
 // Array
 //
@@ -17,7 +17,8 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class Array : public Collection<ArrayElement> {
+  class Array : public Collection<ArrayElement> 
+  {
     public:
       Array(const char *name=0, Int_t size=0);
       ~Array() {}
@@ -119,10 +120,8 @@ inline void mithep::Array<ArrayElement>::Clear(Option_t *opt)
 {
    // Default implementation for clearing the array.
 
-   fArray.Clear(opt); //TClonesArray with opt=="C" will call clear for every entry
-                      //(TObjArray would delete objects if owner)
+   fArray.Clear(opt); //with opt=="C" will call clear for every entry
 
-   //fArray.Delete();
    fNumEntries = 0;
 }
 

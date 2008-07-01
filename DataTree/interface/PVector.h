@@ -1,5 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
+// $Id: PVector.h,v 1.8 2008/06/24 14:01:41 loizides Exp $
+//
+// PVector
 //
 // Implementation of Collection interface using std:vector class for pointers pointing
 // to allocated objects on heap.

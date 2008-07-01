@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
+// $Id: ObjArray.h,v 1.4 2008/06/30 16:54:11 loizides Exp $
 //
 // ObjArray
 //
@@ -17,7 +17,8 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class ObjArray : public Collection<ArrayElement> {
+  class ObjArray : public Collection<ArrayElement> 
+  {
     public:
       ObjArray(const char *name=0, Int_t size=0);
       ~ObjArray() {}
@@ -129,8 +130,7 @@ inline void mithep::ObjArray<ArrayElement>::Clear(Option_t *opt)
 {
    // Default implementation for clearing the array.
 
-   fArray.Clear(opt); //TClonesArray with opt=="C" will call clear for every entry
-                      //(TObjArray would delete objects if owner)
+   fArray.Clear(opt); //will delete objects if owner
 
    fNumEntries = 0;
 }
