@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.11 2008/06/24 14:01:41 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.12 2008/06/30 16:54:41 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -21,13 +21,12 @@
 #include "MitAna/DataTree/interface/FitVertex.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Particle.h"
-
 #include "MitAna/DataTree/interface/Lepton.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
-#include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/GenParticle.h"
 #include "MitAna/DataTree/interface/SimParticle.h"
+#include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #endif
@@ -56,35 +55,46 @@
 #pragma link C++ class mithep::Electron+;
 #pragma link C++ class mithep::GenParticle+;
 #pragma link C++ class mithep::SimParticle+;
-#pragma link C++ class mithep::DecayParticle+;
-#pragma link C++ class mithep::Photon+;
 
 #pragma link C++ class mithep::BaseCollection+;
-#pragma link C++ class mithep::Collection<TRef>+;
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
 #pragma link C++ class mithep::Collection<mithep::Track>+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;
-#pragma link C++ class mithep::Collection<mithep::GenParticle>+;
 #pragma link C++ class mithep::Collection<mithep::Lepton>+;
 #pragma link C++ class mithep::Collection<mithep::Muon>+;
 #pragma link C++ class mithep::Collection<mithep::Electron>+;
+#pragma link C++ class mithep::Collection<mithep::GenParticle>+;
+#pragma link C++ class mithep::Collection<mithep::SimParticle>+;
 #pragma link C++ class mithep::Array<mithep::DataObject>+;
 #pragma link C++ class mithep::Array<mithep::Track>+;
-#pragma link C++ class mithep::Array<mithep::Particle>+;
 #pragma link C++ class mithep::Array<mithep::GenParticle>+;
 #pragma link C++ class mithep::Array<mithep::Lepton>+;
 #pragma link C++ class mithep::Array<mithep::Muon>+;
 #pragma link C++ class mithep::Array<mithep::Electron>+;
+#pragma link C++ class mithep::Array<mithep::SimParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::DataObject>+;
 #pragma link C++ class mithep::ObjArray<mithep::Track>+;
-#pragma link C++ class mithep::ObjArray<mithep::Particle>+;
 #pragma link C++ class mithep::ObjArray<mithep::GenParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::Lepton>+;
 #pragma link C++ class mithep::ObjArray<mithep::Muon>+;
 #pragma link C++ class mithep::ObjArray<mithep::Electron>+;
+#pragma link C++ class mithep::ObjArray<mithep::SimParticle>+;
+#pragma link C++ class mithep::Collection<TRef>+;
 #pragma link C++ class mithep::RefArray<mithep::Particle>+;
 
 #pragma link C++ class mithep::CompositeParticle+;
+#pragma link C++ class mithep::DecayParticle+;
+#pragma link C++ class mithep::Photon+;
+
+#pragma link C++ class mithep::Collection<mithep::CompositeParticle>+;
+#pragma link C++ class mithep::Collection<mithep::DecayParticle>+;
+#pragma link C++ class mithep::Collection<mithep::Photon>+;
+#pragma link C++ class mithep::Array<mithep::CompositeParticle>+;
+#pragma link C++ class mithep::Array<mithep::DecayParticle>+;
+#pragma link C++ class mithep::Array<mithep::Photon>+;
+#pragma link C++ class mithep::ObjArray<mithep::CompositeParticle>+;
+#pragma link C++ class mithep::ObjArray<mithep::DecayParticle>+;
+#pragma link C++ class mithep::ObjArray<mithep::Photon>+;
 
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::TrackCol;
