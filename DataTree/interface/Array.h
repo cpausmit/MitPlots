@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.4 2008/06/30 16:54:11 loizides Exp $
+// $Id: Array.h,v 1.5 2008/07/01 08:52:01 loizides Exp $
 //
 // Array
 //
@@ -24,6 +24,7 @@ namespace mithep
       ~Array() {}
 
       ArrayElement        *AddNew();
+      ArrayElement        *Allocate();
       const TClonesArray  &Arr()                                   const { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                          const;
@@ -41,7 +42,6 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)                  const;
 
     protected:
-      ArrayElement        *Allocate();
       void                 Clear(Option_t *opt="");
 
       TClonesArray         fArray;        //array for storage
