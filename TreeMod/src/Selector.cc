@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.1 2008/06/23 10:54:03 loizides Exp $
+// $Id: Selector.cc,v 1.2 2008/06/24 14:08:39 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -18,9 +18,9 @@ Selector::Selector() :
   fRunTree(0),
   fEventHeader(0),
   fRunInfo(0),
-  fCurRunNum(UInt_t(-1)),
   fLATree(0),
-  fLAHeader(0)
+  fLAHeader(0),
+  fCurRunNum(UInt_t(-1))
 {
 }
 
