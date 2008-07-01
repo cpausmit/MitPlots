@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.6 2008/06/24 14:05:03 loizides Exp $
+// $Id: TreeWriter.cc,v 1.7 2008/06/26 16:45:27 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 
@@ -191,6 +191,8 @@ MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
   TDirectory::TContext context(fFile); 
   tree = new MyTree(tn, tn);
   tree->SetDirectory(fFile);
+  if (fDoObjNumReset)
+    tree->BranchRef();
   fTrees.AddLast(tree);  
   return tree;
 }
