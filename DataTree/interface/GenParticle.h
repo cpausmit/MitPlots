@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.8 2008/07/01 08:55:34 loizides Exp $
+// $Id: GenParticle.h,v 1.9 2008/07/01 10:48:33 loizides Exp $
 //
 // GenParticle
 //
@@ -36,6 +36,7 @@ namespace mithep
 
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(GenParticle *p)  { fMother = p; }
+      void                SetVertex(Double_t x, Double_t y, Double_t z);       
       
     protected:
       Int_t               fCharge;       //charge (*3 to allow storage of fractional charges) 
@@ -71,5 +72,13 @@ inline void mithep::GenParticle::SetMom(Double_t px, Double_t py, Double_t pz, D
   // Set four vector.
 
   fFourVector.SetXYZT(px, py, pz, e);
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::GenParticle::SetVertex(Double_t x, Double_t y, Double_t z)
+{
+  // Set decay vertex.
+
+  fDecayVertex.SetXYZ(x,y,z);
 }
 #endif
