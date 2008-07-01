@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.7 2008/06/24 14:01:41 loizides Exp $
+// $Id: Muon.h,v 1.8 2008/06/30 16:54:40 loizides Exp $
 //
 // Muon
 //
@@ -23,39 +23,61 @@ namespace mithep
       Muon() {}
       ~Muon() {}
       
-      Track*	GetGlobalTrack() const { return (Track*)fGlobalTrackRef.GetObject(); }
-      Track*	GetStandaloneTrack() const { return (Track*)fStandaloneTrackRef.GetObject(); }
-      Track*	GetTrackerTrack() const { return (Track*)fTrackerTrackRef.GetObject(); }
+      const Track   *GetGlobalTrack()     const;
+      const Track   *GetStandaloneTrack() const;
+      const Track   *GetTrackerTrack()    const;
+      const Track*   GetTrack()           const;
+      Double_t       Mass()               const { return 105.658369e-3; }  
       
-      Track*	GetTrack() const {return 0;}
-      
-      Double_t  Mass() const { return 105.658369e-3; }  
-      
-      void	SetGlobalTrack(Track* globalTrack) { fGlobalTrackRef = globalTrack; }
-      void	SetStandaloneTrack(Track* standaloneTrack) { fStandaloneTrackRef = standaloneTrack; }
-      void	SetTrackerTrack(Track* trackerTrack) { fTrackerTrackRef = trackerTrack; }
+      void	     SetGlobalTrack(Track* t)     { fGlobalTrackRef = t; }
+      void	     SetStandaloneTrack(Track* t) { fStandaloneTrackRef = t; }
+      void	     SetTrackerTrack(Track* t)    { fTrackerTrackRef = t; }
       
     protected:
-    	TRef	fGlobalTrackRef;
-	TRef	fStandaloneTrackRef;
-	TRef	fTrackerTrackRef;
+      TRef	     fGlobalTrackRef;      //global combined track reference
+      TRef	     fStandaloneTrackRef;  //standalone muon track reference
+      TRef	     fTrackerTrackRef;     //tracker track reference
       
     ClassDef(Muon, 1) // Muon class
   };
 }
 
-#if 0
-> using namespace mithep;
-> 
-> Track* Muon::GetTrack() const {
->       if (GetGlobalTrack())
->               return GetGlobalTrack();
->       else if (GetStandaloneTrack())
->               return GetStandaloneTrack();
->       else if (GetTrackerTrack())
->               return GetTrackerTrack();
->       else return (Track*)0;
-> }
-#endif
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Muon::GetGlobalTrack() const 
+{ 
+  // Return global combined track.
 
+  return static_cast<const Track*>(fGlobalTrackRef.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Muon::GetStandaloneTrack() const 
+{ 
+  // Return standalone track.
+
+  return static_cast<const Track*>(fStandaloneTrackRef.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Muon::GetTrackerTrack() const 
+{ 
+  // Return tracker track.
+
+  return static_cast<const Track*>(fTrackerTrackRef.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Muon::GetTrack() const
+{
+  // Return "best" track.
+
+  if (GetGlobalTrack())
+    return GetGlobalTrack();
+  else if (GetStandaloneTrack())
+    return GetStandaloneTrack();
+  else if (GetTrackerTrack())
+    return GetTrackerTrack();
+
+  return 0;
+}
 #endif

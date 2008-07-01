@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.7 2008/06/24 14:01:41 loizides Exp $
+// $Id: Electron.h,v 1.8 2008/06/30 16:54:40 loizides Exp $
 //
 // Electron
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides, J. Bendavid
+// Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_ELECTRON_H
@@ -21,31 +21,48 @@ namespace mithep
       Electron() {}
       ~Electron() {}
       
-      Track*	GetGsfTrack() const { return (Track*)fGsfTrackRef.GetObject(); }
-      Track*	GetTrackerTrack() const { return (Track*)fTrackerTrackRef.GetObject(); }
+      const Track         *GetGsfTrack()     const;
+      const Track         *GetTrackerTrack() const;
+      const Track         *GetTrack()        const;
+      Double_t             Mass()            const { return 0.51099892e-3; }
       
-      Track*	GetTrack() const {return 0;}
-      
-      Double_t  Mass() const { return 0.51099892e-3; }
-      
-      void	SetGsfTrack(Track* gsfTrack) { fGsfTrackRef = gsfTrack; }
-      void	SetTrackerTrack(Track* trackerTrack) { fTrackerTrackRef = trackerTrack; }
+      void	           SetGsfTrack(Track* t)     { fGsfTrackRef = t; }
+      void	           SetTrackerTrack(Track* t) { fTrackerTrackRef = t; }
       
     protected:
-    	TRef	fGsfTrackRef;
-	TRef	fTrackerTrackRef;
+      TRef	           fGsfTrackRef;     //global combined track reference
+      TRef	           fTrackerTrackRef; //tracker track reference
       
     ClassDef(Electron, 1) // Electron class
   };
 }
-#endif
 
-#if 0
-> Track* Electron::GetTrack() const {
->       if (GetGsfTrack())
->               return GetGsfTrack();
->       else if (GetTrackerTrack())
->               return GetTrackerTrack();
->       else return (Track*)0;
-> }
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Electron::GetGsfTrack() const
+{
+  // Return global combined track.
+
+  return static_cast<const Track*>(fGsfTrackRef.GetObject());
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Electron::GetTrackerTrack() const
+{
+  // Return tracker track.
+
+  return static_cast<const Track*>(fTrackerTrackRef.GetObject());
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Electron::GetTrack() const
+{
+  // Return "best" track.
+
+  if (GetGsfTrack())
+    return GetGsfTrack();
+  else if (GetTrackerTrack())
+    return GetTrackerTrack();
+
+  return 0;
+}
 #endif
