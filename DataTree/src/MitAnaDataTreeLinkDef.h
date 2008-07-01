@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.12 2008/06/30 16:54:41 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.13 2008/07/01 09:17:45 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -99,9 +99,23 @@
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::TrackCol;
 #pragma link C++ typedef mithep::ParticleCol;
-#pragma link C++ typedef mithep::GenParticleCol;
 #pragma link C++ typedef mithep::LeptonCol;
 #pragma link C++ typedef mithep::MuonCol;
 #pragma link C++ typedef mithep::ElectronCol;
+#pragma link C++ typedef mithep::CompositeParticleCol;
+#pragma link C++ typedef mithep::GenParticleCol;
+#pragma link C++ typedef mithep::SimParticleCol;
+#pragma link C++ typedef mithep::DecayParticleCol;
+#pragma link C++ typedef mithep::PhotonParticleCol;
+
+#pragma link C++ typedef mithep::DataObjectArr;
+#pragma link C++ typedef mithep::TrackArr;
+#pragma link C++ typedef mithep::ParticleArr;
+#pragma link C++ typedef mithep::LeptonArr;
+#pragma link C++ typedef mithep::MuonArr;
+#pragma link C++ typedef mithep::ElectronArr;
+#pragma link C++ typedef mithep::GenParticleArr;
+#pragma link C++ typedef mithep::SimParticleArr;
+#pragma link C++ typedef mithep::PhotonParticleArr;
 
 #endif
