@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.9 2008/06/30 16:54:40 loizides Exp $
+// $Id: Collections.h,v 1.10 2008/07/01 14:09:27 loizides Exp $
 //
 // Collections
 //
@@ -37,7 +37,8 @@ namespace mithep
   typedef Collection<GenParticle>       GenParticleCol;
   typedef Collection<SimParticle>       SimParticleCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
-  typedef Collection<Photon>            PhotonParticleCol;
+  typedef Collection<Photon>            PhotonCol;
+  typedef Collection<Conversion>        ConversionCol;
 
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
@@ -48,6 +49,7 @@ namespace mithep
   typedef Array<GenParticle>            GenParticleArr;
   typedef Array<SimParticle>            SimParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
-  typedef Array<Photon>                 PhotonParticleArr;
+  typedef Array<Photon>                 PhotonArr;
+  typedef Array<Conversion>             ConversionArr;
 }
 #endif
