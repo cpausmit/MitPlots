@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.3 2008/07/01 08:52:01 loizides Exp $
+// $Id: RefArray.h,v 1.4 2008/07/02 12:36:34 bendavid Exp $
 //
 // RefArray
 //
-// Wrapper for a TClonesArray with TRefs to TObjects or derived objects.
+// Wrapper for a std::vector with TRefs to TObjects or derived objects.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -24,37 +24,39 @@ namespace mithep
       RefArray(const char *name=0, Int_t size=0);
       ~RefArray() {}
 
-      void                 Add(ArrayElement *ae);
-      const std::vector<TRef>  &Arr()                                   const { return fV; }
-      ArrayElement        *At(UInt_t idx);
-      const ArrayElement  *At(UInt_t idx)                          const;
-      UInt_t               GetEntries()                            const { return fV.size(); }
-      Bool_t               IsOwner()                               const { return kTRUE; }
-      void                 Reset()                                       { fV.clear(); }
-      void                 Trim()                                        { fV.resize(fV.size());}
-      ArrayElement        *UncheckedAt(UInt_t idx);                 
-      const ArrayElement  *UncheckedAt(UInt_t idx)                 const;
+      void                      Add(ArrayElement *ae);
+      ArrayElement             *At(UInt_t idx);
+      const ArrayElement       *At(UInt_t idx)                          const;
+      UInt_t                    GetEntries()                            const { return fV.size(); }
+      Bool_t                    IsOwner()                               const { return kTRUE; }
+      void                      Reset()                                       { fV.clear(); }
+      void                      Trim()                                        { fV.resize(fV.size());}
+      ArrayElement             *UncheckedAt(UInt_t idx);                 
+      const ArrayElement       *UncheckedAt(UInt_t idx)                 const;
+      const std::vector<TRef>  &Vect()                                  const { return fV; }
 
-      ArrayElement        *operator[](UInt_t idx);
-      const ArrayElement  *operator[](UInt_t idx)                  const;
+      ArrayElement             *operator[](UInt_t idx);
+      const ArrayElement       *operator[](UInt_t idx)                  const;
 
     protected:
-      std::vector<TRef>    fV;        //vector for storage
-      UInt_t               fNumEntries;   //number of entries in the array
+      std::vector<TRef>         fV;            //vector for storage
+      UInt_t                    fNumEntries;   //number of entries in the array
 
     private:
       RefArray(const RefArray &a);
 
-    ClassDefT(RefArray,1) // Wrapper around TClonesArray class to hold TRef object pointers
+    ClassDefT(RefArray,1) // Wrapper around std::vector class to hold TRef object pointers
   };
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline mithep::RefArray<ArrayElement>::RefArray(const char *name, Int_t size)
+inline mithep::RefArray<ArrayElement>::RefArray(const char */*name*/, Int_t size) : 
+  fV(0)
 {
    // Default constructor.
 
+//  fV.reserve(size);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,8 +73,7 @@ inline ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-    return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
-
+  return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,9 +82,7 @@ inline const ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
-    return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
-
-
+  return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------
