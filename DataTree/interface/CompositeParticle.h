@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.1 2008/06/30 16:49:49 loizides Exp $
+// $Id: CompositeParticle.h,v 1.2 2008/07/01 08:56:49 loizides Exp $
 //
 // Composite Particle
 //
@@ -21,10 +21,10 @@ namespace mithep
   class CompositeParticle : public Particle
   {
     public:
-      CompositeParticle() {}
+      CompositeParticle() { SetBit(14); }
       ~CompositeParticle() {}
     
-      void			AddDaughter(Particle *p) { fDaughters.Add(p); }
+      void			AddDaughter(Particle *p) { fDaughters.Add(p); fDaughters.Trim(); }
       Int_t		        Charge()              const;
       const Particle           *GetDaughter(UInt_t i) const { return fDaughters.At(i); }
       UInt_t                    GetNDaughters()       const { return fDaughters.GetEntries(); }
@@ -34,6 +34,8 @@ namespace mithep
       FourVector	        Mom()                 const;
         
     protected:
+      void                      Clear(Option_t */*option*/="") { fDaughters.Reset(); }
+
       RefArray<Particle>        fDaughters; //references to daughter particles
       
     ClassDef(CompositeParticle, 1) // Composite particle class
