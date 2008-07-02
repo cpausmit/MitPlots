@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.2 2008/06/30 16:54:11 loizides Exp $
+// $Id: RefArray.h,v 1.3 2008/07/01 08:52:01 loizides Exp $
 //
 // RefArray
 //
@@ -11,7 +11,7 @@
 #ifndef DATATREE_REFARRAY_H
 #define DATATREE_REFARRAY_H
 
-#include <TClonesArray.h>
+#include <vector>
 #include <TRef.h>
 #include "MitAna/DataTree/interface/Collection.h"
 
@@ -25,16 +25,13 @@ namespace mithep
       ~RefArray() {}
 
       void                 Add(ArrayElement *ae);
-      const TClonesArray  &Arr()                                   const { return fArray; }
+      const std::vector<TRef>  &Arr()                                   const { return fV; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                          const;
-      UInt_t               GetEntries()                            const { return fNumEntries; }
-      const char*          GetName()                               const { return fArray.GetName(); }
+      UInt_t               GetEntries()                            const { return fV.size(); }
       Bool_t               IsOwner()                               const { return kTRUE; }
-      TIterator           *MakeIterator(Bool_t dir = kIterForward) const { return fArray.MakeIterator(dir); }
-      void                 Reset()                                       { Clear(); }
-      void                 Trim()                                        { fArray.Compress();}
-      void                 SetName(const char* name)                     { fArray.SetName(name); }
+      void                 Reset()                                       { fV.clear(); }
+      void                 Trim()                                        { fV.resize(fV.size());}
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)                 const;
 
@@ -42,10 +39,7 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)                  const;
 
     protected:
-      TRef                *Allocate();
-      void                 Clear(Option_t *opt="");
-
-      TClonesArray         fArray;        //array for storage
+      std::vector<TRef>    fV;        //vector for storage
       UInt_t               fNumEntries;   //number of entries in the array
 
     private:
@@ -57,16 +51,10 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline mithep::RefArray<ArrayElement>::RefArray(const char *name, Int_t size) : 
-  fArray("TRef",size), 
-  fNumEntries(0)
+inline mithep::RefArray<ArrayElement>::RefArray(const char *name, Int_t size)
 {
    // Default constructor.
 
-  fArray.BypassStreamer(kFALSE);
-
-  if (name) 
-    fArray.SetName(name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,30 +63,16 @@ inline void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
 {
   // Add new reference to object.
 
-  new(Allocate()) TRef(ae); 
+  fV.push_back(TRef(ae));
 }
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline TRef *mithep::RefArray<ArrayElement>::Allocate()
-{
-   // Allocate a slot in the array, *only* to be used in placement new operator.
-   
-   return static_cast<TRef*>(fArray[fNumEntries++]);
-}
-
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if (idx<fNumEntries)
-    return static_cast<ArrayElement*>(static_cast<TRef*>(fArray.At(idx))->GetObject());
+    return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), RefArray::ClassName()); 
-  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -107,23 +81,9 @@ inline const ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
-  if (idx<fNumEntries)
-    return static_cast<const ArrayElement*>(static_cast<TRef*>(fArray.At(idx))->GetObject());
+    return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), RefArray::ClassName()); 
-  return 0;
-}
 
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::RefArray<ArrayElement>::Clear(Option_t *opt)
-{
-   // Default implementation for clearing the array.
-
-   fArray.Clear(opt);
-
-   fNumEntries = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,7 +110,7 @@ inline ArrayElement* mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
-  return static_cast<ArrayElement*>(static_cast<TRef*>(fArray.At(idx))->GetObject());
+    return static_cast<const ArrayElement*>(fV[idx].GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,6 +119,6 @@ inline const ArrayElement* mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t id
 {
   // Return entry at given index.
 
-  return static_cast<const ArrayElement*>(static_cast<TRef*>(fArray.At(idx))->GetObject());
+    return static_cast<const ArrayElement*>(fV[idx].GetObject());
 }
 #endif
