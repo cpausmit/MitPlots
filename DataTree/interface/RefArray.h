@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.4 2008/07/02 12:36:34 bendavid Exp $
+// $Id: RefArray.h,v 1.5 2008/07/02 21:29:00 loizides Exp $
 //
 // RefArray
 //
@@ -26,17 +26,17 @@ namespace mithep
 
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
-      const ArrayElement       *At(UInt_t idx)                          const;
-      UInt_t                    GetEntries()                            const { return fV.size(); }
-      Bool_t                    IsOwner()                               const { return kTRUE; }
-      void                      Reset()                                       { fV.clear(); }
-      void                      Trim()                                        { fV.resize(fV.size());}
+      const ArrayElement       *At(UInt_t idx)                    const;
+      UInt_t                    GetEntries()                      const { return fV.size(); }
+      Bool_t                    IsOwner()                         const { return kTRUE; }
+      void                      Reset()                                 { fV.clear(); }
+      void                      Trim()                                  { fV.resize(fV.size());}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
-      const ArrayElement       *UncheckedAt(UInt_t idx)                 const;
-      const std::vector<TRef>  &Vect()                                  const { return fV; }
+      const ArrayElement       *UncheckedAt(UInt_t idx)           const;
+      const std::vector<TRef>  &Vect()                            const { return fV; }
 
       ArrayElement             *operator[](UInt_t idx);
-      const ArrayElement       *operator[](UInt_t idx)                  const;
+      const ArrayElement       *operator[](UInt_t idx)            const;
 
     protected:
       std::vector<TRef>         fV;            //vector for storage
@@ -56,7 +56,7 @@ inline mithep::RefArray<ArrayElement>::RefArray(const char */*name*/, Int_t size
 {
    // Default constructor.
 
-//  fV.reserve(size);
+  fV.reserve(size);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,6 +67,7 @@ inline void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
 
   fV.push_back(TRef(ae));
 }
+
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx)
