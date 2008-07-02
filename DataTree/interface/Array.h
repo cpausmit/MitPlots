@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.6 2008/07/01 14:05:02 loizides Exp $
+// $Id: Array.h,v 1.7 2008/07/02 07:38:40 loizides Exp $
 //
 // Array
 //
@@ -32,8 +32,10 @@ namespace mithep
       const char*          GetName()                               const { return fArray.GetName(); }
       Bool_t               IsOwner()                               const { return kTRUE; }
       TIterator           *MakeIterator(Bool_t dir = kIterForward) const { return fArray.MakeIterator(dir); }
+      Bool_t               MustClear()                             const { return this->TestBit(14); }
       void                 Reset()                                       { Clear(); }
-      void                 Trim()                                        { fArray.Compress();}
+      void                 Trim()                                        { fArray.Compress(); }
+      void                 SetMustClearBit()                             { this->SetBit(14); }
       void                 SetName(const char* name)                     { fArray.SetName(name); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)                 const;
@@ -42,7 +44,7 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)                  const;
 
     protected:
-      void                 Clear(Option_t *opt="");
+      void                 Clear();
 
       TClonesArray         fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
@@ -66,6 +68,10 @@ inline mithep::Array<ArrayElement>::Array(const char *name, Int_t size) :
 
   if (name) 
     fArray.SetName(name);
+
+  ArrayElement test;
+  if (test.GetClearBit())
+    SetMustClearBit();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,14 +122,16 @@ inline const ArrayElement* mithep::Array<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::Array<ArrayElement>::Clear(Option_t *opt)
+inline void mithep::Array<ArrayElement>::Clear()
 {
    // Default implementation for clearing the array.
 
-   //fArray.Clear(opt); //with opt=="C" will call clear for every entry
-   fArray.Delete(); // use this for now to avoid memory leak
+  if (this->MustClear())
+    fArray.Clear("C"); //with opt=="C" will call clear for every element
+  else 
+    fArray.Clear();
 
-   fNumEntries = 0;
+  fNumEntries = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
