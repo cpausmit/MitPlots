@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ParticleExampleMod.h,v 1.6 2008/06/12 10:22:29 loizides Exp $
+// $Id: ParticleExampleMod.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
 //
 // ParticleExampleAnaMod
 //
@@ -10,7 +10,6 @@
 // http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM
 //
 // Authors: C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef TREEMOD_PARTICLEXAMPLEMOD_H
@@ -40,6 +39,8 @@ namespace mithep
       TH1D                    *fEtaHist;    //!eta histogram
 
       void                     Begin();
+      void                     BeginRun();
+      void                     EndRun();
       void                     Process();
       void                     SlaveBegin();
       void                     SlaveTerminate();

@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.9 2008/06/23 10:54:20 loizides Exp $
+// $Id: Analysis.cc,v 1.10 2008/06/24 14:07:21 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -16,6 +16,7 @@
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TreeMod/interface/Selector.h"
+#include "MitAna/TreeMod/interface/TreeLoader.h"
 
 ClassImp(mithep::Analysis)
 
@@ -307,10 +308,10 @@ Bool_t Analysis::Init()
 
   }
 
-  // if we had our default TAM plugin we would create it here
-  //  TreeLoader *bl = new TreeLoader;
-  //  fLoaders->Add(bl);
-  //  fDeleteList->Add(bl);
+  // create our customized loader plugin for TAM
+  TreeLoader *bl = new TreeLoader;
+  fLoaders->Add(bl);
+  fDeleteList->Add(bl);
 
   if (fUseProof) {
 

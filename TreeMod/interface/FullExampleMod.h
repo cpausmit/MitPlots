@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.2 2008/06/12 10:22:29 loizides Exp $
+// $Id: FullExampleMod.h,v 1.3 2008/06/18 19:08:14 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -10,7 +10,6 @@
 // http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM
 //
 // Authors: C.Loizides, J.Bendavid
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef TREEMOD_FULLEXAMPLEMOD_H

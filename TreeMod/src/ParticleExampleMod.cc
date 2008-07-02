@@ -1,4 +1,4 @@
-// $Id: ParticleExampleMod.cc,v 1.1 2008/06/12 09:24:09 loizides Exp $
+// $Id: ParticleExampleMod.cc,v 1.2 2008/06/12 10:22:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
@@ -24,6 +24,22 @@ void ParticleExampleMod::Begin()
 {
   // Run startup code on the client machine. For this module, we dont
   // do anything here.
+}
+
+//__________________________________________________________________________________________________
+void ParticleExampleMod::BeginRun()
+{
+  // Run startup code on the client machine. For this module, we dont
+  // do anything here.
+  cout << "BeginRun" << endl;
+}
+
+//__________________________________________________________________________________________________
+void ParticleExampleMod::EndRun()
+{
+  // Run startup code on the client machine. For this module, we dont
+  // do anything here.
+  cout << "EndRun" << endl;
 }
 
 //__________________________________________________________________________________________________
