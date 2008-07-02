@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.5 2008/07/01 08:52:01 loizides Exp $
+// $Id: Array.h,v 1.6 2008/07/01 14:05:02 loizides Exp $
 //
 // Array
 //
@@ -120,7 +120,8 @@ inline void mithep::Array<ArrayElement>::Clear(Option_t *opt)
 {
    // Default implementation for clearing the array.
 
-   fArray.Clear(opt); //with opt=="C" will call clear for every entry
+   //fArray.Clear(opt); //with opt=="C" will call clear for every entry
+   fArray.Delete(); // use this for now to avoid memory leak
 
    fNumEntries = 0;
 }
