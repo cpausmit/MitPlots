@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.7 2008/07/02 07:38:40 loizides Exp $
+// $Id: Array.h,v 1.8 2008/07/02 21:43:57 loizides Exp $
 //
 // Array
 //
@@ -25,23 +25,23 @@ namespace mithep
 
       ArrayElement        *AddNew();
       ArrayElement        *Allocate();
-      const TClonesArray  &Arr()                                   const { return fArray; }
+      const TClonesArray  &Arr()                                const { return fArray; }
       ArrayElement        *At(UInt_t idx);
-      const ArrayElement  *At(UInt_t idx)                          const;
-      UInt_t               GetEntries()                            const { return fNumEntries; }
-      const char*          GetName()                               const { return fArray.GetName(); }
-      Bool_t               IsOwner()                               const { return kTRUE; }
-      TIterator           *MakeIterator(Bool_t dir = kIterForward) const { return fArray.MakeIterator(dir); }
-      Bool_t               MustClear()                             const { return this->TestBit(14); }
-      void                 Reset()                                       { Clear(); }
-      void                 Trim()                                        { fArray.Compress(); }
-      void                 SetMustClearBit()                             { this->SetBit(14); }
-      void                 SetName(const char* name)                     { fArray.SetName(name); }
+      const ArrayElement  *At(UInt_t idx)                       const;
+      UInt_t               GetEntries()                         const { return fNumEntries; }
+      const char*          GetName()                            const { return fArray.GetName(); }
+      Bool_t               IsOwner()                            const { return kTRUE; }
+      TIterator           *MakeIterator(Bool_t dir = kIterForward) const;
+      Bool_t               MustClear()                          const { return this->TestBit(14); }
+      void                 Reset()                                    { Clear(); }
+      void                 Trim()                                     { fArray.Compress(); }
+      void                 SetMustClearBit()                          { this->SetBit(14); }
+      void                 SetName(const char* name)                  { fArray.SetName(name); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
-      const ArrayElement  *UncheckedAt(UInt_t idx)                 const;
+      const ArrayElement  *UncheckedAt(UInt_t idx)              const;
 
       ArrayElement        *operator[](UInt_t idx);
-      const ArrayElement  *operator[](UInt_t idx)                  const;
+      const ArrayElement  *operator[](UInt_t idx)               const;
 
     protected:
       void                 Clear();
@@ -132,6 +132,15 @@ inline void mithep::Array<ArrayElement>::Clear()
     fArray.Clear();
 
   fNumEntries = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline TIterator *mithep::Array<ArrayElement>::MakeIterator(Bool_t dir) const 
+{ 
+  // Return ROOT collection iterator.
+
+  return fArray.MakeIterator(dir); 
 }
 
 //--------------------------------------------------------------------------------------------------

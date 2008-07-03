@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.10 2008/06/24 14:07:21 loizides Exp $
+// $Id: Analysis.cc,v 1.11 2008/07/02 16:34:06 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -22,7 +22,7 @@ ClassImp(mithep::Analysis)
 
 using namespace mithep;
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Analysis::Analysis(Bool_t useproof) : 
   fUseProof(useproof), 
   fHierachy(kTRUE), 
@@ -52,7 +52,7 @@ Analysis::Analysis(Bool_t useproof) :
   // nothing to be done since we do not use par files (yet?)
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Analysis::~Analysis()
 {
   // Destructor.
@@ -71,7 +71,7 @@ Analysis::~Analysis()
   delete fProof;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::AddFile(const char *pname)
 {
   // Add file with given name to the list of files to be processed. Using the token "|", you can
@@ -104,7 +104,7 @@ Bool_t Analysis::AddFile(const char *pname)
   return kTRUE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddFile(const char *pname, Int_t eventlist)
 {
   // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
@@ -142,7 +142,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     Info("AddFile", "Added %s to list of files.", pname);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddFile(const TObject *oname, Int_t eventlist)
 {
   // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
@@ -192,7 +192,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
   return kTRUE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddList(TList *list, Int_t eventlist)
 {
   // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
@@ -206,7 +206,7 @@ void Analysis::AddList(TList *list, Int_t eventlist)
     AddFile(obj->GetName(), eventlist);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddLoader(TAMVirtualLoader *l)      
 { 
   // Add loader to the list of loaders.
@@ -214,7 +214,7 @@ void Analysis::AddLoader(TAMVirtualLoader *l)
   fLoaders->Add(l); 
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddPackage(const char* name)
 {
   // Add package to the list of uploaded packages.
@@ -223,7 +223,7 @@ void Analysis::AddPackage(const char* name)
   fPackages->Add(new TObjString(name));
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::AddPackages(TList *list)
 {
   // Add list of packages to the list of uploaded packages.
@@ -236,7 +236,7 @@ void Analysis::AddPackages(TList *list)
   }
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::Init()
 {
   // Setup the TDSet and TChain to be used for the analysis with or without PROOF. If more than one
@@ -337,7 +337,7 @@ Bool_t Analysis::Init()
   return kTRUE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::InitProof()
 {
   // Initialize PROOF connection.
@@ -378,7 +378,7 @@ Bool_t Analysis::InitProof()
   return ret;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::Run()
 {
   // Run the analysis on the created file set.
@@ -409,7 +409,7 @@ void Analysis::Run()
   fState = kRun;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::Run(Bool_t browse)
 {
   // Execute analysis and open TBrowser if requested.
@@ -427,7 +427,7 @@ Bool_t Analysis::Run(Bool_t browse)
   return kFALSE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Analysis::Terminate()
 {
   // Terminate current analysis run.
@@ -482,7 +482,7 @@ void Analysis::Terminate()
   fState = kTerminate;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::UploadPackages(TList *packages)
 {
   // Upload list of par files to the server.

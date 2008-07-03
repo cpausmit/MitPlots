@@ -1,4 +1,4 @@
-// $Id: TreeLoader.cxx 2950 2006-06-16 16:26:16Z loizides $
+// $Id: TreeLoader.cc,v 1.1 2008/07/02 16:34:06 loizides Exp $
 
 #include "MitAna/TreeMod/interface/TreeLoader.h"
 #include <Riostream.h>
@@ -9,14 +9,14 @@ ClassImp(mithep::TreeLoader)
 
 using namespace mithep;
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 TreeLoader::TreeLoader()
 {
    // Default constructor.
 }
 
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 TAMVirtualBranchLoader *TreeLoader::CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo)
 {
    // Create our branch loader if the requested branch name is found in the tree.

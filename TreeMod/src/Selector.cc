@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.2 2008/06/24 14:08:39 loizides Exp $
+// $Id: Selector.cc,v 1.3 2008/07/01 11:19:31 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -12,7 +12,7 @@ using namespace mithep;
 
 ClassImp(mithep::Selector)
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Selector::Selector() :
   fDoRunInfo(kTRUE),
   fRunTree(0),
@@ -24,12 +24,12 @@ Selector::Selector() :
 {
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Selector::~Selector()
 {
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Selector::BeginRun()
 {
   // Determines whether we are at beginning of a new run.
@@ -48,7 +48,7 @@ Bool_t Selector::BeginRun()
   return ValidRunNum();
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Selector::EndRun()
 {
   // Determines whether we are at the end of a run.
@@ -74,7 +74,7 @@ Bool_t Selector::EndRun()
   return (fLAHeader->RunNum()!=fCurRunNum);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t Selector::Notify()
 {
   // The Notify() function is called when a new file is opened. Here, we check for a new run info
@@ -89,7 +89,7 @@ Bool_t Selector::Notify()
   return TAMSelector::Notify();
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Selector::SlaveBegin(TTree* tree)
 {
   // The SlaveBegin() function is called after the Begin() function and can be used to setup
@@ -102,7 +102,7 @@ void Selector::SlaveBegin(TTree* tree)
   TAMSelector::SlaveBegin(tree);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Selector::UpdateRunInfo() 
 {
   // Update the run info to be consistent with the information from the event header.
@@ -127,7 +127,7 @@ void Selector::UpdateRunInfo()
   }
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void Selector::UpdateRunInfoTree() 
 {
   // Get the run info tree from current file and set our branches.

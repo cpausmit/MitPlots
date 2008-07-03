@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.3 2008/06/20 17:50:41 loizides Exp $
+// $Id: EventHeader.h,v 1.4 2008/06/24 14:01:41 loizides Exp $
 //
 // EventHeader
 //
@@ -18,7 +18,8 @@ namespace mithep
   {
     public:
       EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0) {}
-      EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : fRunNum(run), fEvtNum(evt), fLumiSec(lumi) {}
+      EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : 
+        fRunNum(run), fEvtNum(evt), fLumiSec(lumi) {}
       virtual ~EventHeader() {}
 
       UInt_t              EvtNum()       const { return fEvtNum; }

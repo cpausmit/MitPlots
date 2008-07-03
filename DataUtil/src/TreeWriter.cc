@@ -1,12 +1,10 @@
-// $Id: TreeWriter.cc,v 1.7 2008/06/26 16:45:27 loizides Exp $
+// $Id: TreeWriter.cc,v 1.8 2008/07/01 14:36:52 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
-
 #include <Riostream.h>
 #include <TObject.h>
 #include <TSystem.h>
 #include <TProcessID.h>
-
 #include "MitAna/DataUtil/interface/Debug.h"
 
 using namespace mithep;
@@ -62,7 +60,7 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
 }
 
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
@@ -71,7 +69,7 @@ void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level
   AddBranch(name, CName(obj), obj, bsize, level);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj, Int_t bsize)
 {
@@ -83,7 +81,7 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   b->SetCompressionLevel(GetCompressLevel());
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
@@ -92,7 +90,7 @@ void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize)
   AddBranch(name, CName(obj), obj, bsize);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj)
 {
@@ -104,7 +102,7 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   b->SetCompressionLevel(GetCompressLevel());
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, void *obj)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
@@ -113,7 +111,7 @@ void TreeWriter::AddBranch(const char *name, void *obj)
   AddBranch(name, CName(obj), obj);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                  void *obj, Int_t bsize, Int_t level)
 {
@@ -125,7 +123,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   b->SetCompressionLevel(GetCompressLevel());
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj, 
                                  Int_t bsize, Int_t level)
 {
@@ -135,7 +133,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj,
   AddBranchToTree(tname, name, CName(obj), obj, bsize, level);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                  void *obj, Int_t bsize)
 {
@@ -147,7 +145,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   b->SetCompressionLevel(GetCompressLevel());
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj,
                                  Int_t bsize)
 {
@@ -157,7 +155,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj,
   AddBranchToTree(tname, name, CName(obj), obj, bsize);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                  void *obj)
 {
@@ -169,7 +167,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, const char
   b->SetCompressionLevel(GetCompressLevel());
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj)
 {
   // Add branch with name "name" into tree with name "tname" and set its address 
@@ -178,7 +176,7 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj)
   AddBranchToTree(tname, name, CName(obj), obj);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
 {
   // Add new tree if not present in array of trees or return
@@ -197,7 +195,7 @@ MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
   return tree;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t TreeWriter::BeginEvent(Bool_t doreset)
 {
   // Prepare for the next event. If doreset or fDoObjNumReset is kTRUE
@@ -214,7 +212,7 @@ Bool_t TreeWriter::BeginEvent(Bool_t doreset)
   return kTRUE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::CloseFile()
 {
   // Write tree(s) and close file.
@@ -242,7 +240,7 @@ void TreeWriter::CloseFile()
   fFileNumber++;  
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 const char *TreeWriter::CName(void *obj) const 
 {
   // Dereference void* pointer into TObject* pointer
@@ -254,7 +252,7 @@ const char *TreeWriter::CName(void *obj) const
   return tobj->ClassName();
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t TreeWriter::EndEvent(Bool_t doreset)
 {
   // Store the event in the tree. If doreset or fDoObjNumReset is kTRUE
@@ -289,7 +287,7 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
   return (r >= 0);
 }
 
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 Long64_t TreeWriter::GetEntries(const char *tn) const
 { 
   // Return entries of tree with given name. If no tree is given, return sum of entries
@@ -313,7 +311,7 @@ Long64_t TreeWriter::GetEntries(const char *tn) const
    return ret;
 }
 
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 MyTree *mithep::TreeWriter::GetMyTree(const char *tn)
 {
   // Return MyTree with given name from array.
@@ -333,7 +331,7 @@ MyTree *mithep::TreeWriter::GetMyTree(const char *tn)
   return 0;
 }   
 
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 const TTree *mithep::TreeWriter::GetTree(const char *tn) const
 {
   // Return TTree with given name from array.
@@ -353,7 +351,7 @@ const TTree *mithep::TreeWriter::GetTree(const char *tn) const
   return 0;
 }   
 
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 TTree *mithep::TreeWriter::GetTree(const char *tn)
 {
   // Return TTree with given name from array.
@@ -373,7 +371,7 @@ TTree *mithep::TreeWriter::GetTree(const char *tn)
   return 0;
 }   
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t TreeWriter::IsFull() const
 {
   // Check if the maximum file size has been reached.
@@ -389,7 +387,7 @@ Bool_t TreeWriter::IsFull() const
   return (GetFileSize() + avgSize + fkMinFreeSpace) > fMaxSize;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::OpenFile()
 {
   // Open the file and attach the tree.
@@ -420,7 +418,7 @@ void TreeWriter::OpenFile()
   fIsInit = kTRUE;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::Print(Option_t *option) const
 {
   // Print the contents of the tree writer.
@@ -442,7 +440,7 @@ void TreeWriter::Print(Option_t *option) const
        << (GetEntries() == 1 ? " event" : " events") << endl;
 }
 
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::SetAutoFill(const char *tn, Bool_t b)
 {
   // Set auto-fill mode of tree with given name.
@@ -457,8 +455,7 @@ void TreeWriter::SetAutoFill(const char *tn, Bool_t b)
   mt->SetAutoFill(b);
 }
 
-
-//-------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::SetMaxSize(Long64_t s) 
 { 
   // Set maximum file size. Check if this exceeds the ROOT file size and if, 
@@ -474,7 +471,7 @@ void TreeWriter::SetMaxSize(Long64_t s)
   fMaxSize=s; 
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeWriter::StoreObject(const TObject *obj)
 {
   // Store object next to tree in file. Used to store the

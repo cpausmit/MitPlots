@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.4 2008/06/24 14:23:18 loizides Exp $
+//--------------------------------------------------------------------------------------------------
+// $Id: BaseMod.h,v 1.5 2008/07/02 16:34:06 loizides Exp $
 //
 // BaseMod
 //
 // This TAM module is the base module for all our TAM modules.
 //
 // Authors: C.Loizides
-//---------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 #ifndef TREEMOD_BASEMOD_H
 #define TREEMOD_BASEMOD_H
@@ -32,11 +32,11 @@ namespace mithep
 
     ClassDef(BaseMod,1) // Base TAM module
   };
+}
 
-  //---------------------------------------------------------------------------------------------------
-  inline const Selector *BaseMod::GetSel() const 
-  { 
-    return static_cast<const Selector*>(GetSelector()); 
-  }
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Selector *mithep::BaseMod::GetSel() const 
+{ 
+  return static_cast<const Selector*>(GetSelector()); 
 }
 #endif

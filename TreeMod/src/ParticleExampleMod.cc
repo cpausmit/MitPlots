@@ -1,4 +1,4 @@
-// $Id: ParticleExampleMod.cc,v 1.2 2008/06/12 10:22:29 loizides Exp $
+// $Id: ParticleExampleMod.cc,v 1.3 2008/07/02 16:34:06 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
@@ -8,7 +8,7 @@ using namespace mithep;
 
 ClassImp(mithep::ParticleExampleMod)
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fPartName(Names::gkGenPartBrn),
@@ -19,14 +19,14 @@ ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) :
   // Constructor.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::Begin()
 {
   // Run startup code on the client machine. For this module, we dont
   // do anything here.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::BeginRun()
 {
   // Run startup code on the client machine. For this module, we dont
@@ -34,7 +34,7 @@ void ParticleExampleMod::BeginRun()
   cout << "BeginRun" << endl;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::EndRun()
 {
   // Run startup code on the client machine. For this module, we dont
@@ -42,7 +42,7 @@ void ParticleExampleMod::EndRun()
   cout << "EndRun" << endl;
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::Process()
 {
   // Process entries of the tree. For this module, we just load
@@ -59,7 +59,7 @@ void ParticleExampleMod::Process()
 
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::SlaveBegin()
 {
   // Run startup code on the computer (slave) doing the actual
@@ -75,14 +75,14 @@ void ParticleExampleMod::SlaveBegin()
   AddOutput(fEtaHist);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::SlaveTerminate()
 {
   // Run finishing code on the computer (slave) that did the
   // analysis. For this module, we dont do anything here.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void ParticleExampleMod::Terminate()
 {
   // Run finishing code on the client computer. 

@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.2 2008/07/01 08:56:49 loizides Exp $
+// $Id: CompositeParticle.h,v 1.3 2008/07/02 21:46:01 loizides Exp $
 //
 // Composite Particle
 //
-// Details to be worked out...
+// A composite particle class that holds other (daughter) particles.
 //
 // Authors: J.Bendavid, C.Loizides
-//
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_COMPOSITEPARTICLE_H
@@ -21,7 +20,7 @@ namespace mithep
   class CompositeParticle : public Particle
   {
     public:
-      CompositeParticle() { SetBit(14); }
+      CompositeParticle() { SetClearBit(); }
       ~CompositeParticle() {}
     
       void			AddDaughter(Particle *p) { fDaughters.Add(p); fDaughters.Trim(); }

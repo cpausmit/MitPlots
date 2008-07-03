@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.2 2008/06/24 14:08:39 loizides Exp $
+// $Id: Selector.h,v 1.3 2008/06/24 14:23:18 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -48,17 +48,17 @@ namespace mithep {
 
       ClassDef(Selector,1)
   };
+}
 
 //--------------------------------------------------------------------------------------------------
-  inline Bool_t Selector::ConsistentRunNum() const
-  {
-    return (ValidRunNum() && fCurRunNum==fEventHeader->RunNum());
-  }
+inline Bool_t mithep::Selector::ConsistentRunNum() const
+{
+  return (ValidRunNum() && fCurRunNum==fEventHeader->RunNum());
+}
 
 //--------------------------------------------------------------------------------------------------
-  inline Bool_t Selector::ValidRunInfo() const
-  {
-    return (fRunInfo && fCurRunNum==fRunInfo->RunNum());
-  }
+inline Bool_t mithep::Selector::ValidRunInfo() const
+{
+  return (fRunInfo && fCurRunNum==fRunInfo->RunNum());
 }
 #endif

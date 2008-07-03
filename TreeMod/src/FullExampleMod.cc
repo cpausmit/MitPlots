@@ -1,4 +1,4 @@
-// $Id: FullExampleMod.cc,v 1.1 2008/06/12 09:24:09 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.2 2008/06/12 10:22:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -8,7 +8,7 @@ using namespace mithep;
 
 ClassImp(mithep::FullExampleMod)
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 FullExampleMod::FullExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fGenPartName(Names::gkGenPartBrn),
@@ -31,14 +31,14 @@ FullExampleMod::FullExampleMod(const char *name, const char *title) :
   // Constructor.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void FullExampleMod::Begin()
 {
   // Run startup code on the client machine. For this module, we dont do
   // anything here.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void FullExampleMod::Process()
 {
   // Process entries of the tree. For this module, we just load the branches and
@@ -73,7 +73,7 @@ void FullExampleMod::Process()
 
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void FullExampleMod::SlaveBegin()
 {
   // Run startup code on the computer (slave) doing the actual analysis. Here,
@@ -103,14 +103,14 @@ void FullExampleMod::SlaveBegin()
   AddOutput(fElectronEtaHist);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void FullExampleMod::SlaveTerminate()
 {
   // Run finishing code on the computer (slave) that did the analysis. For this
   // module, we dont do anything here.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void FullExampleMod::Terminate()
 {
   // Run finishing code on the client computer. For this module, we dont do

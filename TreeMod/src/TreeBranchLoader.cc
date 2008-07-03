@@ -1,4 +1,4 @@
-// $Id: TreeBranchLoader.cxx 5095 2008-03-17 21:07:09Z loizides $
+// $Id: TreeBranchLoader.cc,v 1.1 2008/07/02 16:34:06 loizides Exp $
 
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
 #include <Riostream.h>
@@ -14,7 +14,7 @@ ClassImp(mithep::TreeBranchLoader)
 
 using namespace mithep;
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 TreeBranchLoader::TreeBranchLoader(TAMBranchInfo *binfo) : 
   TAMTreeBranchLoader(binfo), 
   fDoReset(kFALSE)
@@ -22,7 +22,7 @@ TreeBranchLoader::TreeBranchLoader(TAMBranchInfo *binfo) :
   // Default constructor.
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 void TreeBranchLoader::Clear(Option_t *option)
 {
   // Clear objects in Objects that allocated memory on the heap.
@@ -39,7 +39,7 @@ void TreeBranchLoader::Clear(Option_t *option)
   TAMTreeBranchLoader::Clear(option);
 }
 
-//__________________________________________________________________________________________________
+//--------------------------------------------------------------------------------------------------
 Bool_t TreeBranchLoader::Notify(TTree* tree)
 {
   // Notify via TAMSelector that is being connected to a (new) file.

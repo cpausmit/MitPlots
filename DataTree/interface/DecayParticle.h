@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.1 2008/06/30 16:50:39 loizides Exp $
+// $Id: DecayParticle.h,v 1.2 2008/07/01 08:57:24 loizides Exp $
 //
 // Decay Particle
 //
@@ -21,7 +21,8 @@ namespace mithep
     public:
       DecayParticle() {}
       DecayParticle(Double_t x, Double_t y, Double_t z) : fVertex(x,y,z) {}
-      DecayParticle(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) : 
+      DecayParticle(Double_t x, Double_t y, Double_t z, 
+                    Double_t xErr, Double_t yErr, Double_t zErr) : 
         fVertex(x,y,z,xErr,yErr,zErr) {}
       ~DecayParticle() {}
       

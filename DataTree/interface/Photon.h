@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.2 2008/07/01 09:16:49 loizides Exp $
+// $Id: Photon.h,v 1.3 2008/07/02 19:28:43 bendavid Exp $
 //
 // Photon
 //
@@ -11,8 +11,8 @@
 #ifndef DATATREE_PHOTON_H
 #define DATATREE_PHOTON_H
  
-#include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/RefArray.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 
@@ -25,7 +25,7 @@ namespace mithep
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : fFourVector(px,py,pz,e) {}
       ~Photon() {}
 
-      void                      AddConversion(Conversion *c)  { fConversions.Add(c); }
+      void                      AddConversion(Conversion *c);
       Int_t                     Charge()                const { return 0; }
       Bool_t                    IsConverted()           const { return fConversions.GetEntries(); }
       const Conversion         *GetConversion(UInt_t i) const { return fConversions.At(i); }
@@ -34,11 +34,20 @@ namespace mithep
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
 	    
     protected:
-      FourVector                fFourVector; //four momentum vector
+      FourVector                fFourVector;  //four momentum vector
       RefArray<Conversion>      fConversions; //references to associated conversion candidates
 	
     ClassDef(Photon,1) // Photon class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Photon::AddConversion(Conversion *c)  
+{ 
+  // Add a conversion object.
+
+  fConversions.Add(c); 
+  fConversions.Trim();
 }
 
 //--------------------------------------------------------------------------------------------------
