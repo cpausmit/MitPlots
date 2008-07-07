@@ -1,4 +1,4 @@
-// $Id: $
+// $Id: Catalog.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
 
 #include <TROOT.h>
 #include <TSystem.h>
@@ -20,10 +20,10 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset)
 {
   // Try to find the given dataset in the catalog and return it properly filled.
 
-  TString slash    = "/";
-  TString fullDir  = fLocation +slash+ TString(book) +slash+ TString(dataset);
-  TString cmdDirs  = TString("cat ")+fullDir+slash+TString("Directory | grep -v ^#");
-  TString cmdFiles = TString("cat ")+fullDir+slash+TString("Files     | grep -v ^#");
+  TString slash        = "/";
+  TString fullDir      = fLocation +slash+ TString(book) +slash+ TString(dataset);
+  TString cmdFilesets  = TString("cat ")+fullDir+slash+TString("Filesets | grep -v ^#");
+  TString cmdFiles     = TString("cat ")+fullDir+slash+TString("Files    | grep -v ^#");
 
   char    file[6], fset[60], location[100];
   UInt_t  nLumiSecs=0, nEvents=0;
@@ -33,7 +33,7 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset)
   Dataset *ds = new Dataset(dataset);
 
   // Read the locations and parameters of the different filesets
-  f = gSystem->OpenPipe(cmdDirs.Data(),"r");
+  f = gSystem->OpenPipe(cmdFilesets.Data(),"r");
   while (fscanf(f,"%s %s %d %d %d %d %d %d",fset,location,
 		&nLumiSecs,&nEvents,&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
 	 != EOF) {
