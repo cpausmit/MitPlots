@@ -1,12 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
+// $Id: Analysis.h,v 1.8 2008/06/24 14:07:21 loizides Exp $
 //
 // Analysis
 //
-// This is the top-level analysis class used to hide the (little)
-// differences between TAM standalone and TAM with PROOF.
-// In addition it provides an almost transparent interface
-// in the case you want to do mixing of different events.
+// This is the top-level analysis class used to hide the (little) differences between TAM standalone
+// and TAM with PROOF.  In addition it provides an almost transparent interface in the case you want
+// to do mixing of different events.
 // 
 // The class can operate in following modes:
 //  a) Add single files to be analyzed using Analysis::AddFile
@@ -37,16 +36,18 @@ class TProof;
 
 namespace mithep 
 {
+  class Dataset;
   class Analysis : public TObject 
   {
     public:
       Analysis(Bool_t useproof=kFALSE);
       ~Analysis();
 
-      void                      AddLoader(TAMVirtualLoader *l);
+      Bool_t                    AddDataset(const Dataset *dataset);
       Bool_t                    AddFile(const char *pname);
       Bool_t                    AddFiles(const char *pname, Int_t nmax=-1);
-      void                      AddPackage(const char* name);
+      void                      AddLoader(TAMVirtualLoader *l);
+      void                      AddPackage(const char *name);
       void                      AddPackages(TList *list);
       const char               *GetAnaOutputName()            const { return fAnaOutput;}
       const TList              *GetOutput()                   const { return fOutput; }
@@ -94,7 +95,7 @@ namespace mithep
       TString                   fConfig;          //config file name for PROOF
       Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
-      Long64_t                  fDoNEvents;       //number of events to process (def=TChain::kBigNumber)
+      Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
 
       void                      AddFile(const char *pname, Int_t eventlist);
       void                      AddFile(const TObject *oname, Int_t eventlist);

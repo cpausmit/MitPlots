@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.11 2008/07/02 16:34:06 loizides Exp $
+// $Id: Analysis.cc,v 1.12 2008/07/03 08:22:19 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -17,6 +17,7 @@
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/TreeMod/interface/TreeLoader.h"
+#include "MitAna/Catalog/interface/Dataset.h"
 
 ClassImp(mithep::Analysis)
 
@@ -190,6 +191,18 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
   } 
 
   return kTRUE;
+}
+
+//--------------------------------------------------------------------------------------------------
+Bool_t Analysis::AddDataset(const Dataset *dataset)
+{
+  Bool_t status = true;
+
+  // Add a full dataset to the analysis.
+  for (UInt_t i=0; i<dataset->NFiles(); i++)
+    status = (status && AddFile(dataset->FileUrl(i)));
+
+  return status;
 }
 
 //--------------------------------------------------------------------------------------------------

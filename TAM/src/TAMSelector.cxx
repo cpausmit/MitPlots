@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.2 2008/06/23 19:39:14 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.3 2008/06/24 14:03:45 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -176,11 +176,10 @@ Bool_t TAMSelector::AddObjThisEvt(TObject *obj)
    // Add this object to the list of objects stored for this event.
    // See further description below.
 
-   if(obj)
+   if (obj)
       return AddObjThisEvt(obj,obj->GetName());
    else {
-      Error("AddObjThisEvt",
-            "Can not add null object to event.");
+      Error("AddObjThisEvt","Can not add null object to event.");
       return kFALSE;
    }
 }
@@ -280,7 +279,7 @@ void TAMSelector::ClearAllLoaders()
    // loaders that were used.
   	 
    TIter nextBr(fBranchTable.MakeIterator()); 	 
-   while ( TAMBranchInfo *br = dynamic_cast<TAMBranchInfo*>(nextBr()))  {
+   while (TAMBranchInfo *br = dynamic_cast<TAMBranchInfo*>(nextBr()))  {
 
       if (!br->fIsLoaded) continue;  
       // don't bother with branches that weren't loaded
@@ -932,8 +931,8 @@ void TAMSelector::ZeroAllBranches()
    // for each branch to zero.
    
    TIter nextBranch(fBranchTable.MakeIterator());
-   while ( TAMBranchInfo *brInfo = 
-              dynamic_cast<TAMBranchInfo*>(nextBranch()) ) {
+   while (TAMBranchInfo *brInfo = 
+	  dynamic_cast<TAMBranchInfo*>(nextBranch())) {
          brInfo->ZeroUsrAddrs();
    }
 }

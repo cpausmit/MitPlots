@@ -1,0 +1,8 @@
+# -*- Makefile -*-
+# $Id: $
+
+<use name=root>
+<use name=MitAna/DataUtil>
+<export>
+   <lib name=MitAnaCatalog>
+</export>

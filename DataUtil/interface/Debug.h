@@ -1,16 +1,14 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Debug.h,v 1.4 2008/06/18 19:08:14 loizides Exp $
+// $Id: Debug.h,v 1.5 2008/06/24 14:05:03 loizides Exp $
 //
-// Debug
+// Debug - detailed logging / debug scheme
 //
-// Detailed logging / debug scheme:
-//   This class defines the debuging masks (EDebugMask), which
-//   are used with the MDB (MIT DeBug) macro together with
-//   the log levels to control the verbosity.
-//   As a rule of thumb:
-//    level 1 and 2 should not be used in (event) loops,
-//    level 3 and 4 might be used in loops.
-//  Please, do not introduce more levels!
+// This class defines the debuging masks (EDebugMask), which are used with the MDB (MIT DeBug) macro
+// together with the log levels to control the verbosity.  As a rule of thumb:
+//
+//    level 1 and 2 should not be used in (event) loops, level 3 and 4 might be used in loops.
+//
+// Please, do not introduce more levels!
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------

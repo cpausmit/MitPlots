@@ -1,0 +1,55 @@
+//--------------------------------------------------------------------------------------------------
+// $Id: $
+//
+// BaseMetaData - base class for collections of data
+//
+// This class implements a minimal description of a bunch of data. In fact this is a just the
+// MetaData for any type of collection of data (e.g file, filesets, datasets) and some convenient
+// tools to juggle the metadata.
+//
+// Authors: C.Paus
+//--------------------------------------------------------------------------------------------------
+
+#ifndef CATALOG_BASEMETADATA_H
+#define CATALOG_BASEMETADATA_H
+
+#include "MitAna/DataTree/interface/Types.h"
+
+namespace mithep 
+{
+  class BaseMetaData
+  {
+    public:
+      BaseMetaData();
+      BaseMetaData(UInt_t nEvts, UInt_t nLs,
+		   UInt_t nMinR, UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR);
+      BaseMetaData(BaseMetaData *b);
+      virtual ~BaseMetaData() {}
+
+      UInt_t                   NEvents           () const { return fNEvents           ; }
+      UInt_t                   NLumiSecs         () const { return fNLumiSecs         ; }
+
+      UInt_t                   MinRun            () const { return fMinRun            ; }  
+      UInt_t                   MinLumiSecInMinRun() const { return fMinLumiSecInMinRun; }  
+      UInt_t                   MaxRun            () const { return fMaxRun            ; }  
+      UInt_t                   MaxLumiSecInMaxRun() const { return fMaxLumiSecInMaxRun; }  
+
+      void                     AddRun            (UInt_t nR, UInt_t nLs);
+      void                     AddLumiSec        (UInt_t nR, UInt_t nLs);
+      void                     AddEvent          () { fNEvents++; }
+
+      void                     Add               (BaseMetaData *b);
+
+      virtual void             Print             () const;
+
+    protected:
+      UInt_t                   fNEvents;             // number of events analyzed
+      UInt_t                   fNLumiSecs;           // number of lumi sections analyzed
+      
+      UInt_t                   fMinRun;              // smallest run number encountered
+      UInt_t                   fMinLumiSecInMinRun;  // smallest lumi section in that run
+      UInt_t                   fMaxRun;              // largest run nnumber encountered
+      UInt_t                   fMaxLumiSecInMaxRun;  // largest lumi section in that run
+  };
+}
+#endif
