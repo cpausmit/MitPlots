@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.1 2008/06/30 11:30:27 loizides Exp $
+// $Id: Vertex.h,v 1.2 2008/06/30 16:54:40 loizides Exp $
 //
 // Vertex
 //
@@ -22,6 +22,7 @@ namespace mithep
       Vertex(Double_t x, Double_t y, Double_t z) : fPoint(x,y,z) {}
       ~Vertex() {}
       
+      Double_t          Phi()   const { return fPoint.Phi(); }
       Double_t		Rho()   const { return fPoint.Rho(); }
       void		SetXYZ(Double_t x, Double_t y, Double_t z) { fPoint.SetXYZ(x,y,z); }
       Double_t		X()     const { return fPoint.X();   }
