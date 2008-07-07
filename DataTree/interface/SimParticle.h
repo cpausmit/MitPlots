@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimParticle.h,v 1.2 2008/07/01 09:17:11 loizides Exp $
+// $Id: SimParticle.h,v 1.3 2008/07/01 14:09:27 loizides Exp $
 //
 // SimParticle
 //
@@ -26,6 +26,7 @@ namespace mithep
       
       const SimParticle   *GetDaughter(UInt_t i) const;
       const GenParticle*   GetGenParticle()      const;
+      const SimParticle   *GetMother()           const;
       Bool_t               IsGenerated()         const { return fGenPartRef.IsValid(); }
       void                 SetGenParticle(GenParticle* p) { fGenPartRef = p; }
 
@@ -51,4 +52,13 @@ inline const mithep::GenParticle *mithep::SimParticle::GetGenParticle() const
 
   return static_cast<const GenParticle*>(fGenPartRef.GetObject()); 
 }
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::SimParticle *mithep::SimParticle::GetMother() const 
+{ 
+  // Return mother.
+
+  return static_cast<const SimParticle*>(fMother.GetObject()); 
+}
+
 #endif
