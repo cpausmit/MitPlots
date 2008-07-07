@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.10 2008/07/01 14:09:27 loizides Exp $
+// $Id: Collections.h,v 1.11 2008/07/02 19:28:43 bendavid Exp $
 //
 // Collections
 //
@@ -19,6 +19,8 @@
 #include "MitAna/DataTree/interface/Lepton.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
+#include "MitAna/DataTree/interface/Jet.h"
+#include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/GenParticle.h"
 #include "MitAna/DataTree/interface/SimParticle.h"
@@ -33,6 +35,8 @@ namespace mithep
   typedef Collection<Lepton>            LeptonCol;
   typedef Collection<Muon>              MuonCol;
   typedef Collection<Electron>          ElectronCol;
+  typedef Collection<Jet>               JetCol;
+  typedef Collection<Met>               MetCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<GenParticle>       GenParticleCol;
   typedef Collection<SimParticle>       SimParticleCol;
@@ -46,6 +50,8 @@ namespace mithep
   typedef Array<Lepton>                 LeptonArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
+  typedef Array<Jet>                    JetArr;
+  typedef Array<Met>                    MetArr;
   typedef Array<GenParticle>            GenParticleArr;
   typedef Array<SimParticle>            SimParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
