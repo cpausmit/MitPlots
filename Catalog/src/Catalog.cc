@@ -1,10 +1,11 @@
-// $Id: Catalog.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: Catalog.cc,v 1.2 2008/07/07 23:49:40 paus Exp $
 
-#include <TROOT.h>
+#include "MitAna/Catalog/interface/Catalog.h"
 #include <TSystem.h>
 #include "MitAna/DataUtil/interface/Debug.h"
-#include "MitAna/Catalog/interface/Catalog.h"
 #include "MitAna/Catalog/interface/Dataset.h"
+
+ClassImp(mithep::Catalog)
 
 using namespace mithep;
 
@@ -19,13 +20,14 @@ Catalog::Catalog(const char *location) :
 Dataset *Catalog::FindDataset(const char *book, const char *dataset)
 {
   // Try to find the given dataset in the catalog and return it properly filled.
+  // Note that the caller must delete the returned dataset.
 
   TString slash        = "/";
   TString fullDir      = fLocation +slash+ TString(book) +slash+ TString(dataset);
   TString cmdFilesets  = TString("cat ")+fullDir+slash+TString("Filesets | grep -v ^#");
   TString cmdFiles     = TString("cat ")+fullDir+slash+TString("Files    | grep -v ^#");
 
-  char    file[6], fset[60], location[100];
+  char    file[1024], fset[1024], location[1024];
   UInt_t  nLumiSecs=0, nEvents=0;
   UInt_t  nMaxRun=0, nMaxLumiSecMaxRun=0, nMinRun=0, nMinLumiSecMinRun=0;
   FILE   *f;
@@ -42,6 +44,7 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset)
 	     nLumiSecs,nEvents,nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     FilesetMetaData *fs = new FilesetMetaData(fset,location);
     ds->AddFileset(fs);
+    delete fs;
   }
   gSystem->ClosePipe(f);
 
@@ -56,6 +59,7 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset)
     BaseMetaData  b(nLumiSecs,nEvents,nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     FileMetaData *f = new FileMetaData(file,&b);
     ds->AddFile(fset,f);
+    delete f;
   }
   gSystem->ClosePipe(f);
 

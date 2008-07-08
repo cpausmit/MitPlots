@@ -1,9 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: FileMetaData.h,v 1.1 2008/07/07 16:41:52 paus Exp $
 //
-// FileMetaData - class for keeping meta data of a file
+// FileMetaData
 //
-// This class inherits from the BaseMetaData and just adds on top the filename.
+// This class keeps meta data of a file. It inherits from the BaseMetaData and just adds 
+// on top the filename.
 //
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
@@ -20,15 +21,16 @@ namespace mithep
   {
     public:
       FileMetaData() {}
-      FileMetaData(const char *fileName, BaseMetaData *metaData);
+      FileMetaData(const char *fileName, const BaseMetaData *metaData);
       ~FileMetaData() {}
 
       const TString               *FileName() const { return &fFileName; }
-
-      void                         Print     () const;
+      void                         Print   () const;
 
     protected:
-      TString                      fFileName;            // name of the file (no path included)
+      TString                      fFileName;            //name of the file (no path included)
+
+    ClassDef(FileMetaData, 1) // Class for keeping meta data of a file
   };
 }
 #endif

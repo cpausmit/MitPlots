@@ -1,9 +1,9 @@
-// $Id: $
+// $Id: BaseMetaData.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
 
-#include <TROOT.h>
-#include <TSystem.h>
 #include "MitAna/Catalog/interface/BaseMetaData.h"
 #include "MitAna/Catalog/interface/Dataset.h"
+
+ClassImp(mithep::BaseMetaData)
 
 using namespace mithep;
 
@@ -19,6 +19,7 @@ BaseMetaData::BaseMetaData() :
   // Constructor
 }
 
+//--------------------------------------------------------------------------------------------------
 BaseMetaData::BaseMetaData(UInt_t nEvts, UInt_t nLs,
                            UInt_t nMinR, UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR) :
   fNEvents           (nEvts),
@@ -31,52 +32,11 @@ BaseMetaData::BaseMetaData(UInt_t nEvts, UInt_t nLs,
   // Constructor
 }
 
-
 //--------------------------------------------------------------------------------------------------
-BaseMetaData::BaseMetaData(BaseMetaData *b)
+void BaseMetaData::Add(const BaseMetaData *b)
 {
-  fNEvents            = b->NEvents           ();
-  fNLumiSecs          = b->NLumiSecs         ();
-  fMinRun             = b->MinRun            ();
-  fMinLumiSecInMinRun = b->MinLumiSecInMinRun();
-  fMaxRun             = b->MaxRun            ();
-  fMaxLumiSecInMaxRun = b->MaxLumiSecInMaxRun();
-}
+  // Account for new meta data information.
 
-//--------------------------------------------------------------------------------------------------
-void BaseMetaData::AddRun(UInt_t nR, UInt_t nLs)
-{
-  // account for the minimum run number and reset minimum luminosity section within
-  if (fMinRun > nR) {
-    fMinRun             = nR;
-    fMinLumiSecInMinRun = nLs;
-  }
-  // account for the maximum run number and reset maximum luminosity section within
-  if (fMaxRun < nR) {
-    fMaxRun             = nR;
-    fMaxLumiSecInMaxRun = nLs;
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
-void BaseMetaData::AddLumiSec(UInt_t nR, UInt_t nLs)
-{
-  fNLumiSecs++;
-  // account for the maximum lumi section number in the maximum run
-  if (fMaxRun == nR) {
-    if (fMaxLumiSecInMaxRun < nLs)
-      fMaxLumiSecInMaxRun = nLs;
-  }
-  // account for the minimum lumi section number in the minimum run
-  if (fMinRun == nR) {
-    if (fMinLumiSecInMinRun > nLs)
-      fMinLumiSecInMinRun = nLs;
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
-void BaseMetaData::Add(BaseMetaData *b)
-{
   // Add simple counts (nRun count is incorrect... we are counting the times BeginRun is hit...)
   fNEvents   += b->NEvents  ();
   fNLumiSecs += b->NLumiSecs();
@@ -94,8 +54,45 @@ void BaseMetaData::Add(BaseMetaData *b)
 }
 
 //--------------------------------------------------------------------------------------------------
+void BaseMetaData::AddLumiSec(UInt_t nR, UInt_t nLs)
+{
+  // Add new lumi section info and account for limits.
+
+  fNLumiSecs++;
+  // account for the maximum lumi section number in the maximum run
+  if (fMaxRun == nR) {
+    if (fMaxLumiSecInMaxRun < nLs)
+      fMaxLumiSecInMaxRun = nLs;
+  }
+  // account for the minimum lumi section number in the minimum run
+  if (fMinRun == nR) {
+    if (fMinLumiSecInMinRun > nLs)
+      fMinLumiSecInMinRun = nLs;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+void BaseMetaData::AddRun(UInt_t nR, UInt_t nLs)
+{
+  // Add run with lumi section and account for limits.
+
+  // account for the minimum run number and reset minimum luminosity section within
+  if (fMinRun > nR) {
+    fMinRun             = nR;
+    fMinLumiSecInMinRun = nLs;
+  }
+  // account for the maximum run number and reset maximum luminosity section within
+  if (fMaxRun < nR) {
+    fMaxRun             = nR;
+    fMaxLumiSecInMaxRun = nLs;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
 void BaseMetaData::Print() const
 {
+  // Print useful information.
+
   printf("%9d %9d %9d %6d %9d %6d\n",
 	 fNLumiSecs         ,
 	 fNEvents           ,

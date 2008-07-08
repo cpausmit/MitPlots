@@ -1,7 +1,8 @@
-// $Id: $
+// $Id: Dataset.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
 
-#include <iostream>
 #include "MitAna/Catalog/interface/Dataset.h"
+
+ClassImp(mithep::Dataset)
 
 using namespace std;
 using namespace mithep;
@@ -15,15 +16,11 @@ Dataset::Dataset(const char *name) :
   // Constructor
 }
 
-void Dataset::AddFileset(FilesetMetaData *f)
+//--------------------------------------------------------------------------------------------------
+void Dataset::AddFile(const char *filesetName, const FileMetaData *f)
 {
-  Add(f);
-  fFilesetList.push_back(*f);
-  fNFiles += f->NFiles();
-}
+  // Add a file to a fileset.
 
-void Dataset::AddFile(const char *filesetName, FileMetaData *f)
-{
   TString name(filesetName);
   for (UInt_t i=0; i<fFilesetList.size(); i++) {
     if (filesetName == *fFilesetList[i].FilesetName()) {
@@ -35,8 +32,21 @@ void Dataset::AddFile(const char *filesetName, FileMetaData *f)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+void Dataset::AddFileset(const FilesetMetaData *f)
+{
+  // Add a fileset.
+
+  Add(f);
+  fFilesetList.push_back(*f);
+  fNFiles += f->NFiles();
+}
+
+//--------------------------------------------------------------------------------------------------
 const FileMetaData *Dataset::File(UInt_t iFile) const
 {
+  // Get filename corresponding to given file number.
+
   if (iFile >= fNFiles)
     return 0;
 
@@ -51,8 +61,11 @@ const FileMetaData *Dataset::File(UInt_t iFile) const
   return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 const char *Dataset::FileUrl(UInt_t iFile) const
 {
+  // Get url corresponding to given file number.
+
   TString slash("/");
   TString url("");
   if (iFile >= fNFiles)
@@ -71,8 +84,11 @@ const char *Dataset::FileUrl(UInt_t iFile) const
   return url.Data();
 }
 
+//--------------------------------------------------------------------------------------------------
 void Dataset::Print() const
 {
+  // Print useful information.
+
   cout << endl << " Printing contents of dataset: " << fName << endl << " - Metadata: ";
   BaseMetaData::Print();
   for (UInt_t i=0; i<fFilesetList.size(); i++) {
@@ -80,5 +96,4 @@ void Dataset::Print() const
     fFilesetList[i].Print();
   }
   cout << endl;
-
 }
