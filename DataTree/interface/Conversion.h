@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.2 2008/07/03 08:22:17 loizides Exp $
+// $Id: Conversion.h,v 1.3 2008/07/07 15:32:52 bendavid Exp $
 //
 // Conversion
 //
@@ -39,10 +39,10 @@ namespace mithep
       void                      SetPairMomentum(Double_t px, Double_t py, Double_t pz);
         
     protected:
-      FitVertex                 fVertex; //reconstructed decay vertex
-      Double_t                  fDCotTheta; //delta cot theta between the tracks at the conversion point
-      Double_t                  fEOverP; //E over p of conversion tracks
-      Double_t                  fPairMass; //mass of electron-positron pair at conversion point
+      FitVertex                 fVertex;       //reconstructed decay vertex
+      Double_t                  fDCotTheta;    //delta cot theta wrt tracks at the conversion point
+      Double_t                  fEOverP;       //E over p of conversion tracks
+      Double_t                  fPairMass;     //mass of electron-positron pair at conversion point
       ThreeVector               fPairMomentum; //momentum of tracks at conversion point
       
     ClassDef(Conversion,1) // Conversion class
@@ -60,6 +60,8 @@ inline const mithep::Electron *mithep::Conversion::GetDaughter(UInt_t i) const
 //--------------------------------------------------------------------------------------------------
 inline void mithep::Conversion::SetPairMomentum(Double_t px, Double_t py, Double_t pz)
 { 
+  // Set pair momentum.
+
   fPairMomentum.SetXYZ(px,py,pz);; 
 }
 #endif

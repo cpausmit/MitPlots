@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.12 2008/07/03 08:22:19 loizides Exp $
+// $Id: Analysis.cc,v 1.13 2008/07/07 16:41:54 paus Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -196,9 +196,10 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
 //--------------------------------------------------------------------------------------------------
 Bool_t Analysis::AddDataset(const Dataset *dataset)
 {
+  // Add a full dataset to the analysis.
+
   Bool_t status = true;
 
-  // Add a full dataset to the analysis.
   for (UInt_t i=0; i<dataset->NFiles(); i++)
     status = (status && AddFile(dataset->FileUrl(i)));
 

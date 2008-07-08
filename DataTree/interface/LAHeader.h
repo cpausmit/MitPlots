@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.3 2008/06/20 17:50:41 loizides Exp $
+// $Id: LAHeader.h,v 1.1 2008/06/24 14:01:41 loizides Exp $
 //
 // LAHeader
 //
@@ -27,7 +27,7 @@ namespace mithep
       void                SetRunNum(UInt_t i)  { fRunNum=i; }
 
     protected:
-      UInt_t              fRunNum;          // run number
+      UInt_t              fRunNum;          //run number
       
     ClassDef(LAHeader, 1) // Look-ahead event header class
   };

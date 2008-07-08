@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.10 2008/07/01 08:53:09 loizides Exp $
+// $Id: Track.h,v 1.11 2008/07/03 09:47:49 paus Exp $
 //
 // Track
 //
@@ -20,9 +20,11 @@ namespace mithep
   class Track : public DataObject
   {
     public:
-      Track() {}
+      Track() : fPhi(0), fD0(0), fPt(0), fDz(0), fTheta(0), fPhiErr(0), fD0Err(0), fPtErr(0),
+                fDzErr(0), fThetaErr(0), fCharge(0) {}
       Track(Double_t phi, Double_t d0, Double_t pt, Double_t dz, Double_t theta) :
-	fPhi(phi), fD0(d0), fPt(pt), fDz(dz), fTheta(theta) {}
+	fPhi(phi), fD0(d0), fPt(pt), fDz(dz), fTheta(theta), fPhiErr(0), fD0Err(0), fPtErr(0),
+        fDzErr(0), fThetaErr(0), fCharge(0) {}
       ~Track() {}
 
       Int_t	        Charge()       const { return fCharge; }      
@@ -56,17 +58,17 @@ namespace mithep
       void	        SetSimParticle(SimParticle* p) { fSimParticleRef = p; }
       
     protected:
-      Double_t          fPhi;            // azimuthal angle
-      Double_t          fD0;             // raw impact parameter
-      Double_t          fPt;             // transverse momentum
-      Double_t          fDz;             // z-displacement
-      Double_t          fTheta;          // polar angle
-      Double_t          fPhiErr;         // uncertainy on phi
-      Double_t          fD0Err;          // uncertainty on D0
-      Double_t          fPtErr;          // uncertainty on pt
-      Double_t          fDzErr;          // uncertainty on dz
-      Double_t          fThetaErr;       // uncertainty on theta
-      Int_t             fCharge;         // electric charge of reconstructed track
+      Double_t          fPhi;            //azimuthal angle
+      Double_t          fD0;             //raw impact parameter
+      Double_t          fPt;             //transverse momentum
+      Double_t          fDz;             //z-displacement
+      Double_t          fTheta;          //polar angle
+      Double_t          fPhiErr;         //uncertainy on phi
+      Double_t          fD0Err;          //uncertainty on D0
+      Double_t          fPtErr;          //uncertainty on pt
+      Double_t          fDzErr;          //uncertainty on dz
+      Double_t          fThetaErr;       //uncertainty on theta
+      Int_t             fCharge;         //electric charge of reconstructed track
       TRef              fSimParticleRef; //reference to sim particle (for monte carlo)
 	      
     ClassDef(Track, 1) // Track class

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.9 2008/06/18 19:08:14 loizides Exp $
+// $Id: Vector.h,v 1.10 2008/06/24 14:01:41 loizides Exp $
 //
 // Vector
 //
@@ -46,7 +46,7 @@ namespace mithep
       const ArrayElement              *operator[](UInt_t idx)        const { return &fV.at(idx); }
 
     protected:
-      std::vector<ArrayElement>        fV;           //std::vector
+      std::vector<ArrayElement>        fV; //std::vector
 
     private:
       Vector(const Vector &v);
