@@ -1,4 +1,5 @@
-// $Id: $
+// $Id: runCataloging.C,v 1.1 2008/07/07 16:41:54 paus Exp $
+
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include <TSystem.h>
@@ -11,8 +12,8 @@
 
 using namespace mithep;
 
-Int_t   gNFilesPerSet = 5;
-TString slash   = "/";
+const Int_t   gNFilesPerSet = 5;
+const TString slash   = "/";
 
 void catalogData(const char *dir, int iFileSet = 0);
 void catalogFile(const char *dir, const char *file, int iFileSet = 0);
@@ -30,10 +31,10 @@ void runCataloging(const char *baseDir = "/server/03b/paus",
   // This script runs a full cataloging action on the given directory
   // -----------------------------------------------------------------------------------------------
   gDebugMask        = Debug::kNone;
-  gDebugLevel       = -2;
+  gDebugLevel       = 1;
   gErrorIgnoreLevel = kWarning;
 
-  // Create information per files
+  // create information per files
   TString fullDir = baseDir +slash+ book +slash+ dataset;
   TString cmd     = TString("ls -1 ")+fullDir;
   char    file[1000];
@@ -47,7 +48,7 @@ void runCataloging(const char *baseDir = "/server/03b/paus",
   }
   gSystem->ClosePipe(f);
 
-  // Create information per file set
+  // create information per file set
   i = 0;
   int iF = 0, iFLast = 0;
   reset();
@@ -83,6 +84,7 @@ void runCataloging(const char *baseDir = "/server/03b/paus",
   return;
 }
 
+//--------------------------------------------------------------------------------------------------
 void catalogData(const char *dir, int iFileSet)
 {
   // set up the modules
@@ -96,6 +98,7 @@ void catalogData(const char *dir, int iFileSet)
   gAna->Run(false);  
 }
 
+//--------------------------------------------------------------------------------------------------
 void catalogFile(const char *dir, const char *file, int iFileSet)
 {
   // set up the modules
@@ -110,8 +113,10 @@ void catalogFile(const char *dir, const char *file, int iFileSet)
   gAna->Run(false);  
 }
 
+//--------------------------------------------------------------------------------------------------
 void reset()
 {
+  // reset pointers
   if (gAna)
     delete gAna;
   gAna = new Analysis();
