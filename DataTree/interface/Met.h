@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
+// $Id: Met.h,v 1.1 2008/07/07 16:02:25 loizides Exp $
 //
 // Met
 //
@@ -19,10 +19,26 @@ namespace mithep
   class Met : public Particle
   {
     public:
-      Met() {}
+      Met() : fPx(0), fPy(0) {}
+      Met(Double_t px, Double_t py) : fPx(px), fPy(py) {}
       ~Met() {}
 
-    ClassDef(Met, 1) // Met class
+      Double_t		E()      const { return Pt();}
+      Double_t		Eta()    const { return Mom().Eta();}
+      Double_t		Mass()   const { return TMath::Sqrt(Mom().M2()); }
+      FourVector	Mom()    const { return FourVector(fPx,fPy,0,Pt()); }
+      Double_t		Phi()    const { return TMath::ATan2(fPy,fPx); }
+      Double_t		Pt()     const { return TMath::Sqrt(fPx*fPx+fPy*fPy);}
+      Double_t		Px()     const { return fPx;}
+      Double_t		Py()     const { return fPy;}
+      Double_t		Pz()     const { return 0; }
+      Double_t		P()      const { return Pt(); }
+
+    protected:
+      Double_t fPx;          //x-component
+      Double_t fPy;          //y-component
+
+    ClassDef(Met, 1) // Missing Et class
   };
 }
 #endif
