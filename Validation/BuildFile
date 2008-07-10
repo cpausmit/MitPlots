@@ -1,0 +1,10 @@
+# -*- Makefile -*-
+# $Id: BuildFile,v 1.1 2008/05/27 19:36:05 loizides Exp $
+
+<use name=MitAna/TreeMod>
+#<use name=MitAna/DataTree>
+#<use name=MitAna/DataUtil>
+#<use name=root>
+<export>
+   <lib name=Validation>
+</export>
