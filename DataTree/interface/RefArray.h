@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.5 2008/07/02 21:29:00 loizides Exp $
+// $Id: RefArray.h,v 1.6 2008/07/02 21:45:17 loizides Exp $
 //
 // RefArray
 //
@@ -40,7 +40,6 @@ namespace mithep
 
     protected:
       std::vector<TRef>         fV;            //vector for storage
-      UInt_t                    fNumEntries;   //number of entries in the array
 
     private:
       RefArray(const RefArray &a);
