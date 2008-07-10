@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: CatalogingMod.h,v 1.1 2008/07/07 16:41:53 paus Exp $
 //
-// Cataloging Module
+// CatalogingMod
 //
 // This TAM module analyzes the given files and writes out all metafile information necessary to
 // create a catalog. Ideally Meta information should be created per file but this module will
@@ -24,14 +24,13 @@ namespace mithep
   {
     public:
       CatalogingMod(const char *name  = "CatalogingMod",
-                    const char *title = "");
+                    const char *title = "Cataloging module producing a fileset catalog");
       ~CatalogingMod() {}
 
       void                     SetMetaDataString(const char* s) { fMetaDataString = TString(s); }
-      const char              *MetaDataString()                 { return fMetaDataString.Data(); }
-
+      const char              *MetaDataString() const           { return fMetaDataString.Data(); }
       void                     SetNFileSet(Int_t i)             { fNFileSet = i; }
-      Int_t                    NFileSet()                       { return fNFileSet; }
+      Int_t                    NFileSet()       const           { return fNFileSet; }
 
     protected:
       void                     SlaveBegin();
@@ -40,13 +39,12 @@ namespace mithep
       void                     SlaveTerminate();
 
     private:
-      TString                  fMetaDataString;
-      Int_t                    fNFileSet;
-      UInt_t                   fLastLumiSec;         // last active lumi section
+      TString                  fMetaDataString;      // 
+      Int_t                    fNFileSet;            //
+      UInt_t                   fLastLumiSec;         //last active lumi section
+      BaseMetaData             fMetaData;            //
 
-      BaseMetaData             fMetaData;
-
-      ClassDef(CatalogingMod,1)                      // Cataloging Module
+      ClassDef(CatalogingMod,1) // Cataloging module
   };
 }
 #endif

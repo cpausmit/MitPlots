@@ -1,4 +1,4 @@
-// $Id: $
+// $Id: CatalogingMod.cc,v 1.1 2008/07/07 16:41:54 paus Exp $
 
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/TreeMod/interface/CatalogingMod.h"
@@ -21,7 +21,8 @@ CatalogingMod::CatalogingMod(const char *name, const char *title) :
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::SlaveBegin()
 {
-  // Cataloging module message
+  // Print out cataloging module message.
+
   if (gDebugLevel > 0)
     cout << " ============================\n"
 	 << " CatalogingMod::SlaveBegin -- Creating MetaInformation for the coming events\n"
@@ -31,7 +32,8 @@ void CatalogingMod::SlaveBegin()
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::BeginRun()
 {
-  // reset the last luminosity section
+  // Reset the last luminosity section.
+
   fLastLumiSec = 999999999;
   fMetaData.AddRun(GetEventHeader()->RunNum(),GetEventHeader()->LumiSec());
 }
@@ -39,6 +41,8 @@ void CatalogingMod::BeginRun()
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::Process()
 {
+  // Add new event and update luminosity section counter.
+
   // count all events
   fMetaData.AddEvent();
   // count luminosity sections
@@ -49,7 +53,8 @@ void CatalogingMod::Process()
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::SlaveTerminate()
 {
-  // Cataloging module message
+  // Print cataloging module message.
+
   if (gDebugLevel > 0)
     cout << "\n"
 	 << " ============================----\n"
