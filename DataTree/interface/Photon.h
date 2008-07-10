@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.3 2008/07/02 19:28:43 bendavid Exp $
+// $Id: Photon.h,v 1.4 2008/07/03 08:22:18 loizides Exp $
 //
 // Photon
 //
@@ -21,8 +21,8 @@ namespace mithep
   class Photon : public Particle
   {
     public:
-      Photon() {}
-      Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : fFourVector(px,py,pz,e) {}
+      Photon() { SetClearBit(); }
+      Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : fFourVector(px,py,pz,e) { SetClearBit(); }
       ~Photon() {}
 
       void                      AddConversion(Conversion *c);
@@ -34,6 +34,8 @@ namespace mithep
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
 	    
     protected:
+      void                      Clear(Option_t */*option*/="") { fConversions.Reset(); }
+      
       FourVector                fFourVector;  //four momentum vector
       RefArray<Conversion>      fConversions; //references to associated conversion candidates
 	
