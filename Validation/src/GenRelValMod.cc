@@ -1,11 +1,7 @@
-// $Id:$
+// $Id: GenRelValMod.cc,v 1.1 2008/07/10 14:56:27 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
-
 #include "MitAna/DataTree/interface/Names.h"
-//#include <stdio.h>
-//#include <iostream>
-//#include <fstream>
 
 using namespace mithep;
 
@@ -28,13 +24,11 @@ void GenRelValMod::SlaveBegin()
   // initialize histograms and other analysis objects and request branches. For this module, we
   // request a branch of the MitTree and open a text file for writing.
 
-  // Request the branches
   ReqBranch(fGenPartName,fParticles);
 
-  // Open file for writing
   ofile = new std::ofstream("macro_output.txt");
   if (ofile->bad()) {
-    std::cout<<"Problem opening output file\n";
+    SendError(kAbortAnalysis, "SlaveBegin", "Can not open output file.");
   }
 }
 
@@ -61,6 +55,8 @@ void GenRelValMod::Process()
           const  GenParticle *test = fParticles->At(j);
           if(test==mother) {
             mind=j+1;
+            // hack to overcome ambiguity
+            if(mind==5 && I==7 || I==8) mind=0;
             break;
           }
         }
