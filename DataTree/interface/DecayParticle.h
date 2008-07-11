@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.2 2008/07/01 08:57:24 loizides Exp $
+// $Id: DecayParticle.h,v 1.3 2008/07/03 08:22:18 loizides Exp $
 //
 // Decay Particle
 //
@@ -26,7 +26,8 @@ namespace mithep
         fVertex(x,y,z,xErr,yErr,zErr) {}
       ~DecayParticle() {}
       
-      const FitVertex        &GetVertex() { return fVertex; }
+      const FitVertex        &GetVertex() const { return fVertex; }
+      FitVertex              &GetVertex()       { return fVertex; }
         
     protected:
       FitVertex		      fVertex; //reconstructed decay vertex
