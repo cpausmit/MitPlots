@@ -1,9 +1,9 @@
 #!/bin/bash
-# $Id: genrelval.sh,v 1.1 2008/07/10 15:00:12 loizides Exp $
+# $Id: genrelval.sh,v 1.2 2008/07/10 16:23:12 loizides Exp $
 #
 # genrelval.sh: Release validation script for generated particles
 #
-# $Id:$
+# $Id: genrelval.sh,v 1.2 2008/07/10 16:23:12 loizides Exp $
 #_____________________________________________________________________________________________
 #
 # Variables to configure:
@@ -27,7 +27,7 @@ function write_cfg {
 process Gen =
 {
     # request 2 events for validation purpose
-    untracked PSet maxEvents = { untracked int32 input = 10 }
+    untracked PSet maxEvents = { untracked int32 input = 5 }
 
     include "FWCore/MessageService/data/MessageLogger.cfi"
     include "Configuration/StandardSequences/data/SimulationRandomNumberGeneratorSeeds.cff"
@@ -38,7 +38,7 @@ process Gen =
     {
         untracked int32  pythiaPylistVerbosity = 1
         untracked bool   pythiaHepMCVerbosity  = false
-        untracked int32  maxEventsToPrint      = 3
+        untracked int32  maxEventsToPrint      = 5
         untracked double filterEfficiency      = 1.
 
         PSet PythiaParameters = {
@@ -92,11 +92,11 @@ function write_macro {
 void runGenRelVal(const char *files = "mit-gen_000.root")
 {
   gROOT->Macro("$CMSSW_BASE/src/MitAna/macros/setRootEnv.C+");
-  gSystem->Load("$CMSSW_BASE/lib/slc4_ia32_gcc345/libMitRelValMods.so");
+  gSystem->Load("$CMSSW_BASE/lib/slc4_ia32_gcc345/libMitAnaValidation.so");
 
   using namespace mithep;
   gDebugMask  = Debug::kAnalysis;
-  gDebugLevel = 1;
+  gDebugLevel = 0;
 
   // set up the modules
   GenRelValMod *mod = new GenRelValMod;
@@ -124,6 +124,7 @@ if (( $? )) ; then
     echo "Problem generating sample:" >&2
     echo '' >&2
     cat pythia_raw.txt >&2
+    echo "Output left in $MY_BASE_DIR" >&2
     exit 1
 fi
 
@@ -138,20 +139,18 @@ cat pythia_raw.txt | \
                   $_ =~ /^(\s{1}\d{4})\s.{18}(.{5})(.{5})(.{36})/) 
                 { print "$1$2$3$4\n" ; }' > $PYFILE
 
-exit 1;
-
-
 
 # write+run the validation macro:
 cd $MY_BASE_DIR/prod
 
-write_macro > ./runRelVal.C
+write_macro > ./runGenRelVal.C
 
-rec=`root -l -n -q ./runRelVal.C 2>&1`
+rec=`root -l -n -q ./runGenRelVal.C 2>&1`
 if (( $? )) ; then 
-    echo "Problem executing runRelVal.C:" >&2
+    echo "Problem executing runGenRelVal.C:" >&2
     echo ''  >&2
     echo $rec >&2
+    echo "Output left in $MY_BASE_DIR" >&2
     exit 1
 fi
 
@@ -162,10 +161,10 @@ diff $PYFILE macro_output.txt > diff_report.txt
 if (( $? )) ; then 
     echo "Pythia output disagrees with GenParticles branch contents:" >&2
     cat diff_report.txt >&2
+    echo "Output left in $MY_BASE_DIR" >&2
     exit 1
 fi
 
-exit 0
 # Cleanup
 rm -rf $MY_BASE_DIR
 exit 0
