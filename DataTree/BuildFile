@@ -1,8 +1,8 @@
 # -*- Makefile -*-
-# $Id:$
+# $Id: BuildFile,v 1.1 2008/05/27 19:24:49 loizides Exp $
 
 <use name=root>
+<flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaDataTree>
-   <use name=root>
 </export>
