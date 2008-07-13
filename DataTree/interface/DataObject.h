@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.6 2008/07/02 21:43:15 loizides Exp $
+// $Id: DataObject.h,v 1.7 2008/07/08 14:41:01 loizides Exp $
 //
 // DataObject
 //
@@ -22,13 +22,15 @@ namespace mithep
       DataObject() {}
       ~DataObject() {}
 
-      Bool_t               GetClearBit() const { return TestBit(14); }
-      Bool_t               GetCacheBit() const { return TestBit(15); }
+      Bool_t               GetClearBit()  const { return TestBit(14); }
+      Bool_t               GetDeleteBit() const { return TestBit(15); }
+      Bool_t               GetCacheBit()  const { return TestBit(23); }
 
     protected:
       void                 SetClearBit()       { SetBit(14); }
-      void                 SetCacheBit()       { SetBit(15); }
-      void                 ResetCacheBit()     { SetBit(15,0); }
+      void                 SetDeleteBit()      { SetBit(15); }
+      void                 SetCacheBit()       { SetBit(23); }
+      void                 ResetCacheBit()     { SetBit(23,0); }
 
     ClassDef(DataObject, 1) // Basic data object class
   };
