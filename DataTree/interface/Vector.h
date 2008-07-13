@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.10 2008/06/24 14:01:41 loizides Exp $
+// $Id: Vector.h,v 1.11 2008/07/08 14:41:02 loizides Exp $
 //
 // Vector
 //
@@ -36,7 +36,7 @@ namespace mithep
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
       void                             Reset()                             { fV.clear(); }
-      void                             Trim()                              { fV.resize(fV.size()); }
+      void                             Trim();
       ArrayElement                    *UncheckedAt(UInt_t idx)             { return &fV[idx]; }
       const ArrayElement              *UncheckedAt(UInt_t idx)       const { return &fV[idx]; }
       const std::vector<ArrayElement> &Vect()                        const { return fV; }
@@ -53,5 +53,14 @@ namespace mithep
 
     ClassDefT(Vector, 1) // Wrapper around std::vector class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::Vector<ArrayElement>::Trim()
+{
+  // Trim vector to minimal needed size.
+
+  std::vector<ArrayElement>(fV).swap(fV);
 }
 #endif
