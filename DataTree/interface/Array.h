@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.9 2008/07/03 08:22:17 loizides Exp $
+// $Id: Array.h,v 1.10 2008/07/10 20:59:24 loizides Exp $
 //
 // Array
 //
@@ -20,7 +20,7 @@ namespace mithep
   class Array : public Collection<ArrayElement> 
   {
     public:
-      Array(const char *name=0, Int_t size=0);
+      Array(UInt_t size=0, const char *name=0);
       ~Array() {}
 
       ArrayElement        *AddNew();
@@ -29,14 +29,16 @@ namespace mithep
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                       const;
       UInt_t               GetEntries()                         const { return fNumEntries; }
-      const char*          GetName()                            const { return fArray.GetName(); }
+      const char          *GetName()                            const { return fArray.GetName(); }
       Bool_t               IsOwner()                            const { return kTRUE; }
-      TIterator           *MakeIterator(Bool_t dir = kIterForward) const;
+      TIterator           *Iterator(Bool_t dir = kIterForward)  const;
       Bool_t               MustClear()                          const { return this->TestBit(14); }
+      Bool_t               MustDelete()                         const { return this->TestBit(15); }
       void                 Reset()                                    { Clear(); }
       void                 Trim()                                     { fArray.Compress(); }
       void                 SetMustClearBit()                          { this->SetBit(14); }
-      void                 SetName(const char* name)                  { fArray.SetName(name); }
+      void                 SetMustDeleteBit()                         { this->SetBit(15); }
+      void                 SetName(const char *name)                  { fArray.SetName(name); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)              const;
 
@@ -58,7 +60,7 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline mithep::Array<ArrayElement>::Array(const char *name, Int_t size) : 
+inline mithep::Array<ArrayElement>::Array(UInt_t size, const char *name) : 
   fArray(ArrayElement::Class_Name(),size), 
   fNumEntries(0)
 {
@@ -70,6 +72,8 @@ inline mithep::Array<ArrayElement>::Array(const char *name, Int_t size) :
     fArray.SetName(name);
 
   ArrayElement test;
+  if (test.GetDeleteBit())
+    SetMustDeleteBit();
   if (test.GetClearBit())
     SetMustClearBit();
 }
@@ -94,29 +98,31 @@ inline ArrayElement *mithep::Array<ArrayElement>::Allocate()
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::Array<ArrayElement>::At(UInt_t idx)
+inline ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx)
 {
   // Return entry at given index.
 
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), Array::ClassName()); 
+  ArrayElement tmp;
+  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+        idx, fNumEntries, this->GetName(), tmp.GetName()); 
   return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::Array<ArrayElement>::At(UInt_t idx) const
+inline const ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), Array::ClassName()); 
+  ArrayElement tmp;
+  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+        idx, fNumEntries, this->GetName(), tmp.GetName()); 
   return 0;
 }
 
@@ -126,20 +132,19 @@ inline void mithep::Array<ArrayElement>::Clear()
 {
    // Default implementation for clearing the array.
 
-#if 1
-  fArray.Delete();
-#else
-  if (this->MustClear())
+  if (this->MustDelete())
+    fArray.Delete();   //will call destructor for every element
+  else if (this->MustClear())
     fArray.Clear("C"); //with opt=="C" will call clear for every element
   else 
     fArray.Clear();
-#endif
+
   fNumEntries = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline TIterator *mithep::Array<ArrayElement>::MakeIterator(Bool_t dir) const 
+inline TIterator *mithep::Array<ArrayElement>::Iterator(Bool_t dir) const 
 { 
   // Return ROOT collection iterator.
 
@@ -148,7 +153,7 @@ inline TIterator *mithep::Array<ArrayElement>::MakeIterator(Bool_t dir) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::Array<ArrayElement>::operator[](UInt_t idx) const
+inline const ArrayElement *mithep::Array<ArrayElement>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -157,7 +162,7 @@ inline const ArrayElement* mithep::Array<ArrayElement>::operator[](UInt_t idx) c
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::Array<ArrayElement>::operator[](UInt_t idx)
+inline ArrayElement *mithep::Array<ArrayElement>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 
@@ -166,7 +171,7 @@ inline ArrayElement* mithep::Array<ArrayElement>::operator[](UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx)
+inline ArrayElement *mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -175,7 +180,7 @@ inline ArrayElement* mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx) const
+inline const ArrayElement *mithep::Array<ArrayElement>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
