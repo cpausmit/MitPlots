@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.9 2008/07/01 10:48:33 loizides Exp $
+// $Id: GenParticle.h,v 1.10 2008/07/01 14:05:22 loizides Exp $
 //
 // GenParticle
 //
@@ -19,9 +19,10 @@ namespace mithep
   class GenParticle : public CompositeParticle
   {
     public:
-      GenParticle() {}
-      GenParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) 
-        : fPdgId(id), fStatus(s), fFourVector(px,py,pz,e), fDecayVertex(0,0,0) {}
+      GenParticle() : CompositeParticle(16) {}
+      GenParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
+        CompositeParticle(16), fPdgId(id), fStatus(s), 
+        fFourVector(px,py,pz,e), fDecayVertex(0,0,0) {}
       ~GenParticle() {}
 
       void		  AddDaughter(GenParticle *p) { fDaughters.Add(p); }
