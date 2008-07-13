@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.4 2008/06/30 16:54:11 loizides Exp $
+// $Id: ObjArray.h,v 1.5 2008/07/01 08:52:01 loizides Exp $
 //
 // ObjArray
 //
@@ -20,26 +20,26 @@ namespace mithep
   class ObjArray : public Collection<ArrayElement> 
   {
     public:
-      ObjArray(const char *name=0, Int_t size=0);
+      ObjArray(UInt_t size=0, const char *name=0);
       ~ObjArray() {}
 
       void                 Add(ArrayElement *ae);
-      const TObjArray     &Arr()                                   const { return fArray; }
+      const TObjArray     &Arr()                                 const { return fArray; }
       ArrayElement        *At(UInt_t idx);
-      const ArrayElement  *At(UInt_t idx)                          const;
-      UInt_t               GetEntries()                            const { return fNumEntries; }
-      const char*          GetName()                               const { return fArray.GetName(); }
-      Bool_t               IsOwner()                               const { return fArray.IsOwner(); }
-      TIterator           *MakeIterator(Bool_t dir = kIterForward) const { return fArray.MakeIterator(dir); }
-      void                 Reset()                                       { Clear(); }
-      void                 Trim()                                        { fArray.Compress();}
-      void                 SetName(const char* name)                     { fArray.SetName(name); }
-      void                 SetOwner(Bool_t o)                            { fArray.SetOwner(o); }
+      const ArrayElement  *At(UInt_t idx)                        const;
+      UInt_t               GetEntries()                          const { return fNumEntries; }
+      const char*          GetName()                             const { return fArray.GetName(); }
+      Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
+      TIterator           *Iterator(Bool_t dir = kIterForward)   const;
+      void                 Reset()                                     { Clear(); }
+      void                 Trim()                                      { fArray.Compress();}
+      void                 SetName(const char* name)                   { fArray.SetName(name); }
+      void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
-      const ArrayElement  *UncheckedAt(UInt_t idx)                 const;
+      const ArrayElement  *UncheckedAt(UInt_t idx)               const;
 
       ArrayElement        *operator[](UInt_t idx);
-      const ArrayElement  *operator[](UInt_t idx)                  const;
+      const ArrayElement  *operator[](UInt_t idx)                const;
 
     protected:
       void                 AddLast(ArrayElement *e);
@@ -58,7 +58,7 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline mithep::ObjArray<ArrayElement>::ObjArray(const char *name, Int_t size) : 
+inline mithep::ObjArray<ArrayElement>::ObjArray(UInt_t size, const char *name) : 
   fArray(size), 
   fNumEntries(0)
 {
@@ -105,8 +105,9 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), ObjArray::ClassName()); 
+  ArrayElement tmp;
+  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+        idx, fNumEntries, GetName(), tmp.GetName()); 
   return 0;
 }
 
@@ -119,8 +120,9 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s with type %s",
-        idx, fNumEntries, GetName(), ObjArray::ClassName()); 
+  ArrayElement tmp;
+  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+        idx, fNumEntries, GetName(), tmp.GetName()); 
   return 0;
 }
 
@@ -133,6 +135,15 @@ inline void mithep::ObjArray<ArrayElement>::Clear(Option_t *opt)
    fArray.Clear(opt); //will delete objects if owner
 
    fNumEntries = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline TIterator *mithep::ObjArray<ArrayElement>::Iterator(Bool_t dir) const 
+{ 
+  // Return ROOT collection iterator.
+
+  return fArray.MakeIterator(dir); 
 }
 
 //--------------------------------------------------------------------------------------------------
