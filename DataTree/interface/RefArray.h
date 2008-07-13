@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.6 2008/07/02 21:45:17 loizides Exp $
+// $Id: RefArray.h,v 1.7 2008/07/10 21:00:54 loizides Exp $
 //
 // RefArray
 //
@@ -21,16 +21,17 @@ namespace mithep
   class RefArray : public Collection<ArrayElement> 
   {
     public:
-      RefArray(const char *name=0, Int_t size=0);
+      RefArray(UInt_t rsv=0);
       ~RefArray() {}
 
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                    const;
+      void                      Destroy();
       UInt_t                    GetEntries()                      const { return fV.size(); }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fV.clear(); }
-      void                      Trim()                                  { fV.resize(fV.size());}
+      void                      Trim();
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)           const;
       const std::vector<TRef>  &Vect()                            const { return fV; }
@@ -50,12 +51,12 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline mithep::RefArray<ArrayElement>::RefArray(const char */*name*/, Int_t size) : 
+inline mithep::RefArray<ArrayElement>::RefArray(UInt_t rsv) : 
   fV(0)
 {
    // Default constructor.
 
-  fV.reserve(size);
+  fV.reserve(rsv);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ inline void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx)
+inline ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -78,7 +79,17 @@ inline ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx) const
+inline void mithep::RefArray<ArrayElement>::Destroy()
+{
+  // Delete the std::container and indicate that object destructor was called.
+
+  fV.~vector<TRef>(); 
+  this->SetBit(TObject::kNotDeleted,0);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline const ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -87,7 +98,7 @@ inline const ArrayElement* mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::RefArray<ArrayElement>::operator[](UInt_t idx) const
+inline const ArrayElement *mithep::RefArray<ArrayElement>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -96,7 +107,7 @@ inline const ArrayElement* mithep::RefArray<ArrayElement>::operator[](UInt_t idx
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::RefArray<ArrayElement>::operator[](UInt_t idx)
+inline ArrayElement *mithep::RefArray<ArrayElement>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 
@@ -105,7 +116,16 @@ inline ArrayElement* mithep::RefArray<ArrayElement>::operator[](UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
+inline void mithep::RefArray<ArrayElement>::Trim()
+{
+  // Trim vector to minimal needed size.
+
+  std::vector<TRef>(fV).swap(fV);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline ArrayElement *mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -114,7 +134,7 @@ inline ArrayElement* mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx) const
+inline const ArrayElement *mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
