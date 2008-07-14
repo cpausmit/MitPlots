@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.8 2008/07/13 08:33:26 loizides Exp $
+// $Id: RefArray.h,v 1.9 2008/07/14 09:41:59 loizides Exp $
 //
 // RefArray
 //
@@ -27,7 +27,8 @@ namespace mithep
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                    const;
-      void                      Clear(Option_t */*option*/="")    {   fV.~vector<TRef>();  }
+      void                      Clear(Option_t */*opt*/="")             { fV.~vector<TRef>(); }
+      UInt_t                    Entries()                         const { return fV.size(); }
       UInt_t                    GetEntries()                      const { return fV.size(); }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fV.clear(); }
@@ -40,7 +41,7 @@ namespace mithep
       const ArrayElement       *operator[](UInt_t idx)            const;
 
     protected:
-      std::vector<TRef>         fV;            //vector for storage
+      std::vector<TRef>         fV; //vector for storage
 
     private:
       RefArray(const RefArray &a);

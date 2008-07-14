@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.6 2008/07/13 08:37:50 loizides Exp $
+// $Id: Photon.h,v 1.7 2008/07/14 09:41:59 loizides Exp $
 //
 // Photon
 //
@@ -30,11 +30,10 @@ namespace mithep
       Int_t                     Charge()                const { return 0; }
       void                      Clear(Option_t *opt="")       { fConversions.Clear(opt); }
       Bool_t                    IsConverted()           const { return fConversions.GetEntries(); }
-      const Conversion         *GetConversion(UInt_t i) const { return fConversions.At(i); }
-      UInt_t                    GetNConversions()       const { return fConversions.GetEntries(); }
+      const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
+      UInt_t                    NConversions()          const { return fConversions.GetEntries(); }
       FourVector 	        Mom()                   const { return fFourVector; }  
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      Trim()                        { fConversions.Trim(); }
 	    
     protected:
       FourVector                fFourVector;  //four momentum vector

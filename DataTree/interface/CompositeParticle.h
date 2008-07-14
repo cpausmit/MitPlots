@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.5 2008/07/13 08:37:50 loizides Exp $
+// $Id: CompositeParticle.h,v 1.6 2008/07/14 09:41:59 loizides Exp $
 //
 // Composite Particle
 //
@@ -26,13 +26,12 @@ namespace mithep
       void			AddDaughter(Particle *p)    { fDaughters.Add(p); }
       void                      Clear(Option_t *opt="")     { fDaughters.Clear(opt); }
       Int_t		        Charge()              const;
-      const Particle           *GetDaughter(UInt_t i) const { return fDaughters.At(i); }
-      UInt_t                    GetNDaughters()       const { return fDaughters.GetEntries(); }
+      const Particle           *Daughter(UInt_t i)    const { return fDaughters.At(i); }
+      UInt_t                    NDaughters()          const { return fDaughters.Entries(); }
       Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
       Bool_t			HasSameDaughters(const CompositeParticle *p)  const;
       Bool_t			IsDaughter(const Particle *p)                 const;
       FourVector	        Mom()                 const;
-      void                      Trim()                      { fDaughters.Trim(); }
 
     protected:
       RefArray<Particle>        fDaughters; //references to daughter particles

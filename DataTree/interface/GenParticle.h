@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.10 2008/07/01 14:05:22 loizides Exp $
+// $Id: GenParticle.h,v 1.11 2008/07/13 08:37:50 loizides Exp $
 //
 // GenParticle
 //
@@ -27,14 +27,13 @@ namespace mithep
 
       void		  AddDaughter(GenParticle *p) { fDaughters.Add(p); }
       Int_t               Charge()              const { return fCharge/3; }
-      const Vertex       &GetDecayVertex()      const { return fDecayVertex; }
-      const GenParticle  *GetDaughter(UInt_t i) const;
-      Int_t               GetPdgId()            const { return fPdgId; }
-      Int_t               GetStatus()           const { return fStatus; }
+      const Vertex       &DecayVertex()         const { return fDecayVertex; }
+      const GenParticle  *Daughter(UInt_t i)    const;
+      Int_t               PdgId()               const { return fPdgId; }
+      Int_t               Status()              const { return fStatus; }
       Bool_t              HasMother()           const { return fMother.IsValid(); }
-      const GenParticle  *GetMother()           const;
+      const GenParticle  *Mother()              const;
       FourVector	  Mom()                 const { return fFourVector; }
-
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(GenParticle *p)  { fMother = p; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);       
@@ -52,7 +51,7 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::GenParticle *mithep::GenParticle::GetDaughter(UInt_t i) const 
+inline const mithep::GenParticle *mithep::GenParticle::Daughter(UInt_t i) const 
 { 
   // Return daughter corresponding to given index.
 
@@ -60,7 +59,7 @@ inline const mithep::GenParticle *mithep::GenParticle::GetDaughter(UInt_t i) con
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::GenParticle *mithep::GenParticle::GetMother() const 
+inline const mithep::GenParticle *mithep::GenParticle::Mother() const 
 { 
   // Return mother.
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.8 2008/06/30 16:54:40 loizides Exp $
+// $Id: Electron.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
 //
 // Electron
 //
@@ -21,13 +21,13 @@ namespace mithep
       Electron() {}
       ~Electron() {}
       
-      const Track         *GetGsfTrack()     const;
-      const Track         *GetTrackerTrack() const;
-      const Track         *GetTrack()        const;
+      const Track         *BestTrk()         const;
+      const Track         *GsfTrk()          const;
+      const Track         *TrackerTrk()      const;
       Double_t             Mass()            const { return 0.51099892e-3; }
       
-      void	           SetGsfTrack(Track* t)     { fGsfTrackRef = t; }
-      void	           SetTrackerTrack(Track* t) { fTrackerTrackRef = t; }
+      void	           SetGsfTrk(Track* t)     { fGsfTrackRef = t; }
+      void	           SetTrackerTrk(Track* t) { fTrackerTrackRef = t; }
       
     protected:
       TRef	           fGsfTrackRef;     //global combined track reference
@@ -38,7 +38,20 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Electron::GetGsfTrack() const
+inline const mithep::Track *mithep::Electron::BestTrk() const
+{
+  // Return "best" track.
+
+  if (GsfTrk())
+    return GsfTrk();
+  else if (TrackerTrk())
+    return TrackerTrk();
+
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Electron::GsfTrk() const
 {
   // Return global combined track.
 
@@ -46,23 +59,10 @@ inline const mithep::Track *mithep::Electron::GetGsfTrack() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Electron::GetTrackerTrack() const
+inline const mithep::Track *mithep::Electron::TrackerTrk() const
 {
   // Return tracker track.
 
   return static_cast<const Track*>(fTrackerTrackRef.GetObject());
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Electron::GetTrack() const
-{
-  // Return "best" track.
-
-  if (GetGsfTrack())
-    return GetGsfTrack();
-  else if (GetTrackerTrack())
-    return GetTrackerTrack();
-
-  return 0;
 }
 #endif

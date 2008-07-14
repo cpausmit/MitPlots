@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.8 2008/06/30 16:54:40 loizides Exp $
+// $Id: Muon.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
 //
 // Muon
 //
@@ -23,15 +23,15 @@ namespace mithep
       Muon() {}
       ~Muon() {}
       
-      const Track   *GetGlobalTrack()     const;
-      const Track   *GetStandaloneTrack() const;
-      const Track   *GetTrackerTrack()    const;
-      const Track*   GetTrack()           const;
+      const Track   *BestTrk()            const;
+      const Track   *GlobalTrk()          const;
+      const Track   *StandaloneTrk()      const;
+      const Track   *TrackerTrk()         const;
       Double_t       Mass()               const { return 105.658369e-3; }  
       
-      void	     SetGlobalTrack(Track* t)     { fGlobalTrackRef = t; }
-      void	     SetStandaloneTrack(Track* t) { fStandaloneTrackRef = t; }
-      void	     SetTrackerTrack(Track* t)    { fTrackerTrackRef = t; }
+      void	     SetGlobalTrk(Track* t)     { fGlobalTrackRef = t; }
+      void	     SetStandaloneTrk(Track* t) { fStandaloneTrackRef = t; }
+      void	     SetTrackerTrk(Track* t)    { fTrackerTrackRef = t; }
       
     protected:
       TRef	     fGlobalTrackRef;      //global combined track reference
@@ -43,7 +43,22 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::GetGlobalTrack() const 
+inline const mithep::Track *mithep::Muon::BestTrk() const
+{
+  // Return "best" track.
+
+  if (GlobalTrk())
+    return GlobalTrk();
+  else if (StandaloneTrk())
+    return StandaloneTrk();
+  else if (TrackerTrk())
+    return TrackerTrk();
+
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::Track *mithep::Muon::GlobalTrk() const 
 { 
   // Return global combined track.
 
@@ -51,7 +66,7 @@ inline const mithep::Track *mithep::Muon::GetGlobalTrack() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::GetStandaloneTrack() const 
+inline const mithep::Track *mithep::Muon::StandaloneTrk() const 
 { 
   // Return standalone track.
 
@@ -59,25 +74,10 @@ inline const mithep::Track *mithep::Muon::GetStandaloneTrack() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::GetTrackerTrack() const 
+inline const mithep::Track *mithep::Muon::TrackerTrk() const 
 { 
   // Return tracker track.
 
   return static_cast<const Track*>(fTrackerTrackRef.GetObject()); 
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::GetTrack() const
-{
-  // Return "best" track.
-
-  if (GetGlobalTrack())
-    return GetGlobalTrack();
-  else if (GetStandaloneTrack())
-    return GetStandaloneTrack();
-  else if (GetTrackerTrack())
-    return GetTrackerTrack();
-
-  return 0;
 }
 #endif

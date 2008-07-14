@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.6 2008/07/13 08:23:46 loizides Exp $
+// $Id: ObjArray.h,v 1.7 2008/07/14 09:41:59 loizides Exp $
 //
 // ObjArray
 //
@@ -29,6 +29,7 @@ namespace mithep
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                        const;
       void                 Clear(Option_t */*opt*/="")                 { fArray.~TObjArray(); }
+      UInt_t               Entries()                             const { return fNumEntries; }
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }

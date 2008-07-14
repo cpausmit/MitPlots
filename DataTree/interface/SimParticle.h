@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimParticle.h,v 1.4 2008/07/07 13:27:58 bendavid Exp $
+// $Id: SimParticle.h,v 1.5 2008/07/07 16:01:46 loizides Exp $
 //
 // SimParticle
 //
@@ -24,11 +24,11 @@ namespace mithep
         : GenParticle(px,py,pz,e,id,0) {}
       ~SimParticle() {}
       
-      const SimParticle   *GetDaughter(UInt_t i) const;
-      const GenParticle*   GetGenParticle()      const;
-      const SimParticle   *GetMother()           const;
+      const SimParticle   *Daughter(UInt_t i)    const;
+      const GenParticle   *GenPart()             const;
+      const SimParticle   *Mother()              const;
       Bool_t               IsGenerated()         const    { return fGenPartRef.IsValid(); }
-      void                 SetGenParticle(GenParticle* p) { fGenPartRef = p; }
+      void                 SetGenPart(GenParticle* p)     { fGenPartRef = p; }
 
     protected:
       TRef		   fGenPartRef; //reference to generated particle
@@ -38,7 +38,7 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::SimParticle *mithep::SimParticle::GetDaughter(UInt_t i) const 
+inline const mithep::SimParticle *mithep::SimParticle::Daughter(UInt_t i) const 
 { 
   // Return daughter corresponding to given index.
 
@@ -46,7 +46,7 @@ inline const mithep::SimParticle *mithep::SimParticle::GetDaughter(UInt_t i) con
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::GenParticle *mithep::SimParticle::GetGenParticle() const 
+inline const mithep::GenParticle *mithep::SimParticle::GenPart() const 
 { 
   // Return reference to generated particle.
 
@@ -54,11 +54,10 @@ inline const mithep::GenParticle *mithep::SimParticle::GetGenParticle() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::SimParticle *mithep::SimParticle::GetMother() const 
+inline const mithep::SimParticle *mithep::SimParticle::Mother() const 
 { 
   // Return mother.
 
   return static_cast<const SimParticle*>(fMother.GetObject()); 
 }
-
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.12 2008/07/13 08:23:13 loizides Exp $
+// $Id: Vector.h,v 1.13 2008/07/14 09:41:59 loizides Exp $
 //
 // Vector
 //
@@ -32,6 +32,7 @@ namespace mithep
       ArrayElement                    *At(UInt_t idx)                      { return &fV.at(idx); }
       const ArrayElement              *At(UInt_t idx)                const { return &fV.at(idx); }
       void                             Clear(Option_t *opt="");
+      UInt_t                           Entries()                     const { return fV.size(); }
       UInt_t                           GetEntries()                  const { return fV.size(); }
       Bool_t                           IsOwner()                     const { return kTRUE; }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.11 2008/07/13 08:29:11 loizides Exp $
+// $Id: Array.h,v 1.12 2008/07/14 09:41:59 loizides Exp $
 //
 // Array
 //
@@ -30,6 +30,7 @@ namespace mithep
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                       const;
       void                 Clear(Option_t */*opt*/="")                { fArray.~TClonesArray(); }
+      UInt_t               Entries()                            const { return fNumEntries; }
       UInt_t               GetEntries()                         const { return fNumEntries; }
       const char          *GetName()                            const { return fArray.GetName(); }
       Bool_t               IsOwner()                            const { return kTRUE; }
@@ -48,7 +49,6 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)               const;
 
     protected:
-
       TClonesArray         fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
 
@@ -73,10 +73,10 @@ inline mithep::Array<ArrayElement>::Array(UInt_t size, const char *name) :
     fArray.SetName(name);
 
   ArrayElement test;
-  if (test.GetDeleteBit())
-    SetMustDeleteBit();
-  if (test.GetClearBit())
+  if (test.MustClear())
     SetMustClearBit();
+  if (test.MustDelete())
+    SetMustDeleteBit();
 }
 
 //--------------------------------------------------------------------------------------------------

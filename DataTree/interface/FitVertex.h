@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FitVertex.h,v 1.1 2008/06/30 11:40:44 loizides Exp $
+// $Id: FitVertex.h,v 1.2 2008/07/01 08:53:42 loizides Exp $
 //
 // FitVertex
 //
@@ -26,15 +26,15 @@ namespace mithep
         Vertex(x,y,z), fXErr(xErr), fYErr(yErr), fZErr(zErr), fChi2(0), fNDof(0) {}
       ~FitVertex() {}
 
-      Double_t		GetChi2()   const { return fChi2; } 
-      Int_t		GetNDof()   const { return fNDof; }
-      void		SetChi2(Double_t chi2) { fChi2 = chi2; }
-      void		SetErrors(Double_t xErr, Double_t yErr, Double_t zErr);
-      void		SetNDof(Int_t nDof)    { fNDof = nDof; }
+      Double_t		Chi2()      const { return fChi2; } 
+      Int_t		NDof()      const { return fNDof; }
       Double_t		XErr()      const { return fXErr; }
       Double_t		YErr()      const { return fYErr; }
       Double_t		ZErr()      const { return fZErr; }
       Double_t		Prob()      const { return TMath::Prob(fChi2,fNDof); }
+      void		SetChi2(Double_t chi2) { fChi2 = chi2; }
+      void		SetErrors(Double_t xErr, Double_t yErr, Double_t zErr);
+      void		SetNDof(Int_t nDof)    { fNDof = nDof; }
             
     protected:
       Double_t	        fXErr; //error in x

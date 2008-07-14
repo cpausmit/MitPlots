@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.4 2008/07/08 14:41:01 loizides Exp $
+// $Id: Conversion.h,v 1.5 2008/07/13 08:37:50 loizides Exp $
 //
 // Conversion
 //
@@ -26,13 +26,13 @@ namespace mithep
         CompositeParticle(2), fVertex(x,y,z,xErr,yErr,zErr) {}
       ~Conversion() {}
       
-      const Electron           *GetDaughter(UInt_t i) const;
-      Double_t                  GetDCotTheta()        const { return fDCotTheta; }
-      Double_t                  GetEOverP()           const { return fEOverP; }
-      Double_t                  GetPairMass()         const { return fPairMass; }
-      const ThreeVector        &GetPairMomentum()     const { return fPairMomentum; }
-      const FitVertex          &GetVertex()           const { return fVertex; }
-      FitVertex                &GetVertex()                 { return fVertex; }
+      const Electron           *Daughter(UInt_t i)         const;
+      Double_t                  DCotTheta()                const { return fDCotTheta; }
+      Double_t                  EOverP()                   const { return fEOverP; }
+      Double_t                  PairMass()                 const { return fPairMass; }
+      const ThreeVector        &PairMomentum()             const { return fPairMomentum; }
+      const FitVertex          &DecayVertex()              const { return fVertex; }
+      FitVertex                &DecayVertex()                    { return fVertex; }
       void                      SetDCotTheta(Double_t dCotTheta) { fDCotTheta = dCotTheta;}
       void                      SetEOverP(Double_t eOverP)       { fEOverP = eOverP;}
       void                      SetPairMass(Double_t pairMass)   { fPairMass = pairMass;}
@@ -50,7 +50,7 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Electron *mithep::Conversion::GetDaughter(UInt_t i) const 
+inline const mithep::Electron *mithep::Conversion::Daughter(UInt_t i) const 
 { 
   // Return reference to electron daughters.
 
