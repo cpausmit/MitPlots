@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.11 2008/07/08 14:41:02 loizides Exp $
+// $Id: Vector.h,v 1.12 2008/07/13 08:23:13 loizides Exp $
 //
 // Vector
 //
@@ -31,6 +31,7 @@ namespace mithep
       void                             AddCopy(const ArrayElement *ae)     { fV.push_back(*ae); }
       ArrayElement                    *At(UInt_t idx)                      { return &fV.at(idx); }
       const ArrayElement              *At(UInt_t idx)                const { return &fV.at(idx); }
+      void                             Clear(Option_t *opt="");
       UInt_t                           GetEntries()                  const { return fV.size(); }
       Bool_t                           IsOwner()                     const { return kTRUE; }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
@@ -53,6 +54,16 @@ namespace mithep
 
     ClassDefT(Vector, 1) // Wrapper around std::vector class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::Vector<ArrayElement>::Clear(Option_t */*opt*/)
+{
+  // Destruct container.
+
+  using namespace std;
+  fV.~vector<ArrayElement>();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.8 2008/06/24 14:01:41 loizides Exp $
+// $Id: PVector.h,v 1.9 2008/07/01 08:52:01 loizides Exp $
 //
 // PVector
 //
@@ -24,20 +24,30 @@ namespace mithep
     public:
       PVector(UInt_t rsv=0) : Vector<ArrayElement>(0) {}
       PVector(std::vector<ArrayElement> &v) : Vector<ArrayElement>(v) {}
-      ~PVector() { Delete(); }
+      ~PVector() { Reset(); }
 
-      void                             Reset()                             { Delete(); }
+      void                             Clear(Option_t *opt="");
+      void                             Reset();
 
     protected:
-      void                             Delete();
 
     ClassDefT(PVector, 1) // Wrapper around std::vector class
   };
 }
 
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::PVector<ArrayElement>::Clear(Option_t *opt)
+{
+  // Destruct container.
+
+  Reset();
+  Vector<ArrayElement>::Clear(opt);
+}
+
 //__________________________________________________________________________________________________
 template<class ArrayElement>
-inline void mithep::PVector<ArrayElement>::Delete()
+inline void mithep::PVector<ArrayElement>::Reset()
 {
   for (UInt_t i=0; i<Vector<ArrayElement>::GetEntries(); ++i) {
     delete Vector<ArrayElement>::fV[i];

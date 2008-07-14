@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.5 2008/07/01 08:52:01 loizides Exp $
+// $Id: ObjArray.h,v 1.6 2008/07/13 08:23:46 loizides Exp $
 //
 // ObjArray
 //
@@ -25,13 +25,15 @@ namespace mithep
 
       void                 Add(ArrayElement *ae);
       const TObjArray     &Arr()                                 const { return fArray; }
+      TObjArray           &Arr()                                       { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                        const;
+      void                 Clear(Option_t */*opt*/="")                 { fArray.~TObjArray(); }
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
-      void                 Reset()                                     { Clear(); }
+      void                 Reset();
       void                 Trim()                                      { fArray.Compress();}
       void                 SetName(const char* name)                   { fArray.SetName(name); }
       void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
@@ -44,7 +46,6 @@ namespace mithep
     protected:
       void                 AddLast(ArrayElement *e);
       void                 AddLast(const ArrayElement *e);
-      void                 Clear(Option_t *opt="");
 
       TObjArray            fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
@@ -128,13 +129,13 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::Clear(Option_t *opt)
+inline void mithep::ObjArray<ArrayElement>::Reset()
 {
-   // Default implementation for clearing the array.
+  // Default implementation for clearing the array.
 
-   fArray.Clear(opt); //will delete objects if owner
+  fArray.Clear(); //will delete objects if owner
 
-   fNumEntries = 0;
+  fNumEntries = 0;
 }
 
 //--------------------------------------------------------------------------------------------------

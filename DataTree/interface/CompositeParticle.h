@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.4 2008/07/03 08:22:17 loizides Exp $
+// $Id: CompositeParticle.h,v 1.5 2008/07/13 08:37:50 loizides Exp $
 //
 // Composite Particle
 //
@@ -23,7 +23,8 @@ namespace mithep
       CompositeParticle(UInt_t rsv=0) : fDaughters(rsv) { SetClearBit(); }
       ~CompositeParticle() {}
     
-      void			AddDaughter(Particle *p) { fDaughters.Add(p); }
+      void			AddDaughter(Particle *p)    { fDaughters.Add(p); }
+      void                      Clear(Option_t *opt="")     { fDaughters.Clear(opt); }
       Int_t		        Charge()              const;
       const Particle           *GetDaughter(UInt_t i) const { return fDaughters.At(i); }
       UInt_t                    GetNDaughters()       const { return fDaughters.GetEntries(); }
@@ -34,8 +35,6 @@ namespace mithep
       void                      Trim()                      { fDaughters.Trim(); }
 
     protected:
-      void                      Clear(Option_t */*option*/="") { fDaughters.Destroy(); }
-
       RefArray<Particle>        fDaughters; //references to daughter particles
       
     ClassDef(CompositeParticle, 1) // Composite particle class

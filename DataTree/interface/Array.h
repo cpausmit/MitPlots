@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.10 2008/07/10 20:59:24 loizides Exp $
+// $Id: Array.h,v 1.11 2008/07/13 08:29:11 loizides Exp $
 //
 // Array
 //
@@ -26,15 +26,17 @@ namespace mithep
       ArrayElement        *AddNew();
       ArrayElement        *Allocate();
       const TClonesArray  &Arr()                                const { return fArray; }
+      TClonesArray        &Arr()                                      { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                       const;
+      void                 Clear(Option_t */*opt*/="")                { fArray.~TClonesArray(); }
       UInt_t               GetEntries()                         const { return fNumEntries; }
       const char          *GetName()                            const { return fArray.GetName(); }
       Bool_t               IsOwner()                            const { return kTRUE; }
       TIterator           *Iterator(Bool_t dir = kIterForward)  const;
       Bool_t               MustClear()                          const { return this->TestBit(14); }
       Bool_t               MustDelete()                         const { return this->TestBit(15); }
-      void                 Reset()                                    { Clear(); }
+      void                 Reset();
       void                 Trim()                                     { fArray.Compress(); }
       void                 SetMustClearBit()                          { this->SetBit(14); }
       void                 SetMustDeleteBit()                         { this->SetBit(15); }
@@ -46,7 +48,6 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)               const;
 
     protected:
-      void                 Clear();
 
       TClonesArray         fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
@@ -128,22 +129,6 @@ inline const ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::Array<ArrayElement>::Clear()
-{
-   // Default implementation for clearing the array.
-
-  if (this->MustDelete())
-    fArray.Delete();   //will call destructor for every element
-  else if (this->MustClear())
-    fArray.Clear("C"); //with opt=="C" will call clear for every element
-  else 
-    fArray.Clear();
-
-  fNumEntries = 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
 inline TIterator *mithep::Array<ArrayElement>::Iterator(Bool_t dir) const 
 { 
   // Return ROOT collection iterator.
@@ -167,6 +152,22 @@ inline ArrayElement *mithep::Array<ArrayElement>::operator[](UInt_t idx)
   // Return entry at given index.
 
   return At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::Array<ArrayElement>::Reset()
+{
+  // ROOT implementation for clearing the array.
+
+  if (this->MustDelete())
+    fArray.Delete();   //will call destructor for every element
+  else if (this->MustClear())
+    fArray.Clear("C"); //will call clear for every element
+  else 
+    fArray.Clear();
+
+  fNumEntries = 0;
 }
 
 //--------------------------------------------------------------------------------------------------

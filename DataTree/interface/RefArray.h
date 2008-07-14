@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.7 2008/07/10 21:00:54 loizides Exp $
+// $Id: RefArray.h,v 1.8 2008/07/13 08:33:26 loizides Exp $
 //
 // RefArray
 //
@@ -27,7 +27,7 @@ namespace mithep
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                    const;
-      void                      Destroy();
+      void                      Clear(Option_t */*option*/="")    {   fV.~vector<TRef>();  }
       UInt_t                    GetEntries()                      const { return fV.size(); }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fV.clear(); }
@@ -75,16 +75,6 @@ inline ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx)
   // Return entry at given index.
 
   return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::RefArray<ArrayElement>::Destroy()
-{
-  // Delete the std::container and indicate that object destructor was called.
-
-  fV.~vector<TRef>(); 
-  this->SetBit(TObject::kNotDeleted,0);
 }
 
 //--------------------------------------------------------------------------------------------------
