@@ -1,4 +1,4 @@
-// $Id: GenRelValMod.cc,v 1.1 2008/07/10 14:56:27 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.2 2008/07/10 16:23:11 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -42,14 +42,14 @@ void GenRelValMod::Process()
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
     GenParticle* p = fParticles->At(i);
     int I     = i+1;                                         // Particle index (starts at 1)
-    int KF    = p->GetPdgId();                               // Pdg code
+    int KF    = p->PdgId();                                  // Pdg code
     double p_x = p->Px(); if (fabs(p_x)<0.0005) p_x = 0.;    // Momenta.  We only compare the
     double p_y = p->Py(); if (fabs(p_y)<0.0005) p_y = 0.;    //  first 3 digits after the
     double p_z = p->Pz(); if (fabs(p_z)<0.0005) p_z = 0.;    //  decimal.
     double E   = p->E();  if (fabs(E  )<0.0005) E   = 0.;    // Energy
     int mind=0;
     if(p->HasMother()) {
-      const GenParticle *mother = p->GetMother();
+      const GenParticle *mother = p->Mother();
       if(mother) {
         for (UInt_t j=0; j<fParticles->GetEntries(); ++j) {
           const  GenParticle *test = fParticles->At(j);
