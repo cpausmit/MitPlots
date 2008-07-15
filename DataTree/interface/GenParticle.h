@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.11 2008/07/13 08:37:50 loizides Exp $
+// $Id: GenParticle.h,v 1.12 2008/07/14 20:55:19 loizides Exp $
 //
 // GenParticle
 //
@@ -35,8 +35,9 @@ namespace mithep
       const GenParticle  *Mother()              const;
       FourVector	  Mom()                 const { return fFourVector; }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void		  SetMother(GenParticle *p)  { fMother = p; }
+      void		  SetMother(GenParticle *p)   { fMother = p; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);       
+      void                Print(Option_t *opt="") const;
       
     protected:
       Int_t               fCharge;       //charge (*3 to allow storage of fractional charges) 

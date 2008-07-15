@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimParticle.h,v 1.5 2008/07/07 16:01:46 loizides Exp $
+// $Id: SimParticle.h,v 1.6 2008/07/14 20:55:19 loizides Exp $
 //
 // SimParticle
 //
@@ -26,8 +26,8 @@ namespace mithep
       
       const SimParticle   *Daughter(UInt_t i)    const;
       const GenParticle   *GenPart()             const;
-      const SimParticle   *Mother()              const;
       Bool_t               IsGenerated()         const    { return fGenPartRef.IsValid(); }
+      const SimParticle   *Mother()              const;
       void                 SetGenPart(GenParticle* p)     { fGenPartRef = p; }
 
     protected:
