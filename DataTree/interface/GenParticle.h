@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.13 2008/07/15 11:31:08 loizides Exp $
+// $Id: GenParticle.h,v 1.14 2008/07/16 09:32:04 bendavid Exp $
 //
 // GenParticle
 //
@@ -32,6 +32,7 @@ namespace mithep
       const Vertex       &DecayVertex()         const { return fDecayVertex; }
       const GenParticle  *Daughter(UInt_t i)    const;
       Int_t               PdgId()               const { return fPdgId; }
+      Int_t               AbsPdgId()            const { return (fPdgId<0 ? -fPdgId:fPdgId); }
       TParticlePDG       *PdgEntry()            const { return TDatabasePDG::Instance()->GetParticle(fPdgId); }
       Int_t               Status()              const { return fStatus; }
       Bool_t              HasMother()           const { return fMother.IsValid(); }
