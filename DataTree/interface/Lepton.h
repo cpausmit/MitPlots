@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
+// $Id: Lepton.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
 //
 // Lepton
 //
@@ -22,17 +22,17 @@ namespace mithep
       Lepton() {}
       ~Lepton() {}
 
-      Int_t                   Charge()    const { return Trk()->Charge(); }
+      Int_t                   Charge()    const { return BestTrk()->Charge(); }
       Double_t                E()         const; 
-      Double_t                Eta()       const { return Trk()->Mom().Eta(); }
-      virtual const Track    *Trk()       const { return 0; }
+      Double_t                Eta()       const { return BestTrk()->Mom().Eta(); }
+      virtual const Track    *BestTrk()   const { return 0; }
       FourVector              Mom()       const { return FourVector(Px(),Py(),Pz(),E()); }
-      Double_t                Phi()       const { return Trk()->Phi(); }
-      Double_t                P()         const { return Trk()->P(); }
-      Double_t                Pt()        const { return Trk()->Pt(); }
-      Double_t                Px()        const { return Trk()->Px(); }
-      Double_t                Py()        const { return Trk()->Py(); }
-      Double_t                Pz()        const { return Trk()->Pz(); }
+      Double_t                Phi()       const { return BestTrk()->Phi(); }
+      Double_t                P()         const { return BestTrk()->P(); }
+      Double_t                Pt()        const { return BestTrk()->Pt(); }
+      Double_t                Px()        const { return BestTrk()->Px(); }
+      Double_t                Py()        const { return BestTrk()->Py(); }
+      Double_t                Pz()        const { return BestTrk()->Pz(); }
       
     ClassDef(Lepton, 1) // Lepton class
   };
@@ -41,6 +41,6 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 inline Double_t mithep::Lepton::E() const
 {
-  return TMath::Sqrt(Trk()->P()*Trk()->P() + Mass()*Mass());
+  return TMath::Sqrt(BestTrk()->P()*BestTrk()->P() + Mass()*Mass());
 }
 #endif
