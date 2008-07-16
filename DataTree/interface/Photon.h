@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.7 2008/07/14 09:41:59 loizides Exp $
+// $Id: Photon.h,v 1.8 2008/07/14 20:55:19 loizides Exp $
 //
 // Photon
 //
@@ -27,7 +27,7 @@ namespace mithep
       ~Photon() {}
 
       void                      AddConversion(Conversion *c)  { fConversions.Add(c); }
-      Int_t                     Charge()                const { return 0; }
+      Double_t                  Charge()                const { return 0; }
       void                      Clear(Option_t *opt="")       { fConversions.Clear(opt); }
       Bool_t                    IsConverted()           const { return fConversions.GetEntries(); }
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }

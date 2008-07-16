@@ -1,10 +1,24 @@
-// $Id: GenParticle.cc,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: GenParticle.cc,v 1.2 2008/07/15 11:31:08 loizides Exp $
 
 #include "MitAna/DataTree/interface/GenParticle.h"
 
 ClassImp(mithep::GenParticle)
 
 using namespace mithep;
+
+//--------------------------------------------------------------------------------------------------
+Double_t GenParticle::Charge() const
+{
+  // Get Charge from Pdg Lookup
+
+  TParticlePDG* pdgEntry = PdgEntry();
+  if (pdgEntry)
+    return pdgEntry->Charge()/3.0;
+  else {
+    return -99.0;
+    printf("Pdg Code %i not found in table, returning Charge=-99.0", fPdgId);
+  }
+}
 
 //--------------------------------------------------------------------------------------------------
 void GenParticle::Print(Option_t */*opt*/) const

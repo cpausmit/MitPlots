@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.12 2008/07/14 20:55:19 loizides Exp $
+// $Id: GenParticle.h,v 1.13 2008/07/15 11:31:08 loizides Exp $
 //
 // GenParticle
 //
@@ -10,7 +10,9 @@
 
 #ifndef DATATREE_GENPARTICLE_H
 #define DATATREE_GENPARTICLE_H
- 
+
+#include <TDatabasePDG.h>
+#include <TParticlePDG.h> 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/Vertex.h"
 
@@ -26,10 +28,11 @@ namespace mithep
       ~GenParticle() {}
 
       void		  AddDaughter(GenParticle *p) { fDaughters.Add(p); }
-      Int_t               Charge()              const { return fCharge/3; }
+      Double_t            Charge()              const;
       const Vertex       &DecayVertex()         const { return fDecayVertex; }
       const GenParticle  *Daughter(UInt_t i)    const;
       Int_t               PdgId()               const { return fPdgId; }
+      TParticlePDG       *PdgEntry()            const { return TDatabasePDG::Instance()->GetParticle(fPdgId); }
       Int_t               Status()              const { return fStatus; }
       Bool_t              HasMother()           const { return fMother.IsValid(); }
       const GenParticle  *Mother()              const;
@@ -40,14 +43,13 @@ namespace mithep
       void                Print(Option_t *opt="") const;
       
     protected:
-      Int_t               fCharge;       //charge (*3 to allow storage of fractional charges) 
       Int_t               fPdgId;        //pdg identifier
       Int_t               fStatus;       //status flag of generator
       FourVector          fFourVector;   //four momentum vector
       Vertex		  fDecayVertex;  //gen decay vertex
       TRef                fMother;       //reference to mother
 
-    ClassDef(GenParticle,1) // Generated particle class
+    ClassDef(GenParticle,2) // Generated particle class
   };
 }
 

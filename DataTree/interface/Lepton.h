@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
+// $Id: Lepton.h,v 1.11 2008/07/16 09:29:35 bendavid Exp $
 //
 // Lepton
 //
@@ -22,7 +22,7 @@ namespace mithep
       Lepton() {}
       ~Lepton() {}
 
-      Int_t                   Charge()    const { return BestTrk()->Charge(); }
+      Double_t                Charge()    const { return BestTrk()->Charge(); }
       Double_t                E()         const; 
       Double_t                Eta()       const { return BestTrk()->Mom().Eta(); }
       virtual const Track    *BestTrk()   const { return 0; }

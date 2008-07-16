@@ -1,4 +1,4 @@
-// $Id: CompositeParticle.cc,v 1.2 2008/07/01 08:56:50 loizides Exp $
+// $Id: CompositeParticle.cc,v 1.3 2008/07/14 20:55:19 loizides Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
@@ -7,11 +7,11 @@ ClassImp(mithep::CompositeParticle)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Int_t CompositeParticle::Charge() const 
+Double_t CompositeParticle::Charge() const 
 {
   // Return sum of charge of daughter particles.
 
-  Int_t charge = 0;
+  Double_t charge = 0;
   for (UInt_t i=0; i<NDaughters(); ++i)
     charge += Daughter(i)->Charge();
   

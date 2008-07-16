@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.6 2008/07/14 09:41:59 loizides Exp $
+// $Id: CompositeParticle.h,v 1.7 2008/07/14 20:55:19 loizides Exp $
 //
 // Composite Particle
 //
@@ -25,7 +25,7 @@ namespace mithep
     
       void			AddDaughter(Particle *p)    { fDaughters.Add(p); }
       void                      Clear(Option_t *opt="")     { fDaughters.Clear(opt); }
-      Int_t		        Charge()              const;
+      Double_t		        Charge()              const;
       const Particle           *Daughter(UInt_t i)    const { return fDaughters.At(i); }
       UInt_t                    NDaughters()          const { return fDaughters.Entries(); }
       Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
