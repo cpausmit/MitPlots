@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.15 2008/07/02 19:28:44 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.16 2008/07/07 16:02:25 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -76,7 +76,6 @@
 #pragma link C++ class mithep::Array<mithep::DataObject>+;
 #pragma link C++ class mithep::Array<mithep::Track>+;
 #pragma link C++ class mithep::Array<mithep::GenParticle>+;
-#pragma link C++ class mithep::Array<mithep::Lepton>+;
 #pragma link C++ class mithep::Array<mithep::Muon>+;
 #pragma link C++ class mithep::Array<mithep::Electron>+;
 #pragma link C++ class mithep::Array<mithep::Jet>+;
@@ -130,8 +129,6 @@
 
 #pragma link C++ typedef mithep::DataObjectArr;
 #pragma link C++ typedef mithep::TrackArr;
-#pragma link C++ typedef mithep::ParticleArr;
-#pragma link C++ typedef mithep::LeptonArr;
 #pragma link C++ typedef mithep::MuonArr;
 #pragma link C++ typedef mithep::ElectronArr;
 #pragma link C++ typedef mithep::JetArr;

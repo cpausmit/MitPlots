@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.1 2008/07/07 16:02:25 loizides Exp $
+// $Id: Met.h,v 1.2 2008/07/09 10:54:50 loizides Exp $
 //
 // Met
 //
@@ -23,6 +23,7 @@ namespace mithep
       Met(Double_t px, Double_t py) : fPx(px), fPy(py) {}
       ~Met() {}
 
+      Double_t          Charge() const { return 0; }
       Double_t		E()      const { return Pt();}
       Double_t		Eta()    const { return Mom().Eta();}
       Double_t		Mass()   const { return TMath::Sqrt(Mom().M2()); }

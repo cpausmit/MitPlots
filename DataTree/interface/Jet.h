@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.2 2008/07/08 14:40:52 loizides Exp $
+// $Id: Jet.h,v 1.3 2008/07/14 07:54:25 loizides Exp $
 //
 // Jet
 //
@@ -32,6 +32,7 @@ namespace mithep
 
       FourVector	    Mom()                             const { return fMom; }
 
+      Double_t              Charge()                          const { return 0; }
       Double_t              MaxEInEmTowers()                  const { return fMaxEInEmTowers; }
       Double_t              MaxEInHadTowers()                 const { return fMaxEInHadTowers; }
       Double_t              HadEnergyInHO()                   const { return fHadEnergyInHO; } 

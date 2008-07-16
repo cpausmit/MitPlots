@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.11 2008/07/02 19:28:43 bendavid Exp $
+// $Id: Collections.h,v 1.12 2008/07/07 16:02:25 loizides Exp $
 //
 // Collections
 //
@@ -46,8 +46,6 @@ namespace mithep
 
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
-  typedef Array<Particle>               ParticleArr;
-  typedef Array<Lepton>                 LeptonArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
   typedef Array<Jet>                    JetArr;

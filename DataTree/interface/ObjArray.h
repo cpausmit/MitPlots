@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.7 2008/07/14 09:41:59 loizides Exp $
+// $Id: ObjArray.h,v 1.8 2008/07/14 20:55:19 loizides Exp $
 //
 // ObjArray
 //
@@ -107,9 +107,8 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  ArrayElement tmp;
-  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-        idx, fNumEntries, GetName(), tmp.GetName()); 
+  Fatal("At","Index too large: (%ud < %ud violated) for %s",
+        idx, fNumEntries, GetName()); 
   return 0;
 }
 
@@ -122,9 +121,8 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  ArrayElement tmp;
-  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-        idx, fNumEntries, GetName(), tmp.GetName()); 
+  Fatal("At","Index too large: (%ud < %ud violated) for %s",
+        idx, fNumEntries, GetName()); 
   return 0;
 }
 

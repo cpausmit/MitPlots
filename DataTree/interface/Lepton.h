@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Lepton.h,v 1.11 2008/07/16 09:29:35 bendavid Exp $
+// $Id: Lepton.h,v 1.12 2008/07/16 09:32:04 bendavid Exp $
 //
 // Lepton
 //
@@ -25,7 +25,7 @@ namespace mithep
       Double_t                Charge()    const { return BestTrk()->Charge(); }
       Double_t                E()         const; 
       Double_t                Eta()       const { return BestTrk()->Mom().Eta(); }
-      virtual const Track    *BestTrk()   const { return 0; }
+      virtual const Track    *BestTrk()   const=0;
       FourVector              Mom()       const { return FourVector(Px(),Py(),Pz(),E()); }
       Double_t                Phi()       const { return BestTrk()->Phi(); }
       Double_t                P()         const { return BestTrk()->P(); }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.13 2008/07/15 11:31:08 loizides Exp $
+// $Id: Particle.h,v 1.14 2008/07/16 09:32:04 bendavid Exp $
 //
 // Particle
 //
@@ -22,11 +22,11 @@ namespace mithep
       Particle() {}
       ~Particle() {}
      
-      virtual Double_t 		Charge() const { return 0; }
+      virtual Double_t 		Charge() const=0;
       virtual Double_t		E()      const { return Mom().E();}
       virtual Double_t		Eta()    const { return Mom().Eta();}
       virtual Double_t		Mass()   const { return TMath::Sqrt(Mom().M2()); }
-      virtual FourVector	Mom()    const { return FourVector(0,0,0,0); }
+      virtual FourVector	Mom()    const=0;
       virtual Double_t		Phi()    const { return Mom().Phi();}
       virtual Double_t		Pt()     const { return Mom().Pt();}
       virtual Double_t		Px()     const { return Mom().Px();}
