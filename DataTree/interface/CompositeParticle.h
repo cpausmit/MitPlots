@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.7 2008/07/14 20:55:19 loizides Exp $
+// $Id: CompositeParticle.h,v 1.8 2008/07/16 09:32:04 bendavid Exp $
 //
 // Composite Particle
 //
@@ -28,9 +28,9 @@ namespace mithep
       Double_t		        Charge()              const;
       const Particle           *Daughter(UInt_t i)    const { return fDaughters.At(i); }
       UInt_t                    NDaughters()          const { return fDaughters.Entries(); }
+      Bool_t			HasDaughter(const Particle *p)                const;
       Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
       Bool_t			HasSameDaughters(const CompositeParticle *p)  const;
-      Bool_t			IsDaughter(const Particle *p)                 const;
       FourVector	        Mom()                 const;
 
     protected:

@@ -1,4 +1,4 @@
-// $Id: CompositeParticle.cc,v 1.3 2008/07/14 20:55:19 loizides Exp $
+// $Id: CompositeParticle.cc,v 1.4 2008/07/16 09:32:05 bendavid Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
@@ -19,6 +19,23 @@ Double_t CompositeParticle::Charge() const
 }
 
 //--------------------------------------------------------------------------------------------------
+Bool_t CompositeParticle::HasDaughter(const Particle* p) const 
+{
+  // Return true if given particle is among daughters.
+
+  if(!p) return kFALSE;
+
+  if (!NDaughters())
+    return kFALSE;
+
+  for (UInt_t i=0; i<NDaughters(); ++i)
+    if (Daughter(i)==p)
+      return kTRUE;
+  
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
 Bool_t CompositeParticle::HasCommonDaughter(const CompositeParticle *p) const 
 {
   // Return true if a common daughter exists.
@@ -26,7 +43,7 @@ Bool_t CompositeParticle::HasCommonDaughter(const CompositeParticle *p) const
   if(!p) return kFALSE;
 
   for (UInt_t i=0; i<p->NDaughters(); ++i)
-    if (IsDaughter(p->Daughter(i)))
+    if (HasDaughter(p->Daughter(i)))
       return kTRUE;
 	
   return kFALSE;
@@ -43,27 +60,10 @@ Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle* p) const
     return kFALSE;
 		
   for (UInt_t i=0; i<p->NDaughters(); ++i)
-    if (!IsDaughter(p->Daughter(i))) 
+    if (!HasDaughter(p->Daughter(i))) 
         return kFALSE;
 	
   return kTRUE;
-}
-
-//--------------------------------------------------------------------------------------------------
-Bool_t CompositeParticle::IsDaughter(const Particle* p) const 
-{
-  // Return true if given particle is among daughters.
-
-  if(!p) return kFALSE;
-
-  if (!NDaughters())
-    return kFALSE;
-
-  for (UInt_t i=0; i<NDaughters(); ++i)
-    if (Daughter(i)==p)
-      return kTRUE;
-  
-  return kFALSE;
 }
 
 //--------------------------------------------------------------------------------------------------
