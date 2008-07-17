@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.14 2008/07/16 09:32:04 bendavid Exp $
+// $Id: GenParticle.h,v 1.15 2008/07/16 18:57:20 loizides Exp $
 //
 // GenParticle
 //
@@ -27,21 +27,29 @@ namespace mithep
         fFourVector(px,py,pz,e), fDecayVertex(0,0,0) {}
       ~GenParticle() {}
 
+      Int_t               AbsPdgId()            const { return (fPdgId<0 ? -fPdgId:fPdgId); }
       void		  AddDaughter(GenParticle *p) { fDaughters.Add(p); }
       Double_t            Charge()              const;
       const Vertex       &DecayVertex()         const { return fDecayVertex; }
       const GenParticle  *Daughter(UInt_t i)    const;
-      Int_t               PdgId()               const { return fPdgId; }
-      Int_t               AbsPdgId()            const { return (fPdgId<0 ? -fPdgId:fPdgId); }
-      TParticlePDG       *PdgEntry()            const { return TDatabasePDG::Instance()->GetParticle(fPdgId); }
-      Int_t               Status()              const { return fStatus; }
       Bool_t              HasMother()           const { return fMother.IsValid(); }
+      Bool_t              IsNeutrino()          const;
       const GenParticle  *Mother()              const;
       FourVector	  Mom()                 const { return fFourVector; }
+      TParticlePDG       *PdgEntry()            const;
+      Int_t               PdgId()               const { return fPdgId; }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(GenParticle *p)   { fMother = p; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);       
+      Int_t               Status()              const { return fStatus; }
       void                Print(Option_t *opt="") const;
+
+      enum EPartType {
+        kUnknown=0,
+        kEl=11, kMu=13, kTau=15,
+        kElNu=12, kMuNu=14, kTauNu=16,
+        kGlu=21, kGamma=22
+      };
       
     protected:
       Int_t               fPdgId;        //pdg identifier
@@ -68,6 +76,28 @@ inline const mithep::GenParticle *mithep::GenParticle::Mother() const
   // Return mother.
 
   return static_cast<const GenParticle*>(fMother.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::GenParticle::IsNeutrino() const 
+{ 
+  // Return true if particle is neutrino.
+
+  Int_t ap = AbsPdgId();
+  if ((ap==kElNu) ||
+      (ap==kMuNu) ||
+      (ap==kTauNu)) 
+    return kTRUE;
+
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline TParticlePDG *mithep::GenParticle::PdgEntry() const 
+{ 
+  // Return entry to pdg database.
+
+  return TDatabasePDG::Instance()->GetParticle(fPdgId); 
 }
 
 //--------------------------------------------------------------------------------------------------
