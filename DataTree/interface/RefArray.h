@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
+// $Id: RefArray.h,v 1.11 2008/07/16 18:58:29 loizides Exp $
 //
 // RefArray
 //
@@ -76,7 +76,7 @@ inline ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx)
   // Return entry at given index.
 
   if (idx<fV.size())
-     return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
+    return static_cast<const ArrayElement*>(fV[idx].GetObject());
 
   Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
   return 0;
@@ -89,7 +89,7 @@ inline const ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx) const
   // Return entry at given index.
 
   if (idx<fV.size())
-     return static_cast<const ArrayElement*>(fV.at(idx).GetObject());
+     return static_cast<const ArrayElement*>(fV[idx].GetObject());
 
   Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
   return 0;
