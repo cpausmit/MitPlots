@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.16 2008/07/07 16:02:25 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.17 2008/07/16 10:00:59 bendavid Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -137,5 +137,7 @@
 #pragma link C++ typedef mithep::SimParticleArr;
 #pragma link C++ typedef mithep::PhotonArr;
 #pragma link C++ typedef mithep::ConversionArr;
+
+#pragma link C++ enum mithep::GenParticle::EPartType;
 
 #endif
