@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.9 2008/07/14 20:55:19 loizides Exp $
+// $Id: DataObject.h,v 1.10 2008/07/17 16:37:37 bendavid Exp $
 //
 // DataObject
 //
 // This is the common base class for all objects in the tree. 
 //
-// Authors: C.Loizides
+// Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_DATAOBJECT_H
@@ -30,7 +30,7 @@ namespace mithep
       Bool_t               MustClear()   const { return TestBit(14); }
       Bool_t               MustDelete()  const { return TestBit(15); }
       Bool_t               IsCached()    const { return TestBit(23); }
-      template <class Col> Col* ParentCol();
+      template <class Col> const Col* ParentCol() const;
 
     protected:
       void                 SetClearBit()       { SetBit(14); }
@@ -44,17 +44,21 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template <class Col>
-Col* mithep::DataObject::ParentCol()
+const Col* mithep::DataObject::ParentCol() const
 {
-  // Return pointer to parent collection.  SLOW!
+  // Return pointer to parent collection.  SLOW! (But faster than looping over collections.)
+  // Also note this function will only work for objects which were reference prior to being written.
+  // Otherwise a null pointer will be returned.
   
-  Col* colObj=0;
+  const Col* colObj=0;
   TRefTable *table = TRefTable::GetRefTable();
   if (!table)
     return colObj;
   table->SetUID(this->GetUniqueID(), (TProcessID*)gROOT->GetUUIDs());
   table->Notify();
-  TBranchElement *trackParent = (TBranchElement*)(table->GetParent(this->GetUniqueID(), TProcessID::GetProcessWithUID(this->GetUniqueID(),this)));
+  //cast away const is a hack, this is fixed in newer root versions
+  TProcessID* pID = TProcessID::GetProcessWithUID(this->GetUniqueID(),(void*)this); 
+  TBranchElement *trackParent = (TBranchElement*)(table->GetParent(this->GetUniqueID(), pID));
   while (!colObj) {
     if (!trackParent)
       return colObj;
