@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.15 2008/07/16 18:57:20 loizides Exp $
+// $Id: GenParticle.h,v 1.16 2008/07/17 08:21:07 loizides Exp $
 //
 // GenParticle
 //
@@ -11,6 +11,7 @@
 #ifndef DATATREE_GENPARTICLE_H
 #define DATATREE_GENPARTICLE_H
 
+#include <TRef.h>
 #include <TDatabasePDG.h>
 #include <TParticlePDG.h> 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
@@ -21,9 +22,9 @@ namespace mithep
   class GenParticle : public CompositeParticle
   {
     public:
-      GenParticle() : CompositeParticle(16) {}
+      GenParticle() {}
       GenParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
-        CompositeParticle(16), fPdgId(id), fStatus(s), 
+        fPdgId(id), fStatus(s), 
         fFourVector(px,py,pz,e), fDecayVertex(0,0,0) {}
       ~GenParticle() {}
 

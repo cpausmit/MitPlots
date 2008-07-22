@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.17 2008/07/16 10:00:59 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.18 2008/07/17 08:22:09 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -94,8 +94,8 @@
 #pragma link C++ class mithep::ObjArray<mithep::Conversion>+;
 
 #pragma link C++ class mithep::Collection<TRef>+;
-#pragma link C++ class mithep::RefArray<mithep::Particle>+;
-#pragma link C++ class mithep::RefArray<mithep::Conversion>+;
+#pragma link C++ class mithep::RefArray<mithep::Particle>-;
+#pragma link C++ class mithep::RefArray<mithep::Conversion>-;
 
 #pragma link C++ class mithep::CompositeParticle+;
 #pragma link C++ class mithep::DecayParticle+;

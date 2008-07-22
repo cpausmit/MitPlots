@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.5 2008/07/13 08:37:50 loizides Exp $
+// $Id: Conversion.h,v 1.6 2008/07/14 20:55:19 loizides Exp $
 //
 // Conversion
 //
@@ -20,10 +20,10 @@ namespace mithep
   class Conversion : public CompositeParticle
   {
     public:
-      Conversion() : CompositeParticle(2), fVertex(0,0,0) {}
-      Conversion(Double_t x, Double_t y, Double_t z) : CompositeParticle(2), fVertex(x,y,z) {}
+      Conversion() : fVertex(0,0,0) {}
+      Conversion(Double_t x, Double_t y, Double_t z) : fVertex(x,y,z) {}
       Conversion(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) : 
-        CompositeParticle(2), fVertex(x,y,z,xErr,yErr,zErr) {}
+        fVertex(x,y,z,xErr,yErr,zErr) {}
       ~Conversion() {}
       
       const Electron           *Daughter(UInt_t i)         const;
