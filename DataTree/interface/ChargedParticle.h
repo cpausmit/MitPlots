@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.13 2008/07/16 10:00:58 bendavid Exp $
+// $Id: ChargedParticle.h,v 1.1 2008/07/25 16:04:44 bendavid Exp $
 //
 // ChargedParticle
 //
-// Details to be worked out...
+// Abstract base class for particles which have a track
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
