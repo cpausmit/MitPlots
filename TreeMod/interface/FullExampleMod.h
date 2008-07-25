@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.3 2008/06/18 19:08:14 loizides Exp $
+// $Id: FullExampleMod.h,v 1.4 2008/07/02 16:34:06 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -30,17 +30,17 @@ namespace mithep
       ~FullExampleMod() {}
 
     protected:
-      TString                  fGenPartName;   //name of particle collection
+      TString                  fMCPartName;    //name of particle collection
       TString                  fTrackName;     //name of track collection
       TString                  fMuonName;      //name of muon collection
       TString                  fElectronName;  //name of electron collection
 
-      GenParticleCol          *fParticles;          //!GenParticle branch
+      MCParticleCol           *fParticles;          //!MCParticle branch
       TrackCol		      *fTracks;	            //!Track branch
       MuonCol		      *fMuons;              //!Muon branch
       ElectronCol	      *fElectrons;          //!Electron branch
-      TH1D                    *fGenPtHist;          //!GenParticle pt histogram
-      TH1D                    *fGenEtaHist;         //!GenParticle eta histogram
+      TH1D                    *fMCPtHist;           //!MCParticle pt histogram
+      TH1D                    *fMCEtaHist;         //!MCParticle eta histogram
       TH1D                    *fTrackPtHist;        //!Track pt histogram
       TH1D                    *fTrackEtaHist;       //!Track eta histogram
       TH1D                    *fMuonPtHist;         //!Muon pt histogram

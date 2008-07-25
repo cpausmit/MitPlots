@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ParticleExampleMod.h,v 1.7 2008/06/18 19:08:14 loizides Exp $
+// $Id: ParticleExampleMod.h,v 1.8 2008/07/02 16:34:06 loizides Exp $
 //
 // ParticleExampleAnaMod
 //
@@ -34,7 +34,7 @@ namespace mithep
 
     protected:
       TString                  fPartName;   //branch name of GenParticle collection
-      GenParticleCol          *fParticles;  //!point to generated particle branch
+      MCParticleCol           *fParticles;  //!point to generated particle branch
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
 

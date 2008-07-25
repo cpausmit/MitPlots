@@ -1,4 +1,4 @@
-// $Id: ParticleExampleMod.cc,v 1.4 2008/07/03 08:22:19 loizides Exp $
+// $Id: ParticleExampleMod.cc,v 1.5 2008/07/14 20:59:55 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include <TH1D.h>
@@ -11,7 +11,7 @@ ClassImp(mithep::ParticleExampleMod)
 //--------------------------------------------------------------------------------------------------
 ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
-  fPartName(Names::gkGenPartBrn),
+  fPartName(Names::gkMCPartBrn),
   fParticles(0),
   fPtHist(0),
   fEtaHist(0)
@@ -50,7 +50,7 @@ void ParticleExampleMod::Process()
 
   Int_t ents=fParticles->GetEntries();
   for(Int_t i=0;i<ents;++i) {
-     GenParticle* p = fParticles->At(i);
+     MCParticle* p = fParticles->At(i);
      fPtHist->Fill(p->Pt());
      fEtaHist->Fill(p->Eta());
   }

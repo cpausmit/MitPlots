@@ -1,4 +1,4 @@
-// $Id: FullExampleMod.cc,v 1.2 2008/06/12 10:22:29 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.3 2008/07/03 08:22:19 loizides Exp $
 
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -11,7 +11,7 @@ ClassImp(mithep::FullExampleMod)
 //--------------------------------------------------------------------------------------------------
 FullExampleMod::FullExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
-  fGenPartName(Names::gkGenPartBrn),
+  fMCPartName(Names::gkMCPartBrn),
   fTrackName(Names::gkTrackBrn),
   fMuonName(Names::gkMuonBrn),
   fElectronName(Names::gkElectronBrn),
@@ -19,8 +19,8 @@ FullExampleMod::FullExampleMod(const char *name, const char *title) :
   fTracks(0),
   fMuons(0),
   fElectrons(0),
-  fGenPtHist(0),
-  fGenEtaHist(0),
+  fMCPtHist(0),
+  fMCEtaHist(0),
   fTrackPtHist(0),
   fTrackEtaHist(0),
   fMuonPtHist(0),
@@ -44,11 +44,11 @@ void FullExampleMod::Process()
   // Process entries of the tree. For this module, we just load the branches and
   // fill the histograms.
 
-  LoadBranch(fGenPartName);
+  LoadBranch(fMCPartName);
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
-    GenParticle* p = fParticles->At(i);
-    fGenPtHist->Fill(p->Pt());
-    fGenEtaHist->Fill(p->Eta());
+    MCParticle* p = fParticles->At(i);
+    fMCPtHist->Fill(p->Pt());
+    fMCEtaHist->Fill(p->Eta());
   }
   
   LoadBranch(fTrackName);
@@ -80,15 +80,15 @@ void FullExampleMod::SlaveBegin()
   // we typically initialize histograms and other analysis objects and request
   // branches. For this module, we request a branch of the MitTree.
 
-  ReqBranch(fGenPartName,  fParticles);
+  ReqBranch(fMCPartName,   fParticles);
   ReqBranch(fTrackName,    fTracks);
   ReqBranch(fMuonName,     fMuons);
   ReqBranch(fElectronName, fElectrons);
 
-  fGenPtHist           = new TH1D("hGenPtHist",";p_{t};#",100,0.,25.);
-  AddOutput(fGenPtHist);
-  fGenEtaHist          = new TH1D("hGenEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fGenEtaHist);
+  fMCPtHist           = new TH1D("hMCPtHist",";p_{t};#",100,0.,25.);
+  AddOutput(fMCPtHist);
+  fMCEtaHist          = new TH1D("hMCEtaHist",";#eta;#",160,-8.,8.);
+  AddOutput(fMCEtaHist);
   fTrackPtHist         = new TH1D("hTrackPtHist",";p_{t};#",100,0.,25.);
   AddOutput(fTrackPtHist);
   fTrackEtaHist      = new TH1D("hTrakEtaHist",";#eta;#",160,-8.,8.);
