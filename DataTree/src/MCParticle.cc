@@ -1,13 +1,13 @@
-// $Id: GenParticle.cc,v 1.2 2008/07/15 11:31:08 loizides Exp $
+// $Id: MCParticle.cc,v 1.3 2008/07/16 09:32:05 bendavid Exp $
 
-#include "MitAna/DataTree/interface/GenParticle.h"
+#include "MitAna/DataTree/interface/MCParticle.h"
 
-ClassImp(mithep::GenParticle)
+ClassImp(mithep::MCParticle)
 
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Double_t GenParticle::Charge() const
+Double_t MCParticle::Charge() const
 {
   // Get Charge from Pdg Lookup
 
@@ -21,7 +21,7 @@ Double_t GenParticle::Charge() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void GenParticle::Print(Option_t */*opt*/) const
+void MCParticle::Print(Option_t */*opt*/) const
 {
   printf("id=%5d st=%3d px=%.3f py=%.3f pz=%.3f e=%.3f\n", 
          PdgId(), Status(), Px(), Py(), Pz(), E());

@@ -1,15 +1,15 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenParticle.h,v 1.16 2008/07/17 08:21:07 loizides Exp $
+// $Id: MCParticle.h,v 1.17 2008/07/22 19:57:50 loizides Exp $
 //
-// GenParticle
+// MCParticle
 //
-// Details to be worked out...
+// Stores MC information for both gen and sim level
 //
 // Authors: C.Loizides, J.Bendavid...
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_GENPARTICLE_H
-#define DATATREE_GENPARTICLE_H
+#ifndef DATATREE_MCPARTICLE_H
+#define DATATREE_MCPARTICLE_H
 
 #include <TRef.h>
 #include <TDatabasePDG.h>
@@ -19,28 +19,34 @@
 
 namespace mithep 
 {
-  class GenParticle : public CompositeParticle
+  class MCParticle : public CompositeParticle
   {
     public:
-      GenParticle() {}
-      GenParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
+      MCParticle() : fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
+      MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
         fPdgId(id), fStatus(s), 
-        fFourVector(px,py,pz,e), fDecayVertex(0,0,0) {}
-      ~GenParticle() {}
+        fFourVector(px,py,pz,e), fDecayVertex(0,0,0),
+        fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
+      ~MCParticle() {}
 
       Int_t               AbsPdgId()            const { return (fPdgId<0 ? -fPdgId:fPdgId); }
-      void		  AddDaughter(GenParticle *p) { fDaughters.Add(p); }
+      void		  AddDaughter(MCParticle *p) { fDaughters.Add(p); }
       Double_t            Charge()              const;
       const Vertex       &DecayVertex()         const { return fDecayVertex; }
-      const GenParticle  *Daughter(UInt_t i)    const;
+      const MCParticle   *Daughter(UInt_t i)    const;
       Bool_t              HasMother()           const { return fMother.IsValid(); }
+      Bool_t              IsGenerated()         const { return fIsGenerated; }
+      Bool_t              IsSimulated()         const { return fIsSimulated; }
       Bool_t              IsNeutrino()          const;
-      const GenParticle  *Mother()              const;
+      const MCParticle  *Mother()              const;
       FourVector	  Mom()                 const { return fFourVector; }
+      void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t; }
+      void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t; }
       TParticlePDG       *PdgEntry()            const;
       Int_t               PdgId()               const { return fPdgId; }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void		  SetMother(GenParticle *p)   { fMother = p; }
+      void		  SetMother(MCParticle *p)   { fMother = p; }
+      void                SetStatus(Int_t s)          { fStatus = s; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);       
       Int_t               Status()              const { return fStatus; }
       void                Print(Option_t *opt="") const;
@@ -54,33 +60,35 @@ namespace mithep
       
     protected:
       Int_t               fPdgId;        //pdg identifier
-      Int_t               fStatus;       //status flag of generator
+      Int_t               fStatus;       //status flag of generator or simulation
       FourVector          fFourVector;   //four momentum vector
       Vertex		  fDecayVertex;  //gen decay vertex
       TRef                fMother;       //reference to mother
+      Bool_t              fIsGenerated;
+      Bool_t              fIsSimulated;
 
-    ClassDef(GenParticle,2) // Generated particle class
+    ClassDef(MCParticle,2) // Generated particle class
   };
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::GenParticle *mithep::GenParticle::Daughter(UInt_t i) const 
+inline const mithep::MCParticle *mithep::MCParticle::Daughter(UInt_t i) const 
 { 
   // Return daughter corresponding to given index.
 
-  return static_cast<const GenParticle*>(fDaughters.At(i)); 
+  return static_cast<const MCParticle*>(fDaughters.At(i)); 
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::GenParticle *mithep::GenParticle::Mother() const 
+inline const mithep::MCParticle *mithep::MCParticle::Mother() const 
 { 
   // Return mother.
 
-  return static_cast<const GenParticle*>(fMother.GetObject()); 
+  return static_cast<const MCParticle*>(fMother.GetObject()); 
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Bool_t mithep::GenParticle::IsNeutrino() const 
+inline Bool_t mithep::MCParticle::IsNeutrino() const 
 { 
   // Return true if particle is neutrino.
 
@@ -94,7 +102,7 @@ inline Bool_t mithep::GenParticle::IsNeutrino() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline TParticlePDG *mithep::GenParticle::PdgEntry() const 
+inline TParticlePDG *mithep::MCParticle::PdgEntry() const 
 { 
   // Return entry to pdg database.
 
@@ -102,7 +110,7 @@ inline TParticlePDG *mithep::GenParticle::PdgEntry() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::GenParticle::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
+inline void mithep::MCParticle::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
 { 
   // Set four vector.
 
@@ -110,7 +118,7 @@ inline void mithep::GenParticle::SetMom(Double_t px, Double_t py, Double_t pz, D
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::GenParticle::SetVertex(Double_t x, Double_t y, Double_t z)
+inline void mithep::MCParticle::SetVertex(Double_t x, Double_t y, Double_t z)
 {
   // Set decay vertex.
 

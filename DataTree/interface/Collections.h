@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.12 2008/07/07 16:02:25 loizides Exp $
+// $Id: Collections.h,v 1.13 2008/07/16 10:00:58 bendavid Exp $
 //
 // Collections
 //
@@ -22,8 +22,7 @@
 #include "MitAna/DataTree/interface/Jet.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
-#include "MitAna/DataTree/interface/GenParticle.h"
-#include "MitAna/DataTree/interface/SimParticle.h"
+#include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Photon.h"
 
@@ -38,8 +37,7 @@ namespace mithep
   typedef Collection<Jet>               JetCol;
   typedef Collection<Met>               MetCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
-  typedef Collection<GenParticle>       GenParticleCol;
-  typedef Collection<SimParticle>       SimParticleCol;
+  typedef Collection<MCParticle>        MCParticleCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<Conversion>        ConversionCol;
@@ -50,8 +48,7 @@ namespace mithep
   typedef Array<Electron>               ElectronArr;
   typedef Array<Jet>                    JetArr;
   typedef Array<Met>                    MetArr;
-  typedef Array<GenParticle>            GenParticleArr;
-  typedef Array<SimParticle>            SimParticleArr;
+  typedef Array<MCParticle>             MCParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
   typedef Array<Photon>                 PhotonArr;
   typedef Array<Conversion>             ConversionArr;

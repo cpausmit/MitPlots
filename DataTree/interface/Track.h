@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.12 2008/07/08 14:41:01 loizides Exp $
+// $Id: Track.h,v 1.13 2008/07/14 20:55:19 loizides Exp $
 //
 // Track
 //
@@ -12,7 +12,7 @@
 #define DATATREE_TRACK_H
  
 #include "MitAna/DataTree/interface/DataObject.h"
-#include "MitAna/DataTree/interface/SimParticle.h"
+#include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
@@ -55,8 +55,8 @@ namespace mithep
       void	         SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, 
                                    Double_t dzErr, Double_t thetaErr);
       
-      const SimParticle *SimPart()      const;
-      void	         SetSimPart(SimParticle *p) { fSimParticleRef = p; }
+      const MCParticle  *MCPart()      const;
+      void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
       
     protected:
       Double_t           fPhi;            //azimuthal angle
@@ -70,7 +70,7 @@ namespace mithep
       Double_t           fDzErr;          //uncertainty on dz
       Double_t           fThetaErr;       //uncertainty on theta
       Int_t              fCharge;         //electric charge of reconstructed track
-      TRef               fSimParticleRef; //reference to sim particle (for monte carlo)
+      TRef               fMCParticleRef; //reference to sim particle (for monte carlo)
 	      
     ClassDef(Track, 1) // Track class
   };
@@ -105,10 +105,10 @@ void mithep::Track::SetErrors(Double_t phiErr, Double_t d0Err, Double_t ptErr, D
 
 //--------------------------------------------------------------------------------------------------
 inline
-const mithep::SimParticle *mithep::Track::SimPart() const 
+const mithep::MCParticle *mithep::Track::MCPart() const 
 { 
   // Get reference to simulated particle.
 
-  return static_cast<const SimParticle*>(fSimParticleRef.GetObject()); 
+  return static_cast<const MCParticle*>(fMCParticleRef.GetObject()); 
 }
 #endif
