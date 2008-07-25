@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
+// $Id: Electron.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
 //
 // Electron
 //
@@ -11,11 +11,11 @@
 #ifndef DATATREE_ELECTRON_H
 #define DATATREE_ELECTRON_H
  
-#include "MitAna/DataTree/interface/Lepton.h"
+#include "MitAna/DataTree/interface/ChargedParticle.h"
 
 namespace mithep 
 {
-  class Electron : public Lepton
+  class Electron : public ChargedParticle
   {
     public:
       Electron() {}

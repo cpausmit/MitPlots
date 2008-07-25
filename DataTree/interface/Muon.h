@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.9 2008/07/01 08:54:57 loizides Exp $
+// $Id: Muon.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
 //
 // Muon
 //
@@ -12,12 +12,12 @@
 #define DATATREE_MUON_H
 
 #include <TRef.h>
-#include "MitAna/DataTree/interface/Lepton.h"
+#include "MitAna/DataTree/interface/ChargedParticle.h"
 #include "MitAna/DataTree/interface/Track.h"
 
 namespace mithep 
 {
-  class Muon : public Lepton
+  class Muon : public ChargedParticle
   {
     public:
       Muon() {}
