@@ -1,9 +1,9 @@
 #!/bin/bash
-# $Id: genrelval.sh,v 1.2 2008/07/10 16:23:12 loizides Exp $
+# $Id: genrelval.sh,v 1.3 2008/07/13 08:39:59 loizides Exp $
 #
 # genrelval.sh: Release validation script for generated particles
 #
-# $Id: genrelval.sh,v 1.2 2008/07/10 16:23:12 loizides Exp $
+# $Id: genrelval.sh,v 1.3 2008/07/13 08:39:59 loizides Exp $
 #_____________________________________________________________________________________________
 #
 # Variables to configure:
@@ -59,11 +59,14 @@ process Gen =
     # customize the MIT filler
     module MitTreeFiller = FillMitTree {
         untracked bool defactive = false
-    	untracked PSet GenParts = {
-		untracked bool active = true
-		untracked string mitName = "GenParticles"
-		untracked string edmName = "source"
-	}
+        untracked PSet MCParticles = {
+            untracked bool active = true
+            untracked bool genActive = true
+            untracked bool simActive = false
+            untracked string mitName = "MCParticles"
+            untracked string genEdmName = "source"
+            untracked string simEdmName = "mergedtruth:MergedTrackTruth"
+        }
     }
 
     # standard path of action of the module

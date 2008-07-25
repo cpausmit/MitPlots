@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id:$
+// $Id: GenRelValMod.h,v 1.1 2008/07/10 14:56:27 loizides Exp $
 //
 // GenRelValMod
 //
@@ -29,8 +29,8 @@ namespace mithep
       void             SlaveTerminate();
 
     protected:
-      TString          fGenPartName;  //name of particle collection
-      GenParticleCol  *fParticles;    //!particle branch
+      TString          fMCPartName;   //name of particle collection
+      MCParticleCol   *fParticles;    //!particle branch
       std::ofstream   *ofile;         //!output text file
 
       ClassDef(GenRelValMod,1) // GenParticle validation module

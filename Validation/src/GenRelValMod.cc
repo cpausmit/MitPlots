@@ -1,4 +1,4 @@
-// $Id: GenRelValMod.cc,v 1.2 2008/07/10 16:23:11 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.3 2008/07/14 20:59:56 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -10,7 +10,7 @@ ClassImp(mithep::GenRelValMod)
 //--------------------------------------------------------------------------------------------------
 GenRelValMod::GenRelValMod(const char *name, const char *title) :
   BaseMod(name,title),
-  fGenPartName(Names::gkGenPartBrn),
+  fMCPartName(Names::gkMCPartBrn),
   fParticles(0),
   ofile(0)
 {
@@ -24,7 +24,7 @@ void GenRelValMod::SlaveBegin()
   // initialize histograms and other analysis objects and request branches. For this module, we
   // request a branch of the MitTree and open a text file for writing.
 
-  ReqBranch(fGenPartName,fParticles);
+  ReqBranch(fMCPartName,fParticles);
 
   ofile = new std::ofstream("macro_output.txt");
   if (ofile->bad()) {
@@ -37,10 +37,10 @@ void GenRelValMod::Process()
 {
   // Process entries of the tree. For this module, we just load the branch and fill the histograms.
 
-  LoadBranch(fGenPartName);
+  LoadBranch(fMCPartName);
 
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
-    GenParticle* p = fParticles->At(i);
+    const MCParticle *p = fParticles->At(i);
     int I     = i+1;                                         // Particle index (starts at 1)
     int KF    = p->PdgId();                                  // Pdg code
     double p_x = p->Px(); if (fabs(p_x)<0.0005) p_x = 0.;    // Momenta.  We only compare the
@@ -49,10 +49,10 @@ void GenRelValMod::Process()
     double E   = p->E();  if (fabs(E  )<0.0005) E   = 0.;    // Energy
     int mind=0;
     if(p->HasMother()) {
-      const GenParticle *mother = p->Mother();
+      const MCParticle *mother = p->Mother();
       if(mother) {
         for (UInt_t j=0; j<fParticles->GetEntries(); ++j) {
-          const  GenParticle *test = fParticles->At(j);
+          const  MCParticle *test = fParticles->At(j);
           if(test==mother) {
             mind=j+1;
             // hack to overcome ambiguity
