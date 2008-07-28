@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.8 2008/06/24 14:01:41 loizides Exp $
+// $Id: Collection.h,v 1.9 2008/06/30 16:54:11 loizides Exp $
 //
 // Collection
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_COLLECTION_H
-#define DATATREE_COLLECTION_H
+#ifndef mithep_COLLECTION_H
+#define mithep_COLLECTION_H
  
 #include "MitAna/DataTree/interface/BaseCollection.h"
 

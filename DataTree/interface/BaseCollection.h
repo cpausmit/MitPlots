@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.5 2008/06/24 14:01:41 loizides Exp $
+// $Id: BaseCollection.h,v 1.6 2008/07/01 08:52:01 loizides Exp $
 //
 // BaseCollection
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_BASECOLLECTION_H
-#define DATATREE_BASECOLLECTION_H
+#ifndef mithep_BASECOLLECTION_H
+#define mithep_BASECOLLECTION_H
  
 #include <TObject.h>
 #include "MitAna/DataTree/interface/Types.h"

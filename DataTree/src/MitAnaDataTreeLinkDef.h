@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.20 2008/07/25 11:32:46 bendavid Exp $
+// $Id: $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -31,6 +31,9 @@
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataTree/interface/BasePart.h"
+#include "MitAna/DataTree/interface/DecayPart.h"
+#include "MitAna/DataTree/interface/StablePart.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #endif
 
@@ -101,16 +104,25 @@
 #pragma link C++ class mithep::DecayParticle+;
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Conversion+;
+#pragma link C++ class mithep::BasePart+;
+#pragma link C++ class mithep::DecayPart+;
+#pragma link C++ class mithep::StablePart+;
 
 #pragma link C++ class mithep::Collection<mithep::CompositeParticle>+;
 #pragma link C++ class mithep::Collection<mithep::DecayParticle>+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;
+#pragma link C++ class mithep::Collection<mithep::BasePart>+;
+#pragma link C++ class mithep::Collection<mithep::DecayPart>+;
+#pragma link C++ class mithep::Collection<mithep::StablePart>+;
 #pragma link C++ class mithep::Array<mithep::CompositeParticle>+;
 #pragma link C++ class mithep::Array<mithep::DecayParticle>+;
 #pragma link C++ class mithep::Array<mithep::Photon>+;
 #pragma link C++ class mithep::ObjArray<mithep::CompositeParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::DecayParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::Photon>+;
+#pragma link C++ class mithep::ObjArray<mithep::BasePart>+;
+#pragma link C++ class mithep::ObjArray<mithep::DecayPart>+;
+#pragma link C++ class mithep::ObjArray<mithep::StablePart>+;
 
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::TrackCol;
@@ -135,9 +147,12 @@
 #pragma link C++ typedef mithep::MetArr;
 #pragma link C++ typedef mithep::MCParticleArr;
 #pragma link C++ typedef mithep::PhotonArr;
-#pragma link C++ typedef mithep::ConversionArr;
 #pragma link C++ typedef mithep::StableParticleArr;
 
 #pragma link C++ enum mithep::MCParticle::EPartType;
+
+#pragma link C++ typedef mithep::BasePartObjArr;
+#pragma link C++ typedef mithep::DecayPartObjArr;
+#pragma link C++ typedef mithep::StablePartObjArr;
 
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.10 2008/07/17 16:37:37 bendavid Exp $
+// $Id: DataObject.h,v 1.11 2008/07/18 10:54:14 bendavid Exp $
 //
 // DataObject
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_DATAOBJECT_H
-#define DATATREE_DATAOBJECT_H
+#ifndef _mithep_DATAOBJECT_H
+#define _mithep_DATAOBJECT_H
  
 #include <TObject.h>
 #include <TROOT.h>
@@ -19,7 +19,7 @@
 #include <TProcessID.h>
 #include "MitAna/DataTree/interface/Types.h"
 
-namespace mithep 
+namespace mithep
 {
   class DataObject : public TObject
   {
@@ -38,7 +38,7 @@ namespace mithep
       void                 SetCacheBit()       { SetBit(23); }
       void                 ResetCacheBit()     { SetBit(23,0); }
 
-    ClassDef(DataObject, 1) // Basic data object class
+      ClassDef(DataObject, 1)
   };
 }
 

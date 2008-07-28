@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DIR=$CMSSW_BASE/src/MitAna/DataTree/scripts
+
+$DIR/generateCode.py --file=BaseCollection.h
+$DIR/generateCode.py --file=BasePartAction.h
+$DIR/generateCode.py --file=BasePart.h
+$DIR/generateCode.py --file=Collection.h
+$DIR/generateCode.py --file=DataObject.h
+$DIR/generateCode.py --file=DecayPart.h
+$DIR/generateCode.py --file=ObjArray.h
+$DIR/generateCode.py --file=StablePart.h
+$DIR/generateCode.py --file=Types.h
+
+$DIR/generateCode.py --file=BaseCollection.cc
+$DIR/generateCode.py --file=BasePartAction.cc
+$DIR/generateCode.py --file=BasePart.cc
+$DIR/generateCode.py --file=Collection.cc
+$DIR/generateCode.py --file=DataObject.cc
+$DIR/generateCode.py --file=DecayPart.cc
+$DIR/generateCode.py --file=ObjArray.cc
+$DIR/generateCode.py --file=StablePart.cc
+
+exit;

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.8 2008/06/30 16:54:40 loizides Exp $
+// $Id: Types.h,v 1.9 2008/07/25 11:08:03 bendavid Exp $
 //
 // Types
 //
@@ -8,14 +8,14 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_TYPES_H
-#define DATATREE_TYPES_H
+#ifndef _mithep_TYPES_H
+#define _mithep_TYPES_H
  
 #include <Rtypes.h>
 #include <Math/GenVector/LorentzVector.h>
 #include <Math/Point3Dfwd.h>
 
-namespace mithep 
+namespace mithep
 {
   typedef ::ROOT::Math::LorentzVector< ::ROOT::Math::PxPyPzE4D<double> > FourVector;
   typedef ::ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,

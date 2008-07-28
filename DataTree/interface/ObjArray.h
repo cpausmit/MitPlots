@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.10 2008/07/28 15:39:23 loizides Exp $
+// $Id: ObjArray.h,v 1.11 2008/07/28 16:05:02 loizides Exp $
 //
 // ObjArray
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_OBJARRAY_H
-#define DATATREE_OBJARRAY_H
+#ifndef mithep_OBJARRAY_H
+#define mithep_OBJARRAY_H
 
 #include <TObjArray.h>
 #include "MitAna/DataTree/interface/Collection.h"

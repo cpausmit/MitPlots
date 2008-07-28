@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.14 2008/07/25 11:32:45 bendavid Exp $
+// $Id: Collections.h,v 1.15 2008/07/25 16:04:44 bendavid Exp $
 //
 // Collections
 //
@@ -13,6 +13,7 @@
  
 #include "MitAna/DataTree/interface/Collection.h"
 #include "MitAna/DataTree/interface/Array.h"
+#include "MitAna/DataTree/interface/ObjArray.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Particle.h"
@@ -25,6 +26,10 @@
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Photon.h"
+#include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataTree/interface/BasePart.h"
+#include "MitAna/DataTree/interface/DecayPart.h"
+#include "MitAna/DataTree/interface/StablePart.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 
 namespace mithep 
@@ -44,8 +49,11 @@ namespace mithep
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<Conversion>        StableParticleCol;
 
+  typedef Collection<BasePart>          BasePartCol;
+
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
+  typedef Array<Conversion>             ConversionArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
   typedef Array<Jet>                    JetArr;
@@ -53,7 +61,10 @@ namespace mithep
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
   typedef Array<Photon>                 PhotonArr;
-  typedef Array<Conversion>             ConversionArr;
+  typedef ObjArray<BasePart>            BasePartObjArr;
+  typedef ObjArray<DecayPart>           DecayPartObjArr;
+  typedef ObjArray<StablePart>          StablePartObjArr;
   typedef Array<Conversion>             StableParticleArr;
+  typedef Array<Conversion>             ConversionArr;
 }
 #endif

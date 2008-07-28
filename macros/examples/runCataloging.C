@@ -1,4 +1,4 @@
-// $Id: runCataloging.C,v 1.1 2008/07/07 16:41:54 paus Exp $
+// $Id: runCataloging.C,v 1.2 2008/07/08 05:52:09 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -23,19 +23,29 @@ Analysis      *gAna(0);
 CatalogingMod *gMod(0);
 
 //--------------------------------------------------------------------------------------------------
-void runCataloging(const char *baseDir = "/server/03b/paus",
-		   const char *book    = "filler/000",
-		   const char *dataset = "jpsi-csa08-10pb")
+void runCataloging(const char *catalogDir  = "/home/mitprod/catalog",
+		   const char *dataBaseDir = "/server/03b/paus",
+		   const char *book        = "filler/000",
+		   const char *dataset     = "jpsi-csa08-10pb")
 {
   // -----------------------------------------------------------------------------------------------
   // This script runs a full cataloging action on the given directory
   // -----------------------------------------------------------------------------------------------
   gDebugMask        = Debug::kNone;
+<<<<<<< runCataloging.C
+  gDebugLevel       = 0;
+=======
   gDebugLevel       = 1;
+>>>>>>> 1.2
   gErrorIgnoreLevel = kWarning;
 
+<<<<<<< runCataloging.C
+  // Create information per files
+  TString fullDir = dataBaseDir +slash+ book +slash+ dataset;
+=======
   // create information per files
   TString fullDir = baseDir +slash+ book +slash+ dataset;
+>>>>>>> 1.2
   TString cmd     = TString("ls -1 ")+fullDir;
   char    file[1000];
   int i = 0;
