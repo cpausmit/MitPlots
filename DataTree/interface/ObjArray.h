@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.8 2008/07/14 20:55:19 loizides Exp $
+// $Id: ObjArray.h,v 1.9 2008/07/16 10:00:58 bendavid Exp $
 //
 // ObjArray
 //
@@ -32,12 +32,18 @@ namespace mithep
       UInt_t               Entries()                             const { return fNumEntries; }
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
+      const ArrayElement  *Find(const char *name)                const;
+      ArrayElement        *Find(const char *name);
+      void                 Remove(UInt_t idx);
+      void                 Remove(const char *name);
+      void                 Remove(ArrayElement *ae);
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
       void                 Reset();
       void                 Trim()                                      { fArray.Compress();}
       void                 SetName(const char* name)                   { fArray.SetName(name); }
       void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
+      void                 Sort()                                      { fArray.Sort(); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)               const;
 
@@ -128,6 +134,42 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
+inline const ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name) const
+{
+  return static_cast<const ArrayElement*>(fArray.FindObject(name));
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name)
+{
+  return static_cast<ArrayElement*>(fArray.FindObject(name));
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Remove(UInt_t idx)
+{
+  fArray.RemoveAt(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Remove(const char *name)
+{
+  TObject *obj = fArray.FindObject(name);
+  if (obj) fArray.Remove(obj);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Remove(ArrayElement *ae)
+{
+  fArray.Remove(ae);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Reset()
 {
   // Default implementation for clearing the array.
@@ -148,7 +190,7 @@ inline TIterator *mithep::ObjArray<ArrayElement>::Iterator(Bool_t dir) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::ObjArray<ArrayElement>::operator[](UInt_t idx) const
+inline const ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -157,7 +199,7 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::operator[](UInt_t idx
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::ObjArray<ArrayElement>::operator[](UInt_t idx)
+inline ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 
@@ -166,7 +208,7 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::operator[](UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline ArrayElement* mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx)
+inline ArrayElement *mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -175,7 +217,7 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement* mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx) const
+inline const ArrayElement *mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
