@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.9 2008/07/16 10:00:58 bendavid Exp $
+// $Id: ObjArray.h,v 1.10 2008/07/28 15:39:23 loizides Exp $
 //
 // ObjArray
 //
@@ -136,6 +136,8 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
 template<class ArrayElement>
 inline const ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name) const
 {
+  // Find object by name.
+
   return static_cast<const ArrayElement*>(fArray.FindObject(name));
 }
 
@@ -143,6 +145,8 @@ inline const ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name
 template<class ArrayElement>
 inline ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name)
 {
+  // Find object by name.
+
   return static_cast<ArrayElement*>(fArray.FindObject(name));
 }
 
@@ -150,6 +154,8 @@ inline ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name)
 template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Remove(UInt_t idx)
 {
+  // Remove object at given index from array. You probably want to call Trim as well.
+
   fArray.RemoveAt(idx);
 }
 
@@ -157,6 +163,8 @@ inline void mithep::ObjArray<ArrayElement>::Remove(UInt_t idx)
 template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Remove(const char *name)
 {
+  // Remove object from array. You probably want to call Trim as well.
+
   TObject *obj = fArray.FindObject(name);
   if (obj) fArray.Remove(obj);
 }
