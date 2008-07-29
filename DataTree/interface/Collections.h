@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.16 2008/07/28 23:13:41 paus Exp $
+// $Id: Collections.h,v 1.17 2008/07/29 10:38:47 loizides Exp $
 //
 // Collections
 //
@@ -34,6 +34,7 @@
 #include "MitAna/DataTree/interface/DecayPart.h"
 #include "MitAna/DataTree/interface/StablePart.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
+#include "MitAna/DataTree/interface/StableDaughter.h"
 
 namespace mithep 
 {
@@ -50,7 +51,8 @@ namespace mithep
   typedef Collection<DecayParticle>     DecayParticleCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<Conversion>        ConversionCol;
-  typedef Collection<Conversion>        StableParticleCol;
+  typedef Collection<StableParticle>    StableParticleCol;
+  typedef Collection<StableDaughter>    StableDaughterCol;
 
   typedef Collection<BasePart>          BasePartCol;
 
@@ -68,6 +70,7 @@ namespace mithep
   typedef ObjArray<DecayPart>           DecayPartObjArr;
   typedef ObjArray<StablePart>          StablePartObjArr;
   typedef Array<Conversion>             StableParticleArr;
+  typedef Array<Conversion>             StableDaughterArr;
   typedef Array<Conversion>             ConversionArr;
 }
 #endif

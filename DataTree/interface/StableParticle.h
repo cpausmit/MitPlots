@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.1 2008/07/25 16:04:44 bendavid Exp $
+// $Id: StableParticle.h,v 1.2 2008/07/29 07:55:40 loizides Exp $
 //
 // StableParticle
 //
-// Details to be worked out...
+// Generic stable particle with track.  Stores absolute pdg code and link to track.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -18,7 +18,8 @@ namespace mithep
   class StableParticle : public ChargedParticle
   {
     public:
-      StableParticle() {}
+      StableParticle() : fAbsPdgId(0) {}
+      StableParticle(UInt_t absPdgId) : fAbsPdgId(absPdgId) {}
       StableParticle(UInt_t absPdgId, Track *track) : fAbsPdgId(absPdgId), fTrackRef(track) {}
       ~StableParticle() {}
       

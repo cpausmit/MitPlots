@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.17 2008/07/22 19:57:50 loizides Exp $
+// $Id: MCParticle.h,v 1.1 2008/07/25 11:32:45 bendavid Exp $
 //
 // MCParticle
 //
@@ -32,7 +32,7 @@ namespace mithep
       Int_t               AbsPdgId()            const { return (fPdgId<0 ? -fPdgId:fPdgId); }
       void		  AddDaughter(MCParticle *p) { fDaughters.Add(p); }
       Double_t            Charge()              const;
-      const Vertex       &DecayVertex()         const { return fDecayVertex; }
+      const ThreeVector  &DecayVertex()         const { return fDecayVertex; }
       const MCParticle   *Daughter(UInt_t i)    const;
       Bool_t              HasMother()           const { return fMother.IsValid(); }
       Bool_t              IsGenerated()         const { return fIsGenerated; }
@@ -47,7 +47,7 @@ namespace mithep
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(MCParticle *p)   { fMother = p; }
       void                SetStatus(Int_t s)          { fStatus = s; }
-      void                SetVertex(Double_t x, Double_t y, Double_t z);       
+      void                SetVertex(Double_t x, Double_t y, Double_t z);
       Int_t               Status()              const { return fStatus; }
       void                Print(Option_t *opt="") const;
 
@@ -62,7 +62,7 @@ namespace mithep
       Int_t               fPdgId;        //pdg identifier
       Int_t               fStatus;       //status flag of generator or simulation
       FourVector          fFourVector;   //four momentum vector
-      Vertex		  fDecayVertex;  //gen decay vertex
+      ThreeVector         fDecayVertex;  //gen decay vertex
       TRef                fMother;       //reference to mother
       Bool_t              fIsGenerated;
       Bool_t              fIsSimulated;

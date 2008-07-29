@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.9 2008/07/25 11:08:03 bendavid Exp $
+// $Id: Types.h,v 1.10 2008/07/28 23:13:41 paus Exp $
 //
 // Types
 //
@@ -14,6 +14,7 @@
 #include <Rtypes.h>
 #include <Math/GenVector/LorentzVector.h>
 #include <Math/Point3Dfwd.h>
+#include <Math/SMatrix.h>
 
 namespace mithep
 {
@@ -21,6 +22,10 @@ namespace mithep
   typedef ::ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,
                                              ROOT::Math::DefaultCoordinateSystemTag> ThreeVector;
   typedef ::ROOT::Math::DisplacementVector3D<ROOT::Math::CylindricalEta3D<double>,
-                                             ROOT::Math::DefaultCoordinateSystemTag> ThreeVectorEtaPhi;                                             
+                                             ROOT::Math::DefaultCoordinateSystemTag> ThreeVectorEtaPhi;
+  typedef ::ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3> > ThreeSymMatrix;
+  typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepSym<double,7> > SevenSymMatrix;
+  typedef ::ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepStd<double,3,3> > ThreeMatrix;
+  typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepStd<double,7,7> > SevenMatrix;
 }
 #endif
