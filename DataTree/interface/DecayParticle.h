@@ -133,7 +133,10 @@ namespace mithep
       void                   setBigError(const SevenSymMatrix &bigError) { fBigError = bigError; }
 //    void                   setBigError(const SevenMatrix    &bigError) { fBigError = bigError; }
 
-        
+      //Momentum Accessors/setter (this will probably change)
+      FourVector	        Mom() const { return fMomentum; }
+      void		     SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+
     protected:
       UInt_t                fAbsPdgId;
       DecayType             fDecayType; // Decay type (either fast of slow)
@@ -164,6 +167,8 @@ namespace mithep
       ThreeVector           fPosition;
       ThreeSymMatrix        fError;
       SevenSymMatrix        fBigError;
+      // momentum
+      FourVector            fMomentum; //momentum fourvector, may be removed at some point
       
     ClassDef(DecayParticle, 1)         // Decay particle class
   };
@@ -175,5 +180,13 @@ inline TParticlePDG *mithep::DecayParticle::ParticlePdgEntry() const
   // Return entry to pdg database for the PARTICLE.
 
   return TDatabasePDG::Instance()->GetParticle(fAbsPdgId); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayParticle::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
+{ 
+  // Set four vector.
+
+  fMomentum.SetXYZT(px, py, pz, e);
 }
 #endif
