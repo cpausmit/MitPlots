@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.24 2008/07/29 12:29:47 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.25 2008/07/29 13:44:26 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -59,7 +59,6 @@
 #pragma link C++ class mithep::StableParticle+;
 #pragma link C++ class mithep::StableDaughter+;
 
-#pragma link C++ class mithep::BaseCollection+;
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
 #pragma link C++ class mithep::Collection<mithep::Track>+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;

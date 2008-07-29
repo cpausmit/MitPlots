@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableDaughter.h,v 1.2 2008/07/29 13:44:25 loizides Exp $
+// $Id: StableDaughter.h,v 1.3 2008/07/29 16:17:18 loizides Exp $
 //
 // StableDaughter
 //
@@ -24,19 +24,19 @@ namespace mithep
       StableDaughter(UInt_t absPdgId, Track *track) : StableParticle(absPdgId, track) {}
       StableDaughter(UInt_t absPdgId, Track *track, Double_t px, Double_t py, Double_t pz) :
         StableParticle(absPdgId, track),
-        fMomentumAtVertex(px,py,pz) {}
+        fMomAtVertex(px,py,pz) {}
       ~StableDaughter() {}
 
-      Double_t             Eta()       const { return fMomentumAtVertex.Eta(); }
+      Double_t             Eta()       const { return fMomAtVertex.Eta(); }
       const Particle      *Mother()    const;
-      Double_t             Phi()       const { return fMomentumAtVertex.Phi(); }
-      Double_t             P()         const { return fMomentumAtVertex.R();  }
-      Double_t             Pt()        const { return fMomentumAtVertex.Rho(); }
-      Double_t             Px()        const { return fMomentumAtVertex.X(); }
-      Double_t             Py()        const { return fMomentumAtVertex.Y(); }
-      Double_t             Pz()        const { return fMomentumAtVertex.Z(); }
+      Double_t             Phi()       const { return fMomAtVertex.Phi(); }
+      Double_t             P()         const { return fMomAtVertex.R();  }
+      Double_t             Pt()        const { return fMomAtVertex.Rho(); }
+      Double_t             Px()        const { return fMomAtVertex.X(); }
+      Double_t             Py()        const { return fMomAtVertex.Y(); }
+      Double_t             Pz()        const { return fMomAtVertex.Z(); }
       void                 SetThreeMom(Double_t px, Double_t y, Double_t z);
-      const ThreeVector   &ThreeMom()  const { return fMomentumAtVertex; }
+      const ThreeVector   &ThreeMom()  const { return fMomAtVertex; }
 
     protected:
       ThreeVector          fMomAtVertex;      //fitted momentum at vertex
