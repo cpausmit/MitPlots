@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.2 2008/07/07 16:41:53 paus Exp $
+# $Id: BuildFile,v 1.3 2008/07/13 08:40:54 loizides Exp $
 
 <use name=MitAna/TAM>
 <use name=MitAna/DataTree>
@@ -10,5 +10,4 @@
 <flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaTreeMod>
-   <use root>
 </export>

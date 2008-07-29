@@ -1,4 +1,4 @@
-// $Id: TreeBranchLoader.cc,v 1.1 2008/07/02 16:34:06 loizides Exp $
+// $Id: TreeBranchLoader.cc,v 1.2 2008/07/03 08:22:19 loizides Exp $
 
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
 #include <Riostream.h>
@@ -6,7 +6,7 @@
 #include <TTree.h>
 #include <TClass.h>
 #include <TFile.h>
-#include "MitAna/DataTree/interface/BaseCollection.h"
+#include "MitAna/DataCont/interface/BaseCollection.h"
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 
