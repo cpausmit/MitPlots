@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
+// $Id: Electron.h,v 1.11 2008/07/25 16:04:44 bendavid Exp $
 //
 // Electron
 //
@@ -24,6 +24,7 @@ namespace mithep
       const Track         *BestTrk()         const;
       const Track         *GsfTrk()          const;
       const Track         *TrackerTrk()      const;
+      const Track         *Trk()             const { return BestTrk(); }
       Double_t             Mass()            const { return 0.51099892e-3; }
       
       void	           SetGsfTrk(Track* t)     { fGsfTrackRef = t; }

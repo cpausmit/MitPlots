@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
+// $Id: StableParticle.h,v 1.1 2008/07/25 16:04:44 bendavid Exp $
 //
 // StableParticle
 //
@@ -23,7 +23,6 @@ namespace mithep
       ~StableParticle() {}
       
       UInt_t               AbsPdgId()         const { return fAbsPdgId; }
-      const Track         *BestTrk()          const { return Trk(); }
       const Track         *Trk()              const;
       Double_t             Mass()             const;
       TParticlePDG        *ParticlePdgEntry() const;

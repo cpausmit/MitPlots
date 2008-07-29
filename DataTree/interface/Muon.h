@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.10 2008/07/14 20:55:19 loizides Exp $
+// $Id: Muon.h,v 1.11 2008/07/25 16:04:44 bendavid Exp $
 //
 // Muon
 //
@@ -27,6 +27,7 @@ namespace mithep
       const Track   *GlobalTrk()          const;
       const Track   *StandaloneTrk()      const;
       const Track   *TrackerTrk()         const;
+      const Track   *Trk()                const { return BestTrk(); }
       Double_t       Mass()               const { return 105.658369e-3; }  
       
       void	     SetGlobalTrk(Track* t)     { fGlobalTrackRef = t; }
