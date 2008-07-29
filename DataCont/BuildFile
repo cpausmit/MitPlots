@@ -1,0 +1,8 @@
+# -*- Makefile -*-
+# $Id: BuildFile,v 1.4 2008/07/28 23:13:41 paus Exp $
+
+<use name=root>
+<flags CXXFLAGS="-g">
+<export>
+   <lib name=MitAnaDataCont>
+</export>
