@@ -1,8 +1,0 @@
-#!/bin/sh
-# $Id: $
-#
-# Needed to be able to build dictionaries using dependencies between different 
-# submodes. In our case we need it for MitAna/DataCont and MitAna/DataTree.
-
-/bin/touch $1 > /dev/null 2>&1
-exit 0
