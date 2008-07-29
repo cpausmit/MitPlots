@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.2 2008/07/29 07:55:40 loizides Exp $
+// $Id: StableParticle.h,v 1.3 2008/07/29 12:29:47 bendavid Exp $
 //
 // StableParticle
 //
-// Generic stable particle with track.  Stores absolute pdg code and link to track.
+// Generic stable particle with track. Stores absolute pdg code and link to track.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -29,13 +29,13 @@ namespace mithep
       TParticlePDG        *ParticlePdgEntry() const;
       
       void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
-      void	           SetTrk(Track* t) { fTrackRef = t; }
+      void	           SetTrk(Track *t)             { fTrackRef = t; }
       
     protected:
       UInt_t               fAbsPdgId; //pdg identifier (absolute value)
       TRef	           fTrackRef; //tracker track reference
       
-    ClassDef(StableParticle, 1) // StableParticle class
+    ClassDef(StableParticle, 1) // Stable particle class
   };
 }
 
