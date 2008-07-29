@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.6 2008/07/28 23:13:41 paus Exp $
+// $Id: DecayParticle.h,v 1.8 2008/07/29 13:32:49 bendavid Exp $
 //
 // Decay Particle
 //
@@ -123,19 +123,20 @@ namespace mithep
       // Accessors/Setter: Extended Vertex fit info from this level
       //----------------------------------------------------------------------------------------------
       // Position
-      const ThreeVector        &position() const { return fPosition; }
-      void                   setPosition(const ThreeVector &position) { fPosition = position; }
+      const ThreeVector        &Position() const { return fPosition; }
+      void                   SetPosition(const ThreeVector &position) { fPosition = position; }
       // Error
-      const ThreeSymMatrix     &error() const { return fError; }
-      void                   setError(const ThreeSymMatrix &error) { fError = error; }
+      const ThreeSymMatrix     &Error() const { return fError; }
+      void                   SetError(const ThreeSymMatrix &error) { fError = error; }
       // Big 7x7 Error Matrix
-      const SevenSymMatrix     &bigError() const { return fBigError; }
-      void                   setBigError(const SevenSymMatrix &bigError) { fBigError = bigError; }
+      const SevenSymMatrix     &BigError() const { return fBigError; }
+      void                   SetBigError(const SevenSymMatrix &bigError) { fBigError = bigError; }
 //    void                   setBigError(const SevenMatrix    &bigError) { fBigError = bigError; }
 
       //Momentum Accessors/setter (this will probably change)
       FourVector	        Mom() const { return fMomentum; }
-      void		     SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                   SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                   SetMom(const FourVector &p) { fMomentum = p; }
 
     protected:
       UInt_t                fAbsPdgId;
