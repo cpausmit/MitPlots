@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableDaughter.h,v 1.1 2008/07/25 16:04:44 bendavid Exp $
+// $Id: StableDaughter.h,v 1.1 2008/07/29 13:32:49 bendavid Exp $
 //
 // StableDaughter
 //
@@ -20,7 +20,7 @@ namespace mithep
   class StableDaughter : public StableParticle
   {
     public:
-      StableDaughter() : StableParticle(0) {}
+      StableDaughter() : StableParticle() {}
       StableDaughter(UInt_t absPdgId, Track *track) : StableParticle(absPdgId, track) {}
       StableDaughter(UInt_t absPdgId, Track *track, Double_t px, Double_t py, Double_t pz) :
         StableParticle(absPdgId, track),

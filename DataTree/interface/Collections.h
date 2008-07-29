@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.17 2008/07/29 10:38:47 loizides Exp $
+// $Id: Collections.h,v 1.18 2008/07/29 12:29:47 bendavid Exp $
 //
 // Collections
 //
@@ -30,9 +30,6 @@
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/Conversion.h"
-#include "MitAna/DataTree/interface/BasePart.h"
-#include "MitAna/DataTree/interface/DecayPart.h"
-#include "MitAna/DataTree/interface/StablePart.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
 
@@ -53,24 +50,20 @@ namespace mithep
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<StableParticle>    StableParticleCol;
   typedef Collection<StableDaughter>    StableDaughterCol;
-
-  typedef Collection<BasePart>          BasePartCol;
-
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
-  typedef Array<Conversion>             ConversionArr;
+  typedef Array<Particle>               ParticleArr;
+  typedef Array<ChargedParticle>        ChargedParticleArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
   typedef Array<Jet>                    JetArr;
   typedef Array<Met>                    MetArr;
   typedef Array<MCParticle>             MCParticleArr;
+  typedef Array<CompositeParticle>      CompositeParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
   typedef Array<Photon>                 PhotonArr;
-  typedef ObjArray<BasePart>            BasePartObjArr;
-  typedef ObjArray<DecayPart>           DecayPartObjArr;
-  typedef ObjArray<StablePart>          StablePartObjArr;
-  typedef Array<Conversion>             StableParticleArr;
-  typedef Array<Conversion>             StableDaughterArr;
   typedef Array<Conversion>             ConversionArr;
+  typedef Array<StableParticle>         StableParticleArr;
+  typedef Array<StableDaughter>         StableDaughterArr;
 }
 #endif
