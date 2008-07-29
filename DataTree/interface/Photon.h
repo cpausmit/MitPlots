@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.9 2008/07/16 09:32:04 bendavid Exp $
+// $Id: Photon.h,v 1.10 2008/07/22 19:57:50 loizides Exp $
 //
 // Photon
 //
@@ -13,8 +13,8 @@
  
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/RefArray.h"
 #include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep 
 {

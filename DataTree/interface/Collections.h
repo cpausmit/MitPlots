@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.15 2008/07/25 16:04:44 bendavid Exp $
+// $Id: Collections.h,v 1.16 2008/07/28 23:13:41 paus Exp $
 //
 // Collections
 //
@@ -11,9 +11,12 @@
 #ifndef DATATREE_COLLECTIONS_H
 #define DATATREE_COLLECTIONS_H
  
-#include "MitAna/DataTree/interface/Collection.h"
-#include "MitAna/DataTree/interface/Array.h"
-#include "MitAna/DataTree/interface/ObjArray.h"
+#include "MitAna/DataCont/interface/Collection.h"
+#include "MitAna/DataCont/interface/Array.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
+#include "MitAna/DataCont/interface/RefArray.h"
+#include "MitAna/DataCont/interface/Vector.h"
+
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Particle.h"

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: DecayPart.h,v 1.1 2008/07/28 23:13:41 paus Exp $
 //
 // Description: Class DecayPart
 // ------------
@@ -20,7 +20,7 @@
 #include "CLHEP/Geometry/Point3D.h"
 #include "CLHEP/Matrix/SymMatrix.h"
 #include "MitAna/DataTree/interface/Types.h"
-#include "MitAna/DataTree/interface/ObjArray.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/DataTree/interface/BasePart.h"
 
 namespace mithep

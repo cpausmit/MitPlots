@@ -1,4 +1,4 @@
-// $Id: $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.22 2008/07/28 23:13:42 paus Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -6,10 +6,6 @@
 #include <vector>
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Names.h"
-#include "MitAna/DataTree/interface/Array.h"
-#include "MitAna/DataTree/interface/ObjArray.h"
-#include "MitAna/DataTree/interface/RefArray.h"
-#include "MitAna/DataTree/interface/Vector.h"
 #include "MitAna/DataTree/interface/Collections.h"
 
 #include "MitAna/DataTree/interface/EventHeader.h"
