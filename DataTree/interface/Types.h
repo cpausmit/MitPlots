@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.12 2008/07/29 16:17:18 loizides Exp $
+// $Id: Types.h,v 1.13 2008/07/29 22:51:56 bendavid Exp $
 //
 // Types
 //
@@ -12,7 +12,6 @@
 #define _mithep_TYPES_H
  
 #include <Rtypes.h>
-#include <utility>
 #include <Math/GenVector/LorentzVector.h>
 #include <Math/Point3Dfwd.h>
 #include <Math/SMatrix.h>
@@ -28,6 +27,5 @@ namespace mithep
   typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepSym<double,7> >   SevenSymMatrix;
   typedef ::ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepStd<double,3,3> > ThreeMatrix;
   typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepStd<double,7,7> > SevenMatrix;
-  typedef std::pair<int,int> DoubleIntKey;
 }
 #endif
