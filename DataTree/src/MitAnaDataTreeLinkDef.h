@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.25 2008/07/29 13:44:26 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.26 2008/07/29 17:00:13 loizides Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -29,6 +29,8 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
+#include "MitAna/DataTree/interface/BitMask32.h"
+#include "MitAna/DataTree/interface/BitMask64.h"
 #endif
 
 #ifdef __CINT__
@@ -58,6 +60,8 @@
 #pragma link C++ class mithep::MCParticle+;
 #pragma link C++ class mithep::StableParticle+;
 #pragma link C++ class mithep::StableDaughter+;
+#pragma link C++ class mithep::BitMask32+;
+#pragma link C++ class mithep::BitMask64+;
 
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
 #pragma link C++ class mithep::Collection<mithep::Track>+;
