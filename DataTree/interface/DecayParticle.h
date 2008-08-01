@@ -1,12 +1,15 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.8 2008/07/29 13:32:49 bendavid Exp $
+// $Id: DecayParticle.h,v 1.9 2008/07/29 22:51:56 bendavid Exp $
 //
 // Decay Particle
 //
 // Decay Particle for use in vertexing based analyses.
-// Stores vertex fit information and links to daughters.
+// Stores vertex fit information (including four momentum) and links to daughters.
 //
-// Authors: J.Bendavid...
+// Note that Charge is still computed as a recursive loop over daughters, as inherited from
+// CompositeParticle, but momentum is returned from the internally stored four vector
+//
+// Authors: Ch.Paus, J.Bendavid...
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_DECAYPARTICLE_H
@@ -133,7 +136,7 @@ namespace mithep
       void                   SetBigError(const SevenSymMatrix &bigError) { fBigError = bigError; }
 //    void                   setBigError(const SevenMatrix    &bigError) { fBigError = bigError; }
 
-      //Momentum Accessors/setter (this will probably change)
+      //Momentum Accessors/setter
       FourVector	        Mom() const { return fMomentum; }
       void                   SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                   SetMom(const FourVector &p) { fMomentum = p; }
@@ -169,7 +172,7 @@ namespace mithep
       ThreeSymMatrix        fError;
       SevenSymMatrix        fBigError;
       // momentum
-      FourVector            fMomentum; //momentum fourvector, may be removed at some point
+      FourVector            fMomentum; //momentum fourvector
       
     ClassDef(DecayParticle, 1)         // Decay particle class
   };
