@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.18 2008/07/29 12:29:47 bendavid Exp $
+// $Id: Collections.h,v 1.19 2008/07/29 13:44:25 loizides Exp $
 //
 // Collections
 //
@@ -19,6 +19,8 @@
 
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Track.h"
+#include "MitAna/DataTree/interface/BasicCluster.h"
+#include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
@@ -28,8 +30,8 @@
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
-#include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
 
@@ -37,6 +39,8 @@ namespace mithep
 {
   typedef Collection<DataObject>        DataObjectCol;
   typedef Collection<Track>             TrackCol;
+  typedef Collection<BasicCluster>      BasicClusterCol;
+  typedef Collection<SuperCluster>      SuperClusterCol;
   typedef Collection<Particle>          ParticleCol;
   typedef Collection<ChargedParticle>   ChargedParticleCol;
   typedef Collection<Muon>              MuonCol;
@@ -46,12 +50,15 @@ namespace mithep
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<MCParticle>        MCParticleCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
-  typedef Collection<Photon>            PhotonCol;
   typedef Collection<Conversion>        ConversionCol;
+  typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
   typedef Collection<StableDaughter>    StableDaughterCol;
+
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
+  typedef Array<BasicCluster>           BasicClusterArr;
+  typedef Array<SuperCluster>           SuperClusterArr;
   typedef Array<Particle>               ParticleArr;
   typedef Array<ChargedParticle>        ChargedParticleArr;
   typedef Array<Muon>                   MuonArr;
@@ -61,8 +68,8 @@ namespace mithep
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<CompositeParticle>      CompositeParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
-  typedef Array<Photon>                 PhotonArr;
   typedef Array<Conversion>             ConversionArr;
+  typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
   typedef Array<StableDaughter>         StableDaughterArr;
 }
