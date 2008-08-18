@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.14 2008/07/30 08:38:04 loizides Exp $
+// $Id: Types.h,v 1.15 2008/08/18 10:58:20 sixie Exp $
 //
 // Types
 //
@@ -19,7 +19,7 @@
 namespace mithep
 {
   typedef ::ROOT::Math::LorentzVector< ::ROOT::Math::PxPyPzE4D<double> > FourVector;
-  typedef ::ROOT::Math::LorentzVector< ::ROOT::Math::PtEtaPhiE4D<double> > FourVectorEtaPhi;
+//  typedef ::ROOT::Math::LorentzVector< ::ROOT::Math::PtEtaPhiE4D<double> > FourVectorEtaPhi;
 
   typedef ::ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,
                                              ROOT::Math::DefaultCoordinateSystemTag> 
