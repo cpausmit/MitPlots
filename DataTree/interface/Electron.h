@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.12 2008/07/29 07:55:40 loizides Exp $
+// $Id: Electron.h,v 1.13 2008/08/08 11:17:13 sixie Exp $
 //
 // Electron
 //
@@ -22,11 +22,14 @@ namespace mithep
       Electron() {}
       ~Electron() {}
       
-      const Track         *BestTrk()         const;
-      const Track         *GsfTrk()          const;
-      const Track         *TrackerTrk()      const;
-      const SuperCluster  *SCluster()        const;
-      const Track         *Trk()             const { return BestTrk(); }
+      const Track         *BestTrk()               const;
+      const Track         *GsfTrk()                const;
+      const Track         *TrackerTrk()            const;
+      const SuperCluster  *SCluster()              const;
+      FourVector           Mom()                   const;
+      const Track         *Trk()                   const { return BestTrk();                }
+      Double_t             E()                     const {return SCluster()->Energy();      } 
+
 
       Double_t    Mass()                           const { return 0.51099892e-3;            }
       Double_t    ESuperClusterOverP()             const { return fESuperClusterOverP;      }
@@ -40,10 +43,6 @@ namespace mithep
       Double_t    IsMomentumCorrected()            const { return fIsMomentumCorrected;     }
       Double_t    NumberOfClusters()               const { return fNumberOfClusters;        }
       Double_t    Classification()                 const { return fClassification;          }
-      Double_t    SuperClusterPx()                 const { return fSuperClusterPx;          }
-      Double_t    SuperClusterPy()                 const { return fSuperClusterPy;          }
-      Double_t    SuperClusterPz()                 const { return fSuperClusterPz;          }
-      Double_t    SuperClusterE()                  const { return fSuperClusterE;           }
       Double_t    E33()                            const { return fE33;                     }
       Double_t    E55()                            const { return fE55;                     }
       Double_t    CovEtaEta()                      const { return fCovEtaEta;               }
@@ -51,7 +50,7 @@ namespace mithep
       Double_t    CovPhiPhi()                      const { return fCovPhiPhi;               }
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
-      
+     
       Double_t    ComputeTrackIsolation   (  Double_t extRadius, Double_t intRadius, 
                                              Double_t ptLow, Double_t maxVtxZDist, 
                                              mithep::Collection<Track> *tracks              );
@@ -72,10 +71,6 @@ namespace mithep
       void        SetIsMomentumCorrected(Double_t x)            { fIsMomentumCorrected = x;        }
       void        SetNumberOfClusters(Double_t x)               { fNumberOfClusters = x;           }
       void        SetClassification(Double_t x)                 { fClassification = x;             }
-      void        SetSuperClusterPx(Double_t SuperClusterPx)    { fSuperClusterPx = SuperClusterPx;}
-      void        SetSuperClusterPy(Double_t SuperClusterPy)    { fSuperClusterPy = SuperClusterPy;}
-      void        SetSuperClusterPz(Double_t SuperClusterPz)    { fSuperClusterPz = SuperClusterPz;}
-      void        SetSuperClusterE(Double_t SuperClusterE)      { fSuperClusterE = SuperClusterE;  }
       void        SetE33(Double_t E33)                          { fE33 = E33;                      }
       void        SetE55(Double_t E55)                          { fE55 = E55;                      }
       void        SetCovEtaEta(Double_t CovEtaEta)              { fCovEtaEta = CovEtaEta;          }
@@ -83,8 +78,6 @@ namespace mithep
       void        SetCovPhiPhi(Double_t CovPhiPhi)              { fCovPhiPhi = CovPhiPhi;          }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
-
-
 
     protected:
       TRef	           fGsfTrackRef;     //global combined track reference
@@ -152,5 +145,16 @@ inline const mithep::SuperCluster *mithep::Electron::SCluster() const
   // Return Super cluster
 
   return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
+}
+
+//-------------------------------------------------------------------------------------------------
+inline mithep::FourVector mithep::Electron::Mom() const
+{
+  // Return Momentum of the electron. We use the direction of the
+  // Track and the Energy of the Super Cluster
+
+  double P = TMath::Sqrt( E()*E() - Mass()*Mass());
+  return FourVector(P*sin(Trk()->Theta())*cos(Trk()->Phi()), 
+                    P*sin(Trk()->Theta())*sin(Trk()->Phi()), P*cos(Trk()->Theta()), E());
 }
 #endif
