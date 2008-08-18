@@ -6,6 +6,8 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
 
+#include "MitCommon/MathTools/interface/MathUtils.h"
+
 using namespace mithep;
 
 ClassImp(mithep::ObjectCleaningMod)
@@ -46,6 +48,12 @@ void ObjectCleaningMod::Begin()
 {
   // Run startup code on the client machine. For this module, we dont do
   // anything here.
+                  fGoodElectronsName = "GoodElectrons" ;        
+                 fGoodMuonsName = "GoodMuons" ;        
+                  fGoodCentralJetsName = "GoodCentralJets";        
+                  fGoodForwardJetsName = "GoodForwardJets" ;        
+                  fMuonCorrectedMetName = "MET" ; 
+                  fGenLeptonsName = "GenLeptons";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,24 +70,44 @@ void ObjectCleaningMod::Process()
     cerr << endl << "Process Event " << fNEventsProcessed << endl;
 
   //Get Generator Level information for matching
-  ObjArray<MCParticle> GenLeptons;
+  ObjArray<MCParticle> *GenLeptons = new ObjArray<MCParticle>;
   LoadBranch(fMCPartName);
 
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
     MCParticle* p = fParticles->At(i);
+    fGenPtHist->Fill(p->Pt());
+    fGenEtaHist->Fill(p->Eta());
+    fGenPhiHist->Fill(p->Phi());
+
     if (p->IsGenerated() && 
-	(abs(p->PdgId()) == 11 || abs(p->PdgId()) == 13 || abs(p->PdgId()) == 15) 
+	(abs(p->PdgId()) >= 11 && abs(p->PdgId()) <= 16) 
 	&& p->Status() == 3 //pick 3 because we want primary interaction leptons only
-      )
-      GenLeptons.Add(p);
+      ) 
+      GenLeptons->Add(p);
+    
   }
-   
-  if (printDebug) {
-    cerr << "Check Generator Leptons Finding" << endl;
-    for (UInt_t i=0; i<GenLeptons.GetEntries(); ++i) {
-      cout << i << " " << GenLeptons[i]->PdgId() << " " << GenLeptons[i]->Status() 
-           << " " << GenLeptons[i]->Pt() << " " << GenLeptons[i]->Eta() << " " 
-           << GenLeptons[i]->Phi() << endl;
+     
+  if (printDebug) cerr << "Check Generator Leptons Finding" << endl;
+  for (UInt_t i=0; i<GenLeptons->GetEntries(); ++i) {
+    if (GenLeptons->At(i)->AbsPdgId() == 11) {
+      fGenElectronPt->Fill(GenLeptons->At(i)->Pt());
+      fGenElectronEta->Fill(GenLeptons->At(i)->Eta());
+      fGenElectronPhi->Fill(GenLeptons->At(i)->Phi());
+    }
+    if (GenLeptons->At(i)->AbsPdgId() == 13) {
+      fGenMuonPt->Fill(GenLeptons->At(i)->Pt());
+      fGenMuonEta->Fill(GenLeptons->At(i)->Eta());
+      fGenMuonPhi->Fill(GenLeptons->At(i)->Phi());      
+    }
+    if (GenLeptons->At(i)->AbsPdgId() == 15) {
+      fGenTauPt->Fill(GenLeptons->At(i)->Pt());
+      fGenTauEta->Fill(GenLeptons->At(i)->Eta());
+      fGenTauPhi->Fill(GenLeptons->At(i)->Phi());      
+    } 
+    if (printDebug) {
+      cout << i << " " << GenLeptons->At(i)->PdgId() << " " << GenLeptons->At(i)->Status() 
+           << " " << GenLeptons->At(i)->Pt() << " " << GenLeptons->At(i)->Eta() << " " 
+           << GenLeptons->At(i)->Phi() << endl;
     }
   }    
   
@@ -110,23 +138,19 @@ void ObjectCleaningMod::Process()
     //do matching to gen particle to find if it's a fake
     bool isFake = true;
     bool isFromTau = false;
-    for (UInt_t j = 0; j<GenLeptons.GetEntries(); j++) {
-      double dphi = (abs(GenLeptons[j]->Phi() - mu->Phi()) > M_PI) 
-        ? abs(GenLeptons[j]->Phi() - mu->Phi()) - 2*M_PI : abs(GenLeptons[j]->Phi() - mu->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GenLeptons[j]->Eta() - mu->Eta())*
-                                  abs(GenLeptons[j]->Eta() - mu->Eta()));       
+    for (UInt_t j = 0; j<GenLeptons->GetEntries(); j++) {
+      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),mu->Mom());    
       if (deltaR < 0.15) {
-        if (abs(GenLeptons[j]->PdgId()) == 13) {
+        if (abs(GenLeptons->At(j)->PdgId()) == 13) {
           isFake = false;
           if (printDebug) 
             cout << "Matched: " 
                  << mu->Pt() << " " << mu->Eta() << " " << mu->Phi() << endl
-                 << GenLeptons[j]->PdgId() << " " << GenLeptons[j]->Pt() << " " 
-                 << GenLeptons[j]->Eta() << " " << GenLeptons[j]->Phi() << endl;
+                 << GenLeptons->At(j)->PdgId() << " " << GenLeptons->At(j)->Pt() << " " 
+                 << GenLeptons->At(j)->Eta() << " " << GenLeptons->At(j)->Phi() << endl;
           //debug = true;
         }
-        if (abs(GenLeptons[j]->PdgId()) == 15) {
+        if (abs(GenLeptons->At(j)->PdgId()) == 15) {
           isFromTau = true;	 
         }	 
       }
@@ -208,8 +232,8 @@ void ObjectCleaningMod::Process()
     }    
     
     //Define the ID Cuts
-    const int nCuts = 3;
-    double cutValue[nCuts] = {0.1, 3.0, 3.0};
+    const int nCuts = 4;
+    double cutValue[nCuts] = {0.1, 3.0, 3.0, 1.5};
     bool passCut[nCuts] = {false, false, false,};
     
     double muonD0 = -0.05;
@@ -222,6 +246,9 @@ void ObjectCleaningMod::Process()
     if(mu->IsoR03EmEt() + 
        mu->IsoR03HadEt() < cutValue[2]) passCut[2] = true;
     
+    if(mu->Pt() > 1.5)
+      passCut[3] = true;
+
     // Final decision
     bool allCuts = true;
     for(int c=0; c<nCuts; c++) {
@@ -279,29 +306,27 @@ void ObjectCleaningMod::Process()
     //do matching to gen particle to find if it's a fake
     bool isFake = true;
     bool isFromTau = false;
-    for (UInt_t j = 0; j<GenLeptons.GetEntries(); j++) {
-      double dphi = (abs(GenLeptons[j]->Phi() - e->Phi()) > M_PI) ? 
-        abs(GenLeptons[j]->Phi() - e->Phi()) - 2*M_PI : abs(GenLeptons[j]->Phi() - e->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GenLeptons[j]->Eta() - e->Eta())*
-                                  abs(GenLeptons[j]->Eta() - e->Eta()));       
+    for (UInt_t j = 0; j<GenLeptons->GetEntries(); j++) {
+      double dphi = (abs(GenLeptons->At(j)->Phi() - e->Phi()) > M_PI) ? 
+        abs(GenLeptons->At(j)->Phi() - e->Phi()) - 2*M_PI : abs(GenLeptons->At(j)->Phi() - e->Phi());
+      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),e->Mom());
       if (deltaR < 0.15) {
-        if (abs(GenLeptons[j]->PdgId()) == 11) {
+        if (abs(GenLeptons->At(j)->PdgId()) == 11) {
           isFake = false;
           if (printDebug) 
             cout << "Matched: " 
                  << e->Pt() << " " << e->Eta() << " " << e->Phi() << endl
-                 << GenLeptons[j]->PdgId() << " " << GenLeptons[j]->Pt() 
-                 << " " << GenLeptons[j]->Eta() << " " << GenLeptons[j]->Phi() << endl;
+                 << GenLeptons->At(j)->PdgId() << " " << GenLeptons->At(j)->Pt() 
+                 << " " << GenLeptons->At(j)->Eta() << " " << GenLeptons->At(j)->Phi() << endl;
           //debug = true;
         }
-        if (abs(GenLeptons[j]->PdgId()) == 15) {
+        if (abs(GenLeptons->At(j)->PdgId()) == 15) {
           isFromTau = true;	 
         }	 
       }
     }       
     
-    double electronepInv = fabs(1./e->SuperClusterE()- 1./e->E());
+    double electronepInv = fabs(1./e->SCluster()->Energy()- 1./e->E());
     
     
     //Check Electron Iso calculation:
@@ -340,7 +365,8 @@ void ObjectCleaningMod::Process()
     fAllElectronTrackIso->Fill(e->TrackIsolation());
     fAllElectronComputedEcalIso->Fill(computedEcalIso);
     fAllElectronComputedTrackIso->Fill(computedTrackIso);
-    
+    fAllElectronTrackChi2->Fill(e->Trk()->Chi2());
+    fAllElectronTrackNHits->Fill(e->Trk()->NHits());
     if (!isFake) {       
       fRealElectronPtHist->Fill(e->Pt());
       fRealElectronEtaHist->Fill(e->Eta());
@@ -366,6 +392,8 @@ void ObjectCleaningMod::Process()
       fRealElectronTrackIso->Fill(e->TrackIsolation()); 
       fRealElectronComputedEcalIso->Fill(computedEcalIso);
       fRealElectronComputedTrackIso->Fill(computedTrackIso);
+      fRealElectronTrackChi2->Fill(e->Trk()->Chi2());
+      fRealElectronTrackNHits->Fill(e->Trk()->NHits());
     } else {
       fFakeElectronPtHist->Fill(e->Pt());
       fFakeElectronEtaHist->Fill(e->Eta());
@@ -391,6 +419,8 @@ void ObjectCleaningMod::Process()
       fFakeElectronTrackIso->Fill(e->TrackIsolation());
       fFakeElectronComputedEcalIso->Fill(computedEcalIso);
       fFakeElectronComputedTrackIso->Fill(computedTrackIso);
+      fFakeElectronTrackChi2->Fill(e->Trk()->Chi2());
+      fFakeElectronTrackNHits->Fill(e->Trk()->NHits());
     }
     
     //cuts depend on electron classification
@@ -447,8 +477,10 @@ void ObjectCleaningMod::Process()
                            false, false, false, false, false,
                            false};
     
-    if(e->ESuperClusterOverP() < EoverPInMax[cutClass]) 		      passCut[0] = true;
-    if(e->ESuperClusterOverP() > EoverPInMin[cutClass]) 		      passCut[1] = true;
+    //if(e->ESuperClusterOverP() < EoverPInMax[cutClass])
+ 		      passCut[0] = true;
+    //if(e->ESuperClusterOverP() > EoverPInMin[cutClass]) 		
+      passCut[1] = true;
     if(fabs(e->DeltaEtaSuperClusterTrackAtVtx()) < deltaEtaIn[cutClass])      passCut[2] = true;
     if(fabs(e->DeltaPhiSuperClusterTrackAtVtx()) < deltaPhiIn[cutClass])      passCut[3] = true;
     if(e->HadronicOverEm() < HoverE[cutClass])                                passCut[4] = true;
@@ -456,21 +488,23 @@ void ObjectCleaningMod::Process()
       passCut[5] = true;
     //comment out these two for now because this variable 
     //seems to be incorrect in CMSSW 2_0_8                              
-    //if(e->ESeedClusterOverPout() < EoverPOutMax[cutClass]) 
-    passCut[6] = true;
-    //if(e->ESeedClusterOverPout() > EoverPOutMin[cutClass])                
-    passCut[7] = true;
+    if(e->ESeedClusterOverPout() < EoverPOutMax[cutClass])                    passCut[6] = true;
+    if(e->ESeedClusterOverPout() > EoverPOutMin[cutClass])                    passCut[7] = true;
     if(fabs(e->DeltaPhiSeedClusterTrackAtCalo()) < deltaPhiOut[cutClass])     passCut[8] = true;
     if(electronepInv < invEMinusInvP[cutClass])                               passCut[9] = true;
-    if(e->CovEtaEta() < sigmaEtaEtaMax[cutClass])  			      passCut[10] = true;
-    if(e->CovEtaEta() > sigmaEtaEtaMin[cutClass])  			      passCut[11] = true;
-    if(e->CovPhiPhi() < sigmaPhiPhiMax[cutClass])  			      passCut[12] = true;
-    if(e->CovPhiPhi() > sigmaPhiPhiMin[cutClass])  			      passCut[13] = true;
+    //if(e->CovEtaEta() < sigmaEtaEtaMax[cutClass])  			 
+     passCut[10] = true;
+    //if(e->CovEtaEta() > sigmaEtaEtaMin[cutClass])  			   
+   passCut[11] = true;
+    //if(e->CovPhiPhi() < sigmaPhiPhiMax[cutClass])  			   
+   passCut[12] = true;
+    //if(e->CovPhiPhi() > sigmaPhiPhiMin[cutClass])  			   
+   passCut[13] = true;
     if(e->TrackIsolation() < 5.0)                                             passCut[14] = true;
     if(e->CaloIsolation() < 5.0)                                              passCut[15] = true; 
     
     // Final decision
-    bool allCuts = true;
+    bool allCuts = true;  
     for(int c=0; c<nCuts; c++) {
       allCuts = allCuts & passCut[c];
     }
@@ -500,9 +534,7 @@ void ObjectCleaningMod::Process()
     for (UInt_t j=0; j<GoodMuons->GetEntries();j++) {
       double dphi = (abs(GoodMuons->At(j)->Phi() - e->Phi()) > M_PI) ? 
         abs(GoodMuons->At(j)->Phi() - e->Phi()) - 2*M_PI : abs(GoodMuons->At(j)->Phi() - e->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GoodMuons->At(j)->Eta() - e->Eta())*
-                                  abs(GoodMuons->At(j)->Eta() - e->Eta()));  
+      double deltaR = mitMath::deltaR(GoodMuons->At(j)->Mom(), e->Mom());     
       if (deltaR < 0.1) {
         isMuonOverlap = true;
         break;	 
@@ -511,13 +543,9 @@ void ObjectCleaningMod::Process()
     
     //Check whether it overlaps with another electron candidate
     bool isElectronOverlap = false;
-    for (UInt_t j=0; j<GoodElectronsVector.size(); j++) {
-      double dphi = (abs(GoodElectronsVector[j]->Phi() - e->Phi()) > M_PI) 
-        ? abs(GoodElectronsVector[j]->Phi() - e->Phi()) - 2*M_PI : 
-        abs(GoodElectronsVector[j]->Phi() - e->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GoodElectronsVector[j]->Eta() - e->Eta())*
-                                  abs(GoodElectronsVector[j]->Eta() - e->Eta()));  
+    for (UInt_t j=0; j<GoodElectronsVector.size(); j++) {      
+      double deltaR = mitMath::deltaR(GoodElectronsVector[j]->Mom(), e->Mom());
+
       if (deltaR < 0.1) {
         isElectronOverlap = true;        
         
@@ -535,10 +563,19 @@ void ObjectCleaningMod::Process()
       }
     }
     
+
+    //Debug information
+    if (e->Trk()->Pt() > 2000) {
+      cout << "!!!!!!!!!!!!!!! Track Pt: " << e->Trk()->Pt() << endl;
+      debug = true;
+    }
+
     //These are Good Electrons
-    if (allCuts
-        && abs(e->Eta()) < 2.5 //&& e->Pt() > 5.0
-        && !isMuonOverlap && !isElectronOverlap
+    bool imposeElectronID = false;
+    if ( (!imposeElectronID || allCuts)
+//          && abs(e->Eta()) < 2.5
+          && !isMuonOverlap && !isElectronOverlap    
+               
       ) {       
       fGoodElectronPtHist->Fill(e->Pt());
       fGoodElectronEtaHist->Fill(e->Eta());  
@@ -546,7 +583,7 @@ void ObjectCleaningMod::Process()
       
       GoodElectronsVector.push_back(fElectrons->At(i));   
       GoodElectronIsFake.push_back(isFake);
-      debug = isFake && !isFromTau;	
+      //debug = isFake && !isFromTau;	
     }     
   }   
   
@@ -574,9 +611,7 @@ void ObjectCleaningMod::Process()
       double dphi = (abs(GoodElectrons->At(j)->Phi() - jet->Phi()) > M_PI) 
         ? abs(GoodElectrons->At(j)->Phi() - jet->Phi()) - 2*M_PI : 
         abs(GoodElectrons->At(j)->Phi() - jet->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GoodElectrons->At(j)->Eta() - jet->Eta())*
-                                  abs(GoodElectrons->At(j)->Eta() - jet->Eta()));  
+      double deltaR = mitMath::deltaR(GoodElectrons->At(j)->Mom(),jet->Mom());  
       if (deltaR < 0.1) {
 	isElectronOverlap = true;	 	 	
 	break;	 	 
@@ -590,16 +625,14 @@ void ObjectCleaningMod::Process()
     fAllJetPtEta2DHist->Fill(jet->Pt(), jet->Eta());
     
     //check whether a jet is actually from a lepton
-    for (UInt_t j=0; j<GenLeptons.GetEntries(); j++) {
-      double dphi = (abs(GenLeptons[j]->Phi() - jet->Phi()) > M_PI) 
-        ? abs(GenLeptons[j]->Phi() - jet->Phi()) - 2*M_PI : abs(GenLeptons[j]->Phi() - jet->Phi());
-      double deltaR = TMath::Sqrt(dphi*dphi + 
-                                  abs(GenLeptons[j]->Eta() - jet->Eta())*
-                                  abs(GenLeptons[j]->Eta() - jet->Eta()));  
+    for (UInt_t j=0; j<GenLeptons->GetEntries(); j++) {
+      double dphi = (abs(GenLeptons->At(j)->Phi() - jet->Phi()) > M_PI) 
+        ? abs(GenLeptons->At(j)->Phi() - jet->Phi()) - 2*M_PI : abs(GenLeptons->At(j)->Phi() - jet->Phi());
+      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),jet->Mom());
       if (deltaR < 0.1) {
 	isFromGenLepton = true;	
 	//debug = true;
-	if (abs(GenLeptons[j]->PdgId()) == 15) {
+	if (abs(GenLeptons->At(j)->PdgId()) == 15) {
 	  // isFromTau = true;	 
 	}
 	if (printDebug) cout << "Fake Jet Found" << endl;
@@ -789,13 +822,14 @@ void ObjectCleaningMod::Process()
    fMetMuonCorrectedPhiHist->Fill(muonCorrectedMet->Phi());
    
    //Save Objects for Other Modules to use
-   AddObjThisEvt(GoodElectrons, "GoodElectrons");
-   AddObjThisEvt(GoodMuons, "GoodMuons");
-   AddObjThisEvt(GoodCentralJets, "GoodCentralJets");
-   AddObjThisEvt(GoodForwardJets, "GoodForwardJets");
-   AddObjThisEvt(muonCorrectedMet, "muonCorrectedMet");   
+   AddObjThisEvt(GoodElectrons, fGoodElectronsName.c_str());
+   AddObjThisEvt(GoodMuons, fGoodMuonsName.c_str());
+   AddObjThisEvt(GoodCentralJets, fGoodCentralJetsName.c_str());
+   AddObjThisEvt(GoodForwardJets, fGoodForwardJetsName.c_str());
+   AddObjThisEvt(muonCorrectedMet, fMuonCorrectedMetName.c_str());
+   AddObjThisEvt(GenLeptons,fGenLeptonsName.c_str());
 
-   //Final Summary Debug Output
+   //Final Summary Debug Output   
    if ( 
        printDebug &&
        debug )
@@ -828,14 +862,13 @@ void ObjectCleaningMod::Process()
             << muonCorrectedMet->Phi() << endl;    	  
        
        
-       //print out Generator BLock
+       //print out Generator BLock       
        LoadBranch(fMCPartName);
-       if (debug) cout << "Generator Block" << endl;
+       cout << "Generator Block" << endl;
        for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
-	 MCParticle* p = fParticles->At(i); 
-	 if (debug)
-	   cout << i << " " << p->PdgId() << " " << p->Status() << " " << p->Pt() 
-                << " " << p->Eta() << " " << p->Phi() << endl;	    	 
+	 MCParticle* p = fParticles->At(i); 	 
+         cout << i << " " << p->PdgId() << " " << p->Status() << " " << p->Pt() 
+              << " " << p->Eta() << " " << p->Phi() << endl;	    	 
        }
        
      }
@@ -858,21 +891,43 @@ void ObjectCleaningMod::SlaveBegin()
   ReqBranch(fJetName,                   fJets);
   ReqBranch(fMetName,                   fMet);
 
-  fGenPtHist                       = new TH1D("hGenPtHist",";p_{t};#",100,0.,25.);
+  fGenPtHist                       = new TH1D("hGenPtHist",";p_{t};#",200,0.,200.);
   fGenEtaHist                      = new TH1D("hGenEtaHist",";#eta;#",160,-8.,8.);
+  fGenPhiHist                      = new TH1D("hGenPhiHist",";#phi;#",200,-3.2,3.2);
+  fGenElectronPt                   = new TH1D("hGenElectronPt",";p_{t};#",250,0.,1000);
+  fGenElectronEta                  = new TH1D("hGenElectronEta",";#eta;#",160,-8.,8.);
+  fGenElectronPhi                  = new TH1D("hGenElectronPhi",";#phi;#",200,-3.2,3.2);
+  fGenMuonPt                       = new TH1D("hGenMuonPt",";p_{t};#",200,0.,200.);
+  fGenMuonEta                      = new TH1D("hGenMuonEta",";#eta;#",160,-8.,8.);
+  fGenMuonPhi                      = new TH1D("hGenMuonPhi",";#phi;#",200,-3.2,3.2);
+  fGenTauPt                        = new TH1D("hGenTauPt",";p_{t};#",200,0.,200.);
+  fGenTauEta                       = new TH1D("hGenTauEta",";#eta;#",160,-8.,8.);
+  fGenTauPhi                       = new TH1D("hGenTauPhi",";#phi;#",200,-3.2,3.2);
+  AddOutput(fGenPtHist);
+  AddOutput(fGenEtaHist); 
+  AddOutput(fGenPhiHist); 
+  AddOutput(fGenElectronPt);
+  AddOutput(fGenElectronEta); 
+  AddOutput(fGenElectronPhi); 
+  AddOutput(fGenMuonPt);
+  AddOutput(fGenMuonEta); 
+  AddOutput(fGenMuonPhi); 
+  AddOutput(fGenTauPt);
+  AddOutput(fGenTauEta); 
+  AddOutput(fGenTauPhi); 
+
+
   fTrackPtHist                     = new TH1D("hTrackPtHist",";p_{t};#",100,0.,25.);
   fTrackThetaHist                  = new TH1D("hTrackThetaHist",";#theta;#",100,-5.0,5.0);
   fTrackPhiHist                    = new TH1D("hTrackPhiHist",";p_{t};#",100,-3.5,3.5);
   AddOutput(fTrackPhiHist);
-  AddOutput(fGenPtHist);
-  AddOutput(fGenEtaHist);
   AddOutput(fTrackPtHist);  
   AddOutput(fTrackThetaHist);
    
 
   //Muon Plots
-  fAllMuonPtHist                   = new TH1D("hAllMuonPtHist",";p_{t};#",25,0.,200.);
-  fAllMuonEtaHist                  = new TH1D("hAllMuonEtaHist",";#eta;#",21,-5.,5.);
+  fAllMuonPtHist                   = new TH1D("hAllMuonPtHist",";p_{t};#",200,0.,200.);
+  fAllMuonEtaHist                  = new TH1D("hAllMuonEtaHist",";#eta;#",100,-5.,5.);
   fAllMuonChi2                     = new TH1D("hAllMuonChi2",";Chi2;#",51,0,50);
   fAllMuonNHits                    = new TH1D("hAllMuonNHits",";NHits;#",71,0,70);
   fAllMuonBestTrackD0              = new TH1D("hAllMuonBestTrackD0",";BestTrackD0;#",100,0,0.1);
@@ -881,23 +936,23 @@ void ObjectCleaningMod::SlaveBegin()
   fAllMuonIsoR03HadEt              = new TH1D("hAllMuonIsoR03HadEt", ";IsoR03HadEt;#",100,0,10); 
   fAllMuonIsoR03EmAndHadEt         = new TH1D("hAllMuonIsoR03EmAndHadEt", 
                                               ";IsoR03EmAndHadEt;#",100,0,10);
-  fAllMuonIsoR03HoEt               = new TH1D("hAllMuonIsoR03HoEt",  ";IsoR03HoEt;#",20,0,10);
+  fAllMuonIsoR03HoEt               = new TH1D("hAllMuonIsoR03HoEt",  ";IsoR03HoEt;#",100,0,10);
   fAllMuonIsoR03NTracks            = new TH1D("hAllMuonIsoR03NTracks", ";IsoR03NTracks;#",50,0,50);
   fAllMuonIsoR03NJets              = new TH1D("hAllMuonIsoR03NJets",  ";IsoR03NJets;#",10,0,10);
-  fAllMuonIsoR05SumPt              = new TH1D("hAllMuonIsoR05SumPt", ";IsoR05SumPt;#",20,0,10);
-  fAllMuonIsoR05EmEt               = new TH1D("hAllMuonIsoR05EmEt", ";IsoR05EmEt;#",20,0,10);
-  fAllMuonIsoR05HadEt              = new TH1D("hAllMuonIsoR05HadEt",  ";IsoR05HadEt;#",20,0,10);
-  fAllMuonIsoR05HoEt               = new TH1D("hAllMuonIsoR05HoEt",  ";IsoR05HoEt;#",20,0,10);
+  fAllMuonIsoR05SumPt              = new TH1D("hAllMuonIsoR05SumPt", ";IsoR05SumPt;#",100,0,10);
+  fAllMuonIsoR05EmEt               = new TH1D("hAllMuonIsoR05EmEt", ";IsoR05EmEt;#",100,0,10);
+  fAllMuonIsoR05HadEt              = new TH1D("hAllMuonIsoR05HadEt",  ";IsoR05HadEt;#",100,0,10);
+  fAllMuonIsoR05HoEt               = new TH1D("hAllMuonIsoR05HoEt",  ";IsoR05HoEt;#",100,0,10);
   fAllMuonIsoR05NTracks            = new TH1D("hAllMuonIsoR05NTracks",";IsoR05NTracks;#",50,0,50);
   fAllMuonIsoR05NJets              = new TH1D("hAllMuonIsoR05NJets",  ";IsoR05NJets;#",10,0,10);
-  fAllMuonEmEnergy                 = new TH1D("hAllMuonEmEnergy",";EmEnergy;#",50,0,10);
-  fAllMuonHadEnergy                = new TH1D("hAllMuonHadEnergy",";HadEnergy;#",60,0,30);
-  fAllMuonHoEnergy                 = new TH1D("hAllMuonHoEnergy",";HoEnergy;#",50,0,10);
-  fAllMuonEmS9Energy               = new TH1D("hAllMuonEmS9Energy",";EmS9Energy;#",50,0,10);
-  fAllMuonHadS9Energy              = new TH1D("hAllMuonHadS9Energy",";HadS9Energy;#",60,0,30);
-  fAllMuonHoS9Energy               = new TH1D("hAllMuonHoS9Energy",";HoS9Energy;#",50,0,10);
-  fRealMuonPtHist                  = new TH1D("hRealMuonPtHist",";p_{t};#",25,0.,200.);
-  fRealMuonEtaHist                 = new TH1D("hRealMuonEtaHist",";#eta;#",21,-5.,5.);
+  fAllMuonEmEnergy                 = new TH1D("hAllMuonEmEnergy",";EmEnergy;#",100,0,10);
+  fAllMuonHadEnergy                = new TH1D("hAllMuonHadEnergy",";HadEnergy;#",100,0,30);
+  fAllMuonHoEnergy                 = new TH1D("hAllMuonHoEnergy",";HoEnergy;#",100,0,10);
+  fAllMuonEmS9Energy               = new TH1D("hAllMuonEmS9Energy",";EmS9Energy;#",100,0,10);
+  fAllMuonHadS9Energy              = new TH1D("hAllMuonHadS9Energy",";HadS9Energy;#",100,0,30);
+  fAllMuonHoS9Energy               = new TH1D("hAllMuonHoS9Energy",";HoS9Energy;#",100,0,10);
+  fRealMuonPtHist                  = new TH1D("hRealMuonPtHist",";p_{t};#",200,0.,200.);
+  fRealMuonEtaHist                 = new TH1D("hRealMuonEtaHist",";#eta;#",100,-5.,5.);
   fRealMuonChi2                    = new TH1D("hRealMuonChi2",";Chi2;#",51,0,50);
   fRealMuonNHits                   = new TH1D("hRealMuonNHits",";NHits;#",71,0,70);
   fRealMuonBestTrackD0             = new TH1D("hRealMuonBestTrackD0",";BestTrackD0;#",100,0,0.1);
@@ -906,23 +961,23 @@ void ObjectCleaningMod::SlaveBegin()
   fRealMuonIsoR03HadEt             = new TH1D("hRealMuonIsoR03HadEt",";IsoR03HadEt;#",100,0,10);
   fRealMuonIsoR03EmAndHadEt        = new TH1D("hRealMuonIsoR03EmAndHadEt",
                                               ";IsoR03EmAndHadEt;#",100,0,10);
-  fRealMuonIsoR03HoEt              = new TH1D("hRealMuonIsoR03HoEt",";IsoR03HoEt;#",20,0,10);
+  fRealMuonIsoR03HoEt              = new TH1D("hRealMuonIsoR03HoEt",";IsoR03HoEt;#",100,0,10);
   fRealMuonIsoR03NTracks           = new TH1D("hRealMuonIsoR03NTracks",";IsoR03NTracks;#",50,0,50);
   fRealMuonIsoR03NJets             = new TH1D("hRealMuonIsoR03NJets", ";IsoR03NJets;#",10,0,10);
-  fRealMuonIsoR05SumPt             = new TH1D("hRealMuonIsoR05SumPt", ";IsoR05SumPt;#",20,0,10);
-  fRealMuonIsoR05EmEt              = new TH1D("hRealMuonIsoR05EmEt", ";IsoR05EmEt;#",20,0,10);
-  fRealMuonIsoR05HadEt             = new TH1D("hRealMuonIsoR05HadEt", ";IsoR05HadEt;#",20,0,10);
-  fRealMuonIsoR05HoEt              = new TH1D("hRealMuonIsoR05HoEt", ";IsoR05HoEt;#",20,0,10);
+  fRealMuonIsoR05SumPt             = new TH1D("hRealMuonIsoR05SumPt", ";IsoR05SumPt;#",100,0,10);
+  fRealMuonIsoR05EmEt              = new TH1D("hRealMuonIsoR05EmEt", ";IsoR05EmEt;#",100,0,10);
+  fRealMuonIsoR05HadEt             = new TH1D("hRealMuonIsoR05HadEt", ";IsoR05HadEt;#",100,0,10);
+  fRealMuonIsoR05HoEt              = new TH1D("hRealMuonIsoR05HoEt", ";IsoR05HoEt;#",100,0,10);
   fRealMuonIsoR05NTracks           = new TH1D("hRealMuonIsoR05NTracks",";IsoR05NTracks;#",50,0,50);
   fRealMuonIsoR05NJets             = new TH1D("hRealMuonIsoR05NJets",";IsoR05NJets;#",10,0,10);
-  fRealMuonEmEnergy                = new TH1D("hRealMuonEmEnergy",";EmEnergy;#",50,0,10);
-  fRealMuonHadEnergy               = new TH1D("hRealMuonHadEnergy",";HadEnergy;#",60,0,30);
-  fRealMuonHoEnergy                = new TH1D("hRealMuonHoEnergy",";HoEnergy;#",50,0,10);
-  fRealMuonEmS9Energy              = new TH1D("hRealMuonEmS9Energy",";EmS9Energy;#",50,0,10);
-  fRealMuonHadS9Energy             = new TH1D("hRealMuonHadS9Energy",";HadS9Energy;#",60,0,30);
-  fRealMuonHoS9Energy              = new TH1D("hRealMuonHoS9Energy",";HoS9Energy;#",50,0,10);
-  fFakeMuonPtHist                  = new TH1D("hFakeMuonPtHist",";p_{t};#",25,0.,200.);
-  fFakeMuonEtaHist                 = new TH1D("hFakeMuonEtaHist",";#eta;#",21,-5.,5.);
+  fRealMuonEmEnergy                = new TH1D("hRealMuonEmEnergy",";EmEnergy;#",100,0,10);
+  fRealMuonHadEnergy               = new TH1D("hRealMuonHadEnergy",";HadEnergy;#",100,0,30);
+  fRealMuonHoEnergy                = new TH1D("hRealMuonHoEnergy",";HoEnergy;#",100,0,10);
+  fRealMuonEmS9Energy              = new TH1D("hRealMuonEmS9Energy",";EmS9Energy;#",100,0,10);
+  fRealMuonHadS9Energy             = new TH1D("hRealMuonHadS9Energy",";HadS9Energy;#",100,0,30);
+  fRealMuonHoS9Energy              = new TH1D("hRealMuonHoS9Energy",";HoS9Energy;#",100,0,10);
+  fFakeMuonPtHist                  = new TH1D("hFakeMuonPtHist",";p_{t};#",200,0.,200.);
+  fFakeMuonEtaHist                 = new TH1D("hFakeMuonEtaHist",";#eta;#",100,-5.,5.);
   fFakeMuonChi2                    = new TH1D("hFakeMuonChi2",";Chi2;#",51,0,50);
   fFakeMuonNHits                   = new TH1D("hFakeMuonNHits", ";NHits;#",71,0,70);
   fFakeMuonBestTrackD0             = new TH1D("hFakeMuonBestTrackD0",";BestTrackD0;#",100,0,0.1);
@@ -931,22 +986,22 @@ void ObjectCleaningMod::SlaveBegin()
   fFakeMuonIsoR03HadEt             = new TH1D("hFakeMuonIsoR03HadEt",";IsoR03HadEt;#",100,0,10);
   fFakeMuonIsoR03EmAndHadEt        = new TH1D("hFakeMuonIsoR03EmAndHadEt",
                                               ";IsoR03EmAndHadEt;#",100,0,10);
-  fFakeMuonIsoR03HoEt              = new TH1D("hFakeMuonIsoR03HoEt",";IsoR03HoEt;#",20,0,10);
+  fFakeMuonIsoR03HoEt              = new TH1D("hFakeMuonIsoR03HoEt",";IsoR03HoEt;#",100,0,10);
   fFakeMuonIsoR03NTracks           = new TH1D("hFakeMuonIsoR03NTracks",";IsoR03NTracks;#",50,0,50);
   fFakeMuonIsoR03NJets             = new TH1D("hFakeMuonIsoR03NJets",";IsoR03NJets;#",10,0,10);
-  fFakeMuonIsoR05SumPt             = new TH1D("hFakeMuonIsoR05SumPt",";IsoR05SumPt;#",20,0,10);
-  fFakeMuonIsoR05EmEt              = new TH1D("hFakeMuonIsoR05EmEt",";IsoR05EmEt;#",20,0,10);
-  fFakeMuonIsoR05HadEt             = new TH1D("hFakeMuonIsoR05HadEt",";IsoR05HadEt;#",20,0,10);
-  fFakeMuonIsoR05HoEt              = new TH1D("hFakeMuonIsoR05HoEt",";IsoR05HoEt;#",20,0,10);
+  fFakeMuonIsoR05SumPt             = new TH1D("hFakeMuonIsoR05SumPt",";IsoR05SumPt;#",100,0,10);
+  fFakeMuonIsoR05EmEt              = new TH1D("hFakeMuonIsoR05EmEt",";IsoR05EmEt;#",100,0,10);
+  fFakeMuonIsoR05HadEt             = new TH1D("hFakeMuonIsoR05HadEt",";IsoR05HadEt;#",100,0,10);
+  fFakeMuonIsoR05HoEt              = new TH1D("hFakeMuonIsoR05HoEt",";IsoR05HoEt;#",100,0,10);
   fFakeMuonIsoR05NTracks           = new TH1D("hFakeMuonIsoR05NTracks",";IsoR05NTracks;#",50,0,50);
   fFakeMuonIsoR05NJets             = new TH1D("hFakeMuonIsoR05NJets",";IsoR05NJets;#",10,0,10);
-  fFakeMuonEmEnergy                = new TH1D("hFakeMuonEmEnergy",";EmEnergy;#",50,0,10);
-  fFakeMuonHadEnergy               = new TH1D("hFakeMuonHadEnergy",";HadEnergy;#",60,0,30);
-  fFakeMuonHoEnergy                = new TH1D("hFakeMuonHoEnergy",";HoEnergy;#",50,0,10);
-  fFakeMuonEmS9Energy              = new TH1D("hFakeMuonEmS9Energy",";EmS9Energy;#",50,0,10);
-  fFakeMuonHadS9Energy             = new TH1D("hFakeMuonHadS9Energy",";HadS9Energy;#",60,0,30);
-  fFakeMuonHoS9Energy              = new TH1D("hFakeMuonHoS9Energy",";HoS9Energy;#",50,0,10); 
-  fGoodMuonPtHist                  = new TH1D("hGoodMuonPtHist",";p_{t};#",25,0.,200.);
+  fFakeMuonEmEnergy                = new TH1D("hFakeMuonEmEnergy",";EmEnergy;#",100,0,10);
+  fFakeMuonHadEnergy               = new TH1D("hFakeMuonHadEnergy",";HadEnergy;#",100,0,30);
+  fFakeMuonHoEnergy                = new TH1D("hFakeMuonHoEnergy",";HoEnergy;#",100,0,10);
+  fFakeMuonEmS9Energy              = new TH1D("hFakeMuonEmS9Energy",";EmS9Energy;#",100,0,10);
+  fFakeMuonHadS9Energy             = new TH1D("hFakeMuonHadS9Energy",";HadS9Energy;#",100,0,30);
+  fFakeMuonHoS9Energy              = new TH1D("hFakeMuonHoS9Energy",";HoS9Energy;#",100,0,10); 
+  fGoodMuonPtHist                  = new TH1D("hGoodMuonPtHist",";p_{t};#",200,0.,200.);
   fGoodMuonEtaHist                 = new TH1D("hGoodMuonEtaHist",";#eta;#",21,-5.,5.);
   fMuonSelection                   = new TH1D("hMuonSelection", ";MuonSelection;#",4,-1.5,2.5 ) ;  
   fRealMuonSelection               = new TH1D("hRealMuonSelection",
@@ -1033,7 +1088,7 @@ void ObjectCleaningMod::SlaveBegin()
 
   //Electron Plots
   fAllElectronPtHist                     = new TH1D("hAllElectronPtHist",";p_{t};#",100,0.,200.);  
-  fAllElectronEtaHist                    = new TH1D("hAllElectronEtaHist",";#eta;#",80,-2.,2.);
+  fAllElectronEtaHist                    = new TH1D("hAllElectronEtaHist",";#eta;#",100,-5.,5.);
   fAllElectronESuperClOverP              = new TH1D("hAllElectronESuperClOverP",
                                                    ";ESuperClOverP;#",100,0,5.0 ) ; 
   fAllElectronESeedClOverPout            = new TH1D("hAllElectronESeedClOverPout",
@@ -1065,11 +1120,11 @@ void ObjectCleaningMod::SlaveBegin()
   fAllElectronE33                        = new TH1D("hAllElectronE33",";E33;#",50,0,200 ) ; 
   fAllElectronE55                        = new TH1D("hAllElectronE55",";E55;#",50,0,200 ) ; 
   fAllElectronCovEtaEta                  = new TH1D("hAllElectronCovEtaEta",
-                                                    ";CovEtaEta;#",100,0,1.0 ) ; 
+                                                    ";CovEtaEta * 10^4;#",200,0,2.0 ) ; 
   fAllElectronCovEtaPhi                  = new TH1D("hAllElectronCovEtaPhi",
-                                                    ";CovEtaPhi;#",100,0,1.0 ) ; 
+                                                    ";CovEtaPhi * 10^4;#",100,0,1.0 ) ; 
   fAllElectronCovPhiPhi                  = new TH1D("hAllElectronCovPhiPhi",
-                                                    ";CovPhiPhi;#",100,0,1.0 ) ; 
+                                                    ";CovPhiPhi * 10^3;#",200,0,2.0 ) ; 
   fAllElectronLat                        = new TH1D("hAllElectronLat",";Lat;#",20,0,10 ) ; 
   fAllElectronZernike20                  = new TH1D("hAllElectronZernike20",
                                                     ";Zernike20;#",20,0,10 ) ; 
@@ -1083,9 +1138,21 @@ void ObjectCleaningMod::SlaveBegin()
                                                     ";ComputedEcalIso;#",100,0,10 ) ; 
   fAllElectronComputedTrackIso           = new TH1D("hAllElectronComputedTrackIso",
                                                     ";ComputedTrackIso;#",100,0,10 ) ; 
+  fAllElectronTrackChi2                  = new TH1D("hAllElectronTrackChi2",
+                                                    ";TrackChi2;#",100,0,100 ) ; 
+  fAllElectronTrackNHits                 = new TH1D("hAllElectronTrackNHits",
+                                                    ";TrackNHits;#",100,0,100 ) ; 
+  fAllElectronPOutOverPIn                = new TH1D("hAllElectronPOutOverPIn",
+                                                    ";POutOverPIn;#",100,0,1 ) ; 
+  fAllElectronSuperClEOverTrueE          = new TH1D("hAllElectronSuperClEOverTrueE",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
+  fAllElectronPOverTrueP                 = new TH1D("hAllElectronPOverTrueP",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
+ 
+
   fRealElectronPtHist                    = new TH1D("hRealElectronPtHist",";p_{t};#",100,0.,200.);
 
-  fRealElectronEtaHist                   = new TH1D("hRealElectronEtaHist",";#eta;#",80,-2.,2.);
+  fRealElectronEtaHist                   = new TH1D("hRealElectronEtaHist",";#eta;#",100,-5.,5.);
   fRealElectronESuperClOverP             = new TH1D("hRealElectronESuperClOverP",
                                                     ";ESuperClOverP;#",100,0,5.0 ) ; 
   fRealElectronESeedClOverPout           = new TH1D("hRealElectronESeedClOverPout",
@@ -1119,11 +1186,11 @@ void ObjectCleaningMod::SlaveBegin()
   fRealElectronE33                       = new TH1D("hRealElectronE33",";E33;#",50,0,200 ) ; 
   fRealElectronE55                       = new TH1D("hRealElectronE55",";E55;#",50,0,200 ) ; 
   fRealElectronCovEtaEta                 = new TH1D("hRealElectronCovEtaEta",
-                                                    ";CovEtaEta;#",100,0,1.0 ) ; 
+                                                    ";CovEtaEta * 10^4;#",200,0,2.0 ) ; 
   fRealElectronCovEtaPhi                 = new TH1D("hRealElectronCovEtaPhi",
-                                                    ";CovEtaPhi;#",100,0,1.0 ) ; 
+                                                    ";CovEtaPhi * 10^4;#",100,0,1.0 ) ; 
   fRealElectronCovPhiPhi                 = new TH1D("hRealElectronCovPhiPhi",
-                                                    ";CovPhiPhi;#",100,0,1.0 ) ; 
+                                                    ";CovPhiPhi * 10^3;#",200,0,2.0 ) ; 
   fRealElectronLat                       = new TH1D("hRealElectronLat",";Lat;#",20,0,10 ) ; 
   fRealElectronZernike20                 = new TH1D("hRealElectronZernike20",
                                                     ";Zernike20;#",20,0,10 ) ; 
@@ -1137,8 +1204,18 @@ void ObjectCleaningMod::SlaveBegin()
                                                     ";ComputedEcalIso;#",100,0,10 ) ; 
   fRealElectronComputedTrackIso          = new TH1D("hRealElectronComputedTrackIso",
                                                     ";ComputedTrackIso;#",100,0,10 ) ; 
+  fRealElectronTrackChi2                  = new TH1D("hRealElectronTrackChi2",
+                                                    ";TrackChi2;#",100,0,100 ) ; 
+  fRealElectronTrackNHits                 = new TH1D("hRealElectronTrackNHits",
+                                                    ";TrackNHits;#",100,0,100 ) ; 
+  fRealElectronPOutOverPIn                = new TH1D("hRealElectronPOutOverPIn",
+                                                    ";POutOverPIn;#",100,0,1 ) ; 
+  fRealElectronSuperClEOverTrueE          = new TH1D("hRealElectronSuperClEOverTrueE",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
+  fRealElectronPOverTrueP                 = new TH1D("hRealElectronPOverTrueP",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
   fFakeElectronPtHist                    = new TH1D("hFakeElectronPtHist",";p_{t};#",100,0.,200.);
-  fFakeElectronEtaHist                   = new TH1D("hFakeElectronEtaHist",";#eta;#",80,-2.,2.);
+  fFakeElectronEtaHist                   = new TH1D("hFakeElectronEtaHist",";#eta;#",100,-5.,5.);
   
   fFakeElectronESuperClOverP             = new TH1D("hFakeElectronESuperClOverP",
                                                     ";ESuperClOverP;#",100,0,5.0 ) ; 
@@ -1173,11 +1250,11 @@ void ObjectCleaningMod::SlaveBegin()
   fFakeElectronE33                       = new TH1D("hFakeElectronE33",";E33;#",50,0,200 ) ; 
   fFakeElectronE55                       = new TH1D("hFakeElectronE55",";E55;#",50,0,200 ) ; 
   fFakeElectronCovEtaEta                 = new TH1D("hFakeElectronCovEtaEta",
-                                                    ";CovEtaEta;#",100,0,1.0 ) ; 
+                                                    ";CovEtaEta * 10^4;#",200,0,2.0 ) ; 
   fFakeElectronCovEtaPhi                 = new TH1D("hFakeElectronCovEtaPhi",
-                                                    ";CovEtaPhi;#",100,0,1.0 ) ; 
+                                                    ";CovEtaPhi * 10^4;#",100,0,1.0 ) ; 
   fFakeElectronCovPhiPhi                 = new TH1D("hFakeElectronCovPhiPhi",
-                                                    ";CovPhiPhi;#",100,0,1.0 ) ; 
+                                                    ";CovPhiPhi * 10^3;#",200,0,2.0 ) ; 
   fFakeElectronLat                       = new TH1D("hFakeElectronLat",";Lat;#",20,0,10 ) ; 
   fFakeElectronZernike20                 = new TH1D("hFakeElectronZernike20",
                                                     ";Zernike20;#",20,0,10 ) ; 
@@ -1191,6 +1268,16 @@ void ObjectCleaningMod::SlaveBegin()
                                                     ";ComputedEcalIso;#",100,0,10 ) ; 
   fFakeElectronComputedTrackIso          = new TH1D("hFakeElectronComputedTrackIso",
                                                     ";ComputedTrackIso;#",100,0,10 ) ; 
+  fFakeElectronTrackChi2                  = new TH1D("hFakeElectronTrackChi2",
+                                                    ";TrackChi2;#",100,0,100 ) ; 
+  fFakeElectronTrackNHits                 = new TH1D("hFakeElectronTrackNHits",
+                                                    ";TrackNHits;#",100,0,100 ) ; 
+  fFakeElectronPOutOverPIn                = new TH1D("hFakeElectronPOutOverPIn",
+                                                    ";POutOverPIn;#",100,0,1 ) ; 
+  fFakeElectronSuperClEOverTrueE          = new TH1D("hFakeElectronSuperClEOverTrueE",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
+  fFakeElectronPOverTrueP                 = new TH1D("hFakeElectronPOverTrueP",
+                                                    ";POutOverPIn;#",150,0,1.5 ) ; 
   fElectronSelection                     = new TH1D("hElectronSelection",
                                                     ";ElectronSelection;#",18,-1.5,16.5 ) ; 
   fRealElectronSelection                 = new TH1D("hRealElectronSelection",
@@ -1202,6 +1289,8 @@ void ObjectCleaningMod::SlaveBegin()
   fGoodElectronClassification            = new TH1D("hGoodElectronClassification",
                                                     ";Good Electron Classification;#",51,0,50 ) ; 
   
+
+
   AddOutput(fAllElectronPtHist);
   AddOutput(fAllElectronEtaHist);
   AddOutput(fAllElectronESuperClOverP);
@@ -1230,6 +1319,12 @@ void ObjectCleaningMod::SlaveBegin()
   AddOutput(fAllElectronTrackIso);
   AddOutput(fAllElectronComputedEcalIso);
   AddOutput(fAllElectronComputedTrackIso);
+  AddOutput(fAllElectronTrackChi2);
+  AddOutput(fAllElectronTrackNHits);
+  AddOutput(fAllElectronPOutOverPIn);
+  AddOutput(fAllElectronSuperClEOverTrueE);
+  AddOutput(fAllElectronPOverTrueP);
+
   AddOutput(fRealElectronPtHist);
   AddOutput(fRealElectronEtaHist);
   AddOutput(fRealElectronESuperClOverP);
@@ -1258,6 +1353,12 @@ void ObjectCleaningMod::SlaveBegin()
   AddOutput(fRealElectronTrackIso);
   AddOutput(fRealElectronComputedEcalIso);
   AddOutput(fRealElectronComputedTrackIso);
+  AddOutput(fRealElectronTrackChi2);
+  AddOutput(fRealElectronTrackNHits);
+  AddOutput(fRealElectronPOutOverPIn);
+  AddOutput(fRealElectronSuperClEOverTrueE);
+  AddOutput(fRealElectronPOverTrueP);
+
   AddOutput(fFakeElectronPtHist);
   AddOutput(fFakeElectronEtaHist);
   AddOutput(fFakeElectronESuperClOverP);
@@ -1286,13 +1387,17 @@ void ObjectCleaningMod::SlaveBegin()
   AddOutput(fFakeElectronTrackIso);
   AddOutput(fFakeElectronComputedEcalIso);
   AddOutput(fFakeElectronComputedTrackIso);
+  AddOutput(fFakeElectronTrackChi2);
+  AddOutput(fFakeElectronTrackNHits);
+  AddOutput(fFakeElectronPOutOverPIn);
+  AddOutput(fFakeElectronSuperClEOverTrueE);
+  AddOutput(fFakeElectronPOverTrueP);
   AddOutput(fElectronSelection);
   AddOutput(fRealElectronSelection);
   AddOutput(fFakeElectronSelection);
   AddOutput(fGoodElectronPtHist);
   AddOutput(fGoodElectronEtaHist);
   AddOutput(fGoodElectronClassification);
-
 
   //Jet Plots
   fAllJetPtHist                   = new TH1D("hAllJetPtHist",";All Jet p_{t};#",100,0.,200.);

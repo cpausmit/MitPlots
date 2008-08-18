@@ -38,7 +38,12 @@ namespace mithep
       TString                  fElectronName;             //name of electron collection
       TString                  fJetName;                  //name of jet collection
       TString                  fMetName;                  //name of met collection
-
+      string                   fGoodElectronsName ;        
+      string                   fGoodMuonsName ;        
+      string                   fGoodCentralJetsName;        
+      string                   fGoodForwardJetsName ;        
+      string                   fMuonCorrectedMetName ;        
+      string                   fGenLeptonsName;
       MCParticleCol           *fParticles;                //!GenParticle branch
       TrackCol		      *fTracks;	                  //!Track branch
       BasicClusterCol         *fBarrelBasicClusters;      //!Basic Cluster branch
@@ -51,6 +56,17 @@ namespace mithep
 
       TH1D                    *fGenPtHist;                //!GenParticle pt histogram
       TH1D                    *fGenEtaHist;               //!GenParticle eta histogram
+      TH1D                    *fGenPhiHist;               //!GenParticle eta histogram
+      TH1D                    *fGenElectronPt;
+      TH1D                    *fGenElectronEta;
+      TH1D                    *fGenElectronPhi;
+      TH1D                    *fGenMuonPt;
+      TH1D                    *fGenMuonEta;
+      TH1D                    *fGenMuonPhi;
+      TH1D                    *fGenTauPt;
+      TH1D                    *fGenTauEta;
+      TH1D                    *fGenTauPhi;
+
       TH1D                    *fTrackPtHist;              //!Track pt histogram
       TH1D                    *fTrackThetaHist;           //!Track theta histogram
       TH1D                    *fTrackPhiHist;             //!Track eta histogram
@@ -168,6 +184,12 @@ namespace mithep
       TH1D                    *fAllElectronTrackIso;
       TH1D                    *fAllElectronComputedEcalIso;
       TH1D                    *fAllElectronComputedTrackIso;
+      TH1D                    *fAllElectronTrackChi2;
+      TH1D                    *fAllElectronTrackNHits;
+      TH1D                    *fAllElectronPOutOverPIn;
+      TH1D                    *fAllElectronSuperClEOverTrueE;
+      TH1D                    *fAllElectronPOverTrueP;
+     
       //Histrograms for Electron Object ID variables for matched real electrons
       TH1D                    *fRealElectronPtHist;
       TH1D                    *fRealElectronEtaHist;
@@ -197,6 +219,11 @@ namespace mithep
       TH1D                    *fRealElectronTrackIso;
       TH1D                    *fRealElectronComputedEcalIso;
       TH1D                    *fRealElectronComputedTrackIso;
+      TH1D                    *fRealElectronTrackChi2;
+      TH1D                    *fRealElectronTrackNHits;
+      TH1D                    *fRealElectronPOutOverPIn;
+      TH1D                    *fRealElectronSuperClEOverTrueE;
+      TH1D                    *fRealElectronPOverTrueP;
       //Histrograms for Electron Object ID variables for matched fake electrons
       TH1D                    *fFakeElectronPtHist;
       TH1D                    *fFakeElectronEtaHist;
@@ -226,6 +253,12 @@ namespace mithep
       TH1D                    *fFakeElectronTrackIso;
       TH1D                    *fFakeElectronComputedEcalIso;
       TH1D                    *fFakeElectronComputedTrackIso;
+      TH1D                    *fFakeElectronTrackChi2;
+      TH1D                    *fFakeElectronTrackNHits;
+      TH1D                    *fFakeElectronPOutOverPIn;
+      TH1D                    *fFakeElectronSuperClEOverTrueE;
+      TH1D                    *fFakeElectronPOverTrueP;
+
       TH1D                    *fElectronSelection;
       TH1D                    *fRealElectronSelection;
       TH1D                    *fFakeElectronSelection;
