@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: SuperCluster.h,v 1.1 2008/08/08 11:12:37 sixie Exp $
 //
 // SuperCluster
 //
@@ -24,19 +24,19 @@ namespace mithep
       SuperCluster() : fEnergy(0.0), fPoint(0,0,0) , fRawEnergy(-1.0) {}     
       ~SuperCluster() {}
  
-      const BasicCluster  *Cluster(UInt_t i)    const { return fClusters.At(i); }
-      UInt_t               ClusterSize() const { return fClusters.GetEntries(); }
-      Double_t             Energy() const { return fEnergy; }      
-      Double_t             Eta() const { return fPoint.Eta(); }
-      Double_t             EtaWidth() const { return fEtaWidth; }
-      Double_t             Phi() const { return fPoint.Phi(); }
-      Double_t             PhiWidth() const { return fPhiWidth; }
-      Double_t             PreshowerEnergy() const { return fPreshowerEnergy; }
-      Double_t             RawEnergy() const { return fRawEnergy; }      
-      const BasicCluster  *Seed() const;       
-      Double_t             X() const { return fPoint.X(); }
-      Double_t             Y() const { return fPoint.Y(); }
-      Double_t             Z() const { return fPoint.Z(); }                        
+      const BasicCluster  *Cluster(UInt_t i)       const { return fClusters.At(i); }
+      UInt_t               ClusterSize()           const { return fClusters.GetEntries(); }
+      Double_t             Energy()                const { return fEnergy; }      
+      Double_t             Eta()                   const { return fPoint.Eta(); }
+      Double_t             EtaWidth()              const { return fEtaWidth; }
+      Double_t             Phi()                   const { return fPoint.Phi(); }
+      Double_t             PhiWidth()              const { return fPhiWidth; }
+      Double_t             PreshowerEnergy()       const { return fPreshowerEnergy; }
+      Double_t             RawEnergy()             const { return fRawEnergy; }      
+      const BasicCluster  *Seed()                  const;       
+      Double_t             X()                     const { return fPoint.X(); }
+      Double_t             Y()                     const { return fPoint.Y(); }
+      Double_t             Z()                     const { return fPoint.Z(); }                        
       void                 Print(Option_t *opt="") const;
 
       void	           AddCluster( BasicCluster *Cluster)           { fClusters.Add(Cluster); }
