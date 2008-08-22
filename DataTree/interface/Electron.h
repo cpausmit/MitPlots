@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.13 2008/08/08 11:17:13 sixie Exp $
+// $Id: Electron.h,v 1.14 2008/08/18 10:56:03 sixie Exp $
 //
 // Electron
 //
@@ -34,6 +34,9 @@ namespace mithep
       Double_t    Mass()                           const { return 0.51099892e-3;            }
       Double_t    ESuperClusterOverP()             const { return fESuperClusterOverP;      }
       Double_t    ESeedClusterOverPout()           const { return fESeedClusterOverPout;    }
+      Double_t    ESeedClusterOverPIn()            const;
+      Double_t    PIn()                            const { return fPIn;                     }
+      Double_t    POut()                           const { return fPOut;                    }
       Double_t    DeltaEtaSuperClusterTrackAtVtx() const { return fDeltaEtaSuperClTrkAtVtx; }
       Double_t    DeltaEtaSeedClusterTrackAtCalo() const { return fDeltaEtaSeedClTrkAtCalo; }
       Double_t    DeltaPhiSuperClusterTrackAtVtx() const { return fDeltaPhiSuperClTrkAtVtx; }
@@ -50,7 +53,9 @@ namespace mithep
       Double_t    CovPhiPhi()                      const { return fCovPhiPhi;               }
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
-     
+      Double_t    PassLooseID()                    const { return fPassLooseID;             }
+      Double_t    PassTightID()                    const { return fPassTightID;             }
+      Double_t    IDLikelihood()                   const { return fIDLikelihood;            }
       Double_t    ComputeTrackIsolation   (  Double_t extRadius, Double_t intRadius, 
                                              Double_t ptLow, Double_t maxVtxZDist, 
                                              mithep::Collection<Track> *tracks              );
@@ -62,6 +67,8 @@ namespace mithep
       void	  SetSuperCluster(SuperCluster* sc)             { fSuperClusterRef = sc;           }
       void        SetESuperClusterOverP(Double_t x)             { fESuperClusterOverP = x;         }
       void        SetESeedClusterOverPout(Double_t x)           { fESeedClusterOverPout = x;       }
+      void        SetPIn(Double_t PIn)                          { fPIn = PIn;                      }
+      void        SetPOut(Double_t POut)                        { fPOut = POut;                    }
       void        SetDeltaEtaSuperClusterTrackAtVtx(Double_t x) { fDeltaEtaSuperClTrkAtVtx = x;    }
       void        SetDeltaEtaSeedClusterTrackAtCalo(Double_t x) { fDeltaEtaSeedClTrkAtCalo = x;    }
       void        SetDeltaPhiSuperClusterTrackAtVtx(Double_t x) { fDeltaPhiSuperClTrkAtVtx = x;    }
@@ -78,6 +85,9 @@ namespace mithep
       void        SetCovPhiPhi(Double_t CovPhiPhi)              { fCovPhiPhi = CovPhiPhi;          }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
+      void        SetPassLooseID(Double_t passLooseID)          { fPassLooseID = passLooseID;      }
+      void        SetPassTightID(Double_t passTightID)          { fPassTightID = passTightID;      }
+      void        SetIDLikelihood(Double_t likelihood)          { fIDLikelihood = likelihood;      }
 
     protected:
       TRef	           fGsfTrackRef;     //global combined track reference
@@ -106,6 +116,11 @@ namespace mithep
       Double_t             fCovPhiPhi;
       Double_t             fCaloIsolation;
       Double_t             fTrackIsolation;
+      Double_t             fPassLooseID;
+      Double_t             fPassTightID;
+      Double_t             fIDLikelihood;
+      Double_t             fPIn;
+      Double_t             fPOut;
 
     ClassDef(Electron, 1) // Electron class
   };
@@ -157,4 +172,15 @@ inline mithep::FourVector mithep::Electron::Mom() const
   return FourVector(P*sin(Trk()->Theta())*cos(Trk()->Phi()), 
                     P*sin(Trk()->Theta())*sin(Trk()->Phi()), P*cos(Trk()->Theta()), E());
 }
+
+inline Double_t mithep::Electron::ESeedClusterOverPIn() const
+{
+  // Return Energy of the SuperCluster Seed Divided by the magnitude 
+  // of the track momentum at the vertex
+  
+  return SCluster()->Seed()->Energy() / PIn();
+}
+
+
 #endif
+
