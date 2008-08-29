@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.14 2008/07/25 11:32:45 bendavid Exp $
+// $Id: Track.h,v 1.15 2008/07/31 13:28:42 bendavid Exp $
 //
 // Track
 //
@@ -12,20 +12,18 @@
 // phi = azimuth angle at the given point
 // dxy = -vx*sin(phi) + vy*cos(phi) [cm]
 // dsz = vz*cos(lambda) - (vx*cos(phi)+vy*sin(phi))*sin(lambda) [cm]
-
-//
 //
 // Format for fHits: (We do not use anything resembling reco::HitPattern from CMSSW because that
 // data format requires 800 bits per track!)
 // There is a one to one mapping between bits and tracker layers, where layers are enumerated
 // seperately in the PXB, PXF, TIB, TID, TOB, TEC and r-phi and stereo modules are treated as
 // seperate layers in those detectors which have them
-// (TIB L1,L2, TID L1,L2, TOB L1,L2, TEC L1,L2,L5)
+// (TIB L1,L2, TID L1,L2, TOB L1,L2, TEC L1,L2,L5).
 // 
 // A bit value of 1 indicates a hit in the corresponding layer, and 0 indicates no hit.
 //
 // Note that currently this only stores information about hits in the Tracker,
-// but muon chamber information will likely be added as well
+// but muon chamber information will likely be added as well.
 //
 // Bit-Layer assignments (starting from bit 0):
 // Bit  0: PXB L1
@@ -39,11 +37,11 @@
 // Bit  8: TIB L2 stereo
 // Bit  9: TIB L3 r-phi
 // Bit 10: TIB L4 r-phi
-// Bit 11: TID L1 phi
+// Bit 11: TID L1 r-phi
 // Bit 12: TID L1 stereo
-// Bit 13: TID L2 phi
+// Bit 13: TID L2 r-phi
 // Bit 14: TID L2 stereo
-// Bit 15: TID L3 phi
+// Bit 15: TID L3 r-phi
 // Bit 16: TOB L1 r-phi
 // Bit 17: TOB L1 stereo
 // Bit 18: TOB L2 r-phi
@@ -52,18 +50,18 @@
 // Bit 21: TOB L4 r-phi
 // Bit 22: TOB L5 r-phi
 // Bit 23: TOB L6 r-phi
-// Bit 24: TEC L1 phi
+// Bit 24: TEC L1 r-phi
 // Bit 25: TEC L1 stereo
-// Bit 26: TEC L2 phi
+// Bit 26: TEC L2 r-phi
 // Bit 27: TEC L2 stereo
-// Bit 28: TEC L3 phi
-// Bit 29: TEC L4 phi
-// Bit 30: TEC L5 phi
+// Bit 28: TEC L3 r-phi
+// Bit 29: TEC L4 r-phi
+// Bit 30: TEC L5 r-phi
 // Bit 31: TEC L5 stereo
-// Bit 32: TEC L6 phi
-// Bit 33: TEC L7 phi
-// Bit 34: TEC L8 phi
-// Bit 35: TEC L9 phi
+// Bit 32: TEC L6 r-phi
+// Bit 33: TEC L7 r-phi
+// Bit 34: TEC L8 r-phi
+// Bit 35: TEC L9 r-phi
 //
 // Authors: C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
