@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.27 2008/07/31 13:28:42 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.28 2008/08/08 11:16:09 sixie Exp $
 
 #ifndef DATATREE_LINKDEF_H
 #define DATATREE_LINKDEF_H
@@ -11,6 +11,7 @@
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
 #include "MitAna/DataTree/interface/RunInfo.h"
+#include "MitAna/DataTree/interface/MCEventInfo.h"
 
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Vertex.h"
@@ -49,6 +50,7 @@
 #pragma link C++ class mithep::EventHeader+;
 #pragma link C++ class mithep::LAHeader+;
 #pragma link C++ class mithep::RunInfo+;
+#pragma link C++ class mithep::MCEventInfo+;
 
 #pragma link C++ class mithep::BitMask32+;
 #pragma link C++ class mithep::BitMask64+;
