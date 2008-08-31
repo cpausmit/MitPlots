@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.3 2008/07/14 07:54:25 loizides Exp $
+// $Id: Jet.h,v 1.4 2008/07/16 10:00:58 bendavid Exp $
 //
 // Jet
 //
@@ -22,12 +22,12 @@ namespace mithep
       Jet() : fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
-              fN60(0), fN90(0) {}
+              fN60(0), fN90(0), fMatchedMCFlavor(0) {}
       Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(px,py,pz,e),
               fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
-              fN60(0), fN90(0) {}
+              fN60(0), fN90(0), fMatchedMCFlavor(0) {}
       ~Jet() {}
 
       FourVector	    Mom()                             const { return fMom; }
@@ -48,22 +48,24 @@ namespace mithep
       UShort_t              N()                               const { return fN; }
       UShort_t              N60()                             const { return fN60; }
       UShort_t              N90()                             const { return fN90; }
+      Int_t                 MatchedMCFlavor()                 const { return fMatchedMCFlavor; }
 
-      void                  SetMaxEInEmTowers(Double_t val)         { fMaxEInEmTowers  = val; }
-      void                  SetMaxEInHadTowers(Double_t val)        { fMaxEInHadTowers  = val; }
-      void                  SetHadEnergyInHO(Double_t val)          { fHadEnergyInHO    = val; } 
-      void                  SetHadEnergyInHB(Double_t val)          { fHadEnergyInHB    = val; } 
-      void                  SetHadEnergyInHF(Double_t val)          { fHadEnergyInHF    = val; } 
-      void                  SetHadEnergyInHE(Double_t val)          { fHadEnergyInHE    = val; } 
-      void                  SetEmEnergyInEB(Double_t val)           { fEmEnergyInEB     = val; } 
-      void                  SetEmEnergyInEE(Double_t val)           { fEmEnergyInEE     = val; } 
-      void                  SetEmEnergyInHF(Double_t val)           { fEmEnergyInHF     = val; } 
-      void                  SetEnergyFractionH(Double_t val)        { fEnergyFractionH  = val; }
-      void                  SetEnergyFractionEm(Double_t val)       { fEnergyFractionEm = val; }
-      void                  SetTowersArea(Double_t val)             { fTowersArea       = val; } 
-      void                  SetN(UShort_t n)                        { fN = n; }
-      void                  SetN60(UShort_t n)                      { fN60 = n; }
-      void                  SetN90(UShort_t n)                      { fN90 = n; }
+      void                  SetMaxEInEmTowers(Double_t val)    { fMaxEInEmTowers   = val;   }
+      void                  SetMaxEInHadTowers(Double_t val)   { fMaxEInHadTowers  = val;   }
+      void                  SetHadEnergyInHO(Double_t val)     { fHadEnergyInHO    = val;   } 
+      void                  SetHadEnergyInHB(Double_t val)     { fHadEnergyInHB    = val;   } 
+      void                  SetHadEnergyInHF(Double_t val)     { fHadEnergyInHF    = val;   } 
+      void                  SetHadEnergyInHE(Double_t val)     { fHadEnergyInHE    = val;   } 
+      void                  SetEmEnergyInEB(Double_t val)      { fEmEnergyInEB     = val;   } 
+      void                  SetEmEnergyInEE(Double_t val)      { fEmEnergyInEE     = val;   } 
+      void                  SetEmEnergyInHF(Double_t val)      { fEmEnergyInHF     = val;   } 
+      void                  SetEnergyFractionH(Double_t val)   { fEnergyFractionH  = val;   }
+      void                  SetEnergyFractionEm(Double_t val)  { fEnergyFractionEm = val;   }
+      void                  SetTowersArea(Double_t val)        { fTowersArea       = val;   } 
+      void                  SetN(UShort_t n)                   { fN = n;                    }
+      void                  SetN60(UShort_t n)                 { fN60 = n;                  }
+      void                  SetN90(UShort_t n)                 { fN90 = n;                  }
+      void                  SetMatchedMCFlavor(Int_t flavor)   { fMatchedMCFlavor = flavor; }
 
     protected:
       FourVector fMom;                    //four momentum of jet
@@ -82,6 +84,7 @@ namespace mithep
       UShort_t   fN;                      //number of constituents
       UShort_t   fN60;                    //number constituents with 60% of total energy
       UShort_t   fN90;                    //number constituents with 90% of total energy
+      Int_t      fMatchedMCFlavor;         //pdgID of the quark flavor that the jet matched to
 
     ClassDef(Jet, 1) // Jet class
   };
