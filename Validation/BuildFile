@@ -1,8 +1,8 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.1 2008/07/10 14:56:27 loizides Exp $
+# $Id: BuildFile,v 1.2 2008/07/13 08:40:54 loizides Exp $
 
 <use name=MitAna/TreeMod>
-<flags CXXFLAGS="-g">
+#<flags CXXFLAGS="-g">
 <export>
    <lib name=Validation>
 </export>

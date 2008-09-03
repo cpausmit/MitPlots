@@ -1,11 +1,10 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.5 2008/07/29 10:38:46 loizides Exp $
+# $Id: BuildFile,v 1.6 2008/07/29 12:15:07 loizides Exp $
 
 <use name=MitAna/DataCont>
 <use name=root>
-<use name=clhep>
 <lib name=EG>
-<flags CXXFLAGS="-g">
+#<flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaDataTree>
 </export>

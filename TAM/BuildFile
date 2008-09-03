@@ -1,9 +1,9 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.1 2008/05/27 19:13:20 loizides Exp $
+# $Id: BuildFile,v 1.2 2008/07/13 08:40:54 loizides Exp $
 
 <include_path path=${CMSSW_BASE}/src/MitAna/TAM/interface>
 <use name=root>
-<flags CXXFLAGS="-g">
+#<flags CXXFLAGS="-g">
 <export>
   <lib name=MitAnaTAM>
 </export>
