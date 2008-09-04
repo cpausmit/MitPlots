@@ -1,14 +1,14 @@
-// $Id: $
+// $Id: ObjectCleaningMod.cc,v 1.2 2008/08/18 15:01:27 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ObjectCleaningMod.h"
 #include <TH1D.h>
 #include <TH2D.h>
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
-
 #include "MitCommon/MathTools/interface/MathUtils.h"
 
 using namespace mithep;
+using namespace mitcommon;
 
 ClassImp(mithep::ObjectCleaningMod)
 
@@ -139,7 +139,7 @@ void ObjectCleaningMod::Process()
     bool isFake = true;
     bool isFromTau = false;
     for (UInt_t j = 0; j<GenLeptons->GetEntries(); j++) {
-      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),mu->Mom());    
+      double deltaR = MathUtils::DeltaR(GenLeptons->At(j)->Mom(),mu->Mom());    
       if (deltaR < 0.15) {
         if (abs(GenLeptons->At(j)->PdgId()) == 13) {
           isFake = false;
@@ -307,9 +307,7 @@ void ObjectCleaningMod::Process()
     bool isFake = true;
     bool isFromTau = false;
     for (UInt_t j = 0; j<GenLeptons->GetEntries(); j++) {
-      double dphi = (abs(GenLeptons->At(j)->Phi() - e->Phi()) > M_PI) ? 
-        abs(GenLeptons->At(j)->Phi() - e->Phi()) - 2*M_PI : abs(GenLeptons->At(j)->Phi() - e->Phi());
-      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),e->Mom());
+      double deltaR = MathUtils::DeltaR(GenLeptons->At(j)->Mom(),e->Mom());
       if (deltaR < 0.15) {
         if (abs(GenLeptons->At(j)->PdgId()) == 11) {
           isFake = false;
@@ -456,8 +454,8 @@ void ObjectCleaningMod::Process()
     //cerr << "3" << endl;
     
     //values of cuts[classification]
-    double EoverPInMax[]     = { 1.3,   1.2,   1.3,   999.,  999.,  999.,  999.,  999.  }; // 0
-    double EoverPInMin[]     = { 0.9,   0.9,   0.9,   0.6,   0.9,   0.9,   0.9,   0.7   }; // 1
+    //double EoverPInMax[]     = { 1.3,   1.2,   1.3,   999.,  999.,  999.,  999.,  999.  }; // 0
+    //double EoverPInMin[]     = { 0.9,   0.9,   0.9,   0.6,   0.9,   0.9,   0.9,   0.7   }; // 1
     double deltaEtaIn[]	     = { 0.004, 0.006, 0.005, 0.007, 0.007, 0.008, 0.007, 0.008 }; // 2
     double deltaPhiIn[]	     = { 0.04,  0.07,  0.04,  0.08,  0.06,  0.07,  0.06,  0.07  }; // 3
     double HoverE[] 	     = { 0.06,  0.05,  0.06,  0.14,  0.1,   0.1,   0.1,   0.12  }; // 4
@@ -466,10 +464,10 @@ void ObjectCleaningMod::Process()
     double EoverPOutMin[]    = { 0.6,   1.8,   1.,    0.75,  0.6,   1.5,   1.,    0.8   }; // 7
     double deltaPhiOut[]     = { 0.011, 999.,  999.,  999.,  0.02,  999.,  999.,  999.  }; // 8
     double invEMinusInvP[]   = { 0.06,  0.06,  0.06,  0.06,  0.06,  0.06,  0.06,  0.06  }; // 9
-    double sigmaEtaEtaMax[]  = { 0.011, 0.011, 0.011, 0.011, 0.022, 0.022, 0.022, 0.3   }; // 10
-    double sigmaEtaEtaMin[]  = { 0.00,  0.00, 0.00,   0.00,  0.00,  0.00,  0.00,  0.    }; // 11
-    double sigmaPhiPhiMax[]  = { 0.015, 999.,  999.,  999.,  0.02,  999.,  999.,  999.  }; // 12
-    double sigmaPhiPhiMin[]  = { 0.00,  0.,    0.,    0.,    0.,    0.,    0.,    0.    }; // 13
+    //double sigmaEtaEtaMax[]  = { 0.011, 0.011, 0.011, 0.011, 0.022, 0.022, 0.022, 0.3   }; // 10
+    //double sigmaEtaEtaMin[]  = { 0.00,  0.00, 0.00,   0.00,  0.00,  0.00,  0.00,  0.    }; // 11
+    //double sigmaPhiPhiMax[]  = { 0.015, 999.,  999.,  999.,  0.02,  999.,  999.,  999.  }; // 12
+    //double sigmaPhiPhiMin[]  = { 0.00,  0.,    0.,    0.,    0.,    0.,    0.,    0.    }; // 13
     
     const int nCuts = 16;
     bool passCut[nCuts] = {false, false, false, false, false, 
@@ -532,9 +530,7 @@ void ObjectCleaningMod::Process()
     //Check whether it overlaps with a good muon.
     bool isMuonOverlap = false;
     for (UInt_t j=0; j<GoodMuons->GetEntries();j++) {
-      double dphi = (abs(GoodMuons->At(j)->Phi() - e->Phi()) > M_PI) ? 
-        abs(GoodMuons->At(j)->Phi() - e->Phi()) - 2*M_PI : abs(GoodMuons->At(j)->Phi() - e->Phi());
-      double deltaR = mitMath::deltaR(GoodMuons->At(j)->Mom(), e->Mom());     
+      double deltaR = MathUtils::DeltaR(GoodMuons->At(j)->Mom(), e->Mom());     
       if (deltaR < 0.1) {
         isMuonOverlap = true;
         break;	 
@@ -544,7 +540,7 @@ void ObjectCleaningMod::Process()
     //Check whether it overlaps with another electron candidate
     bool isElectronOverlap = false;
     for (UInt_t j=0; j<GoodElectronsVector.size(); j++) {      
-      double deltaR = mitMath::deltaR(GoodElectronsVector[j]->Mom(), e->Mom());
+      double deltaR = MathUtils::DeltaR(GoodElectronsVector[j]->Mom(), e->Mom());
 
       if (deltaR < 0.1) {
         isElectronOverlap = true;        
@@ -608,10 +604,7 @@ void ObjectCleaningMod::Process()
      
     //Check for overlap with an electron
     for (UInt_t j=0; j<GoodElectrons->GetEntries(); j++) {
-      double dphi = (abs(GoodElectrons->At(j)->Phi() - jet->Phi()) > M_PI) 
-        ? abs(GoodElectrons->At(j)->Phi() - jet->Phi()) - 2*M_PI : 
-        abs(GoodElectrons->At(j)->Phi() - jet->Phi());
-      double deltaR = mitMath::deltaR(GoodElectrons->At(j)->Mom(),jet->Mom());  
+      double deltaR = MathUtils::DeltaR(GoodElectrons->At(j)->Mom(),jet->Mom());  
       if (deltaR < 0.1) {
 	isElectronOverlap = true;	 	 	
 	break;	 	 
@@ -626,9 +619,7 @@ void ObjectCleaningMod::Process()
     
     //check whether a jet is actually from a lepton
     for (UInt_t j=0; j<GenLeptons->GetEntries(); j++) {
-      double dphi = (abs(GenLeptons->At(j)->Phi() - jet->Phi()) > M_PI) 
-        ? abs(GenLeptons->At(j)->Phi() - jet->Phi()) - 2*M_PI : abs(GenLeptons->At(j)->Phi() - jet->Phi());
-      double deltaR = mitMath::deltaR(GenLeptons->At(j)->Mom(),jet->Mom());
+      double deltaR = MathUtils::DeltaR(GenLeptons->At(j)->Mom(),jet->Mom());
       if (deltaR < 0.1) {
 	isFromGenLepton = true;	
 	//debug = true;
