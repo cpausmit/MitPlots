@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.15 2008/08/18 10:58:20 sixie Exp $
+// $Id: Types.h,v 1.16 2008/08/18 15:24:02 loizides Exp $
 //
 // Types
 //
@@ -15,6 +15,7 @@
 #include <Math/GenVector/LorentzVector.h>
 #include <Math/Point3Dfwd.h>
 #include <Math/SMatrix.h>
+#include "MitAna/DataTree/interface/BitMask.h"
 
 namespace mithep
 {
@@ -31,5 +32,10 @@ namespace mithep
   typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepSym<double,7> >   SevenSymMatrix;
   typedef ::ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepStd<double,3,3> > ThreeMatrix;
   typedef ::ROOT::Math::SMatrix<double,7,7,ROOT::Math::MatRepStd<double,7,7> > SevenMatrix;
+
+
+  //typedef BitMask<4> BitMask32;
+  //typedef BitMask<8> BitMask64;
+  typedef BitMask<32> BitMask256;
 }
 #endif

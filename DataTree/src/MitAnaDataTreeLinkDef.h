@@ -1,13 +1,16 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.28 2008/08/08 11:16:09 sixie Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.29 2008/08/29 01:53:27 loizides Exp $
 
-#ifndef DATATREE_LINKDEF_H
-#define DATATREE_LINKDEF_H
+#ifndef MITANA_DATATREE_LINKDEF_H
+#define MITANA_DATATREE_LINKDEF_H
 
 #include <vector>
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/Collections.h"
 
+#include "MitAna/DataTree/interface/BitMask.h"
+#include "MitAna/DataTree/interface/BitMask32.h"
+#include "MitAna/DataTree/interface/BitMask64.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
 #include "MitAna/DataTree/interface/RunInfo.h"
@@ -33,8 +36,6 @@
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
-#include "MitAna/DataTree/interface/BitMask32.h"
-#include "MitAna/DataTree/interface/BitMask64.h"
 #endif
 
 #ifdef __CINT__
@@ -52,6 +53,12 @@
 #pragma link C++ class mithep::RunInfo+;
 #pragma link C++ class mithep::MCEventInfo+;
 
+#pragma link C++ class mithep::BitMask<4>+;
+#pragma link C++ class mithep::BitMask<8>+;
+#pragma link C++ class mithep::BitMask<32>+;
+//#pragma link C++ typedef mithep::BitMask32;
+//#pragma link C++ typedef mithep::BitMask64;
+#pragma link C++ typedef mithep::BitMask256;
 #pragma link C++ class mithep::BitMask32+;
 #pragma link C++ class mithep::BitMask64+;
 #pragma link C++ class mithep::Collection<TRef>+;
