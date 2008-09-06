@@ -1,10 +1,11 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.5 2008/08/18 15:00:55 sixie Exp $
+# $Id: BuildFile,v 1.6 2008/09/03 20:51:49 loizides Exp $
 
 <use name=MitAna/TAM>
 <use name=MitAna/DataTree>
 <use name=MitAna/DataUtil>
 <use name=MitAna/Catalog>
+<use name=MitAna/Utils>
 <use name=MitCommon/MathTools>
 <use root>
 <lib name=Proof>

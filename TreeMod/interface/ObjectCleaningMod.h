@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.4 2008/07/02 16:34:06 loizides Exp $
+// $Id: ObjectCleaningMod.h,v 1.2 2008/08/18 15:01:27 sixie Exp $
 //
 // ObjectCleaningMod
 //
@@ -34,6 +34,9 @@ namespace mithep
       TString                  fTrackName;                //name of track collection
       TString                  fBarrelBasicClusterName;   //name of basic Cluster collection
       TString                  fBarrelSuperClusterName;   //name of Super Cluster collection
+      TString                  fEndcapBasicClusterName;   //name of basic Cluster collection
+      TString                  fEndcapSuperClusterName;   //name of Super Cluster collection 
+      TString                  fCaloTowerName;            //name of CaloTower collection
       TString                  fMuonName;                 //name of muon collection
       TString                  fElectronName;             //name of electron collection
       TString                  fJetName;                  //name of jet collection
@@ -48,6 +51,9 @@ namespace mithep
       TrackCol		      *fTracks;	                  //!Track branch
       BasicClusterCol         *fBarrelBasicClusters;      //!Basic Cluster branch
       SuperClusterCol         *fBarrelSuperClusters;      //!Super Cluster branch
+      BasicClusterCol         *fEndcapBasicClusters;      //!Basic Cluster branch
+      SuperClusterCol         *fEndcapSuperClusters;      //!Super Cluster branch
+      CaloTowerCol            *fCaloTowers;               //!CaloTower branch
       MuonCol		      *fMuons;                    //!Muon branch
       ElectronCol	      *fElectrons;                //!Electron branch
 

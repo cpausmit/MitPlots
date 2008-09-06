@@ -1,11 +1,13 @@
-// $Id: ObjectCleaningMod.cc,v 1.2 2008/08/18 15:01:27 sixie Exp $
+// $Id: ObjectCleaningMod.cc,v 1.3 2008/09/04 21:36:21 loizides Exp $
 
 #include "MitAna/TreeMod/interface/ObjectCleaningMod.h"
 #include <TH1D.h>
 #include <TH2D.h>
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
+#include "MitAna/Utils/interface/IsolationTools.h"
 #include "MitCommon/MathTools/interface/MathUtils.h"
+
 
 using namespace mithep;
 using namespace mitcommon;
@@ -19,6 +21,9 @@ ObjectCleaningMod::ObjectCleaningMod(const char *name, const char *title) :
   fTrackName(Names::gkTrackBrn),
   fBarrelBasicClusterName(Names::gkBarrelBasicClusterBrn),
   fBarrelSuperClusterName(Names::gkBarrelSuperClusterBrn),
+  fEndcapBasicClusterName(Names::gkEndcapBasicClusterBrn),
+  fEndcapSuperClusterName(Names::gkEndcapSuperClusterBrn),  
+  fCaloTowerName(Names::gkCaloTowerBrn),
   fMuonName(Names::gkMuonBrn),
   fElectronName(Names::gkElectronBrn),
   fJetName(Names::gkCaloJetBrn),
@@ -122,9 +127,12 @@ void ObjectCleaningMod::Process()
 
   //Get the Basic Clusters
   LoadBranch(fBarrelBasicClusterName);
-  
+  LoadBranch(fEndcapBasicClusterName);  
   //Get the Super Clusters
   LoadBranch(fBarrelSuperClusterName);
+  LoadBranch(fEndcapSuperClusterName);
+  //Get the CaloTowers
+  LoadBranch(fCaloTowerName); 
   
   //Muons
   ObjArray<Muon> *GoodMuons = new ObjArray<Muon>; 
@@ -327,9 +335,15 @@ void ObjectCleaningMod::Process()
     double electronepInv = fabs(1./e->SCluster()->Energy()- 1./e->E());
     
     
-    //Check Electron Iso calculation:
-    double computedEcalIso = e->ComputeEcalIsolation(0.3,0.0,fBarrelBasicClusters);
-    double computedTrackIso =  e->ComputeTrackIsolation(0.2, 0.02,0.1,0.1,fTracks);
+    //electron isolation calculation
+    double computedEcalIso;    
+    if (fabs(e->Eta()) < 1.479) {
+      computedEcalIso = IsolationTools::EcalIsolation(e->SCluster(),0.3,0.0,fBarrelBasicClusters);
+    } else {
+      computedEcalIso = IsolationTools::EcalIsolation(e->SCluster(),0.3,0.0,fEndcapBasicClusters);
+    } 
+    double computedTrackIso =  IsolationTools::TrackIsolation(e->Trk(),0.2, 0.02,1.5,0.1,fTracks);    
+
     if (printDebug) {
       cout << "Check Iso Calculation:" << endl;
       cout << "e->ComputeTrackIso: " << computedTrackIso << endl;
