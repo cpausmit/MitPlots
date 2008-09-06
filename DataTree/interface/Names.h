@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.14 2008/08/08 11:16:09 sixie Exp $
+// $Id: Names.h,v 1.15 2008/08/29 02:48:33 loizides Exp $
 //
 // Names
 //
@@ -27,6 +27,7 @@ namespace mithep
       static const char *gkBarrelSuperClusterBrn;
       static const char *gkEndcapBasicClusterBrn;
       static const char *gkEndcapSuperClusterBrn;
+      static const char *gkCaloTowerBrn;
       static const char *gkMuonBrn;
       static const char *gkElectronBrn;
       static const char *gkCaloJetBrn;
