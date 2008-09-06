@@ -1,0 +1,9 @@
+# -*- Makefile -*-
+# $Id $
+
+<use name=root>
+<use name=MitCommon/MathTools>
+#<flags CXXFLAGS="-g">
+<export>
+   <lib name=MitAnaUtils>
+</export>
