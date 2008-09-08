@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.4 2008/07/16 10:00:58 bendavid Exp $
+// $Id: Jet.h,v 1.5 2008/08/31 10:13:31 sixie Exp $
 //
 // Jet
 //
@@ -13,6 +13,7 @@
  
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Track.h"
+#include "MitAna/DataTree/interface/CaloTower.h"
 
 namespace mithep 
 {
@@ -44,12 +45,15 @@ namespace mithep
       Double_t              EmEnergyInHF()                    const { return fEmEnergyInHF; } 
       Double_t              EnergyFractionH()                 const { return fEnergyFractionH; }
       Double_t              EnergyFractionEm()                const { return fEnergyFractionEm; }
+      const CaloTower      *Tower(UInt_t i)                   const { return fTowers.At(i); }
       Double_t              TowersArea()                      const { return fTowersArea; }
       UShort_t              N()                               const { return fN; }
       UShort_t              N60()                             const { return fN60; }
       UShort_t              N90()                             const { return fN90; }
+      UInt_t                NTowers()                         const { return fTowers.GetEntries(); }
       Int_t                 MatchedMCFlavor()                 const { return fMatchedMCFlavor; }
 
+      void	            AddTower(CaloTower *tower)         { fTowers.Add(tower);      }
       void                  SetMaxEInEmTowers(Double_t val)    { fMaxEInEmTowers   = val;   }
       void                  SetMaxEInHadTowers(Double_t val)   { fMaxEInHadTowers  = val;   }
       void                  SetHadEnergyInHO(Double_t val)     { fHadEnergyInHO    = val;   } 
@@ -84,7 +88,8 @@ namespace mithep
       UShort_t   fN;                      //number of constituents
       UShort_t   fN60;                    //number constituents with 60% of total energy
       UShort_t   fN90;                    //number constituents with 90% of total energy
-      Int_t      fMatchedMCFlavor;         //pdgID of the quark flavor that the jet matched to
+      Int_t      fMatchedMCFlavor;        //pdgID of the quark flavor that the jet matched to
+      RefArray<CaloTower> fTowers;        //||CaloTowers in this jet
 
     ClassDef(Jet, 1) // Jet class
   };
