@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.15 2008/08/22 09:55:40 sixie Exp $
+// $Id: Electron.h,v 1.16 2008/09/06 18:03:23 sixie Exp $
 //
 // Electron
 //
@@ -53,6 +53,9 @@ namespace mithep
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
       Double_t    CaloTowerIsolation()             const { return fCaloTowerIsolation;      }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
+      Double_t    EcalJurassicIsolation()          const { return fEcalJurassicIsolation;   }
+      Double_t    HcalJurassicIsolation()          const { return fHcalJurassicIsolation;   }
+
       Double_t    PassLooseID()                    const { return fPassLooseID;             }
       Double_t    PassTightID()                    const { return fPassTightID;             }
       Double_t    IDLikelihood()                   const { return fIDLikelihood;            }
@@ -81,6 +84,8 @@ namespace mithep
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
+      void        SetEcalJurassicIsolation(Double_t iso )       { fEcalJurassicIsolation = iso;    }
+      void        SetHcalJurassicIsolation(Double_t iso )       { fHcalJurassicIsolation = iso;    }
       void        SetPassLooseID(Double_t passLooseID)          { fPassLooseID = passLooseID;      }
       void        SetPassTightID(Double_t passTightID)          { fPassTightID = passTightID;      }
       void        SetIDLikelihood(Double_t likelihood)          { fIDLikelihood = likelihood;      }
@@ -101,10 +106,6 @@ namespace mithep
       Double_t             fIsMomentumCorrected;      
       Double_t             fNumberOfClusters;
       Double_t             fClassification;          
-      Double_t             fSuperClusterPx;
-      Double_t             fSuperClusterPy;
-      Double_t             fSuperClusterPz;
-      Double_t             fSuperClusterE;
       Double_t             fE33;
       Double_t             fE55;
       Double_t             fCovEtaEta;
@@ -113,6 +114,8 @@ namespace mithep
       Double_t             fCaloIsolation;
       Double_t             fCaloTowerIsolation;
       Double_t             fTrackIsolation;
+      Double_t             fEcalJurassicIsolation;
+      Double_t             fHcalJurassicIsolation;
       Double_t             fPassLooseID;
       Double_t             fPassTightID;
       Double_t             fIDLikelihood;
