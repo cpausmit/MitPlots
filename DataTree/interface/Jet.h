@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.5 2008/08/31 10:13:31 sixie Exp $
+// $Id: Jet.h,v 1.6 2008/09/08 20:11:54 bendavid Exp $
 //
 // Jet
 //
@@ -52,6 +52,28 @@ namespace mithep
       UShort_t              N90()                             const { return fN90; }
       UInt_t                NTowers()                         const { return fTowers.GetEntries(); }
       Int_t                 MatchedMCFlavor()                 const { return fMatchedMCFlavor; }
+      Double_t JetProbabilityBJetTagsDisc()                   const 
+      { return fJetProbabilityBJetTagsDisc;             }
+      Double_t JetBProbabilityBJetTagsDisc()                  const 
+      { return fJetBProbabilityBJetTagsDisc;            }
+      Double_t SimpleSecondaryVertexBJetTagsDisc()            const 
+      { return fSimpleSecondaryVertexBJetTagsDisc;      }
+      Double_t CombinedSecondaryVertexBJetTagsDisc()          const 
+      { return fCombinedSecondaryVertexBJetTagsDisc;    } 
+      Double_t CombinedSecondaryVertexMVABJetTagsDisc()       const 
+      { return fCombinedSecondaryVertexMVABJetTagsDisc; }
+      Double_t ImpactParameterMVABJetTagsDisc()               const 
+      { return fImpactParameterMVABJetTagsDisc;         }
+      Double_t TrackCountingHighEffBJetTagsDisc()             const 
+      { return fTrackCountingHighEffBJetTagsDisc;       }
+      Double_t TrackCountingHighPurBJetTagsDisc()             const 
+      { return fTrackCountingHighPurBJetTagsDisc;       }
+      Double_t SoftMuonBJetTagsDisc()                         const 
+      { return fSoftMuonBJetTagsDisc;                   }
+      Double_t SoftMuonNoIPBJetTagsDisc()                     const 
+      { return fSoftMuonNoIPBJetTagsDisc;               }
+      Double_t SoftElectronBJetTagsDisc()                     const 
+      { return fSoftElectronBJetTagsDisc;               }
 
       void	            AddTower(CaloTower *tower)         { fTowers.Add(tower);      }
       void                  SetMaxEInEmTowers(Double_t val)    { fMaxEInEmTowers   = val;   }
@@ -70,25 +92,54 @@ namespace mithep
       void                  SetN60(UShort_t n)                 { fN60 = n;                  }
       void                  SetN90(UShort_t n)                 { fN90 = n;                  }
       void                  SetMatchedMCFlavor(Int_t flavor)   { fMatchedMCFlavor = flavor; }
-
+      void       SetJetProbabilityBJetTagsDisc ( Double_t d )  { fJetProbabilityBJetTagsDisc = d;  }
+      void       SetJetBProbabilityBJetTagsDisc ( Double_t d ) { fJetBProbabilityBJetTagsDisc = d; }
+      void       SetSimpleSecondaryVertexBJetTagsDisc ( Double_t d ) 
+                                                   { fSimpleSecondaryVertexBJetTagsDisc = d;       }
+      void       SetCombinedSecondaryVertexBJetTagsDisc ( Double_t d ) 
+                                                   { fCombinedSecondaryVertexBJetTagsDisc = d;     }
+      void       SetCombinedSecondaryVertexMVABJetTagsDisc ( Double_t d ) 
+                                                   { fCombinedSecondaryVertexMVABJetTagsDisc = d;  }
+      void       SetImpactParameterMVABJetTagsDisc ( Double_t d ) 
+                                                   {   fImpactParameterMVABJetTagsDisc = d;        }
+      void       SetTrackCountingHighEffBJetTagsDisc ( Double_t d ) 
+                                                   { fTrackCountingHighEffBJetTagsDisc = d;        }
+      void       SetTrackCountingHighPurBJetTagsDisc ( Double_t d ) 
+                                                   { fTrackCountingHighPurBJetTagsDisc = d;        }
+      void       SetSoftMuonBJetTagsDisc ( Double_t d )        { fSoftMuonBJetTagsDisc = d;        }
+      void       SetSoftMuonNoIPBJetTagsDisc ( Double_t d )    { fSoftMuonNoIPBJetTagsDisc = d;    }
+      void       SetSoftElectronBJetTagsDisc ( Double_t d )    { fSoftElectronBJetTagsDisc = d;    }
+      
     protected:
       FourVector fMom;                    //four momentum of jet
-      Double32_t fMaxEInEmTowers;         //maximum energy in EM towers
-      Double32_t fMaxEInHadTowers;        //maximum energy in HCAL towers
-      Double32_t fEnergyFractionH;        //hadronic energy fraction
-      Double32_t fEnergyFractionEm;       //electromagnetic energy fraction
-      Double32_t fHadEnergyInHB; 	  //hadronic energy in HB
-      Double32_t fHadEnergyInHO; 	  //hadronic energy in HO
-      Double32_t fHadEnergyInHE; 	  //hadronic energy in HE
-      Double32_t fHadEnergyInHF; 	  //hadronic energy in HF
-      Double32_t fEmEnergyInEB; 	  //electromagnetic energy in EB
-      Double32_t fEmEnergyInEE; 	  //electromagnetic energy in EE
-      Double32_t fEmEnergyInHF; 	  //electromagnetic energy extracted from HF
-      Double32_t fTowersArea;             //area of contributing towers
+      Double_t   fMaxEInEmTowers;         //maximum energy in EM towers
+      Double_t   fMaxEInHadTowers;        //maximum energy in HCAL towers
+      Double_t   fEnergyFractionH;        //hadronic energy fraction
+      Double_t   fEnergyFractionEm;       //electromagnetic energy fraction
+      Double_t   fHadEnergyInHB; 	  //hadronic energy in HB
+      Double_t   fHadEnergyInHO; 	  //hadronic energy in HO
+      Double_t   fHadEnergyInHE; 	  //hadronic energy in HE
+      Double_t   fHadEnergyInHF; 	  //hadronic energy in HF
+      Double_t   fEmEnergyInEB; 	  //electromagnetic energy in EB
+      Double_t   fEmEnergyInEE; 	  //electromagnetic energy in EE
+      Double_t   fEmEnergyInHF; 	  //electromagnetic energy extracted from HF
+      Double_t   fTowersArea;             //area of contributing towers
       UShort_t   fN;                      //number of constituents
       UShort_t   fN60;                    //number constituents with 60% of total energy
       UShort_t   fN90;                    //number constituents with 90% of total energy
       Int_t      fMatchedMCFlavor;        //pdgID of the quark flavor that the jet matched to
+      Double_t   fJetProbabilityBJetTagsDisc;              //Discriminants for various b-tagging
+      Double_t   fJetBProbabilityBJetTagsDisc;             //algorithms
+      Double_t   fSimpleSecondaryVertexBJetTagsDisc;
+      Double_t   fCombinedSecondaryVertexBJetTagsDisc;
+      Double_t   fCombinedSecondaryVertexMVABJetTagsDisc;
+      Double_t   fImpactParameterMVABJetTagsDisc;
+      Double_t   fTrackCountingHighEffBJetTagsDisc;
+      Double_t   fTrackCountingHighPurBJetTagsDisc;
+      Double_t   fSoftMuonBJetTagsDisc;
+      Double_t   fSoftMuonNoIPBJetTagsDisc;
+      Double_t   fSoftElectronBJetTagsDisc;
+
       RefArray<CaloTower> fTowers;        //||CaloTowers in this jet
 
     ClassDef(Jet, 1) // Jet class
