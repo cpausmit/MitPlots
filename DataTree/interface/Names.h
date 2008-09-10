@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.15 2008/08/29 02:48:33 loizides Exp $
+// $Id: Names.h,v 1.16 2008/09/06 18:02:22 sixie Exp $
 //
 // Names
 //
@@ -9,8 +9,8 @@
 // Authors: C.Loizides, C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_NAMES_H
-#define DATATREE_NAMES_H
+#ifndef MITANA_DATATREE_NAMES_H
+#define MITANA_DATATREE_NAMES_H
  
 #include "MitAna/DataTree/interface/Types.h"
 

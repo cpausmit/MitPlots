@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.10 2008/07/14 09:41:59 loizides Exp $
+// $Id: PVector.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // PVector
 //
@@ -11,8 +11,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_PVECTOR_H
-#define DATATREE_PVECTOR_H
+#ifndef MITANA_DATACONT_PVECTOR_H
+#define MITANA_DATACONT_PVECTOR_H
  
 #include "MitAna/DataCont/interface/Vector.h"
 

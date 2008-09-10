@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeBranchLoader.h 2950 2006-06-16 16:26:16Z loizides $
+// $Id: TreeBranchLoader.h,v 1.1 2008/07/02 16:34:06 loizides Exp $
 //
 // TreeBranchLoader
 //
@@ -11,8 +11,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_TREEBRANCHLOADER_H
-#define TREEMOD_TREEBRANCHLOADER_H
+#ifndef MITANA_TREEMOD_TREEBRANCHLOADER_H
+#define MITANA_TREEMOD_TREEBRANCHLOADER_H
 
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 

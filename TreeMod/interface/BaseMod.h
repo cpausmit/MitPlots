@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.5 2008/07/02 16:34:06 loizides Exp $
+// $Id: BaseMod.h,v 1.6 2008/07/03 08:22:18 loizides Exp $
 //
 // BaseMod
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_BASEMOD_H
-#define TREEMOD_BASEMOD_H
+#ifndef MITANA_TREEMOD_BASEMOD_H
+#define MITANA_TREEMOD_BASEMOD_H
 
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TreeMod/interface/Selector.h" 

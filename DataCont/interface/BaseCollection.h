@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.7 2008/07/28 23:13:41 paus Exp $
+// $Id: BaseCollection.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // BaseCollection
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef mithep_BASECOLLECTION_H
-#define mithep_BASECOLLECTION_H
+#ifndef MITANA_DATACONT_BASECOLLECTION_H
+#define MITANA_DATACONT_BASECOLLECTION_H
  
 #include <TObject.h>
 

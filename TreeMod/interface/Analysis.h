@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.8 2008/06/24 14:07:21 loizides Exp $
+// $Id: Analysis.h,v 1.9 2008/07/07 16:41:53 paus Exp $
 //
 // Analysis
 //
@@ -18,8 +18,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATAUTIL_ANALYSIS_H
-#define DATAUTIL_ANALYSIS_H
+#ifndef MITANA_DATAUTIL_ANALYSIS_H
+#define MITANA_DATAUTIL_ANALYSIS_H
 
 #include <TObject.h>
 #include <TString.h>

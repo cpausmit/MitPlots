@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.1 2008/08/08 11:12:37 sixie Exp $
+// $Id: SuperCluster.h,v 1.2 2008/08/18 09:27:42 sixie Exp $
 //
 // SuperCluster
 //
@@ -8,8 +8,8 @@
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_SUPERCLUSTER_H
-#define DATATREE_SUPERCLUSTER_H
+#ifndef MITANA_DATATREE_SUPERCLUSTER_H
+#define MITANA_DATATREE_SUPERCLUSTER_H
  
 #include <TMath.h>
 #include "MitAna/DataTree/interface/DataObject.h"
@@ -36,7 +36,7 @@ namespace mithep
       const BasicCluster  *Seed()                  const;       
       Double_t             X()                     const { return fPoint.X(); }
       Double_t             Y()                     const { return fPoint.Y(); }
-      Double_t             Z()                     const { return fPoint.Z(); }                        
+      Double_t             Z()                     const { return fPoint.Z(); }
       void                 Print(Option_t *opt="") const;
 
       void	           AddCluster( BasicCluster *Cluster)           { fClusters.Add(Cluster); }

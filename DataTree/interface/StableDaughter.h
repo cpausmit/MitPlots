@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableDaughter.h,v 1.3 2008/07/29 16:17:18 loizides Exp $
+// $Id: StableDaughter.h,v 1.4 2008/07/29 17:00:12 loizides Exp $
 //
 // StableDaughter
 //
@@ -9,8 +9,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_STABLEDAUGHTER_H
-#define DATATREE_STABLEDAUGHTER_H
+#ifndef MITANA_DATATREE_STABLEDAUGHTER_H
+#define MITANA_DATATREE_STABLEDAUGHTER_H
  
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/Types.h"

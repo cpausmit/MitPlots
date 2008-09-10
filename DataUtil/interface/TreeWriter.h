@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.8 2008/06/18 19:08:14 loizides Exp $
+// $Id: TreeWriter.h,v 1.9 2008/06/24 14:05:03 loizides Exp $
 //
 // TreeWriter
 //
@@ -15,8 +15,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_TREEWRITER_H
-#define DATATREE_TREEWRITER_H
+#ifndef MITANA_DATAUTIL_TREEWRITER_H
+#define MITANA_DATAUTIL_TREEWRITER_H
 
 #include <TNamed.h>
 #include <TString.h>

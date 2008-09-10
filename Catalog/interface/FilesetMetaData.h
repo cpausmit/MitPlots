@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilesetMetaData.h,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: FilesetMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
 //
 // FilesetMetaData
 //
@@ -9,8 +9,8 @@
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef CATALOG_FILESETMETADATA_H
-#define CATALOG_FILESETMETADATA_H
+#ifndef MITANA_CATALOG_FILESETMETADATA_H
+#define MITANA_CATALOG_FILESETMETADATA_H
 
 #include <vector>
 #include <TString.h>

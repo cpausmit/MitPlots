@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.6 2008/09/08 20:11:54 bendavid Exp $
+// $Id: Jet.h,v 1.7 2008/09/09 12:51:38 sixie Exp $
 //
 // Jet
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_JET_H
-#define DATATREE_JET_H
+#ifndef MITANA_DATATREE_JET_H
+#define MITANA_DATATREE_JET_H
  
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Track.h"
@@ -32,7 +32,6 @@ namespace mithep
       ~Jet() {}
 
       FourVector	    Mom()                             const { return fMom; }
-
       Double_t              Charge()                          const { return 0; }
       Double_t              MaxEInEmTowers()                  const { return fMaxEInEmTowers; }
       Double_t              MaxEInHadTowers()                 const { return fMaxEInHadTowers; }
@@ -74,7 +73,6 @@ namespace mithep
       { return fSoftMuonNoIPBJetTagsDisc;               }
       Double_t SoftElectronBJetTagsDisc()                     const 
       { return fSoftElectronBJetTagsDisc;               }
-
       void	            AddTower(CaloTower *tower)         { fTowers.Add(tower);      }
       void                  SetMaxEInEmTowers(Double_t val)    { fMaxEInEmTowers   = val;   }
       void                  SetMaxEInHadTowers(Double_t val)   { fMaxEInHadTowers  = val;   }

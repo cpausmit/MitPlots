@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.3 2008/06/24 14:01:41 loizides Exp $
+// $Id: RunInfo.h,v 1.4 2008/07/08 14:41:01 loizides Exp $
 //
 // RunInfo
 //
@@ -7,8 +7,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_RUNINFO_H
-#define DATATREE_RUNINFO_H
+#ifndef MITANA_DATATREE_RUNINFO_H
+#define MITANA_DATATREE_RUNINFO_H
  
 #include "MitAna/DataTree/interface/Types.h"
 

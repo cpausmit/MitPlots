@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: LAHeader.h,v 1.1 2008/06/24 14:01:41 loizides Exp $
+// $Id: LAHeader.h,v 1.2 2008/07/08 14:41:01 loizides Exp $
 //
 // LAHeader
 //
@@ -9,8 +9,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_LAHEADER_H
-#define DATATREE_LAHEADER_H
+#ifndef MITANA_DATATREE_LAHEADER_H
+#define MITANA_DATATREE_LAHEADER_H
  
 #include "MitAna/DataTree/interface/Types.h"
 

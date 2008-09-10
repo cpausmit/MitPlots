@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenRelValMod.h,v 1.1 2008/07/10 14:56:27 loizides Exp $
+// $Id: GenRelValMod.h,v 1.2 2008/07/25 12:41:41 loizides Exp $
 //
 // GenRelValMod
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef VALIDATION_GENRELVAL_H
-#define VALIDATION_GENRELVAL_H
+#ifndef MITANA_VALIDATION_GENRELVAL_H
+#define MITANA_VALIDATION_GENRELVAL_H
 
 #include <Riostream.h>
 #include "MitAna/TreeMod/interface/BaseMod.h"

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.13 2008/07/22 19:57:50 loizides Exp $
+// $Id: RefArray.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // RefArray
 //
@@ -11,8 +11,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_REFARRAY
-#define DATATREE_REFARRAY
+#ifndef MITANA_DATACONT_REFARRAY
+#define MITANA_DATACONT_REFARRAY
 
 #include <TObject.h>
 #include <TRefArray.h>

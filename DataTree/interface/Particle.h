@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.16 2008/08/08 11:17:32 sixie Exp $
+// $Id: Particle.h,v 1.17 2008/08/18 10:53:05 sixie Exp $
 //
 // Particle
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_PARTICLE_H
-#define DATATREE_PARTICLE_H
+#ifndef MITANA_DATATREE_PARTICLE_H
+#define MITANA_DATATREE_PARTICLE_H
  
 #include <TMath.h>
 #include "MitAna/DataTree/interface/DataObject.h"

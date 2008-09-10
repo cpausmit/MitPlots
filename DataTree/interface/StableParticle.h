@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.3 2008/07/29 12:29:47 bendavid Exp $
+// $Id: StableParticle.h,v 1.4 2008/07/29 16:17:18 loizides Exp $
 //
 // StableParticle
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_STABLEPARTICLE_H
-#define DATATREE_STABLEPARTICLE_H
+#ifndef MITANA_DATATREE_STABLEPARTICLE_H
+#define MITANA_DATATREE_STABLEPARTICLE_H
  
 #include "MitAna/DataTree/interface/ChargedParticle.h"
 

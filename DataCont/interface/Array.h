@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.13 2008/07/14 20:55:19 loizides Exp $
+// $Id: Array.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // Array
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_ARRAY_H
-#define DATATREE_ARRAY_H
+#ifndef MITANA_DATACONT_ARRAY_H
+#define MITANA_DATACONT_ARRAY_H
 
 #include <TClonesArray.h>
 #include "MitAna/DataCont/interface/Collection.h"

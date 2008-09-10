@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.10 2008/07/28 23:13:41 paus Exp $
+// $Id: Collection.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // Collection
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef mithep_COLLECTION_H
-#define mithep_COLLECTION_H
+#ifndef MITANA_DATACONT_COLLECTION_H
+#define MITANA_DATACONT_COLLECTION_H
  
 #include "MitAna/DataCont/interface/BaseCollection.h"
 

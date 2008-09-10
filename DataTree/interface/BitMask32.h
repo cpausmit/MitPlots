@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask32.h,v 1.1 2008/07/31 13:28:41 bendavid Exp $
+// $Id: BitMask32.h,v 1.2 2008/08/29 01:52:21 loizides Exp $
 //
 // BitMask32
 //
@@ -8,8 +8,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_BITMASK32_H
-#define DATATREE_BITMASK32_H
+#ifndef MITANA_DATATREE_BITMASK32_H
+#define MITANA_DATATREE_BITMASK32_H
  
 #include "Rtypes.h"
 

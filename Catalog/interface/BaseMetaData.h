@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMetaData.h,v 1.1 2008/07/07 16:41:51 paus Exp $
+// $Id: BaseMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
 //
 // BaseMetaData
 //
@@ -10,8 +10,8 @@
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef CATALOG_BASEMETADATA_H
-#define CATALOG_BASEMETADATA_H
+#ifndef MITANA_CATALOG_BASEMETADATA_H
+#define MITANA_CATALOG_BASEMETADATA_H
 
 #include "MitAna/DataTree/interface/Types.h"
 

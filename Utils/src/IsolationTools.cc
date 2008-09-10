@@ -1,8 +1,8 @@
-// $Id $
+// $Id: $
 
 #include "MitAna/Utils/interface/IsolationTools.h"
 #include "MitCommon/MathTools/interface/MathUtils.h"
-using namespace mitcommon;
+
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------

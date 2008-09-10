@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.6 2008/07/14 20:55:19 loizides Exp $
+// $Id: Conversion.h,v 1.7 2008/07/22 19:57:50 loizides Exp $
 //
 // Conversion
 //
@@ -8,8 +8,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_CONVERSION_H
-#define DATATREE_CONVERSION_H
+#ifndef MITANA_DATATREE_CONVERSION_H
+#define MITANA_DATATREE_CONVERSION_H
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/FitVertex.h"

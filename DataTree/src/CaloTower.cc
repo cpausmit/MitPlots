@@ -1,4 +1,4 @@
-// $ Id $
+// $Id:$
 
 #include "MitAna/DataTree/interface/CaloTower.h"
 

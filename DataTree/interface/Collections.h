@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.20 2008/08/08 11:16:09 sixie Exp $
+// $Id: Collections.h,v 1.21 2008/09/06 18:02:22 sixie Exp $
 //
 // Collections
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_COLLECTIONS_H
-#define DATATREE_COLLECTIONS_H
+#ifndef MITANA_DATATREE_COLLECTIONS_H
+#define MITANA_DATATREE_COLLECTIONS_H
  
 #include "MitAna/DataCont/interface/Collection.h"
 #include "MitAna/DataCont/interface/Array.h"

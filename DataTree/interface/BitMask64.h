@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.14 2008/07/25 11:32:45 bendavid Exp $
+// $Id: BitMask64.h,v 1.1 2008/07/31 13:28:41 bendavid Exp $
 //
 // BitMask64
 //
@@ -8,8 +8,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_BITMASK64_H
-#define DATATREE_BITMASK64_H
+#ifndef MITANA_DATATREE_BITMASK64_H
+#define MITANA_DATATREE_BITMASK64_H
  
 #include "Rtypes.h"
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ParticleExampleMod.h,v 1.8 2008/07/02 16:34:06 loizides Exp $
+// $Id: ParticleExampleMod.h,v 1.9 2008/07/25 11:34:45 bendavid Exp $
 //
 // ParticleExampleAnaMod
 //
@@ -12,8 +12,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_PARTICLEXAMPLEMOD_H
-#define TREEMOD_PARTICLEXAMPLEMOD_H
+#ifndef MITANA_TREEMOD_PARTICLEXAMPLEMOD_H
+#define MITANA_TREEMOD_PARTICLEXAMPLEMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/Collections.h"

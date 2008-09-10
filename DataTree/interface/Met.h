@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.2 2008/07/09 10:54:50 loizides Exp $
+// $Id: Met.h,v 1.3 2008/07/16 10:00:58 bendavid Exp $
 //
 // Met
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_MET_H
-#define DATATREE_MET_H
+#ifndef MITANA_DATATREE_MET_H
+#define MITANA_DATATREE_MET_H
  
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Track.h"

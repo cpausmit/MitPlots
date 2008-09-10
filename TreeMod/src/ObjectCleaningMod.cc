@@ -1,4 +1,4 @@
-// $Id: ObjectCleaningMod.cc,v 1.3 2008/09/04 21:36:21 loizides Exp $
+// $Id: ObjectCleaningMod.cc,v 1.4 2008/09/06 19:04:50 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ObjectCleaningMod.h"
 #include <TH1D.h>
@@ -10,7 +10,6 @@
 
 
 using namespace mithep;
-using namespace mitcommon;
 
 ClassImp(mithep::ObjectCleaningMod)
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.2 2008/07/25 16:07:53 bendavid Exp $
+// $Id: ChargedParticle.h,v 1.3 2008/07/29 07:55:40 loizides Exp $
 //
 // ChargedParticle
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_CHARGEDPARTICLE_H
-#define DATATREE_CHARGEDPARTICLE_H
+#ifndef MITANA_DATATREE_CHARGEDPARTICLE_H
+#define MITANA_DATATREE_CHARGEDPARTICLE_H
  
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Track.h"

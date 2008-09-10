@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: THITreeLoader.h 2950 2006-06-16 16:26:16Z loizides $
+// $Id: TreeLoader.h,v 1.1 2008/07/02 16:34:06 loizides Exp $
 //
 // TreeLoader
 //
@@ -9,8 +9,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_TREELOADER_H
-#define TREEMOD_TREELOADER_H
+#ifndef MITANA_TREEMOD_TREELOADER_H
+#define MITANA_TREEMOD_TREELOADER_H
 
 #include "MitAna/TAM/interface/TAMVirtualLoader.h" 
 

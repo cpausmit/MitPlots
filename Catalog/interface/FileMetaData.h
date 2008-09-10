@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FileMetaData.h,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: FileMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
 //
 // FileMetaData
 //
@@ -9,8 +9,8 @@
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef CATALOG_FILEMETADATA_H
-#define CATALOG_FILEMETADATA_H
+#ifndef MITANA_CATALOG_FILEMETADATA_H
+#define MITANA_CATALOG_FILEMETADATA_H
 
 #include <TString.h>
 #include "MitAna/Catalog/interface/BaseMetaData.h"

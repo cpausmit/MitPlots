@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjectCleaningMod.h,v 1.2 2008/08/18 15:01:27 sixie Exp $
+// $Id: ObjectCleaningMod.h,v 1.3 2008/09/06 19:04:49 sixie Exp $
 //
 // ObjectCleaningMod
 //
@@ -11,8 +11,8 @@
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_OBJECTCLEANINGMOD_H
-#define TREEMOD_OBJECTCLEANINGMOD_H
+#ifndef MITANA_TREEMOD_OBJECTCLEANINGMOD_H
+#define MITANA_TREEMOD_OBJECTCLEANINGMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/Collections.h"

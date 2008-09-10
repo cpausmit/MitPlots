@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.14 2008/07/14 20:55:19 loizides Exp $
+// $Id: Vector.h,v 1.1 2008/07/29 10:36:21 loizides Exp $
 //
 // Vector
 //
@@ -11,8 +11,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_VECTOR_H
-#define DATATREE_VECTOR_H
+#ifndef MITANA_DATACONT_VECTOR_H
+#define MITANA_DATACONT_VECTOR_H
  
 #include <vector>
 #include <Rtypes.h>

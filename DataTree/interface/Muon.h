@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.12 2008/07/29 07:55:40 loizides Exp $
+// $Id: Muon.h,v 1.13 2008/08/08 11:17:13 sixie Exp $
 //
 // Muon
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_MUON_H
-#define DATATREE_MUON_H
+#ifndef MITANA_DATATREE_MUON_H
+#define MITANA_DATATREE_MUON_H
 
 #include <TRef.h>
 #include "MitAna/DataTree/interface/ChargedParticle.h"
@@ -27,26 +27,26 @@ namespace mithep
       const Track   *GlobalTrk()          const;
       const Track   *StandaloneTrk()      const;
       const Track   *TrackerTrk()         const;
-      const Track   *Trk()                const  { return BestTrk();          }
-      Double_t       IsoR03SumPt()         const { return fIsoR03SumPt;       }
-      Double_t       IsoR03EmEt()          const { return fIsoR03EmEt;        }
-      Double_t       IsoR03HadEt()         const { return fIsoR03HadEt;       }
-      Double_t       IsoR03HoEt()          const { return fIsoR03HoEt;        }
-      Int_t          IsoR03NTracks()       const { return fIsoR03NTracks;     }
-      Int_t          IsoR03NJets()         const { return fIsoR03NJets;       }
-      Double_t       IsoR05SumPt()         const { return fIsoR05SumPt;       }
-      Double_t       IsoR05EmEt()          const { return fIsoR05EmEt;        }
-      Double_t       IsoR05HadEt()         const { return fIsoR05HadEt;       }
-      Double_t       IsoR05HoEt()          const { return fIsoR05HoEt;        }
-      Int_t          IsoR05NTracks()       const { return fIsoR05NTracks;     }
-      Int_t          IsoR05NJets()         const { return fIsoR05NJets;       }            
-      Double_t       EmEnergy()            const { return fEmEnergy;          }
-      Double_t       HadEnergy()           const { return fHadEnergy;         }
-      Double_t       HoEnergy()            const { return fHoEnergy;          }
-      Double_t       EmS9Energy()          const { return fEmS9Energy;        }
-      Double_t       HadS9Energy()         const { return fHadS9Energy;       }
-      Double_t       HoS9Energy()          const { return fHoS9Energy;        }
-      Double_t       Mass()                const { return 105.658369e-3;      }  
+      const Track   *Trk()                const { return BestTrk();          }
+      Double_t       IsoR03SumPt()        const { return fIsoR03SumPt;       }
+      Double_t       IsoR03EmEt()         const { return fIsoR03EmEt;        }
+      Double_t       IsoR03HadEt()        const { return fIsoR03HadEt;       }
+      Double_t       IsoR03HoEt()         const { return fIsoR03HoEt;        }
+      Int_t          IsoR03NTracks()      const { return fIsoR03NTracks;     }
+      Int_t          IsoR03NJets()        const { return fIsoR03NJets;       }
+      Double_t       IsoR05SumPt()        const { return fIsoR05SumPt;       }
+      Double_t       IsoR05EmEt()         const { return fIsoR05EmEt;        }
+      Double_t       IsoR05HadEt()        const { return fIsoR05HadEt;       }
+      Double_t       IsoR05HoEt()         const { return fIsoR05HoEt;        }
+      Int_t          IsoR05NTracks()      const { return fIsoR05NTracks;     }
+      Int_t          IsoR05NJets()        const { return fIsoR05NJets;       }            
+      Double_t       EmEnergy()           const { return fEmEnergy;          }
+      Double_t       HadEnergy()          const { return fHadEnergy;         }
+      Double_t       HoEnergy()           const { return fHoEnergy;          }
+      Double_t       EmS9Energy()         const { return fEmS9Energy;        }
+      Double_t       HadS9Energy()        const { return fHadS9Energy;       }
+      Double_t       HoS9Energy()         const { return fHoS9Energy;        }
+      Double_t       Mass()               const { return 105.658369e-3;      }  
       
       void	     SetGlobalTrk(Track* t)                { fGlobalTrackRef = t;            }
       void	     SetStandaloneTrk(Track* t)            { fStandaloneTrackRef = t;        }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefVector.h,v 1.1 2008/07/21 08:51:56 loizides Exp $
+// $Id: RefVector.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // RefArray
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_REFVECTOR_H
-#define DATATREE_REFVECTOR_H
+#ifndef MITANA_DATACONT_REFVECTOR_H
+#define MITANA_DATACONT_REFVECTOR_H
 
 #include <vector>
 #include <TRef.h>

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.11 2008/07/18 10:54:14 bendavid Exp $
+// $Id: DataObject.h,v 1.12 2008/07/28 23:13:41 paus Exp $
 //
 // DataObject
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef _mithep_DATAOBJECT_H
-#define _mithep_DATAOBJECT_H
+#ifndef MITANA_DATATREE_DATAOBJECT_H
+#define MITANA_DATATREE_DATAOBJECT_H
  
 #include <TObject.h>
 #include <TROOT.h>

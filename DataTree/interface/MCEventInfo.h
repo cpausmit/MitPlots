@@ -1,13 +1,13 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.6 2008/07/08 14:41:01 loizides Exp $
+// $Id: MCEventInfo.h,v 1.1 2008/08/29 01:53:26 loizides Exp $
 //
 // MCEventInfo
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_MCEVENTINFO_H
-#define DATATREE_MCEVENTINFO_H
+#ifndef MITANA_DATATREE_MCEVENTINFO_H
+#define MITANA_DATATREE_MCEVENTINFO_H
  
 #include "MitAna/DataTree/interface/Types.h"
 

@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.30 2008/09/05 01:21:46 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.31 2008/09/06 18:02:38 sixie Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -13,6 +13,7 @@
 #include "MitAna/DataTree/interface/BitMask64.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
+#include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/RunInfo.h"
 #include "MitAna/DataTree/interface/MCEventInfo.h"
 
@@ -49,11 +50,6 @@
 
 #pragma link C++ class mithep::Names+;
 
-#pragma link C++ class mithep::EventHeader+;
-#pragma link C++ class mithep::LAHeader+;
-#pragma link C++ class mithep::RunInfo+;
-#pragma link C++ class mithep::MCEventInfo+;
-
 #pragma link C++ class mithep::BitMask<4>+;
 #pragma link C++ class mithep::BitMask<8>+;
 #pragma link C++ class mithep::BitMask<32>+;
@@ -62,6 +58,12 @@
 #pragma link C++ typedef mithep::BitMask256;
 #pragma link C++ class mithep::BitMask32+;
 #pragma link C++ class mithep::BitMask64+;
+#pragma link C++ class mithep::EventHeader+;
+#pragma link C++ class mithep::LAHeader+;
+#pragma link C++ class mithep::TriggerName+;
+#pragma link C++ class mithep::RunInfo+;
+#pragma link C++ class mithep::MCEventInfo+;
+
 #pragma link C++ class mithep::Collection<TRef>+;
 
 #pragma link C++ class mithep::DataObject+;

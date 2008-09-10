@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CatalogingMod.h,v 1.1 2008/07/07 16:41:53 paus Exp $
+// $Id: CatalogingMod.h,v 1.2 2008/07/10 21:31:46 loizides Exp $
 //
 // CatalogingMod
 //
@@ -11,8 +11,8 @@
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_CATALOGINGMOD_H
-#define TREEMOD_CATALOGINGMOD_H
+#ifndef MITANA_TREEMOD_CATALOGINGMOD_H
+#define MITANA_TREEMOD_CATALOGINGMOD_H
 
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h"

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.3 2008/06/24 14:23:18 loizides Exp $
+// $Id: Selector.h,v 1.4 2008/07/03 08:22:18 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -8,8 +8,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_SELECTOR_H
-#define TREEMOD_SELECTOR_H
+#ifndef MITANA_TREEMOD_SELECTOR_H
+#define MITANA_TREEMOD_SELECTOR_H
 
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TAM/interface/TAMSelector.h" 

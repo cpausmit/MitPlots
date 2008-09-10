@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: BasicCluster.h,v 1.1 2008/08/08 11:12:37 sixie Exp $
 //
 // Basic Clusters
 //
@@ -8,8 +8,8 @@
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_BASICCLUSTER_H
-#define DATATREE_BASICCLUSTER_H
+#ifndef MITANA_DATATREE_BASICCLUSTER_H
+#define MITANA_DATATREE_BASICCLUSTER_H
  
 #include <TMath.h>
 #include "MitAna/DataTree/interface/DataObject.h"

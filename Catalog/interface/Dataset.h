@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Dataset.h,v 1.1 2008/07/07 16:41:51 paus Exp $
+// $Id: Dataset.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
 //
 // Dataset
 //
@@ -10,8 +10,8 @@
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
 
-#ifndef CATALOG_DATASET_H
-#define CATALOG_DATASET_H
+#ifndef MITANA_CATALOG_DATASET_H
+#define MITANA_CATALOG_DATASET_H
 
 #include <TString.h>
 #include "MitAna/Catalog/interface/FilesetMetaData.h"

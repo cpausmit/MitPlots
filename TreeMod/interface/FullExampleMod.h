@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.4 2008/07/02 16:34:06 loizides Exp $
+// $Id: FullExampleMod.h,v 1.5 2008/07/25 11:34:45 bendavid Exp $
 //
 // FullExampleAnaMod
 //
@@ -12,8 +12,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef TREEMOD_FULLEXAMPLEMOD_H
-#define TREEMOD_FULLEXAMPLEMOD_H
+#ifndef MITANA_TREEMOD_FULLEXAMPLEMOD_H
+#define MITANA_TREEMOD_FULLEXAMPLEMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/Collections.h"

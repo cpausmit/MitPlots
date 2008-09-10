@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Debug.h,v 1.6 2008/07/07 16:41:52 paus Exp $
+// $Id: Debug.h,v 1.7 2008/07/08 05:51:29 loizides Exp $
 //
 // Debug - detailed logging / debug scheme
 //
@@ -20,8 +20,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATAUTIL_DEBUG_H
-#define DATAUTIL_DEBUG_H
+#ifndef MITANA_DATAUTIL_DEBUG_H
+#define MITANA_DATAUTIL_DEBUG_H
 
 #include <Rtypes.h>
 #include <TError.h>

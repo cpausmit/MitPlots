@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.12 2008/07/17 08:19:39 loizides Exp $
+// $Id: CustomArray.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
 //
 // OwnArray
 //
@@ -11,8 +11,8 @@
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_CUSTOMARRAY
-#define DATATREE_CUSTOMARRAY
+#ifndef MITANA_DATACONT_CUSTOMARRAY
+#define MITANA_DATACONT_CUSTOMARRAY
 
 #include <Rtypes.h>
 

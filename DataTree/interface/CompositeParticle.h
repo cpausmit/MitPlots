@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.10 2008/07/22 19:57:50 loizides Exp $
+// $Id: CompositeParticle.h,v 1.11 2008/07/29 10:38:47 loizides Exp $
 //
 // Composite Particle
 //
@@ -8,8 +8,8 @@
 // Authors: J.Bendavid, C.Loizides
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_COMPOSITEPARTICLE_H
-#define DATATREE_COMPOSITEPARTICLE_H
+#ifndef MITANA_DATATREE_COMPOSITEPARTICLE_H
+#define MITANA_DATATREE_COMPOSITEPARTICLE_H
  
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Particle.h"
