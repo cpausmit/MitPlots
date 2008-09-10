@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.21 2008/09/06 18:02:22 sixie Exp $
+// $Id: Collections.h,v 1.22 2008/09/10 03:33:26 loizides Exp $
 //
 // Collections
 //
@@ -28,6 +28,7 @@
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
 #include "MitAna/DataTree/interface/Met.h"
+#include "MitAna/DataTree/interface/CaloMet.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
@@ -49,6 +50,7 @@ namespace mithep
   typedef Collection<Electron>          ElectronCol;
   typedef Collection<Jet>               JetCol;
   typedef Collection<Met>               MetCol;
+  typedef Collection<CaloMet>           CaloMetCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<MCParticle>        MCParticleCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
@@ -68,6 +70,7 @@ namespace mithep
   typedef Array<Electron>               ElectronArr;
   typedef Array<Jet>                    JetArr;
   typedef Array<Met>                    MetArr;
+  typedef Array<CaloMet>                CaloMetArr;
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<CompositeParticle>      CompositeParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
