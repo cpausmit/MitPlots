@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.16 2008/09/06 18:03:23 sixie Exp $
+// $Id: Electron.h,v 1.17 2008/09/09 12:50:43 sixie Exp $
 //
 // Electron
 //
@@ -28,7 +28,12 @@ namespace mithep
       const SuperCluster  *SCluster()              const;
       FourVector           Mom()                   const;
       const Track         *Trk()                   const { return BestTrk();                }
-      Double_t             E()                     const {return SCluster()->Energy();      } 
+      Double_t             E()                     const;
+      Double_t             P()                     const;
+      Double_t             Pt()                    const;
+      Double_t             Px()                    const;
+      Double_t             Py()                    const;
+      Double_t             Pz()                    const;
 
       Double_t    Mass()                           const { return 0.51099892e-3;            }
       Double_t    ESuperClusterOverP()             const { return fESuperClusterOverP;      }
@@ -168,11 +173,10 @@ inline mithep::FourVector mithep::Electron::Mom() const
   // Return Momentum of the electron. We use the direction of the
   // Track and the Energy of the Super Cluster
 
-  double P = TMath::Sqrt( E()*E() - Mass()*Mass());
-  return FourVector(P*sin(Trk()->Theta())*cos(Trk()->Phi()), 
-                    P*sin(Trk()->Theta())*sin(Trk()->Phi()), P*cos(Trk()->Theta()), E());
+  return FourVector(Px(), Py(), Pz(), E());
 }
 
+//-------------------------------------------------------------------------------------------------
 inline Double_t mithep::Electron::ESeedClusterOverPIn() const
 {
   // Return Energy of the SuperCluster Seed Divided by the magnitude 
@@ -181,6 +185,53 @@ inline Double_t mithep::Electron::ESeedClusterOverPIn() const
   return SCluster()->Seed()->Energy() / PIn();
 }
 
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::E() const
+{
+  // Return Energy of the SuperCluster if present
+  // or else return energy derived from the track
+  
+  const mithep::SuperCluster *sc = SCluster();
+  if (sc)
+    return sc->Energy();
+  else
+    return TMath::Sqrt(Trk()->P()*Trk()->P() + Mass()*Mass());
+}
 
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::P() const
+{
+  // Return momentum derived from the SuperCluster if present
+  // or else return momentum from the track
+  
+  const mithep::SuperCluster *sc = SCluster();
+  if (sc)
+    return TMath::Sqrt(sc->Energy()*sc->Energy() - Mass()*Mass());
+  else
+    return Trk()->P();
+}
+
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::Px() const
+{
+  return Pt()*TMath::Cos(Trk()->Phi());
+}
+
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::Py() const
+{
+  return Pt()*TMath::Sin(Trk()->Phi());
+}
+
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::Pz() const
+{
+  return P()*TMath::Sin(Trk()->Lambda());
+}
+
+//-------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::Pt() const
+{
+  return TMath::Abs(P()*TMath::Cos(Trk()->Lambda()));
+}
 #endif
-
