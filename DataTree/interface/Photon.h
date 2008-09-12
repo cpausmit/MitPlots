@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.11 2008/07/29 10:38:47 loizides Exp $
+// $Id: Photon.h,v 1.12 2008/09/10 03:33:27 loizides Exp $
 //
 // Photon
 //
@@ -29,15 +29,17 @@ namespace mithep
       void                      AddConversion(Conversion *c)  { fConversions.Add(c); }
       Double_t                  Charge()                const { return 0; }
       void                      Clear(Option_t *opt="")       { fConversions.Clear(opt); }
-      Bool_t                    IsConverted()           const { return fConversions.GetEntries(); }
+      Bool_t                    IsConverted()           const { return fIsConverted; }
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
       UInt_t                    NConversions()          const { return fConversions.GetEntries(); }
-      FourVector 	        Mom()                   const { return fFourVector; }  
+      FourVector 	        Mom()                   const { return fFourVector; }
+      void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv; }
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
 	    
     protected:
       FourVector                fFourVector;  //four momentum vector
       RefArray<Conversion>      fConversions; //||references to associated conversion candidates
+      Bool_t                    fIsConverted; //conversion flag
 	
     ClassDef(Photon,1) // Photon class
   };
