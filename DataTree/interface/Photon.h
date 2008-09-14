@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.12 2008/09/10 03:33:27 loizides Exp $
+// $Id: Photon.h,v 1.13 2008/09/12 12:53:31 bendavid Exp $
 //
 // Photon
 //
@@ -32,14 +32,17 @@ namespace mithep
       Bool_t                    IsConverted()           const { return fIsConverted; }
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
       UInt_t                    NConversions()          const { return fConversions.GetEntries(); }
+      const SuperCluster       *SCluster()              const;
       FourVector 	        Mom()                   const { return fFourVector; }
       void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv; }
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                      SetSuperCluster(SuperCluster* sc) { fSuperClusterRef = sc; }
 	    
     protected:
       FourVector                fFourVector;  //four momentum vector
       RefArray<Conversion>      fConversions; //||references to associated conversion candidates
       Bool_t                    fIsConverted; //conversion flag
+      TRef                      fSuperClusterRef; //superCluster
 	
     ClassDef(Photon,1) // Photon class
   };
@@ -51,5 +54,13 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   // Set four vector.
 
   fFourVector.SetXYZT(px, py, pz, e);
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::SuperCluster *mithep::Photon::SCluster() const
+{
+  // Return Super cluster
+
+  return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
 }
 #endif
