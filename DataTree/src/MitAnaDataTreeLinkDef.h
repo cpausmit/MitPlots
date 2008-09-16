@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.34 2008/09/10 17:05:37 ksung Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.35 2008/09/16 18:13:03 sixie Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -32,7 +32,6 @@
 #include "MitAna/DataTree/interface/Jet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
-#include "MitAna/DataTree/interface/CaloMet.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
@@ -153,13 +152,6 @@
 #pragma link C++ class mithep::ObjArray<mithep::Met>+;
 #pragma link C++ typedef mithep::MetCol;
 #pragma link C++ typedef mithep::MetArr;
-
-#pragma link C++ class mithep::CaloMet+;
-#pragma link C++ class mithep::Collection<mithep::CaloMet>+;
-#pragma link C++ class mithep::Array<mithep::CaloMet>+;
-#pragma link C++ class mithep::ObjArray<mithep::CaloMet>+;
-#pragma link C++ typedef mithep::CaloMetCol;
-#pragma link C++ typedef mithep::CaloMetArr;
 
 #pragma link C++ class mithep::CompositeParticle+;
 #pragma link C++ class mithep::Collection<mithep::CompositeParticle>+;
