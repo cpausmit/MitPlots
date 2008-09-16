@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.33 2008/09/10 12:16:39 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.34 2008/09/10 17:05:37 ksung Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -30,6 +30,7 @@
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
+#include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/CaloMet.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
@@ -138,6 +139,13 @@
 #pragma link C++ class mithep::ObjArray<mithep::Jet>+;
 #pragma link C++ typedef mithep::JetCol;
 #pragma link C++ typedef mithep::JetArr;
+
+#pragma link C++ class mithep::GenJet+;
+#pragma link C++ class mithep::Collection<mithep::GenJet>+;
+#pragma link C++ class mithep::Array<mithep::GenJet>+;
+#pragma link C++ class mithep::ObjArray<mithep::GenJet>+;
+#pragma link C++ typedef mithep::GenJetCol;
+#pragma link C++ typedef mithep::GenJetArr;
 
 #pragma link C++ class mithep::Met+;
 #pragma link C++ class mithep::Collection<mithep::Met>+;
