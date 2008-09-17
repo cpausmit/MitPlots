@@ -1,9 +1,10 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.7 2008/09/03 20:51:48 loizides Exp $
+# $Id: BuildFile,v 1.8 2008/09/10 03:33:26 loizides Exp $
 
 #<use name=MitCommon/DataFormats>
 <use name=MitAna/DataCont>
 <use name=root>
+<use name=rootmath>
 <lib name=EG>
 #<flags CXXFLAGS="-g">
 <export>
