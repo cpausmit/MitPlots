@@ -1,21 +1,19 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.13 2008/08/08 11:17:13 sixie Exp $
+// $Id: Muon.h,v 1.15 2008/09/10 17:10:55 pharris Exp $
 //
 // Muon
 //
 // Details to be worked out...
 //
-// Authors: C.Loizides(AKA TREE NAZI), J.Bendavid, C.Paus
+// Authors: J.Bendavid, C.Loizides, C.Paus, P.Harris
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_MUON_H
-#define DATATREE_MUON_H
+#ifndef MITANA_DATATREE_MUON_H
+#define MITANA_DATATREE_MUON_H
 
 #include <TRef.h>
-#include "MitAna/DataTree/interface/ChargedParticle.h"
 #include "MitAna/DataTree/interface/Track.h"
-
-#include "MitAna/DataTree/interface/BitMask32.h"
+#include "MitAna/DataTree/interface/ChargedParticle.h"
 
 namespace mithep {
   class Muon : public ChargedParticle {
@@ -23,11 +21,11 @@ namespace mithep {
       Muon() {}
       ~Muon() {}
       
-      const Track   *BestTrk()            const;
-      const Track   *GlobalTrk()          const;
-      const Track   *StandaloneTrk()      const;
-      const Track   *TrackerTrk()         const;
-      const Track   *Trk()                const  { return BestTrk();          }
+      const Track   *BestTrk()             const;
+      const Track   *GlobalTrk()           const;
+      const Track   *StandaloneTrk()       const;
+      const Track   *TrackerTrk()          const;
+      const Track   *Trk()                 const { return BestTrk();          }
       Double_t       IsoR03SumPt()         const { return fIsoR03SumPt;       }
       Double_t       IsoR03EmEt()          const { return fIsoR03EmEt;        }
       Double_t       IsoR03HadEt()         const { return fIsoR03HadEt;       }
@@ -46,42 +44,17 @@ namespace mithep {
       Double_t       EmS9Energy()          const { return fEmS9Energy;        }
       Double_t       HadS9Energy()         const { return fHadS9Energy;       }
       Double_t       HoS9Energy()          const { return fHoS9Energy;        }
-      Double_t       Mass()                const { return 105.658369e-3;      }  
-      //PCH
-      Int_t          NChambers()           const { return fNTraversedChambers;}
-      
-      BitMask32      Stations()            const { return fStationMask; }
-      UInt_t         StationMask()         const { return fStationMask.Bits(); }
-      Int_t          NSegments()           const { return fStationMask.NBitsSet();}
-      
-      Float_t        GetDX(int iStation)   const {
-	if(iStation >= 0 && iStation < 8) return fDX[iStation]; 
-	return 99999;
-      }
-      Float_t        GetDY(int iStation)   const {
-	if(iStation >= 0 && iStation < 8) return fDY[iStation]; 
-	return 99999;
-      }
-      Float_t        GetPullX(int iStation) const {
-	if(iStation >= 0 && iStation < 8) return fPullX[iStation]; 
-	return 99999;
-      }
-      Float_t        GetPullY(int iStation) const {
-	if(iStation >= 0 && iStation < 8) return fPullY[iStation]; 
-	return 99999;
-      }
-      Float_t        GetTrackDist(int iStation)      const {
-	if(iStation >= 0 && iStation < 8) return fTrackDist[iStation]; 
-	return 99999;
-      }
-      Float_t        GetTrackDistErr(int iStation)   const {
-	if(iStation >= 0 && iStation < 8) return fTrackDistErr[iStation]; 
-	return 99999;
-      }
-      Int_t          GetNSegments(int iStation)   const {
-	if(iStation >= 0 && iStation < 8) return fNSegments[iStation]; 
-	return 99999;
-      }
+      Double_t       Mass()                const { return 105.658369e-3;             }  
+      Int_t          NChambers()           const { return fNTraversedChambers;       }
+      Int_t          NSegments()           const { return fStationMask.NBitsSet();   }
+      Bool_t         StationBit(Int_t bit) const { return fStationMask.TestBit(bit); }
+      Double_t       GetDX(Int_t iStation)             const;
+      Double_t       GetDY(Int_t iStation)             const;
+      Double_t       GetPullX(Int_t iStation)          const;
+      Double_t       GetPullY(Int_t iStation)          const;
+      Double_t       GetTrackDist(Int_t iStation)      const;
+      Double_t       GetTrackDistErr(Int_t iStation)   const;
+      Int_t          GetNSegments(Int_t iStation) const;
       void	     SetGlobalTrk(Track* t)                { fGlobalTrackRef = t;            }
       void	     SetStandaloneTrk(Track* t)            { fStandaloneTrackRef = t;        }
       void	     SetTrackerTrk(Track* t)               { fTrackerTrackRef = t;           }
@@ -103,52 +76,48 @@ namespace mithep {
       void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;       }
       void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;     }
       void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;       }
-
-      //PCH
-      void           SetNChambers(Int_t iNTraversedChambers)  {fNTraversedChambers = iNTraversedChambers;}
-      void           SetStationMask(UInt_t iStationMask)      {fStationMask.SetBits(iStationMask);}
-      void           SetDX(int iStation,Float_t iDX)          {if(iStation >= 0 && iStation < 8)       fDX[iStation] = iDX;}
-      void           SetDY(int iStation,Float_t iDY)          {if(iStation >= 0 && iStation < 8)       fDY[iStation] = iDY;}
-      void           SetPullX(int iStation,Float_t iPullX)    {if(iStation >= 0 && iStation < 8)       fPullX[iStation] = iPullX;}
-      void           SetPullY(int iStation,Float_t iPullY)    {if(iStation >= 0 && iStation < 8)       fPullY[iStation] = iPullY;}
-      void           SetTrackDist(int iStation,Float_t iDist) {if(iStation >= 0 && iStation < 8)       fTrackDist[iStation] = iDist;}
-      void           SetTrackDistErr(int iStation,Float_t iDistErr)    {if(iStation >= 0 && iStation < 8) fTrackDistErr[iStation] = iDistErr;}
-      void           SetNSegments   (int iStation,int     iNSegements) {if(iStation >= 0 && iStation < 8) fNSegments   [iStation] = iNSegements;}
+      void           SetNChambers(Int_t iNTraCh)           { fNTraversedChambers = iNTraCh;  }
+      void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);  }
+      void           SetDX(Int_t iStation, Double_t iDX);
+      void           SetDY(Int_t iStation, Double_t iDY);
+      void           SetPullX(Int_t iStation, Double_t iPullX);
+      void           SetPullY(Int_t iStation, Double_t iPullY);
+      void           SetTrackDist(Int_t iStation, Double_t iDist);
+      void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
+      void           SetNSegments(Int_t iStation, Int_t NSegments);
 
     protected:
       TRef	     fGlobalTrackRef;      //global combined track reference
       TRef	     fStandaloneTrackRef;  //standalone muon track reference
       TRef	     fTrackerTrackRef;     //tracker track reference
-      Double_t       fIsoR03SumPt;
-      Double_t       fIsoR03EmEt;
-      Double_t       fIsoR03HadEt;
-      Double_t       fIsoR03HoEt;
-      Int_t          fIsoR03NTracks;
-      Int_t          fIsoR03NJets;
-      Double_t       fIsoR05SumPt;
-      Double_t       fIsoR05EmEt;
-      Double_t       fIsoR05HadEt;
-      Double_t       fIsoR05HoEt;
-      Int_t          fIsoR05NTracks;
-      Int_t          fIsoR05NJets;      
-      Double_t       fEmEnergy;
-      Double_t       fHadEnergy;
-      Double_t       fHoEnergy;
-      Double_t       fEmS9Energy;
-      Double_t       fHadS9Energy;
-      Double_t       fHoS9Energy;
-      //-------------> Added By PCH 
-      //-------------> 0-3 DT 4-7 CSCs Segment Components
-      Int_t   fNTraversedChambers;
-      BitMask32 fStationMask;
-     
-      Float_t fDX[8];
-      Float_t fDY[8];
-      Float_t fPullX[8];
-      Float_t fPullY[8];
-      Float_t fTrackDist[8];
-      Float_t fTrackDistErr[8]; 
-      Int_t   fNSegments[8];
+      Double32_t     fIsoR03SumPt;         //isolation size R=0.3 sum pt
+      Double32_t     fIsoR03EmEt;          //isolation size R=0.3 em  trans energy 
+      Double32_t     fIsoR03HadEt;         //isolation size R=0.3 had trans energy
+      Double32_t     fIsoR03HoEt;          //isolation size R=0.3 ho  trans energy
+      Int_t          fIsoR03NTracks;       //isolation size R=0.3 number of tracks
+      Int_t          fIsoR03NJets;         //isolation size R=0.3 number of jets
+      Double32_t     fIsoR05SumPt;         //isolation size R=0.5 sum pt
+      Double32_t     fIsoR05EmEt;          //isolation size R=0.5 em  trans energy 
+      Double32_t     fIsoR05HadEt;         //isolation size R=0.5 had trans energy
+      Double32_t     fIsoR05HoEt;          //isolation size R=0.5 ho  trans energy
+      Int_t          fIsoR05NTracks;       //isolation size R=0.5 number of tracks
+      Int_t          fIsoR05NJets;         //isolation size R=0.5 number of jets      
+      Double32_t     fEmEnergy;            //?
+      Double32_t     fHadEnergy;           //?
+      Double32_t     fHoEnergy;            //?
+      Double32_t     fEmS9Energy;          //?
+      Double32_t     fHadS9Energy;         //?
+      Double32_t     fHoS9Energy;          //?
+      Int_t          fNTraversedChambers;  //number of tranversed chambers
+      BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs segment components
+      Double32_t     fDX[8];               //uncertainty in x in given muon chamber
+      Double32_t     fDY[8];               //uncertainty in y in given muon chamber
+      Double32_t     fPullX[8];            //pull in x in given muon chamber
+      Double32_t     fPullY[8];            //pull in y in given muon chamber
+      Double32_t     fTrackDist[8];        //distance to track in tranverse plane in given muon chamber
+      Double32_t     fTrackDistErr[8];     //error of distance to track in transverse plane in given muon chamber
+      Int_t          fNSegments[8];        //number of segments in chamber in given muon chamber
+
     ClassDef(Muon, 1) // Muon class
   };
 }
@@ -191,8 +160,130 @@ inline const mithep::Track *mithep::Muon::TrackerTrk() const
 
   return static_cast<const Track*>(fTrackerTrackRef.GetObject()); 
 }
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetDX(Int_t iStation) const 
+{
+  // Return uncertainty in x in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fDX[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetDY(Int_t iStation) const 
+{
+  // Return uncertainty in y in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fDY[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetPullX(Int_t iStation) const 
+{
+  // Return pull in x in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fPullX[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetPullY(Int_t iStation) const 
+{
+  // Return pull in y in given chamber.
+  
+  assert(iStation >= 0 && iStation < 8);
+  return fPullY[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetTrackDist(Int_t iStation) const 
+{
+  // Return track distance in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fTrackDist[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetTrackDistErr(Int_t iStation) const 
+{
+  // Return error of track distance in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fTrackDistErr[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::Muon::GetNSegments(Int_t iStation) const 
+{
+  // Return number of segments in chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  return fNSegments[iStation]; 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetDX(Int_t iStation, Double_t iDX) 
+{
+  // Return uncertainty in x in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fDX[iStation] = iDX;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetDY(Int_t iStation, Double_t iDY)
+{
+  // Return uncertainty in y in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fDY[iStation] = iDY;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetPullX(Int_t iStation, Double_t iPullX)
+{
+  // Set pull in x in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fPullX[iStation] = iPullX;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetPullY(Int_t iStation, Double_t iPullY) 
+{
+  // Set pull in y in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fPullY[iStation] = iPullY;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetTrackDist(Int_t iStation, Double_t iDist) 
+{
+  // Set track distance in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fTrackDist[iStation] = iDist;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetTrackDistErr(Int_t iStation, Double_t iDistErr)
+{
+  // Set error of track distance in given chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fTrackDistErr[iStation] = iDistErr;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t NSegments) 
+{
+  // Set number of segments in chamber.
+
+  assert(iStation >= 0 && iStation < 8);
+  fNSegments[iStation] = NSegments;
+}
 #endif
-
-
-
-
