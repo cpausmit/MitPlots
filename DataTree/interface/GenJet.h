@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: GenJet.h,v 1.1 2008/09/16 18:12:29 sixie Exp $
 //
 // GenJet
 //
@@ -18,9 +18,11 @@ namespace mithep
   class GenJet : public Particle
   {
     public:
-      GenJet() {}
-      GenJet(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(px,py,pz,e)
-      {}
+      GenJet() : fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0), 
+                 fAuxiliaryEnergy(0), fMatchedMCFlavor(0) {}
+      GenJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
+        fMom(px,py,pz,e), fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0),
+        fAuxiliaryEnergy(0), fMatchedMCFlavor(0)  {}
       ~GenJet() {}
 
       FourVector	Mom()                         const { return fMom;                       }
@@ -43,7 +45,7 @@ namespace mithep
       Double_t   fEmEnergy; 	          //electromagnetic
       Double_t   fInvisibleEnergy; 	  //invisible energy (mu, nu)
       Double_t   fAuxiliaryEnergy; 	  //anything else (eg. undecayed sigmas)
-      Int_t      fMatchedMCFlavor;        //pdgID of the quark flavor that the jet matched to
+      Int_t      fMatchedMCFlavor;        //pdg ID of the quark flavor that the jet matched to
 
     ClassDef(GenJet, 1) // GenJet class
   };

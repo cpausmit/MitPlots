@@ -20,7 +20,7 @@ namespace mithep
   {
     public:
       CaloTower() {}
-      virtual ~CaloTower() {}
+      ~CaloTower() {}
      
       void	          SetEmEnergy(Double_t EmEnergy)       { fEmEnergy    = EmEnergy;    }
       void                SetEmPosition(Double_t x, Double_t y, Double_t z)

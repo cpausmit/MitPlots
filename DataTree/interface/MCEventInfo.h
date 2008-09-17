@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCEventInfo.h,v 1.1 2008/08/29 01:53:26 loizides Exp $
+// $Id: MCEventInfo.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // MCEventInfo
 //
@@ -19,11 +19,11 @@ namespace mithep
       MCEventInfo(Double_t w=0) : fWeight(w)  {}
       virtual ~MCEventInfo() {}
 
-      Double_t            Weight()       const { return fWeight; }
-      void                SetWeight(Double_t w)  { fWeight=w; }
+      Double_t            Weight()              const { return fWeight; }
+      void                SetWeight(Double_t w)       { fWeight=w; }
 
     protected:
-      Double32_t          fWeight;          //event weight
+      Double32_t          fWeight;              //event weight
       
     ClassDef(MCEventInfo, 1) // Monte-Carlo event info class
   };

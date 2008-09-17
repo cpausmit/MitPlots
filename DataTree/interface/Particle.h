@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.17 2008/08/18 10:53:05 sixie Exp $
+// $Id: Particle.h,v 1.18 2008/09/10 03:33:27 loizides Exp $
 //
 // Particle
 //
@@ -38,8 +38,6 @@ namespace mithep
       virtual Double_t		P()      const { return Mom().P();}
 
       void                      Print(Option_t *opt="") const;
-
-    protected:
      
     ClassDef(Particle, 1) // Generic particle class
   };

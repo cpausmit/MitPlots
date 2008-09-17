@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.12 2008/07/28 23:13:41 paus Exp $
+// $Id: DataObject.h,v 1.13 2008/09/10 03:33:26 loizides Exp $
 //
 // DataObject
 //
@@ -38,7 +38,7 @@ namespace mithep
       void                 SetCacheBit()       { SetBit(23); }
       void                 ResetCacheBit()     { SetBit(23,0); }
 
-      ClassDef(DataObject, 1)
+    ClassDef(DataObject, 1)
   };
 }
 

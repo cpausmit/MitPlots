@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.2 2008/08/18 09:27:42 sixie Exp $
+// $Id: SuperCluster.h,v 1.3 2008/09/10 03:33:27 loizides Exp $
 //
 // SuperCluster
 //
@@ -60,7 +60,7 @@ namespace mithep
       RefArray<BasicCluster>    fClusters;        //||BasicClusters in this SuperCluster
       TRef                      fSeedRef;         //the seed cluster
 
-      ClassDef(SuperCluster, 1) // Generic particle class
+    ClassDef(SuperCluster, 1) // Generic particle class
   };
 }
 

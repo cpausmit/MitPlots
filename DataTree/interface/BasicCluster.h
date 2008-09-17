@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.1 2008/08/08 11:12:37 sixie Exp $
+// $Id: BasicCluster.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // Basic Clusters
 //
@@ -22,7 +22,7 @@ namespace mithep
       BasicCluster() : fEnergy(0.0), fPoint(0,0,0) {}
       BasicCluster(Double_t Energy, ThreeVector Point) : 
 	fEnergy(Energy), fPoint(Point) {}
-      virtual ~BasicCluster() {}
+      ~BasicCluster() {}
      
       Int_t	       AlgoId()                 const { return fAlgoId; }
       Double_t	       ChiSq()                  const { return fChiSq; }      
