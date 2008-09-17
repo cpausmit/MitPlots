@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.14 2008/08/29 02:48:33 loizides Exp $
+// $Id: Names.cc,v 1.15 2008/09/06 18:02:22 sixie Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -6,6 +6,10 @@ using namespace mithep;
 
 const char *Names::gkEvtTreeName            = "Events";
 const char *Names::gkEvtHeaderBrn           = "EventHeader";
+const char *Names::gkL1BitBrn               = "L1Bits";
+const char *Names::gkL1ObjBrn               = "L1Objects";
+const char *Names::gkHltBitBrn              = "HLTBits";
+const char *Names::gkHltObjBrn              = "HLTObjects";
 const char *Names::gkMCEvtInfoBrn           = "MCEventInfo";
 const char *Names::gkTrackBrn               = "Tracks";
 const char *Names::gkBarrelBasicClusterBrn  = "BarrelBasicClusters";
@@ -26,3 +30,9 @@ const char *Names::gkRunInfoBrn             = "RunInfo";
 const char *Names::gkLATreeName             = "FWMetaData";
 const char *Names::gkLAHeaderBrn            = "LAHeader";
 
+const char *Names::gkHltTreeName            = "HLT";
+const char *Names::gkHltTableBrn            = "HLTTriggerTable";
+const char *Names::gkHltLabelBrn            = "HLTLabels";
+
+const char *Names::gkL1TreeName             = "L1";
+const char *Names::gkL1TableBrn             = "L1TriggerTable";

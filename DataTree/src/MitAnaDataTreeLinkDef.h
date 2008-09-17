@@ -1,19 +1,21 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.35 2008/09/16 18:13:03 sixie Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.36 2008/09/16 22:08:46 ksung Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
 
+#include <string>
 #include <vector>
+
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/Collections.h"
 
 #include "MitAna/DataTree/interface/BitMask.h"
-#include "MitAna/DataTree/interface/BitMask32.h"
-#include "MitAna/DataTree/interface/BitMask64.h"
+//#include "MitAna/DataTree/interface/BitMask32.h"
+//#include "MitAna/DataTree/interface/BitMask64.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
-//#include "MitAna/DataTree/interface/TriggerName.h"
+#include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/RunInfo.h"
 #include "MitAna/DataTree/interface/MCEventInfo.h"
 
@@ -32,6 +34,7 @@
 #include "MitAna/DataTree/interface/Jet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
+#include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
@@ -51,21 +54,33 @@
 
 #pragma link C++ class mithep::Names+;
 
+#pragma link C++ class mithep::BitMask<1>+;
+#pragma link C++ class mithep::BitMask<2>+;
 #pragma link C++ class mithep::BitMask<4>+;
+#pragma link C++ class mithep::BitMask<5>+;
+#pragma link C++ class mithep::BitMask<6>+;
+#pragma link C++ class mithep::BitMask<7>+;
 #pragma link C++ class mithep::BitMask<8>+;
 #pragma link C++ class mithep::BitMask<32>+;
-//#pragma link C++ typedef mithep::BitMask32;
-//#pragma link C++ typedef mithep::BitMask64;
+#pragma link C++ typedef mithep::BitMask8;
+#pragma link C++ typedef mithep::BitMask16;
+#pragma link C++ typedef mithep::BitMask32;
+#pragma link C++ typedef mithep::BitMask40;
+#pragma link C++ typedef mithep::BitMask48;
+#pragma link C++ typedef mithep::BitMask56;
+#pragma link C++ typedef mithep::BitMask64;
 #pragma link C++ typedef mithep::BitMask256;
 #pragma link C++ class mithep::BitMask32+;
 #pragma link C++ class mithep::BitMask64+;
 #pragma link C++ class mithep::EventHeader+;
 #pragma link C++ class mithep::LAHeader+;
-//#pragma link C++ class mithep::TriggerName+;
+#pragma link C++ class mithep::TriggerName+;
 #pragma link C++ class mithep::RunInfo+;
 #pragma link C++ class mithep::MCEventInfo+;
 
 #pragma link C++ class mithep::Collection<TRef>+;
+#pragma link C++ class mithep::Collection<std::string>+;
+#pragma link C++ class mithep::Vector<std::string>+;
 
 #pragma link C++ class mithep::DataObject+;
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
@@ -83,6 +98,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Track>+;
 #pragma link C++ typedef mithep::TrackCol;
 #pragma link C++ typedef mithep::TrackArr;
+#pragma link C++ enum mithep::Track::EHitLayer;
 
 #pragma link C++ class mithep::BasicCluster+;
 #pragma link C++ class mithep::Collection<mithep::BasicCluster>+;
@@ -152,6 +168,26 @@
 #pragma link C++ class mithep::ObjArray<mithep::Met>+;
 #pragma link C++ typedef mithep::MetCol;
 #pragma link C++ typedef mithep::MetArr;
+
+#pragma link C++ class mithep::TriggerObjectRel+;
+#pragma link C++ class mithep::Collection<mithep::TriggerObjectRel>+;
+#pragma link C++ class mithep::Array<mithep::TriggerObjectRel>+;
+#pragma link C++ typedef mithep::TriggerObjectRelCol;
+#pragma link C++ typedef mithep::TriggerObjectRelArr;
+
+#pragma link C++ class mithep::TriggerObjectBase+;
+#pragma link C++ class mithep::Collection<mithep::TriggerObjectBase>+;
+#pragma link C++ class mithep::Array<mithep::TriggerObjectBase>+;
+#pragma link C++ typedef mithep::TriggerObjectBaseCol;
+#pragma link C++ typedef mithep::TriggerObjectBaseArr;
+
+#pragma link C++ class mithep::TriggerObject+;
+#pragma link C++ class mithep::Collection<mithep::TriggerObject>+;
+#pragma link C++ class mithep::Array<mithep::TriggerObject>+;
+#pragma link C++ class mithep::ObjArray<mithep::TriggerObject>+;
+#pragma link C++ typedef mithep::TriggerObjectCol;
+#pragma link C++ typedef mithep::TriggerObjectArr;
+#pragma link C++ enum mithep::TriggerObject::ETriggerObject;
 
 #pragma link C++ class mithep::CompositeParticle+;
 #pragma link C++ class mithep::Collection<mithep::CompositeParticle>+;
