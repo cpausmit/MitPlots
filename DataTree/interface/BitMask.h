@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: BitMask.h,v 1.3 2008/09/17 04:09:26 loizides Exp $
 //
 // BitMask
 //
@@ -76,7 +76,7 @@ inline void mithep::BitMask<N>::SetBits(Long64_t bits)
 {
   // Set bits given by bits.
 
-  assert(sizeof(Long64_t)<=N);
+  assert(sizeof(Long64_t)>=N);
   SetBits(reinterpret_cast<const char*>(&bits));
 }
 
