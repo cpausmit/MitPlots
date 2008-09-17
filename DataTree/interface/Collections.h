@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.24 2008/09/16 18:12:51 sixie Exp $
+// $Id: Collections.h,v 1.25 2008/09/16 22:06:22 ksung Exp $
 //
 // Collections
 //
@@ -29,6 +29,7 @@
 #include "MitAna/DataTree/interface/Jet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
+#include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
@@ -51,6 +52,9 @@ namespace mithep
   typedef Collection<Jet>               JetCol;
   typedef Collection<GenJet>            GenJetCol;
   typedef Collection<Met>               MetCol;
+  typedef Collection<TriggerObjectRel>  TriggerObjectRelCol;
+  typedef Collection<TriggerObjectBase> TriggerObjectBaseCol;
+  typedef Collection<TriggerObject>     TriggerObjectCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<MCParticle>        MCParticleCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
@@ -71,6 +75,9 @@ namespace mithep
   typedef Array<Jet>                    JetArr;
   typedef Array<GenJet>                 GenJetArr;
   typedef Array<Met>                    MetArr;
+  typedef Array<TriggerObjectRel>       TriggerObjectRelArr;
+  typedef Array<TriggerObjectBase>      TriggerObjectBaseArr;
+  typedef Array<TriggerObject>          TriggerObjectArr;
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<CompositeParticle>      CompositeParticleArr;
   typedef Array<DecayParticle>          DecayParticleArr;
