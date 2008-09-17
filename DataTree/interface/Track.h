@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.16 2008/08/29 01:51:01 loizides Exp $
+// $Id: Track.h,v 1.17 2008/09/10 03:33:27 loizides Exp $
 //
 // Track
 //
@@ -12,6 +12,7 @@
 // phi = azimuth angle at the given point
 // dxy = -vx*sin(phi) + vy*cos(phi) [cm]
 // dsz = vz*cos(lambda) - (vx*cos(phi)+vy*sin(phi))*sin(lambda) [cm]
+// (See http://cmslxr.fnal.gov/lxr/source/DataFormats/TrackReco/interface/TrackBase.h)
 //
 // Format for fHits: (We do not use anything resembling reco::HitPattern from CMSSW because that
 // data format requires 800 bits per track!)
@@ -71,8 +72,7 @@
  
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
-#include "MitAna/DataTree/interface/BitMask32.h"
-#include "MitAna/DataTree/interface/BitMask64.h"
+#include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
@@ -80,43 +80,45 @@ namespace mithep
   class Track : public DataObject
   {
     public:
-      enum HitLayer { PXB1,
-                      PXB2,
-                      PXB3,
-                      PXF1,
-                      PXF2,
-                      TIB1,
-                      TIB1S,
-                      TIB2,
-                      TIB2S,
-                      TIB3,
-                      TIB4,
-                      TID1,
-                      TID1S,
-                      TID2,
-                      TID2S,
-                      TID3,
-                      TOB1,
-                      TOB1S,
-                      TOB2,
-                      TOB2S,
-                      TOB3,
-                      TOB4,
-                      TOB5,
-                      TOB6,
-                      TEC1,
-                      TEC1S,
-                      TEC2,
-                      TEC2S,
-                      TEC3,
-                      TEC4,
-                      TEC5,
-                      TEC5S,
-                      TEC6,
-                      TEC7,
-                      TEC8,
-                      TEC9 };
-    
+      enum EHitLayer { 
+        PXB1, 
+        PXB2,
+        PXB3,
+        PXF1,
+        PXF2,
+        TIB1,
+        TIB1S,
+        TIB2,
+        TIB2S,
+        TIB3,
+        TIB4,
+        TID1,
+        TID1S,
+        TID2,
+        TID2S,
+        TID3,
+        TOB1,
+        TOB1S,
+        TOB2,
+        TOB2S,
+        TOB3,
+        TOB4,
+        TOB5,
+        TOB6,
+        TEC1,
+        TEC1S,
+        TEC2,
+        TEC2S,
+        TEC3,
+        TEC4,
+        TEC5,
+        TEC5S,
+        TEC6,
+        TEC7,
+        TEC8,
+        TEC9 
+      };
+
       Track() : fQOverP(0), fQOverPErr(0), fLambda(0), fLambdaErr(0),
                 fPhi0(0), fPhi0Err(0), fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0),
                 fChi2(0), fNdof(0) {}
@@ -126,74 +128,61 @@ namespace mithep
                 fChi2(0), fNdof(0) {}
       ~Track() {}
 
-      Double_t           QOverP()        const { return fQOverP; }
-      Double_t           QOverPErr()     const { return fQOverPErr; }
-      Double_t           Lambda()        const { return fLambda; }
-      Double_t           LambdaErr()     const { return fLambdaErr; }
-      Double_t	         Phi0()          const { return fPhi0; }
-      Double_t	         Phi0Err()       const { return fPhi0Err; }
-      Double_t           Dxy()           const { return fDxy; }
-      Double_t           DxyErr()        const { return fDxyErr; }
-      Double_t           Dsz()           const { return fDsz; }
-      Double_t           DszErr()        const { return fDszErr; }
-      Int_t	         Charge()        const { return (fQOverP>0) ? 1 : -1; }
-      Double_t           Chi2()          const { return fChi2; }
-      void               ClearHit(HitLayer l)  { fHits.ClearBit(l); } 
-      Double_t	         D0()            const { return -fDxy; }
-      Double_t	         D0Err()         const { return fDxyErr; }
-      Bool_t             Hit(HitLayer l) const { return fHits.TestBit(l); }
-      BitMask64         &Hits()                { return fHits; }
-      const BitMask64   &Hits()          const { return fHits; }
-      ULong64_t          HitMask()       const { return fHits.Bits(); }
-      ThreeVector        Mom()           const { return ThreeVector(Px(),Py(),Pz()); }
-      UInt_t             Ndof()          const { return fNdof; }
-      Double_t           P2()            const { return P()*P(); }
-      Double_t           P()             const { return TMath::Abs(1./fQOverP); }
-      Double_t           Px()            const { return Pt()*TMath::Cos(fPhi0); }      
-      Double_t           Py()            const { return Pt()*TMath::Sin(fPhi0); }
-      Double_t           Pz()            const { return P()*TMath::Sin(fLambda); }
-      Double_t           Phi()           const { return fPhi0; }
-      Double_t	         Pt()            const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
-      void               SetChi2(Double_t chi2)     { fChi2 = chi2; }
-      void               SetHit(HitLayer l)         { fHits.SetBit(l); }
-      void               SetHits(BitMask64 hits)    { fHits = hits; }
-      void               SetHits(ULong64_t hitMask) { fHits.SetBits(hitMask); }
-      void               SetNdof(UInt_t dof)        { fNdof = dof; }
-      void               SetStat(BitMask32 stat)    { fStat = stat; }
-      void               SetStat(UInt_t statBits)   { fStat.SetBits(statBits); }
-      BitMask32         &Stat()                     { return fStat; }
-      const BitMask32   &Stat()               const { return fStat; }
-      UInt_t             StatBits()           const { return fStat.Bits(); }
-      Double_t           Theta()              const { return (TMath::PiOver2() - fLambda); }
-      Double_t           Z0()                 const { return fDsz/TMath::Cos(fLambda); }
-      FourVector         Mom4(Double_t m)     const { return FourVector(Px(),Py(),Pz(),E(m)); }
-      Double_t           E2(Double_t m)       const { return P2()+m*m; }
-      Double_t           E(Double_t m)        const { return TMath::Sqrt(E2(m)); }
-      UInt_t             NHits()              const { return fHits.NBitsSet(); }
-
-      void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
-                                   Double_t dXy, Double_t dSz);
+      Int_t	         Charge()         const { return (fQOverP>0) ? 1 : -1; }
+      Double_t           Chi2()           const { return fChi2; }
+      void               ClearHit(EHitLayer l)  { fHits.ClearBit(l); } 
+      Double_t	         D0()             const { return -fDxy; }
+      Double_t	         D0Err()          const { return fDxyErr; }
+      Double_t           Dsz()            const { return fDsz; }
+      Double_t           DszErr()         const { return fDszErr; }
+      Double_t           Dxy()            const { return fDxy; }
+      Double_t           DxyErr()         const { return fDxyErr; }
+      Double_t           E(Double_t m)    const { return TMath::Sqrt(E2(m)); }
+      Double_t           E2(Double_t m)   const { return P2()+m*m; }
+      Bool_t             Hit(EHitLayer l) const { return fHits.TestBit(l); }
+      Double_t           Lambda()         const { return fLambda; }
+      Double_t           LambdaErr()      const { return fLambdaErr; }
+      const MCParticle  *MCPart()         const;
+      ThreeVector        Mom()            const { return ThreeVector(Px(),Py(),Pz()); }
+      FourVector         Mom4(Double_t m) const { return FourVector(Px(),Py(),Pz(),E(m)); }
+      UInt_t             Ndof()           const { return fNdof; }
+      UInt_t             NHits()          const { return fHits.NBitsSet(); }
+      Double_t           P2()             const { return P()*P(); }
+      Double_t           P()              const { return TMath::Abs(1./fQOverP); }
+      Double_t           Phi()            const { return fPhi0; }
+      Double_t	         Phi0()           const { return fPhi0; }
+      Double_t	         Phi0Err()        const { return fPhi0Err; }
+      Double_t	         Pt()             const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
+      Double_t           Px()             const { return Pt()*TMath::Cos(fPhi0); }      
+      Double_t           Py()             const { return Pt()*TMath::Sin(fPhi0); }
+      Double_t           Pz()             const { return P()*TMath::Sin(fLambda); }
+      Double_t           QOverP()         const { return fQOverP; }
+      Double_t           QOverPErr()      const { return fQOverPErr; }
+      Double_t           Theta()          const { return (TMath::PiOver2() - fLambda); }
+      Double_t           Z0()             const { return fDsz/TMath::Cos(fLambda); }
+      void               SetChi2(Double_t chi2) { fChi2 = chi2; }
       void	         SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
                                    Double_t dXyErr, Double_t dSzErr);
-      
-      const MCParticle  *MCPart()             const;
-      void	         SetMCPart(MCParticle *p)   { fMCParticleRef = p; }
-      
+      void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
+                                   Double_t dXy, Double_t dSz);
+      void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
+      void               SetNdof(UInt_t dof)      { fNdof = dof; }
+      void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
+
     protected:
       BitMask64          fHits;                //storage for mostly hit information
-      BitMask32          fStat;                //storage for various interesting things
-      Double_t           fQOverP;              //track parameters/uncertainties
-      Double_t           fQOverPErr;           //
-      Double_t           fLambda;              //
-      Double_t           fLambdaErr;           //
-      Double_t           fPhi0;                //
-      Double_t           fPhi0Err;             //
-      Double_t           fDxy;                 //
-      Double_t           fDxyErr;              //
-      Double_t           fDsz;                 //
-      Double_t           fDszErr;              //
+      Double_t           fQOverP;              //signed inverse of momentum [1/GeV]
+      Double_t           fQOverPErr;           //error of q/p
+      Double_t           fLambda;              //pi/2 - polar angle at the reference point
+      Double_t           fLambdaErr;           //error of lambda
+      Double_t           fPhi0;                //azimuth angle at the given point
+      Double_t           fPhi0Err;             //error of azimuthal angle
+      Double_t           fDxy;                 //transverse distance to reference point [cm]
+      Double_t           fDxyErr;              //error of transverse distance
+      Double_t           fDsz;                 //longitudinal distance to reference point [cm]
+      Double_t           fDszErr;              //error of longitudinal distance
       Double_t           fChi2;                //chi squared of track fit
-      UInt_t             fNdof;                //number of dof of track fit
+      UInt_t             fNdof;                //degree-of-freedom of track fit
       TRef               fMCParticleRef;       //reference to sim particle (for monte carlo)
 	      
     ClassDef(Track, 1) // Track class
