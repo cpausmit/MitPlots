@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.1 2008/09/05 01:21:45 loizides Exp $
+// $Id: BitMask.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // BitMask
 //
@@ -11,6 +11,7 @@
 #ifndef MITANA_DATATREE_BITMASK_H
 #define MITANA_DATATREE_BITMASK_H
  
+#include <assert.h>
 #include <Rtypes.h>
 
 namespace mithep
@@ -23,16 +24,18 @@ namespace mithep
       BitMask(const Char_t *bits) { SetBits(bits); }
       virtual ~BitMask() {}
 
-      const Char_t *Bits()                const { return fBitMask; }
-      void          Clear()                     { memset(fBitMask,0,N); }
-      void          ClearBit(UInt_t n)          { SetBit(n,0); }
-      UInt_t        NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
-      void          SetBit(UInt_t n, Bool_t b=1);
-      void          SetBits(const Char_t *bits) { strncpy(fBitMask,bits,N); }
-      Bool_t        TestBit(UInt_t n)     const;
+      const Char_t           *Bits()                const { return fBitMask; }
+      void                    Clear()                     { memset(fBitMask,0,N); }
+      void                    ClearBit(UInt_t n)          { SetBit(n,0); }
+      UInt_t                  NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
+      void                    SetBit(UInt_t n, Bool_t b=1);
+      void                    SetBits(const Char_t *bits) { strncpy(fBitMask,bits,N); }
+      void                    SetBits(Long64_t bits);
+      UInt_t                  Size()                const { return N*8; }
+      Bool_t                  TestBit(UInt_t n)     const;
       
     protected:
-      Char_t        fBitMask[N]; //the actual bitmask
+      Char_t                  fBitMask[N]; //the actual bitmask
     
     ClassDefT(BitMask, 1)
   };
@@ -65,6 +68,16 @@ UInt_t mithep::BitMask<N>::NBitsSet(UInt_t first, UInt_t last) const
     numBits += TestBit(i);
     
   return numBits;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<UInt_t N>
+inline void mithep::BitMask<N>::SetBits(Long64_t bits)
+{
+  // Set bits given by bits.
+
+  assert(sizeof(Long64_t)<=N);
+  SetBits(reinterpret_cast<const char*>(&bits));
 }
 
 //--------------------------------------------------------------------------------------------------
