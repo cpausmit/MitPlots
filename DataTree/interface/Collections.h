@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.25 2008/09/16 22:06:22 ksung Exp $
+// $Id: Collections.h,v 1.26 2008/09/17 04:20:15 loizides Exp $
 //
 // Collections
 //
@@ -15,6 +15,7 @@
 #include "MitAna/DataCont/interface/Array.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/DataCont/interface/RefArray.h"
+#include "MitAna/DataCont/interface/StackArray.h"
 #include "MitAna/DataCont/interface/Vector.h"
 
 #include "MitAna/DataTree/interface/DataObject.h"
