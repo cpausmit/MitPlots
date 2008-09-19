@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.9 2008/07/29 22:51:56 bendavid Exp $
+// $Id: DecayParticle.h,v 1.10 2008/08/01 11:19:04 bendavid Exp $
 //
 // Decay Particle
 //
@@ -18,6 +18,8 @@
 #include <TDatabasePDG.h>
 #include <TParticlePDG.h> 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
+#include "MitAna/DataTree/interface/DaughterData.h"
+#include "MitAna/DataCont/interface/StackArray.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
@@ -140,8 +142,15 @@ namespace mithep
       FourVector	        Mom() const { return fMomentum; }
       void                   SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                   SetMom(const FourVector &p) { fMomentum = p; }
-
+      
+      const FourVector&      DaughterMom(UInt_t i) const { return fDaughterData.At(i)->Mom(); }
+      const DaughterData&    DaughterDat(UInt_t i) const { return *fDaughterData.At(i); }
+  
+      void                  AddDaughter(Particle *p, const DaughterData &ddata = DaughterData());
+      
     protected:
+      void                  AddDaughterData(const DaughterData &ddata) { fDaughterData.AddCopy(ddata); }  
+    
       UInt_t                fAbsPdgId;
       DecayType             fDecayType; // Decay type (either fast of slow)
       // Fit quality
@@ -173,6 +182,7 @@ namespace mithep
       SevenSymMatrix        fBigError;
       // momentum
       FourVector            fMomentum; //momentum fourvector
+      StackArray<DaughterData,32> fDaughterData; //||momentum of daughters at vertex
       
     ClassDef(DecayParticle, 1)         // Decay particle class
   };
@@ -191,6 +201,15 @@ inline void mithep::DecayParticle::SetMom(Double_t px, Double_t py, Double_t pz,
 { 
   // Set four vector.
 
-  fMomentum.SetXYZT(px, py, pz, e);
+  fMomentum.SetXYZT(px,py,pz,e);
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayParticle::AddDaughter(Particle *p, const DaughterData &ddata)
+{ 
+  // Add daughter and associated fourvector
+
+  CompositeParticle::AddDaughter(p);
+  AddDaughterData(ddata);
 }
 #endif
