@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.36 2008/09/16 22:08:46 ksung Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.37 2008/09/17 04:21:50 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -204,6 +204,10 @@
 #pragma link C++ typedef mithep::MCParticleArr;
 #pragma link C++ enum mithep::MCParticle::EPartType;
 
+#pragma link C++ class mithep::DaughterData+;
+#pragma link C++ class mithep::Collection<mithep::DaughterData>+;
+#pragma link C++ class mithep::StackArray<mithep::DaughterData,32>-;
+
 #pragma link C++ class mithep::DecayParticle+;
 #pragma link C++ class mithep::Collection<mithep::DecayParticle>+;
 #pragma link C++ class mithep::Array<mithep::DecayParticle>+;
@@ -238,5 +242,6 @@
 #pragma link C++ class mithep::ObjArray<mithep::StableDaughter>+;
 #pragma link C++ typedef mithep::StableDaughterCol;
 #pragma link C++ typedef mithep::StableDaughterArr;
+
 
 #endif
