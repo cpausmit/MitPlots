@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.2 2008/07/29 12:29:47 bendavid Exp $
+// $Id: MCParticle.h,v 1.3 2008/09/10 03:33:27 loizides Exp $
 //
 // MCParticle
 //
@@ -33,6 +33,7 @@ namespace mithep
       Double_t            Charge()                 const;
       const ThreeVector  &DecayVertex()            const { return fDecayVertex; }
       const MCParticle   *Daughter(UInt_t i)       const;
+      const MCParticle   *DistinctMother()         const;
       Bool_t              HasMother()              const { return fMother.IsValid(); }
       Bool_t              IsGenerated()            const { return fIsGenerated; }
       Bool_t              IsSimulated()            const { return fIsSimulated; }
@@ -76,6 +77,22 @@ inline const mithep::MCParticle *mithep::MCParticle::Daughter(UInt_t i) const
   // Return daughter corresponding to given index.
 
   return static_cast<const MCParticle*>(fDaughters.At(i)); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::MCParticle *mithep::MCParticle::DistinctMother() const 
+{ 
+  // Return mother, walking up the tree until a particle with a different pdg from this one
+  // is found.
+
+  const mithep::MCParticle *mother = Mother();
+  
+  if (!mother) return 0;
+  
+  while (mother->PdgId()==fPdgId)
+    mother = mother->Mother();
+    
+  return mother;
 }
 
 //--------------------------------------------------------------------------------------------------
