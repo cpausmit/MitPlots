@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.17 2008/09/10 03:33:27 loizides Exp $
+// $Id: Track.h,v 1.18 2008/09/17 04:16:25 loizides Exp $
 //
 // Track
 //
@@ -152,6 +152,7 @@ namespace mithep
       Double_t           Phi()            const { return fPhi0; }
       Double_t	         Phi0()           const { return fPhi0; }
       Double_t	         Phi0Err()        const { return fPhi0Err; }
+      Double_t           Prob()           const { return TMath::Prob(fChi2,fNdof); }
       Double_t	         Pt()             const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
       Double_t           Px()             const { return Pt()*TMath::Cos(fPhi0); }      
       Double_t           Py()             const { return Pt()*TMath::Sin(fPhi0); }
