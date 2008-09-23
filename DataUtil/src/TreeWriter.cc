@@ -1,10 +1,11 @@
-// $Id: TreeWriter.cc,v 1.8 2008/07/01 14:36:52 loizides Exp $
+// $Id: TreeWriter.cc,v 1.9 2008/07/03 08:22:18 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
 #include <TObject.h>
 #include <TSystem.h>
 #include <TProcessID.h>
+#include <TBranchRef.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 
 using namespace mithep;
@@ -228,7 +229,16 @@ void TreeWriter::CloseFile()
   for (Int_t i=0;i<fTrees.GetEntries();++i) {
     MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
     mt->Write(mt->GetName(),TObject::kOverwrite);
-    mt->Reset();
+    //backup and restore list of branch pointers from TRefTable (needed for autoloading)
+    if (mt->GetBranchRef()) {
+      TObjArray *parents = mt->GetBranchRef()->GetRefTable()->GetParents();
+      TObjArray parentsBak(*parents);
+      mt->Reset();
+      for (Int_t j=0; j<parentsBak.GetEntries(); ++j)
+        parents->Add(parentsBak.At(j));
+    }
+    else
+      mt->Reset();
     mt->SetDirectory(0);   
   }
 
