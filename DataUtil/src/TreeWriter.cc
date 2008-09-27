@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.9 2008/07/03 08:22:18 loizides Exp $
+// $Id: TreeWriter.cc,v 1.10 2008/09/23 16:58:56 bendavid Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -229,7 +229,7 @@ void TreeWriter::CloseFile()
   for (Int_t i=0;i<fTrees.GetEntries();++i) {
     MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
     mt->Write(mt->GetName(),TObject::kOverwrite);
-    //backup and restore list of branch pointers from TRefTable (needed for autoloading)
+    // Backup and restore list of branch pointers from TRefTable (needed for autoloading)
     if (mt->GetBranchRef()) {
       TObjArray *parents = mt->GetBranchRef()->GetRefTable()->GetParents();
       TObjArray parentsBak(*parents);
@@ -289,7 +289,7 @@ Bool_t TreeWriter::EndEvent(Bool_t doreset)
     if (fEvtObjNum<0) {
       Error("EndEvent", "Object counter is zero. Did you call BeginEvent(kTRUE)?");
     } else {
-      // Reset the TRef table. keep it from growing with each event (see doc)
+      // Reset the TRef table. Keep it from growing with each event (see doc)
       TProcessID::SetObjectCount(fEvtObjNum);
     }
   }
