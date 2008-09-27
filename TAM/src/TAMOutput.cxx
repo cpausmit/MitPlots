@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx 5120 2008-05-07 18:17:33Z loizides $
+// $Id: TAMOutput.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "TAMOutput.h"
@@ -75,7 +75,8 @@ ClassImp(TAMOutput::TAMModInspector::TAMModMember)
 
 
 //______________________________________________________________________________
-TAMOutput::TAMModInspector::TAMModInspector() 
+TAMOutput::TAMModInspector::TAMModInspector() :
+   fOutputMembers(TCollection::kInitHashTableCapacity, 1)
 {
    // Default constructor.
 
