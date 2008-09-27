@@ -1,4 +1,4 @@
-// $Id: LAHeader.cc,v 1.1 2008/06/24 14:01:41 loizides Exp $
+// $Id: TriggerName.cc,v 1.1 2008/09/17 04:07:28 loizides Exp $
 
 #include "MitAna/DataTree/interface/TriggerName.h"
 
@@ -9,5 +9,20 @@ using namespace mithep;
 //--------------------------------------------------------------------------------------------------
 void TriggerName::Print(Option_t *opt) const
 {
+  // Print trigger id and name.
+
   printf("%03d: %s\n", fId, fName.Data());
+}
+
+//--------------------------------------------------------------------------------------------------
+void TriggerTable::Print(Option_t *opt) const
+{
+  // Print trigger table content (not ordered!)
+
+  TIterator *iter = MakeIterator();
+  const TriggerName *tn = dynamic_cast<const TriggerName *>(iter->Next());
+  while (tn) {
+    tn->Print();
+    tn = dynamic_cast<const TriggerName *>(iter->Next());
+  }
 }
