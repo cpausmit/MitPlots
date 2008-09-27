@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.10 2008/08/01 11:19:04 bendavid Exp $
+// $Id: DecayParticle.h,v 1.11 2008/09/19 11:58:41 bendavid Exp $
 //
 // Decay Particle
 //
@@ -58,93 +58,91 @@ namespace mithep
         fPosition(0,0,0) {}
       ~DecayParticle() {}
 
-      UInt_t        AbsPdgId() const { return fAbsPdgId; }
-      void          SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
+      UInt_t        AbsPdgId()         const { return fAbsPdgId; }
+      void          SetAbsPdgId(UInt_t apid) { fAbsPdgId=apid; }
       TParticlePDG *ParticlePdgEntry() const;
-
-      Double_t  PdgMass() const;
-
-      Double_t    Prob() const { return TMath::Prob(fChi2,fNdof); }
-      Double_t    Chi2() const { return fChi2; }
-      Int_t       Ndof() const { return fNdof; }
-      void   SetChi2(Double_t chi2) { fChi2 = chi2;}
-      void   SetNdof(Int_t    ndof) { fNdof = ndof;}
+      Double_t      PdgMass()          const;
+      Double_t      Prob()             const { return TMath::Prob(fChi2,fNdof); }
+      Double_t      Chi2()             const { return fChi2; }
+      Int_t         Ndof()             const { return fNdof; }
+      void          SetChi2(Double_t chi2) { fChi2 = chi2;}
+      void          SetNdof(Int_t    ndof) { fNdof = ndof;}
+      using TObject::Error;
     
       // Fitted Mass
-      Double_t    FittedMass() const { return fFittedMass; }
+      Double_t  FittedMass() const { return fFittedMass; }
       void   SetFittedMass(Double_t fittedMass) { fFittedMass = fittedMass;}
       // Fitted Mass Error
-      Double_t    FittedMassError() const { return fFittedMassError; }
+      Double_t  FittedMassError() const { return fFittedMassError; }
       void   SetFittedMassError(Double_t fittedMassError) { fFittedMassError = fittedMassError;}
       // Lxy
-      Double_t    Lxy() const { return fLxy; }
+      Double_t  Lxy() const { return fLxy; }
       void   SetLxy(Double_t lxy) { fLxy = lxy;}
       // Lxy Error
-      Double_t    LxyError() const { return fLxyError; }
+      Double_t  LxyError() const { return fLxyError; }
       void   SetLxyError(Double_t lxyError) { fLxyError = lxyError;}
       // LxyToPv (length to primary vertex)
-      Double_t    LxyToPv() const { return fLxyToPv; }
+      Double_t  LxyToPv() const { return fLxyToPv; }
       void   SetLxyToPv(Double_t lxyToPv) { fLxyToPv = lxyToPv;}
       // LxyToPv Error
-      Double_t    LxyToPvError() const { return fLxyToPvError; }
+      Double_t  LxyToPvError() const { return fLxyToPvError; }
       void   SetLxyToPvError(Double_t lxyToPvError) { fLxyToPvError = lxyToPvError;}
       // Dxy (two dimensional impact parameter)
-      Double_t    Dxy() const { return fDxy; }
+      Double_t  Dxy() const { return fDxy; }
       void   SetDxy(Double_t dxy) { fDxy = dxy;}
       // Dxy Error
-      Double_t    DxyError() const { return fDxyError; }
+      Double_t  DxyError() const { return fDxyError; }
       void   SetDxyError(Double_t dxyError) { fDxyError = dxyError;}
       // DxyToPv (two dimensional impact parameter with respect to primary vertex)
-      Double_t    DxyToPv() const { return fDxyToPv; }
+      Double_t  DxyToPv() const { return fDxyToPv; }
       void   SetDxyToPv(Double_t dxyToPv) { fDxyToPv = dxyToPv;}
       // DlxyToPv Error
-      Double_t    DxyToPvError() const { return fDxyToPvError; }
+      Double_t  DxyToPvError() const { return fDxyToPvError; }
       void   SetDxyToPvError(Double_t dxyToPvError) { fDxyToPvError = dxyToPvError;}
       // Lz
-      Double_t    Lz() const { return fLz; }
+      Double_t  Lz() const { return fLz; }
       void   SetLz(Double_t lz) { fLz = lz;}
       // Lz Error
-      Double_t    LzError() const { return fLzError; }
+      Double_t  LzError() const { return fLzError; }
       void   SetLzError(Double_t lzError) { fLzError = lzError;}
       // LzToPv (length to primary vertex)
-      Double_t    LzToPv() const { return fLzToPv; }
+      Double_t  LzToPv() const { return fLzToPv; }
       void   SetLzToPv(Double_t lzToPv) { fLzToPv = lzToPv;}
       // LzToPv Error
-      Double_t    LzToPvError() const { return fLzToPvError; }
+      Double_t  LzToPvError() const { return fLzToPvError; }
       void   SetLzToPvError(Double_t lzToPvError) { fLzToPvError = lzToPvError;}
       // CTau
-      Double_t    CTau() const { return fCTau; }
+      Double_t  CTau() const { return fCTau; }
       void   SetCTau(Double_t cTau) { fCTau = cTau;}
       // CTau Error
-      Double_t    CTauError() const { return fCTauError; }
+      Double_t  CTauError() const { return fCTauError; }
       void   SetCTauError(Double_t cTauError) { fCTauError = cTauError;}
       // Pt
-      Double_t    Pt() const { return  fPt; }
+      Double_t  Pt() const { return  fPt; }
       void   SetPt(Double_t pt) { fPt = pt;}
       // Pt Error
-      Double_t    PtError() const { return fPtError; }
+      Double_t  PtError() const { return fPtError; }
       void   SetPtError(Double_t ptError) { fPtError = ptError;}
       //----------------------------------------------------------------------------------------------
       // Accessors/Setter: Extended Vertex fit info from this level
       //----------------------------------------------------------------------------------------------
       // Position
-      const ThreeVector        &Position() const { return fPosition; }
-      void                   SetPosition(const ThreeVector &position) { fPosition = position; }
+      const ThreeVector       &Position() const { return fPosition; }
+      void                  SetPosition(const ThreeVector &position) { fPosition = position; }
       // Error
-      const ThreeSymMatrix     &Error() const { return fError; }
-      void                   SetError(const ThreeSymMatrix &error) { fError = error; }
+      const ThreeSymMatrix    &Error() const { return fError; }
+      void                  SetError(const ThreeSymMatrix &error) { fError = error; }
       // Big 7x7 Error Matrix
-      const SevenSymMatrix     &BigError() const { return fBigError; }
+      const SevenSymMatrix    &BigError() const { return fBigError; }
       void                   SetBigError(const SevenSymMatrix &bigError) { fBigError = bigError; }
-//    void                   setBigError(const SevenMatrix    &bigError) { fBigError = bigError; }
 
       //Momentum Accessors/setter
-      FourVector	        Mom() const { return fMomentum; }
-      void                   SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                   SetMom(const FourVector &p) { fMomentum = p; }
+      FourVector	       Mom() const { return fMomentum; }
+      void                  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                  SetMom(const FourVector &p) { fMomentum = p; }
       
-      const FourVector&      DaughterMom(UInt_t i) const { return fDaughterData.At(i)->Mom(); }
-      const DaughterData&    DaughterDat(UInt_t i) const { return *fDaughterData.At(i); }
+      const FourVector     &DaughterMom(UInt_t i) const { return fDaughterData.At(i)->Mom(); }
+      const DaughterData   &DaughterDat(UInt_t i) const { return *fDaughterData.At(i); }
   
       void                  AddDaughter(Particle *p, const DaughterData &ddata = DaughterData());
       
