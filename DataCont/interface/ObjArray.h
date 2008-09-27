@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
+// $Id: ObjArray.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // ObjArray
 //
@@ -23,7 +23,7 @@ namespace mithep
       ObjArray(UInt_t size=0, const char *name=0);
       ~ObjArray() {}
 
-      void                 Add(ArrayElement *ae);
+      void                 Add(ArrayElement *ae)                       { AddLast(ae); }
       const TObjArray     &Arr()                                 const { return fArray; }
       TObjArray           &Arr()                                       { return fArray; }
       ArrayElement        *At(UInt_t idx);
@@ -52,7 +52,6 @@ namespace mithep
 
     protected:
       void                 AddLast(ArrayElement *e);
-      void                 AddLast(const ArrayElement *e);
 
       TObjArray            fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
@@ -78,30 +77,12 @@ inline mithep::ObjArray<ArrayElement>::ObjArray(UInt_t size, const char *name) :
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::Add(ArrayElement *ae)
-{
-  // Add new entry to array.
-
-  AddLast(ae); 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::AddLast(ArrayElement *e)
+inline void mithep::ObjArray<ArrayElement>::AddLast(ArrayElement *ae)
 {
   // Add new entry at the end of array.
 
-  fArray.AddLast(e); 
+  fArray.AddLast(ae); 
   fNumEntries++; 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::AddLast(const ArrayElement *e)
-{ 
-  // Add new entry at the end of array.
-
-  AddLast(const_cast<ArrayElement*>(e)); 
 }
 
 //--------------------------------------------------------------------------------------------------
