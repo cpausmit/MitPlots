@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.3 2008/09/17 04:09:26 loizides Exp $
+// $Id: BitMask.h,v 1.4 2008/09/17 05:26:23 loizides Exp $
 //
 // BitMask
 //
@@ -21,19 +21,26 @@ namespace mithep
   {
     public:
       BitMask() { Clear(); }
-      BitMask(const Char_t *bits) { SetBits(bits); }
+      BitMask(const char *bits) { SetBits(bits); }
+      BitMask(const BitMask<N> &copy) { SetBits(copy.Bits()); }
       virtual ~BitMask() {}
 
-      const Char_t           *Bits()                const { return fBitMask; }
+      const char             *Bits()                const { return fBitMask; }
       void                    Clear()                     { memset(fBitMask,0,N); }
       void                    ClearBit(UInt_t n)          { SetBit(n,0); }
       UInt_t                  NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
       void                    SetBit(UInt_t n, Bool_t b=1);
-      void                    SetBits(const Char_t *bits) { strncpy(fBitMask,bits,N); }
+      void                    SetBits(const Char_t *bits) { memcpy(fBitMask,bits,N); }
       void                    SetBits(Long64_t bits);
       UInt_t                  Size()                const { return N*8; }
       Bool_t                  TestBit(UInt_t n)     const;
-      
+      BitMask                &operator&=(const BitMask<N> &rhs) 
+        { for (UInt_t n=0; n<N; ++n) fBitMask[n]&=rhs.fBitMask[n]; return *this; }
+      BitMask                &operator|=(const BitMask<N> &rhs)
+        { for (UInt_t n=0; n<N; ++n) fBitMask[n]|=rhs.fBitMask[n]; return *this; }
+      Bool_t                  operator!=(const BitMask<N> &other) const;
+      Bool_t                  operator==(const BitMask<N> &other) const;    
+
     protected:
       Char_t                  fBitMask[N]; //the actual bitmask
     
@@ -94,4 +101,30 @@ inline Bool_t mithep::BitMask<N>::TestBit(UInt_t n) const
   Bool_t result = (val & (1<<bit)) != 0;
   return result;
 }
+
+//--------------------------------------------------------------------------------------------------
+template<UInt_t N>
+Bool_t mithep::BitMask<N>::operator==(const mithep::BitMask<N> &other) const
+{
+  // Equal operator.
+
+  for (UInt_t n=0; n<N; ++n) {
+    if (fBitMask[n]!=other.fBitMask[n]) 
+      return kFALSE;
+  }
+  return kTRUE;
+}    
+
+//--------------------------------------------------------------------------------------------------
+template<UInt_t N>
+Bool_t mithep::BitMask<N>::operator!=(const mithep::BitMask<N> &other) const
+{
+  // Unequal operator.
+
+  for (UInt_t n=0; n<N; ++n) {
+    if (fBitMask[n]==other.fBitMask[n]) 
+      return kFALSE;
+  }
+  return kTRUE;
+}    
 #endif
