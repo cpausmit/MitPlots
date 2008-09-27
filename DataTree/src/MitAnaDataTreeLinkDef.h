@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.37 2008/09/17 04:21:50 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.38 2008/09/19 11:58:03 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -11,8 +11,6 @@
 #include "MitAna/DataTree/interface/Collections.h"
 
 #include "MitAna/DataTree/interface/BitMask.h"
-//#include "MitAna/DataTree/interface/BitMask32.h"
-//#include "MitAna/DataTree/interface/BitMask64.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
@@ -54,33 +52,52 @@
 
 #pragma link C++ class mithep::Names+;
 
+#pragma link C++ class mithep::Collection<TRef>+;
+#pragma link C++ class mithep::Collection<std::string>+;
+#pragma link C++ class mithep::Vector<std::string>+;
+
 #pragma link C++ class mithep::BitMask<1>+;
 #pragma link C++ class mithep::BitMask<2>+;
 #pragma link C++ class mithep::BitMask<4>+;
-#pragma link C++ class mithep::BitMask<5>+;
-#pragma link C++ class mithep::BitMask<6>+;
-#pragma link C++ class mithep::BitMask<7>+;
 #pragma link C++ class mithep::BitMask<8>+;
+#pragma link C++ class mithep::BitMask<16>+;
 #pragma link C++ class mithep::BitMask<32>+;
 #pragma link C++ typedef mithep::BitMask8;
 #pragma link C++ typedef mithep::BitMask16;
 #pragma link C++ typedef mithep::BitMask32;
-#pragma link C++ typedef mithep::BitMask40;
-#pragma link C++ typedef mithep::BitMask48;
-#pragma link C++ typedef mithep::BitMask56;
 #pragma link C++ typedef mithep::BitMask64;
+#pragma link C++ typedef mithep::BitMask128;
 #pragma link C++ typedef mithep::BitMask256;
-#pragma link C++ class mithep::BitMask32+;
-#pragma link C++ class mithep::BitMask64+;
+#pragma link C++ class mithep::Collection<mithep::BitMask<1> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<1> >+;
+#pragma link C++ typedef mithep::BitMask8Col;
+#pragma link C++ typedef mithep::BitMask8Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<2> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<2> >+;
+#pragma link C++ typedef mithep::BitMask16Col;
+#pragma link C++ typedef mithep::BitMask16Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<4> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<4> >+;
+#pragma link C++ typedef mithep::BitMask32Col;
+#pragma link C++ typedef mithep::BitMask32Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<8> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<8> >+;
+#pragma link C++ typedef mithep::BitMask64Col;
+#pragma link C++ typedef mithep::BitMask64Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<16> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<16> >+;
+#pragma link C++ typedef mithep::BitMask128Col;
+#pragma link C++ typedef mithep::BitMask128Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<32> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<32> >+;
+#pragma link C++ typedef mithep::BitMask256Col;
+#pragma link C++ typedef mithep::BitMask256Vec;
+
 #pragma link C++ class mithep::EventHeader+;
 #pragma link C++ class mithep::LAHeader+;
 #pragma link C++ class mithep::TriggerName+;
 #pragma link C++ class mithep::RunInfo+;
 #pragma link C++ class mithep::MCEventInfo+;
-
-#pragma link C++ class mithep::Collection<TRef>+;
-#pragma link C++ class mithep::Collection<std::string>+;
-#pragma link C++ class mithep::Vector<std::string>+;
 
 #pragma link C++ class mithep::DataObject+;
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
@@ -88,9 +105,13 @@
 #pragma link C++ class mithep::ObjArray<mithep::DataObject>+;
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::DataObjectArr;
+#pragma link C++ typedef mithep::DataObjectOArr;
 
 #pragma link C++ class mithep::Vertex+;
 #pragma link C++ class mithep::FitVertex+;
+
+#pragma link C++ class mithep::Collection<mithep::BitMask256>+;
+#pragma link C++ class mithep::Vector<mithep::BitMask256>+;
 
 #pragma link C++ class mithep::Track+;
 #pragma link C++ class mithep::Collection<mithep::Track>+;
@@ -98,6 +119,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Track>+;
 #pragma link C++ typedef mithep::TrackCol;
 #pragma link C++ typedef mithep::TrackArr;
+#pragma link C++ typedef mithep::TrackOArr;
 #pragma link C++ enum mithep::Track::EHitLayer;
 
 #pragma link C++ class mithep::BasicCluster+;
@@ -107,12 +129,15 @@
 #pragma link C++ class mithep::RefArray<mithep::BasicCluster>-;
 #pragma link C++ typedef mithep::BasicClusterCol;
 #pragma link C++ typedef mithep::BasicClusterArr;
+#pragma link C++ typedef mithep::BasicClusterOArr;
+
 #pragma link C++ class mithep::SuperCluster+;
 #pragma link C++ class mithep::Collection<mithep::SuperCluster>+;
 #pragma link C++ class mithep::Array<mithep::SuperCluster>+;
 #pragma link C++ class mithep::ObjArray<mithep::SuperCluster>+;
 #pragma link C++ typedef mithep::SuperClusterCol;
 #pragma link C++ typedef mithep::SuperClusterArr;
+#pragma link C++ typedef mithep::SuperClusterOArr;
 
 #pragma link C++ class mithep::CaloTower+;
 #pragma link C++ class mithep::Collection<mithep::CaloTower>+;
@@ -121,18 +146,19 @@
 #pragma link C++ class mithep::RefArray<mithep::CaloTower>-;
 #pragma link C++ typedef mithep::CaloTowerCol;
 #pragma link C++ typedef mithep::CaloTowerArr;
+#pragma link C++ typedef mithep::CaloTowerOArr;
 
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;
 #pragma link C++ class mithep::RefArray<mithep::Particle>-;
 #pragma link C++ typedef mithep::ParticleCol;
-#pragma link C++ typedef mithep::ParticleArr;
 
 #pragma link C++ class mithep::ChargedParticle+;
 #pragma link C++ class mithep::Collection<mithep::ChargedParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::ChargedParticle>+;
 #pragma link C++ typedef mithep::ChargedParticleCol;
 #pragma link C++ typedef mithep::ChargedParticleArr;
+#pragma link C++ typedef mithep::ChargedParticleOArr;
 
 #pragma link C++ class mithep::Muon+;
 #pragma link C++ class mithep::Collection<mithep::Muon>+;
@@ -140,6 +166,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Muon>+;
 #pragma link C++ typedef mithep::MuonCol;
 #pragma link C++ typedef mithep::MuonArr;
+#pragma link C++ typedef mithep::MuonOArr;
 
 #pragma link C++ class mithep::Electron+;
 #pragma link C++ class mithep::Collection<mithep::Electron>+;
@@ -147,6 +174,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Electron>+;
 #pragma link C++ typedef mithep::ElectronCol;
 #pragma link C++ typedef mithep::ElectronArr;
+#pragma link C++ typedef mithep::ElectronOArr;
 
 #pragma link C++ class mithep::Jet+;
 #pragma link C++ class mithep::Collection<mithep::Jet>+;
@@ -154,6 +182,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Jet>+;
 #pragma link C++ typedef mithep::JetCol;
 #pragma link C++ typedef mithep::JetArr;
+#pragma link C++ typedef mithep::JetOArr;
 
 #pragma link C++ class mithep::GenJet+;
 #pragma link C++ class mithep::Collection<mithep::GenJet>+;
@@ -161,6 +190,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::GenJet>+;
 #pragma link C++ typedef mithep::GenJetCol;
 #pragma link C++ typedef mithep::GenJetArr;
+#pragma link C++ typedef mithep::GenJetOArr;
 
 #pragma link C++ class mithep::Met+;
 #pragma link C++ class mithep::Collection<mithep::Met>+;
@@ -168,18 +198,21 @@
 #pragma link C++ class mithep::ObjArray<mithep::Met>+;
 #pragma link C++ typedef mithep::MetCol;
 #pragma link C++ typedef mithep::MetArr;
+#pragma link C++ typedef mithep::MetOArr;
 
 #pragma link C++ class mithep::TriggerObjectRel+;
 #pragma link C++ class mithep::Collection<mithep::TriggerObjectRel>+;
 #pragma link C++ class mithep::Array<mithep::TriggerObjectRel>+;
 #pragma link C++ typedef mithep::TriggerObjectRelCol;
 #pragma link C++ typedef mithep::TriggerObjectRelArr;
+#pragma link C++ typedef mithep::TriggerObjectRelOArr;
 
 #pragma link C++ class mithep::TriggerObjectBase+;
 #pragma link C++ class mithep::Collection<mithep::TriggerObjectBase>+;
 #pragma link C++ class mithep::Array<mithep::TriggerObjectBase>+;
 #pragma link C++ typedef mithep::TriggerObjectBaseCol;
 #pragma link C++ typedef mithep::TriggerObjectBaseArr;
+#pragma link C++ typedef mithep::TriggerObjectBaseOArr;
 
 #pragma link C++ class mithep::TriggerObject+;
 #pragma link C++ class mithep::Collection<mithep::TriggerObject>+;
@@ -187,6 +220,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::TriggerObject>+;
 #pragma link C++ typedef mithep::TriggerObjectCol;
 #pragma link C++ typedef mithep::TriggerObjectArr;
+#pragma link C++ typedef mithep::TriggerObjectOArr;
 #pragma link C++ enum mithep::TriggerObject::ETriggerObject;
 
 #pragma link C++ class mithep::CompositeParticle+;
@@ -195,6 +229,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::CompositeParticle>+;
 #pragma link C++ typedef mithep::CompositeParticleCol;
 #pragma link C++ typedef mithep::CompositeParticleArr;
+#pragma link C++ typedef mithep::CompositeParticleOArr;
 
 #pragma link C++ class mithep::MCParticle+;
 #pragma link C++ class mithep::Collection<mithep::MCParticle>+;
@@ -202,6 +237,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::MCParticle>+;
 #pragma link C++ typedef mithep::MCParticleCol;
 #pragma link C++ typedef mithep::MCParticleArr;
+#pragma link C++ typedef mithep::MCParticleOArr;
 #pragma link C++ enum mithep::MCParticle::EPartType;
 
 #pragma link C++ class mithep::DaughterData+;
@@ -214,14 +250,16 @@
 #pragma link C++ class mithep::ObjArray<mithep::DecayParticle>+;
 #pragma link C++ typedef mithep::DecayParticleCol;
 #pragma link C++ typedef mithep::DecayParticleArr;
+#pragma link C++ typedef mithep::DecayParticleOArr;
 
 #pragma link C++ class mithep::Conversion+;
 #pragma link C++ class mithep::Collection<mithep::Conversion>+;
 #pragma link C++ class mithep::Array<mithep::Conversion>+;
 #pragma link C++ class mithep::ObjArray<mithep::Conversion>+;
 #pragma link C++ class mithep::RefArray<mithep::Conversion>-;
-#pragma link C++ typedef mithep::ConversionArr;
 #pragma link C++ typedef mithep::ConversionCol;
+#pragma link C++ typedef mithep::ConversionArr;
+#pragma link C++ typedef mithep::ConversionOArr;
 
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;
@@ -229,6 +267,7 @@
 #pragma link C++ class mithep::ObjArray<mithep::Photon>+;
 #pragma link C++ typedef mithep::PhotonCol;
 #pragma link C++ typedef mithep::PhotonArr;
+#pragma link C++ typedef mithep::PhotonOArr;
 
 #pragma link C++ class mithep::StableParticle+;
 #pragma link C++ class mithep::Collection<mithep::StableParticle>+;
@@ -236,12 +275,14 @@
 #pragma link C++ class mithep::ObjArray<mithep::StableParticle>+;
 #pragma link C++ typedef mithep::StableParticleCol;
 #pragma link C++ typedef mithep::StableParticleArr;
+#pragma link C++ typedef mithep::StableParticleOArr;
+
 #pragma link C++ class mithep::StableDaughter+;
 #pragma link C++ class mithep::Collection<mithep::StableDaughter>+;
 #pragma link C++ class mithep::Array<mithep::StableDaughter>+;
 #pragma link C++ class mithep::ObjArray<mithep::StableDaughter>+;
 #pragma link C++ typedef mithep::StableDaughterCol;
 #pragma link C++ typedef mithep::StableDaughterArr;
-
+#pragma link C++ typedef mithep::StableDaughterOArr;
 
 #endif

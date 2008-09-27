@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.18 2008/09/10 03:33:27 loizides Exp $
+// $Id: Types.h,v 1.19 2008/09/17 04:18:56 loizides Exp $
 //
 // Types
 //
@@ -14,6 +14,7 @@
 #include <Rtypes.h>
 #include "MitCommon/DataFormats/interface/Types.h"
 #include "MitAna/DataTree/interface/BitMask.h"
+#include "MitAna/DataCont/interface/Vector.h"
 
 namespace mithep
 {
@@ -24,6 +25,7 @@ namespace mithep
   typedef BitMask<6>  BitMask48;
   typedef BitMask<7>  BitMask56;
   typedef BitMask<8>  BitMask64;
+  typedef BitMask<16> BitMask128;
   typedef BitMask<32> BitMask256;
 }
 #endif

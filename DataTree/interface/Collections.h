@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.26 2008/09/17 04:20:15 loizides Exp $
+// $Id: Collections.h,v 1.27 2008/09/19 11:56:39 bendavid Exp $
 //
 // Collections
 //
@@ -17,7 +17,7 @@
 #include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataCont/interface/StackArray.h"
 #include "MitAna/DataCont/interface/Vector.h"
-
+#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
@@ -41,6 +41,20 @@
 
 namespace mithep 
 {
+  typedef Collection<BitMask<1> >       BitMask8Col;
+  typedef Collection<BitMask<2> >       BitMask16Col;
+  typedef Collection<BitMask<4> >       BitMask32Col;
+  typedef Collection<BitMask<8> >       BitMask64Col;
+  typedef Collection<BitMask<16> >      BitMask128Col;
+  typedef Collection<BitMask<32> >      BitMask256Col;
+
+  typedef Vector<BitMask<1> >           BitMask8Vec;
+  typedef Vector<BitMask<2> >           BitMask16Vec;
+  typedef Vector<BitMask<4> >           BitMask32Vec;
+  typedef Vector<BitMask<8> >           BitMask64Vec;
+  typedef Vector<BitMask<16> >          BitMask128Vec;
+  typedef Vector<BitMask<32> >          BitMask256Vec;
+
   typedef Collection<DataObject>        DataObjectCol;
   typedef Collection<Track>             TrackCol;
   typedef Collection<BasicCluster>      BasicClusterCol;
@@ -69,7 +83,6 @@ namespace mithep
   typedef Array<BasicCluster>           BasicClusterArr;
   typedef Array<SuperCluster>           SuperClusterArr;
   typedef Array<CaloTower>              CaloTowerArr; 
-  typedef Array<Particle>               ParticleArr;
   typedef Array<ChargedParticle>        ChargedParticleArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
@@ -86,5 +99,27 @@ namespace mithep
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
   typedef Array<StableDaughter>         StableDaughterArr;
+
+  typedef ObjArray<DataObject>          DataObjectOArr;
+  typedef ObjArray<Track>               TrackOArr;
+  typedef ObjArray<BasicCluster>        BasicClusterOArr;
+  typedef ObjArray<SuperCluster>        SuperClusterOArr;
+  typedef ObjArray<CaloTower>           CaloTowerOArr; 
+  typedef ObjArray<ChargedParticle>     ChargedParticleOArr;
+  typedef ObjArray<Muon>                MuonOArr;
+  typedef ObjArray<Electron>            ElectronOArr;
+  typedef ObjArray<Jet>                 JetOArr;
+  typedef ObjArray<GenJet>              GenJetOArr;
+  typedef ObjArray<Met>                 MetOArr;
+  typedef ObjArray<TriggerObjectRel>    TriggerObjectRelOArr;
+  typedef ObjArray<TriggerObjectBase>   TriggerObjectBaseOArr;
+  typedef ObjArray<TriggerObject>       TriggerObjectOArr;
+  typedef ObjArray<MCParticle>          MCParticleOArr;
+  typedef ObjArray<CompositeParticle>   CompositeParticleOArr;
+  typedef ObjArray<DecayParticle>       DecayParticleOArr;
+  typedef ObjArray<Conversion>          ConversionOArr;
+  typedef ObjArray<Photon>              PhotonOArr;
+  typedef ObjArray<StableParticle>      StableParticleOArr;
+  typedef ObjArray<StableDaughter>      StableDaughterOArr;
 }
 #endif
