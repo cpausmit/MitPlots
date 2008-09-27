@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMSelector.h,v 1.2 2008/06/23 19:39:14 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -92,9 +92,11 @@ public:
    virtual TObject  *FindObjThisEvt(const Char_t* name) const;
    virtual TObject  *FindPublicObj(const Char_t* name)  const;
    Long64_t          GetCurEvt()         const { return fCurEvt; }
-   TFile*            GetCurrentFile()    const;
+   const TFile      *GetCurrentFile()    const;
+   TFile            *GetCurrentFile();
    const TAMOutput  *GetModOutput()      const;
    TAMOutput        *GetModOutput();
+   const TAModule   *GetTopModule()      const { return fAModules; }
    UInt_t            GetVerbosity()      const { return fVerbosity; }
    void              Init(TTree* tree);
    Bool_t            IsAModAborted()     const { return fModAborted; }

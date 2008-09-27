@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.3 2008/06/24 14:03:45 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.4 2008/07/07 16:41:53 paus Exp $
 //
 
 #include "TAMSelector.h"
@@ -87,8 +87,8 @@ ClassImp(TAMSelector)
 //______________________________________________________________________________
 TAMSelector::TAMSelector() :
    fTree(0),
-   fBranchTable(),
-   fEventObjs(),
+   fBranchTable(TCollection::kInitHashTableCapacity, 1),
+   fEventObjs(TCollection::kInitHashTableCapacity, 1),
    fAModules(new TAModule("TAMTopModule",
                           "Top-most module containing all other modules.")),
    fCurEvt(-1),
@@ -202,6 +202,7 @@ Bool_t TAMSelector::AddObjThisEvt(TObject *obj, const char *name)
       if (FindObjThisEvt(name)==0) {
          if (obj->IsOnHeap()) {
             fEventObjs.Add(new TAMEvtObj(obj,name));
+            return kTRUE;
          } else {
             Error("AddObjThisEvt",
                   "Object [%s] does not appear to be on heap. "
@@ -397,7 +398,16 @@ TObject *TAMSelector::FindPublicObj(const Char_t *name) const
 
 
 //______________________________________________________________________________
-TFile *TAMSelector::GetCurrentFile() const 
+const TFile *TAMSelector::GetCurrentFile() const
+{
+   // Returns the current file that the tree is in.
+   
+  return (fTree) ? (const_cast<const TFile *>(fTree->GetCurrentFile())) : 0;
+}
+
+
+//______________________________________________________________________________
+TFile *TAMSelector::GetCurrentFile()
 {
    // Returns the current file that the tree is in.
    
