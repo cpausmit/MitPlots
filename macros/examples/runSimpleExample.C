@@ -1,10 +1,11 @@
-// $Id: runSimpleExample.C,v 1.4 2008/06/05 16:03:35 bendavid Exp $
+// $Id: runSimpleExample.C,v 1.5 2008/06/09 00:06:36 bendavid Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include "MitAna/DataUtil/interface/Debug.h"
-#include "MitAna/TreeMod/interface/ParticleExampleMod.h"
 #include "MitAna/TreeMod/interface/Analysis.h"
+#include "MitAna/TreeMod/interface/SimpleExampleMod.h"
+
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -14,15 +15,15 @@ void runSimpleExample(const char *files = "mit-gen_000.root")
   gDebugMask  = Debug::kAnalysis;
   gDebugLevel = 1;
 
-  // set up the modules
-  ParticleExampleMod *mod = new ParticleExampleMod;
+  SimpleExampleMod *smod = new SimpleExampleMod;
 
   // set up analysis
   Analysis *ana = new Analysis;
-  ana->SetSuperModule(mod);
+  ana->SetSuperModule(smod);
   ana->AddFile(files);
-  ana->SetOutputName("mit-gen-hist.root");
-
+  if (gROOT->IsBatch()) 
+    ana->SetOutputName("mit-example-hist.root");
+  
   // run the analysis after successful initialisation
   ana->Run(!gROOT->IsBatch());
 }
