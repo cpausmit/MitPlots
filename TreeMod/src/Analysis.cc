@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.13 2008/07/07 16:41:54 paus Exp $
+// $Id: Analysis.cc,v 1.14 2008/07/08 14:42:09 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -17,6 +17,7 @@
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/TreeMod/interface/TreeLoader.h"
+#include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/Catalog/interface/Dataset.h"
 
 ClassImp(mithep::Analysis)
@@ -26,6 +27,7 @@ using namespace mithep;
 //--------------------------------------------------------------------------------------------------
 Analysis::Analysis(Bool_t useproof) : 
   fUseProof(useproof), 
+  fUseHLT(kTRUE),
   fHierachy(kTRUE), 
   fState(kPristine), 
   fNFriends(0), 
@@ -327,7 +329,17 @@ Bool_t Analysis::Init()
   fLoaders->Add(bl);
   fDeleteList->Add(bl);
 
+  // create our HLT framework module
+  HLTFwkMod *hltmod = 0;
+  if (fUseHLT) {
+    hltmod = new HLTFwkMod;
+    fDeleteList->Add(hltmod);
+  }
+
   if (fUseProof) {
+
+    if (hltmod) 
+      fProof->AddInput(hltmod);
 
     fProof->AddInput(fSuperMod);
     fLoaders->SetName("TAM_LOADERS");
@@ -337,6 +349,10 @@ Bool_t Analysis::Init()
 
     // when not running Proof, we must make a selector
     fSelector = new Selector; 
+
+    if (hltmod) 
+      fSelector->AddInput(hltmod);
+
     fSelector->AddInput(fSuperMod);
     MDB(kAnalysis, 2)
       fSelector->SetVerbosity(1);
@@ -492,8 +508,6 @@ void Analysis::Terminate()
   delete fChain;
   delete fSet;
   fDeleteList->Delete();
-
-  fState = kTerminate;
 }
 
 //--------------------------------------------------------------------------------------------------

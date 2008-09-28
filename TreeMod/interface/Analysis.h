@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.9 2008/07/07 16:41:53 paus Exp $
+// $Id: Analysis.h,v 1.10 2008/09/10 03:33:28 loizides Exp $
 //
 // Analysis
 //
@@ -66,6 +66,7 @@ namespace mithep
       void                      SetOutputName(const char *name)     { fAnaOutput = name; }
       void                      SetSuperModule(TAModule *mod)       { fSuperMod  = mod; }
       void                      SetTreeName(const char *name)       { fTreeName  = name; }
+      void                      SetUseHLT(Bool_t hlt)               { fUseHLT  = hlt; }
       void                      SetUseProof(Bool_t up)              { fUseProof  = up; }
       void                      Terminate();
 
@@ -77,6 +78,7 @@ namespace mithep
                   };
 
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
+      Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
       Bool_t                    fHierachy;        //=true if module hierachy to be stored (def=1)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
