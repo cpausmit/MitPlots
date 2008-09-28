@@ -1,15 +1,15 @@
-// $Id: ParticleExampleMod.cc,v 1.5 2008/07/14 20:59:55 loizides Exp $
+// $Id: SimpleExampleMod.cc,v 1.6 2008/07/25 11:34:46 bendavid Exp $
 
-#include "MitAna/TreeMod/interface/ParticleExampleMod.h"
+#include "MitAna/TreeMod/interface/SimpleExampleMod.h"
 #include <TH1D.h>
 #include "MitAna/DataTree/interface/Names.h"
 
 using namespace mithep;
 
-ClassImp(mithep::ParticleExampleMod)
+ClassImp(mithep::SimpleExampleMod)
 
 //--------------------------------------------------------------------------------------------------
-ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) : 
+SimpleExampleMod::SimpleExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fPartName(Names::gkMCPartBrn),
   fParticles(0),
@@ -20,28 +20,28 @@ ParticleExampleMod::ParticleExampleMod(const char *name, const char *title) :
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::Begin()
+void SimpleExampleMod::Begin()
 {
   // Run startup code on the client machine. For this module, we dont
   // do anything here.
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::BeginRun()
+void SimpleExampleMod::BeginRun()
 {
   // Run startup code on the client machine. For this module, we dont
   // do anything here.
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::EndRun()
+void SimpleExampleMod::EndRun()
 {
   // Run startup code on the client machine. For this module, we dont
   // do anything here.
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::Process()
+void SimpleExampleMod::Process()
 {
   // Process entries of the tree. For this module, we just load
   // the branch and fill the histograms.
@@ -58,7 +58,7 @@ void ParticleExampleMod::Process()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::SlaveBegin()
+void SimpleExampleMod::SlaveBegin()
 {
   // Run startup code on the computer (slave) doing the actual
   // analysis. Here, we typically initialize histograms and 
@@ -74,14 +74,14 @@ void ParticleExampleMod::SlaveBegin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::SlaveTerminate()
+void SimpleExampleMod::SlaveTerminate()
 {
   // Run finishing code on the computer (slave) that did the
   // analysis. For this module, we dont do anything here.
 }
 
 //--------------------------------------------------------------------------------------------------
-void ParticleExampleMod::Terminate()
+void SimpleExampleMod::Terminate()
 {
   // Run finishing code on the client computer. 
   // For this module, we dont do anything here.
