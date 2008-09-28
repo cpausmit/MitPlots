@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.3 2008/07/01 11:19:31 loizides Exp $
+// $Id: Selector.cc,v 1.4 2008/07/03 08:22:19 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -7,7 +7,6 @@
 #include <TFile.h>
 #include <TTree.h>
 
-
 using namespace mithep;
 
 ClassImp(mithep::Selector)
@@ -15,6 +14,11 @@ ClassImp(mithep::Selector)
 //--------------------------------------------------------------------------------------------------
 Selector::Selector() :
   fDoRunInfo(kTRUE),
+  fEvtHdrName(Names::gkEvtHeaderBrn),
+  fRunTreeName(Names::gkRunTreeName),
+  fRunInfoName(Names::gkRunInfoBrn),
+  fLATreeName(Names::gkLATreeName),
+  fLAHdrName(Names::gkLAHeaderBrn),
   fRunTree(0),
   fEventHeader(0),
   fRunInfo(0),
@@ -22,11 +26,20 @@ Selector::Selector() :
   fLAHeader(0),
   fCurRunNum(UInt_t(-1))
 {
+  // Constructor.
 }
 
 //--------------------------------------------------------------------------------------------------
 Selector::~Selector()
 {
+  // Destructor.
+
+  fRunTree = 0;
+  fEventHeader = 0;
+  fRunInfo = 0;
+  fLATree = 0;
+  fLAHeader = 0;
+  fCurRunNum = UInt_t(-1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -37,7 +50,7 @@ Bool_t Selector::BeginRun()
   if (!fDoRunInfo) 
     return kFALSE;
 
-  LoadBranch(Names::gkEvtHeaderBrn);
+  LoadBranch(fEvtHdrName);
   if (!fEventHeader) 
     return kFALSE;
 
@@ -77,8 +90,8 @@ Bool_t Selector::EndRun()
 //--------------------------------------------------------------------------------------------------
 Bool_t Selector::Notify()
 {
-  // The Notify() function is called when a new file is opened. Here, we check for a new run info
-  // tree. 
+  // The Notify() function is called when a new file is opened. 
+  // Here, we check for a new run info tree. 
 
   if (!GetCurrentFile()) 
     return kTRUE;
@@ -96,7 +109,7 @@ void Selector::SlaveBegin(TTree* tree)
   // analysis on the slaves. Here, we request the event header branch.
 
   if (fDoRunInfo) {
-    ReqBranch(Names::gkEvtHeaderBrn, fEventHeader);
+    ReqBranch(fEvtHdrName.Data(), fEventHeader);
   }
 
   TAMSelector::SlaveBegin(tree);
@@ -147,28 +160,28 @@ void Selector::UpdateRunInfoTree()
   }
 
   // run info tree
-  fRunTree = dynamic_cast<TTree*>(f->Get(Names::gkRunTreeName));
+  fRunTree = dynamic_cast<TTree*>(f->Get(fRunTreeName));
   if (!fRunTree) {
-    Fatal("UpdateRunInfoTree", "Can not find run info tree with name %s", Names::gkRunTreeName);
+    Fatal("UpdateRunInfoTree", "Can not find run info tree with name %s", fRunTreeName.Data());
   }
 
   // set branches 
-  if (fRunTree->GetBranch(Names::gkRunInfoBrn)) {
-    fRunTree->SetBranchAddress(Names::gkRunInfoBrn, &fRunInfo);
+  if (fRunTree->GetBranch(fRunInfoName)) {
+    fRunTree->SetBranchAddress(fRunInfoName, &fRunInfo);
   } else {
-    Fatal("UpdateRunInfoTree", "Can not find run info branch with name %s", Names::gkRunInfoBrn);
+    Fatal("UpdateRunInfoTree", "Can not find run info branch with name %s", fRunInfoName.Data());
   }
 
   // look-ahead tree
-  fLATree = dynamic_cast<TTree*>(f->Get(Names::gkLATreeName));
+  fLATree = dynamic_cast<TTree*>(f->Get(fLATreeName));
   if (!fLATree) {
-    Fatal("UpdateRunInfoTree", "Can not find look-ahead tree with name %s", Names::gkLATreeName);
+    Fatal("UpdateRunInfoTree", "Can not find look-ahead tree with name %s", fLATreeName.Data());
   }
 
   // set branches 
-  if (fLATree->GetBranch(Names::gkLAHeaderBrn)) {
-    fLATree->SetBranchAddress(Names::gkLAHeaderBrn, &fLAHeader);
+  if (fLATree->GetBranch(fLAHdrName)) {
+    fLATree->SetBranchAddress(fLAHdrName, &fLAHeader);
   } else {
-    Fatal("UpdateRunInfoTree", "Can not find look-ahead branch with name %s", Names::gkLAHeaderBrn);
+    Fatal("UpdateRunInfoTree", "Can not find look-ahead branch with name %s", fLAHdrName.Data());
   }
 }
