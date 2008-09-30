@@ -1,4 +1,4 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.7 2008/08/08 11:24:25 sixie Exp $
+// $Id: MitAnaTreeModLinkDef.h,v 1.8 2008/09/28 10:58:20 loizides Exp $
 
 #ifndef TREEMOD_LINKDEF_H
 #define TREEMOD_LINKDEF_H
@@ -10,6 +10,11 @@
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include "MitAna/TreeMod/interface/ObjectCleaningMod.h"
+#include "MitAna/TreeMod/interface/ElectronCleaningMod.h"
+#include "MitAna/TreeMod/interface/JetCleaningMod.h"
+#include "MitAna/TreeMod/interface/ElectronIDMod.h"
+#include "MitAna/TreeMod/interface/MuonIDMod.h"
+#include "MitAna/TreeMod/interface/JetIDMod.h"
 #include "MitAna/TreeMod/interface/CatalogingMod.h"
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include "MitAna/TreeMod/interface/HLTExampleMod.h"
@@ -32,6 +37,11 @@
 #pragma link C++ class mithep::HLTFwkMod+;
 #pragma link C++ class mithep::HLTMod+;
 #pragma link C++ class mithep::ObjectCleaningMod+;
+#pragma link C++ class mithep::ElectronCleaningMod+;
+#pragma link C++ class mithep::JetCleaningMod+;
+#pragma link C++ class mithep::ElectronIDMod+;
+#pragma link C++ class mithep::MuonIDMod+;
+#pragma link C++ class mithep::JetIDMod+;
 #pragma link C++ class mithep::CatalogingMod+;
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
