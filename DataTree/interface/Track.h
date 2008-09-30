@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.18 2008/09/17 04:16:25 loizides Exp $
+// $Id: Track.h,v 1.19 2008/09/22 10:39:54 bendavid Exp $
 //
 // Track
 //
@@ -130,6 +130,7 @@ namespace mithep
 
       Int_t	         Charge()         const { return (fQOverP>0) ? 1 : -1; }
       Double_t           Chi2()           const { return fChi2; }
+      Double_t           RChi2()          const { return fChi2/(Double_t)fNdof; }
       void               ClearHit(EHitLayer l)  { fHits.ClearBit(l); } 
       Double_t	         D0()             const { return -fDxy; }
       Double_t	         D0Err()          const { return fDxyErr; }
