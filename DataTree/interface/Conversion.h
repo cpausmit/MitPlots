@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.7 2008/07/22 19:57:50 loizides Exp $
+// $Id: Conversion.h,v 1.8 2008/09/10 03:33:26 loizides Exp $
 //
 // Conversion
 //
@@ -12,7 +12,7 @@
 #define MITANA_DATATREE_CONVERSION_H
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
-#include "MitAna/DataTree/interface/FitVertex.h"
+#include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataTree/interface/Electron.h"
 
 namespace mithep 
@@ -31,15 +31,15 @@ namespace mithep
       Double_t                  EOverP()                   const { return fEOverP; }
       Double_t                  PairMass()                 const { return fPairMass; }
       const ThreeVector        &PairMomentum()             const { return fPairMomentum; }
-      const FitVertex          &DecayVertex()              const { return fVertex; }
-      FitVertex                &DecayVertex()                    { return fVertex; }
+      const Vertex             &DecayVertex()              const { return fVertex; }
+      Vertex                   &DecayVertex()                    { return fVertex; }
       void                      SetDCotTheta(Double_t dCotTheta) { fDCotTheta = dCotTheta;}
       void                      SetEOverP(Double_t eOverP)       { fEOverP = eOverP;}
       void                      SetPairMass(Double_t pairMass)   { fPairMass = pairMass;}
       void                      SetPairMomentum(Double_t px, Double_t py, Double_t pz);
         
     protected:
-      FitVertex                 fVertex;       //reconstructed decay vertex
+      Vertex                    fVertex;       //reconstructed decay vertex
       Double_t                  fDCotTheta;    //delta cot theta wrt tracks at the conversion point
       Double_t                  fEOverP;       //E over p of conversion tracks
       Double_t                  fPairMass;     //mass of electron-positron pair at conversion point
