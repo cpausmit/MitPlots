@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.38 2008/09/19 11:58:03 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.39 2008/09/27 06:12:59 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -19,7 +19,6 @@
 
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/Vertex.h"
-#include "MitAna/DataTree/interface/FitVertex.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
@@ -35,6 +34,9 @@
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
+#include "MitAna/DataTree/interface/DaughterData.h"
+#include "MitAna/DataTree/interface/StableData.h"
+#include "MitAna/DataTree/interface/DecayData.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
@@ -108,7 +110,11 @@
 #pragma link C++ typedef mithep::DataObjectOArr;
 
 #pragma link C++ class mithep::Vertex+;
-#pragma link C++ class mithep::FitVertex+;
+#pragma link C++ class mithep::Collection<mithep::Vertex>+;
+#pragma link C++ class mithep::Array<mithep::Vertex>+;
+#pragma link C++ class mithep::ObjArray<mithep::Vertex>+;
+#pragma link C++ typedef mithep::VertexCol;
+#pragma link C++ typedef mithep::VertexArr;
 
 #pragma link C++ class mithep::Collection<mithep::BitMask256>+;
 #pragma link C++ class mithep::Vector<mithep::BitMask256>+;
@@ -242,7 +248,19 @@
 
 #pragma link C++ class mithep::DaughterData+;
 #pragma link C++ class mithep::Collection<mithep::DaughterData>+;
-#pragma link C++ class mithep::StackArray<mithep::DaughterData,32>-;
+#pragma link C++ class mithep::RefArray<mithep::DaughterData>-;
+
+#pragma link C++ class mithep::StableData+;
+#pragma link C++ class mithep::Collection<mithep::StableData>+;
+#pragma link C++ class mithep::Array<mithep::StableData>+;
+#pragma link C++ typedef mithep::StableDataCol;
+#pragma link C++ typedef mithep::StableDataArr;
+
+#pragma link C++ class mithep::DecayData+;
+#pragma link C++ class mithep::Collection<mithep::DecayData>+;
+#pragma link C++ class mithep::Array<mithep::DecayData>+;
+#pragma link C++ typedef mithep::DecayDataCol;
+#pragma link C++ typedef mithep::DecayDataArr;
 
 #pragma link C++ class mithep::DecayParticle+;
 #pragma link C++ class mithep::Collection<mithep::DecayParticle>+;

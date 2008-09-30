@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.27 2008/09/19 11:56:39 bendavid Exp $
+// $Id: Collections.h,v 1.28 2008/09/27 06:12:59 loizides Exp $
 //
 // Collections
 //
@@ -33,11 +33,14 @@
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
+#include "MitAna/DataTree/interface/StableData.h"
+#include "MitAna/DataTree/interface/DecayData.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
+#include "MitAna/DataTree/interface/Vertex.h"
 
 namespace mithep 
 {
@@ -72,11 +75,14 @@ namespace mithep
   typedef Collection<TriggerObject>     TriggerObjectCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<MCParticle>        MCParticleCol;
+  typedef Collection<StableData>        StableDataCol;
+  typedef Collection<DecayData>         DecayDataCol;
   typedef Collection<DecayParticle>     DecayParticleCol;
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
   typedef Collection<StableDaughter>    StableDaughterCol;
+  typedef Collection<Vertex>            VertexCol;
 
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
@@ -94,11 +100,14 @@ namespace mithep
   typedef Array<TriggerObject>          TriggerObjectArr;
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<CompositeParticle>      CompositeParticleArr;
+  typedef Array<StableData>             StableDataArr;
+  typedef Array<DecayData>              DecayDataArr;
   typedef Array<DecayParticle>          DecayParticleArr;
   typedef Array<Conversion>             ConversionArr;
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
   typedef Array<StableDaughter>         StableDaughterArr;
+  typedef Array<Vertex>                 VertexArr;
 
   typedef ObjArray<DataObject>          DataObjectOArr;
   typedef ObjArray<Track>               TrackOArr;
@@ -121,5 +130,6 @@ namespace mithep
   typedef ObjArray<Photon>              PhotonOArr;
   typedef ObjArray<StableParticle>      StableParticleOArr;
   typedef ObjArray<StableDaughter>      StableDaughterOArr;
+  typedef ObjArray<Vertex>              VertexOArr;
 }
 #endif
