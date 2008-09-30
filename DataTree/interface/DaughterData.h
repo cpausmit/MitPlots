@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.5 2008/09/10 03:33:27 loizides Exp $
+// $Id: DaughterData.h,v 1.1 2008/09/19 11:58:02 bendavid Exp $
 //
 // DaughterData
 //
-// Additional information on a decay daughter which is specific to a particular decay
+// Additional information on a daughter which is specific to a particular decay
 // 
 //
 // Authors: J.Bendavid
@@ -12,34 +12,33 @@
 #ifndef MITANA_DATATREE_DAUGHTERDATA_H
 #define MITANA_DATATREE_DAUGHTERDATA_H
  
-#include "MitAna/DataTree/interface/StableParticle.h"
+#include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {
-  class DaughterData
+  class DaughterData : public Particle
   {
     public:
       DaughterData() {}
-      DaughterData(const FourVector &mom) : fMomAtVertex(mom) {}
+      DaughterData(Particle *orig) : fOriginal(orig) {}
       virtual ~DaughterData() {}
 
-      void                 SetMom(Double_t px, Double_t y, Double_t z, Double_t e);
-      void                 SetMom(const FourVector &mom) { fMomAtVertex = mom; }
-      const FourVector    &Mom()       const { return fMomAtVertex; }
+      Double_t             Charge()    const { return Original()->Charge(); }
+      
+      const Particle      *Original()  const;
 
     protected:
-      FourVector           fMomAtVertex;      //fitted momentum at vertex
+      TRef                 fOriginal; //TRef to original particle
 
     ClassDef(DaughterData, 1) // Stable daughter class
   };
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::DaughterData::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
+inline const mithep::Particle *mithep::DaughterData::Original() const
 {
-  // Set four momentum.
+  // Return global combined track.
 
-  fMomAtVertex.SetXYZT(px, py, pz, e);
+  return static_cast<const Particle*>(fOriginal.GetObject());
 }
 #endif
