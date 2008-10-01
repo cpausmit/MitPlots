@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: ElectronIDMod.h,v 1.1 2008/09/30 16:36:37 sixie Exp $
 //
 // ElectronIDMod
 //
@@ -28,6 +28,7 @@ namespace mithep
       ~ElectronIDMod() {}
       void        SetPrintDebug(bool b)                       { fPrintDebug               = b;    }
       void        SetElectronIDType(TString type)             { fElectronIDType           = type; }
+      void        SetElectronIsoType(TString type)            { fElectronIsoType          = type; }
       void        SetIDLikelihoodCut(Double_t cut)            { fIDLikelihoodCut          = cut;  }
       void        SetTrackIsolationCut(Double_t cut)          { fTrackIsolationCut        = cut;  }
       void        SetCaloIsolationCut(Double_t cut)           { fCaloIsolationCut         = cut;  }

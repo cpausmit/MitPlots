@@ -1,4 +1,4 @@
-// $Id:  $
+// $Id: ElectronIDMod.cc,v 1.1 2008/09/30 16:36:38 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ElectronIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -76,7 +76,7 @@ void ElectronIDMod::Process()
     }
     //isolation Cuts
     bool passTrackIsolation = (e->TrackIsolation() < fTrackIsolationCut);
-    bool passCaloIsolation      = (e->TrackIsolation() < fCaloIsolationCut);
+    bool passCaloIsolation      = (e->CaloIsolation() < fCaloIsolationCut);
     bool passEcalJurassicIsolation = (e->EcalJurassicIsolation() < fEcalJurassicIsolationCut);
     bool passHcalJurassicIsolation = (e->HcalJurassicIsolation() < fHcalJurassicIsolationCut);
     //Decide which Isolation cut to use
@@ -85,6 +85,8 @@ void ElectronIDMod::Process()
     else if (fElectronIsoType.CompareTo( "TrackJurassic" ) == 0) {
       allCuts = (allCuts && passTrackIsolation && 
                  passEcalJurassicIsolation && passHcalJurassicIsolation);
+    }else if (fElectronIsoType.CompareTo("NoIso") == 0 ) {
+      //Do Nothing here
     } else {
       cerr << "The specified electron Isolation type : " << fElectronIDType.Data() 
            << "is invalid. Please specify a correct isolation type. " << endl;
