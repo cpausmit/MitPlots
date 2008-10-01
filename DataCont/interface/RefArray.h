@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
+// $Id: RefArray.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // RefArray
 //
@@ -52,9 +52,6 @@ namespace mithep
       TProcessID               *fProcID;      //!ptr to Process Unique Identifier
       UShort_t                  fSize;        //size of array
       UInt_t                    fUIDs[1024];  //storage of uids of referenced objects
-
-    private:
-      RefArray(const RefArray &a);
 
     ClassDefT(RefArray,1) // Implementation of our own TRefArray
   };
