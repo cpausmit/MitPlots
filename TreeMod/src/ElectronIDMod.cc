@@ -1,12 +1,10 @@
-// $Id: ElectronIDMod.cc,v 1.1 2008/09/30 16:36:38 sixie Exp $
+// $Id: ElectronIDMod.cc,v 1.2 2008/10/01 11:19:23 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ElectronIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/Utils/interface/IsolationTools.h"
 #include "MitCommon/MathTools/interface/MathUtils.h"
-#include "MitAna/Utils/interface/IsolationTools.h"
-
 
 using namespace mithep;
 

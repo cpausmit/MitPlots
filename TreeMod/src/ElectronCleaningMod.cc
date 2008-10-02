@@ -1,4 +1,4 @@
-// $Id:  $
+// $Id: ElectronCleaningMod.cc,v 1.1 2008/09/30 16:37:05 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ElectronCleaningMod.h"
 #include <TH1D.h>
@@ -7,8 +7,6 @@
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/Utils/interface/IsolationTools.h"
 #include "MitCommon/MathTools/interface/MathUtils.h"
-#include "MitAna/Utils/interface/IsolationTools.h"
-
 
 using namespace mithep;
 
