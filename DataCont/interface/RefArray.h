@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.3 2008/10/01 18:37:48 bendavid Exp $
+// $Id: RefArray.h,v 1.4 2008/10/02 12:48:08 bendavid Exp $
 //
 // RefArray
 //
@@ -60,7 +60,7 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline mithep::RefArray<ArrayElement>::RefArray() : 
-  fProcID(0),
+  fProcID(TProcessID::GetSessionProcessID()),
   fSize(0)
 {
    // Default constructor.
