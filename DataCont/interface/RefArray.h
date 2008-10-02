@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: RefArray.h,v 1.3 2008/10/01 18:37:48 bendavid Exp $
 //
 // RefArray
 //
@@ -60,7 +60,7 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline mithep::RefArray<ArrayElement>::RefArray() : 
-  fProcID(TProcessID::GetSessionProcessID()),
+  fProcID(0),
   fSize(0)
 {
    // Default constructor.
@@ -86,11 +86,15 @@ void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
 
   if (ae->TestBit(kIsReferenced)) {
     uid = ae->GetUniqueID();
+    if (fSize==0)
+      fProcID = TProcessID::GetProcessWithUID(uid,ae);
     if (fProcID != TProcessID::GetProcessWithUID(uid,ae)) {
       Error("Add", "Object can not be added as it has a different process id!");
       return;
     }
   } else {
+    if (fSize==0)
+      fProcID = TProcessID::GetSessionProcessID();
     if (fProcID != TProcessID::GetSessionProcessID()) {
       Error("Add", "Object can not be added as it has a different process id!");
       return;
