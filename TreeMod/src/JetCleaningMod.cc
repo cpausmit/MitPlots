@@ -1,11 +1,10 @@
-// $Id:  $
+// $Id: JetCleaningMod.cc,v 1.1 2008/09/30 16:37:17 sixie Exp $
 
 #include "MitAna/TreeMod/interface/JetCleaningMod.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/Utils/interface/IsolationTools.h"
 #include "MitCommon/MathTools/interface/MathUtils.h"
-#include "MitAna/Utils/interface/IsolationTools.h"
 
 using namespace mithep;
 
@@ -62,7 +61,7 @@ void JetCleaningMod::Process()
     //Check for overlap with an electron
     for (UInt_t j=0; j<CleanElectrons->GetEntries(); j++) {
       double deltaR = MathUtils::DeltaR(CleanElectrons->At(j)->Mom(),jet->Mom());  
-      if (deltaR < 0.1) {
+      if (deltaR < 0.3) {
 	isElectronOverlap = true;	 	 	
 	break;	 	 
       }      
