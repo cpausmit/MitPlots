@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.19 2008/09/22 10:39:54 bendavid Exp $
+// $Id: Track.h,v 1.20 2008/09/30 12:49:36 bendavid Exp $
 //
 // Track
 //
@@ -140,6 +140,7 @@ namespace mithep
       Double_t           DxyErr()         const { return fDxyErr; }
       Double_t           E(Double_t m)    const { return TMath::Sqrt(E2(m)); }
       Double_t           E2(Double_t m)   const { return P2()+m*m; }
+      Double_t           Eta()            const { return Mom().Eta(); }
       Bool_t             Hit(EHitLayer l) const { return fHits.TestBit(l); }
       Double_t           Lambda()         const { return fLambda; }
       Double_t           LambdaErr()      const { return fLambdaErr; }
