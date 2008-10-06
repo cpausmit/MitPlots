@@ -1,4 +1,4 @@
-// $Id: ElectronIDMod.cc,v 1.2 2008/10/01 11:19:23 sixie Exp $
+// $Id: ElectronIDMod.cc,v 1.3 2008/10/02 14:23:39 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ElectronIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -17,8 +17,9 @@ ClassImp(mithep::ElectronIDMod)
   fElectronName(Names::gkElectronBrn),
   fGoodElectronsName(Names::gkGoodElectronsName),  
   fElectronIDType("Tight"),
-  fElectronIsoType("TrackCalo"),  
+  fElectronIsoType("TrackCalo"),
   fElectrons(0),
+  fElectronPtMin(10),
   fIDLikelihoodCut(0.9),
   fTrackIsolationCut(5.0),
   fCaloIsolationCut(5.0),
@@ -72,6 +73,7 @@ void ElectronIDMod::Process()
            << " is invalid. Please specify a correct ID type. " << endl;
       allCuts = false;
     }
+
     //isolation Cuts
     bool passTrackIsolation = (e->TrackIsolation() < fTrackIsolationCut);
     bool passCaloIsolation      = (e->CaloIsolation() < fCaloIsolationCut);
@@ -91,12 +93,14 @@ void ElectronIDMod::Process()
       allCuts = false;
     }
 
+    //Pt Cut
+    if(e->Pt() < fElectronPtMin) allCuts = false;
+
     //These are Good Electrons
     if ( allCuts ) {    
       GoodElectrons->Add(fElectrons->At(i));
-    }   
-
-  }     
+    }
+  }   
   
   //Final Summary Debug Output   
   if ( fPrintDebug ) {
