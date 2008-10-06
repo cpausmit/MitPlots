@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.cxx 5120 2008-05-07 18:17:33Z loizides $
+// $Id: TAMTreeBranchLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "TAMTreeBranchLoader.h"
@@ -296,7 +296,12 @@ Int_t TAMTreeBranchLoader::GetEntry(Long64_t entry)
 {
    // Get requested entry.
 
-   Int_t ret = fBranch->GetEntry(entry);
+   Int_t ret = 0;
+
+   // do not reread branch
+   if (entry!=fBranch->GetReadEntry()) 
+     ret = fBranch->GetEntry(entry);
+
    if(ret<0) {
       Error("GetEntry",
 	    "I/O error in file [%s] (at entry %lld) "
@@ -322,7 +327,7 @@ Bool_t TAMTreeBranchLoader::Notify(TTree* tree)
    // get branch with requested branch name
    // first check if given name is alias
    TString brname(tree->GetAlias(GetBInfo()->GetName()));
-   if(brname.IsNull())
+   if (brname.IsNull())
       brname=GetBInfo()->GetName();
    fBranch = tree->GetBranch(brname);
 
@@ -331,10 +336,19 @@ Bool_t TAMTreeBranchLoader::Notify(TTree* tree)
       return kFALSE;
    }
    
-   // get branch information and check if types match
-   if (CheckBrTypeAllModules()==kFALSE) {
-      Error("Notify", "CheckBrTypeAllModules failed.");
-      return kFALSE;
+   if (GetBInfo()->fUsrAddresses.size()) {
+      // get branch information and check if types match
+     if (CheckBrTypeAllModules()==kFALSE) {
+        Error("Notify", "CheckBrTypeAllModules failed.");
+        return kFALSE;
+     }
+   } else {
+      // zero usr addresses (only possible for autoloading)
+      TClass* cls = gROOT->GetClass(fBranch->GetClassName());
+      if (cls!=0) { // known class
+         fIsClass = kTRUE;
+         fClass = cls;
+      }
    }
 
    // allocate memory on heap at fBAddr
