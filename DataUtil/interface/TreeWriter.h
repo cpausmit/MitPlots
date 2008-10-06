@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.9 2008/06/24 14:05:03 loizides Exp $
+// $Id: TreeWriter.h,v 1.10 2008/09/10 03:33:27 loizides Exp $
 //
 // TreeWriter
 //
@@ -30,11 +30,13 @@ namespace mithep
   {
     public:
       MyTree(const char* name, const char* title, Int_t splitlevel = 99) :
-	TTree(name,title, splitlevel), fAutoFill(1) {}
+	TTree(name,title, splitlevel), fAutoFill(1), fBrRef(0) {}
 	Bool_t GetAutoFill() const   { return fAutoFill; }
 	void   SetAutoFill(Bool_t b) { fAutoFill = b; }
+
     protected:
       Bool_t fAutoFill; //!=true then fill automatically in TreeWriter (def=1)
+      Bool_t fBrRef;    //!=true then call BranchRef in TreeWriter (def=0)
   };
   
   class TreeWriter : public TNamed 
@@ -65,9 +67,11 @@ namespace mithep
       void                 AddBranchToTree(const char *tname, const char *name, void *obj);
       Bool_t               BeginEvent(Bool_t doreset=kFALSE);
       Bool_t               EndEvent(Bool_t doreset=kFALSE);
-      const char          *GetBaseURL()                 const {
-	return fBaseURL.IsNull() ? "." : fBaseURL; }  
+      const char          *GetBaseURL()                 const
+                             { return fBaseURL.IsNull() ? "." : fBaseURL; }  
       Int_t                GetCompressLevel()           const { return fCompressLevel; }
+      Bool_t               GetDoObjNumReset()           const { return fDoObjNumReset; }
+      Bool_t               GetDoBranchRef()             const { return fDoBranchRef; }
       Long64_t             GetEntries(const char *tn=0) const;
       Long64_t             GetFileSize()                const {
 	return fFile != 0 ? fFile->GetEND() : 0; }
@@ -78,33 +82,36 @@ namespace mithep
       const char          *GetFullName()                const {
 	return Form("%s/%s", GetBaseURL(), GetFileName()); }
       const char          *GetPrefix()                  const { return fPrefix; }  
-      const TTree         *GetTree(const char *tn)      const;
-      TTree               *GetTree(const char *tn);
+      const TTree         *GetTree(const char *tn=0)    const;
+      TTree               *GetTree(const char *tn=0);
       void                 Print(Option_t *option="")   const;
       void                 SetAutoFill(const char *tn, Bool_t b);
       void                 SetBaseURL(const char *b)          { fBaseURL = b; }
       void                 SetCompressLevel(Int_t l)          { fCompressLevel = l; }
       void                 SetDefaultBrSize(Int_t s)          { fDefBrSize=s; }
       void                 SetDefaultSL(Int_t s)              { fDefSL=s;}
+      void                 SetDoObjNumReset(Bool_t b)         { fDoObjNumReset = b; }
+      void                 SetDoBranchRef(Bool_t b)           { fDoBranchRef = b; }
       void                 SetMaxSize(Long64_t s);
       void                 SetPrefix(const char *p)           { fPrefix = p; }
       void                 StoreObject(const TObject *obj);
 
     protected:
-      TString              fBaseURL;            // base url for tree storage
-      TString              fPrefix;             // prefix of file name 
-      UShort_t             fFileNumber;         // current sequence number
-      Int_t                fCompressLevel;      // compression level used for TFile
-      Int_t                fDefBrSize;          // default buffer size for branches
-      Int_t                fDefSL;              // default split level for branches
-      Long64_t             fMaxSize;            // maximum file size for a file [Bytes]
-      const Long64_t       fkMinFreeSpace;      // minimum free space required for closing file
-      const Long64_t       fkMinAvgSize;        // minimum average entry size 
-      Long64_t             fEvtObjNum;          // event object number offset (for TRef)
-      Bool_t               fIsInit;             // true if OpenFile() was called
-      Bool_t               fDoObjNumReset;      // true if obj. number resets automatically (def=0)
-      TFile               *fFile;               // file being written
-      TObjArray            fTrees;              // array of tree(s) being filled
+      TString              fBaseURL;            //base url for tree storage
+      TString              fPrefix;             //prefix of file name 
+      UShort_t             fFileNumber;         //current sequence number
+      Int_t                fCompressLevel;      //compression level used for TFile
+      Int_t                fDefBrSize;          //default buffer size for branches
+      Int_t                fDefSL;              //default split level for branches
+      Long64_t             fMaxSize;            //maximum file size for a file [Bytes]
+      const Long64_t       fkMinFreeSpace;      //minimum free space required for closing file
+      const Long64_t       fkMinAvgSize;        //minimum average entry size 
+      Long64_t             fEvtObjNum;          //event object number offset (for TRef)
+      Bool_t               fIsInit;             //true if OpenFile() was called
+      Bool_t               fDoObjNumReset;      //true if obj. number resets automatically (def=0)
+      Bool_t               fDoBranchRef;        //true if BranchRef is called automatically (def=0)
+      TFile               *fFile;               //file being written
+      TObjArray            fTrees;              //array of tree(s) being filled
 
       mithep::MyTree      *AddOrGetMyTree(const char *tn);
       mithep::MyTree      *GetMyTree(const char *tn);

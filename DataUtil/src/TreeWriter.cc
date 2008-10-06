@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.10 2008/09/23 16:58:56 bendavid Exp $
+// $Id: TreeWriter.cc,v 1.11 2008/09/27 06:14:05 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -27,6 +27,7 @@ TreeWriter::TreeWriter(const char *tname, Bool_t doreset) :
   fEvtObjNum(-1), 
   fIsInit(kFALSE), 
   fDoObjNumReset(doreset), 
+  fDoBranchRef(0), 
   fFile(0), 
   fTrees(0)
 {
@@ -183,14 +184,14 @@ MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
   // Add new tree if not present in array of trees or return
   // present tree.
 
-  MyTree *tree = dynamic_cast<MyTree*>(fTrees.FindObject(tn));
+  MyTree *tree = GetMyTree(tn); //dynamic_cast<MyTree*>(fTrees.FindObject(tn));
   if (tree)
     return tree;
 
   TDirectory::TContext context(fFile); 
   tree = new MyTree(tn, tn);
   tree->SetDirectory(fFile);
-  if (fDoObjNumReset)
+  if (fDoBranchRef)
     tree->BranchRef();
   fTrees.AddLast(tree);  
   return tree;
@@ -229,7 +230,8 @@ void TreeWriter::CloseFile()
   for (Int_t i=0;i<fTrees.GetEntries();++i) {
     MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
     mt->Write(mt->GetName(),TObject::kOverwrite);
-    // Backup and restore list of branch pointers from TRefTable (needed for autoloading)
+
+    // backup and restore list of branch pointers from TRefTable (needed for autoloading)
     if (mt->GetBranchRef()) {
       TObjArray *parents = mt->GetBranchRef()->GetRefTable()->GetParents();
       TObjArray parentsBak(*parents);
