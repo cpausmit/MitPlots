@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.2 2008/06/23 19:39:14 loizides Exp $
+// $Id: TAMSelector.h,v 1.3 2008/09/27 06:02:54 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -34,7 +34,7 @@ class TTree;
 class TFile;
 class TAModule;
 class TAMOutput;
-
+class TBranchRef;
 
 class TAMSelector : public TSelector {
 protected:
@@ -45,13 +45,32 @@ protected:
       // It is needed to force the THashTable to call Hash on a TNamed
       // to allow lookup using the hash value given the object's name
       // (as opposed to its pointer value, as is done for TObject's).
-      TObject* fObj; // the object
+      TObject* fObj; //the object
       TAMEvtObj(TObject* obj) : TNamed(obj->GetName(),0), fObj(obj) {}
       TAMEvtObj(TObject* obj, const char *name) : TNamed(name,0), fObj(obj) {}
       virtual ~TAMEvtObj() { if (fObj!=0) delete fObj; }
    };
-   
+
+   class TAMAutoLoadProxy : public TObject {
+      // Class that acts as a proxy between the TRefTable, TAM and TBranchRef.
+      // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done via
+      // TAM loaders.
+   protected:
+       TAMSelector *fSel;       //ptr to TAMSelector (we are a friend)
+       TRefTable   *fOrig;      //ptr to original TRefTable filled by I/O (owner is TBranchRef)
+       TRefTable   *fFake;      //ptr to our fake TRefTable of which we are owner
+       Int_t        fReadEntry; //cache of last ready entry
+
+   public:
+       TAMAutoLoadProxy(TAMSelector *sel, Bool_t e=kFALSE);
+       virtual ~TAMAutoLoadProxy();
+       void   Disable();
+       void   Enable();
+       Bool_t Notify();
+   };
+
    TTree            *fTree;            //!the tree or chain
+   TAMAutoLoadProxy *fProxy;           //!the proxy for autoload branch loading
    THashTable        fBranchTable;     //!table of requested branches
    THashTable        fEventObjs;       //!table of objects available to any module while the current event is processed
    TAModule         *fAModules;        //!the top-most TAModule. nothing but a container for more modules
@@ -61,9 +80,10 @@ protected:
    Bool_t            fModAborted;      //!true if one or more modules(s) have been aborted
    Bool_t            fEventAborted;    //!true if the current event should be aborted
    Bool_t            fActNotify;       //!true if notify is active (avoiding recursive calls of Notify())
-   UInt_t            fObjCounter;      //keep object counter for resetting it in the process loop
-   UInt_t            fObjCounterRun;   //keep object counter for resetting it in the process loop when end of run is reached
+   UInt_t            fObjCounter;      //!keep object counter for resetting it in the process loop
+   UInt_t            fObjCounterRun;   //!keep object counter for resetting it in the process loop when end of run is reached
    UInt_t            fVerbosity;       //true if one wants to print debug info
+   Bool_t            fDoProxy;         //true if TAMAutoLoadProxy should be enabled
    TList             fLoaders;         //list of data loaders
 
    void              AddNewOutputLists();
@@ -73,6 +93,8 @@ protected:
    void              TakeModsFromInput();
    void              TakeLoadersFromInput();
    void              ZeroAllBranches();
+
+   friend class TAMAutoLoadProxy;
    
 public:
    TAMSelector();
@@ -97,6 +119,8 @@ public:
    const TAMOutput  *GetModOutput()      const;
    TAMOutput        *GetModOutput();
    const TAModule   *GetTopModule()      const { return fAModules; }
+   const TTree      *GetTree()           const { return fTree; }
+   TTree            *GetTree()                 { return fTree; }
    UInt_t            GetVerbosity()      const { return fVerbosity; }
    void              Init(TTree* tree);
    Bool_t            IsAModAborted()     const { return fModAborted; }
@@ -111,13 +135,14 @@ public:
    void              ReqBranch(const Char_t* bname, T*& address);
    virtual TObject  *RemoveObjThisEvt(const Char_t* name);
    virtual TObject  *RetractObj(const Char_t* name);
+   void              SetDoProxy(Bool_t b)      { fDoProxy = b; }
    void              SetVerbosity(UInt_t vb)   { fVerbosity = vb; }
    void              SlaveBegin(TTree* tree);
    void              SlaveTerminate();
    void              Terminate();
    Int_t             Version()           const { return 1; }
    
-   ClassDef(TAMSelector,7)
+   ClassDef(TAMSelector,8)
 };
 
 
@@ -129,7 +154,8 @@ inline void TAMSelector::ReqBranch(const Char_t* bname, T*& address)
    // used by an TAModule and that the the module will access the branch
    // using the pointer 'address'.
 
-   TAMBranchInfo* brInfo = dynamic_cast<TAMBranchInfo*>( fBranchTable.FindObject(bname) );
+   TAMBranchInfo* brInfo = 
+     dynamic_cast<TAMBranchInfo*>( fBranchTable.FindObject(bname) );
 
    if (brInfo==0) {
       brInfo = new TAMBranchInfo(bname);
@@ -138,5 +164,6 @@ inline void TAMSelector::ReqBranch(const Char_t* bname, T*& address)
 
    if (!brInfo->AddPtr(address)) AbortAnalysis();
 }
+
 
 #endif //ROOT_TAMSelector

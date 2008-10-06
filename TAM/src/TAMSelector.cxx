@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.4 2008/07/07 16:41:53 paus Exp $
+// $Id: TAMSelector.cxx,v 1.5 2008/09/27 06:02:54 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -35,6 +35,15 @@
 #include "TUrl.h"
 #endif
 #endif
+#ifndef ROOT_TRefTable
+#include <TRefTable.h>
+#endif
+#ifndef ROOT_TBranchRef
+#include <TBranchRef.h>
+#endif
+#ifndef ROOT_TFriendElement
+#include "TFriendElement.h"
+#endif
 #ifndef TAM_TAModule
 #include "TAModule.h"
 #endif
@@ -50,7 +59,6 @@
 #ifndef TAM_TAMTreeLoader
 #include "TAMTreeLoader.h"
 #endif
-
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -83,10 +91,153 @@ ClassImp(TAMSelector)
    if (!(e)) Fatal("", kAssertMsg, _QUOTE_(e), __LINE__, __FILE__)
 #endif
 
+//______________________________________________________________________________
+TAMSelector::TAMAutoLoadProxy::TAMAutoLoadProxy(TAMSelector *sel, Bool_t e) : 
+   fSel(sel),
+   fOrig(0), 
+   fFake(0),
+   fReadEntry(-1)
+{ 
+   // Default constructor.
+
+   fFake = new TRefTable(this, 10);
+   if (e) Enable(); 
+}
+
+//______________________________________________________________________________
+TAMSelector::TAMAutoLoadProxy::~TAMAutoLoadProxy() 
+{ 
+   // Destructor.
+
+   Disable(); 
+   delete fFake; 
+   fFake = 0; 
+}
+
+//______________________________________________________________________________
+void TAMSelector::TAMAutoLoadProxy::Disable()
+{
+   // Disable the proxy.
+
+   if (fOrig)
+      TRefTable::SetRefTable(fOrig);
+}
+
+//______________________________________________________________________________
+void TAMSelector::TAMAutoLoadProxy::Enable()
+{
+   // Enable the proxy.
+
+   fOrig = TRefTable::GetRefTable();
+   if (fOrig) 
+      TRefTable::SetRefTable(fFake);
+}
+
+//______________________________________________________________________________
+Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
+{
+   // Notification received from TRefTable::Notify. Originally this would
+   // have been address to the TBranchRef owner of the TRefTable, but
+   // we intercept this call.
+
+   TBranchRef *br = dynamic_cast<TBranchRef*>(fOrig->GetOwner());
+   if (!br) 
+      return kFALSE;
+
+   Disable();
+
+   UInt_t      uid = fFake->GetUID();
+   TProcessID *pid = fFake->GetUIDContext();
+   fOrig->SetUID(uid,pid);
+
+   if (0) { // this essentially is what ROOT would have done
+     Bool_t ret = br->Notify();
+     Enable();
+     return ret;
+   }
+
+   // read entry for this event
+   Int_t readentry = br->GetReadEntry();
+
+   // read branchref if needed
+   if (fReadEntry != readentry) {
+      Int_t bytes = br->GetEntry(readentry);
+      if (bytes<0) {
+         Fatal("Notify", "Could not get entry %d from %s branch",
+               readentry, br->GetName());
+      }
+   }
+
+   // get branch from RefTable
+   TBranch *branch = dynamic_cast<TBranch*>(fOrig->GetParent(uid, pid));
+
+   if (!branch) { //scan for possible friend Trees
+      TList *friends = fSel->GetTree()->GetListOfFriends();
+      if (friends) {
+         TObjLink *lnk = friends->FirstLink();
+         while (lnk) {
+            TFriendElement *elem = 
+               static_cast<TFriendElement*>(lnk->GetObject());
+            TBranchRef *bref = elem->GetTree()->GetBranchRef();
+            if (bref) {
+               if (readentry != bref->GetReadEntry())
+                  bref->GetEntry(readentry);
+               TBranch *branch = dynamic_cast<TBranch*>
+                  (bref->GetRefTable()->GetParent(uid, pid));
+               if (branch) 
+                 break; // found branch
+            }
+            lnk = lnk->Next();
+         }
+      }
+   }
+
+   if (!branch) {
+      Enable();
+      return kFALSE;
+   }
+
+   TBranch *readbranch = branch->GetMother();
+   if (!readbranch) {
+      Enable();
+      return kFALSE;
+   }
+
+   const char *brname = readbranch->GetName();
+   TObject *brInfo = fSel->fBranchTable.FindObject(brname);
+   if (brInfo==0) {
+     fSel->fBranchTable.Add(new TAMBranchInfo(brname));
+   }
+
+   fSel->LoadBranch(brname);
+
+   return kTRUE;
+}
+
+#if 0
+   cout << "Found " << branch->GetName() << " " << readbranch->GetName() << endl;
+   TClass *cls = gROOT->GetClass(readbranch->GetClassName());
+   if (cls!=0) {
+     cout << " CLASE " << cls->GetName() << endl;
+   }
+
+   // read branch
+   fReadEntry = readentry;
+   if (fReadEntry != readbranch->GetReadEntry()) {
+      Int_t bytes = readbranch->GetEntry(fReadEntry);
+      if (bytes<0) {
+         Enable();
+         return kFALSE;
+      }
+   }
+   Enable();
+#endif
+
 
 //______________________________________________________________________________
 TAMSelector::TAMSelector() :
    fTree(0),
+   fProxy(new TAMAutoLoadProxy(this)),
    fBranchTable(TCollection::kInitHashTableCapacity, 1),
    fEventObjs(TCollection::kInitHashTableCapacity, 1),
    fAModules(new TAModule("TAMTopModule",
@@ -99,6 +250,7 @@ TAMSelector::TAMSelector() :
    fActNotify(kFALSE),
    fObjCounter(0),
    fVerbosity(0),
+   fDoProxy(kFALSE),
    fLoaders()
 {
    // Default constructor.
@@ -481,7 +633,7 @@ void TAMSelector::LoadBranch(const Char_t *bname)
       AbortAnalysis();
    } 
 
-   if (brInfo->IsLoaded() ) 
+   if (brInfo->IsLoaded()) 
       return;
 
    // find loader for branch info if needed and notify
@@ -502,10 +654,9 @@ void TAMSelector::LoadBranch(const Char_t *bname)
 
       // have to reset our object counter to take care of objects
       // created in the notify of the loader
-      fObjCounter=TProcessID::GetObjectCount();
-
+      //fObjCounter=TProcessID::GetObjectCount();
    }
-                            
+
    // load the entry
    Int_t ret = brInfo->GetEntry(fCurEvt);
    if(ret<0) {
@@ -517,6 +668,9 @@ void TAMSelector::LoadBranch(const Char_t *bname)
 
       AbortAnalysis();
    }
+
+   // make sure autoload proxy is enabled
+   if (fDoProxy) fProxy->Enable();
 }
 
 
@@ -530,30 +684,29 @@ Bool_t TAMSelector::Notify()
    // can be either for a new TTree in a TChain or when a new TTree
    // is started when using PROOF.
 
-   //we are just in Notify(), therefore we ignore this call
+   // we are just in Notify(), therefore we ignore this call
    if(fActNotify) return kTRUE;
    fActNotify = kTRUE; //"lock" to protect for recursive calls
 
 #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0) && \
     ROOT_VERSION_CODE <  ROOT_VERSION(5,11,2)
  
-   // Workaround for older ROOT: give file name to 
+   // workaround for older ROOT: give file name to 
    // TFile that accidentally stripped the protocol 
+   const TUrl *url = (GetCurrentFile()!=0) 
+     ? GetCurrentFile()->GetEndpointUrl() : 0;
 
-      const TUrl *url = (GetCurrentFile()!=0) 
-         ? GetCurrentFile()->GetEndpointUrl() : 0;
+   if (url==0) {
+     Warning("Notify","Could not get URL for file [%s].",
+             (GetCurrentFile()!=0) ? (GetCurrentFile()->GetName())
+             : "null");
+   } else {
 
-      if (url==0) {
-	 Warning("Notify","Could not get URL for file [%s].",
-		 (GetCurrentFile()!=0) ? (GetCurrentFile()->GetName())
-		 : "null");
-      } else {
-
-	 if(GetCurrentFile()!=0)
-	    GetCurrentFile()->SetName((const_cast<TUrl*>(url)->GetUrl()));
-	                               // the const_cast is for some version of 
-                                       // 5.08.00 that didn't have GetUrl const.
-      }
+     if(GetCurrentFile()!=0)
+       GetCurrentFile()->SetName((const_cast<TUrl*>(url)->GetUrl()));
+     // the const_cast is for some version of 
+     // 5.08.00 that didn't have GetUrl const.
+   }
 #endif
 
    if (fVerbosity>0) {
@@ -562,7 +715,7 @@ Bool_t TAMSelector::Notify()
            fCurEvt);
    }
 
-
+   // status (return value) of notify
    Bool_t notifyStat = kTRUE;
 
    // no event yet processed eg, no loaders assigned,
@@ -579,7 +732,7 @@ Bool_t TAMSelector::Notify()
 
          // have to reset our object counter to take care of objects
          // created in the notify of the loader
-         fObjCounter=TProcessID::GetObjectCount();;
+         //fObjCounter=TProcessID::GetObjectCount();;
 
 	 if (notifyStat==kFALSE) {
 	    Error("Notify","Branch [%s] Notify() failed in file [%s].",
@@ -620,6 +773,7 @@ Bool_t TAMSelector::Process(Long64_t entry)
       return kFALSE;
    }
 
+   // prepare for event
    fCurEvt = entry;
    ZeroAllBranches();
    if (fModAborted) {
@@ -630,28 +784,30 @@ Bool_t TAMSelector::Process(Long64_t entry)
      fEventAborted = kFALSE;
    }
 
-   // store object counter
+   // store object counter for run boundaries
    if (BeginRun()) {
      fObjCounterRun=TProcessID::GetObjectCount();;
      fAModules->ExecuteTask(&TAModule::kExecBeginRun);
    }
 
-   // store object counter
+   // store object counter and process event
    fObjCounter=TProcessID::GetObjectCount();;
-      
    if (fVerbosity>9) {
      if ((entry % 100)==0) {
        fprintf(stderr,"Processing entry %lld...                       \r",
                entry);
      }
    }
+
    fAModules->ExecuteTask(&TAModule::kExecProcess);
 
+   // update object counter on run boundaries
    if (EndRun()) {
      fAModules->ExecuteTask(&TAModule::kExecEndRun);
      fObjCounter=fObjCounterRun;
    }
 
+   // cleanup
    ClearAllLoaders();
    if (fEventObjs.IsEmpty()==kFALSE) 
      fEventObjs.Delete();
@@ -789,8 +945,10 @@ void TAMSelector::SlaveBegin(TTree *tree)
 
       // init requires fBranchTable to be built already
       // in Proof, this is called automatically when a new tree is loaded
-      if (tree) Init(tree);
-      if (fEventObjs.IsEmpty()==kFALSE) fEventObjs.Delete();
+      if (tree) 
+        Init(tree);
+      if (fEventObjs.IsEmpty()==kFALSE) 
+        fEventObjs.Delete();
    }
 }
 
