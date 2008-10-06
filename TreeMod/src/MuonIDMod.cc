@@ -1,4 +1,4 @@
-// $Id:  $
+// $Id: MuonIDMod.cc,v 1.1 2008/09/30 16:36:23 sixie Exp $
 
 #include "MitAna/TreeMod/interface/MuonIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -66,13 +66,13 @@ void MuonIDMod::Process()
     const int nCuts = 4;
     double cutValue[nCuts] = {0.1, 3.0, 3.0, 1.5 };
     bool passCut[nCuts] = {false, false, false, false};
-    double muonD0 = mu->BestTrk()->D0();
+    double muonD0 = fabs(mu->BestTrk()->D0());
     if(muonD0 < cutValue[0] &&  MuonClass == 0 ) 
       passCut[0] = true;
     if(mu->IsoR03SumPt() < cutValue[1]) passCut[1] = true;
     if(mu->IsoR03EmEt() + 
        mu->IsoR03HadEt() < cutValue[2]) passCut[2] = true;    
-    if(mu->Pt() > 5)
+    if(mu->Pt() > 10)
       passCut[3] = true;   
     
     // Final decision
