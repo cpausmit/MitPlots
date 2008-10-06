@@ -1,4 +1,4 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.8 2008/09/28 10:58:20 loizides Exp $
+// $Id: MitAnaTreeModLinkDef.h,v 1.9 2008/09/30 16:39:26 sixie Exp $
 
 #ifndef TREEMOD_LINKDEF_H
 #define TREEMOD_LINKDEF_H
@@ -19,6 +19,7 @@
 #include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include "MitAna/TreeMod/interface/HLTExampleMod.h"
 #include "MitAna/TreeMod/interface/SimpleExampleMod.h"
+#include "MitAna/TreeMod/interface/GeneratorMod.h"
 #endif
 
 #ifdef __CINT__
@@ -46,4 +47,5 @@
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
 #pragma link C++ class mithep::HLTExampleMod+;
+#pragma link C++ class mithep::GeneratorMod+;
 #endif
