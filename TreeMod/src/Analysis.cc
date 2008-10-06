@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.14 2008/07/08 14:42:09 loizides Exp $
+// $Id: Analysis.cc,v 1.15 2008/09/28 02:36:23 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -28,7 +28,8 @@ using namespace mithep;
 Analysis::Analysis(Bool_t useproof) : 
   fUseProof(useproof), 
   fUseHLT(kTRUE),
-  fHierachy(kTRUE), 
+  fHierarchy(kTRUE), 
+  fDoProxy(kTRUE), 
   fState(kPristine), 
   fNFriends(0), 
   fList(new TList), 
@@ -349,10 +350,9 @@ Bool_t Analysis::Init()
 
     // when not running Proof, we must make a selector
     fSelector = new Selector; 
-
+    fSelector->SetDoProxy(fDoProxy);
     if (hltmod) 
       fSelector->AddInput(hltmod);
-
     fSelector->AddInput(fSuperMod);
     MDB(kAnalysis, 2)
       fSelector->SetVerbosity(1);
@@ -496,7 +496,7 @@ void Analysis::Terminate()
         MDB(kAnalysis, 1)
           Info("Terminate", "Saving output to %s!", fAnaOutput.Data());
 
-        if (fHierachy) 
+        if (fHierarchy) 
           fOutput->Write(fOutput->GetName(),TObject::kSingleKey);       
         else 
           fOutput->Write();

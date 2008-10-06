@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.10 2008/09/10 03:33:28 loizides Exp $
+// $Id: Analysis.h,v 1.11 2008/09/28 02:36:23 loizides Exp $
 //
 // Analysis
 //
@@ -50,24 +50,25 @@ namespace mithep
       void                      AddPackage(const char *name);
       void                      AddPackages(TList *list);
       const char               *GetAnaOutputName()            const { return fAnaOutput;}
-      const TList              *GetOutput()                   const { return fOutput; }
+      const TList              *GetOutput()                   const { return fOutput;   }
       Bool_t                    GetUseProof()                 const { return fUseProof; }
       Bool_t                    Init();
-      Bool_t                    IsInit()                      const { return fState==kInit; }
-      Bool_t                    IsRun()                       const { return fState==kRun; }
+      Bool_t                    IsInit()                      const { return fState==kInit;      }
+      Bool_t                    IsRun()                       const { return fState==kRun;       }
       Bool_t                    IsTerminated()                const { return fState==kTerminate; }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNevents(Long64_t n)       { fDoNEvents = n; }
-      void                      SetCompressionLevel(Int_t level)    { fCompLevel = level; }
-      void                      SetConfigName(const char* name)     { fConfig    = name; }
-      void                      SetKeepHierachy(Bool_t b)           { fHierachy  = b; }
-      void                      SetMasterName(const char* name)     { fMaster    = name; }
-      void                      SetOutputName(const char *name)     { fAnaOutput = name; }
-      void                      SetSuperModule(TAModule *mod)       { fSuperMod  = mod; }
-      void                      SetTreeName(const char *name)       { fTreeName  = name; }
-      void                      SetUseHLT(Bool_t hlt)               { fUseHLT  = hlt; }
-      void                      SetUseProof(Bool_t up)              { fUseProof  = up; }
+      void                      SetProcessNevents(Long64_t n)       { fDoNEvents  = n;     }
+      void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level; }
+      void                      SetConfigName(const char* name)     { fConfig     = name;  }
+      void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;     }
+      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy  = b;     }
+      void                      SetMasterName(const char* name)     { fMaster     = name;  }
+      void                      SetOutputName(const char *name)     { fAnaOutput  = name;  }
+      void                      SetSuperModule(TAModule *mod)       { fSuperMod   = mod;   }
+      void                      SetTreeName(const char *name)       { fTreeName   = name;  }
+      void                      SetUseHLT(Bool_t hlt)               { fUseHLT     = hlt;   }
+      void                      SetUseProof(Bool_t up)              { fUseProof   = up;    }
       void                      Terminate();
 
     protected:
@@ -79,7 +80,8 @@ namespace mithep
 
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
       Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
-      Bool_t                    fHierachy;        //=true if module hierachy to be stored (def=1)
+      Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
+      Bool_t                    fDoProxy;         //=true if branch autoload is used (def=1)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names
