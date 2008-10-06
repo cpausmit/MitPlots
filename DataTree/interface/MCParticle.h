@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.3 2008/09/10 03:33:27 loizides Exp $
+// $Id: MCParticle.h,v 1.4 2008/09/22 10:40:07 bendavid Exp $
 //
 // MCParticle
 //
@@ -48,6 +48,7 @@ namespace mithep
       void		  SetMother(MCParticle *p)       { fMother = p; }
       void                SetStatus(Int_t s)             { fStatus = s; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
+      void                SetPdgId(Int_t s)              {  fPdgId = s; }
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
 
