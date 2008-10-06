@@ -3,6 +3,7 @@
 
 <use name=root>
 <use name=MitCommon/MathTools>
+<use name=MitAna/DataTree>
 #<flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaUtils>
