@@ -1,4 +1,4 @@
-// $Id: JetCleaningMod.cc,v 1.1 2008/09/30 16:37:17 sixie Exp $
+// $Id: JetCleaningMod.cc,v 1.2 2008/10/02 14:22:46 sixie Exp $
 
 #include "MitAna/TreeMod/interface/JetCleaningMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -61,7 +61,7 @@ void JetCleaningMod::Process()
     //Check for overlap with an electron
     for (UInt_t j=0; j<CleanElectrons->GetEntries(); j++) {
       double deltaR = MathUtils::DeltaR(CleanElectrons->At(j)->Mom(),jet->Mom());  
-      if (deltaR < 0.3) {
+      if (deltaR < 0.1) {
 	isElectronOverlap = true;	 	 	
 	break;	 	 
       }      
