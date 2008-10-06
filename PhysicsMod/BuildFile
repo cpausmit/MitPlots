@@ -1,0 +1,12 @@
+# -*- Makefile -*-
+# $Id: $
+
+<use name=MitAna/TreeMod>
+<use name=MitAna/Utils>
+<use name=MitCommon/MathTools>
+<use root>
+<lib name=Proof>
+#<flags CXXFLAGS="-g">
+<export>
+   <lib name=MitAnaPhysicsMod>
+</export>
