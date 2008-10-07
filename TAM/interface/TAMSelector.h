@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.4 2008/10/06 16:50:07 loizides Exp $
+// $Id: TAMSelector.h,v 1.5 2008/10/07 04:13:54 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -128,6 +128,7 @@ public:
    Bool_t            IsEventAborted()    const { return fEventAborted; }
    Bool_t            IsAnalysisAborted() const { return fAnalysisAborted; }
    void              LoadBranch(const Char_t* bname);
+   void              LoadBranch(TAMBranchInfo* brInfo);
    Bool_t            Notify();
    Bool_t            Process(Int_t entry) { return Process(static_cast<Long64_t>(entry)); }
    Bool_t            Process(Long64_t entry);

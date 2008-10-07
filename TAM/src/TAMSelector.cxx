@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.6 2008/10/06 16:50:07 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.7 2008/10/07 04:13:54 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -129,10 +129,13 @@ void TAMSelector::TAMAutoLoadProxy::Disable()
 void TAMSelector::TAMAutoLoadProxy::Enable()
 {
    // Enable the proxy.
-
-   fOrig = TRefTable::GetRefTable();
-   if (fOrig) 
-      TRefTable::SetRefTable(fFake);
+   
+   TBranchRef *bref = fSel->GetTree()->GetTree()->GetBranchRef();
+   if (bref) {
+     fOrig = bref->GetRefTable();
+     TRefTable::SetRefTable(fFake);
+   }
+      
 }
 
 //______________________________________________________________________________
@@ -145,10 +148,6 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    TBranchRef *br = dynamic_cast<TBranchRef*>(fOrig->GetOwner());
    if (!br) 
       return kFALSE;
-
-   // disable proxy (this is needed since underlying ROOT code relies on 
-   // on a corresponding pair of TRefTable/TBranchRef).
-   Disable(); 
 
    UInt_t      uid = fFake->GetUID();
    TProcessID *pid = fFake->GetUIDContext();
@@ -216,25 +215,26 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    fCurEntry = readentry;
 
    if (!branch) {
-      Enable();
       return kFALSE;
    }
 
    TBranch *readbranch = branch->GetMother();
    if (!readbranch) {
-      Enable();
       return kFALSE;
    }
 
    const char *brname = readbranch->GetName();
    TObject *brInfo = fSel->fBranchTable.FindObject(brname);
+   TAMBranchInfo *branchInfo;
    if (brInfo==0) {
-     fSel->fBranchTable.Add(new TAMBranchInfo(brname));
+     branchInfo = new TAMBranchInfo(brname);
+     fSel->fBranchTable.Add(branchInfo);
    }
+   else
+     branchInfo = dynamic_cast<TAMBranchInfo*>(brInfo);
 
-   fSel->LoadBranch(brname);
+   fSel->LoadBranch(branchInfo);
 
-   //Enable(); call done by LoadBranch
    return kTRUE;
 }
 
@@ -612,15 +612,13 @@ void TAMSelector::Init(TTree *tree) {
    }
 }
 
-
 //______________________________________________________________________________
-void TAMSelector::LoadBranch(const Char_t *bname) 
+void TAMSelector::LoadBranch(const Char_t *bname)
 {
-   // Loads the selected branch and get the current entry (number fCurEvt)
-   // if the branch has not yet been loaded for this event. It then makes 
-   // sure each module's pointer to the branch object point to the address
-   // of this branch.
-   
+
+  // Loads branch by name, getting the pointer to the corresponding
+  // TAMBranchInfo and then calling the other LoadBranch function
+
    if(fCurEvt==-1) {
       Error("LoadBranch",
             "Can not load branch with name [%s] at this point (fCurEvt==-1).",
@@ -636,7 +634,18 @@ void TAMSelector::LoadBranch(const Char_t *bname)
             "Could not find branch with name [%s] in requested branch list.",
             bname);
       AbortAnalysis();
-   } 
+   }
+   
+   LoadBranch(brInfo); 
+}
+
+//______________________________________________________________________________
+void TAMSelector::LoadBranch(TAMBranchInfo* brInfo)
+{
+   // Loads the selected branch and get the current entry (number fCurEvt)
+   // if the branch has not yet been loaded for this event. It then makes 
+   // sure each module's pointer to the branch object point to the address
+   // of this branch.
 
    if (brInfo->IsLoaded()) 
       return;
@@ -669,7 +678,7 @@ void TAMSelector::LoadBranch(const Char_t *bname)
             "Error in file [%s] when accessing branch with name [%s] in "
             "requested branch list.",
             (GetCurrentFile()!=0) ? (GetCurrentFile()->GetName()) 
-                                  : "null", bname);
+                                  : "null", brInfo->GetName());
 
       AbortAnalysis();
    }
