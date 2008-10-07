@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.3 2008/09/27 06:15:18 loizides Exp $
+# $Id: setup.sh,v 1.4 2008/09/30 22:01:31 loizides Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,6 +29,23 @@ case $version in
        cvs co -r V01-06-02 CondFormats/JetMETObjects;
        cvs co -r V01-08-03 JetMETCorrections/Configuration;
        cvs co -r V02-09-00 JetMETCorrections/Modules;
+
+       #things related to Calo+track Jets
+       cvs co -A JetMETCorrections/Configuration/data/CMSSW_167_TrackLeakage.txt
+       cvs co -A JetMETCorrections/Configuration/data/CMSSW_167_TrackLeakage_one.txt
+       cvs co -A JetMETCorrections/Configuration/data/CMSSW_167_TrackNonEff_one.txt
+       cvs co -A JetMETCorrections/Configuration/data/CMSSW_167_response.txt
+       cvs co -A JetMETCorrections/Configuration/python/JetPlusTrackCorrections_cff.py
+       cvs co -r CMSSW_2_1_9 JetMETCorrections/JetPlusTrack
+       cvs co -A JetMETCorrections/JetPlusTrack/BuildFile
+       cvs co -A JetMETCorrections/JetPlusTrack/plugins/BuildFile
+       cvs co -A JetMETCorrections/JetPlusTrack/test/JPTanalyzer_cfg.py
+       cvs co -r CMSSW_2_1_9 JetMETCorrections/Algorithms
+       cvs co -A JetMETCorrections/Algorithms/src/JetPlusTrackCorrector.cc
+       cvs co -A JetMETCorrections/Algorithms/interface/JetPlusTrackCorrector.h
+       cvs co -A JetMETCorrections/Algorithms/BuildFile
+       
+
        #to remove annoying Warning messages for the jet to vertex associator.
        cvs co JetMETCorrections/JetVertexAssociation;
        TMP=`mktemp`;
