@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.5 2008/09/27 06:02:54 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.6 2008/10/06 16:50:07 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -96,12 +96,14 @@ TAMSelector::TAMAutoLoadProxy::TAMAutoLoadProxy(TAMSelector *sel, Bool_t e) :
    fSel(sel),
    fOrig(0), 
    fFake(0),
-   fReadEntry(-1)
+   fCurEntry(-1)
 { 
    // Default constructor.
 
    fFake = new TRefTable(this, 10);
    if (e) Enable(); 
+
+   memset(fBrRead, 0, 1024*sizeof(Bool_t));
 }
 
 //______________________________________________________________________________
@@ -144,23 +146,31 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    if (!br) 
       return kFALSE;
 
-   Disable();
+   // disable proxy (this is needed since underlying ROOT code relies on 
+   // on a corresponding pair of TRefTable/TBranchRef).
+   Disable(); 
 
    UInt_t      uid = fFake->GetUID();
    TProcessID *pid = fFake->GetUIDContext();
    fOrig->SetUID(uid,pid);
 
    if (0) { // this essentially is what ROOT would have done
-     Bool_t ret = br->Notify();
-     Enable();
-     return ret;
+      Bool_t ret = br->Notify();
+      Enable();
+      return ret;
    }
 
    // read entry for this event
-   Int_t readentry = br->GetReadEntry();
+   Long64_t readentry = br->GetReadEntry();
+   Long64_t tamentry  = fSel->fCurEvt;
+   if (readentry!=tamentry) {
+      Fatal("Notify", 
+            "Entries from BranchRef (%d) differs from TAM current entry (%d)",
+            readentry, tamentry);
+   }
 
    // read branchref if needed
-   if (fReadEntry != readentry) {
+   if (fCurEntry != readentry) {
       Int_t bytes = br->GetEntry(readentry);
       if (bytes<0) {
          Fatal("Notify", "Could not get entry %d from %s branch",
@@ -174,23 +184,36 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    if (!branch) { //scan for possible friend Trees
       TList *friends = fSel->GetTree()->GetListOfFriends();
       if (friends) {
+
+         // reset branch read flags if new entry to be read
+         if (fCurEntry != readentry)
+            memset(fBrRead, 0, 1024*sizeof(Bool_t));
+
          TObjLink *lnk = friends->FirstLink();
+         Int_t nfriend = 0;
          while (lnk) {
             TFriendElement *elem = 
                static_cast<TFriendElement*>(lnk->GetObject());
             TBranchRef *bref = elem->GetTree()->GetBranchRef();
             if (bref) {
-               if (readentry != bref->GetReadEntry())
+               if (!fBrRead[nfriend]) {
                   bref->GetEntry(readentry);
+                  fBrRead[nfriend] = kTRUE;
+               }
                TBranch *branch = dynamic_cast<TBranch*>
                   (bref->GetRefTable()->GetParent(uid, pid));
                if (branch) 
                  break; // found branch
             }
             lnk = lnk->Next();
+            ++nfriend;
+            R__ASSERT(nfriend<1024);
          }
       }
    }
+
+   // cache last branch read attempt
+   fCurEntry = readentry;
 
    if (!branch) {
       Enable();
@@ -211,27 +234,9 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
 
    fSel->LoadBranch(brname);
 
+   //Enable(); call done by LoadBranch
    return kTRUE;
 }
-
-#if 0
-   cout << "Found " << branch->GetName() << " " << readbranch->GetName() << endl;
-   TClass *cls = gROOT->GetClass(readbranch->GetClassName());
-   if (cls!=0) {
-     cout << " CLASE " << cls->GetName() << endl;
-   }
-
-   // read branch
-   fReadEntry = readentry;
-   if (fReadEntry != readbranch->GetReadEntry()) {
-      Int_t bytes = readbranch->GetEntry(fReadEntry);
-      if (bytes<0) {
-         Enable();
-         return kFALSE;
-      }
-   }
-   Enable();
-#endif
 
 
 //______________________________________________________________________________
@@ -670,7 +675,8 @@ void TAMSelector::LoadBranch(const Char_t *bname)
    }
 
    // make sure autoload proxy is enabled
-   if (fDoProxy) fProxy->Enable();
+   if (fDoProxy) 
+     fProxy->Enable();
 }
 
 
@@ -743,7 +749,6 @@ Bool_t TAMSelector::Notify()
 	    AbortAnalysis();
 	 }
       }
-
    }
 
    if (notifyStat && (fAnalysisAborted==kFALSE)) {

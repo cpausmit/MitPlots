@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.3 2008/09/27 06:02:54 loizides Exp $
+// $Id: TAMSelector.h,v 1.4 2008/10/06 16:50:07 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -56,10 +56,11 @@ protected:
       // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done via
       // TAM loaders.
    protected:
-       TAMSelector *fSel;       //ptr to TAMSelector (we are a friend)
-       TRefTable   *fOrig;      //ptr to original TRefTable filled by I/O (owner is TBranchRef)
-       TRefTable   *fFake;      //ptr to our fake TRefTable of which we are owner
-       Int_t        fReadEntry; //cache of last ready entry
+       TAMSelector *fSel;          //ptr to TAMSelector (we are a friend)
+       TRefTable   *fOrig;         //ptr to original TRefTable filled by I/O (owner is TBranchRef)
+       TRefTable   *fFake;         //ptr to our fake TRefTable of which we are owner
+       Long64_t     fCurEntry;     //cache of current entry
+       Bool_t       fBrRead[1024]; //flag which TBranchRef branch was read
 
    public:
        TAMAutoLoadProxy(TAMSelector *sel, Bool_t e=kFALSE);
