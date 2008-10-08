@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.7 2008/10/07 04:13:54 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.8 2008/10/07 16:02:34 bendavid Exp $
 //
 
 #include "TAMSelector.h"
@@ -135,7 +135,6 @@ void TAMSelector::TAMAutoLoadProxy::Enable()
      fOrig = bref->GetRefTable();
      TRefTable::SetRefTable(fFake);
    }
-      
 }
 
 //______________________________________________________________________________
@@ -149,13 +148,13 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    if (!br) 
       return kFALSE;
 
+   // get the desired uid/pid pair
    UInt_t      uid = fFake->GetUID();
    TProcessID *pid = fFake->GetUIDContext();
    fOrig->SetUID(uid,pid);
 
    if (0) { // this essentially is what ROOT would have done
       Bool_t ret = br->Notify();
-      Enable();
       return ret;
    }
 
@@ -218,11 +217,14 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
       return kFALSE;
    }
 
+   // access the main branch
    TBranch *readbranch = branch->GetMother();
    if (!readbranch) {
       return kFALSE;
    }
 
+   // check if TAMBranchInfo already exists
+   // and if not add it
    const char *brname = readbranch->GetName();
    TObject *brInfo = fSel->fBranchTable.FindObject(brname);
    TAMBranchInfo *branchInfo;
@@ -233,6 +235,7 @@ Bool_t TAMSelector::TAMAutoLoadProxy::Notify()
    else
      branchInfo = dynamic_cast<TAMBranchInfo*>(brInfo);
 
+   // load the branch
    fSel->LoadBranch(branchInfo);
 
    return kTRUE;
@@ -615,9 +618,9 @@ void TAMSelector::Init(TTree *tree) {
 //______________________________________________________________________________
 void TAMSelector::LoadBranch(const Char_t *bname)
 {
-
   // Loads branch by name, getting the pointer to the corresponding
-  // TAMBranchInfo and then calling the other LoadBranch function
+  // TAMBranchInfo and then use it in the call of the protected LoadBranch 
+  // function.
 
    if(fCurEvt==-1) {
       Error("LoadBranch",
