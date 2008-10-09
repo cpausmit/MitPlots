@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GeneratorMod.h,v 1.1 2008/10/01 13:00:09 ceballos Exp $
+// $Id: GeneratorMod.h,v 1.1 2008/10/06 15:50:59 ceballos Exp $
 //
 // GeneratorMod
 //
@@ -38,7 +38,7 @@ namespace mithep
     protected:
       bool           fPrintDebug;		// debug output
       bool           fFillHist; 		// Fill histograms?
-      TString        fIsMC;			// is MC?
+      bool           fIsMC;			// is MC?
       TString        fMCPartName;		// generator coll
       TString        fMCLeptonsName ;		// new lepton coll
       TString        fMCTausName;		// new tau coll

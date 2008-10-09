@@ -1,4 +1,4 @@
-// $Id: GeneratorMod.cc,v 1.1 2008/10/06 15:50:09 ceballos Exp $
+// $Id: GeneratorMod.cc,v 1.2 2008/10/09 10:38:44 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/GeneratorMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -267,9 +267,7 @@ void GeneratorMod::SlaveBegin()
   // Run startup code on the computer (slave) doing the actual analysis. Here,
   // we typically initialize histograms and other analysis objects and request
   // branches. For this module, we request a branch of the MitTree.
-  if(fIsMC == true){
-    ReqBranch(fMCPartName, fParticles);
-  }
+  ReqBranch(fMCPartName, fParticles);
 
   // Fill histograms
   if(fFillHist == true){
