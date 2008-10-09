@@ -1,4 +1,4 @@
- // $Id: FwdJetEvtSelMod.cc,v 1.1 2008/09/30 19:24:22 ceballos Exp $
+ // $Id: FwdJetEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/FwdJetEvtSelMod.h"
 #include <TH1D.h>
@@ -65,8 +65,8 @@ void FwdJetEvtSelMod::Process()
   ObjArray<Jet> *CleanJets = dynamic_cast<ObjArray<Jet>* >
     (FindObjThisEvt(fCleanJetsName.Data()));
 
-  ObjArray<Jet> *CleanFwdJets   = new ObjArray<Jet>; 
-  ObjArray<Jet> *CleanNoFwdJets = new ObjArray<Jet>; 
+  ObjArray<Jet> *CleanFwdJets   = new ObjArray<Jet>; CleanFwdJets->SetOwner(true);
+  ObjArray<Jet> *CleanNoFwdJets = new ObjArray<Jet>; CleanNoFwdJets->SetOwner(true);
 
   // Sort and count the number of central Jets for vetoing
   vector<Jet*> sortedJets;
@@ -126,6 +126,7 @@ void FwdJetEvtSelMod::Process()
 	  CleanFwdJets->Add(sortedJets[j]);
 	  jmax = i; jmin = j;
 	}
+	delete dijet;
       } // j...
     } // i...
     // Looking for central jets if a good forward tagging pair is found
@@ -183,6 +184,7 @@ void FwdJetEvtSelMod::Process()
 	hDFwdJetSel[6+VBYtype*100]->Fill(nnOutput);
 	hDFwdJetSel[7+VBYtype*100]->Fill((double)isFwdJet[0]);
 	hDFwdJetSel[8+VBYtype*100]->Fill((double)isFwdJet[1]);
+	delete dijet;
       }
 
       // Event has a good forward tagging pair
@@ -282,6 +284,7 @@ void FwdJetEvtSelMod::Process()
               hDFwdJetSel[23+VBYtype*100]->Fill((double)CleanNoFwdJets->GetEntries());
 	    }
 	  }
+	  delete dilepton;
 	} // At least 2 identifed leptons
       } // jmax >= 0
     } // FillHist

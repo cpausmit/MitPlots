@@ -1,4 +1,4 @@
- // $Id: ZXEvtSelMod.cc,v 1.1 2008/09/30 19:24:22 ceballos Exp $
+ // $Id: ZXEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/ZXEvtSelMod.h"
 #include <TH1D.h>
@@ -150,6 +150,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsMu[2]);
             leptonsWZ.push_back(leptonsMu[1]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else if(leptonsMu[1]->Charge() != leptonsMu[0]->Charge() &&
 	        leptonsMu[1]->Charge() != leptonsMu[2]->Charge()){
@@ -169,6 +171,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsMu[2]);
             leptonsWZ.push_back(leptonsMu[0]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else if(leptonsMu[2]->Charge() != leptonsMu[0]->Charge() &&
 	        leptonsMu[2]->Charge() != leptonsMu[1]->Charge()){
@@ -188,6 +192,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsMu[2]);
             leptonsWZ.push_back(leptonsMu[0]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else {
 	  printf("Impossible in nWZType = 2\n");
@@ -219,6 +225,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsEl[2]);
             leptonsWZ.push_back(leptonsEl[1]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else if(leptonsEl[1]->Charge() != leptonsEl[0]->Charge() &&
 	        leptonsEl[1]->Charge() != leptonsEl[2]->Charge()){
@@ -238,6 +246,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsEl[2]);
             leptonsWZ.push_back(leptonsEl[0]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else if(leptonsEl[2]->Charge() != leptonsEl[0]->Charge() &&
 	        leptonsEl[2]->Charge() != leptonsEl[1]->Charge()){
@@ -257,6 +267,8 @@ void ZXEvtSelMod::Process()
             leptonsWZ.push_back(leptonsEl[2]);
             leptonsWZ.push_back(leptonsEl[0]);	    
 	  }
+	  delete dileptonA;
+	  delete dileptonB;
 	}
 	else {
 	  printf("Impossible in nWZType = 3\n");
@@ -336,6 +348,7 @@ void ZXEvtSelMod::Process()
 	hDWZSel[14+100*nWZType]->Fill(deltaRJetl);
 	hDWZSel[15+100*nWZType]->Fill(deltaRJetMet * 180./TMath::Pi());
       }
+      delete dilepton;
     } // Z Charge == 0
   } // WZ Selection
 
@@ -360,6 +373,8 @@ void ZXEvtSelMod::Process()
         dileptonA->AddDaughter(leptonsMu[1]);
         dileptonB->AddDaughter(leptonsMu[0]);
         dileptonB->AddDaughter(leptonsMu[2]);
+	delete dileptonA;
+	delete dileptonB;
       }
       else if(leptonsMu[0]->Charge() != leptonsMu[1]->Charge() &&
               leptonsMu[0]->Charge() != leptonsMu[3]->Charge()){
@@ -501,6 +516,8 @@ void ZXEvtSelMod::Process()
         leptonsZZ.push_back(leptonsEl[2]);
         nZZType = 12;
       }
+      delete dileptonA;
+      delete dileptonB;
     }
     hDZZSel[90]->Fill((double)nZZType);
     if(nZZType >= 0){
@@ -535,6 +552,9 @@ void ZXEvtSelMod::Process()
         hDZZSel[ 5+100*simpleZZType]->Fill(TMath::Min(dileptonZ1->Mass(),199.99));
       }
       hDZZSel[ 6+100*simpleZZType]->Fill(TMath::Min(particleH->Mass(),599.99));
+      delete dileptonZ1;
+      delete dileptonZ2;
+      delete particleH;
     } // nZZType >= 0
   } // ZZ analysis
 }

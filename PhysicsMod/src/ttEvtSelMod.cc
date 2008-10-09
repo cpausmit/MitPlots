@@ -1,4 +1,4 @@
- // $Id: ttEvtSelMod.cc,v 1.1 2008/09/30 19:24:22 ceballos Exp $
+ // $Id: ttEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/ttEvtSelMod.h"
 #include <TH1D.h>
@@ -107,203 +107,203 @@ void ttEvtSelMod::Process()
       cout << leptons[i]->Pt() << endl;
   }
 
-  // Pt requirements
-  if (leptons.size() < 2 || leptons[0]->Pt() < 20 || 
-                            leptons[1]->Pt() < 15) return;
+  // Pt requirements && MET requirements
+  if (leptons.size() >= 2 && caloMet->Pt() >= 0 &&
+      leptons[0]->Pt() > 20 && leptons[1]->Pt() > 15){
 
-  // MET requirement
-  if (caloMet->Pt() < 0) return;
+    CompositeParticle *dilepton = new CompositeParticle();
+    dilepton->AddDaughter(leptons[0]);
+    dilepton->AddDaughter(leptons[1]);
+    // Charge of the leptons should be opposite && minimum mass requirement
+    if (dilepton->Charge() == 0 && dilepton->Mass() > 12){
 
-  CompositeParticle *dilepton = new CompositeParticle();
-  dilepton->AddDaughter(leptons[0]);
-  dilepton->AddDaughter(leptons[1]);
-  // Charge of the leptons should be opposite
-  if (dilepton->Charge() != 0) return;
-
-  // Minimum mass requirement
-  if (dilepton->Mass() < 12) return;
-
-  // Sort and count the number of central Jets for vetoing
-  vector<Jet*> sortedJets;
-  int nCentralJets = 0;
-  for(UInt_t i=0; i<CleanJets->GetEntries(); i++){
-    if(fabs(CleanJets->At(i)->Eta()) < 2.5){
-      nCentralJets++;
-      Jet* jet_f = new Jet(CleanJets->At(i)->Px()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
-                           CleanJets->At(i)->Py()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
-                           CleanJets->At(i)->Pz()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
-			   CleanJets->At(i)->E() *CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale());
-      sortedJets.push_back(jet_f);
-    }
-  }
-  for(UInt_t i=0; i<sortedJets.size(); i++){
-    for(UInt_t j=i+1; j<sortedJets.size(); j++){
-      if(sortedJets[i]->Pt() < sortedJets[j]->Pt()) {
-	//swap i and j
-        Jet* tempjet = sortedJets[i];
-        sortedJets[i] = sortedJets[j];
-        sortedJets[j] = tempjet;	
-      }
-    }
-  }
-
-  // Delta phi between the 2 leptons in degrees
-  double deltaPhiLeptons = MathUtils::DeltaPhi(leptons[0]->Phi(), 
-                                               leptons[1]->Phi())* 180./TMath::Pi();
-
-  double deltaEtaLeptons = abs(leptons[0]->Eta() - leptons[1]->Eta());
-
-  double deltaPhiDileptonMet = MathUtils::DeltaPhi(caloMet->Phi(), 
-                                                   dilepton->Phi())* 180./TMath::Pi();
-
-  double mtHiggs = TMath::Sqrt(2.0*dilepton->Pt() * caloMet->Pt()*
-			       (1.0 - cos(deltaPhiDileptonMet * TMath::Pi()/180.0)));
-
-  // Angle between MET and closest lepton
-  double deltaPhiMetLepton[2] = {MathUtils::DeltaPhi(caloMet->Phi(), leptons[0]->Phi()),
-                                 MathUtils::DeltaPhi(caloMet->Phi(), leptons[1]->Phi())};
-  
-  double minDeltaPhiMetLepton = (deltaPhiMetLepton[0] < deltaPhiMetLepton[1])?
-    deltaPhiMetLepton[0]:deltaPhiMetLepton[1];
-  minDeltaPhiMetLepton = minDeltaPhiMetLepton * 180./TMath::Pi();
-
-  double METdeltaPhilEt = caloMet->Pt();
-  if(minDeltaPhiMetLepton < 90.0) 
-    METdeltaPhilEt = METdeltaPhilEt * sin(minDeltaPhiMetLepton * TMath::Pi()/180.);
-
-  double mTW[2] = {TMath::Sqrt(2.0*leptons[0]->Pt()*caloMet->Pt()*
-                               (1.0 - cos(deltaPhiMetLepton[0]))),
-		   TMath::Sqrt(2.0*leptons[1]->Pt()*caloMet->Pt()*
-                               (1.0 - cos(deltaPhiMetLepton[1])))};
-
-  int pairType = -1;
-  if (leptonType[0] == "mu" && leptonType[1] == "mu" )
-    pairType = 0;
-  else if(leptonType[0] == "e" && leptonType[1] == "e")
-    pairType = 1;
-  else if((leptonType[0] == "e" && leptonType[1] == "mu") || 
-	  (leptonType[0] == "mu" && leptonType[1] == "e"))
-    pairType = 2;
-  else {
-    cout << "Hey, this is not possible, leptonTypes: "
-         << leptonType[0] << " - " 
-	 << leptonType[1] << endl;
-  }
-
-  hDttPresel[ 0+100*pairType]->Fill((double)leptons.size());
-  // No more than 2 isolated good leptons
-  if (leptons.size() > 2) return;
-
-  hDttPresel[ 1+100*pairType]->Fill(caloMet->Pt());
-  hDttPresel[ 2+100*pairType]->Fill(leptons[0]->Pt());
-  hDttPresel[ 3+100*pairType]->Fill(leptons[1]->Pt());
-  hDttPresel[ 4+100*pairType]->Fill(dilepton->Mass());
-  hDttPresel[ 5+100*pairType]->Fill((double)nCentralJets);
-  hDttPresel[ 6+100*pairType]->Fill(deltaEtaLeptons);
-  hDttPresel[ 7+100*pairType]->Fill(deltaPhiLeptons);
-  hDttPresel[ 8+100*pairType]->Fill(mtHiggs);
-  hDttPresel[ 9+100*pairType]->Fill(minDeltaPhiMetLepton);
-  hDttPresel[10+100*pairType]->Fill(METdeltaPhilEt);
-  hDttPresel[11+100*pairType]->Fill(caloMet->MetSig());
-  hDttPresel[12+100*pairType]->Fill(caloMet->SumEt());
-  hDttPresel[13+100*pairType]->Fill(TMath::Max(mTW[0],mTW[1]));
-  hDttPresel[14+100*pairType]->Fill(TMath::Min(mTW[0],mTW[1]));
-  hDttPresel[15+100*pairType]->Fill(leptons[0]->Pt()+leptons[1]->Pt()+caloMet->Pt());
-  for (UInt_t j=0; j<CleanMuons->GetEntries(); j++) {
-    hDttPresel[16+100*pairType]->Fill(TMath::Min(fabs(CleanMuons->At(j)->GlobalTrk()->D0()),0.3999));
-  }
-  for (UInt_t j=0; j<CleanElectrons->GetEntries(); j++) {   
-    hDttPresel[17+100*pairType]->Fill(TMath::Min(fabs(CleanElectrons->At(j)->GsfTrk()->D0()),0.3999));
-  }
-
-  // Study for genuine tt->WbWb->2l2nubb
-  if(nCentralJets >= 2){
-    hDttPresel[18+100*pairType]->Fill(TMath::Max(fabs(sortedJets[0]->Eta()),
-                                                 fabs(sortedJets[1]->Eta())));
-    hDttPresel[19+100*pairType]->Fill(TMath::Min(fabs(sortedJets[0]->Eta()),
-                                                 fabs(sortedJets[1]->Eta())));
-    hDttPresel[20+100*pairType]->Fill(MathUtils::DeltaPhi(sortedJets[0]->Phi(),sortedJets[1]->Phi())
-                                      * 180.0 / TMath::Pi());
-    hDttPresel[21+100*pairType]->Fill(fabs(sortedJets[0]->Eta()-sortedJets[1]->Eta()));
-    hDttPresel[22+100*pairType]->Fill(MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
-                                                        sortedJets[1]->Phi(),sortedJets[1]->Eta()));
-    hDttPresel[23+100*pairType]->Fill(TMath::Max(fabs(sortedJets[0]->Pt()),
-                                                 fabs(sortedJets[1]->Pt())));
-    hDttPresel[24+100*pairType]->Fill(TMath::Min(fabs(sortedJets[0]->Pt()),
-                                                 fabs(sortedJets[1]->Pt())));
-    CompositeParticle *dijet = new CompositeParticle();
-    dijet->AddDaughter(sortedJets[0]);
-    dijet->AddDaughter(sortedJets[1]);
-    hDttPresel[25+100*pairType]->Fill(dijet->Mass());
-    hDttPresel[26+100*pairType]->Fill(dijet->Pt());
-
-    // Study energy scale corrections
-    if(GenQuarks->GetEntries() >= 2){
-      double deltarAux[2];
-      double deltaPt;
-      deltarAux[0] = MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
-                                       GenQuarks->At(0)->Phi(),GenQuarks->At(0)->Eta());
-      deltarAux[1] = MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
-                                       GenQuarks->At(1)->Phi(),GenQuarks->At(1)->Eta());
-      hDttPresel[27+100*pairType]->Fill(TMath::Min(deltarAux[0],deltarAux[1]));
-      deltaPt = -999;
-      if     (deltarAux[0] < deltarAux[1] && deltarAux[0] < 1.0){
-	deltaPt = (sortedJets[0]->Pt()-GenQuarks->At(0)->Pt())/sortedJets[0]->Pt();
-      }
-      else if(deltarAux[1] < deltarAux[0] && deltarAux[1] < 1.0){
-	deltaPt = (sortedJets[0]->Pt()-GenQuarks->At(1)->Pt())/sortedJets[0]->Pt();
-      }
-      if(deltaPt != -999) hDttPresel[28+100*pairType]->Fill(deltaPt);
-      deltarAux[0] = MathUtils::DeltaR(sortedJets[1]->Phi(),sortedJets[1]->Eta(),
-                                       GenQuarks->At(0)->Phi(),GenQuarks->At(0)->Eta());
-      deltarAux[1] = MathUtils::DeltaR(sortedJets[1]->Phi(),sortedJets[1]->Eta(),
-                                       GenQuarks->At(1)->Phi(),GenQuarks->At(1)->Eta());
-      hDttPresel[29+100*pairType]->Fill(TMath::Min(deltarAux[0],deltarAux[1]));
-      deltaPt = -999;
-      if     (deltarAux[0] < deltarAux[1] && deltarAux[0] < 1.0){
-	deltaPt = (sortedJets[1]->Pt()-GenQuarks->At(0)->Pt())/sortedJets[1]->Pt();
-      }
-      else if(deltarAux[1] < deltarAux[0] && deltarAux[1] < 1.0){
-	deltaPt = (sortedJets[1]->Pt()-GenQuarks->At(1)->Pt())/sortedJets[1]->Pt();
-      }
-      if(deltaPt != -999) hDttPresel[30+100*pairType]->Fill(deltaPt);
-    }
-  }
-
-  // Study for additional muons
-  hDttPresel[31+100*pairType]->Fill((double)DirtyMuons->GetEntries());
-  for (UInt_t i=0; i<DirtyMuons->GetEntries(); ++i) {
-    Muon *mu = DirtyMuons->At(i);
-    hDttPresel[32+100*pairType]->Fill(mu->Pt());
-    hDttPresel[33+100*pairType]->Fill(TMath::Min(fabs(mu->GlobalTrk()->D0()),0.3999));
-  }
-  if(DirtyMuons->GetEntries() > 0){
-    hDttPresel[34+100*pairType]->Fill((double)nCentralJets);
-  }
-
-  // Study dijet mass
-  if(nCentralJets >= 2){
-    double dijetMass = 999.;
-    int indDiJet[2] = {-1, -1};
-    for(UInt_t i=0; i<sortedJets.size(); i++){
-      for(UInt_t j=i+1; j<sortedJets.size(); j++){
-	CompositeParticle *dijetTemp = new CompositeParticle();
-	dijetTemp->AddDaughter(sortedJets[i]);
-	dijetTemp->AddDaughter(sortedJets[j]);
-	if(fabs(dijetTemp->Mass()-91.18) < fabs(dijetMass-91.18)){
-	  dijetMass = dijetTemp->Mass();
-	  indDiJet[0] = i;
-	  indDiJet[1] = j;
+      // Sort and count the number of central Jets for vetoing
+      vector<Jet*> sortedJets;
+      int nCentralJets = 0;
+      for(UInt_t i=0; i<CleanJets->GetEntries(); i++){
+	if(fabs(CleanJets->At(i)->Eta()) < 2.5){
+	  nCentralJets++;
+	  Jet* jet_f = new Jet(CleanJets->At(i)->Px()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
+                               CleanJets->At(i)->Py()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
+                               CleanJets->At(i)->Pz()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
+			       CleanJets->At(i)->E() *CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale());
+	  sortedJets.push_back(jet_f);
 	}
       }
-    }
-    hDttPresel[35+100*pairType]->Fill(dijetMass);
-    if(indDiJet[0] == 0 && indDiJet[1] == 1)
-      hDttPresel[36+100*pairType]->Fill(dijetMass);
-    else
-      hDttPresel[37+100*pairType]->Fill(dijetMass);
-    hDttPresel[38+100*pairType]->Fill((double)(indDiJet[0]+10*indDiJet[1]));
-  }
+      for(UInt_t i=0; i<sortedJets.size(); i++){
+	for(UInt_t j=i+1; j<sortedJets.size(); j++){
+	  if(sortedJets[i]->Pt() < sortedJets[j]->Pt()) {
+	    //swap i and j
+            Jet* tempjet = sortedJets[i];
+            sortedJets[i] = sortedJets[j];
+            sortedJets[j] = tempjet;	
+	  }
+	}
+      }
+
+      // Delta phi between the 2 leptons in degrees
+      double deltaPhiLeptons = MathUtils::DeltaPhi(leptons[0]->Phi(), 
+                                        	   leptons[1]->Phi())* 180./TMath::Pi();
+
+      double deltaEtaLeptons = abs(leptons[0]->Eta() - leptons[1]->Eta());
+
+      double deltaPhiDileptonMet = MathUtils::DeltaPhi(caloMet->Phi(), 
+                                                       dilepton->Phi())* 180./TMath::Pi();
+
+      double mtHiggs = TMath::Sqrt(2.0*dilepton->Pt() * caloMet->Pt()*
+				   (1.0 - cos(deltaPhiDileptonMet * TMath::Pi()/180.0)));
+
+      // Angle between MET and closest lepton
+      double deltaPhiMetLepton[2] = {MathUtils::DeltaPhi(caloMet->Phi(), leptons[0]->Phi()),
+                                     MathUtils::DeltaPhi(caloMet->Phi(), leptons[1]->Phi())};
+
+      double minDeltaPhiMetLepton = (deltaPhiMetLepton[0] < deltaPhiMetLepton[1])?
+	deltaPhiMetLepton[0]:deltaPhiMetLepton[1];
+      minDeltaPhiMetLepton = minDeltaPhiMetLepton * 180./TMath::Pi();
+
+      double METdeltaPhilEt = caloMet->Pt();
+      if(minDeltaPhiMetLepton < 90.0) 
+	METdeltaPhilEt = METdeltaPhilEt * sin(minDeltaPhiMetLepton * TMath::Pi()/180.);
+
+      double mTW[2] = {TMath::Sqrt(2.0*leptons[0]->Pt()*caloMet->Pt()*
+                        	   (1.0 - cos(deltaPhiMetLepton[0]))),
+		       TMath::Sqrt(2.0*leptons[1]->Pt()*caloMet->Pt()*
+                        	   (1.0 - cos(deltaPhiMetLepton[1])))};
+
+      int pairType = -1;
+      if (leptonType[0] == "mu" && leptonType[1] == "mu" )
+	pairType = 0;
+      else if(leptonType[0] == "e" && leptonType[1] == "e")
+	pairType = 1;
+      else if((leptonType[0] == "e" && leptonType[1] == "mu") || 
+	      (leptonType[0] == "mu" && leptonType[1] == "e"))
+	pairType = 2;
+      else {
+	cout << "Hey, this is not possible, leptonTypes: "
+             << leptonType[0] << " - " 
+	     << leptonType[1] << endl;
+      }
+
+      hDttPresel[ 0+100*pairType]->Fill((double)leptons.size());
+      // No more than 2 isolated good leptons
+      if (leptons.size() > 2) return;
+
+      hDttPresel[ 1+100*pairType]->Fill(caloMet->Pt());
+      hDttPresel[ 2+100*pairType]->Fill(leptons[0]->Pt());
+      hDttPresel[ 3+100*pairType]->Fill(leptons[1]->Pt());
+      hDttPresel[ 4+100*pairType]->Fill(dilepton->Mass());
+      hDttPresel[ 5+100*pairType]->Fill((double)nCentralJets);
+      hDttPresel[ 6+100*pairType]->Fill(deltaEtaLeptons);
+      hDttPresel[ 7+100*pairType]->Fill(deltaPhiLeptons);
+      hDttPresel[ 8+100*pairType]->Fill(mtHiggs);
+      hDttPresel[ 9+100*pairType]->Fill(minDeltaPhiMetLepton);
+      hDttPresel[10+100*pairType]->Fill(METdeltaPhilEt);
+      hDttPresel[11+100*pairType]->Fill(caloMet->MetSig());
+      hDttPresel[12+100*pairType]->Fill(caloMet->SumEt());
+      hDttPresel[13+100*pairType]->Fill(TMath::Max(mTW[0],mTW[1]));
+      hDttPresel[14+100*pairType]->Fill(TMath::Min(mTW[0],mTW[1]));
+      hDttPresel[15+100*pairType]->Fill(leptons[0]->Pt()+leptons[1]->Pt()+caloMet->Pt());
+      for (UInt_t j=0; j<CleanMuons->GetEntries(); j++) {
+	hDttPresel[16+100*pairType]->Fill(TMath::Min(fabs(CleanMuons->At(j)->GlobalTrk()->D0()),0.3999));
+      }
+      for (UInt_t j=0; j<CleanElectrons->GetEntries(); j++) {   
+	hDttPresel[17+100*pairType]->Fill(TMath::Min(fabs(CleanElectrons->At(j)->GsfTrk()->D0()),0.3999));
+      }
+
+      // Study for genuine tt->WbWb->2l2nubb
+      if(nCentralJets >= 2){
+	hDttPresel[18+100*pairType]->Fill(TMath::Max(fabs(sortedJets[0]->Eta()),
+                                                     fabs(sortedJets[1]->Eta())));
+	hDttPresel[19+100*pairType]->Fill(TMath::Min(fabs(sortedJets[0]->Eta()),
+                                                     fabs(sortedJets[1]->Eta())));
+	hDttPresel[20+100*pairType]->Fill(MathUtils::DeltaPhi(sortedJets[0]->Phi(),sortedJets[1]->Phi())
+                                	  * 180.0 / TMath::Pi());
+	hDttPresel[21+100*pairType]->Fill(fabs(sortedJets[0]->Eta()-sortedJets[1]->Eta()));
+	hDttPresel[22+100*pairType]->Fill(MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
+                                                            sortedJets[1]->Phi(),sortedJets[1]->Eta()));
+	hDttPresel[23+100*pairType]->Fill(TMath::Max(fabs(sortedJets[0]->Pt()),
+                                                     fabs(sortedJets[1]->Pt())));
+	hDttPresel[24+100*pairType]->Fill(TMath::Min(fabs(sortedJets[0]->Pt()),
+                                                     fabs(sortedJets[1]->Pt())));
+	CompositeParticle *dijet = new CompositeParticle();
+	dijet->AddDaughter(sortedJets[0]);
+	dijet->AddDaughter(sortedJets[1]);
+	hDttPresel[25+100*pairType]->Fill(dijet->Mass());
+	hDttPresel[26+100*pairType]->Fill(dijet->Pt());
+
+	// Study energy scale corrections
+	if(GenQuarks->GetEntries() >= 2){
+	  double deltarAux[2];
+	  double deltaPt;
+	  deltarAux[0] = MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
+                                	   GenQuarks->At(0)->Phi(),GenQuarks->At(0)->Eta());
+	  deltarAux[1] = MathUtils::DeltaR(sortedJets[0]->Phi(),sortedJets[0]->Eta(),
+                                	   GenQuarks->At(1)->Phi(),GenQuarks->At(1)->Eta());
+	  hDttPresel[27+100*pairType]->Fill(TMath::Min(deltarAux[0],deltarAux[1]));
+	  deltaPt = -999;
+	  if     (deltarAux[0] < deltarAux[1] && deltarAux[0] < 1.0){
+	    deltaPt = (sortedJets[0]->Pt()-GenQuarks->At(0)->Pt())/sortedJets[0]->Pt();
+	  }
+	  else if(deltarAux[1] < deltarAux[0] && deltarAux[1] < 1.0){
+	    deltaPt = (sortedJets[0]->Pt()-GenQuarks->At(1)->Pt())/sortedJets[0]->Pt();
+	  }
+	  if(deltaPt != -999) hDttPresel[28+100*pairType]->Fill(deltaPt);
+	  deltarAux[0] = MathUtils::DeltaR(sortedJets[1]->Phi(),sortedJets[1]->Eta(),
+                                	   GenQuarks->At(0)->Phi(),GenQuarks->At(0)->Eta());
+	  deltarAux[1] = MathUtils::DeltaR(sortedJets[1]->Phi(),sortedJets[1]->Eta(),
+                                	   GenQuarks->At(1)->Phi(),GenQuarks->At(1)->Eta());
+	  hDttPresel[29+100*pairType]->Fill(TMath::Min(deltarAux[0],deltarAux[1]));
+	  deltaPt = -999;
+	  if     (deltarAux[0] < deltarAux[1] && deltarAux[0] < 1.0){
+	    deltaPt = (sortedJets[1]->Pt()-GenQuarks->At(0)->Pt())/sortedJets[1]->Pt();
+	  }
+	  else if(deltarAux[1] < deltarAux[0] && deltarAux[1] < 1.0){
+	    deltaPt = (sortedJets[1]->Pt()-GenQuarks->At(1)->Pt())/sortedJets[1]->Pt();
+	  }
+	  if(deltaPt != -999) hDttPresel[30+100*pairType]->Fill(deltaPt);
+	}
+	delete dijet;
+      } // Njets >=2 
+
+      // Study for additional muons
+      hDttPresel[31+100*pairType]->Fill((double)DirtyMuons->GetEntries());
+      for (UInt_t i=0; i<DirtyMuons->GetEntries(); ++i) {
+	Muon *mu = DirtyMuons->At(i);
+	hDttPresel[32+100*pairType]->Fill(mu->Pt());
+	hDttPresel[33+100*pairType]->Fill(TMath::Min(fabs(mu->GlobalTrk()->D0()),0.3999));
+      }
+      if(DirtyMuons->GetEntries() > 0){
+	hDttPresel[34+100*pairType]->Fill((double)nCentralJets);
+      }
+
+      // Study dijet mass
+      if(nCentralJets >= 2){
+	double dijetMass = 999.;
+	int indDiJet[2] = {-1, -1};
+	for(UInt_t i=0; i<sortedJets.size(); i++){
+	  for(UInt_t j=i+1; j<sortedJets.size(); j++){
+	    CompositeParticle *dijetTemp = new CompositeParticle();
+	    dijetTemp->AddDaughter(sortedJets[i]);
+	    dijetTemp->AddDaughter(sortedJets[j]);
+	    if(fabs(dijetTemp->Mass()-91.18) < fabs(dijetMass-91.18)){
+	      dijetMass = dijetTemp->Mass();
+	      indDiJet[0] = i;
+	      indDiJet[1] = j;
+	    }
+	    delete dijetTemp;
+	  }
+	}
+	hDttPresel[35+100*pairType]->Fill(dijetMass);
+	if(indDiJet[0] == 0 && indDiJet[1] == 1)
+	  hDttPresel[36+100*pairType]->Fill(dijetMass);
+	else
+	  hDttPresel[37+100*pairType]->Fill(dijetMass);
+	hDttPresel[38+100*pairType]->Fill((double)(indDiJet[0]+10*indDiJet[1]));
+      }
+    } // q1+q2==0 && mass_ll>12
+    delete dilepton;
+  } // Minimun Pt, Nleptons and MET requirements
+  delete DirtyMuons;
 }
 //--------------------------------------------------------------------------------------------------
 void ttEvtSelMod::SlaveBegin()

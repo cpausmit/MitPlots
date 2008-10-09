@@ -1,4 +1,4 @@
-// $Id: GeneratorMod.cc,v 1.2 2008/10/09 10:38:44 ceballos Exp $
+// $Id: GeneratorMod.cc,v 1.3 2008/10/09 13:44:13 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/GeneratorMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -53,7 +53,7 @@ void GeneratorMod::Process()
 
   // These arrays will be filled in the loop of particles
   ObjArray<MCParticle> *GenLeptons   = new ObjArray<MCParticle>;
-  ObjArray<MCParticle> *GenTaus      = new ObjArray<MCParticle>;
+  ObjArray<MCParticle> *GenTaus      = new ObjArray<MCParticle>; GenTaus->SetOwner(true);
   ObjArray<MCParticle> *GenNeutrinos = new ObjArray<MCParticle>;
   ObjArray<MCParticle> *GenQuarks    = new ObjArray<MCParticle>;
   ObjArray<MCParticle> *GenqqHs      = new ObjArray<MCParticle>;
@@ -62,6 +62,7 @@ void GeneratorMod::Process()
   if(fIsMC == true){
     // Get Generator Level information branch
     LoadBranch(fMCPartName);
+    bool isqqH = false;
     for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
       MCParticle* p = fParticles->At(i);
 
@@ -69,8 +70,8 @@ void GeneratorMod::Process()
 
       // muons/electrons from W/Z decays
       if((p->AbsPdgId() == 11 || p->AbsPdgId() == 13) && p->Status() == 1){
-	MCParticle* pm = new MCParticle(*p);
 	bool isGoodLepton = false;
+        MCParticle* pm = p;
 	while (pm->HasMother() && isGoodLepton == false){
           if     (pm->Mother()->AbsPdgId() == 23 || pm->Mother()->AbsPdgId() == 24){
 	    GenLeptons->Add(p);
@@ -87,7 +88,7 @@ void GeneratorMod::Process()
       }
 
       // taus
-      if(p->AbsPdgId() == 16 && p->Status() == 1){
+      else if(p->AbsPdgId() == 16 && p->Status() == 1){
 	if(p->DistinctMother()){
           MCParticle* pm = (mithep::MCParticle*)p->DistinctMother();
           if(pm->AbsPdgId() == 15){
@@ -100,13 +101,13 @@ void GeneratorMod::Process()
       }
 
       // neutrinos
-      if(p->Status() == 1 &&
+      else if(p->Status() == 1 &&
 	 (p->AbsPdgId() == 12 || p->AbsPdgId() == 14 || p->AbsPdgId() == 16)){
 	GenNeutrinos->Add(p);
       }
 
       // quarks from W/Z decays or top particles
-      if(p->AbsPdgId() >=1 && p->AbsPdgId() <=6 && p->HasMother()){
+      else if(p->AbsPdgId() >=1 && p->AbsPdgId() <=6 && p->HasMother()){
 	if(p->Mother()->AbsPdgId() == 23 || p->Mother()->AbsPdgId() == 24 ||
 	   p->AbsPdgId() == 6 || p->Mother()->AbsPdgId() == 6){
           GenQuarks->Add(p);
@@ -114,11 +115,11 @@ void GeneratorMod::Process()
       }
 
       // qqH, information about the forward jets
-      bool isqqH = false;
-      if(isqqH == false && p->AbsPdgId() == 25){
+      else if(isqqH == false && p->AbsPdgId() == 25){
 	isqqH = true;
 	MCParticle* pq1 = fParticles->At(i-1);
 	MCParticle* pq2 = fParticles->At(i-2);
+
 	if(pq1->HasMother() && pq2->HasMother() &&
            pq1->Mother()->PdgId() == p->Mother()->PdgId() &&
 	   pq2->Mother()->PdgId() == p->Mother()->PdgId() &&
@@ -130,7 +131,7 @@ void GeneratorMod::Process()
       }
 
       // information about bosons: W, Z, h, Z', W', H0, A0, H+
-      if(p->Status() == 2 &&
+      else if(p->Status() == 2 &&
 	 (p->AbsPdgId() == 23 || p->AbsPdgId() == 24 || p->AbsPdgId() == 25 ||
           p->AbsPdgId() == 32 || p->AbsPdgId() == 34 ||
 	  p->AbsPdgId() == 35 || p->AbsPdgId() == 36 || p->AbsPdgId() == 37)){
