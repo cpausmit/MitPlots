@@ -1,4 +1,4 @@
-// $Id: MuonIDMod.cc,v 1.1 2008/09/30 16:36:23 sixie Exp $
+// $Id: MuonIDMod.cc,v 1.2 2008/10/06 15:52:12 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/MuonIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -22,7 +22,8 @@ ClassImp(mithep::MuonIDMod)
   fMuonIsoType("TrackCalo"),  
   fMuons(0),
   fTrackIsolationCut(5.0),
-  fCaloIsolationCut(5.0)
+  fCaloIsolationCut(5.0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }

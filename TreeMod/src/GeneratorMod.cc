@@ -1,4 +1,4 @@
-// $Id: GeneratorMod.cc,v 1.1 2008/10/01 13:00:09 ceballos Exp $
+// $Id: GeneratorMod.cc,v 1.1 2008/10/06 15:50:09 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/GeneratorMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -25,7 +25,8 @@ ClassImp(mithep::GeneratorMod)
   fMCQuarksName(Names::gkMCQuarksName),
   fMCqqHsName(Names::gkMCqqHsName),
   fMCBosonsName(Names::gkMCBosonsName),
-  fParticles(0)
+  fParticles(0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }
@@ -266,7 +267,9 @@ void GeneratorMod::SlaveBegin()
   // Run startup code on the computer (slave) doing the actual analysis. Here,
   // we typically initialize histograms and other analysis objects and request
   // branches. For this module, we request a branch of the MitTree.
-  ReqBranch(fMCPartName, fParticles);
+  if(fIsMC == true){
+    ReqBranch(fMCPartName, fParticles);
+  }
 
   // Fill histograms
   if(fFillHist == true){

@@ -1,4 +1,4 @@
-// $Id: ElectronCleaningMod.cc,v 1.1 2008/09/30 16:37:05 sixie Exp $
+// $Id: ElectronCleaningMod.cc,v 1.2 2008/10/02 14:23:39 sixie Exp $
 
 #include "MitAna/TreeMod/interface/ElectronCleaningMod.h"
 #include <TH1D.h>
@@ -20,7 +20,8 @@ ClassImp(mithep::ElectronCleaningMod)
   fCleanMuonsName(Names::gkCleanMuonsName),        
   fCleanElectronsName(Names::gkCleanElectronsName),        
   fMuons(0),
-  fElectrons(0)
+  fElectrons(0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }

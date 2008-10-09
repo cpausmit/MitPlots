@@ -1,4 +1,4 @@
-// $Id: JetCleaningMod.cc,v 1.2 2008/10/02 14:22:46 sixie Exp $
+// $Id: JetCleaningMod.cc,v 1.3 2008/10/06 15:48:01 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/JetCleaningMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -18,7 +18,8 @@ ClassImp(mithep::JetCleaningMod)
   fGoodJetsName(Names::gkGoodJetsName),        
   fCleanJetsName(Names::gkCleanJetsName),        
   fElectrons(0),
-  fJets(0)
+  fJets(0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }

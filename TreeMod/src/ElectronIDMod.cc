@@ -1,4 +1,4 @@
-// $Id: ElectronIDMod.cc,v 1.3 2008/10/02 14:23:39 sixie Exp $
+// $Id: ElectronIDMod.cc,v 1.4 2008/10/06 15:49:38 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/ElectronIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -24,7 +24,8 @@ ClassImp(mithep::ElectronIDMod)
   fTrackIsolationCut(5.0),
   fCaloIsolationCut(5.0),
   fEcalJurassicIsolationCut(5.0),
-  fHcalJurassicIsolationCut(5.0)
+  fHcalJurassicIsolationCut(5.0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }

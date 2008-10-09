@@ -1,4 +1,4 @@
-// $Id:  $
+// $Id: JetIDMod.cc,v 1.1 2008/09/30 16:36:52 sixie Exp $
 
 #include "MitAna/TreeMod/interface/JetIDMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -17,7 +17,8 @@ ClassImp(mithep::JetIDMod)
   fJetName(Names::gkCaloJetBrn),
   fGoodJetsName(Names::gkGoodJetsName),  
   fJetIDType("HWWJets"),
-  fJets(0)
+  fJets(0),
+  fNEventsProcessed(0)
 {
   // Constructor.
 }
