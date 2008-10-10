@@ -1,4 +1,4 @@
- // $Id: ttEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
+ // $Id: ttEvtSelMod.cc,v 1.2 2008/10/09 18:10:23 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/ttEvtSelMod.h"
 #include <TH1D.h>
@@ -300,10 +300,12 @@ void ttEvtSelMod::Process()
 	  hDttPresel[37+100*pairType]->Fill(dijetMass);
 	hDttPresel[38+100*pairType]->Fill((double)(indDiJet[0]+10*indDiJet[1]));
       }
+      for(UInt_t i=0; i<sortedJets.size(); i++) delete sortedJets[i];
     } // q1+q2==0 && mass_ll>12
     delete dilepton;
   } // Minimun Pt, Nleptons and MET requirements
   delete DirtyMuons;
+  leptons.clear();
 }
 //--------------------------------------------------------------------------------------------------
 void ttEvtSelMod::SlaveBegin()

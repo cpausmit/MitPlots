@@ -1,4 +1,4 @@
- // $Id: FwdJetEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
+ // $Id: FwdJetEvtSelMod.cc,v 1.2 2008/10/09 18:10:23 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/FwdJetEvtSelMod.h"
 #include <TH1D.h>
@@ -70,12 +70,14 @@ void FwdJetEvtSelMod::Process()
 
   // Sort and count the number of central Jets for vetoing
   vector<Jet*> sortedJets;
+  vector<bool> isUsedLater;
   for(UInt_t i=0; i<CleanJets->GetEntries(); i++){
     Jet* jet_f = new Jet(CleanJets->At(i)->Px()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
     			 CleanJets->At(i)->Py()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
     			 CleanJets->At(i)->Pz()*CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale(),
         		 CleanJets->At(i)->E() *CleanJets->At(i)->L2RelativeCorrectionScale()*CleanJets->At(i)->L3AbsoluteCorrectionScale());
     sortedJets.push_back(jet_f);
+    isUsedLater.push_back(false);
   }
   for(UInt_t i=0; i<sortedJets.size(); i++){
     for(UInt_t j=i+1; j<sortedJets.size(); j++){
@@ -83,10 +85,11 @@ void FwdJetEvtSelMod::Process()
 	//swap i and j
         Jet* tempjet = sortedJets[i];
         sortedJets[i] = sortedJets[j];
-        sortedJets[j] = tempjet;	
+        sortedJets[j] = tempjet;
       }
     }
   }
+
   if(sortedJets.size() >= 2 && sortedJets[0]->Pt() > 20 &&
                                sortedJets[1]->Pt() > 20){
     // Use either the 2 or the 4 highest Pt jets
@@ -120,11 +123,15 @@ void FwdJetEvtSelMod::Process()
 	  CleanFwdJets->Add(sortedJets[i]);
 	  CleanFwdJets->Add(sortedJets[j]);
 	  jmax = i; jmin = j;
+          isUsedLater[i] = true;
+          isUsedLater[j] = true;
 	}
 	else if(fUseANN == true and isFwdJet[1] == true){
 	  CleanFwdJets->Add(sortedJets[i]);
 	  CleanFwdJets->Add(sortedJets[j]);
 	  jmax = i; jmin = j;
+          isUsedLater[i] = true;
+          isUsedLater[j] = true;
 	}
 	delete dijet;
       } // j...
@@ -137,6 +144,7 @@ void FwdJetEvtSelMod::Process()
            (sortedJets[i]->Eta() > sortedJets[jmin]->Eta() &&
 	    sortedJets[i]->Eta() < sortedJets[jmax]->Eta())){
           CleanNoFwdJets->Add(sortedJets[i]);
+          isUsedLater[i] = true;
 	}
       }
     }
@@ -285,6 +293,7 @@ void FwdJetEvtSelMod::Process()
 	    }
 	  }
 	  delete dilepton;
+	  leptons.clear();
 	} // At least 2 identifed leptons
       } // jmax >= 0
     } // FillHist
@@ -301,6 +310,9 @@ void FwdJetEvtSelMod::Process()
       }
     }
   } // Include also this to know how many events are rejected at preselection level
+
+  for(UInt_t i=0; i<sortedJets.size(); i++)
+    if(isUsedLater[i] == false) delete sortedJets[i];
 
   //Save Objects for Other Modules to use
   AddObjThisEvt(CleanFwdJets,  fCleanFwdJetsName.Data());

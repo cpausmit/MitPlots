@@ -1,4 +1,4 @@
-// $Id: GeneratorMod.cc,v 1.3 2008/10/09 13:44:13 ceballos Exp $
+// $Id: GeneratorMod.cc,v 1.4 2008/10/09 18:10:23 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/GeneratorMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -163,6 +163,7 @@ void GeneratorMod::Process()
         dilepton->AddDaughter(GenLeptons->At(i));
         dilepton->AddDaughter(GenLeptons->At(j));
         hDGenLeptons[4]->Fill(dilepton->Mass());
+	delete dilepton;
       }
       // Selecting the two highest Pt leptons
       if     (GenLeptons->At(i)->Pt() > ptMaxLep[0]){
@@ -195,6 +196,7 @@ void GeneratorMod::Process()
 	    hDGenLeptons[10]->Fill(MathUtils::DeltaPhi(GenLeptons->At(idxMaxLep[0])->Phi(),
 	                                               GenLeptons->At(idxMaxLep[1])->Phi())
 						       * 180./ TMath::Pi());
+	    delete dilepton;
 	  }
 	}
       }
@@ -220,7 +222,8 @@ void GeneratorMod::Process()
       hDGenNeutrinos[2]->Fill(neutrinoTotal->Eta());
       hDGenNeutrinos[3]->Fill(neutrinoTotal->Phi() * 180./ TMath::Pi());    
     }
-
+    delete neutrinoTotal;
+    
     // Quarks
     hDGenQuarks[0]->Fill(GenQuarks->GetEntries());
     for(UInt_t i=0; i<GenQuarks->GetEntries(); i++){
@@ -234,6 +237,7 @@ void GeneratorMod::Process()
           hDGenQuarks[3]->Fill(dijet->Pt());
           hDGenQuarks[4]->Fill(dijet->Mass());
 	}
+	delete dijet;
       }
     }
 
@@ -248,6 +252,7 @@ void GeneratorMod::Process()
       diqq->AddDaughter(GenqqHs->At(0));
       diqq->AddDaughter(GenqqHs->At(1));
       hDGenWBF[4]->Fill(diqq->Mass());
+      delete diqq;
     }
 
     // Bosons
@@ -256,8 +261,7 @@ void GeneratorMod::Process()
       hDGenBosons[1]->Fill(GenBosons->At(i)->Pt());
       hDGenBosons[2]->Fill(GenBosons->At(i)->Eta());
       hDGenBosons[3]->Fill(GenBosons->At(i)->Mass());
-    }
-    
+    } 
   }
 
 }

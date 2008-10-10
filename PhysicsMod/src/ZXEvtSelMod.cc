@@ -1,4 +1,4 @@
- // $Id: ZXEvtSelMod.cc,v 1.1 2008/10/06 16:59:48 ceballos Exp $
+ // $Id: ZXEvtSelMod.cc,v 1.2 2008/10/09 18:10:23 ceballos Exp $
 
 #include "MitAna/PhysicsMod/interface/ZXEvtSelMod.h"
 #include <TH1D.h>
@@ -349,6 +349,7 @@ void ZXEvtSelMod::Process()
 	hDWZSel[15+100*nWZType]->Fill(deltaRJetMet * 180./TMath::Pi());
       }
       delete dilepton;
+      for(UInt_t i=0; i<sortedJets.size(); i++) delete sortedJets[i];
     } // Z Charge == 0
   } // WZ Selection
 
@@ -557,6 +558,10 @@ void ZXEvtSelMod::Process()
       delete particleH;
     } // nZZType >= 0
   } // ZZ analysis
+
+  leptonsMu.clear();
+  leptonsEl.clear();
+  leptonsAll.clear();
 }
 //--------------------------------------------------------------------------------------------------
 void ZXEvtSelMod::SlaveBegin()
