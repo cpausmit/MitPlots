@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.20 2008/09/30 12:49:36 bendavid Exp $
+// $Id: Track.h,v 1.21 2008/10/04 16:55:19 sixie Exp $
 //
 // Track
 //
@@ -142,6 +142,7 @@ namespace mithep
       Double_t           E2(Double_t m)   const { return P2()+m*m; }
       Double_t           Eta()            const { return Mom().Eta(); }
       Bool_t             Hit(EHitLayer l) const { return fHits.TestBit(l); }
+      const BitMask64   &Hits()           const { return fHits; }
       Double_t           Lambda()         const { return fLambda; }
       Double_t           LambdaErr()      const { return fLambdaErr; }
       const MCParticle  *MCPart()         const;
@@ -169,6 +170,7 @@ namespace mithep
       void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
                                    Double_t dXy, Double_t dSz);
       void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
+      void               SetHits(BitMask64 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
       void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
 
