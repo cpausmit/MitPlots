@@ -1,9 +1,9 @@
 # -*- Makefile -*-
-# $Id $
+# $Id: $
 
-<use name=root>
-<use name=MitCommon/MathTools>
 <use name=MitAna/DataTree>
+<use name=MitCommon/MathTools>
+<use name=root>
 #<flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaUtils>
