@@ -1,7 +1,7 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.22 2008/07/28 23:13:42 paus Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.1 2008/07/29 10:36:21 loizides Exp $
 
-#ifndef DATACONT_LINKDEF_H
-#define DATACONT_LINKDEF_H
+#ifndef MITANA_DATACONT_LINKDEF_H
+#define MITANA_DATACONT_LINKDEF_H
 
 #include "MitAna/DataCont/interface/BaseCollection.h"
 #endif

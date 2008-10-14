@@ -1,7 +1,7 @@
-// $Id: MitAnaCatalogLinkDef.h,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: MitAnaCatalogLinkDef.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
 
-#ifndef CATALOG_LINKDEF_H
-#define CATALOG_LINKDEF_H
+#ifndef MITANA_CATALOG_LINKDEF_H
+#define MITANA_CATALOG_LINKDEF_H
 #include "MitAna/Catalog/interface/BaseMetaData.h"
 #include "MitAna/Catalog/interface/FilesetMetaData.h"
 #include "MitAna/Catalog/interface/FileMetaData.h"

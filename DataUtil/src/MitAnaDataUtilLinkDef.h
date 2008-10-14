@@ -1,7 +1,7 @@
-// $Id: LinkDef.h 2272 2006-01-08 17:16:44Z loizides $
+// $Id: MitAnaDataUtilLinkDef.h,v 1.1 2008/05/27 19:36:05 loizides Exp $
 
-#ifndef DATAUTIL_LINKDEF_H
-#define DATAUTIL_LINKDEF_H
+#ifndef MITANA_DATAUTIL_LINKDEF_H
+#define MITANA_DATAUTIL_LINKDEF_H
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #endif
