@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.12 2008/09/27 06:10:09 loizides Exp $
+// $Id: DecayParticle.h,v 1.13 2008/09/30 12:53:58 bendavid Exp $
 //
 // Decay Particle
 //
@@ -9,7 +9,7 @@
 // Note that Charge is still computed as a recursive loop over daughters, as inherited from
 // CompositeParticle, but momentum is returned from the internally stored four vector
 //
-// Authors: Ch.Paus, J.Bendavid...
+// Authors: C.Paus, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
 #ifndef DATATREE_DECAYPARTICLE_H
