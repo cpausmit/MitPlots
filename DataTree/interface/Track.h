@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.21 2008/10/04 16:55:19 sixie Exp $
+// $Id: Track.h,v 1.22 2008/10/13 10:34:00 bendavid Exp $
 //
 // Track
 //
@@ -43,26 +43,33 @@
 // Bit 13: TID L2 r-phi
 // Bit 14: TID L2 stereo
 // Bit 15: TID L3 r-phi
-// Bit 16: TOB L1 r-phi
-// Bit 17: TOB L1 stereo
-// Bit 18: TOB L2 r-phi
-// Bit 19: TOB L2 stereo
-// Bit 20: TOB L3 r-phi
-// Bit 21: TOB L4 r-phi
-// Bit 22: TOB L5 r-phi
-// Bit 23: TOB L6 r-phi
-// Bit 24: TEC L1 r-phi
-// Bit 25: TEC L1 stereo
-// Bit 26: TEC L2 r-phi
-// Bit 27: TEC L2 stereo
-// Bit 28: TEC L3 r-phi
-// Bit 29: TEC L4 r-phi
-// Bit 30: TEC L5 r-phi
-// Bit 31: TEC L5 stereo
-// Bit 32: TEC L6 r-phi
-// Bit 33: TEC L7 r-phi
-// Bit 34: TEC L8 r-phi
-// Bit 35: TEC L9 r-phi
+// Bit 16: TID L3 stereo
+// Bit 17: TOB L1 r-phi
+// Bit 18: TOB L1 stereo
+// Bit 19: TOB L2 r-phi
+// Bit 20: TOB L2 stereo
+// Bit 21: TOB L3 r-phi
+// Bit 22: TOB L4 r-phi
+// Bit 23: TOB L5 r-phi
+// Bit 24: TOB L6 r-phi
+// Bit 25: TEC L1 r-phi
+// Bit 26: TEC L1 stereo
+// Bit 27: TEC L2 r-phi
+// Bit 28: TEC L2 stereo
+// Bit 29: TEC L3 r-phi
+// Bit 30: TEC L3 stereo
+// Bit 31: TEC L4 r-phi
+// Bit 32: TEC L4 stereo
+// Bit 33: TEC L5 r-phi
+// Bit 34: TEC L5 stereo
+// Bit 35: TEC L6 r-phi
+// Bit 36: TEC L6 stereo
+// Bit 37: TEC L7 r-phi
+// Bit 38: TEC L7 stereo
+// Bit 39: TEC L8 r-phi
+// Bit 40: TEC L8 stereo
+// Bit 41: TEC L9 r-phi
+// Bit 42: TEC L9 stereo
 //
 // Authors: C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
@@ -97,6 +104,7 @@ namespace mithep
         TID2,
         TID2S,
         TID3,
+        TID3S,
         TOB1,
         TOB1S,
         TOB2,
@@ -110,13 +118,19 @@ namespace mithep
         TEC2,
         TEC2S,
         TEC3,
+        TEC3S,
         TEC4,
+        TEC4S,
         TEC5,
         TEC5S,
         TEC6,
+        TEC6S,
         TEC7,
+        TEC7S,
         TEC8,
-        TEC9 
+        TEC8S,
+        TEC9,
+        TEC9S
       };
 
       Track() : fQOverP(0), fQOverPErr(0), fLambda(0), fLambdaErr(0),
@@ -170,7 +184,7 @@ namespace mithep
       void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
                                    Double_t dXy, Double_t dSz);
       void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
-      void               SetHits(BitMask64 &hits) { fHits = hits; }
+      void               SetHits(const BitMask64 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
       void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
 
