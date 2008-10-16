@@ -1,4 +1,4 @@
-// $Id: StableData.cc,v 1.1 2008/09/30 12:52:53 bendavid Exp $
+// $Id: StableData.cc,v 1.2 2008/10/13 10:35:11 bendavid Exp $
 
 #include "MitAna/DataTree/interface/StableData.h"
 
@@ -15,7 +15,7 @@ const BitMask64 StableData::MissedHits() const
   if (!cOrig)
     return BitMask64(0);
 
-  BitMask64 missedHits = Layers() & ~cOrig->Trk()->Hits();
+  BitMask64 missedHits = BadLayers() & ~cOrig->Trk()->Hits();
 
   return missedHits;
 
@@ -30,7 +30,7 @@ const BitMask64 StableData::WrongHits() const
   if (!cOrig)
     return BitMask64(0);
 
-  BitMask64 wrongHits = ~Layers() & cOrig->Trk()->Hits();
+  BitMask64 wrongHits = BadLayers() & cOrig->Trk()->Hits();
 
   return wrongHits;
 
