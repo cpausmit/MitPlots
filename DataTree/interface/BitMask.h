@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.5 2008/09/27 06:09:27 loizides Exp $
+// $Id: BitMask.h,v 1.6 2008/10/13 10:34:30 bendavid Exp $
 //
 // BitMask
 //
@@ -38,12 +38,16 @@ namespace mithep
         { for (UInt_t n=0; n<N; ++n) fBitMask[n]&=rhs.fBitMask[n]; return *this; }
       BitMask                &operator|=(const BitMask<N> &rhs)
         { for (UInt_t n=0; n<N; ++n) fBitMask[n]|=rhs.fBitMask[n]; return *this; }
+      BitMask                &operator^=(const BitMask<N> &rhs)
+        { for (UInt_t n=0; n<N; ++n) fBitMask[n]^=rhs.fBitMask[n]; return *this; }        
       Bool_t                  operator!=(const BitMask<N> &other) const;
       Bool_t                  operator==(const BitMask<N> &other) const;    
       BitMask                 operator& (const BitMask &other) const
         { return BitMask<N>(*this) &= other; }
       BitMask                 operator| (const BitMask &other) const
         { return BitMask<N>(*this) |= other; }
+      BitMask                 operator^ (const BitMask &other) const
+        { return BitMask<N>(*this) ^= other; }        
       BitMask                 operator ~ () const;
         
         
