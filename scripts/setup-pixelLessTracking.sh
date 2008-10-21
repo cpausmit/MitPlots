@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.5 2008/10/07 17:58:34 sixie Exp $
+# $Id: setup-pixelLessTracking.sh,v 1.1 2008/10/16 16:52:51 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -18,7 +18,7 @@ echo "Setup called for $CMSSW_VERSION ($version)";
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 20108; then
+if test $version -lt 2001008; then
     echo "Nothing to be done, exiting";
     exit 1;
 fi
@@ -37,4 +37,4 @@ case $version in
     ;;
 esac
 
-echo "Setup done; you probably want to compile your project area now";
+echo "Setup for pixel less tracking done; you probably want to compile your project area now";

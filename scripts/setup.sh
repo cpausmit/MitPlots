@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.4 2008/09/30 22:01:31 loizides Exp $
+# $Id: setup.sh,v 1.5 2008/10/07 17:58:34 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -18,7 +18,7 @@ echo "Setup called for $CMSSW_VERSION ($version)";
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 20108; then
+if test $version -lt 2001008; then
     echo "Nothing to be done, exiting";
     exit 1;
 fi
@@ -58,5 +58,23 @@ case $version in
         exit 1;
     ;;
 esac
+
+if test -z $MIT_VERS; then
+    echo " "
+    echo "Production setup not executed: MIT_VERS is not setup."
+    echo " "
+else
+    echo " "
+    echo "Entering production setup. Looking for MIT_VERS: $MIT_VERS dependencies."
+    echo " "
+    case $MIT_VERS in
+        005)
+            MitAna/scripts/setup-pixelLessTracking.sh
+        ;;
+        *) 
+            echo "Nothing special to be done for this version";
+        ;;
+    esac
+fi
 
 echo "Setup done; you probably want to compile your project area now";
