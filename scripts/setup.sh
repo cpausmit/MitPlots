@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.5 2008/10/07 17:58:34 sixie Exp $
+# $Id: setup.sh,v 1.6 2008/10/21 07:22:07 paus Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -24,7 +24,7 @@ if test $version -lt 2001008; then
 fi
 
 case $version in
-       (2001008 | 2001009)
+       (2001008 | 2001009 | 2001010)
  
        cvs co -r V01-06-02 CondFormats/JetMETObjects;
        cvs co -r V01-08-03 JetMETCorrections/Configuration;
@@ -52,6 +52,15 @@ case $version in
        cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
        sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
        mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
+
+       #for jurassic isolation veto FIX. Note that this should be fixed
+       #in the release at some point so this will be unnecessary then
+       #and should be removed at that point in time.
+       if test $version -eq 2001010; then
+           cvs co -rCMSSW_2_1_10 PhysicsTools/IsolationAlgos/
+           cvs co -r1.2 PhysicsTools/IsolationAlgos/src/IsoDepositVetoFactory.cc
+       fi
+
        ;;
     *) 
         echo "Nothing known about this version, exiting";
