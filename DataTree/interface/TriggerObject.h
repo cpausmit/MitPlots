@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.1 2008/09/17 04:07:28 loizides Exp $
+// $Id: TriggerObject.h,v 1.2 2008/09/27 06:08:21 loizides Exp $
 //
 // TriggerObject
 //
@@ -159,11 +159,10 @@ namespace mithep
         THashTable(capacity,rehash), fTriggers(table) {}
       ~TriggerObjectsTable() {}
 
-      const TriggerObject *Get(const char *name)   const;
-      const TriggerObject *Get(ULong_t id)         const;
-      const TList         *GetList(ULong_t id)     const;
+      const TList         *GetList(const char *name) const;
+      const TList         *GetList(ULong_t id)       const;
       using TCollection::Print;
-      void                 Print(Option_t *opt="") const;
+      void                 Print(Option_t *opt="")   const;
  
     protected:
       const TriggerTable *fTriggers; //trigger table
@@ -172,21 +171,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::TriggerObject *mithep::TriggerObjectsTable::Get(const char *name) const
+inline const TList *mithep::TriggerObjectsTable::GetList(const char *name) const
 { 
-  // Return TriggerObject pointer for given trigger name.
+  // Return list of trigger objects for given trigger name.
 
   ULong_t id = fTriggers->GetId(name);
-  return Get(id);
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::TriggerObject *mithep::TriggerObjectsTable::Get(ULong_t id) const
-{ 
-  // Return TriggerObject pointer for given trigger id (bit).
-
-  MyKey key(id); 
-  return dynamic_cast<const TriggerObject*>(FindObject(&key)); 
+  return GetList(id);
 }
 
 //--------------------------------------------------------------------------------------------------
