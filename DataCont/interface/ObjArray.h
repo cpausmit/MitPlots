@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: ObjArray.h,v 1.3 2008/09/27 06:04:49 loizides Exp $
 //
 // ObjArray
 //
@@ -24,6 +24,7 @@ namespace mithep
       ~ObjArray() {}
 
       void                 Add(ArrayElement *ae)                       { AddLast(ae); }
+      void                 Add(const TCollection *col);
       const TObjArray     &Arr()                                 const { return fArray; }
       TObjArray           &Arr()                                       { return fArray; }
       ArrayElement        *At(UInt_t idx);
@@ -77,6 +78,28 @@ inline mithep::ObjArray<ArrayElement>::ObjArray(UInt_t size, const char *name) :
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
+{
+  if (!col)
+    return;
+
+  if (IsOwner()) {
+    TObject::Error("Add","Can not add collection since IsOwner() returns kTRUE.");
+    return;
+  }
+
+  TIterator *iter = col->MakeIterator();
+  if (iter) {
+    ArrayElement *to = dynamic_cast<ArrayElement *>(iter->Next());
+    while (to) {
+      AddLast(to);
+      to = dynamic_cast<ArrayElement *>(iter->Next());
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::AddLast(ArrayElement *ae)
 {
   // Add new entry at the end of array.
@@ -94,8 +117,8 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s",
-        idx, fNumEntries, GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s",
+                 idx, fNumEntries, GetName()); 
   return 0;
 }
 
@@ -108,8 +131,8 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  Fatal("At","Index too large: (%ud < %ud violated) for %s",
-        idx, fNumEntries, GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s",
+                 idx, fNumEntries, GetName()); 
   return 0;
 }
 
@@ -212,4 +235,5 @@ inline const ArrayElement *mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t id
 
   return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 }
+
 #endif
