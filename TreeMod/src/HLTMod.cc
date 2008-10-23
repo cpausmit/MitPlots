@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.1 2008/09/28 02:40:09 loizides Exp $
+// $Id: HLTMod.cc,v 1.2 2008/10/23 17:02:16 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -62,16 +62,7 @@ void HLTMod::AddTrigObjs(UInt_t tid)
       continue; // excluded trigger bit (ie a !trgname)
 
     const TList *list = fTrigObjs->GetList(i);
-    if (list) {
-      TIterator *iter = list->MakeIterator();
-      if (iter) {
-        TriggerObject *to = dynamic_cast<TriggerObject *>(iter->Next());
-        while (to) {
-          fMyTrgObjs->Add(to);
-          to = dynamic_cast<TriggerObject *>(iter->Next());
-        }
-      }
-    }
+    fMyTrgObjs->Add(list);    
     fBitsDone.SetBit(i);
   }
 }
