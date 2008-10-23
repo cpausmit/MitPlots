@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: StackArray.h,v 1.1 2008/09/19 11:56:08 bendavid Exp $
 //
 // StackArray
 //
@@ -46,9 +46,9 @@ namespace mithep
       const ArrayElement       *operator[](UInt_t idx)            const;
 
     protected:
-      TClass                    *fClass;//! pointer to TClass object used by streamer
-      UShort_t                  fSize;        //size of array
-      ArrayElement              fArray[N];  //storage of uids of referenced objects
+      TClass                   *fClass;    //!pointer to TClass object used by streamer
+      UShort_t                  fSize;     //size of array
+      ArrayElement              fArray[N]; //storage of uids of referenced objects
 
     private:
       StackArray(const StackArray &a);
@@ -73,7 +73,8 @@ void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
   // Add a copy of an existing object.
 
   if(fSize>=N) {
-    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
+    TObject::Fatal("Add", 
+                   "Maximum number of references reached: To support more requires change code!");
     return;
   }
 
@@ -97,7 +98,8 @@ ArrayElement* mithep::StackArray<ArrayElement, N>::Allocate()
    // Allocate a slot in the array, *only* to be used in placement new operator.
 
   if(fSize>=N) {
-    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
+    TObject::Fatal("Add", 
+                   "Maximum number of references reached: To support more requires change code!");
     return 0;
   }
 
@@ -156,23 +158,15 @@ void mithep::StackArray<ArrayElement, N>::Streamer(TBuffer &b)
    // Stream all objects in the array to or from the I/O buffer.
 
   if (b.IsReading()) {
-    //UInt_t sv, cv;
-    //b.ReadVersion(&sv, &cv);
-    //TObject::Streamer(b);
     b >> fSize;
     if (fSize) {
       b.ReadFastArray(fArray,fClass,fSize);
     }
-    //b.CheckByteCount(sv, cv, StackArray::IsA());
   } else { /*writing*/
-    //UInt_t cv;
-    //cv = b.WriteVersion(StackArray::IsA(), kTRUE);
-    //TObject::Streamer(b);
     b << fSize;
     if (fSize) {
       b.WriteFastArray(fArray,fClass,fSize);
     }
-    //b.SetByteCount(cv, kTRUE);
   }
 }
 

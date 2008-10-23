@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefVector.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
+// $Id: RefVector.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // RefArray
 //
@@ -78,7 +78,7 @@ inline ArrayElement *mithep::RefVector<ArrayElement>::At(UInt_t idx)
   if (idx<fV.size())
     return static_cast<const ArrayElement*>(fV[idx].GetObject());
 
-  Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
+  TObject::Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
   return 0;
 }
 
@@ -91,7 +91,7 @@ inline const ArrayElement *mithep::RefVector<ArrayElement>::At(UInt_t idx) const
   if (idx<fV.size())
      return static_cast<const ArrayElement*>(fV[idx].GetObject());
 
-  Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
+  TObject::Fatal("At", "Index out of range: %ud < %ud", idx, fV.size());
   return 0;
 }
 

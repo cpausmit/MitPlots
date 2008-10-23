@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.4 2008/10/02 12:48:08 bendavid Exp $
+// $Id: RefArray.h,v 1.5 2008/10/02 14:00:02 bendavid Exp $
 //
 // RefArray
 //
@@ -73,7 +73,8 @@ void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
   // Add new reference to object.
 
   if(fSize>=1024) {
-    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
+    TObject::Fatal("Add", 
+                   "Maximum number of references reached: To support more requires change code!");
     return;
   }
 
@@ -195,9 +196,6 @@ void mithep::RefArray<ArrayElement>::Streamer(TBuffer &b)
    // Stream all objects in the array to or from the I/O buffer.
 
   if (b.IsReading()) {
-    //UInt_t sv, cv;
-    //b.ReadVersion(&sv, &cv);
-    //TObject::Streamer(b);
     b >> fSize;
     if (fSize) {
       UShort_t pidf;
@@ -206,11 +204,7 @@ void mithep::RefArray<ArrayElement>::Streamer(TBuffer &b)
       fProcID = b.ReadProcessID(pidf);
       b.ReadFastArray(fUIDs,fSize);
     }
-    //b.CheckByteCount(sv, cv, RefArray::IsA());
   } else { /*writing*/
-    //UInt_t cv;
-    //cv = b.WriteVersion(RefArray::IsA(), kTRUE);
-    //TObject::Streamer(b);
     b << fSize;
     if (fSize) {
       UShort_t pidf;
@@ -218,7 +212,6 @@ void mithep::RefArray<ArrayElement>::Streamer(TBuffer &b)
       b << pidf;
       b.WriteFastArray(fUIDs,fSize);
     }
-    //b.SetByteCount(cv, kTRUE);
   }
 }
 

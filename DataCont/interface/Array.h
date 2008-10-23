@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
+// $Id: Array.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // Array
 //
@@ -107,8 +107,8 @@ inline ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
   ArrayElement tmp;
-  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-        idx, fNumEntries, this->GetName(), tmp.GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, this->GetName(), tmp.GetName()); 
   return 0;
 }
 
@@ -122,8 +122,8 @@ inline const ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx) const
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
   ArrayElement tmp;
-  Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-        idx, fNumEntries, this->GetName(), tmp.GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, this->GetName(), tmp.GetName()); 
   return 0;
 }
 
