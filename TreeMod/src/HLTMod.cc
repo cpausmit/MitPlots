@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.1 2008/06/12 08:47:57 loizides Exp $
+// $Id: HLTMod.cc,v 1.1 2008/09/28 02:40:09 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -83,6 +83,9 @@ void HLTMod::BeginRun()
 
   fTrigBitsAnd.Reset();
   fTrigBitsCmp.Reset();
+
+  if (fPrintTable) 
+    fTriggers->Print();
 
   for (UInt_t i=0; i<fTrigNames.Entries(); ++i) {
     BitMask256 tmask; //trigger mask

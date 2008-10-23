@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.7 2008/09/10 03:33:28 loizides Exp $
+// $Id: HLTMod.h,v 1.1 2008/09/28 02:40:08 loizides Exp $
 //
 // HLTMod
 //
@@ -45,7 +45,9 @@ namespace mithep
       Int_t                       GetNAccepted() const { return fNAcceped; }
       Int_t                       GetNFailed()   const { return fNFailed; }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort = b; }
+      void                        SetPrintTable(Bool_t b)           { fPrintTable = b; }
       void                        SetTrigObjsName(const char *n)    { fMyObjsNamePub = n; }
+
     protected:
       void                        AddTrigObjs(UInt_t tid);
       void                        BeginRun();
@@ -55,6 +57,7 @@ namespace mithep
       void                        SlaveBegin();
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
+      Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun.
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
       Vector<std::string>         fTrigNames;     //trigger names requested for test mask
