@@ -1,4 +1,4 @@
-// $Id: runSimpleExample.C,v 1.5 2008/06/09 00:06:36 bendavid Exp $
+// $Id: runHLTExample.C,v 1.1 2008/09/28 02:43:15 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -16,6 +16,7 @@ void runHLTExample(const char *trigger="HLT_Jet80", const char *files = "mit-ful
   gDebugLevel = 1;
 
   HLTMod *hltmod = new HLTMod;
+  hltmod->SetPrintTable(kTRUE);
   hltmod->AddTrigger(trigger);
   hltmod->SetTrigObjsName("myhltobjs");
 
