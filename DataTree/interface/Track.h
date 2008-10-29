@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.22 2008/10/13 10:34:00 bendavid Exp $
+// $Id: Track.h,v 1.23 2008/10/16 16:13:23 bendavid Exp $
 //
 // Track
 //
@@ -164,6 +164,7 @@ namespace mithep
       FourVector         Mom4(Double_t m) const { return FourVector(Px(),Py(),Pz(),E(m)); }
       UInt_t             Ndof()           const { return fNdof; }
       UInt_t             NHits()          const { return fHits.NBitsSet(); }
+      UInt_t             NStereoHits()    const { return StereoHits().NBitsSet(); }
       Double_t           P2()             const { return P()*P(); }
       Double_t           P()              const { return TMath::Abs(1./fQOverP); }
       Double_t           Phi()            const { return fPhi0; }
@@ -187,6 +188,8 @@ namespace mithep
       void               SetHits(const BitMask64 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
       void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
+      const BitMask64    StereoHits()     const { return (fHits & StereoLayers()); }
+      static BitMask64   StereoLayers() { return BitMask64(Long64_t(0x55554155140LL)); }
 
     protected:
       BitMask64          fHits;                //storage for mostly hit information
