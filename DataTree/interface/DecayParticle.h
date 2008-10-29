@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.13 2008/09/30 12:53:58 bendavid Exp $
+// $Id: DecayParticle.h,v 1.14 2008/10/14 05:27:54 loizides Exp $
 //
 // Decay Particle
 //
@@ -88,6 +88,9 @@ namespace mithep
       UInt_t                 NDaughters()          const { return fDaughterData.Entries(); }
       const Particle        *Daughter(UInt_t i)    const { return DaughterDat(i)->Original(); }
       const DaughterData    *DaughterDat(UInt_t i) const { return fDaughterData.At(i); }
+      Bool_t                 HasDaughter(const Particle *p)                const;
+      Bool_t                 HasCommonDaughter(const DecayParticle *p) const;
+      Bool_t                 HasSameDaughters(const DecayParticle *p)  const;
   
       void                   AddDaughterData(DaughterData *ddata) { fDaughterData.Add(ddata); }
       
