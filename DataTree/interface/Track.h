@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.23 2008/10/16 16:13:23 bendavid Exp $
+// $Id: Track.h,v 1.24 2008/10/29 17:04:01 bendavid Exp $
 //
 // Track
 //
@@ -19,7 +19,7 @@
 // There is a one to one mapping between bits and tracker layers, where layers are enumerated
 // seperately in the PXB, PXF, TIB, TID, TOB, TEC and r-phi and stereo modules are treated as
 // seperate layers in those detectors which have them
-// (TIB L1,L2, TID L1,L2, TOB L1,L2, TEC L1,L2,L5).
+// (TIB L1,L2, TID L1,L2,L3, TOB L1,L2, TEC L1,L2,L3,L4,L5,L6,L7,L8,L9).
 // 
 // A bit value of 1 indicates a hit in the corresponding layer, and 0 indicates no hit.
 //
