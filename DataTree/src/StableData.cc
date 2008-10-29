@@ -1,4 +1,4 @@
-// $Id: StableData.cc,v 1.2 2008/10/13 10:35:11 bendavid Exp $
+// $Id: StableData.cc,v 1.3 2008/10/16 16:19:40 bendavid Exp $
 
 #include "MitAna/DataTree/interface/StableData.h"
 
@@ -13,7 +13,7 @@ const BitMask64 StableData::MissedHits() const
 
   const ChargedParticle *cOrig = dynamic_cast<const ChargedParticle*>(Original());
   if (!cOrig)
-    return BitMask64(0);
+    return BitMask64();
 
   BitMask64 missedHits = BadLayers() & ~cOrig->Trk()->Hits();
 
@@ -28,7 +28,7 @@ const BitMask64 StableData::WrongHits() const
 
   const ChargedParticle *cOrig = dynamic_cast<const ChargedParticle*>(Original());
   if (!cOrig)
-    return BitMask64(0);
+    return BitMask64();
 
   BitMask64 wrongHits = BadLayers() & cOrig->Trk()->Hits();
 
