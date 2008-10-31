@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.28 2008/09/27 06:12:59 loizides Exp $
+// $Id: Collections.h,v 1.29 2008/09/30 12:55:13 bendavid Exp $
 //
 // Collections
 //
@@ -47,6 +47,7 @@ namespace mithep
   typedef Collection<BitMask<1> >       BitMask8Col;
   typedef Collection<BitMask<2> >       BitMask16Col;
   typedef Collection<BitMask<4> >       BitMask32Col;
+  typedef Collection<BitMask<6> >       BitMask48Col;
   typedef Collection<BitMask<8> >       BitMask64Col;
   typedef Collection<BitMask<16> >      BitMask128Col;
   typedef Collection<BitMask<32> >      BitMask256Col;
@@ -54,6 +55,7 @@ namespace mithep
   typedef Vector<BitMask<1> >           BitMask8Vec;
   typedef Vector<BitMask<2> >           BitMask16Vec;
   typedef Vector<BitMask<4> >           BitMask32Vec;
+  typedef Vector<BitMask<6> >           BitMask48Vec;
   typedef Vector<BitMask<8> >           BitMask64Vec;
   typedef Vector<BitMask<16> >          BitMask128Vec;
   typedef Vector<BitMask<32> >          BitMask256Vec;

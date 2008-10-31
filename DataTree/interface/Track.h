@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.24 2008/10/29 17:04:01 bendavid Exp $
+// $Id: Track.h,v 1.25 2008/10/29 17:04:59 bendavid Exp $
 //
 // Track
 //
@@ -156,7 +156,7 @@ namespace mithep
       Double_t           E2(Double_t m)   const { return P2()+m*m; }
       Double_t           Eta()            const { return Mom().Eta(); }
       Bool_t             Hit(EHitLayer l) const { return fHits.TestBit(l); }
-      const BitMask64   &Hits()           const { return fHits; }
+      const BitMask48   &Hits()           const { return fHits; }
       Double_t           Lambda()         const { return fLambda; }
       Double_t           LambdaErr()      const { return fLambdaErr; }
       const MCParticle  *MCPart()         const;
@@ -185,14 +185,14 @@ namespace mithep
       void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
                                    Double_t dXy, Double_t dSz);
       void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
-      void               SetHits(const BitMask64 &hits) { fHits = hits; }
+      void               SetHits(const BitMask48 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
       void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
-      const BitMask64    StereoHits()     const { return (fHits & StereoLayers()); }
-      static BitMask64   StereoLayers() { return BitMask64(Long64_t(0x55554155140LL)); }
+      const  BitMask48   StereoHits()     const { return (fHits & StereoLayers()); }
+      static BitMask48   StereoLayers();
 
     protected:
-      BitMask64          fHits;                //storage for mostly hit information
+      BitMask48          fHits;                //storage for mostly hit information
       Double_t           fQOverP;              //signed inverse of momentum [1/GeV]
       Double_t           fQOverPErr;           //error of q/p
       Double_t           fLambda;              //pi/2 - polar angle at the reference point
@@ -246,5 +246,33 @@ const mithep::MCParticle *mithep::Track::MCPart() const
   // Get reference to simulated particle.
 
   return static_cast<const MCParticle*>(fMCParticleRef.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline
+mithep::BitMask48 mithep::Track::StereoLayers()
+{ 
+  // Build and return BitMask of stereo layers
+
+  mithep::BitMask48 stereoLayers;
+  
+  stereoLayers.SetBit(mithep::Track::TIB1S);
+  stereoLayers.SetBit(mithep::Track::TIB2S);
+  stereoLayers.SetBit(mithep::Track::TID1S);
+  stereoLayers.SetBit(mithep::Track::TID2S);
+  stereoLayers.SetBit(mithep::Track::TID3S);
+  stereoLayers.SetBit(mithep::Track::TOB1S);
+  stereoLayers.SetBit(mithep::Track::TOB2S);
+  stereoLayers.SetBit(mithep::Track::TEC1S);
+  stereoLayers.SetBit(mithep::Track::TEC2S);
+  stereoLayers.SetBit(mithep::Track::TEC3S);
+  stereoLayers.SetBit(mithep::Track::TEC4S);
+  stereoLayers.SetBit(mithep::Track::TEC5S);
+  stereoLayers.SetBit(mithep::Track::TEC6S);
+  stereoLayers.SetBit(mithep::Track::TEC7S);
+  stereoLayers.SetBit(mithep::Track::TEC8S);
+  stereoLayers.SetBit(mithep::Track::TEC9S);
+  
+  return stereoLayers;
 }
 #endif

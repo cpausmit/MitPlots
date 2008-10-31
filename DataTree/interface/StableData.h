@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableData.h,v 1.2 2008/10/13 10:35:11 bendavid Exp $
+// $Id: StableData.h,v 1.3 2008/10/16 16:19:39 bendavid Exp $
 //
 // StableData
 //
@@ -38,23 +38,23 @@ namespace mithep
       Double_t             P()    const { return fMomAtVertex.R(); }
       Double_t             E()    const { return TMath::Sqrt(P()*P()+Mass()*Mass()); }
       Bool_t               BadLayer(Track::EHitLayer l) const { return fBadLayers.TestBit(l); }
-      const BitMask64     &BadLayers() const { return fBadLayers; }
+      const BitMask48     &BadLayers() const { return fBadLayers; }
       Double_t             Mass() const { return Original()->Mass(); }
-      const BitMask64      MissedHits() const;
+      const BitMask48      MissedHits() const;
       FourVector           Mom()  const;
       UInt_t               NWrongOrMissingHits() const { return fBadLayers.NBitsSet(); }
       UInt_t               NMissedHits() const { return MissedHits().NBitsSet(); }
       UInt_t               NWrongHits()  const { return WrongHits().NBitsSet(); }
       void                 SetBadLayer(Track::EHitLayer l) { fBadLayers.SetBit(l); }
-      void                 SetBadLayers(const BitMask64 &layers) { fBadLayers = layers; }
+      void                 SetBadLayers(const BitMask48 &layers) { fBadLayers = layers; }
       void                 SetThreeMom(Double_t px, Double_t y, Double_t z);
       void                 SetThreeMom(const ThreeVector &mom) { fMomAtVertex = mom; }
       const ThreeVector   &ThreeMom()       const { return fMomAtVertex; }
-      const BitMask64      WrongHits() const;
+      const BitMask48      WrongHits() const;
 
     protected:
       ThreeVector32        fMomAtVertex;      //fitted momentum at vertex
-      BitMask64            fBadLayers;        //layer mask for incorrect or missing hits from
+      BitMask48            fBadLayers;        //layer mask for incorrect or missing hits from
                                               //before or after the decay vertex
                                               //using same bit-layer mapping as mithep::Track
 

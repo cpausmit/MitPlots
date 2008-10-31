@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.39 2008/09/27 06:12:59 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.40 2008/09/30 12:55:13 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -61,12 +61,14 @@
 #pragma link C++ class mithep::BitMask<1>+;
 #pragma link C++ class mithep::BitMask<2>+;
 #pragma link C++ class mithep::BitMask<4>+;
+#pragma link C++ class mithep::BitMask<6>+;
 #pragma link C++ class mithep::BitMask<8>+;
 #pragma link C++ class mithep::BitMask<16>+;
 #pragma link C++ class mithep::BitMask<32>+;
 #pragma link C++ typedef mithep::BitMask8;
 #pragma link C++ typedef mithep::BitMask16;
 #pragma link C++ typedef mithep::BitMask32;
+#pragma link C++ typedef mithep::BitMask48;
 #pragma link C++ typedef mithep::BitMask64;
 #pragma link C++ typedef mithep::BitMask128;
 #pragma link C++ typedef mithep::BitMask256;
@@ -82,6 +84,10 @@
 #pragma link C++ class mithep::Vector<mithep::BitMask<4> >+;
 #pragma link C++ typedef mithep::BitMask32Col;
 #pragma link C++ typedef mithep::BitMask32Vec;
+#pragma link C++ class mithep::Collection<mithep::BitMask<6> >+;
+#pragma link C++ class mithep::Vector<mithep::BitMask<6> >+;
+#pragma link C++ typedef mithep::BitMask48Col;
+#pragma link C++ typedef mithep::BitMask48Vec;
 #pragma link C++ class mithep::Collection<mithep::BitMask<8> >+;
 #pragma link C++ class mithep::Vector<mithep::BitMask<8> >+;
 #pragma link C++ typedef mithep::BitMask64Col;
