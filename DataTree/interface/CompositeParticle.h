@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.13 2008/09/19 11:58:41 bendavid Exp $
+// $Id: CompositeParticle.h,v 1.14 2008/09/30 12:54:44 bendavid Exp $
 //
 // Composite Particle
 //
@@ -34,7 +34,7 @@ namespace mithep
       FourVector	        Mom()                 const;
 
     protected:
-      RefArray<Particle>        fDaughters; //||references to daughter particles
+      RefArray<Particle,1024>   fDaughters; //references to daughter particles
       
     ClassDef(CompositeParticle, 1) // Composite particle class
   };

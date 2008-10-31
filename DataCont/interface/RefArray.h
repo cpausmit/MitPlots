@@ -1,12 +1,15 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.5 2008/10/02 14:00:02 bendavid Exp $
+// $Id: RefArray.h,v 1.6 2008/10/23 18:22:27 loizides Exp $
 //
 // RefArray
 //
 // Implementation of a TRefArray using stack (and not heap) memory.
-// For various reasons, the array can not be written in split mode.
-// Maximum size of references is set to 1024 (but this could be 
-// changed if there is need for it).
+// The maximum number of references is left as a template parameter.
+// Since all of the stack allocation is handled by the StackArrays
+// the RefArray itself can now actually be split.
+//
+// RefArray now supports objects from multiple PIDs, but only a single PID will be stored as long
+// as only objects from a single PID are added.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -20,24 +23,27 @@
 #include <TProcessID.h>
 #include <TError.h>
 #include "MitAna/DataCont/interface/Collection.h"
+#include "MitAna/DataCont/interface/StackArray.h"
+#include "MitAna/DataCont/interface/StackArrayBasic.h"
+#include "MitAna/DataCont/interface/ProcIDRef.h"
 
 namespace mithep 
 {
-  template<class ArrayElement>
-  class RefArray : public Collection<ArrayElement>
+  template<class ArrayElement, UInt_t N>
+  class RefArray
   {
     public:
       RefArray();
-      ~RefArray() { fProcID = 0; }
+      virtual ~RefArray() {}
 
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                    const;
-      void                      Clear(Option_t */*opt*/="")             { fProcID = 0;}
+      void                      Clear(Option_t */*opt*/="")             {}
       UInt_t                    Entries()                         const { return GetEntries(); }
-      UInt_t                    GetEntries()                      const { return fSize; }
+      UInt_t                    GetEntries()                      const { return fUIDs.GetEntries(); }
       Bool_t                    IsOwner()                         const { return kTRUE; }
-      void                      Reset()                                 { fSize = 0; }
+      void                      Reset();
       void                      Trim()                                  {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)           const;
@@ -49,102 +55,107 @@ namespace mithep
       TObject                  *GetObject(UInt_t idx)             const;
       UInt_t                    GetUID(UInt_t idx)                const;
     
-      TProcessID               *fProcID;      //!ptr to Process Unique Identifier
-      UShort_t                  fSize;        //size of array
-      UInt_t                    fUIDs[1024];  //storage of uids of referenced objects
+      StackArray<ProcIDRef,N>      fPIDs;//|| process ids of referenced objects
+      StackArrayBasic<UInt_t,N>    fUIDs;//|| unique ids of referenced objects
 
-    ClassDefT(RefArray,1) // Implementation of our own TRefArray
+    ClassDef(RefArray,2) // Implementation of our own TRefArray
   };
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline mithep::RefArray<ArrayElement>::RefArray() : 
-  fProcID(TProcessID::GetSessionProcessID()),
-  fSize(0)
+template<class ArrayElement, UInt_t N>
+inline mithep::RefArray<ArrayElement,N>::RefArray()
 {
-   // Default constructor.
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-void mithep::RefArray<ArrayElement>::Add(ArrayElement *ae)
+template<class ArrayElement, UInt_t N>
+void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
 {
   // Add new reference to object.
 
-  if(fSize>=1024) {
-    TObject::Fatal("Add", 
-                   "Maximum number of references reached: To support more requires change code!");
+  if(GetEntries()>=N) {
+    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
     return;
   }
 
   // check if the object can belong here and assign or get its uid
-  UInt_t uid = 0;
   if (ae->TestBit(kHasUUID)) {
     Error("Add", "Object can not be added as it has not UUID!");
     return;
   }
 
+  UInt_t uid = 0;
+  TProcessID *pid = 0;
   if (ae->TestBit(kIsReferenced)) {
     uid = ae->GetUniqueID();
-    if (fSize==0)
-      fProcID = TProcessID::GetProcessWithUID(uid,ae);
-    if (fProcID != TProcessID::GetProcessWithUID(uid,ae)) {
-      Error("Add", "Object can not be added as it has a different process id!");
-      return;
-    }
+    pid = TProcessID::GetProcessWithUID(uid,ae);
   } else {
-    if (fSize==0)
-      fProcID = TProcessID::GetSessionProcessID();
-    if (fProcID != TProcessID::GetSessionProcessID()) {
-      Error("Add", "Object can not be added as it has a different process id!");
-      return;
-    }
+    pid = TProcessID::GetSessionProcessID();
     uid = TProcessID::AssignID(ae);
   }
 
-  fUIDs[fSize] = uid;
-  ++fSize;
+  //If RefArray contains one and only one PID reference, then only add another if the added object
+  //has a different PID.  When this occurs all of the extra spaces which had been left empty get
+  //filled in with the original PID
+  if (fPIDs.GetEntries()==1) {
+    if (pid != fPIDs.At(0)->Pid() ) {
+      while (fPIDs.GetEntries()<GetEntries())
+        fPIDs.Allocate()->SetPid(fPIDs.At(0)->Pid());
+        
+      fPIDs.Allocate()->SetPid(pid);
+    }    
+  }
+  else
+    fPIDs.Allocate()->SetPid(pid);
+  
+  fUIDs.Add(uid);
+  
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx)
+template<class ArrayElement, UInt_t N>
+inline ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if(idx<GetEntries())  
      return static_cast<ArrayElement*>(GetObject(idx));
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
+  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
   return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx) const
+template<class ArrayElement, UInt_t N>
+inline const ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if(idx<GetEntries())  
      return static_cast<const ArrayElement*>(GetObject(idx));
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
+  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
   return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-TObject *mithep::RefArray<ArrayElement>::GetObject(UInt_t idx) const
+template<class ArrayElement, UInt_t N>
+TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 {
   // Return entry at given index. Code adapted from TRef::GetObject().
+  TProcessID *pid=0; 
+  if (fPIDs.GetEntries()>1)
+    pid = fPIDs.At(idx)->Pid();
+  else
+    pid = fPIDs.At(0)->Pid();
   
-  if (!fProcID) {
+  if (!pid) {
     Error("GetObject","Process id pointer is null!");
     return 0;
   }
 
-  if (!TProcessID::IsValid(fProcID)) {
+  if (!TProcessID::IsValid(pid)) {
     Error("GetObject","Process id is invalid!");
     return 0;
   }
@@ -153,27 +164,27 @@ TObject *mithep::RefArray<ArrayElement>::GetObject(UInt_t idx) const
   //the reference may be in the TRefTable
   TRefTable *table = TRefTable::GetRefTable();
   if (table) {
-    table->SetUID(uid, fProcID);
+    table->SetUID(uid, pid);
     table->Notify();
   }
 
   //try to find the object from the table of the corresponding PID
-  TObject *obj = fProcID->GetObjectWithID(uid);
+  TObject *obj = pid->GetObjectWithID(uid);
   return obj;
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline UInt_t mithep::RefArray<ArrayElement>::GetUID(UInt_t idx) const
+template<class ArrayElement, UInt_t N>
+inline UInt_t mithep::RefArray<ArrayElement,N>::GetUID(UInt_t idx) const
 {
   // Return uid corresponding to idx.
 
-  return fUIDs[idx];
+  return fUIDs.At(idx);
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement *mithep::RefArray<ArrayElement>::operator[](UInt_t idx) const
+template<class ArrayElement, UInt_t N>
+inline const ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -181,43 +192,25 @@ inline const ArrayElement *mithep::RefArray<ArrayElement>::operator[](UInt_t idx
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::RefArray<ArrayElement>::operator[](UInt_t idx)
+template<class ArrayElement, UInt_t N>
+inline ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 
   return At(idx);
 }
 
-//-------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-void mithep::RefArray<ArrayElement>::Streamer(TBuffer &b)
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline void mithep::RefArray<ArrayElement,N>::Reset()
 {
-   // Stream all objects in the array to or from the I/O buffer.
-
-  if (b.IsReading()) {
-    b >> fSize;
-    if (fSize) {
-      UShort_t pidf;
-      b >> pidf;
-      pidf += b.GetPidOffset();
-      fProcID = b.ReadProcessID(pidf);
-      b.ReadFastArray(fUIDs,fSize);
-    }
-  } else { /*writing*/
-    b << fSize;
-    if (fSize) {
-      UShort_t pidf;
-      pidf = b.WriteProcessID(fProcID);
-      b << pidf;
-      b.WriteFastArray(fUIDs,fSize);
-    }
-  }
+  fUIDs.Reset();
+  fPIDs.Reset();
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
+template<class ArrayElement, UInt_t N>
+inline ArrayElement *mithep::RefArray<ArrayElement,N>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -225,8 +218,8 @@ inline ArrayElement *mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement *mithep::RefArray<ArrayElement>::UncheckedAt(UInt_t idx) const
+template<class ArrayElement, UInt_t N>
+inline const ArrayElement *mithep::RefArray<ArrayElement,N>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 

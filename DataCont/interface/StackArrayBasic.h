@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.2 2008/10/23 18:22:27 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.1 2008/09/19 11:56:08 bendavid Exp $
 //
-// StackArray
+// StackArrayBasic
 //
-// Implementation of a TStackArray using stack (and not heap) memory.
+// Implementation of a TStackArrayBasic using stack (and not heap) memory.
 // For various reasons, the array can not be written in split mode.
 // Maximum size of references is set to 1024 (but this could be 
 // changed if there is need for it).
@@ -11,8 +11,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_STACKARRAY
-#define MITANA_DATACONT_STACKARRAY
+#ifndef MITANA_DATACONT_STACKARRAYBASIC
+#define MITANA_DATACONT_STACKARRAYBASIC
 
 #include <TObject.h>
 #include <TError.h>
@@ -22,70 +22,62 @@
 namespace mithep 
 {
   template<class ArrayElement, UInt_t N>
-  class StackArray : public Collection<ArrayElement>
+  class StackArrayBasic : public TObject
   {
     public:
-      StackArray();
-      StackArray(const StackArray &a);
-      ~StackArray() {}
+      StackArrayBasic();
+      StackArrayBasic(const StackArrayBasic &a);
+      ~StackArrayBasic() {}
 
-      void                      AddCopy(const ArrayElement &ae);
-      ArrayElement             *AddNew();
-      ArrayElement             *Allocate();
-      ArrayElement             *At(UInt_t idx);
-      const ArrayElement       *At(UInt_t idx)                    const;
+      void                      Add(const ArrayElement &ae);
+      ArrayElement              At(UInt_t idx);
+      const ArrayElement        At(UInt_t idx)                    const;
       void                      Clear(Option_t */*opt*/="")             {}
       UInt_t                    Entries()                         const { return GetEntries(); }
       UInt_t                    GetEntries()                      const { return fSize; }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fSize = 0; }
       void                      Trim()                                  {}
-      ArrayElement             *UncheckedAt(UInt_t idx);                 
-      const ArrayElement       *UncheckedAt(UInt_t idx)           const;
+      ArrayElement              UncheckedAt(UInt_t idx);                 
+      const ArrayElement        UncheckedAt(UInt_t idx)           const;
 
-      ArrayElement             *operator[](UInt_t idx);
-      const ArrayElement       *operator[](UInt_t idx)            const;
+      ArrayElement              operator[](UInt_t idx);
+      const ArrayElement        operator[](UInt_t idx)            const;
 
     protected:
-      TClass                   *fClass;    //!pointer to TClass object used by streamer
-      UShort_t                  fSize;     //size of array
-      ArrayElement              fArray[N]; //storage of uids of referenced objects
+      UShort_t                  fSize;        //size of array
+      ArrayElement              fArray[N];  //storage of uids of referenced objects
 
-    ClassDef(StackArray,1) // Implementation of our own TStackArray
+    ClassDef(StackArrayBasic,1) // Implementation of our own TStackArrayBasic
   };
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline mithep::StackArray<ArrayElement, N>::StackArray() : 
-  fClass(TClass::GetClass(typeid(ArrayElement))),
+inline mithep::StackArrayBasic<ArrayElement, N>::StackArrayBasic() : 
   fSize(0)
 {
-   // Default constructor.
-   
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline mithep::StackArray<ArrayElement, N>::StackArray(const StackArray &a) : 
-  fClass(a.fClass),
+inline mithep::StackArrayBasic<ArrayElement, N>::StackArrayBasic(const StackArrayBasic &a) : 
   fSize(a.fSize)
 {
-   // Copy constructor.  Copy only elements which are used.
-   for (UInt_t i=0; i<fSize; ++i)
+  //Copy constructor.  Copy only elements which are used.
+  for (UInt_t i=0; i<fSize; ++i)
     fArray[i] = a.fArray[i];
-   
+
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
+void mithep::StackArrayBasic<ArrayElement, N>::Add(const ArrayElement &ae)
 {
   // Add a copy of an existing object.
 
   if(fSize>=N) {
-    TObject::Fatal("Add", 
-                   "Maximum number of references reached: To support more requires change code!");
+    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
     return;
   }
 
@@ -95,58 +87,33 @@ void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-ArrayElement* mithep::StackArray<ArrayElement, N>::AddNew()
-{
-  // Add new object.
-
-  return new(Allocate()) ArrayElement(); 
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-ArrayElement* mithep::StackArray<ArrayElement, N>::Allocate()
-{
-   // Allocate a slot in the array, *only* to be used in placement new operator.
-
-  if(fSize>=N) {
-    TObject::Fatal("Add", 
-                   "Maximum number of references reached: To support more requires change code!");
-    return 0;
-  }
-
-  ++fSize;
-  return &fArray[fSize-1];
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-inline ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx)
+inline ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t idx)
 {
   // Return entry at given index.
 
   if(idx<fSize)  
-     return static_cast<ArrayElement*>(&fArray[idx]);
+     return fArray[idx];
 
   Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
-  return 0;
+  return fArray[fSize];
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline const ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx) const
+inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
   if(idx<fSize)  
-     return static_cast<const ArrayElement*>(&fArray[idx]);
+     return fArray[idx];
 
   Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
-  return 0;
+  return fArray[fSize];
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline const ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx) const
+inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -155,7 +122,7 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx)
+inline ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 
@@ -164,38 +131,46 @@ inline ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx)
 
 //-------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-void mithep::StackArray<ArrayElement, N>::Streamer(TBuffer &b)
+void mithep::StackArrayBasic<ArrayElement, N>::Streamer(TBuffer &b)
 {
    // Stream all objects in the array to or from the I/O buffer.
 
   if (b.IsReading()) {
+    //UInt_t sv, cv;
+    //b.ReadVersion(&sv, &cv);
+    //TObject::Streamer(b);
     b >> fSize;
     if (fSize) {
-      b.ReadFastArray(fArray,fClass,fSize);
+      b.ReadFastArray(fArray,fSize);
     }
+    //b.CheckByteCount(sv, cv, StackArrayBasic::IsA());
   } else { /*writing*/
+    //UInt_t cv;
+    //cv = b.WriteVersion(StackArrayBasic::IsA(), kTRUE);
+    //TObject::Streamer(b);
     b << fSize;
     if (fSize) {
-      b.WriteFastArray(fArray,fClass,fSize);
+      b.WriteFastArray(fArray,fSize);
     }
+    //b.SetByteCount(cv, kTRUE);
   }
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline ArrayElement *mithep::StackArray<ArrayElement, N>::UncheckedAt(UInt_t idx)
+inline ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
-  return static_cast<ArrayElement*>(&fArray[idx]);
+  return fArray[idx];
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-inline const ArrayElement *mithep::StackArray<ArrayElement, N>::UncheckedAt(UInt_t idx) const
+inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
-  return static_cast<const ArrayElement*>(&fArray[idx]);
+  return fArray[idx];
 }
 #endif

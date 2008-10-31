@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.13 2008/09/12 12:53:31 bendavid Exp $
+// $Id: Photon.h,v 1.14 2008/09/14 03:23:27 bendavid Exp $
 //
 // Photon
 //
@@ -40,7 +40,7 @@ namespace mithep
 	    
     protected:
       FourVector                fFourVector;  //four momentum vector
-      RefArray<Conversion>      fConversions; //||references to associated conversion candidates
+      RefArray<Conversion,128>  fConversions; //references to associated conversion candidates
       Bool_t                    fIsConverted; //conversion flag
       TRef                      fSuperClusterRef; //superCluster
 	

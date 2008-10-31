@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.14 2008/10/14 05:27:54 loizides Exp $
+// $Id: DecayParticle.h,v 1.15 2008/10/29 17:02:55 bendavid Exp $
 //
 // Decay Particle
 //
@@ -115,7 +115,7 @@ namespace mithep
       Double_t               fLzError;
       // Extended vertex fit info
       FourVector             fMomentum; //momentum fourvector
-      RefArray<DaughterData> fDaughterData; //||momentum of daughters at vertex
+      RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
       TRef                   fPriVertex; //reference to primary vertex
       
     ClassDef(DecayParticle, 1)         // Decay particle class

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.8 2008/09/10 03:33:26 loizides Exp $
+// $Id: Jet.h,v 1.9 2008/09/16 18:13:42 sixie Exp $
 //
 // Jet
 //
@@ -162,7 +162,7 @@ namespace mithep
       Double_t   fL5FlavorCorrectionScale;
       Double_t   fL7PartonCorrectionScale;
 
-      RefArray<CaloTower> fTowers;        //||CaloTowers in this jet
+      RefArray<CaloTower,1024> fTowers;        //CaloTowers in this jet
 
     ClassDef(Jet, 1) // Jet class
   };

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.3 2008/09/10 03:33:27 loizides Exp $
+// $Id: SuperCluster.h,v 1.4 2008/09/17 04:21:17 loizides Exp $
 //
 // SuperCluster
 //
@@ -57,7 +57,7 @@ namespace mithep
       Double_t                  fPreshowerEnergy; //Energy in the preshower
       Double_t                  fPhiWidth;        //Width in Phi
       Double_t                  fRawEnergy;       //Supercluster raw energy
-      RefArray<BasicCluster>    fClusters;        //||BasicClusters in this SuperCluster
+      RefArray<BasicCluster,1024> fClusters;        //BasicClusters in this SuperCluster
       TRef                      fSeedRef;         //the seed cluster
 
     ClassDef(SuperCluster, 1) // Generic particle class
