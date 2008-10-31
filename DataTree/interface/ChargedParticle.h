@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.3 2008/07/29 07:55:40 loizides Exp $
+// $Id: ChargedParticle.h,v 1.4 2008/09/10 03:33:26 loizides Exp $
 //
 // ChargedParticle
 //
@@ -26,6 +26,7 @@ namespace mithep
       Double_t                E()         const; 
       Double_t                Eta()       const { return Trk()->Mom().Eta(); }
       virtual const Track    *Trk()       const = 0;
+      virtual const Track    *TrackerTrk() const = 0;
       FourVector              Mom()       const { return FourVector(Px(),Py(),Pz(),E()); }
       Double_t                Phi()       const { return Trk()->Phi(); }
       Double_t                P()         const { return Trk()->P();  }
