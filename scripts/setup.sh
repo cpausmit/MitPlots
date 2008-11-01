@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.6 2008/10/21 07:22:07 paus Exp $
+# $Id: setup.sh,v 1.7 2008/10/22 10:44:16 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -24,7 +24,7 @@ if test $version -lt 2001008; then
 fi
 
 case $version in
-       (2001008 | 2001009 | 2001010)
+       (2001008 | 2001009 | 2001010 | 2001011 )
  
        cvs co -r V01-06-02 CondFormats/JetMETObjects;
        cvs co -r V01-08-03 JetMETCorrections/Configuration;
@@ -56,7 +56,7 @@ case $version in
        #for jurassic isolation veto FIX. Note that this should be fixed
        #in the release at some point so this will be unnecessary then
        #and should be removed at that point in time.
-       if test $version -eq 2001010; then
+       if test $version -eq 2001011; then
            cvs co -rCMSSW_2_1_10 PhysicsTools/IsolationAlgos/
            cvs co -r1.2 PhysicsTools/IsolationAlgos/src/IsoDepositVetoFactory.cc
        fi
