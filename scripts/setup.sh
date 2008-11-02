@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.7 2008/10/22 10:44:16 sixie Exp $
+# $Id: setup.sh,v 1.8 2008/11/01 10:59:17 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -26,8 +26,8 @@ fi
 case $version in
        (2001008 | 2001009 | 2001010 | 2001011 )
  
-       cvs co -r V01-06-02 CondFormats/JetMETObjects;
-       cvs co -r V01-08-03 JetMETCorrections/Configuration;
+       cvs co -r V01-06-05 CondFormats/JetMETObjects;
+       cvs co -r V01-08-10 JetMETCorrections/Configuration;
        cvs co -r V02-09-00 JetMETCorrections/Modules;
 
        #things related to Calo+track Jets
