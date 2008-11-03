@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.25 2008/10/29 17:04:59 bendavid Exp $
+// $Id: Track.h,v 1.26 2008/10/31 17:42:08 bendavid Exp $
 //
 // Track
 //
@@ -78,6 +78,7 @@
 #define MITANA_DATATREE_TRACK_H
  
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/Types.h"
@@ -135,11 +136,11 @@ namespace mithep
 
       Track() : fQOverP(0), fQOverPErr(0), fLambda(0), fLambdaErr(0),
                 fPhi0(0), fPhi0Err(0), fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0),
-                fChi2(0), fNdof(0) {}
+                fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       Track(Double_t qOverP, Double_t lambda, Double_t phi0, Double_t dxy, Double_t dsz) :
 	        fQOverP(qOverP), fQOverPErr(0), fLambda(lambda), fLambdaErr(0),
                 fPhi0(phi0), fPhi0Err(0), fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0),
-                fChi2(0), fNdof(0) {}
+                fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
       Int_t	         Charge()         const { return (fQOverP>0) ? 1 : -1; }
@@ -155,6 +156,7 @@ namespace mithep
       Double_t           E(Double_t m)    const { return TMath::Sqrt(E2(m)); }
       Double_t           E2(Double_t m)   const { return P2()+m*m; }
       Double_t           Eta()            const { return Mom().Eta(); }
+      Double_t           EtaEcal()        const { return fEtaEcal; }
       Bool_t             Hit(EHitLayer l) const { return fHits.TestBit(l); }
       const BitMask48   &Hits()           const { return fHits; }
       Double_t           Lambda()         const { return fLambda; }
@@ -170,6 +172,7 @@ namespace mithep
       Double_t           Phi()            const { return fPhi0; }
       Double_t	         Phi0()           const { return fPhi0; }
       Double_t	         Phi0Err()        const { return fPhi0Err; }
+      Double_t           PhiEcal()        const { return fPhiEcal; }
       Double_t           Prob()           const { return TMath::Prob(fChi2,fNdof); }
       Double_t	         Pt()             const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
       Double_t           Px()             const { return Pt()*TMath::Cos(fPhi0); }      
@@ -182,14 +185,18 @@ namespace mithep
       void               SetChi2(Double_t chi2) { fChi2 = chi2; }
       void	         SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
                                    Double_t dXyErr, Double_t dSzErr);
+      void               SetEtaEcal(Double_t eta) { fEtaEcal = eta; }
       void               SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
                                    Double_t dXy, Double_t dSz);
       void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
       void               SetHits(const BitMask48 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
       void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
+      void               SetPhiEcal(Double_t phi) { fPhiEcal = phi; }
+      void	         SetSCluster(SuperCluster* sc) { fSuperClusterRef = sc; }
+      const SuperCluster *SCluster()      const;
       const  BitMask48   StereoHits()     const { return (fHits & StereoLayers()); }
-      static BitMask48   StereoLayers();
+      static const BitMask48 StereoLayers();
 
     protected:
       BitMask48          fHits;                //storage for mostly hit information
@@ -205,9 +212,12 @@ namespace mithep
       Double_t           fDszErr;              //error of longitudinal distance
       Double_t           fChi2;                //chi squared of track fit
       UInt_t             fNdof;                //degree-of-freedom of track fit
+      Double32_t         fEtaEcal;             //Eta of track at Ecal front face
+      Double32_t         fPhiEcal;             //phi of track at Ecal front face
+      TRef               fSuperClusterRef;     //superCluster crossed by track
       TRef               fMCParticleRef;       //reference to sim particle (for monte carlo)
 	      
-    ClassDef(Track, 1) // Track class
+    ClassDef(Track, 2) // Track class
   };
 }
 
@@ -249,8 +259,16 @@ const mithep::MCParticle *mithep::Track::MCPart() const
 }
 
 //--------------------------------------------------------------------------------------------------
+inline const mithep::SuperCluster *mithep::Track::SCluster() const
+{
+  // Return Super cluster
+
+  return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
+}
+
+//--------------------------------------------------------------------------------------------------
 inline
-mithep::BitMask48 mithep::Track::StereoLayers()
+const mithep::BitMask48 mithep::Track::StereoLayers()
 { 
   // Build and return BitMask of stereo layers
 
