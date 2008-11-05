@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.15 2008/09/28 02:36:23 loizides Exp $
+// $Id: Analysis.cc,v 1.16 2008/10/06 17:01:21 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -503,6 +503,8 @@ void Analysis::Terminate()
                
       }
     }
+    // set state to terminate
+    fState = kTerminate;
   }
 
   delete fChain;
