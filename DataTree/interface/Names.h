@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.19 2008/09/30 19:07:55 sixie Exp $
+// $Id: Names.h,v 1.20 2008/10/06 15:54:41 ceballos Exp $
 //
 // Names
 //
@@ -66,6 +66,7 @@ namespace mithep
       static const char *gkCleanFwdJetsName;
       static const char *gkCleanNoFwdJetsName;
       static const char *gkMCLeptonsName;
+      static const char *gkMCAllLeptonsName;
       static const char *gkMCTausName;
       static const char *gkMCNeutrinosName;
       static const char *gkMCQuarksName;
