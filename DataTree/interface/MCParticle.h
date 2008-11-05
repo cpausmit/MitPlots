@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.4 2008/09/22 10:40:07 bendavid Exp $
+// $Id: MCParticle.h,v 1.5 2008/10/06 15:55:17 ceballos Exp $
 //
 // MCParticle
 //
@@ -24,7 +24,7 @@ namespace mithep
       MCParticle() : fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
         fPdgId(id), fStatus(s), 
-        fFourVector(px,py,pz,e), fDecayVertex(0,0,0),
+        fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       ~MCParticle() {}
 
@@ -39,7 +39,7 @@ namespace mithep
       Bool_t              IsSimulated()            const { return fIsSimulated; }
       Bool_t              IsNeutrino()             const;
       const MCParticle   *Mother()                 const;
-      FourVector	  Mom()                    const { return fFourVector; }
+      FourVector	  Mom()                    const { return FourVector(fFourVector); }
       void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t; }
       void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t; }
       TParticlePDG       *PdgEntry()               const;
@@ -62,13 +62,13 @@ namespace mithep
     protected:
       Int_t               fPdgId;        //pdg identifier
       Int_t               fStatus;       //status flag of generator or simulation
-      FourVector          fFourVector;   //four momentum vector
-      ThreeVector         fDecayVertex;  //gen decay vertex
+      FourVectorM32       fFourVector;   //four momentum vector
+      ThreeVector32       fDecayVertex;  //gen decay vertex
       TRef                fMother;       //reference to mother
       Bool_t              fIsGenerated;  //=true if generated particle
       Bool_t              fIsSimulated;  //=true if simulated particle
 
-    ClassDef(MCParticle,2) // Generated particle class
+    ClassDef(MCParticle,3) // Generated particle class
   };
 }
 
