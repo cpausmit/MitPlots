@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.15 2008/10/29 17:02:55 bendavid Exp $
+// $Id: DecayParticle.h,v 1.16 2008/10/31 18:56:42 bendavid Exp $
 //
 // Decay Particle
 //
@@ -30,16 +30,17 @@ namespace mithep
     public:
       DecayParticle() {}
       DecayParticle(Int_t absPdgId) :
-        fAbsPdgId(absPdgId),
-        fChi2(0),
-        fNdof(0),
+        fAbsPdgId (absPdgId),
+        fChi2     (0),
+        fNdof     (0),
         fMassError(0),
-        fLxy(0),
-        fLxyError(0),
-        fDxy(0),
-        fDxyError(0),
-        fLz(0),
-        fLzError(0) {}
+        fLxy      (0),
+        fLxyError (0),
+        fDxy      (0),
+        fDxyError (0),
+        fLz       (0),
+        fLzError  (0) {}
+
       ~DecayParticle() {}
 
       UInt_t        AbsPdgId()         const { return fAbsPdgId; }
@@ -54,30 +55,30 @@ namespace mithep
       using TObject::Error;
     
       // Fitted Mass Error
-      Double_t    MassError() const { return fMassError; }
-      void   SetMassError(Double_t massError) { fMassError = massError;}
+      Double_t      MassError() const { return fMassError; }
+      void       SetMassError(Double_t massError) { fMassError = massError;}
       // Lxy
-      Double_t  Lxy() const { return fLxy; }
-      void   SetLxy(Double_t lxy) { fLxy = lxy;}
+      Double_t      Lxy() const { return fLxy; }
+      void       SetLxy(Double_t lxy) { fLxy = lxy;}
       // Lxy Error
-      Double_t  LxyError() const { return fLxyError; }
-      void   SetLxyError(Double_t lxyError) { fLxyError = lxyError;}
+      Double_t      LxyError() const { return fLxyError; }
+      void       SetLxyError(Double_t lxyError) { fLxyError = lxyError;}
       // Dxy (two dimensional impact parameter)
-      Double_t  Dxy() const { return fDxy; }
-      void   SetDxy(Double_t dxy) { fDxy = dxy;}
+      Double_t      Dxy() const { return fDxy; }
+      void       SetDxy(Double_t dxy) { fDxy = dxy;}
       // Dxy Error
-      Double_t  DxyError() const { return fDxyError; }
-      void   SetDxyError(Double_t dxyError) { fDxyError = dxyError;}
+      Double_t      DxyError() const { return fDxyError; }
+      void       SetDxyError(Double_t dxyError) { fDxyError = dxyError;}
       // Lz
-      Double_t  Lz() const { return fLz; }
-      void   SetLz(Double_t lz) { fLz = lz;}
+      Double_t      Lz() const { return fLz; }
+      void       SetLz(Double_t lz) { fLz = lz;}
       // Lz Error
-      Double_t  LzError() const { return fLzError; }
-      void   SetLzError(Double_t lzError) { fLzError = lzError;}
-      //----------------------------------------------------------------------------------------------
+      Double_t      LzError() const { return fLzError; }
+      void       SetLzError(Double_t lzError) { fLzError = lzError;}
+
+      //--------------------------------------------------------------------------------------------
       // Accessors/Setter: Extended Vertex fit info from this level
-      //----------------------------------------------------------------------------------------------     
-       
+      //--------------------------------------------------------------------------------------------
       Double_t               Charge()              const;
 
       //Momentum Accessors/setter
@@ -118,14 +119,14 @@ namespace mithep
       RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
       TRef                   fPriVertex; //reference to primary vertex
       
-    ClassDef(DecayParticle, 1)         // Decay particle class
+    ClassDef(DecayParticle, 1)
   };
 }
 
 //--------------------------------------------------------------------------------------------------
 inline TParticlePDG *mithep::DecayParticle::ParticlePdgEntry() const 
 { 
-  // Return entry to pdg database for the PARTICLE.
+  // return entry to pdg database for the particle
 
   return TDatabasePDG::Instance()->GetParticle(fAbsPdgId); 
 }
@@ -133,7 +134,7 @@ inline TParticlePDG *mithep::DecayParticle::ParticlePdgEntry() const
 //--------------------------------------------------------------------------------------------------
 inline void mithep::DecayParticle::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
 { 
-  // Set four vector.
+  // set four vector
 
   fMomentum.SetXYZT(px,py,pz,e);
 }
@@ -141,7 +142,7 @@ inline void mithep::DecayParticle::SetMom(Double_t px, Double_t py, Double_t pz,
 //--------------------------------------------------------------------------------------------------
 inline const mithep::ThreeVector mithep::DecayParticle::Position() const
 {
-  // Return absolute position of decay
+  // return absolute position of decay
 
   const mithep::Vertex *pv = PriVertex();
     
@@ -155,15 +156,15 @@ inline const mithep::ThreeVector mithep::DecayParticle::Position() const
 //--------------------------------------------------------------------------------------------------
 inline const mithep::ThreeVector mithep::DecayParticle::RelativePosition() const
 {
-  //compute the position vector of the decay vertex relative to the primary vertex
+  // compute the position vector of the decay vertex relative to the primary vertex
 
   mithep::ThreeVector dz(0,0,fLz*TMath::Abs(fMomentum.Pz())/fMomentum.Pz());
   
   mithep::ThreeVector momPerp(fMomentum.Px(),fMomentum.Py(),0);
   mithep::ThreeVector zHat(0,0,1.0);
   
-  mithep::ThreeVector dxy = -momPerp.Cross(zHat)*fDxy/momPerp.R();
-  mithep::ThreeVector dlxy  = momPerp*fLxy/momPerp.R();
+  mithep::ThreeVector dxy   = -momPerp.Cross(zHat)*fDxy/momPerp.R();
+  mithep::ThreeVector dlxy  =  momPerp*fLxy/momPerp.R();
   
   return (dxy+dlxy+dz);
 }
@@ -171,7 +172,7 @@ inline const mithep::ThreeVector mithep::DecayParticle::RelativePosition() const
 //--------------------------------------------------------------------------------------------------
 inline const mithep::Vertex *mithep::DecayParticle::PriVertex() const
 {
-  // Return primary vertex
+  // return primary vertex
 
   return static_cast<const Vertex*>(fPriVertex.GetObject());
 }
