@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.8 2008/11/01 10:59:17 sixie Exp $
+# $Id: setup.sh,v 1.9 2008/11/02 11:52:53 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -56,9 +56,12 @@ case $version in
        #for jurassic isolation veto FIX. Note that this should be fixed
        #in the release at some point so this will be unnecessary then
        #and should be removed at that point in time.
+       #These tags were suggested by Sam Harper
        if test $version -eq 2001011; then
-           cvs co -rCMSSW_2_1_10 PhysicsTools/IsolationAlgos/
-           cvs co -r1.2 PhysicsTools/IsolationAlgos/src/IsoDepositVetoFactory.cc
+           cvs co -rV00-02-00 RecoEgamma/EgammaIsolationAlgos
+           cvs co -rV00-02-04 EgammaAnalysis/EgammaIsolationProducers
+           cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
+           cvs co -rV00-16-07 DataFormats/RecoCandidate
        fi
 
        ;;
