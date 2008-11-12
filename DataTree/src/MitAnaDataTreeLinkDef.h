@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.41 2008/10/31 17:42:09 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.42 2008/10/31 18:56:42 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -18,7 +18,9 @@
 #include "MitAna/DataTree/interface/MCEventInfo.h"
 
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/Vertex.h"
+#include "MitAna/DataTree/interface/BeamSpot.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
@@ -115,12 +117,26 @@
 #pragma link C++ typedef mithep::DataObjectArr;
 #pragma link C++ typedef mithep::DataObjectOArr;
 
+#pragma link C++ class mithep::BaseVertex+;
+#pragma link C++ class mithep::Collection<mithep::BaseVertex>+;
+#pragma link C++ class mithep::Array<mithep::BaseVertex>+;
+#pragma link C++ class mithep::ObjArray<mithep::BaseVertex>+;
+#pragma link C++ typedef mithep::BaseVertexCol;
+#pragma link C++ typedef mithep::BaseVertexArr;
+
 #pragma link C++ class mithep::Vertex+;
 #pragma link C++ class mithep::Collection<mithep::Vertex>+;
 #pragma link C++ class mithep::Array<mithep::Vertex>+;
 #pragma link C++ class mithep::ObjArray<mithep::Vertex>+;
 #pragma link C++ typedef mithep::VertexCol;
 #pragma link C++ typedef mithep::VertexArr;
+
+#pragma link C++ class mithep::BeamSpot+;
+#pragma link C++ class mithep::Collection<mithep::BeamSpot>+;
+#pragma link C++ class mithep::Array<mithep::BeamSpot>+;
+#pragma link C++ class mithep::ObjArray<mithep::BeamSpot>+;
+#pragma link C++ typedef mithep::BeamSpotCol;
+#pragma link C++ typedef mithep::BeamSpotArr;
 
 #pragma link C++ class mithep::Collection<mithep::BitMask256>+;
 #pragma link C++ class mithep::Vector<mithep::BitMask256>+;

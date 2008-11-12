@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.29 2008/09/30 12:55:13 bendavid Exp $
+// $Id: Collections.h,v 1.30 2008/10/31 17:42:08 bendavid Exp $
 //
 // Collections
 //
@@ -40,7 +40,9 @@
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/StableDaughter.h"
+#include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/Vertex.h"
+#include "MitAna/DataTree/interface/BeamSpot.h"
 
 namespace mithep 
 {
@@ -84,7 +86,9 @@ namespace mithep
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
   typedef Collection<StableDaughter>    StableDaughterCol;
+  typedef Collection<BaseVertex>        BaseVertexCol;
   typedef Collection<Vertex>            VertexCol;
+  typedef Collection<BeamSpot>          BeamSpotCol;
 
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
@@ -109,7 +113,9 @@ namespace mithep
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
   typedef Array<StableDaughter>         StableDaughterArr;
+  typedef Array<BaseVertex>             BaseVertexArr;
   typedef Array<Vertex>                 VertexArr;
+  typedef Array<BeamSpot>               BeamSpotArr;
 
   typedef ObjArray<DataObject>          DataObjectOArr;
   typedef ObjArray<Track>               TrackOArr;
@@ -132,6 +138,8 @@ namespace mithep
   typedef ObjArray<Photon>              PhotonOArr;
   typedef ObjArray<StableParticle>      StableParticleOArr;
   typedef ObjArray<StableDaughter>      StableDaughterOArr;
+  typedef ObjArray<BaseVertex>          BaseVertexOArr;
   typedef ObjArray<Vertex>              VertexOArr;
+  typedef ObjArray<BeamSpot>            BeamSpotOArr;
 }
 #endif
