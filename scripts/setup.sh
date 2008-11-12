@@ -1,10 +1,12 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.12 2008/11/12 06:28:42 loizides Exp $
+# $Id: setup.sh,v 1.13 2008/11/12 18:56:25 peveraer Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
     exit 1;
 fi
+
+export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
 
 majver=`echo $CMSSW_VERSION | cut -d_ -f 2`;
 minver=`echo $CMSSW_VERSION | cut -d_ -f 3`;
@@ -30,14 +32,14 @@ case $version in
        cvs co -r V01-08-10 JetMETCorrections/Configuration;
        cvs co -r V02-09-00 JetMETCorrections/Modules;
 
-       #things related to Calo+track Jets
+       #things related to JetsPlusTrack
        cvs co -r V01-07-11 JetMETCorrections/Algorithms
        cvs co -r V03-02-04 JetMETCorrections/JetPlusTrack
        #this is needed to do JetPlusTrack on AOD. we will not use this 
        #for now since we run on RECO for now
        #cvs co -r V01-04-03 RecoJets/JetAssociationAlgorithms       
 
-       #to remove annoying Warning messages for the jet to vertex associator.
+       #to remove annoying warning messages for the jet to vertex associator.
        cvs co JetMETCorrections/JetVertexAssociation;
        TMP=`mktemp`;
        cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
