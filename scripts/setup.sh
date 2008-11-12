@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.11 2008/11/07 13:59:55 sixie Exp $
+# $Id: setup.sh,v 1.12 2008/11/12 06:28:42 loizides Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -53,6 +53,7 @@ case $version in
            cvs co -rV00-02-04 EgammaAnalysis/EgammaIsolationProducers
            cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
            cvs co -rV00-16-07 DataFormats/RecoCandidate
+           cvs co -r V00-05-19 RecoEcal/EgammaCoreTools
        fi
 
        ;;

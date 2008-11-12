@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.17 2008/09/09 12:50:43 sixie Exp $
+// $Id: Electron.h,v 1.18 2008/09/12 12:44:57 bendavid Exp $
 //
 // Electron
 //
@@ -55,6 +55,7 @@ namespace mithep
       Double_t    CovEtaEta()                      const { return fCovEtaEta;               }
       Double_t    CovEtaPhi()                      const { return fCovEtaPhi;               }
       Double_t    CovPhiPhi()                      const { return fCovPhiPhi;               }
+      Double_t    CoviEtaiEta()                    const { return fCoviEtaiEta;             }
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
       Double_t    CaloTowerIsolation()             const { return fCaloTowerIsolation;      }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
@@ -86,6 +87,7 @@ namespace mithep
       void        SetCovEtaEta(Double_t CovEtaEta)              { fCovEtaEta = CovEtaEta;          }
       void        SetCovEtaPhi(Double_t CovEtaPhi)              { fCovEtaPhi = CovEtaPhi;          }
       void        SetCovPhiPhi(Double_t CovPhiPhi)              { fCovPhiPhi = CovPhiPhi;          }
+      void        SetCoviEtaiEta(Double_t CoviEtaiEta)          { fCoviEtaiEta = CoviEtaiEta;      }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
@@ -114,6 +116,7 @@ namespace mithep
       Double_t             fE33;
       Double_t             fE55;
       Double_t             fCovEtaEta;
+      Double_t             fCoviEtaiEta;
       Double_t             fCovEtaPhi;
       Double_t             fCovPhiPhi;
       Double_t             fCaloIsolation;
