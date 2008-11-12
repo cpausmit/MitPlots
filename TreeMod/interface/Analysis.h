@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.11 2008/09/28 02:36:23 loizides Exp $
+// $Id: Analysis.h,v 1.12 2008/10/06 17:01:20 loizides Exp $
 //
 // Analysis
 //
@@ -10,7 +10,7 @@
 // The class can operate in following modes:
 //  a) Add single files to be analyzed using Analysis::AddFile
 //  b) Use a text file to point to files to be analyzed using Analysis::AddFiles
-//  c) Add files using a catalogue (to be done)
+//  c) Add files using a catalog using Analysis::AddDataset
 //
 // See $CMSSW_BASE/src/MitAna/macros/examples/runSimpleExample.C
 // for an example of how to use this class.
