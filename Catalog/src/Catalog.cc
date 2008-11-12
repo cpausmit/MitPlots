@@ -1,4 +1,4 @@
-// $Id: Catalog.cc,v 1.2 2008/07/07 23:49:40 paus Exp $
+// $Id: Catalog.cc,v 1.3 2008/07/08 05:50:57 loizides Exp $
 
 #include "MitAna/Catalog/interface/Catalog.h"
 #include <TSystem.h>
@@ -17,7 +17,7 @@ Catalog::Catalog(const char *location) :
 }
 
 //--------------------------------------------------------------------------------------------------
-Dataset *Catalog::FindDataset(const char *book, const char *dataset)
+Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char *fileset)
 {
   // Try to find the given dataset in the catalog and return it properly filled.
   // Note that the caller must delete the returned dataset.
@@ -26,6 +26,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset)
   TString fullDir      = fLocation +slash+ TString(book) +slash+ TString(dataset);
   TString cmdFilesets  = TString("cat ")+fullDir+slash+TString("Filesets | grep -v ^#");
   TString cmdFiles     = TString("cat ")+fullDir+slash+TString("Files    | grep -v ^#");
+
+  if (TString(fileset) != TString("")) {
+    cmdFilesets += TString(" | grep ^") + TString(fileset);
+    cmdFiles    += TString(" | grep ^") + TString(fileset);
+  }
 
   char    file[1024], fset[1024], location[1024];
   UInt_t  nLumiSecs=0, nEvents=0;
