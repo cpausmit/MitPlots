@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.10 2008/11/06 13:10:50 sixie Exp $
+# $Id: setup.sh,v 1.11 2008/11/07 13:59:55 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -24,7 +24,7 @@ if test $version -lt 2001008; then
 fi
 
 case $version in
-       (2001008 | 2001009 | 2001010 | 2001011 )
+       (2001008 | 2001009 | 2001010 | 2001011 | 2001012)
  
        cvs co -r V01-06-05 CondFormats/JetMETObjects;
        cvs co -r V01-08-10 JetMETCorrections/Configuration;
@@ -48,7 +48,7 @@ case $version in
        #in the release at some point so this will be unnecessary then
        #and should be removed at that point in time.
        #These tags were suggested by Sam Harper
-       if test $version -eq 2001011; then
+       if test $version -eq 2001011 -o $version -eq 2001012; then
            cvs co -rV00-02-00 RecoEgamma/EgammaIsolationAlgos
            cvs co -rV00-02-04 EgammaAnalysis/EgammaIsolationProducers
            cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
@@ -63,13 +63,13 @@ case $version in
 esac
 
 if test -z $MIT_VERS; then
-    echo " "
-    echo "Production setup not executed: MIT_VERS is not setup."
-    echo " "
+    echo
+    echo "Warning: Production setup not executed since \$MIT_VERS is not setup."
+    echo
 else
-    echo " "
+    echo
     echo "Entering production setup. Looking for MIT_VERS: $MIT_VERS dependencies."
-    echo " "
+    echo
     case $MIT_VERS in
         005)
             MitAna/scripts/setup-pixelLessTracking.sh
