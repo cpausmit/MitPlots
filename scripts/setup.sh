@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.13 2008/11/12 18:56:25 peveraer Exp $
+# $Id: setup.sh,v 1.14 2008/11/12 22:21:17 loizides Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -55,7 +55,12 @@ case $version in
            cvs co -rV00-02-04 EgammaAnalysis/EgammaIsolationProducers
            cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
            cvs co -rV00-16-07 DataFormats/RecoCandidate
-           cvs co -r V00-05-19 RecoEcal/EgammaCoreTools
+           cvs co -rV00-05-19 RecoEcal/EgammaCoreTools
+
+           #remove this file because it is causing python compile errors due to
+           #incompatibilities of the tags...
+           #we don't use this file anyways.
+           rm RecoEgamma/EgammaIsolationAlgos/python/egammaIsolationSequence_cff.py
        fi
 
        ;;
