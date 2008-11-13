@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.14 2008/11/12 22:21:17 loizides Exp $
+# $Id: setup.sh,v 1.15 2008/11/13 09:56:41 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -60,7 +60,9 @@ case $version in
            #remove this file because it is causing python compile errors due to
            #incompatibilities of the tags...
            #we don't use this file anyways.
+           #then replace it with an empty file so that it doesn't return after doing cvs update
            rm RecoEgamma/EgammaIsolationAlgos/python/egammaIsolationSequence_cff.py
+           touch RecoEgamma/EgammaIsolationAlgos/python/egammaIsolationSequence_cff.py
        fi
 
        ;;
