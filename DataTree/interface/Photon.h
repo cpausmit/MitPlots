@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.15 2008/10/31 18:56:42 bendavid Exp $
+// $Id: Photon.h,v 1.16 2008/11/06 17:20:45 sixie Exp $
 //
 // Photon
 //
@@ -23,7 +23,7 @@ namespace mithep
     public:
       Photon() {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-        fFourVector(px,py,pz,e) {}
+        fFourVector(FourVector(px,py,pz,e)) {}
       ~Photon() {}
 
       void                      AddConversion(Conversion *c)  { fConversions.Add(c);       }
@@ -49,7 +49,7 @@ namespace mithep
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
       UInt_t                    NConversions()          const { return fConversions.GetEntries(); }
       const SuperCluster       *SCluster()              const;
-      FourVector 	        Mom()                   const { return fFourVector; }
+      FourVector 	        Mom()                   const { return FourVector(fFourVector); }
       void                      Clear(Option_t *opt="")       { fConversions.Clear(opt);   }
       void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv; }
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
@@ -73,7 +73,7 @@ namespace mithep
       void                      SetIsTightPhoton(Bool_t x)        { fIsTightPhoton = x;    }
 
     protected:
-      FourVector                fFourVector;  //four momentum vector
+      FourVectorM32             fFourVector;  //four momentum vector
       Double32_t                fR9;
       Double32_t                fR19;
       Double32_t                fE5x5;

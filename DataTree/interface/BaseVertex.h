@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseVertex.h,v 1.5 2008/10/14 05:27:54 loizides Exp $
+// $Id: BaseVertex.h,v 1.1 2008/11/12 18:18:27 bendavid Exp $
 //
 // BaseVertex
 //
@@ -43,7 +43,7 @@ namespace mithep
       void                SetPosition(Double_t x, Double_t y, Double_t z); 
             
     protected:
-      ThreeVector	  fPosition; //point in space
+      ThreeVector32	  fPosition; //point in space
       Double32_t          fXErr;     //error in x
       Double32_t          fYErr;     //error in y
       Double32_t          fZErr;     //error in z

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: BasicCluster.h,v 1.3 2008/09/17 04:21:16 loizides Exp $
 //
 // Basic Clusters
 //
@@ -41,11 +41,11 @@ namespace mithep
  
     protected:
       
-      Double_t         fEnergy;  //BasicCluster energy      
-      ThreeVector      fPoint;   //Centroid Position
+      Double32_t       fEnergy;  //BasicCluster energy      
+      ThreeVector32    fPoint;   //Centroid Position
       Int_t            fAlgoId;  //Algorithm ID: island = 0, hybrid = 1, fixedMatrix = 2, 
                                  //dynamicHybrid = 3, multi5x5 = 4
-      Double_t         fChiSq;   //Chi sq       
+      Double32_t       fChiSq;   //Chi sq       
       
       ClassDef(BasicCluster, 1)  // BasicCluster class
   };

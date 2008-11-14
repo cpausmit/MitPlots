@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.16 2008/10/31 18:56:42 bendavid Exp $
+// $Id: DecayParticle.h,v 1.17 2008/11/06 15:01:15 paus Exp $
 //
 // Decay Particle
 //
@@ -49,9 +49,9 @@ namespace mithep
       Double_t      PdgMass()          const;
       Double_t      Prob()             const { return TMath::Prob(fChi2,fNdof); }
       Double_t      Chi2()             const { return fChi2; }
-      Int_t         Ndof()             const { return fNdof; }
+      UInt_t        Ndof()             const { return fNdof; }
       void          SetChi2(Double_t chi2) { fChi2 = chi2;}
-      void          SetNdof(Int_t    ndof) { fNdof = ndof;}
+      void          SetNdof(UInt_t   ndof) { fNdof = ndof;}
       using TObject::Error;
     
       // Fitted Mass Error
@@ -82,7 +82,7 @@ namespace mithep
       Double_t               Charge()              const;
 
       //Momentum Accessors/setter
-      FourVector	     Mom() const { return fMomentum; }
+      FourVector	     Mom() const { return FourVector(fMomentum); }
       void                   SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                   SetMom(const FourVector &p) { fMomentum = p; }
       
@@ -104,18 +104,18 @@ namespace mithep
     protected:
       UInt_t                 fAbsPdgId;
       // Fit quality
-      Double_t               fChi2;
-      Int_t                  fNdof;
+      Double32_t             fChi2;
+      UInt_t                 fNdof;
       // Base vertex fit info
-      Double_t               fMassError;
-      Double_t               fLxy;
-      Double_t               fLxyError;
-      Double_t               fDxy;
-      Double_t               fDxyError;
-      Double_t               fLz;
-      Double_t               fLzError;
+      Double32_t             fMassError;
+      Double32_t             fLxy;
+      Double32_t             fLxyError;
+      Double32_t             fDxy;
+      Double32_t             fDxyError;
+      Double32_t             fLz;
+      Double32_t             fLzError;
       // Extended vertex fit info
-      FourVector             fMomentum; //momentum fourvector
+      FourVectorM32          fMomentum; //momentum fourvector
       RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
       TRef                   fPriVertex; //reference to primary vertex
       

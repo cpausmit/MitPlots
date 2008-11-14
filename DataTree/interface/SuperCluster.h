@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.4 2008/09/17 04:21:17 loizides Exp $
+// $Id: SuperCluster.h,v 1.5 2008/10/31 18:56:42 bendavid Exp $
 //
 // SuperCluster
 //
@@ -51,12 +51,12 @@ namespace mithep
       
     protected:
       
-      Double_t                  fEnergy;          //Supercluster energy     
-      Double_t                  fEtaWidth;        //Width in Phi
-      ThreeVector               fPoint;           //Centroid Position
-      Double_t                  fPreshowerEnergy; //Energy in the preshower
-      Double_t                  fPhiWidth;        //Width in Phi
-      Double_t                  fRawEnergy;       //Supercluster raw energy
+      Double32_t                fEnergy;          //Supercluster energy     
+      Double32_t                fEtaWidth;        //Width in Phi
+      ThreeVector32             fPoint;           //Centroid Position
+      Double32_t                fPreshowerEnergy; //Energy in the preshower
+      Double32_t                fPhiWidth;        //Width in Phi
+      Double32_t                fRawEnergy;       //Supercluster raw energy
       RefArray<BasicCluster,1024> fClusters;        //BasicClusters in this SuperCluster
       TRef                      fSeedRef;         //the seed cluster
 

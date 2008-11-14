@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.8 2008/09/10 03:33:26 loizides Exp $
+// $Id: Conversion.h,v 1.9 2008/09/30 12:51:37 bendavid Exp $
 //
 // Conversion
 //
@@ -40,10 +40,10 @@ namespace mithep
         
     protected:
       Vertex                    fVertex;       //reconstructed decay vertex
-      Double_t                  fDCotTheta;    //delta cot theta wrt tracks at the conversion point
-      Double_t                  fEOverP;       //E over p of conversion tracks
-      Double_t                  fPairMass;     //mass of electron-positron pair at conversion point
-      ThreeVector               fPairMomentum; //momentum of tracks at conversion point
+      Double32_t                fDCotTheta;    //delta cot theta wrt tracks at the conversion point
+      Double32_t                fEOverP;       //E over p of conversion tracks
+      Double32_t                fPairMass;     //mass of electron-positron pair at conversion point
+      ThreeVector32             fPairMomentum; //momentum of tracks at conversion point
       
     ClassDef(Conversion,1) // Conversion class
   };

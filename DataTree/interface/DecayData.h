@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.1 2008/09/30 12:52:52 bendavid Exp $
+// $Id: DecayData.h,v 1.2 2008/11/13 14:07:51 bendavid Exp $
 //
 // DecayData
 //
@@ -32,7 +32,7 @@ namespace mithep
       Double32_t             Pz()   const { return fMomAtVertex.Pz(); }
       Double32_t             P()    const { return fMomAtVertex.P(); }
       Double32_t             E()    const { return fMomAtVertex.E(); }
-      FourVector           Mom()  const { return fMomAtVertex; }
+      FourVector           Mom()  const { return FourVector(fMomAtVertex); }
       void                 SetMom(Double32_t px, Double32_t y, Double32_t z, Double32_t e);
       void                 SetMom(const FourVector &mom) { fMomAtVertex = mom; }
       
@@ -61,7 +61,7 @@ namespace mithep
       void              SetLzError(Double32_t lzError) { fLzError = lzError;}      
 
     protected:
-      FourVector32         fMomAtVertex;      //fitted momentum at vertex
+      FourVectorM32        fMomAtVertex;      //fitted momentum at vertex
       Double32_t           fMassError;
       Double32_t           fLxy;
       Double32_t           fLxyError;
