@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.26 2008/10/31 17:42:08 bendavid Exp $
+// $Id: Track.h,v 1.27 2008/11/03 11:21:11 bendavid Exp $
 //
 // Track
 //
@@ -81,6 +81,7 @@
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/BitMask.h"
+#include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
@@ -148,6 +149,7 @@ namespace mithep
       Double_t           RChi2()          const { return fChi2/(Double_t)fNdof; }
       void               ClearHit(EHitLayer l)  { fHits.ClearBit(l); } 
       Double_t	         D0()             const { return -fDxy; }
+      Double_t           D0Corrected(const BaseVertex *iVertex) const;
       Double_t	         D0Err()          const { return fDxyErr; }
       Double_t           Dsz()            const { return fDsz; }
       Double_t           DszErr()         const { return fDszErr; }
@@ -219,6 +221,21 @@ namespace mithep
 	      
     ClassDef(Track, 2) // Track class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Track::D0Corrected(const BaseVertex *iVertex) const
+{
+  // Return corrected d0 with respect to primary vertex or beamspot
+
+  Double_t lXM =  -TMath::Sin(Phi()) * D0();
+  Double_t lYM =   TMath::Cos(Phi()) * D0();
+  Double_t lDX = (lXM + iVertex->X());
+  Double_t lDY = (lYM + iVertex->Y());
+  Double_t d0Corr = (Px()*lDY - Py()*lDX)/Pt();
+  
+  return d0Corr;
+  
 }
 
 //--------------------------------------------------------------------------------------------------
