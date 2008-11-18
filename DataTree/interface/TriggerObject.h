@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.2 2008/09/27 06:08:21 loizides Exp $
+// $Id: TriggerObject.h,v 1.3 2008/10/23 18:24:17 loizides Exp $
 //
 // TriggerObject
 //
@@ -24,9 +24,9 @@ namespace mithep
   {
     public:
       TriggerObjectBase() : fId(0) {}
-      TriggerObjectBase(Int_t id, const FourVectorM32 &mom) : fMom(mom) {}
+      TriggerObjectBase(Int_t id, const FourVectorM32 &mom) : fId(id), fMom(mom) {}
       TriggerObjectBase(Int_t id, Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
-        fId(0), fMom(pt,eta,phi,mass) {}
+        fId(id), fMom(pt,eta,phi,mass) {}
       ~TriggerObjectBase() {}
 
       Int_t                 Id()      const { return fId;  }
