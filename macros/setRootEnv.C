@@ -1,4 +1,4 @@
-// $Id: setRootEnv.C,v 1.3 2008/06/11 13:26:05 loizides Exp $
+// $Id: setRootEnv.C,v 1.4 2008/07/03 10:27:52 paus Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
@@ -15,7 +15,7 @@
 #endif
 
 void setIncludes();
-void loadLibraries();
+void loadLibraries(const char *libpattern="libMitAna*.so");
 void loadmylib(const char *name);
 void loadmylib(const char *pkgname, const char *subpkgname);
 
@@ -62,12 +62,12 @@ void setIncludes()
                       +TString(gSystem->Getenv("CMSSW_BASE"))+"/src/MitAna/macros");
 }
 
-void loadLibraries()
+void loadLibraries(const char *libpattern)
 {
   TString libstr(Form("%s/lib/%s",gSystem->Getenv("CMSSW_BASE"),gSystem->Getenv("SCRAM_ARCH")));
 
   void *dir = gSystem->OpenDirectory(libstr.Data());
-  TRegexp re("libMitAna*.so", kTRUE);
+  TRegexp re(libpattern, kTRUE);
   TRegexp reignore("libMitAnalysis*.so", kTRUE);
   while (const char *direntry=gSystem->GetDirEntry(dir) ) {
     TString sdirentry(direntry);
