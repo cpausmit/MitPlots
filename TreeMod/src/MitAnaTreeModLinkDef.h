@@ -1,7 +1,8 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.10 2008/10/06 15:51:39 ceballos Exp $
+// $Id: MitAnaTreeModLinkDef.h,v 1.11 2008/10/14 05:28:22 loizides Exp $
 
 #ifndef MITANA_TREEMOD_LINKDEF_H
 #define MITANA_TREEMOD_LINKDEF_H
+#include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/CatalogingMod.h"
@@ -23,6 +24,7 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
+#pragma link C++ class mithep::AnaFwkMod+;
 #pragma link C++ class mithep::Analysis+;
 #pragma link C++ class mithep::BaseMod+;
 #pragma link C++ class mithep::CatalogingMod+;

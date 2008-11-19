@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.16 2008/10/06 17:01:21 loizides Exp $
+// $Id: Analysis.cc,v 1.17 2008/11/05 17:23:47 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -17,6 +17,7 @@
 #include "MitAna/TAM/interface/TAModule.h"
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/TreeMod/interface/TreeLoader.h"
+#include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/Catalog/interface/Dataset.h"
 
@@ -330,6 +331,10 @@ Bool_t Analysis::Init()
   fLoaders->Add(bl);
   fDeleteList->Add(bl);
 
+  // create our ana framework module
+  AnaFwkMod *anamod = new AnaFwkMod;
+  fDeleteList->Add(anamod);
+
   // create our HLT framework module
   HLTFwkMod *hltmod = 0;
   if (fUseHLT) {
@@ -339,6 +344,7 @@ Bool_t Analysis::Init()
 
   if (fUseProof) {
 
+    fProof->AddInput(anamod);
     if (hltmod) 
       fProof->AddInput(hltmod);
 
@@ -351,6 +357,9 @@ Bool_t Analysis::Init()
     // when not running Proof, we must make a selector
     fSelector = new Selector; 
     fSelector->SetDoProxy(fDoProxy);
+
+    fSelector->AddInput(anamod);
+
     if (hltmod) 
       fSelector->AddInput(hltmod);
     fSelector->AddInput(fSuperMod);
