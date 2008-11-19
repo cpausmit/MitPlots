@@ -1,4 +1,4 @@
-// $Id: GeneratorMod.cc,v 1.4 2008/11/11 21:22:54 ceballos Exp $
+// $Id: AnaFwkMod.cc,v 1.1 2008/11/19 15:30:26 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -65,7 +65,7 @@ void AnaFwkMod::SlaveBegin()
 {
   // Book our histogram and start the stop watches.
 
-  hDEvents = new TH1D("hDEvents","hDEvents for overall event count",1,-0.5,0.5);
+  hDEvents = new TH1D("hDEvents","Total number of processed events",1,-0.5,0.5);
   AddOutput(hDEvents);
 
   fSWtotal = new TStopwatch;
