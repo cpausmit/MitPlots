@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.19 2008/09/17 04:21:17 loizides Exp $
+// $Id: Particle.h,v 1.20 2008/09/30 12:49:57 bendavid Exp $
 //
 // Particle
 //
@@ -31,6 +31,7 @@ namespace mithep
       virtual FourVector	Mom()    const = 0;
 
       virtual Double_t		Phi()    const { return Mom().Phi();}
+      virtual Double_t          PhiDeg() const { return Phi() * 180. / TMath::Pi(); }
       virtual Double_t		Pt()     const { return Mom().Pt();}
       virtual Double_t		Px()     const { return Mom().Px();}
       virtual Double_t		Py()     const { return Mom().Py();}
