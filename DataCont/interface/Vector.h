@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.1 2008/07/29 10:36:21 loizides Exp $
+// $Id: Vector.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // Vector
 //
@@ -35,6 +35,7 @@ namespace mithep
       void                             Clear(Option_t *opt="");
       UInt_t                           Entries()                     const { return fV.size(); }
       UInt_t                           GetEntries()                  const { return fV.size(); }
+      UInt_t                           GetSize()                     const { return fV.capacity(); }
       Bool_t                           IsOwner()                     const { return kTRUE; }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
@@ -44,7 +45,6 @@ namespace mithep
       const ArrayElement              *UncheckedAt(UInt_t idx)       const { return &fV[idx]; }
       const std::vector<ArrayElement> &Vect()                        const { return fV; }
       std::vector<ArrayElement>       &Vect()                              { return fV; }
-
       ArrayElement                    *operator[](UInt_t idx)              { return &fV.at(idx); }
       const ArrayElement              *operator[](UInt_t idx)        const { return &fV.at(idx); }
 

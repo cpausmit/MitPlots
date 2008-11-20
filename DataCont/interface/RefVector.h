@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefVector.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: RefVector.h,v 1.3 2008/10/23 18:22:27 loizides Exp $
 //
 // RefArray
 //
@@ -36,7 +36,6 @@ namespace mithep
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)           const;
       const std::vector<TRef>  &Vect()                            const { return fV; }
-
       ArrayElement             *operator[](UInt_t idx);
       const ArrayElement       *operator[](UInt_t idx)            const;
 
@@ -97,24 +96,6 @@ inline const ArrayElement *mithep::RefVector<ArrayElement>::At(UInt_t idx) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement *mithep::RefVector<ArrayElement>::operator[](UInt_t idx) const
-{
-  // Return entry at given index.
-
-  return At(idx);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::RefVector<ArrayElement>::operator[](UInt_t idx)
-{
-  // Return entry at given index.
-
-  return At(idx);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
 inline void mithep::RefVector<ArrayElement>::Trim()
 {
   // Trim vector to minimal needed size.
@@ -138,5 +119,23 @@ inline const ArrayElement *mithep::RefVector<ArrayElement>::UncheckedAt(UInt_t i
   // Return entry at given index.
 
     return static_cast<const ArrayElement*>(fV[idx].GetObject());
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline const ArrayElement *mithep::RefVector<ArrayElement>::operator[](UInt_t idx) const
+{
+  // Return entry at given index.
+
+  return At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline ArrayElement *mithep::RefVector<ArrayElement>::operator[](UInt_t idx)
+{
+  // Return entry at given index.
+
+  return At(idx);
 }
 #endif

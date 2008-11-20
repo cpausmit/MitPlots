@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.6 2008/10/23 18:22:27 loizides Exp $
+// $Id: RefArray.h,v 1.7 2008/10/31 18:56:14 bendavid Exp $
 //
 // RefArray
 //
@@ -30,7 +30,7 @@
 namespace mithep 
 {
   template<class ArrayElement, UInt_t N>
-  class RefArray
+  class RefArray /*: public Collection<ArrayElement>*/
   {
     public:
       RefArray();
@@ -38,22 +38,22 @@ namespace mithep
 
       void                      Add(ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
-      const ArrayElement       *At(UInt_t idx)                    const;
-      void                      Clear(Option_t */*opt*/="")             {}
-      UInt_t                    Entries()                         const { return GetEntries(); }
-      UInt_t                    GetEntries()                      const { return fUIDs.GetEntries(); }
-      Bool_t                    IsOwner()                         const { return kTRUE; }
+      const ArrayElement       *At(UInt_t idx)               const;
+      void                      Clear(Option_t */*opt*/="")        {}
+      UInt_t                    Entries()                    const { return GetEntries(); }
+      UInt_t                    GetEntries()                 const { return fUIDs.GetEntries(); }
+      UInt_t                    GetSize()                    const { return N; }
+      Bool_t                    IsOwner()                    const { return kTRUE; }
       void                      Reset();
-      void                      Trim()                                  {}
+      void                      Trim()                             {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
-      const ArrayElement       *UncheckedAt(UInt_t idx)           const;
-
+      const ArrayElement       *UncheckedAt(UInt_t idx)      const;
       ArrayElement             *operator[](UInt_t idx);
-      const ArrayElement       *operator[](UInt_t idx)            const;
+      const ArrayElement       *operator[](UInt_t idx)       const;
 
     protected:
-      TObject                  *GetObject(UInt_t idx)             const;
-      UInt_t                    GetUID(UInt_t idx)                const;
+      TObject                  *GetObject(UInt_t idx)        const;
+      UInt_t                    GetUID(UInt_t idx)           const;
     
       StackArray<ProcIDRef,N>      fPIDs;//|| process ids of referenced objects
       StackArrayBasic<UInt_t,N>    fUIDs;//|| unique ids of referenced objects
@@ -66,6 +66,10 @@ namespace mithep
 template<class ArrayElement, UInt_t N>
 inline mithep::RefArray<ArrayElement,N>::RefArray()
 {
+  // Default constructor.
+
+  // Unfortunately the following only would make sense if TObject was our direct ancestor:
+  //   this->Class()->IgnoreTObjectStreamer(1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,13 +79,14 @@ void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
   // Add new reference to object.
 
   if(GetEntries()>=N) {
-    Fatal("Add", "Maximum number of references reached: To support more requires change in code!");
+    Fatal("Add", "Maximum number of slots reached (%d>=%d): "
+          "To support more requires a different template!", GetEntries(), N);
     return;
   }
 
   // check if the object can belong here and assign or get its uid
   if (ae->TestBit(kHasUUID)) {
-    Error("Add", "Object can not be added as it has not UUID!");
+    Fatal("Add", "Object can not be added as it has not UUID!");
     return;
   }
 
@@ -95,9 +100,9 @@ void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
     uid = TProcessID::AssignID(ae);
   }
 
-  //If RefArray contains one and only one PID reference, then only add another if the added object
-  //has a different PID.  When this occurs all of the extra spaces which had been left empty get
-  //filled in with the original PID
+  // If RefArray contains one and only one PID reference, then only add another if the added object
+  // has a different PID.  When this occurs all of the extra spaces which had been left empty get
+  // filled in with the original PID
   if (fPIDs.GetEntries()==1) {
     if (pid != fPIDs.At(0)->Pid() ) {
       while (fPIDs.GetEntries()<GetEntries())
@@ -110,7 +115,6 @@ void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
     fPIDs.Allocate()->SetPid(pid);
   
   fUIDs.Add(uid);
-  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +126,7 @@ inline ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx)
   if(idx<GetEntries())  
      return static_cast<ArrayElement*>(GetObject(idx));
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
   return 0;
 }
 
@@ -135,7 +139,7 @@ inline const ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx) cons
   if(idx<GetEntries())  
      return static_cast<const ArrayElement*>(GetObject(idx));
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
   return 0;
 }
 
@@ -144,6 +148,7 @@ template<class ArrayElement, UInt_t N>
 TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 {
   // Return entry at given index. Code adapted from TRef::GetObject().
+
   TProcessID *pid=0; 
   if (fPIDs.GetEntries()>1)
     pid = fPIDs.At(idx)->Pid();
@@ -151,14 +156,15 @@ TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
     pid = fPIDs.At(0)->Pid();
   
   if (!pid) {
-    Error("GetObject","Process id pointer is null!");
+    Fatal("GetObject","Process id pointer is null!");
     return 0;
   }
 
   if (!TProcessID::IsValid(pid)) {
-    Error("GetObject","Process id is invalid!");
+    Fatal("GetObject","Process id is invalid!");
     return 0;
   }
+
   UInt_t uid = GetUID(idx);
 
   //the reference may be in the TRefTable
@@ -180,24 +186,6 @@ inline UInt_t mithep::RefArray<ArrayElement,N>::GetUID(UInt_t idx) const
   // Return uid corresponding to idx.
 
   return fUIDs.At(idx);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-inline const ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx) const
-{
-  // Return entry at given index.
-
-  return At(idx);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-inline ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx)
-{
-  // Return entry at given index.
-
-  return At(idx);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,5 +212,23 @@ inline const ArrayElement *mithep::RefArray<ArrayElement,N>::UncheckedAt(UInt_t 
   // Return entry at given index.
 
   return static_cast<const ArrayElement*>(GetObject(idx));
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline const ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx) const
+{
+  // Return entry at given index.
+
+  return At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline ArrayElement *mithep::RefArray<ArrayElement,N>::operator[](UInt_t idx)
+{
+  // Return entry at given index.
+
+  return At(idx);
 }
 #endif

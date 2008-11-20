@@ -1,12 +1,13 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.2 2008/10/23 18:22:27 loizides Exp $
+// $Id: StackArray.h,v 1.3 2008/10/31 18:56:14 bendavid Exp $
 //
 // StackArray
 //
-// Implementation of a TStackArray using stack (and not heap) memory.
-// For various reasons, the array can not be written in split mode.
-// Maximum size of references is set to 1024 (but this could be 
-// changed if there is need for it).
+// Implementation of an array on the stack as opposed to on the heap 
+// memory. For various reasons, the array can not be written in split 
+// mode. Maximum size is set by template parameter. Array is meant to 
+// store classes as opposed to StackArrayBasic which should be used to 
+// hold basic types.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -15,7 +16,6 @@
 #define MITANA_DATACONT_STACKARRAY
 
 #include <TObject.h>
-#include <TError.h>
 #include <TClass.h>
 #include "MitAna/DataCont/interface/Collection.h"
 
@@ -37,21 +37,21 @@ namespace mithep
       void                      Clear(Option_t */*opt*/="")             {}
       UInt_t                    Entries()                         const { return GetEntries(); }
       UInt_t                    GetEntries()                      const { return fSize; }
+      UInt_t                    GetSize()                         const { return N; }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fSize = 0; }
       void                      Trim()                                  {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)           const;
-
       ArrayElement             *operator[](UInt_t idx);
       const ArrayElement       *operator[](UInt_t idx)            const;
 
     protected:
       TClass                   *fClass;    //!pointer to TClass object used by streamer
       UShort_t                  fSize;     //size of array
-      ArrayElement              fArray[N]; //storage of uids of referenced objects
+      ArrayElement              fArray[N]; //storage for objects
 
-    ClassDef(StackArray,1) // Implementation of our own TStackArray
+    ClassDef(StackArray,1) // Array on stack for arbitrary classes
   };
 }
 
@@ -62,7 +62,6 @@ inline mithep::StackArray<ArrayElement, N>::StackArray() :
   fSize(0)
 {
    // Default constructor.
-   
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,10 +70,10 @@ inline mithep::StackArray<ArrayElement, N>::StackArray(const StackArray &a) :
   fClass(a.fClass),
   fSize(a.fSize)
 {
-   // Copy constructor.  Copy only elements which are used.
+   // Copy constructor. Copy only elements which are used.
+
    for (UInt_t i=0; i<fSize; ++i)
     fArray[i] = a.fArray[i];
-   
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,8 +83,8 @@ void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
   // Add a copy of an existing object.
 
   if(fSize>=N) {
-    TObject::Fatal("Add", 
-                   "Maximum number of references reached: To support more requires change code!");
+    TObject::Fatal("AddCopy", "Maximum number of slots reached (%d>=%d): "
+                   "To support more requires a different template!", fSize, N);
     return;
   }
 
@@ -106,11 +105,11 @@ ArrayElement* mithep::StackArray<ArrayElement, N>::AddNew()
 template<class ArrayElement, UInt_t N>
 ArrayElement* mithep::StackArray<ArrayElement, N>::Allocate()
 {
-   // Allocate a slot in the array, *only* to be used in placement new operator.
+  // Return next slot in the array, *only* to be used in placement new operator.
 
   if(fSize>=N) {
-    TObject::Fatal("Add", 
-                   "Maximum number of references reached: To support more requires change code!");
+    TObject::Fatal("Allocate", "Maximum number of slots reached (%d>=%d): "
+                   "To support more requires a different template!", fSize, N);
     return 0;
   }
 
@@ -127,7 +126,9 @@ inline ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx)
   if(idx<fSize)  
      return static_cast<ArrayElement*>(&fArray[idx]);
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
+  ArrayElement tmp;
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fSize, this->GetName(), typeid(tmp).name()); 
   return 0;
 }
 
@@ -140,26 +141,10 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx) c
   if(idx<fSize)  
      return static_cast<const ArrayElement*>(&fArray[idx]);
 
-  Error("At", "Given index (%ud) is larger than array size (%ud)", idx, fSize);
+  ArrayElement tmp;
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fSize, this->GetName(), typeid(tmp).name()); 
   return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-inline const ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx) const
-{
-  // Return entry at given index.
-
-  return At(idx);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement, UInt_t N>
-inline ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx)
-{
-  // Return entry at given index.
-
-  return At(idx);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -197,5 +182,23 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::UncheckedAt(UInt
   // Return entry at given index.
 
   return static_cast<const ArrayElement*>(&fArray[idx]);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline const ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx) const
+{
+  // Return entry at given index.
+
+  return At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline ArrayElement *mithep::StackArray<ArrayElement, N>::operator[](UInt_t idx)
+{
+  // Return entry at given index.
+
+  return At(idx);
 }
 #endif

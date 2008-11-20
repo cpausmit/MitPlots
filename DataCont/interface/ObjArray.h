@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.3 2008/09/27 06:04:49 loizides Exp $
+// $Id: ObjArray.h,v 1.4 2008/10/23 18:21:57 loizides Exp $
 //
 // ObjArray
 //
@@ -33,21 +33,22 @@ namespace mithep
       UInt_t               Entries()                             const { return fNumEntries; }
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
+      UInt_t               GetSize()                            const { return fArray.GetSize(); }
       const ArrayElement  *Find(const char *name)                const;
       ArrayElement        *Find(const char *name);
+      void                 Print(Option_t *opt="")              const;
       void                 Remove(UInt_t idx);
       void                 Remove(const char *name);
       void                 Remove(ArrayElement *ae);
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
       void                 Reset();
-      void                 Trim()                                      { fArray.Compress();}
       void                 SetName(const char* name)                   { fArray.SetName(name); }
       void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
       void                 Sort()                                      { fArray.Sort(); }
+      void                 Trim()                                      { fArray.Compress();}
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)               const;
-
       ArrayElement        *operator[](UInt_t idx);
       const ArrayElement  *operator[](UInt_t idx)                const;
 
@@ -80,6 +81,8 @@ inline mithep::ObjArray<ArrayElement>::ObjArray(UInt_t size, const char *name) :
 template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
 {
+  // Add objects from collection to array.
+
   if (!col)
     return;
 
@@ -117,8 +120,8 @@ inline ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s",
-                 idx, fNumEntries, GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
 
@@ -131,8 +134,8 @@ inline const ArrayElement* mithep::ObjArray<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s",
-                 idx, fNumEntries, GetName()); 
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
 
@@ -202,20 +205,18 @@ inline TIterator *mithep::ObjArray<ArrayElement>::Iterator(Bool_t dir) const
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline const ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx) const
+void mithep::ObjArray<ArrayElement>::Print(Option_t *opt) const
 {
-  // Return entry at given index.
+  // Print out elements of array.
 
-  return At(idx);
-}
+  printf("%s: Contains %d (out of %d) objs of name %s\n",
+         GetName(), GetEntries(), GetSize(), ArrayElement::Class_Name());
 
-//--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx)
-{
-  // Return entry at given index.
-
-  return At(idx);
+  const UInt_t N = GetEntries();
+  for (UInt_t i=0; i<N; ++i) {
+    printf("%4d: ",i);
+    At(i)->Print(opt);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,4 +237,21 @@ inline const ArrayElement *mithep::ObjArray<ArrayElement>::UncheckedAt(UInt_t id
   return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 }
 
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline const ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx) const
+{
+  // Return entry at given index.
+
+  return At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline ArrayElement *mithep::ObjArray<ArrayElement>::operator[](UInt_t idx)
+{
+  // Return entry at given index.
+
+  return At(idx);
+}
 #endif

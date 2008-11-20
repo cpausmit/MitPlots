@@ -1,12 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ProcIDRef.h,v 1.5 2008/10/02 14:00:02 bendavid Exp $
+// $Id: ProcIDRef.h,v 1.1 2008/10/31 18:56:14 bendavid Exp $
 //
 // ProcIDRef
 //
-// Implementation of a TProcIDRef using stack (and not heap) memory.
-// For various reasons, the array can not be written in split mode.
-// Maximum size of references is set to 1024 (but this could be 
-// changed if there is need for it).
+// Implementation of a process id that can be used in the
+// StackArray (and then used in the RefArray).
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -22,23 +20,17 @@ namespace mithep
   class ProcIDRef : public TObject
   {
     public:
-      ProcIDRef();
+      ProcIDRef() {};
       ProcIDRef(TProcessID *pid) : fProcID(pid) {}
       ~ProcIDRef() { fProcID = 0; }
 
-      TProcessID               *Pid()                   const { return fProcID; }
-      void                      SetPid(TProcessID *pid)       { fProcID = pid; }
+      TProcessID        *Pid()                   const { return fProcID; }
+      void               SetPid(TProcessID *pid)       { fProcID = pid; }
       
     protected:
-      TProcessID               *fProcID;      //!ptr to Process Unique Identifier
+      TProcessID        *fProcID; //!ptr to the Process Unique Identifier
 
     ClassDef(ProcIDRef,1) // Implementation of our own TProcIDRef
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline mithep::ProcIDRef::ProcIDRef()
-{
-   // Default constructor.
 }
 #endif

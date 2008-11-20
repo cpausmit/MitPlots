@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.1 2008/07/29 10:36:20 loizides Exp $
+// $Id: Collection.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
 //
 // Collection
 //
@@ -25,16 +25,25 @@ namespace mithep
       virtual ArrayElement        *At(UInt_t idx)                       = 0;
       virtual const ArrayElement  *At(UInt_t idx)                 const = 0;
       virtual UInt_t               GetEntries()                   const = 0;
+      virtual UInt_t               GetSize()                      const = 0;
       virtual Bool_t               IsOwner()                      const = 0;
+      void                         Print(Option_t *opt="")        const;
       virtual void                 Reset()                              = 0;
       virtual void                 Trim()                               = 0;
       virtual ArrayElement        *UncheckedAt(UInt_t idx)              = 0;
       virtual const ArrayElement  *UncheckedAt(UInt_t idx)        const = 0;
-
       virtual ArrayElement        *operator[](UInt_t idx)               = 0;
       virtual const ArrayElement  *operator[](UInt_t idx)         const = 0;
 
     ClassDefT(Collection,1) // Generic access to a collection of ArrayElements
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+void mithep::Collection<ArrayElement>::Print(Option_t *opt) const
+{
+  printf("%s: Contains %d (out of %d) objs\n",
+         GetName(), GetEntries(), GetSize());
 }
 #endif
