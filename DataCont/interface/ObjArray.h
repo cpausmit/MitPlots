@@ -1,9 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.4 2008/10/23 18:21:57 loizides Exp $
+// $Id: ObjArray.h,v 1.5 2008/11/20 17:49:15 loizides Exp $
 //
 // ObjArray
 //
-// Implementation of Collection interface using TObjArray class. 
+// Implementation of Collection interface using TObjArray class. By default, the
+// array does not own its elements, and hence will not delete them. Use SetOwner(1)
+// to turn on ownership.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -23,8 +25,9 @@ namespace mithep
       ObjArray(UInt_t size=0, const char *name=0);
       ~ObjArray() {}
 
-      void                 Add(ArrayElement *ae)                       { AddLast(ae); }
+      void                 Add(const ArrayElement *ae);
       void                 Add(const TCollection *col);
+      void                 AddOwned(ArrayElement *ae);
       const TObjArray     &Arr()                                 const { return fArray; }
       TObjArray           &Arr()                                       { return fArray; }
       ArrayElement        *At(UInt_t idx);
@@ -33,7 +36,7 @@ namespace mithep
       UInt_t               Entries()                             const { return fNumEntries; }
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
-      UInt_t               GetSize()                            const { return fArray.GetSize(); }
+      UInt_t               GetSize()                             const { return fArray.GetSize(); }
       const ArrayElement  *Find(const char *name)                const;
       ArrayElement        *Find(const char *name);
       void                 Print(Option_t *opt="")              const;
@@ -43,7 +46,7 @@ namespace mithep
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
       void                 Reset();
-      void                 SetName(const char* name)                   { fArray.SetName(name); }
+      void                 SetName(const char *name)                   { fArray.SetName(name); }
       void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
       void                 Sort()                                      { fArray.Sort(); }
       void                 Trim()                                      { fArray.Compress();}
@@ -53,7 +56,7 @@ namespace mithep
       const ArrayElement  *operator[](UInt_t idx)                const;
 
     protected:
-      void                 AddLast(ArrayElement *e);
+      void                 AddLast(const ArrayElement *e);
 
       TObjArray            fArray;        //array for storage
       UInt_t               fNumEntries;   //number of entries in the array
@@ -103,12 +106,35 @@ inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::AddLast(ArrayElement *ae)
+inline void mithep::ObjArray<ArrayElement>::Add(const ArrayElement *ae)
+{
+  // Add object to array. This function should be used in cases the array does not own the objects.
+
+  if (IsOwner()) {
+    TObject::Error("Add","Can not add object since IsOwner() returns kTRUE.");
+    return;
+  }
+
+  AddLast(ae);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::AddLast(const ArrayElement *ae)
 {
   // Add new entry at the end of array.
 
-  fArray.AddLast(ae); 
+  fArray.AddLast(const_cast<ArrayElement*>(ae)); 
   fNumEntries++; 
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::AddOwned(ArrayElement *ae)
+{
+  // Add object to array. This function should be used in cases the array owns the objects.
+
+  AddLast(ae);
 }
 
 //--------------------------------------------------------------------------------------------------
