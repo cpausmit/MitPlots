@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.5 2008/10/06 15:55:17 ceballos Exp $
+// $Id: MCParticle.h,v 1.6 2008/11/05 12:15:39 bendavid Exp $
 //
 // MCParticle
 //
@@ -34,10 +34,14 @@ namespace mithep
       const ThreeVector  &DecayVertex()            const { return fDecayVertex; }
       const MCParticle   *Daughter(UInt_t i)       const;
       const MCParticle   *DistinctMother()         const;
+      using CompositeParticle::HasDaughter;
+      Bool_t              HasDaughter(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasMother()              const { return fMother.IsValid(); }
+      Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
       Bool_t              IsGenerated()            const { return fIsGenerated; }
-      Bool_t              IsSimulated()            const { return fIsSimulated; }
       Bool_t              IsNeutrino()             const;
+      Bool_t              IsQuark()                const { return (AbsPdgId()>0 && AbsPdgId()<7); }
+      Bool_t              IsSimulated()            const { return fIsSimulated; }
       const MCParticle   *Mother()                 const;
       FourVector	  Mom()                    const { return FourVector(fFourVector); }
       void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t; }
@@ -53,10 +57,11 @@ namespace mithep
       void                Print(Option_t *opt="")  const;
 
       enum EPartType {
-        kUnknown=0,
-        kEl=11, kMu=13, kTau=15,
+        kUnknown=0, 
+        kUp=1, kDown=2, kStrange=3, kCharm=4, kBottom=5, kTop=6,
+        kEl=11, kMu=13, kTau=15, 
         kElNu=12, kMuNu=14, kTauNu=16,
-        kGlu=21, kGamma=22
+        kGlu=21, kGamma=22, kZ=23, kW=24, kH=25
       };
       
     protected:
@@ -70,6 +75,26 @@ namespace mithep
 
     ClassDef(MCParticle,3) // Generated particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::MCParticle::HasDaughter(Int_t pid, Bool_t checkCharge) const
+{
+  // Return true if a particle with given pdg code is found amoung daughters.
+  // If checkCharge is false then just the type of particle is checked 
+  // (ie particle and anti-particle).
+
+  if (checkCharge) {
+    for (UInt_t i=0; i<NDaughters(); ++i)
+      if (Daughter(i)->PdgId()==pid) 
+        return kTRUE;
+  } else {
+    Int_t apid = pid>0?pid:-pid;
+    for (UInt_t i=0; i<NDaughters(); ++i)
+      if (Daughter(i)->AbsPdgId()==apid) 
+        return kTRUE;
+  }
+  return kFALSE;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,6 +127,19 @@ inline const mithep::MCParticle *mithep::MCParticle::Mother() const
   // Return mother.
 
   return static_cast<const MCParticle*>(fMother.GetObject()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::MCParticle::Is(Int_t pid, Bool_t checkCharge) const 
+{ 
+  // Return true if particle is of given type. If checkCharge is false then just the type of 
+  // particle is checked (ie particle and anti-particle).
+
+  if (checkCharge) 
+    return (PdgId() == pid);
+
+  Int_t apid = pid>0?pid:-pid;
+  return (AbsPdgId() == apid);
 }
 
 //--------------------------------------------------------------------------------------------------
