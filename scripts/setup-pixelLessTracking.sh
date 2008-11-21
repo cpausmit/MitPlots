@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup-pixelLessTracking.sh,v 1.1 2008/10/16 16:52:51 bendavid Exp $
+# $Id: setup-pixelLessTracking.sh,v 1.2 2008/10/21 07:22:07 paus Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -24,7 +24,7 @@ if test $version -lt 2001008; then
 fi
 
 case $version in
-       (2001008 | 2001009)
+       (2001008 | 2001009 | 2001011)
         
        #updated four step iterative track reconstruction (includes pixel-less seeding)
        cvs co -r V00-03-00 RecoTracker/IterativeTracking

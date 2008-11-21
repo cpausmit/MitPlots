@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.15 2008/11/13 09:56:41 sixie Exp $
+# $Id: setup.sh,v 1.16 2008/11/13 14:29:22 sixie Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -46,23 +46,14 @@ case $version in
        sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
        mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
 
-       #for jurassic isolation veto FIX. Note that this should be fixed
-       #in the release at some point so this will be unnecessary then
-       #and should be removed at that point in time.
-       #These tags were suggested by Sam Harper
-       if test $version -eq 2001011 -o $version -eq 2001012; then
-           cvs co -rV00-02-00 RecoEgamma/EgammaIsolationAlgos
-           cvs co -rV00-02-04 EgammaAnalysis/EgammaIsolationProducers
+       if test $version -eq 2001011; then
+           #for jurassic isolation veto FIX.
            cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
-           cvs co -rV00-16-07 DataFormats/RecoCandidate
+           #comment out unused function to remove dependencies on additional tags
+           patch -N -u -r MitAna/scripts/patch-reject.rej -i MitAna/scripts/IsoDepositVetoFactory.cc.patch PhysicsTools/IsolationAlgos/src/IsoDepositVetoFactory.cc
+           
+           #for sigmaietaeta
            cvs co -rV00-05-19 RecoEcal/EgammaCoreTools
-
-           #remove this file because it is causing python compile errors due to
-           #incompatibilities of the tags...
-           #we don't use this file anyways.
-           #then replace it with an empty file so that it doesn't return after doing cvs update
-           rm RecoEgamma/EgammaIsolationAlgos/python/egammaIsolationSequence_cff.py
-           touch RecoEgamma/EgammaIsolationAlgos/python/egammaIsolationSequence_cff.py
        fi
 
        ;;
