@@ -1,4 +1,4 @@
-// $Id: GenRelValMod.cc,v 1.3 2008/07/14 20:59:56 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.4 2008/07/25 12:41:41 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -11,6 +11,9 @@ ClassImp(mithep::GenRelValMod)
 GenRelValMod::GenRelValMod(const char *name, const char *title) :
   BaseMod(name,title),
   fMCPartName(Names::gkMCPartBrn),
+  fFileName("macro_output.txt"),
+  fPrint(1),
+  fWrite(0),
   fParticles(0),
   ofile(0)
 {
@@ -26,9 +29,11 @@ void GenRelValMod::SlaveBegin()
 
   ReqBranch(fMCPartName,fParticles);
 
-  ofile = new std::ofstream("macro_output.txt");
-  if (ofile->bad()) {
-    SendError(kAbortAnalysis, "SlaveBegin", "Can not open output file.");
+  if (fWrite) {
+    ofile = new std::ofstream(fFileName);
+    if (ofile->bad()) {
+      SendError(kAbortAnalysis, "SlaveBegin", "Can not open output file.");
+    }
   }
 }
 
@@ -41,6 +46,8 @@ void GenRelValMod::Process()
 
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
     const MCParticle *p = fParticles->At(i);
+    if (!p->IsGenerated()) continue;
+
     int I     = i+1;                                         // Particle index (starts at 1)
     int KF    = p->PdgId();                                  // Pdg code
     double p_x = p->Px(); if (fabs(p_x)<0.0005) p_x = 0.;    // Momenta.  We only compare the
@@ -52,7 +59,7 @@ void GenRelValMod::Process()
       const MCParticle *mother = p->Mother();
       if(mother) {
         for (UInt_t j=0; j<fParticles->GetEntries(); ++j) {
-          const  MCParticle *test = fParticles->At(j);
+          const MCParticle *test = fParticles->At(j);
           if(test==mother) {
             mind=j+1;
             // hack to overcome ambiguity
@@ -64,7 +71,11 @@ void GenRelValMod::Process()
     }
     char buf[1024];
     sprintf(buf,"%5i%5i%5i%9.3f%9.3f%9.3f%9.3f\n",I,KF,mind,p_x,p_y,p_z,E);
-    *ofile<<buf;
+    if (fPrint) {
+      std::cout << buf;
+    }
+    if (fWrite) 
+      *ofile<<buf;
   }
 }
 
@@ -74,7 +85,9 @@ void GenRelValMod::SlaveTerminate()
   // Run finishing code on the computer (slave) that did the analysis. For this module, we close
   // the text file.
 
-  ofile->close();
-  delete ofile; 
-  ofile=0;
+  if (fWrite) {
+    ofile->close();
+    delete ofile; 
+    ofile=0;
+  }
 }

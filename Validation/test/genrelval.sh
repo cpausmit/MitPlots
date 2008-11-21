@@ -1,9 +1,9 @@
 #!/bin/bash
-# $Id: genrelval.sh,v 1.4 2008/07/25 12:41:41 loizides Exp $
+# $Id: genrelval.sh,v 1.5 2008/07/31 12:06:02 loizides Exp $
 #
 # genrelval.sh: Release validation script for generated particles
 #
-# $Id: genrelval.sh,v 1.4 2008/07/25 12:41:41 loizides Exp $
+# $Id: genrelval.sh,v 1.5 2008/07/31 12:06:02 loizides Exp $
 #_____________________________________________________________________________________________
 #
 # Variables to configure:
@@ -102,6 +102,8 @@ void runGenRelVal(const char *files = "mit-gen_000.root")
 
   // set up the modules
   GenRelValMod *mod = new GenRelValMod;
+  mod->SetWrite(1);
+  mod->SetPrint(0);
 
   // set up analysis
   Analysis *ana = new Analysis;
