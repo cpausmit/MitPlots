@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAModule.cxx,v 1.2 2008/06/23 10:53:00 loizides Exp $
 //
 
 #include "TAModule.h"
@@ -536,24 +536,24 @@ void TAModule::SendError(const EModResult errLevel,
    va_list ap;
    va_start(ap,va_(formattedMsg));
    if (errLevel>=kAbortAnalysis) {
-      DoError(kBreak,location, va_(formattedMsg), ap);
+     DoError(::kBreak, location, va_(formattedMsg), ap);
       AbortAnalysis();
    } else if (errLevel>=kStopModule) {
-      DoError(kError,location, va_(formattedMsg), ap);
+     DoError(::kError, location, va_(formattedMsg), ap);
       StopModule();
    } else if (errLevel>=kAbortEvent) {
-      DoError(kError,location, va_(formattedMsg), ap);
+     DoError(::kError, location, va_(formattedMsg), ap);
       AbortEvent();
    } else if (errLevel>=kAbortModule) {
-      DoError(kError,location, va_(formattedMsg), ap);
+     DoError(::kError, location, va_(formattedMsg), ap);
       AbortModule();
    } else if (errLevel==kWarning) {
-      DoError(kWarning,location, va_(formattedMsg), ap);
+     DoError(::kWarning, location, va_(formattedMsg), ap);
    } else {
       Error("SendError",
             "Unhandled error level [%d] specified when trying to send the "
             "following error:",static_cast<Int_t>(errLevel));
-      DoError(kError,location, va_(formattedMsg), ap);
+      DoError(::kError, location, va_(formattedMsg), ap);
    }
    va_end(ap);
 }
