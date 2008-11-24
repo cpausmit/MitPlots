@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.7 2008/11/21 20:15:02 loizides Exp $
+// $Id: MCParticle.h,v 1.8 2008/11/24 11:51:20 loizides Exp $
 //
 // MCParticle
 //
@@ -25,7 +25,6 @@ namespace mithep
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
         fPdgId(id), fStatus(s), fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
-//      MCParticle(const MCParticle *p) 
       ~MCParticle() {}
 
       Int_t               AbsPdgId()               const { return (fPdgId<0 ? -fPdgId:fPdgId); }
@@ -40,6 +39,7 @@ namespace mithep
       const MCParticle   *FindMother(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasDaughter(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasMother()              const { return fMother.IsValid(); }
+      Bool_t              HasMother(const MCParticle *m)                    const;
       Bool_t              HasMother(Int_t pid, Bool_t checkCharge=kFALSE)   const;
       Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
       Bool_t              IsGenerated()            const { return fIsGenerated; }
@@ -129,6 +129,24 @@ inline Bool_t mithep::MCParticle::HasDaughter(Int_t pid, Bool_t checkCharge) con
 }
 
 //--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::MCParticle::HasMother(const MCParticle *m) const
+{
+  // Return true if the given particle is among mothers. (Note the comparison
+  // is made on pointers and therefore will fail if you work on copies.)
+
+  if (!m) 
+    return kFALSE;
+
+  const mithep::MCParticle *mother = Mother();
+  while (mother && mother!=m)
+    mother = mother->Mother();
+
+  if (mother) 
+    return kTRUE;
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
 inline Bool_t mithep::MCParticle::HasMother(Int_t pid, Bool_t checkCharge) const
 {
   // Return true if a particle with given pdg code is found amoung mothers.
@@ -136,15 +154,13 @@ inline Bool_t mithep::MCParticle::HasMother(Int_t pid, Bool_t checkCharge) const
   // (ie particle and anti-particle).
 
   const mithep::MCParticle *mother = Mother();
-  if (!mother) 
-    return kFALSE;
   
   if (checkCharge) {
-    while (mother->PdgId()==fPdgId)
+    while (mother && mother->PdgId()!=pid)
       mother = mother->Mother();
   } else {
     Int_t apid = pid>0?pid:-pid;
-    while (mother->AbsPdgId()==apid)
+    while (mother && mother->AbsPdgId()!=apid)
       mother = mother->Mother();
   }
 

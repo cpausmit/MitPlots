@@ -1,4 +1,4 @@
-// $Id: MCParticle.cc,v 1.2 2008/11/21 20:15:02 loizides Exp $
+// $Id: MCParticle.cc,v 1.3 2008/11/24 11:51:21 loizides Exp $
 
 #include "MitAna/DataTree/interface/MCParticle.h"
 
@@ -58,13 +58,13 @@ const MCParticle *MCParticle::FindMother(Int_t pid, Bool_t checkCharge) const
     return 0;
   
   if (checkCharge) {
-    while (mother->PdgId()==fPdgId)
+    while (mother && mother->PdgId()!=pid)
       mother = mother->Mother();
     return mother;
   }
 
   Int_t apid = pid>0?pid:-pid;
-  while (mother->AbsPdgId()==apid)
+  while (mother && mother->AbsPdgId()!=apid)
     mother = mother->Mother();
 
   return mother;
