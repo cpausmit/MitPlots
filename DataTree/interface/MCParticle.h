@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.6 2008/11/05 12:15:39 bendavid Exp $
+// $Id: MCParticle.h,v 1.7 2008/11/21 20:15:02 loizides Exp $
 //
 // MCParticle
 //
@@ -23,9 +23,9 @@ namespace mithep
     public:
       MCParticle() : fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
-        fPdgId(id), fStatus(s), 
-        fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
+        fPdgId(id), fStatus(s), fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
+//      MCParticle(const MCParticle *p) 
       ~MCParticle() {}
 
       Int_t               AbsPdgId()               const { return (fPdgId<0 ? -fPdgId:fPdgId); }
@@ -35,8 +35,12 @@ namespace mithep
       const MCParticle   *Daughter(UInt_t i)       const;
       const MCParticle   *DistinctMother()         const;
       using CompositeParticle::HasDaughter;
+      const MCParticle   *FindDaughter(Int_t pid, 
+                                       Bool_t checkCharge=kFALSE, const MCParticle *start=0) const;
+      const MCParticle   *FindMother(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasDaughter(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasMother()              const { return fMother.IsValid(); }
+      Bool_t              HasMother(Int_t pid, Bool_t checkCharge=kFALSE)   const;
       Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
       Bool_t              IsGenerated()            const { return fIsGenerated; }
       Bool_t              IsNeutrino()             const;
@@ -61,7 +65,9 @@ namespace mithep
         kUp=1, kDown=2, kStrange=3, kCharm=4, kBottom=5, kTop=6,
         kEl=11, kMu=13, kTau=15, 
         kElNu=12, kMuNu=14, kTauNu=16,
-        kGlu=21, kGamma=22, kZ=23, kW=24, kH=25
+        kGlu=21, kGamma=22, kZ=23, kW=24, kH=25,
+        kZp=32, kZpp=33, kWp=34, kH0=35, kA0=36, kHp=37,
+        kPi0=111, kEta=221
       };
       
     protected:
@@ -75,6 +81,31 @@ namespace mithep
 
     ClassDef(MCParticle,3) // Generated particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::MCParticle *mithep::MCParticle::Daughter(UInt_t i) const 
+{ 
+  // Return daughter corresponding to given index.
+
+  return static_cast<const MCParticle*>(fDaughters.At(i)); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::MCParticle *mithep::MCParticle::DistinctMother() const 
+{ 
+  // Return mother, walking up the tree until a particle with a different pdg from this one
+  // is found.
+
+  const mithep::MCParticle *mother = Mother();
+  
+  if (!mother) 
+    return 0;
+  
+  while (mother->PdgId()==fPdgId)
+    mother = mother->Mother();
+    
+  return mother;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -98,35 +129,28 @@ inline Bool_t mithep::MCParticle::HasDaughter(Int_t pid, Bool_t checkCharge) con
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::MCParticle *mithep::MCParticle::Daughter(UInt_t i) const 
-{ 
-  // Return daughter corresponding to given index.
-
-  return static_cast<const MCParticle*>(fDaughters.At(i)); 
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::MCParticle *mithep::MCParticle::DistinctMother() const 
-{ 
-  // Return mother, walking up the tree until a particle with a different pdg from this one
-  // is found.
+inline Bool_t mithep::MCParticle::HasMother(Int_t pid, Bool_t checkCharge) const
+{
+  // Return true if a particle with given pdg code is found amoung mothers.
+  // If checkCharge is false then just the type of particle is checked 
+  // (ie particle and anti-particle).
 
   const mithep::MCParticle *mother = Mother();
+  if (!mother) 
+    return kFALSE;
   
-  if (!mother) return 0;
-  
-  while (mother->PdgId()==fPdgId)
-    mother = mother->Mother();
-    
-  return mother;
-}
+  if (checkCharge) {
+    while (mother->PdgId()==fPdgId)
+      mother = mother->Mother();
+  } else {
+    Int_t apid = pid>0?pid:-pid;
+    while (mother->AbsPdgId()==apid)
+      mother = mother->Mother();
+  }
 
-//--------------------------------------------------------------------------------------------------
-inline const mithep::MCParticle *mithep::MCParticle::Mother() const 
-{ 
-  // Return mother.
-
-  return static_cast<const MCParticle*>(fMother.GetObject()); 
+  if (mother) 
+    return kTRUE;
+  return kFALSE;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,6 +178,14 @@ inline Bool_t mithep::MCParticle::IsNeutrino() const
     return kTRUE;
 
   return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::MCParticle *mithep::MCParticle::Mother() const 
+{ 
+  // Return mother.
+
+  return static_cast<const MCParticle*>(fMother.GetObject()); 
 }
 
 //--------------------------------------------------------------------------------------------------

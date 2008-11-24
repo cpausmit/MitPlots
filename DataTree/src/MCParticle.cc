@@ -1,4 +1,4 @@
-// $Id: MCParticle.cc,v 1.1 2008/07/25 11:32:45 bendavid Exp $
+// $Id: MCParticle.cc,v 1.2 2008/11/21 20:15:02 loizides Exp $
 
 #include "MitAna/DataTree/interface/MCParticle.h"
 
@@ -9,7 +9,7 @@ using namespace mithep;
 //--------------------------------------------------------------------------------------------------
 Double_t MCParticle::Charge() const
 {
-  // Get charge from pdg lookup/
+  // Get charge from pdg lookup.
 
   TParticlePDG* pdgEntry = PdgEntry();
   if (pdgEntry)
@@ -18,6 +18,56 @@ Double_t MCParticle::Charge() const
     Error("Charge", "Pdg code %i not found in table, returning charge=-99.0", fPdgId);
     return -99.0;
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+const MCParticle *MCParticle::FindDaughter(Int_t pid, 
+                                           Bool_t checkCharge, const MCParticle *start) const
+{
+  // Return daughter with given pid. If checkCharge is false then just the type of particle is 
+  // checked (ie particle and anti-particle). If start is not null, start searching from 
+  // this daughter.
+
+  UInt_t i = 0;
+  if (start) {
+    for (; i<NDaughters(); ++i) {
+      if (Daughter(i)==start) {
+        ++i;
+        break;
+      }
+    }
+    return 0;
+  }
+
+  for (UInt_t j=i; j<NDaughters(); ++j) {
+    if (Daughter(j)->Is(pid,checkCharge)) 
+      return Daughter(j);
+  }
+
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+const MCParticle *MCParticle::FindMother(Int_t pid, Bool_t checkCharge) const
+{
+  // Return mother with given pid. If checkCharge is false then just the type of particle is 
+  // checked (ie particle and anti-particle). 
+
+  const MCParticle *mother = Mother();
+  if (!mother) 
+    return 0;
+  
+  if (checkCharge) {
+    while (mother->PdgId()==fPdgId)
+      mother = mother->Mother();
+    return mother;
+  }
+
+  Int_t apid = pid>0?pid:-pid;
+  while (mother->AbsPdgId()==apid)
+    mother = mother->Mother();
+
+  return mother;
 }
 
 //--------------------------------------------------------------------------------------------------
