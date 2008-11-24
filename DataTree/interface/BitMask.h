@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.7 2008/10/16 16:12:06 bendavid Exp $
+// $Id: BitMask.h,v 1.8 2008/10/29 17:03:30 bendavid Exp $
 //
 // BitMask
 //
@@ -26,15 +26,16 @@ namespace mithep
       BitMask(Long64_t bits) { SetBits(bits); }
       virtual ~BitMask() {}
 
-      const char             *Bits()                const { return fBitMask; }
-      void                    Clear()                     { memset(fBitMask,0,N); }
-      void                    ClearBit(UInt_t n)          { SetBit(n,0); }
+      const char             *Bits()                  const { return fBitMask; }
+      void                    Clear()                       { memset(fBitMask,0,N); }
+      void                    ClearBit(UInt_t n)            { SetBit(n,0); }
       UInt_t                  NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
+      void                    Print(Option_t *opt="") const;
       void                    SetBit(UInt_t n, Bool_t b=1);
       void                    SetBits(const Char_t *bits) { memcpy(fBitMask,bits,N); }
       void                    SetBits(Long64_t bits);
-      UInt_t                  Size()                const { return N*8; }
-      Bool_t                  TestBit(UInt_t n)     const;
+      UInt_t                  Size()                  const { return N*8; }
+      Bool_t                  TestBit(UInt_t n)       const;
       BitMask                &operator&=(const BitMask<N> &rhs) 
         { for (UInt_t n=0; n<N; ++n) fBitMask[n]&=rhs.fBitMask[n]; return *this; }
       BitMask                &operator|=(const BitMask<N> &rhs)
@@ -43,14 +44,13 @@ namespace mithep
         { for (UInt_t n=0; n<N; ++n) fBitMask[n]^=rhs.fBitMask[n]; return *this; }        
       Bool_t                  operator!=(const BitMask<N> &other) const;
       Bool_t                  operator==(const BitMask<N> &other) const;    
-      BitMask                 operator& (const BitMask &other) const
+      BitMask                 operator& (const BitMask &other)    const
         { return BitMask<N>(*this) &= other; }
-      BitMask                 operator| (const BitMask &other) const
+      BitMask                 operator| (const BitMask &other)    const
         { return BitMask<N>(*this) |= other; }
-      BitMask                 operator^ (const BitMask &other) const
+      BitMask                 operator^ (const BitMask &other)    const
         { return BitMask<N>(*this) ^= other; }        
-      BitMask                 operator ~ () const;
-        
+      BitMask                 operator~ ()                        const;
         
     protected:
       Char_t                  fBitMask[N]; //the actual bitmask
@@ -86,6 +86,17 @@ UInt_t mithep::BitMask<N>::NBitsSet(UInt_t first, UInt_t last) const
     numBits += TestBit(i);
     
   return numBits;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<UInt_t N>
+void mithep::BitMask<N>::Print(Option_t *opt) const
+{
+  // Print bitmask.
+
+  for (UInt_t i=0;i<N;++i) 
+    printf("%X",i);
+  printf("\n");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,7 +152,7 @@ Bool_t mithep::BitMask<N>::operator!=(const mithep::BitMask<N> &other) const
 
 //--------------------------------------------------------------------------------------------------
 template<UInt_t N>
-mithep::BitMask<N> mithep::BitMask<N>::operator ~() const
+mithep::BitMask<N> mithep::BitMask<N>::operator~() const
 {
   // bitwise inversion operator
   BitMask<N> bits;
