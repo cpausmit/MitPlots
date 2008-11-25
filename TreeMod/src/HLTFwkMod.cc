@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.1 2008/06/12 08:47:57 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.1 2008/09/28 02:38:40 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -187,8 +187,8 @@ void HLTFwkMod::Process()
 
   fTrigObjs->Delete();
 
-  LoadBranch(fObjsName.Data());
-  LoadBranch(fRelsName.Data());
+  LoadBranch(fObjsName);
+  LoadBranch(fRelsName);
 
   for (UInt_t i=0; i<fRels->Entries(); ++i) {
     const TriggerObjectRel *rel = fRels->At(i);
@@ -212,8 +212,8 @@ void HLTFwkMod::SlaveBegin()
 {
   // Request branches for trigger objects and relation, and publish our tables.
 
-  ReqBranch(fObjsName.Data(), fObjs);
-  ReqBranch(fRelsName.Data(), fRels);
+  ReqBranch(fObjsName, fObjs);
+  ReqBranch(fRelsName, fRels);
 
   if (!PublishObj(fTriggers)) {
     SendError(kAbortAnalysis, "SlaveBegin", 

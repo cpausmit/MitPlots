@@ -1,11 +1,11 @@
-// $Id: runHLTExample.C,v 1.1 2008/09/28 02:43:15 loizides Exp $
+// $Id: runHLTExample.C,v 1.2 2008/10/23 17:03:06 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include "MitAna/TreeMod/interface/HLTMod.h"
-#include "MitAna/TreeMod/interface/HLTExampleMod.h"
+#include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------

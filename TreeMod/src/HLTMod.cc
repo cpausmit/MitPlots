@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.2 2008/10/23 17:02:16 loizides Exp $
+// $Id: HLTMod.cc,v 1.3 2008/10/23 18:25:27 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -119,7 +119,7 @@ void HLTMod::Process()
   // in a derived class, call it. Do not stop processing this event, if fAbort is kFALSE.
 
   ++fNEvents; 
-  LoadBranch(fBitsName.Data());
+  LoadBranch(fBitsName);
 
   // match trigger bits to trigger mask and obtain trigger objects
   fMyTrgObjs = new TriggerObjectOArr(0,fMyObjsNamePub);
@@ -163,7 +163,7 @@ void HLTMod::SlaveBegin()
 {
   // Request trigger bit branch and obtain trigger table and objects.
 
-  ReqBranch(fBitsName.Data(), fBits);
+  ReqBranch(fBitsName, fBits);
   
   fTriggers = GetHLTTable();
   if (!fTriggers) {

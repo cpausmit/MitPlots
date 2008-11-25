@@ -1,10 +1,10 @@
-// $Id: runFullExample.C,v 1.2 2008/06/09 11:47:03 paus Exp $
+// $Id: runFullExample.C,v 1.3 2008/10/27 20:01:29 bendavid Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include "MitAna/DataUtil/interface/Debug.h"
-#include "MitAna/TreeMod/interface/FullExampleMod.h"
 #include "MitAna/TreeMod/interface/Analysis.h"
+#include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
