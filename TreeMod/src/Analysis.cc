@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.17 2008/11/05 17:23:47 loizides Exp $
+// $Id: Analysis.cc,v 1.18 2008/11/19 15:30:26 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -95,10 +95,10 @@ Bool_t Analysis::AddFile(const char *pname)
   for(Int_t i=0; i<arr->GetEntries(); i++){
       
     TObjString *dummy = dynamic_cast<TObjString*>(arr->At(i));
-    if(!dummy) continue;
+    if (!dummy) continue;
 
     AddFile(dummy->GetName(),i);      
-    if(i==0) msg=dummy->GetName();
+    if (i==0) msg=dummy->GetName();
     else {
       Info("AddFile", "Add file %s as friend to %s", 
            dummy->GetName(), msg.Data());
@@ -139,7 +139,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     return;
   }
    
-  if(!IsValidName(pname)) return;
+  if (!IsValidName(pname)) return;
 
   l->Add(new TObjString(pname));
 
@@ -188,7 +188,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
     }
 
     ++fc;
-    if(nmax>0 && fc>=nmax) {
+    if (nmax>0 && fc>=nmax) {
       Info("AddFiles", "Maximal number (%d) of files added", nmax);
       break;
     }
@@ -381,7 +381,7 @@ Bool_t Analysis::InitProof()
 {
   // Initialize PROOF connection.
 
-  if(fProof && fProof->IsValid()) 
+  if (fProof && fProof->IsValid()) 
     return kTRUE;
 
   delete fProof;

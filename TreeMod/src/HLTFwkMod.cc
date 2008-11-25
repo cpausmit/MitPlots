@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.1 2008/09/28 02:38:40 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.2 2008/11/25 14:29:41 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -192,10 +192,10 @@ void HLTFwkMod::Process()
 
   for (UInt_t i=0; i<fRels->Entries(); ++i) {
     const TriggerObjectRel *rel = fRels->At(i);
-    if(!rel) continue;
+    if (!rel) continue;
 
     const TriggerObjectBase *ob = fObjs->At(rel->ObjInd());
-    if(!ob) continue;
+    if (!ob) continue;
 
     TriggerObject *obj = new TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
                                            ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
