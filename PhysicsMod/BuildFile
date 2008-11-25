@@ -1,0 +1,9 @@
+# -*- Makefile -*-
+# $Id: BuildFile,v 1.8 2008/10/15 17:27:00 loizides Exp $
+
+<use name=MitAna/TreeMod>
+<use root>
+#<flags CXXFLAGS="-g">
+<export>
+   <lib name=MitAnaPhysicsMod>
+</export>
