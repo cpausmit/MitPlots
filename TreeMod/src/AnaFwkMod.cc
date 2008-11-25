@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.1 2008/11/19 15:30:26 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.2 2008/11/19 17:16:10 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -12,8 +12,6 @@ ClassImp(mithep::AnaFwkMod)
 //--------------------------------------------------------------------------------------------------
 AnaFwkMod::AnaFwkMod(const char *name, const char *title) : 
   BaseMod(name,title),
-  fNEventsProcessed(0),
-  hDEvents(0),
   fSWtotal(0),
   fSWevent(0)
 {
@@ -26,25 +24,25 @@ void AnaFwkMod::Process()
   // Do event counting and print out timing information.
 
   // counting events
-  fNEventsProcessed++;
+  IncNEventsProcessed();
 
   // check if printout should be done
   Bool_t doPrint = 0;
 
   MDB(kAnalysis, 4) {
-    if (fNEventsProcessed % 1000  == 0) 
+    if (GetNEventsProcessed() % 1000  == 0) 
       doPrint = 1;
   } else {
     MDB(kAnalysis, 3) {
-      if (fNEventsProcessed % 10000  == 0) 
+      if (GetNEventsProcessed() % 10000  == 0) 
         doPrint = 1;
     } else {
       MDB(kAnalysis, 2) {
-        if (fNEventsProcessed % 50000  == 0) 
+        if (GetNEventsProcessed() % 50000  == 0) 
           doPrint = 1;
       } else {
         MDB(kAnalysis, 1) {
-          if (fNEventsProcessed % 250000 == 0) 
+          if (GetNEventsProcessed() % 250000 == 0) 
             doPrint = 1;
         } 
       }
@@ -54,8 +52,8 @@ void AnaFwkMod::Process()
   if (doPrint) {
     fSWevent->Stop();
     Info("Process", "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
-         fNEventsProcessed, fSWevent->RealTime(), fSWevent->CpuTime(),
-         fSWevent->RealTime()/fNEventsProcessed, fSWevent->CpuTime()/fNEventsProcessed);
+         GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
+         fSWevent->RealTime()/GetNEventsProcessed(), fSWevent->CpuTime()/GetNEventsProcessed());
     fSWevent->Start();
   }  
 }
@@ -64,9 +62,6 @@ void AnaFwkMod::Process()
 void AnaFwkMod::SlaveBegin()
 {
   // Book our histogram and start the stop watches.
-
-  hDEvents = new TH1D("hDEvents","Total number of processed events",1,-0.5,0.5);
-  AddOutput(hDEvents);
 
   fSWtotal = new TStopwatch;
   fSWevent = new TStopwatch;
@@ -77,16 +72,15 @@ void AnaFwkMod::SlaveTerminate()
 {
   // Fill event histogram and printout timing information.
 
-  hDEvents->Fill(0.0,fNEventsProcessed);
-  hDEvents->SetEntries(fNEventsProcessed);
+  SaveNEventsProcessed();
 
   fSWtotal->Stop();
   fSWevent->Stop();
 
   MDB(kAnalysis, 1)
     Info("SlaveTerminate", "Events %d -> %.2gs real, %.2gs cpu (%.2gs real, %.2gs cpu per event)", 
-         fNEventsProcessed, fSWtotal->RealTime(), fSWtotal->CpuTime(),
-         fSWtotal->RealTime()/fNEventsProcessed, fSWtotal->CpuTime()/fNEventsProcessed);
+         GetNEventsProcessed(), fSWtotal->RealTime(), fSWtotal->CpuTime(),
+         fSWtotal->RealTime()/GetNEventsProcessed(), fSWtotal->CpuTime()/GetNEventsProcessed());
 
   delete fSWtotal;
   delete fSWevent;

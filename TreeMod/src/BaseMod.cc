@@ -1,7 +1,8 @@
-// $Id: BaseMod.cc,v 1.1 2008/06/12 08:47:57 loizides Exp $
+// $Id: BaseMod.cc,v 1.2 2008/09/28 02:34:14 loizides Exp $
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
+#include <TH1D.h>
 
 using namespace mithep;
 
@@ -52,4 +53,15 @@ Bool_t BaseMod::HasHLTInfo(const char *hltfwk) const
   if (mod)
     return kTRUE;
   return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+void BaseMod::SaveNEventsProcessed(const char *name) 
+{
+  // Save the number of processed events in a one-bin histogram. 
+
+  TH1D *hDEvents = new TH1D(name,"Total number of processed events",1,-0.5,0.5);
+  hDEvents->Fill(0.0,fNEventsProcessed);
+  hDEvents->SetEntries(fNEventsProcessed);
+  AddOutput(hDEvents);
 }

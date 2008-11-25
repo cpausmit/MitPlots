@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.7 2008/09/10 03:33:28 loizides Exp $
+// $Id: BaseMod.h,v 1.8 2008/09/28 02:34:14 loizides Exp $
 //
 // BaseMod
 //
@@ -26,18 +26,25 @@ namespace mithep
   class BaseMod : public TAModule {
     public:
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module") 
-        : TAModule(name,title) {}
+        : TAModule(name,title), fNEventsProcessed(0) {}
       ~BaseMod() {}
 
     protected:
-      const EventHeader          *GetEventHeader()    const { return GetSel()->GetEventHeader(); }
+      void                        IncNEventsProcessed()       { ++fNEventsProcessed; }
+      Int_t                       GetNEventsProcessed() const { return fNEventsProcessed; }
+
+      const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
       const TriggerObjectCol     *GetHLTObjects(const char *name)                    const;
       const TriggerObjectsTable  *GetHLTObjectsTable(const char *hltfwk="HLTFwkMod") const;
       const TriggerTable         *GetHLTTable(const char *hltfwk="HLTFwkMod")        const;
-      const RunInfo              *GetRunInfo()        const { return GetSel()->GetRunInfo(); }
-      const Selector             *GetSel()            const;
+      const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo(); }
+      const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo(const char *hltfwk="HLTFwkMod")         const;
-      Bool_t                      ValidRunInfo()      const { return GetSel()->ValidRunInfo(); } 
+      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo(); } 
+      void                        SaveNEventsProcessed(const char *name="hDEvents");
+
+    private:
+      Int_t                       fNEventsProcessed; 	//number of events
 
     ClassDef(BaseMod,1) // Base TAM module
   };

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GeneratorMod.h,v 1.3 2008/11/11 21:22:58 ceballos Exp $
+// $Id: AnaFwkMod.h,v 1.1 2008/11/19 15:30:26 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -28,8 +28,6 @@ namespace mithep
       ~AnaFwkMod() {}
 
     protected:
-      Int_t          fNEventsProcessed; 	//number of events
-      TH1D          *hDEvents;                  //!one-bin histo for event counting
       TStopwatch    *fSWtotal;                  //!stop watch for overall timing
       TStopwatch    *fSWevent;                  //!stop watch per n events
 
