@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.18 2008/11/19 15:30:26 loizides Exp $
+// $Id: Analysis.cc,v 1.19 2008/11/25 15:12:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -495,6 +495,8 @@ void Analysis::Terminate()
       fOutput = fSelector->GetModOutput();
     }
 
+    
+
     if (fOutput && !fAnaOutput.IsNull()) {
       TDirectory::TContext context(0); // automatically restore gDirectory
 
@@ -506,10 +508,9 @@ void Analysis::Terminate()
           Info("Terminate", "Saving output to %s!", fAnaOutput.Data());
 
         if (fHierarchy) 
-          fOutput->Write(fOutput->GetName(),TObject::kSingleKey);       
+          fOutput->Write(0,-99);
         else 
           fOutput->Write();
-               
       }
     }
     // set state to terminate
