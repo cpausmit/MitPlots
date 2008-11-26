@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMOutput.cxx,v 1.2 2008/09/27 06:03:36 loizides Exp $
 //
 
 #include "TAMOutput.h"
@@ -35,7 +35,9 @@
 #ifndef TAM_TAModule
 #include "TAModule.h"
 #endif
-
+#ifndef TAM_TDirectory
+#include "TDirectory.h"
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -761,16 +763,27 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
    // write all the output objects, flattening the module hierarchy.
    // If the 'TObject::kSingleKey' option is specified, the TAMOutput
    // objects themselves will be written, thus preserving the module hierarchy.
-   
-   if ( (option & TObject::kSingleKey) ) {
+   // If option==-99, the module hierarchy will be preserved, but TDirectories
+   // will be used instead of TAMOutput objects.
+
+   if (option == -99) {
+      Int_t nbytes = fOutput.Write(name, 0, bsize);
+      TIter nextMod(MakeIterator());
+      TObject* obj=0;
+      while ( (obj = nextMod()) ) {
+         TDirectory *newdir = gDirectory->mkdir(obj->GetName());
+         TDirectory::TContext context(newdir);
+         nbytes += obj->Write(name, option, bsize);
+      }
+      return nbytes;
+   } else if ( (option & TObject::kSingleKey) ) {
       // here, the TList write will work just fine since it will actually
       // call the streamer on the module output objects
       // (through TObject::Write)
       return TList::Write(name, option, bsize);
    } else {
       // flatten the module hierarchy and dump all output objects to the file
-      Int_t nbytes = 0;
-      fOutput.Write(name, option, bsize);
+      Int_t nbytes = fOutput.Write(name, option, bsize);
       TIter nextMod(MakeIterator());
       TObject* obj=0;
       while ( (obj = nextMod()) ) {
@@ -779,4 +792,3 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
       return nbytes;
    }
 }
- 
