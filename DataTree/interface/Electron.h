@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.18 2008/09/12 12:44:57 bendavid Exp $
+// $Id: Electron.h,v 1.19 2008/11/12 18:56:24 peveraer Exp $
 //
 // Electron
 //
@@ -60,8 +60,7 @@ namespace mithep
       Double_t    CaloTowerIsolation()             const { return fCaloTowerIsolation;      }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
       Double_t    EcalJurassicIsolation()          const { return fEcalJurassicIsolation;   }
-      Double_t    HcalJurassicIsolation()          const { return fHcalJurassicIsolation;   }
-
+      Double_t    HcalIsolation()                  const { return fHcalJurassicIsolation;   }
       Double_t    PassLooseID()                    const { return fPassLooseID;             }
       Double_t    PassTightID()                    const { return fPassTightID;             }
       Double_t    IDLikelihood()                   const { return fIDLikelihood;            }
@@ -92,7 +91,7 @@ namespace mithep
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
       void        SetEcalJurassicIsolation(Double_t iso )       { fEcalJurassicIsolation = iso;    }
-      void        SetHcalJurassicIsolation(Double_t iso )       { fHcalJurassicIsolation = iso;    }
+      void        SetHcalIsolation(Double_t iso )               { fHcalJurassicIsolation = iso;    }
       void        SetPassLooseID(Double_t passLooseID)          { fPassLooseID = passLooseID;      }
       void        SetPassTightID(Double_t passTightID)          { fPassTightID = passTightID;      }
       void        SetIDLikelihood(Double_t likelihood)          { fIDLikelihood = likelihood;      }
