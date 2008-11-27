@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.42 2008/10/31 18:56:42 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.43 2008/11/12 18:18:28 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -189,6 +189,7 @@
 #pragma link C++ typedef mithep::ChargedParticleOArr;
 
 #pragma link C++ class mithep::Muon+;
+#pragma link C++ enum mithep::Muon::EClassType;
 #pragma link C++ class mithep::Collection<mithep::Muon>+;
 #pragma link C++ class mithep::Array<mithep::Muon>+;
 #pragma link C++ class mithep::ObjArray<mithep::Muon>+;

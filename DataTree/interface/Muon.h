@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.16 2008/09/17 04:16:49 loizides Exp $
+// $Id: Muon.h,v 1.17 2008/11/17 18:55:42 bendavid Exp $
 //
 // Muon
 //
-// Details to be worked out...
+// Details to be worked out... TODO by Phil
 //
 // Authors: J.Bendavid, C.Loizides, C.Paus, P.Harris
 //--------------------------------------------------------------------------------------------------
@@ -20,6 +20,14 @@ namespace mithep {
     public:
       Muon() {}
       ~Muon() {}
+
+      enum EClassType {
+        kNone,              //no track assigned
+        kGlobal,            //"Global"
+        kTrackerOnly,       //"TrackerOnly"
+        kSta,               //"Standalone"
+        kAny                //any "best" of the above
+      };
       
       const Track   *BestTrk()             const;
       const Track   *GlobalTrk()           const;
@@ -54,7 +62,17 @@ namespace mithep {
       Double_t       GetPullY(Int_t iStation)          const;
       Double_t       GetTrackDist(Int_t iStation)      const;
       Double_t       GetTrackDistErr(Int_t iStation)   const;
-      Int_t          GetNSegments(Int_t iStation) const;
+      Int_t          GetNSegments(Int_t iStation)      const;
+      Bool_t         Has(EClassType type)              const;
+      EClassType     Is()                              const;
+      Int_t          LastHit()                         const;
+      Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
+      Int_t          LastStation(Int_t iMax=8)                                 const;
+      Bool_t         PromptTight(EClassType type)                              const;
+      Bool_t         TMLastStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
+                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
+      Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
+                                  Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
       void	     SetGlobalTrk(Track* t)                { fGlobalTrackRef = t;            }
       void	     SetStandaloneTrk(Track* t)            { fStandaloneTrackRef = t;        }
       void	     SetTrackerTrk(Track* t)               { fTrackerTrackRef = t;           }
@@ -102,21 +120,21 @@ namespace mithep {
       Double32_t     fIsoR05HoEt;          //isolation size R=0.5 ho  trans energy
       Int_t          fIsoR05NTracks;       //isolation size R=0.5 number of tracks
       Int_t          fIsoR05NJets;         //isolation size R=0.5 number of jets      
-      Double32_t     fEmEnergy;            //?
-      Double32_t     fHadEnergy;           //?
-      Double32_t     fHoEnergy;            //?
+      Double32_t     fEmEnergy;            //energy deposit in ecal
+      Double32_t     fHadEnergy;           //energy deposit in hcal
+      Double32_t     fHoEnergy;            //energy deposit in outer hcal
       Double32_t     fEmS9Energy;          //?
       Double32_t     fHadS9Energy;         //?
       Double32_t     fHoS9Energy;          //?
       Int_t          fNTraversedChambers;  //number of tranversed chambers
-      BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs segment components
+      BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
       Double32_t     fDX[8];               //uncertainty in x in given muon chamber
       Double32_t     fDY[8];               //uncertainty in y in given muon chamber
       Double32_t     fPullX[8];            //pull in x in given muon chamber
       Double32_t     fPullY[8];            //pull in y in given muon chamber
-      Double32_t     fTrackDist[8];        //distance to track in tranverse plane in given muon chamber
-      Double32_t     fTrackDistErr[8];     //error of distance to track in transverse plane in given muon chamber
-      Int_t          fNSegments[8];        //number of segments in chamber in given muon chamber
+      Double32_t     fTrackDist[8];        //dist. to track in trans. plane in given muon chamber
+      Double32_t     fTrackDistErr[8];     //error of dist. to track in trans. plane in chamber
+      Int_t          fNSegments[8];        //number of segments in given muon chamber
 
     ClassDef(Muon, 1) // Muon class
   };
@@ -225,6 +243,191 @@ inline Int_t mithep::Muon::GetNSegments(Int_t iStation) const
 }
 
 //--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::Muon::Has(EClassType type) const
+{
+  // Return true if the muon has a track of given class.
+
+  switch (type) {
+    case kAny:
+      if (BestTrk()) 
+        return kTRUE;
+      break;
+    case kGlobal:
+      if (GlobalTrk()) 
+        return kTRUE;
+      break;
+    case kTrackerOnly:
+      if (TrackerTrk()) 
+        return kTRUE;
+      break;
+    case kSta:
+      if (StandaloneTrk()) 
+        return kTRUE;
+      break;
+    case kNone:
+      if (!BestTrk()) 
+        return kTRUE;
+      break;
+    default:
+      break;
+  }
+
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline mithep::Muon::EClassType mithep::Muon::Is() const
+{
+  // Return the "best" classification of the muon according to the assigned tracks.
+
+  if (GlobalTrk())
+    return kGlobal;
+  else if (TrackerTrk())
+    return kTrackerOnly;
+  else if (StandaloneTrk())
+    return kSta;
+
+  return kNone;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::Muon::LastHit() const
+{
+  // Return the last hit, or -1 if no one found.
+
+  Int_t lId = -1;
+  for (Int_t i0 = 0; i0 < 8; ++i0) {
+    if (GetDX(i0) < 99999 || GetDY(i0) < 99999) 
+      lId = i0;
+  }
+  return lId;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::Muon::LastStation(Int_t iMax) const
+{
+  // Return the last station, or -1 of no one found.
+
+  Int_t lId = -1; 
+  if(TMath::Abs(iMax) > 8) 
+    iMax = 8;
+  for (Int_t i0 = 0; i0 < iMax; ++i0) {
+    if (StationBit(i0) && ((lId % 4) < (i0 % 4)))
+      lId = i0;
+  }
+  return lId;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::Muon::LastStation(Double_t iMaxD, Double_t iMaxP) const
+{
+  // Return the last station for given deviation and relative error, or -1 if no one found.
+
+  Int_t lId = -1;
+  for (Int_t i0 = 0; i0 < 8; ++i0) {
+    if ((lId % 4) > (i0 % 4)) 
+      continue;
+    if (GetTrackDist(i0) < iMaxD &&
+        GetTrackDist(i0)/GetTrackDistErr(i0) < iMaxP) 
+      lId = i0;
+  }
+  return lId;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::Muon::PromptTight(EClassType type) const
+{
+  // Return whether track for given class matches tight quality criteria.
+
+  const mithep::Track *lTrack = 0;
+  switch (type) {
+    case kAny:
+      lTrack = BestTrk();
+      break;
+    case kGlobal:
+      lTrack = GlobalTrk();
+      break;
+    case kTrackerOnly:
+      lTrack = TrackerTrk();
+      break;
+    case kSta:
+      lTrack = StandaloneTrk();
+      break;
+    default:
+      break;
+  }
+
+  if (lTrack == 0) 
+    return kFALSE;
+  if (lTrack->NHits() < 11)        
+    return kFALSE;
+  if (lTrack->Chi2()/lTrack->Ndof() > 10.)                         
+    return kFALSE;
+  if (lTrack->D0() > 0.2)                                          
+    return kFALSE;
+  if ((LastHit() % 4) == 0)                                   
+    return kFALSE;
+  return kTRUE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::Muon::TMOneStation(Double_t iDYMin, Double_t iPYMin,
+                                         Double_t iDXMin, Double_t iPXMin, Int_t iN) const
+{
+  // Check if the muon is matched to at least one station (chamber). 
+
+  if (NSegments() < iN)
+    return kFALSE; //second last one
+
+  Bool_t pGoodX  = kFALSE; 
+  for (Int_t i0 = 0; i0 < 8; ++i0) {
+    if ((TMath::Abs(GetDX(i0))    < iDXMin  ||
+         TMath::Abs(GetPullX(i0)) < iPXMin)) 
+      pGoodX = kTRUE; 
+    if (pGoodX &&
+        (TMath::Abs(GetDY(i0))    < iDYMin  || 
+         TMath::Abs(GetPullY(i0)) < iPYMin))  
+      return kTRUE;
+  Bool_t pBadY   = kFALSE;
+    if (TMath::Abs(GetDY(i0)) < 999999) 
+      pBadY = kTRUE;
+    if (i0 == 3 && pGoodX && !pBadY)             
+      return kTRUE;
+  }
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::Muon::TMLastStation(Double_t iDYMin, Double_t iPYMin,
+                                          Double_t iDXMin, Double_t iPXMin, Int_t iN) const
+{
+  // Check if the muon is matched to its last station (chamber). 
+  
+  if (NSegments() < iN) 
+    return kFALSE; //second last one
+
+  Int_t lLast = LastStation(-3.,-3.); // last required station
+  if (lLast < 0)                                   
+    return kFALSE;
+  if (GetDX(lLast) > 9999.)                
+    return kFALSE;
+  lLast = LastStation(); //no requirements
+  if (lLast < 0)                                   
+    return kFALSE;
+  if (!(TMath::Abs(GetDX(lLast))    < iDXMin  ||
+        TMath::Abs(GetPullX(lLast)) < iPXMin))  
+    return kFALSE;
+  if (lLast == 3) 
+    lLast = LastStation(3);
+  if (lLast < 0)                                   
+    return kFALSE;
+  if (!(TMath::Abs(GetDY(lLast))    < iDYMin ||
+        TMath::Abs(GetPullY(lLast)) < iPYMin))  
+    return kFALSE;
+  return kTRUE;
+}
+
+//--------------------------------------------------------------------------------------------------
 inline void mithep::Muon::SetDX(Int_t iStation, Double_t iDX) 
 {
   // Return uncertainty in x in given chamber.
@@ -287,3 +490,8 @@ inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t NSegments)
   fNSegments[iStation] = NSegments;
 }
 #endif
+
+
+
+
+
