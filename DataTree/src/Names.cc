@@ -1,8 +1,10 @@
-// $Id: Names.cc,v 1.19 2008/11/05 14:05:18 ceballos Exp $
+// $Id: Names.cc,v 1.20 2008/11/23 13:35:28 sixie Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
 using namespace mithep;
+
+//--------------------------------------------------------------------------------------------------
 
 const char *Names::gkEvtTreeName            = "Events";
 const char *Names::gkEvtHeaderBrn           = "EventHeader";
@@ -39,24 +41,3 @@ const char *Names::gkHltLabelBrn            = "HLTLabels";
 
 const char *Names::gkL1TreeName             = "L1";
 const char *Names::gkL1TableBrn             = "L1TriggerTable";
-
-const char *Names::gkGoodElectronsName      = "GoodElectrons";
-const char *Names::gkGoodMuonsName          = "GoodMuons";
-const char *Names::gkGoodPhotonsName        = "GoodPhotons";
-const char *Names::gkGoodTausName           = "GoodTaus";
-const char *Names::gkGoodJetsName           = "GoodIC5Jets";
-const char *Names::gkCleanElectronsName     = "CleanElectrons";
-const char *Names::gkCleanMuonsName         = "CleanMuons";
-const char *Names::gkCleanPhotonsName       = "CleanPhotons";
-const char *Names::gkCleanTausName          = "CleanTaus";
-const char *Names::gkCleanJetsName          = "CleanIC5Jets";
-const char *Names::gkCleanFwdJetsName       = "CleanFwdIC5Jets";
-const char *Names::gkCleanNoFwdJetsName     = "CleanNoFwdIC5Jets";
-const char *Names::gkMCLeptonsName          = "MCLeptons";
-const char *Names::gkMCAllLeptonsName       = "MCAllLeptons";
-const char *Names::gkMCTausName             = "MCTaus";
-const char *Names::gkMCNeutrinosName        = "MCNeutrinos";
-const char *Names::gkMCQuarksName           = "MCQuarks";
-const char *Names::gkMCqqHsName             = "MCqqHs";
-const char *Names::gkMCBosonsName           = "MCBosons";
- 
