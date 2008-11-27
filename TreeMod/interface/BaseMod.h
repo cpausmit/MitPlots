@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.8 2008/09/28 02:34:14 loizides Exp $
+// $Id: BaseMod.h,v 1.9 2008/11/25 15:57:49 loizides Exp $
 //
 // BaseMod
 //
@@ -31,12 +31,13 @@ namespace mithep
 
     protected:
       void                        IncNEventsProcessed()       { ++fNEventsProcessed; }
-      Int_t                       GetNEventsProcessed() const { return fNEventsProcessed; }
-
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
       const TriggerObjectCol     *GetHLTObjects(const char *name)                    const;
       const TriggerObjectsTable  *GetHLTObjectsTable(const char *hltfwk="HLTFwkMod") const;
       const TriggerTable         *GetHLTTable(const char *hltfwk="HLTFwkMod")        const;
+      Int_t                       GetNEventsProcessed() const { return fNEventsProcessed; }
+      template <class T> T       *GetObjThisEvt(const char *name);
+      template <class T> T       *GetPublicObj(const char *name);
       const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo(); }
       const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo(const char *hltfwk="HLTFwkMod")         const;
@@ -56,6 +57,36 @@ inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char
   // Get pointer to HLT TriggerObjects collection with given name for the current event.
 
   return (dynamic_cast<const TriggerObjectCol *>(FindObjThisEvt(name)));
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+inline T *mithep::BaseMod::GetObjThisEvt(const char *name)
+{
+  // Get published object for the current event.
+
+  T *ret = dynamic_cast<T*>(FindObjThisEvt(name));
+  if (!ret) {
+    SendError(kWarning, "GetObjThisEvent", 
+              "Could not obtain object with name %s and type %s for current event!",
+              name, T::Class_Name());
+  }
+  return ret;
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+inline T *mithep::BaseMod::GetPublicObj(const char *name)
+{
+  // Get public object.
+
+  T *ret = dynamic_cast<T*>(FindPublicObj(name));
+  if (!ret) {
+    SendError(kWarning, "GetPublicObject", 
+              "Could not obtain public object with name %s and type %s!",
+              name, T::Class_Name());
+  }
+  return ret;
 }
 
 //--------------------------------------------------------------------------------------------------
