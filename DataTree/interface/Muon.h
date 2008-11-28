@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.17 2008/11/17 18:55:42 bendavid Exp $
+// $Id: Muon.h,v 1.18 2008/11/27 16:15:06 loizides Exp $
 //
 // Muon
 //
@@ -380,6 +380,7 @@ inline Bool_t mithep::Muon::TMOneStation(Double_t iDYMin, Double_t iPYMin,
     return kFALSE; //second last one
 
   Bool_t pGoodX  = kFALSE; 
+  Bool_t pBadY   = kFALSE;
   for (Int_t i0 = 0; i0 < 8; ++i0) {
     if ((TMath::Abs(GetDX(i0))    < iDXMin  ||
          TMath::Abs(GetPullX(i0)) < iPXMin)) 
@@ -388,7 +389,6 @@ inline Bool_t mithep::Muon::TMOneStation(Double_t iDYMin, Double_t iPYMin,
         (TMath::Abs(GetDY(i0))    < iDYMin  || 
          TMath::Abs(GetPullY(i0)) < iPYMin))  
       return kTRUE;
-  Bool_t pBadY   = kFALSE;
     if (TMath::Abs(GetDY(i0)) < 999999) 
       pBadY = kTRUE;
     if (i0 == 3 && pGoodX && !pBadY)             
