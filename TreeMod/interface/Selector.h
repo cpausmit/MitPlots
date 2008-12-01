@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.5 2008/09/10 03:33:28 loizides Exp $
+// $Id: Selector.h,v 1.6 2008/09/28 02:37:30 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -24,6 +24,7 @@ namespace mithep {
       Selector();
       ~Selector();
    
+      const THashTable    &GetBranchTable()         const { return fBranchTable; }
       const EventHeader   *GetEventHeader()         const { return fEventHeader; }
       const RunInfo       *GetRunInfo()             const { return fRunInfo; }
       Bool_t               ValidRunInfo()           const;
