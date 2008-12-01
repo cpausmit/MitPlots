@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.12 2008/10/06 17:01:20 loizides Exp $
+// $Id: Analysis.h,v 1.13 2008/11/12 23:31:29 paus Exp $
 //
 // Analysis
 //
@@ -58,7 +58,7 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate; }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNevents(Long64_t n)       { fDoNEvents  = n;     }
+      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents  = n;     }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level; }
       void                      SetConfigName(const char* name)     { fConfig     = name;  }
       void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;     }
