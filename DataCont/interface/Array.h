@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.3 2008/10/23 18:22:27 loizides Exp $
+// $Id: Array.h,v 1.4 2008/11/20 17:49:15 loizides Exp $
 //
 // Array
 //
@@ -34,6 +34,7 @@ namespace mithep
       UInt_t               GetEntries()                         const { return fNumEntries; }
       const char          *GetName()                            const { return fArray.GetName(); }
       UInt_t               GetSize()                            const { return fArray.GetSize(); }
+      Bool_t               HasObject(const ArrayElement *obj)   const;
       Bool_t               IsOwner()                            const { return kTRUE; }
       TIterator           *Iterator(Bool_t dir = kIterForward)  const;
       Bool_t               MustClear()                          const { return this->TestBit(14); }
@@ -135,6 +136,15 @@ inline TIterator *mithep::Array<ArrayElement>::Iterator(Bool_t dir) const
   // Return ROOT collection iterator.
 
   return fArray.MakeIterator(dir); 
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline Bool_t mithep::Array<ArrayElement>::HasObject(const ArrayElement *obj) const
+{
+  // Check whether object is in array.
+
+  return fArray.FindObject(obj);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: Collection.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
 //
 // Collection
 //
@@ -26,6 +26,7 @@ namespace mithep
       virtual const ArrayElement  *At(UInt_t idx)                 const = 0;
       virtual UInt_t               GetEntries()                   const = 0;
       virtual UInt_t               GetSize()                      const = 0;
+      virtual Bool_t               HasObject(const ArrayElement *obj) const = 0;
       virtual Bool_t               IsOwner()                      const = 0;
       void                         Print(Option_t *opt="")        const;
       virtual void                 Reset()                              = 0;

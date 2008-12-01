@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.3 2008/10/31 18:56:14 bendavid Exp $
+// $Id: StackArray.h,v 1.4 2008/11/20 17:49:15 loizides Exp $
 //
 // StackArray
 //
@@ -38,6 +38,7 @@ namespace mithep
       UInt_t                    Entries()                         const { return GetEntries(); }
       UInt_t                    GetEntries()                      const { return fSize; }
       UInt_t                    GetSize()                         const { return N; }
+      Bool_t                    HasObject(const ArrayElement *obj) const;
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fSize = 0; }
       void                      Trim()                                  {}
@@ -145,6 +146,30 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx) c
   TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
                  idx, fSize, this->GetName(), typeid(tmp).name()); 
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline Bool_t mithep::StackArray<ArrayElement, N>::HasObject(const ArrayElement *obj) const
+{
+  // Check whether object is in array.
+
+  // Check whether object is in array.  If ArrayElement inherits from TObject, use the
+  // isEqual function for the comparison, otherwise use the default pointer comparison.
+
+  const TObject *tobj = 0;
+  if (TClass::GetClass(typeid(ArrayElement))->IsTObject())
+    tobj = reinterpret_cast<const TObject*>(obj);
+
+  for (UInt_t i=0; i<fSize; ++i) {
+    if (tobj)
+      if ( reinterpret_cast<const TObject*>(&fArray[i])->IsEqual(tobj) )
+        return true;
+    else if ( &fArray[i] == obj )
+      return true;
+  }
+  
+  return false;
 }
 
 //-------------------------------------------------------------------------------------------------

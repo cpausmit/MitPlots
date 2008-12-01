@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: Vector.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
 //
 // Vector
 //
@@ -16,6 +16,8 @@
  
 #include <vector>
 #include <Rtypes.h>
+#include <TClass.h>
+#include <TObject.h>
 #include "MitAna/DataCont/interface/Collection.h"
 
 namespace mithep 
@@ -36,6 +38,7 @@ namespace mithep
       UInt_t                           Entries()                     const { return fV.size(); }
       UInt_t                           GetEntries()                  const { return fV.size(); }
       UInt_t                           GetSize()                     const { return fV.capacity(); }
+      Bool_t                           HasObject(const ArrayElement *obj) const;// { return false; }
       Bool_t                           IsOwner()                     const { return kTRUE; }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
@@ -67,6 +70,29 @@ inline void mithep::Vector<ArrayElement>::Clear(Option_t */*opt*/)
   using namespace std;
   fV.~vector<ArrayElement>();
 }
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline Bool_t mithep::Vector<ArrayElement>::HasObject(const ArrayElement *obj) const
+{
+  // Check whether object is in array.  If ArrayElement inherits from TObject, use the
+  // isEqual function for the comparison, otherwise use the default pointer comparison.
+
+  const TObject *tobj = 0;
+  if (TClass::GetClass(typeid(ArrayElement))->IsTObject())
+    tobj = reinterpret_cast<const TObject*>(obj);
+
+  for (UInt_t i=0; i<fV.size(); ++i) {
+    if (tobj)
+      if ( reinterpret_cast<const TObject*>(&fV.at(i))->IsEqual(tobj) )
+        return true;
+    else if ( &fV.at(i) == obj )
+      return true;
+  }
+  
+  return false;
+}
+
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>

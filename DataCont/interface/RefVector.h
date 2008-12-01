@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefVector.h,v 1.3 2008/10/23 18:22:27 loizides Exp $
+// $Id: RefVector.h,v 1.4 2008/11/20 17:49:15 loizides Exp $
 //
 // RefArray
 //
@@ -30,6 +30,7 @@ namespace mithep
       void                      Clear(Option_t */*opt*/="")             { fV.~vector<TRef>(); }
       UInt_t                    Entries()                         const { return fV.size(); }
       UInt_t                    GetEntries()                      const { return fV.size(); }
+      Bool_t                    HasObject(const ArrayElement *obj) const { return false; }
       Bool_t                    IsOwner()                         const { return kTRUE; }
       void                      Reset()                                 { fV.clear(); }
       void                      Trim();

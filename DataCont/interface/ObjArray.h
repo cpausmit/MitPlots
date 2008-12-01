@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.5 2008/11/20 17:49:15 loizides Exp $
+// $Id: ObjArray.h,v 1.6 2008/11/21 20:13:35 loizides Exp $
 //
 // ObjArray
 //
@@ -37,9 +37,10 @@ namespace mithep
       UInt_t               GetEntries()                          const { return fNumEntries; }
       const char*          GetName()                             const { return fArray.GetName(); }
       UInt_t               GetSize()                             const { return fArray.GetSize(); }
+      Bool_t               HasObject(const ArrayElement *obj)    const;
       const ArrayElement  *Find(const char *name)                const;
       ArrayElement        *Find(const char *name);
-      void                 Print(Option_t *opt="")              const;
+      void                 Print(Option_t *opt="")               const;
       void                 Remove(UInt_t idx);
       void                 Remove(const char *name);
       void                 Remove(ArrayElement *ae);
@@ -181,6 +182,15 @@ inline ArrayElement *mithep::ObjArray<ArrayElement>::Find(const char *name)
   // Find object by name.
 
   return static_cast<ArrayElement*>(fArray.FindObject(name));
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline Bool_t mithep::ObjArray<ArrayElement>::HasObject(const ArrayElement *obj) const
+{
+  // Check whether object is in array.
+
+  return fArray.FindObject(obj);
 }
 
 //--------------------------------------------------------------------------------------------------
