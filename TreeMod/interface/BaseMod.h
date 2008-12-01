@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.9 2008/11/25 15:57:49 loizides Exp $
+// $Id: BaseMod.h,v 1.10 2008/11/27 22:32:24 loizides Exp $
 //
 // BaseMod
 //
@@ -79,6 +79,7 @@ template <class T>
 inline T *mithep::BaseMod::GetPublicObj(const char *name)
 {
   // Get public object.
+
 
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
   if (!ret) {
