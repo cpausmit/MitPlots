@@ -1,4 +1,4 @@
-// $Id: Particle.cc,v 1.2 2008/07/15 11:31:08 loizides Exp $
+// $Id: Particle.cc,v 1.3 2008/11/21 20:15:02 loizides Exp $
 
 #include "MitAna/DataTree/interface/Particle.h"
 
@@ -7,7 +7,7 @@ ClassImp(mithep::Particle)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-void Particle::Print(Option_t *opt) const
+void Particle::Print(Option_t */*opt*/) const
 {
   // Print particle kinematics.
 

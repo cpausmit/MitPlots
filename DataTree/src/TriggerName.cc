@@ -1,4 +1,4 @@
-// $Id: TriggerName.cc,v 1.1 2008/09/17 04:07:28 loizides Exp $
+// $Id: TriggerName.cc,v 1.2 2008/09/27 06:06:36 loizides Exp $
 
 #include "MitAna/DataTree/interface/TriggerName.h"
 
@@ -20,9 +20,9 @@ void TriggerTable::Print(Option_t *opt) const
   // Print trigger table content (not ordered!)
 
   TIterator *iter = MakeIterator();
-  const TriggerName *tn = dynamic_cast<const TriggerName *>(iter->Next());
+  const TriggerName *tn = dynamic_cast<const TriggerName*>(iter->Next());
   while (tn) {
     tn->Print();
-    tn = dynamic_cast<const TriggerName *>(iter->Next());
+    tn = dynamic_cast<const TriggerName*>(iter->Next());
   }
 }
