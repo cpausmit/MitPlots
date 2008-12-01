@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.4 2008/09/10 03:33:26 loizides Exp $
+// $Id: ChargedParticle.h,v 1.5 2008/10/31 17:41:44 bendavid Exp $
 //
 // ChargedParticle
 //
@@ -22,18 +22,18 @@ namespace mithep
       ChargedParticle() {}
       ~ChargedParticle() {}
 
-      Double_t                Charge()    const { return Trk()->Charge(); }
-      Double_t                E()         const; 
-      Double_t                Eta()       const { return Trk()->Mom().Eta(); }
-      virtual const Track    *Trk()       const = 0;
+      Double_t                Charge()     const { return Trk()?Trk()->Charge():0; }
+      Double_t                E()          const; 
+      Double_t                Eta()        const { return Trk()?Trk()->Mom().Eta():0; }
+      virtual const Track    *Trk()        const = 0;
       virtual const Track    *TrackerTrk() const = 0;
-      FourVector              Mom()       const { return FourVector(Px(),Py(),Pz(),E()); }
-      Double_t                Phi()       const { return Trk()->Phi(); }
-      Double_t                P()         const { return Trk()->P();  }
-      Double_t                Pt()        const { return Trk()->Pt(); }
-      Double_t                Px()        const { return Trk()->Px(); }
-      Double_t                Py()        const { return Trk()->Py(); }
-      Double_t                Pz()        const { return Trk()->Pz(); }
+      FourVector              Mom()        const { return FourVector(Px(),Py(),Pz(),E()); }
+      Double_t                Phi()        const { return Trk()?Trk()->Phi():0; }
+      Double_t                P()          const { return Trk()?Trk()->P():0;  }
+      Double_t                Pt()         const { return Trk()?Trk()->Pt():0; }
+      Double_t                Px()         const { return Trk()?Trk()->Px():0; }
+      Double_t                Py()         const { return Trk()?Trk()->Py():0; }
+      Double_t                Pz()         const { return Trk()?Trk()->Pz():0; }
       
     ClassDef(ChargedParticle, 1) // Charged particle class
   };
@@ -42,6 +42,9 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 inline Double_t mithep::ChargedParticle::E() const
 {
+  if (!Trk())
+    return Mass()*Mass();
+
   return TMath::Sqrt(Trk()->P()*Trk()->P() + Mass()*Mass());
 }
 #endif
