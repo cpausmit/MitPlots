@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.11 2008/09/27 06:14:05 loizides Exp $
+// $Id: TreeWriter.cc,v 1.12 2008/10/06 16:53:26 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -41,12 +41,7 @@ TreeWriter::~TreeWriter()
 {
   // Destructor.
    
-  if (fIsInit) {
-    CloseFile();
-  }
-
-  TDirectory::TContext context(0); 
-  fTrees.Clear();
+  Terminate();
 }
 
 //__________________________________________________________________________________________________
@@ -179,12 +174,20 @@ void TreeWriter::AddBranchToTree(const char *tname, const char *name, void *obj)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TreeWriter::AddTree(const char *tname)
+{
+  // Add tree with name "name" into tree with name "tname".
+
+  AddOrGetMyTree(tname);
+}
+
+//--------------------------------------------------------------------------------------------------
 MyTree *TreeWriter::AddOrGetMyTree(const char *tn)
 {
   // Add new tree if not present in array of trees or return
   // present tree.
 
-  MyTree *tree = GetMyTree(tn); //dynamic_cast<MyTree*>(fTrees.FindObject(tn));
+  MyTree *tree = GetMyTree(tn);
   if (tree)
     return tree;
 
@@ -259,9 +262,26 @@ const char *TreeWriter::CName(void *obj) const
 
   TObject *tobj = dynamic_cast<TObject*>(*(TObject**)obj);
   if (tobj==0) {
-    Fatal("ClassName", "Given void* ptr can not be dereferenced into TObject*");
+    Fatal("CName", "Given void* ptr can not be dereferenced into TObject*");
   }
   return tobj->ClassName();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TreeWriter::DoBranchRef(const char *tn)
+{
+  // Fill BranchRef for given tree.
+
+  if (fTrees.GetEntries()==0) {
+    Error("DoBranchRef", "Tree with name %s not found!", tn); 
+    return;
+  }
+
+  MyTree *mt = GetMyTree(tn);
+  if (!mt)
+    return;
+
+  mt->BranchRef();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -500,4 +520,17 @@ void TreeWriter::StoreObject(const TObject *obj)
   }
 
   fFile->WriteTObject(obj,obj->GetName(),"WriteDelete");
+}
+
+//__________________________________________________________________________________________________
+void TreeWriter::Terminate()
+{
+  // Terminate tree file writing.
+   
+  if (fIsInit) {
+    CloseFile();
+  }
+
+  TDirectory::TContext context(0); 
+  fTrees.Clear();
 }

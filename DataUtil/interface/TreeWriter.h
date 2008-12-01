@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.10 2008/09/10 03:33:27 loizides Exp $
+// $Id: TreeWriter.h,v 1.11 2008/10/06 16:53:25 loizides Exp $
 //
 // TreeWriter
 //
@@ -30,13 +30,12 @@ namespace mithep
   {
     public:
       MyTree(const char* name, const char* title, Int_t splitlevel = 99) :
-	TTree(name,title, splitlevel), fAutoFill(1), fBrRef(0) {}
+	TTree(name,title, splitlevel), fAutoFill(1) {}
 	Bool_t GetAutoFill() const   { return fAutoFill; }
 	void   SetAutoFill(Bool_t b) { fAutoFill = b; }
 
     protected:
       Bool_t fAutoFill; //!=true then fill automatically in TreeWriter (def=1)
-      Bool_t fBrRef;    //!=true then call BranchRef in TreeWriter (def=0)
   };
   
   class TreeWriter : public TNamed 
@@ -65,7 +64,9 @@ namespace mithep
       void                 AddBranchToTree(const char *tname, const char *name, const char *cname, 
                                            void *obj);
       void                 AddBranchToTree(const char *tname, const char *name, void *obj);
+      void                 AddTree(const char *tname);
       Bool_t               BeginEvent(Bool_t doreset=kFALSE);
+      void                 DoBranchRef(const char *tn);
       Bool_t               EndEvent(Bool_t doreset=kFALSE);
       const char          *GetBaseURL()                 const
                              { return fBaseURL.IsNull() ? "." : fBaseURL; }  
@@ -95,6 +96,7 @@ namespace mithep
       void                 SetMaxSize(Long64_t s);
       void                 SetPrefix(const char *p)           { fPrefix = p; }
       void                 StoreObject(const TObject *obj);
+      void                 Terminate();
 
     protected:
       TString              fBaseURL;            //base url for tree storage
