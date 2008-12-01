@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.18 2008/11/27 16:15:06 loizides Exp $
+// $Id: Muon.h,v 1.19 2008/11/28 18:05:53 ceballos Exp $
 //
 // Muon
 //
@@ -18,7 +18,7 @@
 namespace mithep {
   class Muon : public ChargedParticle {
     public:
-      Muon() {}
+      Muon();
       ~Muon() {}
 
       enum EClassType {
@@ -56,16 +56,19 @@ namespace mithep {
       Int_t          NChambers()           const { return fNTraversedChambers;       }
       Int_t          NSegments()           const { return fStationMask.NBitsSet();   }
       Bool_t         StationBit(Int_t bit) const { return fStationMask.TestBit(bit); }
-      Double_t       GetDX(Int_t iStation)             const;
-      Double_t       GetDY(Int_t iStation)             const;
-      Double_t       GetPullX(Int_t iStation)          const;
-      Double_t       GetPullY(Int_t iStation)          const;
-      Double_t       GetTrackDist(Int_t iStation)      const;
-      Double_t       GetTrackDistErr(Int_t iStation)   const;
-      Int_t          GetNSegments(Int_t iStation)      const;
-      Bool_t         Has(EClassType type)              const;
-      EClassType     Is()                              const;
-      Int_t          LastHit()                         const;
+      Double_t       GetDX(Int_t iStation)           const;
+      Double_t       GetDY(Int_t iStation)           const;
+      Double_t       GetPullX(Int_t iStation)        const;
+      Double_t       GetPullY(Int_t iStation)        const;
+      Double_t       GetTrackDist(Int_t iStation)    const;
+      Double_t       GetTrackDistErr(Int_t iStation) const;
+      Int_t          GetNSegments(Int_t iStation)    const;
+      Bool_t         HasGlobalTrk()                  const { return fGlobalTrackRef.IsValid(); }
+      Bool_t         HasStandaloneTrk()              const { return fStandaloneTrackRef.IsValid(); }
+      Bool_t         HasTrackerTrk()                 const { return fTrackerTrackRef.IsValid(); }
+      Bool_t         Has(EClassType type)            const;
+      EClassType     Is()                            const;
+      Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)                                 const;
       Bool_t         PromptTight(EClassType type)                              const;
@@ -73,9 +76,9 @@ namespace mithep {
                                    Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
-      void	     SetGlobalTrk(Track* t)                { fGlobalTrackRef = t;            }
-      void	     SetStandaloneTrk(Track* t)            { fStandaloneTrackRef = t;        }
-      void	     SetTrackerTrk(Track* t)               { fTrackerTrackRef = t;           }
+      void	     SetGlobalTrk(Track *t)                { fGlobalTrackRef = t;            }
+      void	     SetStandaloneTrk(Track *t)            { fStandaloneTrackRef = t;        }
+      void	     SetTrackerTrk(Track *t)               { fTrackerTrackRef = t;           }
       void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;     }
       void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;       }
       void           SetIsoR03HadEt(Double_t isoR03HadEt)  { fIsoR03HadEt = isoR03HadEt;     }
@@ -152,6 +155,7 @@ inline const mithep::Track *mithep::Muon::BestTrk() const
   else if (StandaloneTrk())
     return StandaloneTrk();
 
+  Error("BestTrk", "No track reference found, returning NULL pointer.");
   return 0;
 }
 
