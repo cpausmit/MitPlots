@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCEventInfo.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: MCEventInfo.h,v 1.3 2008/09/17 04:21:17 loizides Exp $
 //
 // MCEventInfo
 //
@@ -9,11 +9,11 @@
 #ifndef MITANA_DATATREE_MCEVENTINFO_H
 #define MITANA_DATATREE_MCEVENTINFO_H
  
-#include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 
 {
-  class MCEventInfo
+  class MCEventInfo : public DataBase
   {
     public:
       MCEventInfo(Double_t w=0) : fWeight(w)  {}

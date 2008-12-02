@@ -1,9 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.13 2008/09/10 03:33:26 loizides Exp $
+// $Id: DataObject.h,v 1.14 2008/09/17 04:21:16 loizides Exp $
 //
 // DataObject
 //
-// This is the common base class for all objects in the tree. 
+// This is the common base class for all objects in the tree that do require the TObject
+// bits to be written out (as opposed to DataBase).
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -11,13 +12,13 @@
 #ifndef MITANA_DATATREE_DATAOBJECT_H
 #define MITANA_DATATREE_DATAOBJECT_H
  
+#include "MitAna/DataTree/interface/Types.h"
 #include <TObject.h>
 #include <TROOT.h>
 #include <TClass.h>
 #include <TBranchElement.h>
 #include <TRefTable.h>
 #include <TProcessID.h>
-#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep
 {
@@ -27,16 +28,17 @@ namespace mithep
       DataObject() {}
       ~DataObject() {}
 
+      Bool_t               IsCached()    const { return TestBit(23); }
       Bool_t               MustClear()   const { return TestBit(14); }
       Bool_t               MustDelete()  const { return TestBit(15); }
-      Bool_t               IsCached()    const { return TestBit(23); }
-      template <class Col> const Col* ParentCol() const;
+      template <class Col> 
+      const Col           *ParentCol()   const;
 
     protected:
-      void                 SetClearBit()       { SetBit(14); }
-      void                 SetDeleteBit()      { SetBit(15); }
-      void                 SetCacheBit()       { SetBit(23); }
       void                 ResetCacheBit()     { SetBit(23,0); }
+      void                 SetCacheBit()       { SetBit(23);   }
+      void                 SetClearBit()       { SetBit(14);   }
+      void                 SetDeleteBit()      { SetBit(15);   }
 
     ClassDef(DataObject, 1)
   };
@@ -46,26 +48,29 @@ namespace mithep
 template <class Col>
 const Col* mithep::DataObject::ParentCol() const
 {
-  // Return pointer to parent collection.  SLOW! (But faster than looping over collections.)
-  // Also note this function will only work for objects which were reference prior to being written.
-  // Otherwise a null pointer will be returned.
+  // Return pointer to parent collection. SLOW, but faster than looping over collections!
+  // Also note this function will only work for objects which were referenced prior to being 
+  // written. Otherwise a null pointer will be returned.
   
   const Col* colObj=0;
   TRefTable *table = TRefTable::GetRefTable();
   if (!table)
     return colObj;
-  table->SetUID(this->GetUniqueID(), (TProcessID*)gROOT->GetUUIDs());
+  table->SetUID(this->GetUniqueID(), static_cast<TProcessID*>(gROOT->GetUUIDs()));
   table->Notify();
-  //cast away const is a hack, this is fixed in newer root versions
-  TProcessID* pID = TProcessID::GetProcessWithUID(this->GetUniqueID(),(void*)this); 
-  TBranchElement *trackParent = (TBranchElement*)(table->GetParent(this->GetUniqueID(), pID));
+  TProcessID *pID = TProcessID::GetProcessWithUID(this->GetUniqueID(),(void*)this); 
+  TBranchElement *trackParent = 
+    static_cast<TBranchElement*>(table->GetParent(this->GetUniqueID(), pID));
   while (!colObj) {
     if (!trackParent)
       return colObj;
-    colObj = dynamic_cast<Col*>((TObject*)((TBranchElement*)trackParent)->GetObject());
-    if (!colObj)
-      trackParent = dynamic_cast<TBranchElement*>(trackParent->GetMother());
+    //cast away const is a hack, this is fixed in newer root versions
+    colObj = dynamic_cast<Col*>
+      (const_cast<TObject*>(static_cast<TBranchElement*>(trackParent)->GetObject()));
+    if (colObj)
+      break;
+    trackParent = static_cast<TBranchElement*>(trackParent->GetMother());
   }
-    return colObj;
+  return colObj;
 }
 #endif

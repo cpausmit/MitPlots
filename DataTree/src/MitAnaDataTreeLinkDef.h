@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.44 2008/11/27 16:15:07 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.45 2008/12/01 17:38:22 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -10,7 +10,7 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/Collections.h"
 
-//#include "MitAna/DataTree/interface/DataBase.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 #include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
@@ -63,7 +63,7 @@
 #pragma link C++ class mithep::Vector<std::string>+;
 #pragma link C++ typedef mithep::StringVec;
 
-//#pragma link C++ class mithep::DataBase+;
+#pragma link C++ class mithep::DataBase+;
 
 #pragma link C++ class mithep::BitMask<1>+;
 #pragma link C++ class mithep::BitMask<2>+;

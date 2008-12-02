@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.8 2008/10/29 17:03:30 bendavid Exp $
+// $Id: BitMask.h,v 1.9 2008/11/24 11:49:52 loizides Exp $
 //
 // BitMask
 //
-// Helper class implementing a Nx8 bit bitmask.
+// Helper class implementing a Nx8 bit bitmask where N is a template parameter.
 //
 // Authors: J.Bendavid, C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -11,28 +11,28 @@
 #ifndef MITANA_DATATREE_BITMASK_H
 #define MITANA_DATATREE_BITMASK_H
  
+#include "MitAna/DataTree/interface/DataBase.h"
 #include <assert.h>
-#include <Rtypes.h>
 
 namespace mithep
 {
   template<UInt_t N>
-  class BitMask
+  class BitMask : public DataBase
   {
     public:
-      BitMask() { Clear(); }
-      BitMask(const char *bits) { SetBits(bits); }
-      BitMask(const BitMask<N> &copy) { SetBits(copy.Bits()); }
-      BitMask(Long64_t bits) { SetBits(bits); }
+      BitMask()                                        { Clear(); }
+      BitMask(const char *bits)                        { SetBits(bits); }
+      BitMask(const BitMask<N> &copy) : DataBase(copy) { SetBits(copy.Bits()); }
+      BitMask(Long64_t bits)                           { SetBits(bits); }
       virtual ~BitMask() {}
 
       const char             *Bits()                  const { return fBitMask; }
-      void                    Clear()                       { memset(fBitMask,0,N); }
+      void                    Clear(Option_t */*opt*/="")   { memset(fBitMask,0,N); }
       void                    ClearBit(UInt_t n)            { SetBit(n,0); }
       UInt_t                  NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
       void                    Print(Option_t *opt="") const;
       void                    SetBit(UInt_t n, Bool_t b=1);
-      void                    SetBits(const Char_t *bits) { memcpy(fBitMask,bits,N); }
+      void                    SetBits(const Char_t *bits)   { memcpy(fBitMask,bits,N); }
       void                    SetBits(Long64_t bits);
       UInt_t                  Size()                  const { return N*8; }
       Bool_t                  TestBit(UInt_t n)       const;
@@ -55,7 +55,7 @@ namespace mithep
     protected:
       Char_t                  fBitMask[N]; //the actual bitmask
     
-    ClassDefT(BitMask, 1)
+    ClassDefT(BitMask, 2) // Generic templated bitmask
   };
 }
 
@@ -90,7 +90,7 @@ UInt_t mithep::BitMask<N>::NBitsSet(UInt_t first, UInt_t last) const
 
 //--------------------------------------------------------------------------------------------------
 template<UInt_t N>
-void mithep::BitMask<N>::Print(Option_t *opt) const
+void mithep::BitMask<N>::Print(Option_t */*opt*/) const
 {
   // Print bitmask.
 

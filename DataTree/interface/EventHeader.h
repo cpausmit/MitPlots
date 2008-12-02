@@ -1,8 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.6 2008/07/08 14:41:01 loizides Exp $
+// $Id: EventHeader.h,v 1.7 2008/09/17 04:21:16 loizides Exp $
 //
 // EventHeader
 //
+// Class to hold event specific information.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -11,15 +12,16 @@
 #define DATATREE_EVENTHEADER_H
  
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 
 {
-  class EventHeader
+  class EventHeader : public DataBase
   {
     public:
       EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0), fRunEntry(-1) {}
       EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : 
-        fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1) {}
+        fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1)        {}
       virtual ~EventHeader() {}
 
       UInt_t              EvtNum()       const { return fEvtNum; }
@@ -37,7 +39,8 @@ namespace mithep
       UInt_t              fLumiSec;         //luminosity block number
       Int_t               fRunEntry;        //entry for run block
       
-    ClassDef(EventHeader, 1) // Event header class
+    ClassDef(EventHeader, 2) // Event header class
   };
 }
+
 #endif

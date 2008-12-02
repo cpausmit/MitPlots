@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerName.h,v 1.1 2008/09/17 04:07:28 loizides Exp $
+// $Id: TriggerName.h,v 1.2 2008/09/27 06:06:36 loizides Exp $
 //
 // TriggerName
 //
@@ -15,11 +15,11 @@
 #include <TObject.h> 
 #include <TString.h>
 #include <THashTable.h>
-#include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 
 {
-  class TriggerName : public TObject
+  class TriggerName : public DataBase
   {
     public:
       TriggerName() : fId(0) {}
@@ -42,7 +42,7 @@ namespace mithep
       UShort_t              fId;          //id
       UInt_t                fHash;        //hash
 
-    ClassDef(TriggerName, 1) // Trigger name class
+    ClassDef(TriggerName, 2) // Trigger name class
   };
 
 //--------------------------------------------------------------------------------------------------

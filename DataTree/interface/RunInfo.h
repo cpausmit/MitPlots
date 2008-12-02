@@ -1,8 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.5 2008/09/10 03:33:27 loizides Exp $
+// $Id: RunInfo.h,v 1.6 2008/09/17 04:17:56 loizides Exp $
 //
 // RunInfo
 //
+// This class holds run specific information. It is stored in a dedicated tree.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -10,11 +11,11 @@
 #ifndef MITANA_DATATREE_RUNINFO_H
 #define MITANA_DATATREE_RUNINFO_H
  
-#include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 
 {
-  class RunInfo
+  class RunInfo : public DataBase
   {
     public:
       RunInfo() : fRunNum(0), fL1Entry(0), fHltEntry(0) {}
@@ -33,7 +34,7 @@ namespace mithep
       Int_t               fL1Entry;         //entry for L1 block
       Int_t               fHltEntry;        //entry for HLT block
 
-    ClassDef(RunInfo, 1) // Run info class
+    ClassDef(RunInfo, 2) // Run info class
   };
 }
 #endif

@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: LAHeader.h,v 1.2 2008/07/08 14:41:01 loizides Exp $
+// $Id: LAHeader.h,v 1.3 2008/09/10 03:33:26 loizides Exp $
 //
 // LAHeader
 //
 // Look-ahead header information in a very compressed way. Just enough information to figure
-// out if the run ends.
+// out if the run ends. This class is stored in a dedicated tree.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -12,11 +12,11 @@
 #ifndef MITANA_DATATREE_LAHEADER_H
 #define MITANA_DATATREE_LAHEADER_H
  
-#include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 
 {
-  class LAHeader
+  class LAHeader : public DataBase
   {
     public:
       LAHeader() : fRunNum(0) {}
@@ -29,7 +29,7 @@ namespace mithep
     protected:
       UInt_t              fRunNum;          //run number
       
-    ClassDef(LAHeader, 1) // Look-ahead event header class
+    ClassDef(LAHeader, 2) // Look-ahead event header class
   };
 }
 #endif
