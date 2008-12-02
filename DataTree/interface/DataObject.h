@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.14 2008/09/17 04:21:16 loizides Exp $
+// $Id: DataObject.h,v 1.15 2008/12/02 09:30:11 loizides Exp $
 //
 // DataObject
 //
@@ -53,20 +53,26 @@ const Col* mithep::DataObject::ParentCol() const
   // written. Otherwise a null pointer will be returned.
   
   const Col* colObj=0;
+  
+  if ( !this->TestBit(kIsReferenced) )
+    return colObj;
+  
   TRefTable *table = TRefTable::GetRefTable();
   if (!table)
     return colObj;
-  table->SetUID(this->GetUniqueID(), static_cast<TProcessID*>(gROOT->GetUUIDs()));
-  table->Notify();
-  TProcessID *pID = TProcessID::GetProcessWithUID(this->GetUniqueID(),(void*)this); 
+    
+  UInt_t uid = this->GetUniqueID();
+  //cast away const is a hack, this is fixed in newer root versions
+  TProcessID *pid = TProcessID::GetProcessWithUID(uid, const_cast<DataObject*>(this));
+  table->SetUID(uid, pid);
+  table->Notify(); 
   TBranchElement *trackParent = 
-    static_cast<TBranchElement*>(table->GetParent(this->GetUniqueID(), pID));
+    static_cast<TBranchElement*>(table->GetParent(uid, pid));
   while (!colObj) {
     if (!trackParent)
       return colObj;
-    //cast away const is a hack, this is fixed in newer root versions
     colObj = dynamic_cast<Col*>
-      (const_cast<TObject*>(static_cast<TBranchElement*>(trackParent)->GetObject()));
+      (reinterpret_cast<TObject*>(static_cast<TBranchElement*>(trackParent)->GetObject()));
     if (colObj)
       break;
     trackParent = static_cast<TBranchElement*>(trackParent->GetMother());
