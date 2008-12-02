@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: OutputMod.h,v 1.1 2008/12/01 17:42:22 loizides Exp $
 //
 // OutputMod
 //
@@ -21,6 +21,9 @@ namespace mithep
 {
   class TreeWriter;
   class EventHeader;
+  class RunInfo;
+  class LAHeader;
+  class HLTFwkMod;
 
   class OutputMod : public BaseMod
   {
@@ -30,7 +33,8 @@ namespace mithep
 
       void                     Drop(const char *bname);
       void                     Keep(const char *bname);
-      void                     SetCheckDep(Bool_t b) { fCheckDep = b; }
+      void                     CheckTamBranches(Bool_t b)    { fCheckTamBr = b; }
+      void                     KeepTamBranches(Bool_t b)     { fKeepTamBr  = b; }
 
     protected:
       void                     BeginRun();
@@ -40,34 +44,39 @@ namespace mithep
       void                     SlaveBegin();
       void                     SlaveTerminate();
 
-      TString                  fTreeName;    //tree name
-      TString                  fPrefix;      //
-      TString                  fPathName;    //
-      UInt_t                   fMaxSize;     //
-      UInt_t                   fCompLevel;   //
-      UInt_t                   fSplitLevel;  //
-      UInt_t                   fBranchSize;  //
-      Bool_t                   fDoReset;     //=true then reset pointers
-      Bool_t                   fCheckDep;    //=true then check auto-loaded branches
-      StringVec                fCmdList;     //list of keep/drop statements
+      TString                  fTreeName;       //tree name
+      TString                  fPrefix;         //
+      TString                  fPathName;       //
+      UInt_t                   fMaxSize;        //
+      UInt_t                   fCompLevel;      //
+      UInt_t                   fSplitLevel;     //
+      UInt_t                   fBranchSize;     //
+      Bool_t                   fDoReset;        //=true then reset pointers
+      Bool_t                   fCheckTamBr;     //=true then check TAM loaded branches
+      Bool_t                   fKeepTamBr;      //=true then keep TAM loaded branches
+      StringVec                fCmdList;        //list of keep/drop statements
+      TString                  fHltFwkModName;  //
 
     private:
       void                     CheckAndAddBranch(const char *bname, const char *cname);
+      void                     CheckAndResolveDep(Bool_t solve=kFALSE);
       Bool_t                   IsAcceptedBranch(const char *bname);
-      UInt_t                   GetNBranches() { return fBrNameList.Entries(); }
+      UInt_t                   GetNBranches() const           { return fBrNameList.Entries(); }
       void                     LoadBranches();
       void                     RequestBranch(const char *bname);
-      void                     ResolveDep(Bool_t solve=kFALSE);
       void                     SetupBranches();
 
       TreeWriter              *fTreeWriter;     //!
-      EventHeader             *fEventHeader;    //!
+      EventHeader             *fMyEventHeader;  //!
+      RunInfo                 *fMyRunInfo;      //!
+      LAHeader                *fMyLaHeader;     //!
       std::vector<TRegexp>     fCmdReList;      //!
       std::vector<Bool_t>      fCmdDeList;      //!
       StringVec                fBrNameList;     //!
       StringVec                fBrClassList;    //!
       TObject**                fBranches;       //!
       const UInt_t             fNBranchesMax;   //!
+      HLTFwkMod               *fHltFwkMod;      //!
 
     ClassDef(OutputMod,1) // Output module
   };

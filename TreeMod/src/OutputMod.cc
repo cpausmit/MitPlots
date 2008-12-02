@@ -1,6 +1,7 @@
-// $Id: $
+// $Id: OutputMod.cc,v 1.1 2008/12/01 17:42:23 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
+#include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataUtil/interface/TreeWriter.h"
@@ -22,11 +23,17 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fSplitLevel(99),
   fBranchSize(32*1024),
   fDoReset(kFALSE),
-  fCheckDep(kTRUE),
+  fCheckTamBr(kTRUE),
+  fKeepTamBr(kTRUE),
+  fHltFwkModName("HLTFwkMod"),
   fTreeWriter(0),
-  fNBranchesMax(1024)
+  fMyEventHeader(0),
+  fMyRunInfo(0),
+  fMyLaHeader(0),
+  fNBranchesMax(1024),
+  fHltFwkMod(0)
 {
-
+  // Constructor.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -39,7 +46,7 @@ void OutputMod::BeginRun()
 //--------------------------------------------------------------------------------------------------
 void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 {
-  // Todo.
+  // Check if the given branch should be kept or dropped. 
   
   if (IsAcceptedBranch(bname)) 
     return;
@@ -92,6 +99,53 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 }
 
 //--------------------------------------------------------------------------------------------------
+void OutputMod::CheckAndResolveDep(Bool_t solve) 
+{
+  // Check if TAM has loaded additional branches. If requested try to solve the the dependency
+  // by adding the branch to the list of branches.
+
+  const THashTable &ht = GetSel()->GetBranchTable();
+
+  TIterator *iter = ht.MakeIterator();
+  const TAMBranchInfo *next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
+
+  while (next) {
+    const TAMBranchInfo *cur = next;
+    next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
+    Bool_t isloaded = cur->IsLoaded();
+    if (!isloaded)
+      continue;
+
+    const char *bname = cur->GetName();
+    if (IsAcceptedBranch(bname))
+      continue;
+
+    TreeBranchLoader *loader = dynamic_cast<TreeBranchLoader*>(cur->GetLoader());
+    if (!loader) 
+      continue;
+
+    TBranch *br = loader->GetBranch();
+    if (!br) 
+      continue;
+
+    const char *cname = br->GetClassName();
+
+    if (solve) {
+      Info("CheckAndResolveDep", "Resolving dependency for loaded branch %s and class %s",
+           bname,cname);
+
+      fBrNameList.AddCopy(string(bname));
+      fBrClassList.AddCopy(string(cname));
+      fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
+
+    } else {
+      Warning("CheckAndResolveDep", "Unresolved dependency for loaded branch %s and class %s",
+              bname,cname);
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
 void OutputMod::RequestBranch(const char *bname) 
 {
   // Request given branch from TAM.
@@ -137,7 +191,10 @@ Bool_t OutputMod::IsAcceptedBranch(const char *bname)
 //--------------------------------------------------------------------------------------------------
 Bool_t OutputMod::Notify()
 {
-  // Todo
+  // On first notify, loop over list of branches to determine the list of kept branches.
+
+  if (GetNEventsProcessed() != 0) 
+    return kTRUE;
 
   TTree *tree=const_cast<TTree*>(GetSel()->GetTree());
   if (!tree) 
@@ -185,17 +242,18 @@ void OutputMod::Process()
 
   fTreeWriter->BeginEvent(fDoReset);
 
-  if (GetNEventsProcessed() == 0 && fCheckDep) {
-    ResolveDep(kTRUE);    
+  if (GetNEventsProcessed() == 0 && fCheckTamBr) {
+    CheckAndResolveDep(fKeepTamBr);    
   }
 
   LoadBranches();
-  // load additional branches
-  //LoadBranch("EventHeader");
 
   if (GetNEventsProcessed() == 0) {
     SetupBranches();
   }
+
+  LoadBranch("EventHeader");
+//  fMyEventHeader 
 
   IncNEventsProcessed();
   fTreeWriter->EndEvent(fDoReset);
@@ -214,7 +272,7 @@ void OutputMod::SetupBranches()
             bname, cname);
       continue;
     }
-    fTreeWriter->AddBranch(bname,cname,&fBranches[i]);
+    fTreeWriter->AddBranch(bname, cname, &fBranches[i]);
   }
 }
 
@@ -224,7 +282,7 @@ void OutputMod::SlaveBegin()
   // Todo
 
   // request here branches we want
-  //ReqBranch("EventHeader", fEventHeader);
+  
 
   // setup tree writer
   fTreeWriter = new TreeWriter(fTreeName, kFALSE);
@@ -237,10 +295,38 @@ void OutputMod::SlaveBegin()
   fTreeWriter->AddTree(fTreeName);
   fTreeWriter->DoBranchRef(fTreeName);
 
+  // deal with my own tree objects
+  fMyEventHeader = new EventHeader;
+  fTreeWriter->AddBranch(Names::gkEvtHeaderBrn, &fMyEventHeader);
+  fMyRunInfo = new RunInfo;
+  fTreeWriter->AddBranchToTree(Names::gkRunTreeName, Names::gkRunInfoBrn, &fMyRunInfo);
+  fTreeWriter->SetAutoFill(Names::gkRunTreeName,0);
+  fMyLaHeader = new LAHeader;
+  fTreeWriter->AddBranchToTree(Names::gkLATreeName, Names::gkLAHeaderBrn, &fMyLaHeader);
+  fTreeWriter->SetAutoFill(Names::gkLATreeName,0);
+
+
+  // add branches to HLT trigger info tree
+  //tws.AddBranchToTree(Names::gkHltTreeName,hltTableName_.c_str(),&hltTable_,32000,0);
+  //tws.SetAutoFill(Names::gkHltTreeName,0);
+  //tws.AddBranchToTree(Names::gkHltTreeName,hltLabelName_.c_str(),&hltLabels_,32000,0);
+  //tws.SetAutoFill(Names::gkHltTreeName,0);
+  //hltTree_=tws.GetTree(Names::gkHltTreeName);
+
+
+  if (HasHLTInfo(fHltFwkModName)) {
+    const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
+    fHltFwkMod = static_cast<HLTFwkMod*>(tasks->FindObject(fHltFwkModName));
+  }
+
   // deal here with published objects
 
   // create TObject space for TAM
   fBranches = new TObject*[fNBranchesMax];       
+
+  // adjust checks for TAM branches
+  if (fKeepTamBr)
+    fCheckTamBr = kTRUE;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -251,48 +337,9 @@ void OutputMod::SlaveTerminate()
   delete fTreeWriter;
   fTreeWriter = 0;
 
+  delete fMyEventHeader;
+
   delete[] fBranches; 
 }
 
 //--------------------------------------------------------------------------------------------------
-
-void OutputMod::ResolveDep(Bool_t solve) 
-{
-  // Todo
-
-  const THashTable &ht = GetSel()->GetBranchTable();
-
-  TIterator *iter = ht.MakeIterator();
-  const TAMBranchInfo *next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
-
-  while (next) {
-    const TAMBranchInfo *cur = next;
-    next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
-    Bool_t isloaded = cur->IsLoaded();
-    if (!isloaded)
-      continue;
-
-    const char *bname = cur->GetName();
-    if (IsAcceptedBranch(bname))
-      continue;
-
-    TreeBranchLoader *loader = dynamic_cast<TreeBranchLoader*>(cur->GetLoader());
-    if (!loader) 
-      continue;
-
-    TBranch *br = loader->GetBranch();
-    if (!br) 
-      continue;
-
-    const char *cname = br->GetClassName();
-
-    if (solve) {
-      Info("ResolveDep", "Resolving dependency for auto-loaded branch %s and class %s",
-           bname,cname);
-      CheckAndAddBranch(bname, cname);
-    } else {
-      Warning("ResolveDep", "Unresolved dependency for auto-loaded branch %s and class %s",
-           bname,cname);
-    }
-  }
-}
