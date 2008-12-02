@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.7 2008/09/10 03:33:28 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.1 2008/09/28 02:38:39 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -29,10 +29,10 @@ namespace mithep
       HLTFwkMod(const char *name="HLTFwkMod", const char *title="HLT framework module");
       ~HLTFwkMod();
 
-      const char                 *HLTTreeName() const { return fHLTTreeName; }
-      const char                 *HLTTabName()  const { return fHLTTabName; }
-      const char                 *HLTLabName()  const { return fHLTLabName; }
-      const char                 *HLTObjsName() const { return fObjsName; }
+      const char                 *HLTTreeName()    const { return fHLTTreeName; }
+      const char                 *HLTTabName()     const { return fHLTTabName; }
+      const char                 *HLTLabName()     const { return fHLTLabName; }
+      const char                 *HLTObjsName()    const { return fObjsName; }
       const char                 *HLTTabNamePub()  const { return fHLTTabNamePub; }
       const char                 *HLTLabNamePub()  const { return fHLTLabNamePub; }
       const char                 *HLTObjsNamePub() const { return fObjsNamePub; }
@@ -64,6 +64,8 @@ namespace mithep
       TriggerTable               *fTriggers;      //!exported published HLT trigger table
       TriggerTable               *fLabels;        //!exported published HLT module label table
       TriggerObjectsTable        *fTrigObjs;      //!exported published HLT trigger objects table
+
+      friend class OutputMod;
 
     ClassDef(HLTFwkMod,1) // HLT framework TAM module
   };

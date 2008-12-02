@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.2 2008/09/28 02:34:14 loizides Exp $
+// $Id: BaseMod.cc,v 1.3 2008/11/25 15:57:49 loizides Exp $
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -18,7 +18,7 @@ const TriggerObjectsTable *BaseMod::GetHLTObjectsTable(const char *hltfwk) const
     return 0;
 
   const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
-  const HLTFwkMod *mod = static_cast<const HLTFwkMod *>(tasks->FindObject(hltfwk));
+  const HLTFwkMod *mod = static_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
   return (dynamic_cast<const TriggerObjectsTable *>(FindPublicObj(mod->HLTObjsNamePub())));
 }
 
@@ -32,7 +32,7 @@ const TriggerTable *BaseMod::GetHLTTable(const char *hltfwk) const
     return 0;
 
   const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
-  const HLTFwkMod *mod = static_cast<const HLTFwkMod *>(tasks->FindObject(hltfwk));
+  const HLTFwkMod *mod = static_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
   return (dynamic_cast<const TriggerTable *>(FindPublicObj(mod->HLTTabNamePub())));
 }
 
@@ -49,7 +49,7 @@ Bool_t BaseMod::HasHLTInfo(const char *hltfwk) const
   if (!tasks)
     return kFALSE;
 
-  const HLTFwkMod *mod = dynamic_cast<const HLTFwkMod *>(tasks->FindObject(hltfwk));
+  const HLTFwkMod *mod = dynamic_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
   if (mod)
     return kTRUE;
   return kFALSE;
