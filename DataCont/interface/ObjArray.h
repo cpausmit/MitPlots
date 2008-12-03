@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.6 2008/11/21 20:13:35 loizides Exp $
+// $Id: ObjArray.h,v 1.7 2008/12/01 17:17:20 bendavid Exp $
 //
 // ObjArray
 //
@@ -48,7 +48,7 @@ namespace mithep
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
       void                 Reset();
       void                 SetName(const char *name)                   { fArray.SetName(name); }
-      void                 SetOwner(Bool_t o)                          { fArray.SetOwner(o); }
+      void                 SetOwner(Bool_t o);
       void                 Sort()                                      { fArray.Sort(); }
       void                 Trim()                                      { fArray.Compress();}
       ArrayElement        *UncheckedAt(UInt_t idx);                 
@@ -135,6 +135,11 @@ inline void mithep::ObjArray<ArrayElement>::AddOwned(ArrayElement *ae)
 {
   // Add object to array. This function should be used in cases the array owns the objects.
 
+  if (!IsOwner()) {
+    TObject::Error("AddOwned","Can not add object since IsOwner() returns kFALSE.");
+    return;
+  }
+  
   AddLast(ae);
 }
 
@@ -229,6 +234,22 @@ inline void mithep::ObjArray<ArrayElement>::Reset()
 
   fNumEntries = 0;
 }
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::SetOwner(Bool_t o)
+{
+  // Set ownership of array.  Must do this before adding any objects
+
+  if (fNumEntries) {
+    TObject::Error("SetOwner","Cannot safely change ownership of non-empty array.");
+    return;
+  }
+  
+  fArray.SetOwner(o);
+
+}
+
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
