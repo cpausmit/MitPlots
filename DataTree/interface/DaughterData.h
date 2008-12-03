@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.2 2008/09/30 12:52:52 bendavid Exp $
+// $Id: DaughterData.h,v 1.3 2008/12/03 16:58:17 bendavid Exp $
 //
 // DaughterData
 //
@@ -22,10 +22,9 @@ namespace mithep
     public:
       DaughterData() {}
       DaughterData(const Particle *orig) : fOriginal(const_cast<Particle*>(orig)) {}
-      virtual ~DaughterData() {}
+      ~DaughterData() {}
 
       Double_t             Charge()    const { return Original()->Charge(); }
-      
       const Particle      *Original()  const;
 
     protected:

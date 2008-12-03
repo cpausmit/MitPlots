@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.9 2008/11/24 11:49:52 loizides Exp $
+// $Id: BitMask.h,v 1.10 2008/12/02 09:30:11 loizides Exp $
 //
 // BitMask
 //
@@ -24,7 +24,7 @@ namespace mithep
       BitMask(const char *bits)                        { SetBits(bits); }
       BitMask(const BitMask<N> &copy) : DataBase(copy) { SetBits(copy.Bits()); }
       BitMask(Long64_t bits)                           { SetBits(bits); }
-      virtual ~BitMask() {}
+      ~BitMask() {}
 
       const char             *Bits()                  const { return fBitMask; }
       void                    Clear(Option_t */*opt*/="")   { memset(fBitMask,0,N); }

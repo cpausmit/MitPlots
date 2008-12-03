@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.6 2008/09/17 04:17:56 loizides Exp $
+// $Id: RunInfo.h,v 1.7 2008/12/02 09:30:11 loizides Exp $
 //
 // RunInfo
 //
@@ -20,7 +20,7 @@ namespace mithep
     public:
       RunInfo() : fRunNum(0), fL1Entry(0), fHltEntry(0) {}
       RunInfo(UInt_t run) : fRunNum(run) {}
-      virtual ~RunInfo() {}
+      ~RunInfo() {}
 
       Int_t               HltEntry()     const { return fHltEntry; }
       Int_t               L1Entry()      const { return fL1Entry; }

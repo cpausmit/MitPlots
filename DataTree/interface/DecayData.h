@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.3 2008/11/14 14:46:35 bendavid Exp $
+// $Id: DecayData.h,v 1.4 2008/12/03 16:58:17 bendavid Exp $
 //
 // DecayData
 //
@@ -25,7 +25,7 @@ namespace mithep
       DecayData(const Particle *p, const FourVector &mom) :
         DaughterData(p),
         fMomAtVertex(mom) {}
-      virtual ~DecayData() {}
+      ~DecayData() {}
 
       Double32_t             Px()   const { return fMomAtVertex.Px(); }
       Double32_t             Py()   const { return fMomAtVertex.Py(); }

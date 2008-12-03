@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: LAHeader.h,v 1.3 2008/09/10 03:33:26 loizides Exp $
+// $Id: LAHeader.h,v 1.4 2008/12/02 09:30:11 loizides Exp $
 //
 // LAHeader
 //
@@ -21,7 +21,7 @@ namespace mithep
     public:
       LAHeader() : fRunNum(0) {}
       LAHeader(UInt_t run) : fRunNum(run) {}
-      virtual ~LAHeader() {}
+      ~LAHeader() {}
 
       UInt_t              RunNum()       const { return fRunNum; }
       void                SetRunNum(UInt_t i)  { fRunNum=i; }
