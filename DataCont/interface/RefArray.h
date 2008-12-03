@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.7 2008/10/31 18:56:14 bendavid Exp $
+// $Id: RefArray.h,v 1.8 2008/11/20 17:49:15 loizides Exp $
 //
 // RefArray
 //
@@ -36,7 +36,7 @@ namespace mithep
       RefArray();
       virtual ~RefArray() {}
 
-      void                      Add(ArrayElement *ae);
+      void                      Add(const ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)               const;
       void                      Clear(Option_t */*opt*/="")        {}
@@ -74,7 +74,7 @@ inline mithep::RefArray<ArrayElement,N>::RefArray()
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, UInt_t N>
-void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
+void mithep::RefArray<ArrayElement,N>::Add(const ArrayElement *ae)
 {
   // Add new reference to object.
 
@@ -94,10 +94,10 @@ void mithep::RefArray<ArrayElement,N>::Add(ArrayElement *ae)
   TProcessID *pid = 0;
   if (ae->TestBit(kIsReferenced)) {
     uid = ae->GetUniqueID();
-    pid = TProcessID::GetProcessWithUID(uid,ae);
+    pid = TProcessID::GetProcessWithUID(uid, const_cast<ArrayElement*>(ae));
   } else {
     pid = TProcessID::GetSessionProcessID();
-    uid = TProcessID::AssignID(ae);
+    uid = TProcessID::AssignID(const_cast<ArrayElement*>(ae));
   }
 
   // If RefArray contains one and only one PID reference, then only add another if the added object
