@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.22 2008/11/23 13:35:24 sixie Exp $
+// $Id: Names.h,v 1.23 2008/11/27 16:14:03 loizides Exp $
 //
 // Names
 //
@@ -54,6 +54,9 @@ namespace mithep
 
       static const char *gkL1TreeName;
       static const char *gkL1TableBrn;
+
+      static const char *gkAllEvtTreeName;
+      static const char *gkAllEvtHeaderBrn;
   };
 }
 #endif
