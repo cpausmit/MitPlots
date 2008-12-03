@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.4 2008/11/20 17:49:15 loizides Exp $
+// $Id: StackArray.h,v 1.5 2008/12/01 17:17:20 bendavid Exp $
 //
 // StackArray
 //
@@ -154,18 +154,8 @@ inline Bool_t mithep::StackArray<ArrayElement, N>::HasObject(const ArrayElement 
 {
   // Check whether object is in array.
 
-  // Check whether object is in array.  If ArrayElement inherits from TObject, use the
-  // isEqual function for the comparison, otherwise use the default pointer comparison.
-
-  const TObject *tobj = 0;
-  if (TClass::GetClass(typeid(ArrayElement))->IsTObject())
-    tobj = reinterpret_cast<const TObject*>(obj);
-
   for (UInt_t i=0; i<fSize; ++i) {
-    if (tobj)
-      if ( reinterpret_cast<const TObject*>(&fArray[i])->IsEqual(tobj) )
-        return true;
-    else if ( &fArray[i] == obj )
+    if ( fArray[i].IsEqual(obj) )
       return true;
   }
   
