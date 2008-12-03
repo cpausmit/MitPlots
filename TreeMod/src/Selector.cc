@@ -1,8 +1,8 @@
-// $Id: Selector.cc,v 1.4 2008/07/03 08:22:19 loizides Exp $
+// $Id: Selector.cc,v 1.5 2008/09/28 02:37:31 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
-
+#include "MitAna/TreeMod/interface/OutputMod.h"
 #include <TProcessID.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -17,8 +17,10 @@ Selector::Selector() :
   fEvtHdrName(Names::gkEvtHeaderBrn),
   fRunTreeName(Names::gkRunTreeName),
   fRunInfoName(Names::gkRunInfoBrn),
+  fAllEvtHdrBrn(Names::gkAllEvtHeaderBrn),
   fLATreeName(Names::gkLATreeName),
   fLAHdrName(Names::gkLAHeaderBrn),
+  fAllEvtTreeName(Names::gkAllEvtTreeName),
   fRunTree(0),
   fEventHeader(0),
   fRunInfo(0),
@@ -64,7 +66,12 @@ Bool_t Selector::BeginRun()
 //--------------------------------------------------------------------------------------------------
 Bool_t Selector::EndRun()
 {
-  // Determines whether we are at the end of a run.
+  // Determines whether we are at the end of a run. Also, do treat special case of output module 
+  // here so it in any case can process the event.
+  
+  if (fOutputMod && (IsAModAborted() || IsEventAborted())) {
+    fOutputMod->ProcessAll();
+  } 
 
   if (!fDoRunInfo) 
     return kFALSE;
@@ -103,7 +110,7 @@ Bool_t Selector::Notify()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Selector::SlaveBegin(TTree* tree)
+void Selector::SlaveBegin(TTree *tree)
 {
   // The SlaveBegin() function is called after the Begin() function and can be used to setup
   // analysis on the slaves. Here, we request the event header branch.

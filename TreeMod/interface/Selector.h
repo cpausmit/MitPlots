@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.6 2008/09/28 02:37:30 loizides Exp $
+// $Id: Selector.h,v 1.7 2008/12/01 17:40:01 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -18,15 +18,17 @@
 #include "MitAna/DataTree/interface/RunInfo.h" 
 
 namespace mithep {
+  class OutputMod;
+
   class Selector : public TAMSelector
   {
     public:
       Selector();
       ~Selector();
-   
+
       const THashTable    &GetBranchTable()         const { return fBranchTable; }
       const EventHeader   *GetEventHeader()         const { return fEventHeader; }
-      const RunInfo       *GetRunInfo()             const { return fRunInfo; }
+      const RunInfo       *GetRunInfo()             const { return fRunInfo;     }
       Bool_t               ValidRunInfo()           const;
       Bool_t               ValidRunNum()            const { return fCurRunNum!=UInt_t(-1); }
 
@@ -34,6 +36,13 @@ namespace mithep {
       Bool_t               BeginRun();
       Bool_t               ConsistentRunNum()       const;
       Bool_t               EndRun();
+      const char          *GetAllEvtTreeName()      const { return fAllEvtTreeName; }
+      const char          *GetAllEvtHdrBrn()        const { return fAllEvtHdrBrn;   }
+      const char          *GetEvtHdrName()          const { return fEvtHdrName;     }
+      const char          *GetLATreeName()          const { return fLATreeName;     }
+      const char          *GetLAHdrName()           const { return fLAHdrName;      }
+      const char          *GetRunTreeName()         const { return fRunTreeName;    }
+      const char          *GetRunInfoName()         const { return fRunInfoName;    }
       Bool_t               Notify();
       void                 SlaveBegin(TTree* tree);
       void                 UpdateRunInfo();
@@ -43,16 +52,21 @@ namespace mithep {
       TString              fEvtHdrName;     //name of event header branch
       TString              fRunTreeName;    //name of run info tree
       TString              fRunInfoName;    //name of run info branch
+      TString              fAllEvtHdrBrn;   //name of all-event header branch
       TString              fLATreeName;     //name of look-ahead tree
       TString              fLAHdrName;      //name of look-ahead event header branch
+      TString              fAllEvtTreeName; //name of all-event tree
       TTree               *fRunTree;        //!run info tree in current file
       EventHeader         *fEventHeader;    //!event header for current event
       RunInfo             *fRunInfo;        //!run information for current run
       TTree               *fLATree;         //!look-ahead tree in current file
       LAHeader            *fLAHeader;       //!event header for next event
       UInt_t               fCurRunNum;      //!current run number
+      OutputMod           *fOutputMod;      //!pointer to output mod (=0 if none used)
 
-      ClassDef(Selector,1)
+      friend class OutputMod;
+
+    ClassDef(Selector,1)
   };
 }
 
