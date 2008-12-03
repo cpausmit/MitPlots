@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.1 2008/12/01 17:42:23 loizides Exp $
+// $Id: OutputMod.cc,v 1.2 2008/12/02 09:34:17 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -25,13 +25,23 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fDoReset(kFALSE),
   fCheckTamBr(kTRUE),
   fKeepTamBr(kTRUE),
-  fHltFwkModName("HLTFwkMod"),
   fTreeWriter(0),
-  fMyEventHeader(0),
-  fMyRunInfo(0),
-  fMyLaHeader(0),
+  fEventHeader(0),
+  fAllEventHeader(0),
+  fRunInfo(0),
+  fLaHeader(0),
   fNBranchesMax(1024),
-  fHltFwkMod(0)
+  fRunTree(0),
+  fLATree(0),
+  fAllTree(0),
+  fL1Tree(0),
+  fHltTree(0),
+  fRunEntries(0),
+  fOrigL1Entry(-1),
+  fL1Entries(0),
+  fOrigHltEntry(-1),
+  fHltEntries(0),
+  fFileNum(0)
 {
   // Constructor.
 }
@@ -39,8 +49,18 @@ OutputMod::OutputMod(const char *name, const char *title) :
 //--------------------------------------------------------------------------------------------------
 void OutputMod::BeginRun()
 {
-  // Todo.
+  // Create HLT tree if HLTFwkMod is being run.
 
+  if (!HasHLTInfo())
+    return;
+
+  if (!fHltTree) {
+    HLTFwkMod *hm = const_cast<HLTFwkMod*>(GetHltFwkMod());
+    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTTabName(), &(hm->fHLTTab), 32000, 0);
+    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTLabName(), &(hm->fHLTLab), 32000, 0);
+    fTreeWriter->SetAutoFill(hm->HLTTreeName(), 0);
+    fHltTree = fTreeWriter->GetTree(hm->HLTTreeName());
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,25 +166,46 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
 }
 
 //--------------------------------------------------------------------------------------------------
-void OutputMod::RequestBranch(const char *bname) 
+void OutputMod::FillAllEventHeader(Bool_t isremoved)
 {
-  // Request given branch from TAM.
+  // Fill event header into the all-event-header tree.
 
-  if (GetNBranches()>=fNBranchesMax) {
-    Error("RequestBranch", "Can not request branch for %bname"
-          "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
-    return;
-  }
-  
-  fBranches[GetNBranches()-1] = 0;
-  ReqBranch(bname, fBranches[GetNBranches()-1]);
+  const EventHeader *eh = GetEventHeader();
+  fAllEventHeader->SetEvtNum(eh->EvtNum());
+  fAllEventHeader->SetLumiSec(eh->LumiSec());
+  fAllEventHeader->SetRunNum(eh->RunNum());
+  if (isremoved) 
+    fAllEventHeader->SetRunEntry(-1);
+  else 
+    fAllEventHeader->SetRunEntry(eh->RunEntry());
+  fAllEventHeader->SetIsRemoved(isremoved);
+
+  fAllTree->Fill();
 }
 
 //--------------------------------------------------------------------------------------------------
-void OutputMod::EndRun()
+void OutputMod::FillL1Info()
+{
+  // Not doing anything here until the production writes out L1 information.
+
+  if (!fL1Tree) 
+    return;
+}
+
+//--------------------------------------------------------------------------------------------------
+void OutputMod::FillHltInfo()
 {
   // Todo.
 
+  if (!fHltTree) 
+    return;
+
+  if (fOrigHltEntry == GetHltFwkMod()->fCurEnt)
+    return;
+
+  fHltTree->Fill();
+  fOrigHltEntry = GetHltFwkMod()->fCurEnt;
+  ++fHltEntries;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,7 +279,8 @@ void OutputMod::LoadBranches()
 //--------------------------------------------------------------------------------------------------
 void OutputMod::Process()
 {
-  // Pre and post event processing at once?!
+  // Write out the kept branches of the current event. Make sure the meta information is 
+  // correctly updated.
 
   fTreeWriter->BeginEvent(fDoReset);
 
@@ -252,11 +294,86 @@ void OutputMod::Process()
     SetupBranches();
   }
 
-  LoadBranch("EventHeader");
-//  fMyEventHeader 
+  // reset per file quantities if a new file was opened
+  if (fTreeWriter->GetFileNumber()!=fFileNum) {
+    fRunmap.clear();
+    fRunEntries = 0;
+    fL1Entries  = -1;
+    fHltEntries = -1;
+    fFileNum = fTreeWriter->GetFileNumber();
+  }
 
+  UInt_t runnum = GetEventHeader()->RunNum();
+
+  // store look ahead information
+  if (fRunEntries>0) {
+    fLaHeader->SetRunNum(runnum);
+    fLATree->Fill();
+  }
+
+  // fill event header
+  fEventHeader->SetEvtNum(GetEventHeader()->EvtNum());
+  fEventHeader->SetLumiSec(GetEventHeader()->LumiSec());
+  fEventHeader->SetRunNum(runnum);
+
+  // fill all event header
+  //  *** note that we need to read an existing tree in 
+  //      the future to make sure we can do skims of skims ***
+  FillAllEventHeader(kFALSE);
+
+  // look-up if entry is in map
+  map<UInt_t,Int_t>::iterator riter = fRunmap.find(runnum);
+  if (riter != fRunmap.end()) { // found existing run info
+    Int_t runentry = riter->second;
+    fEventHeader->SetRunEntry(runentry);
+
+    IncNEventsProcessed();
+    fTreeWriter->EndEvent(fDoReset);
+    return;
+  }
+
+  // fill new run info
+  Int_t runentry = fRunEntries;
+  ++fRunEntries;
+  fEventHeader->SetRunEntry(runentry);
+  fRunmap.insert(pair<UInt_t,Int_t>(runnum,runentry));
+  fRunInfo->SetRunNum(runnum);
+
+  Int_t l1entry = fL1Entries;
+  FillL1Info();
+  fRunInfo->SetL1Entry(l1entry);
+
+  Int_t hltentry = fHltEntries;
+  FillHltInfo();
+  fRunInfo->SetHltEntry(hltentry);
+  
+  fRunTree->Fill();
+  
   IncNEventsProcessed();
   fTreeWriter->EndEvent(fDoReset);
+}
+
+//--------------------------------------------------------------------------------------------------
+void OutputMod::ProcessAll()
+{
+  // Called by the Selector class for events that were skipped.
+
+  FillAllEventHeader(kTRUE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void OutputMod::RequestBranch(const char *bname) 
+{
+  // Request given branch from TAM.
+
+  if (GetNBranches()>=fNBranchesMax) {
+    Error("RequestBranch", "Can not request branch for %bname"
+          "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
+    return;
+  }
+  
+  fBranches[GetNBranches()-1] = 0;
+  ReqBranch(bname, fBranches[GetNBranches()-1]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,10 +396,7 @@ void OutputMod::SetupBranches()
 //--------------------------------------------------------------------------------------------------
 void OutputMod::SlaveBegin()
 {
-  // Todo
-
-  // request here branches we want
-  
+  // Setup the tree writer and create branches that can already be created at this point.
 
   // setup tree writer
   fTreeWriter = new TreeWriter(fTreeName, kFALSE);
@@ -296,30 +410,30 @@ void OutputMod::SlaveBegin()
   fTreeWriter->DoBranchRef(fTreeName);
 
   // deal with my own tree objects
-  fMyEventHeader = new EventHeader;
-  fTreeWriter->AddBranch(Names::gkEvtHeaderBrn, &fMyEventHeader);
-  fMyRunInfo = new RunInfo;
-  fTreeWriter->AddBranchToTree(Names::gkRunTreeName, Names::gkRunInfoBrn, &fMyRunInfo);
-  fTreeWriter->SetAutoFill(Names::gkRunTreeName,0);
-  fMyLaHeader = new LAHeader;
-  fTreeWriter->AddBranchToTree(Names::gkLATreeName, Names::gkLAHeaderBrn, &fMyLaHeader);
-  fTreeWriter->SetAutoFill(Names::gkLATreeName,0);
+  fEventHeader = new EventHeader;
+  fTreeWriter->AddBranch(GetSel()->GetEvtHdrName(), &fEventHeader);
 
+  // deal with other trees
+  const char *tname = 0;
+  fRunInfo = new RunInfo;
+  tname = GetSel()->GetRunTreeName();
+  fTreeWriter->AddBranchToTree(tname, GetSel()->GetRunInfoName(), &fRunInfo);
+  fTreeWriter->SetAutoFill(tname, 0);
+  fRunTree = fTreeWriter->GetTree(tname);
+  fLaHeader = new LAHeader;
+  tname = GetSel()->GetLATreeName();
+  fTreeWriter->AddBranchToTree(tname, GetSel()->GetLAHdrName(), &fLaHeader);
+  fTreeWriter->SetAutoFill(tname,0);
+  fLATree = fTreeWriter->GetTree(tname);
+  fAllEventHeader = new EventHeader;
+  tname = GetSel()->GetAllEvtTreeName();
+  fTreeWriter->AddBranchToTree(tname, GetSel()->GetAllEvtHdrBrn(), &fAllEventHeader);
+  fAllTree = fTreeWriter->GetTree(tname);
 
-  // add branches to HLT trigger info tree
-  //tws.AddBranchToTree(Names::gkHltTreeName,hltTableName_.c_str(),&hltTable_,32000,0);
-  //tws.SetAutoFill(Names::gkHltTreeName,0);
-  //tws.AddBranchToTree(Names::gkHltTreeName,hltLabelName_.c_str(),&hltLabels_,32000,0);
-  //tws.SetAutoFill(Names::gkHltTreeName,0);
-  //hltTree_=tws.GetTree(Names::gkHltTreeName);
-
-
-  if (HasHLTInfo(fHltFwkModName)) {
-    const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
-    fHltFwkMod = static_cast<HLTFwkMod*>(tasks->FindObject(fHltFwkModName));
-  }
-
+  // get pointer to fAllTreeIn todo
+  // todo
   // deal here with published objects
+  // todo
 
   // create TObject space for TAM
   fBranches = new TObject*[fNBranchesMax];       
@@ -332,14 +446,16 @@ void OutputMod::SlaveBegin()
 //--------------------------------------------------------------------------------------------------
 void OutputMod::SlaveTerminate()
 {
-  // Todo
+  // Terminate tree writing and do cleanup.
 
   delete fTreeWriter;
   fTreeWriter = 0;
 
-  delete fMyEventHeader;
+  delete fEventHeader;
+  delete fRunInfo;
+  delete fLaHeader;
+  delete fAllEventHeader;
 
   delete[] fBranches; 
 }
 
-//--------------------------------------------------------------------------------------------------
