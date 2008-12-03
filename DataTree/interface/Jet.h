@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.9 2008/09/16 18:13:42 sixie Exp $
+// $Id: Jet.h,v 1.10 2008/10/31 18:56:42 bendavid Exp $
 //
 // Jet
 //
@@ -82,7 +82,7 @@ namespace mithep
       Double_t SoftElectronBJetTagsDisc()                     const 
       { return fSoftElectronBJetTagsDisc;               }
 
-      void	 AddTower(CaloTower *tower)                    { fTowers.Add(tower);               }
+      void	 AddTower(const CaloTower *tower)              { fTowers.Add(tower);               }
       void       SetMaxEInEmTowers(Double_t val)               { fMaxEInEmTowers   = val;          }
       void       SetMaxEInHadTowers(Double_t val)              { fMaxEInHadTowers  = val;          }
       void       SetHadEnergyInHO(Double_t val)                { fHadEnergyInHO    = val;          } 

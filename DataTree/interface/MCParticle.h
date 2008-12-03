@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.8 2008/11/24 11:51:20 loizides Exp $
+// $Id: MCParticle.h,v 1.9 2008/11/24 14:11:47 loizides Exp $
 //
 // MCParticle
 //
@@ -28,7 +28,7 @@ namespace mithep
       ~MCParticle() {}
 
       Int_t               AbsPdgId()               const { return (fPdgId<0 ? -fPdgId:fPdgId); }
-      void		  AddDaughter(MCParticle *p)     { fDaughters.Add(p); }
+      void		  AddDaughter(const MCParticle *p) { fDaughters.Add(p); }
       Double_t            Charge()                 const;
       const ThreeVector  &DecayVertex()            const { return fDecayVertex; }
       const MCParticle   *Daughter(UInt_t i)       const;
@@ -53,7 +53,7 @@ namespace mithep
       TParticlePDG       *PdgEntry()               const;
       Int_t               PdgId()                  const { return fPdgId; }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void		  SetMother(MCParticle *p)       { fMother = p; }
+      void		  SetMother(const MCParticle *p) { fMother = const_cast<MCParticle*>(p); }
       void                SetStatus(Int_t s)             { fStatus = s; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
       void                SetPdgId(Int_t s)              {  fPdgId = s; }

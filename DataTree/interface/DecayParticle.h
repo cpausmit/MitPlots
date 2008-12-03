@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.17 2008/11/06 15:01:15 paus Exp $
+// $Id: DecayParticle.h,v 1.18 2008/11/14 14:46:35 bendavid Exp $
 //
 // Decay Particle
 //
@@ -93,13 +93,13 @@ namespace mithep
       Bool_t                 HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                 HasSameDaughters(const DecayParticle *p)  const;
   
-      void                   AddDaughterData(DaughterData *ddata) { fDaughterData.Add(ddata); }
+      void                   AddDaughterData(const DaughterData *ddata) { fDaughterData.Add(ddata); }
       
       const ThreeVector      Position()            const;
       const ThreeVector      RelativePosition()    const;
       
       const Vertex          *PriVertex()           const;
-      void                   SetPriVertex(Vertex *v) { fPriVertex = v; }
+      void                   SetPriVertex(const Vertex *v) { fPriVertex = const_cast<Vertex*>(v); }
       
     protected:
       UInt_t                 fAbsPdgId;

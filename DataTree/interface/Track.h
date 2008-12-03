@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.27 2008/11/03 11:21:11 bendavid Exp $
+// $Id: Track.h,v 1.28 2008/11/17 18:56:07 bendavid Exp $
 //
 // Track
 //
@@ -193,9 +193,9 @@ namespace mithep
       void               SetHit(EHitLayer l)      { fHits.SetBit(l); }
       void               SetHits(const BitMask48 &hits) { fHits = hits; }
       void               SetNdof(UInt_t dof)      { fNdof = dof; }
-      void	         SetMCPart(MCParticle *p) { fMCParticleRef = p; }
+      void	         SetMCPart(const MCParticle *p) { fMCParticleRef = const_cast<MCParticle*>(p); }
       void               SetPhiEcal(Double_t phi) { fPhiEcal = phi; }
-      void	         SetSCluster(SuperCluster* sc) { fSuperClusterRef = sc; }
+      void	         SetSCluster(const SuperCluster* sc) { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
       const SuperCluster *SCluster()      const;
       const  BitMask48   StereoHits()     const { return (fHits & StereoLayers()); }
       static const BitMask48 StereoLayers();

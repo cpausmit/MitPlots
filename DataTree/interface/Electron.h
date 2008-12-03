@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.19 2008/11/12 18:56:24 peveraer Exp $
+// $Id: Electron.h,v 1.20 2008/11/27 16:14:37 loizides Exp $
 //
 // Electron
 //
@@ -65,9 +65,9 @@ namespace mithep
       Double_t    PassTightID()                    const { return fPassTightID;             }
       Double_t    IDLikelihood()                   const { return fIDLikelihood;            }
 
-      void	  SetGsfTrk(Track* t)                           { fGsfTrackRef = t;                }
-      void	  SetTrackerTrk(Track* t)                       { fTrackerTrackRef = t;            }
-      void	  SetSuperCluster(SuperCluster* sc)             { fSuperClusterRef = sc;           }
+      void	  SetGsfTrk(const Track* t)                     { fGsfTrackRef = const_cast<Track*>(t); }
+      void	  SetTrackerTrk(const Track* t)                 { fTrackerTrackRef = const_cast<Track*>(t); }
+      void	  SetSuperCluster(const SuperCluster* sc)       { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
       void        SetESuperClusterOverP(Double_t x)             { fESuperClusterOverP = x;         }
       void        SetESeedClusterOverPout(Double_t x)           { fESeedClusterOverPout = x;       }
       void        SetPIn(Double_t PIn)                          { fPIn = PIn;                      }
