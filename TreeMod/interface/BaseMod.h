@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.10 2008/11/27 22:32:24 loizides Exp $
+// $Id: BaseMod.h,v 1.11 2008/12/01 17:42:01 loizides Exp $
 //
 // BaseMod
 //
@@ -22,29 +22,32 @@
 namespace mithep 
 {
   class Selector;
+  class HLTFwkMod;
 
   class BaseMod : public TAModule {
     public:
-      BaseMod(const char *name="BaseMod", const char *title="Base analysis module") 
-        : TAModule(name,title), fNEventsProcessed(0) {}
+      BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
       ~BaseMod() {}
 
     protected:
       void                        IncNEventsProcessed()       { ++fNEventsProcessed; }
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
-      const TriggerObjectCol     *GetHLTObjects(const char *name)                    const;
-      const TriggerObjectsTable  *GetHLTObjectsTable(const char *hltfwk="HLTFwkMod") const;
-      const TriggerTable         *GetHLTTable(const char *hltfwk="HLTFwkMod")        const;
+      const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod; }
+      const TriggerObjectCol     *GetHLTObjects(const char *name) const;
+      const TriggerObjectsTable  *GetHLTObjectsTable()            const;
+      const TriggerTable         *GetHLTTable()                   const;
       Int_t                       GetNEventsProcessed() const { return fNEventsProcessed; }
       template <class T> T       *GetObjThisEvt(const char *name);
       template <class T> T       *GetPublicObj(const char *name);
       const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo(); }
       const Selector             *GetSel()              const;
-      Bool_t                      HasHLTInfo(const char *hltfwk="HLTFwkMod")         const;
+      Bool_t                      HasHLTInfo()          const;
       Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo(); } 
       void                        SaveNEventsProcessed(const char *name="hDEvents");
 
     private:
+      mutable const HLTFwkMod    *fHltFwkMod;           //!pointer to HLTFwdMod
+      const TString               fHltFwkModName;       //!name of HLTFwkMod
       Int_t                       fNEventsProcessed; 	//number of events
 
     ClassDef(BaseMod,1) // Base TAM module

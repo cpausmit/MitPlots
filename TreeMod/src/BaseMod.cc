@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.3 2008/11/25 15:57:49 loizides Exp $
+// $Id: BaseMod.cc,v 1.4 2008/12/02 09:33:46 loizides Exp $
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -9,7 +9,17 @@ using namespace mithep;
 ClassImp(mithep::BaseMod)
 
 //--------------------------------------------------------------------------------------------------
-const TriggerObjectsTable *BaseMod::GetHLTObjectsTable(const char *hltfwk) const
+BaseMod::BaseMod(const char *name, const char *title) : 
+  TAModule(name,title), 
+  fHltFwkMod(0),
+  fHltFwkModName("HLTFwkMod"),
+  fNEventsProcessed(0)
+{
+  // Constructor.
+}
+
+//--------------------------------------------------------------------------------------------------
+const TriggerObjectsTable *BaseMod::GetHLTObjectsTable() const
 { 
   // Get pointer to HLT objects table obtained by module with given name. (Note: normally
   // you want to stick to the default argument.)
@@ -17,30 +27,27 @@ const TriggerObjectsTable *BaseMod::GetHLTObjectsTable(const char *hltfwk) const
   if (!HasHLTInfo()) 
     return 0;
 
-  const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
-  const HLTFwkMod *mod = static_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
-  return (dynamic_cast<const TriggerObjectsTable *>(FindPublicObj(mod->HLTObjsNamePub())));
+  return (dynamic_cast<const TriggerObjectsTable *>(FindPublicObj(fHltFwkMod->HLTObjsNamePub())));
 }
 
 //--------------------------------------------------------------------------------------------------
-const TriggerTable *BaseMod::GetHLTTable(const char *hltfwk) const 
+const TriggerTable *BaseMod::GetHLTTable() const 
 { 
-  // Get pointer to HLT trigger table obtained by module with given name. (Note: normally
-  // you want to stick to the default argument.)
+  // Get pointer to HLT trigger table obtained by module with given name.
   
-  if (!HasHLTInfo(hltfwk)) 
+  if (!HasHLTInfo()) 
     return 0;
 
-  const TList *tasks = GetSelector()->GetTopModule()->GetSubModules();
-  const HLTFwkMod *mod = static_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
-  return (dynamic_cast<const TriggerTable *>(FindPublicObj(mod->HLTTabNamePub())));
+  return (dynamic_cast<const TriggerTable *>(FindPublicObj(fHltFwkMod->HLTTabNamePub())));
 }
 
 //--------------------------------------------------------------------------------------------------
-Bool_t BaseMod::HasHLTInfo(const char *hltfwk) const
+Bool_t BaseMod::HasHLTInfo() const
 { 
-  // Check if HLT framework module is in list of modules. (Note: normally
-  // you want to stick to the default argument.)
+  // Check if HLT framework module is in list of modules. 
+
+  if (fHltFwkMod) 
+    return kTRUE;
 
   if (!GetSelector() || !GetSelector()->GetTopModule()) 
     return kFALSE;
@@ -49,8 +56,8 @@ Bool_t BaseMod::HasHLTInfo(const char *hltfwk) const
   if (!tasks)
     return kFALSE;
 
-  const HLTFwkMod *mod = dynamic_cast<const HLTFwkMod*>(tasks->FindObject(hltfwk));
-  if (mod)
+  fHltFwkMod = dynamic_cast<const HLTFwkMod*>(tasks->FindObject(fHltFwkModName));
+  if (fHltFwkMod)
     return kTRUE;
   return kFALSE;
 }
