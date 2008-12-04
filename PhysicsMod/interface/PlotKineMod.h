@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
+// $Id: PlotKineMod.h,v 1.1 2008/11/28 20:27:23 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -42,9 +42,12 @@ namespace mithep
       Double_t                 fPtMax;      //maximum pt
       Double_t                 fEtaMin;     //minimum eta
       Double_t                 fEtaMax;     //maximum eta 
-      T                       *fCol;        //!pointer to collection 
+      Bool_t                   fLoadBr;     //=true then load branch (def=1)
+      const Collection<T>     *fCol;        //!pointer to collection 
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
+      TH1D                    *fMassHist;   //!mass histogram
+      TH1D                    *fMtHist;     //!mt histogram
 
       void                     Process();
       void                     SlaveBegin();
@@ -62,6 +65,7 @@ mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) :
   fPtMax(5000),
   fEtaMin(-10),
   fEtaMax(10),
+  fLoadBr(kTRUE),
   fCol(0),
   fPtHist(0),
   fEtaHist(0)
@@ -75,11 +79,14 @@ void mithep::PlotKineMod<T>::Process()
 {
   // Process entries of the tree: Just load the branch and fill the histograms.
 
-  LoadBranch(GetColName());
-
+  if (fLoadBr)
+    LoadBranch(GetColName());
+  else 
+    fCol = GetObjThisEvt<Collection<T> >(GetColName());
+    
   Int_t ents=fCol->GetEntries();
   for(Int_t i=0;i<ents;++i) {
-     const Particle *p = fCol->At(i);
+     const T *p = fCol->At(i);
      Double_t pt = p->Pt();
      if (pt<fPtMin) 
        continue;
@@ -101,9 +108,10 @@ void mithep::PlotKineMod<T>::SlaveBegin()
 {
   // Request a branch and create the histograms.
 
-  ReqBranch(GetColName(), fCol);
+  if (fLoadBr) 
+    ReqBranch(GetColName(), fCol);
 
-  fPtHist  = new TH1D("hPtHist",";p_{t};#",100,0.,25.);
+  fPtHist  = new TH1D("hPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddOutput(fPtHist);
   fEtaHist = new TH1D("hEtaHist",";#eta;#",160,-8.,8.);
   AddOutput(fEtaHist);

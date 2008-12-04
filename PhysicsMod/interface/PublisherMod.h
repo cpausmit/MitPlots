@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
+// $Id: PublisherMod.h,v 1.1 2008/11/28 20:27:23 loizides Exp $
 //
 // PublisherMod
 //
@@ -35,7 +35,7 @@ namespace mithep
       void                     Process();
       void                     SlaveBegin();
 
-      ClassDefT(PublisherMod,1) // Plot kinematics module
+      ClassDefT(PublisherMod,1) // Publisher module
   };
 }
 
@@ -43,7 +43,7 @@ namespace mithep
 template<class T>
 mithep::PublisherMod<T>::PublisherMod(const char *name, const char *title) : 
   BaseMod(name,title),
-  fBranchName("SetMe"),
+  fBranchName(""),
   fPublicName(""),
   fObj(0)
 {
@@ -57,7 +57,7 @@ void mithep::PublisherMod<T>::Process()
   // Process entries of the tree: Just load the branch and fill the histograms.
 
   LoadBranch(GetBranchName());
-  AddObjThisEvt(fObj,GetPublicName());
+  AddObjThisEvt(fObj, GetPublicName());
 }
 
 //--------------------------------------------------------------------------------------------------

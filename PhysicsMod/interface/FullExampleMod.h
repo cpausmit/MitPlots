@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.6 2008/09/10 03:33:28 loizides Exp $
+// $Id: FullExampleMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -30,17 +30,22 @@ namespace mithep
       ~FullExampleMod() {}
 
     protected:
-      TString                  fMCPartName;    //name of particle collection
-      TString                  fTrackName;     //name of track collection
-      TString                  fMuonName;      //name of muon collection
-      TString                  fElectronName;  //name of electron collection
+      void                     Begin();
+      void                     Process();
+      void                     SlaveBegin();
+      void                     SlaveTerminate();
+      void                     Terminate();
 
-      MCParticleCol           *fParticles;          //!MCParticle branch
-      TrackCol		      *fTracks;	            //!Track branch
-      MuonCol		      *fMuons;              //!Muon branch
-      ElectronCol	      *fElectrons;          //!Electron branch
+      TString                  fMCPartName;         //name of particle collection
+      TString                  fTrackName;          //name of track collection
+      TString                  fMuonName;           //name of muon collection
+      TString                  fElectronName;       //name of electron collection
+      const MCParticleCol     *fParticles;          //!MCParticle branch
+      const TrackCol          *fTracks;	            //!Track branch
+      const MuonCol	      *fMuons;              //!Muon branch
+      const ElectronCol	      *fElectrons;          //!Electron branch
       TH1D                    *fMCPtHist;           //!MCParticle pt histogram
-      TH1D                    *fMCEtaHist;         //!MCParticle eta histogram
+      TH1D                    *fMCEtaHist;          //!MCParticle eta histogram
       TH1D                    *fTrackPtHist;        //!Track pt histogram
       TH1D                    *fTrackEtaHist;       //!Track eta histogram
       TH1D                    *fMuonPtHist;         //!Muon pt histogram
@@ -48,13 +53,7 @@ namespace mithep
       TH1D                    *fElectronPtHist;	    //!Electron pt histogram
       TH1D                    *fElectronEtaHist;    //!Electron eta histogram
 
-      void                     Begin();
-      void                     Process();
-      void                     SlaveBegin();
-      void                     SlaveTerminate();
-      void                     Terminate();
-
-      ClassDef(FullExampleMod,1) // TAM example analysis module
+      ClassDef(FullExampleMod,1) // Full example analysis module
   };
 }
 #endif

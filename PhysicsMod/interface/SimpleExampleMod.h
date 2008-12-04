@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
+// $Id: SimpleExampleMod.h,v 1.2 2008/11/28 20:27:23 loizides Exp $
 //
 // SimpleExampleAnaMod
 //
@@ -37,11 +37,6 @@ namespace mithep
       void                     SetPartName(const char *n)       { fPartName=n; }
 
     protected:
-      TString                  fPartName;   //branch name of MCParticle collection
-      MCParticleCol           *fParticles;  //!pointer to generated particle branch
-      TH1D                    *fPtHist;     //!pt histogram
-      TH1D                    *fEtaHist;    //!eta histogram
-
       void                     Begin();
       void                     BeginRun();
       void                     EndRun();
@@ -50,7 +45,12 @@ namespace mithep
       void                     SlaveTerminate();
       void                     Terminate();
 
-      ClassDef(SimpleExampleMod,1) // TAM simple example analysis module
+      TString                  fPartName;   //branch name of MCParticle collection
+      const MCParticleCol     *fParticles;  //!pointer to generated particle branch
+      TH1D                    *fPtHist;     //!pt histogram
+      TH1D                    *fEtaHist;    //!eta histogram
+
+      ClassDef(SimpleExampleMod,1) // Simple example analysis module
   };
 }
 #endif

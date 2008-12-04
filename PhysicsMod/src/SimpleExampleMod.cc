@@ -1,4 +1,4 @@
-// $Id: SimpleExampleMod.cc,v 1.1 2008/11/25 14:30:54 loizides Exp $
+// $Id: SimpleExampleMod.cc,v 1.2 2008/11/28 20:27:23 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include <TH1D.h>
@@ -50,7 +50,7 @@ void SimpleExampleMod::Process()
 
   Int_t ents=fParticles->GetEntries();
   for(Int_t i=0;i<ents;++i) {
-     MCParticle *p = fParticles->At(i);
+     const MCParticle *p = fParticles->At(i);
      fPtHist->Fill(p->Pt());
      fEtaHist->Fill(p->Eta());
   }

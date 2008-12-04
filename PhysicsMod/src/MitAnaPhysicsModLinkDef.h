@@ -1,4 +1,4 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.4 2008/11/25 14:30:54 loizides Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.5 2008/11/28 20:27:23 loizides Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
@@ -20,15 +20,15 @@
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::HLTExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CompositeParticleCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::ConversionCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::ElectronCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::GenJetCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::JetCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::MCParticleCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::MetCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::MuonCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::PhotonCol>+;
-//#pragma link C++ class mithep::PlotKineMod<mithep::TrackCol>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::TriggerObjectCol>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::CompositeParticle>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Conversion>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Electron>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::GenJet>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Jet>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::MCParticle>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Met>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Muon>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Photon>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Track>+;
+#pragma link C++ class mithep::PlotKineMod<mithep::TriggerObject>+;
 #endif
