@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.1 2008/09/28 02:40:08 loizides Exp $
+// $Id: HLTMod.h,v 1.2 2008/10/23 17:02:16 loizides Exp $
 //
 // HLTMod
 //
@@ -61,7 +61,7 @@ namespace mithep
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
       Vector<std::string>         fTrigNames;     //trigger names requested for test mask
-      BitMask256                 *fBits;          //!trigger bits branch
+      const BitMask256           *fBits;          //!trigger bits branch
       Vector<BitMask256>          fTrigBitsAnd;   //!trigger bits used in mask
       Vector<BitMask256>          fTrigBitsCmp;   //!trigger bits used for comparison
       BitMask256                  fBitsDone;      //!bits for which trigger objects are copied

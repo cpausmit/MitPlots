@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.1 2008/09/28 02:38:39 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.2 2008/12/02 09:33:45 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -54,8 +54,8 @@ namespace mithep
       TString                     fHLTLabNamePub; //HLT module labels published name
       TString                     fObjsNamePub;   //trigger objects published name
       const UInt_t                fNMaxTriggers;  //maximum number of triggers
-      TriggerObjectBaseArr       *fObjs;          //!trigger objects branch
-      TriggerObjectRelArr        *fRels;          //!trigger to objects relation branch
+      const TriggerObjectBaseArr *fObjs;          //!trigger objects branch
+      const TriggerObjectRelArr  *fRels;          //!trigger to objects relation branch
       Bool_t                      fReload;        //!=true then reload/rebuild tables
       TTree                      *fHLTTree;       //!HLT tree in current file
       Vector<std::string>        *fHLTTab;        //!HLT trigger names
