@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.6 2008/12/03 17:42:37 loizides Exp $
+// $Id: Selector.cc,v 1.7 2008/12/04 13:50:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -72,7 +72,6 @@ Bool_t Selector::EndRun()
   // here so that in any case it can process the event.
 
   if (IsAModAborted() || IsEventAborted()) { // deal with output module if needed: Do this here,
-    cout << "Output mod " << fCurEvt << endl;
     TIter it(fOutputMods.MakeIterator());    // avoids having to copy/rewrite large parts of
     OutputMod *o = 0;                        // TAMSelector::Process and interaction with TAModule
     while ((o=static_cast<OutputMod*>(it.Next())) != 0)
