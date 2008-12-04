@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.2 2008/12/02 09:34:17 loizides Exp $
+// $Id: OutputMod.cc,v 1.3 2008/12/03 17:44:05 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -41,7 +41,10 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fL1Entries(0),
   fOrigHltEntry(-1),
   fHltEntries(0),
-  fFileNum(0)
+  fFileNum(0),
+  fLastWrittenEvt(-1),
+  fLastSeenEvt(-1),
+  fCounter(0)
 {
   // Constructor.
 }
@@ -67,7 +70,7 @@ void OutputMod::BeginRun()
 void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 {
   // Check if the given branch should be kept or dropped. 
-  
+
   if (IsAcceptedBranch(bname)) 
     return;
 
@@ -166,6 +169,12 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
 }
 
 //--------------------------------------------------------------------------------------------------
+void OutputMod::EndRun()
+{
+  // Todo
+}
+
+//--------------------------------------------------------------------------------------------------
 void OutputMod::FillAllEventHeader(Bool_t isremoved)
 {
   // Fill event header into the all-event-header tree.
@@ -195,7 +204,7 @@ void OutputMod::FillL1Info()
 //--------------------------------------------------------------------------------------------------
 void OutputMod::FillHltInfo()
 {
-  // Todo.
+  // Write HLT trigger table if needed.
 
   if (!fHltTree) 
     return;
@@ -282,16 +291,32 @@ void OutputMod::Process()
   // Write out the kept branches of the current event. Make sure the meta information is 
   // correctly updated.
 
+  if (GetSel()->GetCurEvt() == fLastSeenEvt) {
+    Warning("Process", "Event with %ul already seen", fLastSeenEvt);
+    return;
+  }
+  fLastSeenEvt = GetSel()->GetCurEvt();
+
+  if (GetSel()->GetCurEvt() == fLastWrittenEvt) {
+    Warning("Process", "Event with %ul already written", fLastWrittenEvt);
+    return;
+  }
+  fLastWrittenEvt = GetSel()->GetCurEvt();
+  ++fCounter;
+
+  // prepare for tree filling
   fTreeWriter->BeginEvent(fDoReset);
 
   if (GetNEventsProcessed() == 0 && fCheckTamBr) {
     CheckAndResolveDep(fKeepTamBr);    
   }
 
+  // load all our branches
   LoadBranches();
 
+  // pass our branches to tree writer if on first event
   if (GetNEventsProcessed() == 0) {
-    SetupBranches();
+    SetupBranches(); 
   }
 
   // reset per file quantities if a new file was opened
@@ -358,6 +383,11 @@ void OutputMod::ProcessAll()
 {
   // Called by the Selector class for events that were skipped.
 
+  if (GetSel()->GetCurEvt() == fLastSeenEvt)
+    return;
+  fLastSeenEvt = GetSel()->GetCurEvt();
+  ++fCounter;
+
   FillAllEventHeader(kTRUE);
 }
 
@@ -373,7 +403,7 @@ void OutputMod::RequestBranch(const char *bname)
   }
   
   fBranches[GetNBranches()-1] = 0;
-  ReqBranch(bname, fBranches[GetNBranches()-1]);
+  TAModule::ReqBranch(bname, fBranches[GetNBranches()-1]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -457,5 +487,8 @@ void OutputMod::SlaveTerminate()
   delete fAllEventHeader;
 
   delete[] fBranches; 
-}
 
+  Double_t frac =  100.*GetNEventsProcessed()/fCounter;
+  Info("SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
+       frac, GetNEventsProcessed(), fCounter);
+}

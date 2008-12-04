@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.2 2008/12/02 09:34:16 loizides Exp $
+// $Id: OutputMod.h,v 1.3 2008/12/03 17:44:05 loizides Exp $
 //
 // OutputMod
 //
@@ -45,6 +45,7 @@ namespace mithep
 
     protected:
       void                     BeginRun();
+      void                     EndRun();
       Bool_t                   Notify();
       void                     Process();
       void                     ProcessAll();
@@ -70,7 +71,7 @@ namespace mithep
       void                     FillAllEventHeader(Bool_t isremoved);
       void                     FillL1Info();
       void                     FillHltInfo();
-      UInt_t                   GetNBranches() const           { return fBrNameList.Entries(); }
+      UInt_t                   GetNBranches() const          { return fBrNameList.Entries(); }
       void                     LoadBranches();
       void                     RequestBranch(const char *bname);
       void                     SetupBranches();
@@ -90,15 +91,18 @@ namespace mithep
       TTree                   *fLATree;          //!look-ahead tree
       TTree                   *fAllTree;         //!all-event-header tree
       TTree                   *fAllTreeIn;       //!all-event-header tree (input)
-      TTree                   *fL1Tree;          //L1 trigger tree (not owned)
-      TTree                   *fHltTree;         //HLT trigger tree (not owned)
-      Int_t                    fRunEntries;      //number of run info entries
-      std::map<UInt_t,Int_t>   fRunmap;          //map between run number and entry number
-      Int_t                    fOrigL1Entry;     //entry for original tree when table was copied
-      Int_t                    fL1Entries;       //number of l1 info entries
-      Int_t                    fOrigHltEntry;    //entry for original tree when table was copied
-      Int_t                    fHltEntries;      //number of hlt info entries
-      UShort_t                 fFileNum;         //file number of current file
+      TTree                   *fL1Tree;          //!L1 trigger tree (not owned)
+      TTree                   *fHltTree;         //!HLT trigger tree (not owned)
+      Int_t                    fRunEntries;      //!number of run info entries
+      std::map<UInt_t,Int_t>   fRunmap;          //!map between run number and entry number
+      Int_t                    fOrigL1Entry;     //!entry for original tree when table was copied
+      Int_t                    fL1Entries;       //!number of l1 info entries
+      Int_t                    fOrigHltEntry;    //!entry for original tree when table was copied
+      Int_t                    fHltEntries;      //!number of hlt info entries
+      UShort_t                 fFileNum;         //!file number of current file
+      Long64_t                 fLastWrittenEvt;  //!entry of last written event
+      Long64_t                 fLastSeenEvt;     //!entry of last seen event
+      Long64_t                 fCounter;         //!count number of events
 
       friend class Selector;
 
