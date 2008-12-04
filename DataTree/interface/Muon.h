@@ -1,9 +1,54 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.20 2008/12/01 17:32:34 loizides Exp $
+// $Id: Muon.h,v 1.21 2008/12/03 16:58:17 bendavid Exp $
 //
 // Muon
+// Classified into 3 Types
+//  Standalone  : Muon Fit from hits in the Muon Chambers
+//  Tracker     : Tracker Matched Track to Muon Chambers with segments
+//  Global      : Combined Track and Muon Chambers Fit
 //
-// Details to be worked out... TODO by Phil
+//  In the Muon class all three Muons exist and can be determined by checking
+//  whether a fit track exists for such a Muon (eg TrackerTrk() == 0). When 
+//  BestTrk function is called the Global Fit is returned, if that does not
+//  exist the Tracker Fit is returned upon that failure the Standalone Muon
+//  is subsequently returned. To consult More see:
+//  http://cmsdoc.cern.ch/cms/Physics/muon/MPOG/Notes/MuonReco.pdf
+//
+// Quality Varaibles for Selection
+//  Isolation : decomposed to IsoRNNXXXXX 
+//    NN = 03,05 to denote R =0.3,0.5 in Isolation Cone
+//    XXXXX = SumPt  -Sum of Pt of Tracks in Cone (using all Pt Tracks)
+//    XXXXX = EmEt   -Sum of Et of Em component of Calo Towers  (Veto=0.08)
+//    XXXXX = HadEt  -Sum of Et of Had component of Calo Towers (Veto=0.1)
+//    XXXXX = HoEt   -Sum of Pt of Ho component of Calo Towers  (Veto=0.1)
+//    XXXXX = NTrk   -Number of Tracks within Cone (using all Pt Tracks)
+//    XXXXX = NJet   -Sum of Jets inside Cone
+// Muon Quality Variables
+//  Extracted from the Muon Tracking Associator 
+//  For more se https://twiki.cern.ch/twiki/bin/view/CMS/TrackAssociator
+//  Energy Variables : Energy within (5x5 Ecal Crystal/Hcal/Ho) along Track 
+//   Using Calo Towers
+//  S9 Energy Variables : Energy using RecHits CaloTowers Default
+//  Segment Variables :
+//   Segment variables are stored in array of 8:
+//     0-3 Correspond to segments in 4 DT chambers in->outward(3 has no Y Res)
+//     4-7 Correspnod to segments in 4 CSC chambers in->out
+//    If value undetermined 999999 is returned.
+//   Variables:
+//    DX,DY,PullX,PullY: Uncertainties/Pulls of Propagated Track 
+//     with respect to local Muon Segment
+//   TrackDist,TrackDistErr: Summed Dist/Err (in X,Y) of Segment with respect
+//    to propagated Track
+//   NSegments : Number of Segements in Muon using Segment + Track Arbitration 
+//   NChambers : Number of Muon Chambers Traverresed in Propagated Track
+//   LastHit   : Returns farthest (from Center) station with a recorded Segment
+//   LastStation  : Returns farhtest station using Segment+Track Arbitration
+//  Muon Id Methods: Please see Muon Id Note(as of now unpublished): 
+//      https://www.cmsaf.mit.edu/twiki/pub/CmsHep/HepWAnalysis/MuonID-ingo.pdf
+//   TMOneStation : Returns bool whether Muon passes Tracker Muon One StationId
+//    -Matching criteria for One of all Segements Matched to Muon
+//   TMLastStation : Returns bool whether Muon pass LastStation Id criteria
+//    -Matching criteria for Last most Segement 
 //
 // Authors: J.Bendavid, C.Loizides, C.Paus, P.Harris
 //--------------------------------------------------------------------------------------------------
