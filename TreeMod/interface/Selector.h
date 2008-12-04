@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.7 2008/12/01 17:40:01 loizides Exp $
+// $Id: Selector.h,v 1.8 2008/12/03 17:42:36 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -62,7 +62,10 @@ namespace mithep {
       TTree               *fLATree;         //!look-ahead tree in current file
       LAHeader            *fLAHeader;       //!event header for next event
       UInt_t               fCurRunNum;      //!current run number
-      OutputMod           *fOutputMod;      //!pointer to output mod (=0 if none used)
+      TList                fOutputMods;     //!pointer to output modules
+
+    private:
+      void                 SearchOutputMods(const TAModule *mod);
 
       friend class OutputMod;
 

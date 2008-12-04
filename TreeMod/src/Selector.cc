@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.5 2008/09/28 02:37:31 loizides Exp $
+// $Id: Selector.cc,v 1.6 2008/12/03 17:42:37 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -29,6 +29,8 @@ Selector::Selector() :
   fCurRunNum(UInt_t(-1))
 {
   // Constructor.
+
+  fOutputMods.SetOwner(kFALSE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,11 +69,15 @@ Bool_t Selector::BeginRun()
 Bool_t Selector::EndRun()
 {
   // Determines whether we are at the end of a run. Also, do treat special case of output module 
-  // here so it in any case can process the event.
-  
-  if (fOutputMod && (IsAModAborted() || IsEventAborted())) {
-    fOutputMod->ProcessAll();
-  } 
+  // here so that in any case it can process the event.
+
+  if (IsAModAborted() || IsEventAborted()) { // deal with output module if needed: Do this here,
+    cout << "Output mod " << fCurEvt << endl;
+    TIter it(fOutputMods.MakeIterator());    // avoids having to copy/rewrite large parts of
+    OutputMod *o = 0;                        // TAMSelector::Process and interaction with TAModule
+    while ((o=static_cast<OutputMod*>(it.Next())) != 0)
+      o->ProcessAll();
+  }
 
   if (!fDoRunInfo) 
     return kFALSE;
@@ -110,14 +116,41 @@ Bool_t Selector::Notify()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Selector::SearchOutputMods(const TAModule *mod)
+{
+  // Search for output module among list of modules.
+
+  if (!mod)
+    return;
+
+  const OutputMod *o = dynamic_cast<const OutputMod*>(mod);
+  if (o)
+    fOutputMods.Add(const_cast<OutputMod*>(o));
+
+  const TList *tasks = mod->GetSubModules();
+  if (!tasks) 
+    return;
+
+  TIter it(tasks->MakeIterator());
+  TObject *ob = 0;
+  while ((ob=it.Next()) != 0) {
+    TAModule *nmod = dynamic_cast<TAModule*>(ob);
+    if (nmod) 
+      SearchOutputMods(nmod);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Selector::SlaveBegin(TTree *tree)
 {
   // The SlaveBegin() function is called after the Begin() function and can be used to setup
   // analysis on the slaves. Here, we request the event header branch.
 
   if (fDoRunInfo) {
-    ReqBranch(fEvtHdrName.Data(), fEventHeader);
+    ReqBranch(fEvtHdrName, fEventHeader);
   }
+
+  SearchOutputMods(GetTopModule());
 
   TAMSelector::SlaveBegin(tree);
 }
