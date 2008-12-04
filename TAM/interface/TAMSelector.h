@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.6 2008/10/07 16:02:33 bendavid Exp $
+// $Id: TAMSelector.h,v 1.7 2008/10/08 11:33:24 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -164,7 +164,8 @@ inline void TAMSelector::ReqBranch(const Char_t* bname, T*& address)
       fBranchTable.Add(brInfo);
    }
 
-   if (!brInfo->AddPtr(address)) AbortAnalysis();
+   if (!brInfo->AddPtr(address)) 
+     AbortAnalysis();
 }
 
 

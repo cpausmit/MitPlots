@@ -1,5 +1,5 @@
 //
-// $Id: TAMBranchInfo.h 5120 2008-05-07 18:17:33Z loizides $
+// $Id: TAMBranchInfo.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMBranchInfo
@@ -86,6 +86,7 @@ inline Bool_t TAMBranchInfo::AddPtr(T*& address)
    // Must do an explicit cast to BranchAddr_t*
    BranchAddr_t* adr = reinterpret_cast<BranchAddr_t*>(&address);
    fUsrAddresses.push_back(new TAMTypedBrPtr<T>(adr));
+
    return kTRUE;
 }
 

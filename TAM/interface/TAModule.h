@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.2 2008/06/23 10:53:00 loizides Exp $
+// $Id: TAModule.h,v 1.3 2008/06/24 14:03:45 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -55,7 +55,6 @@ private:
    static const Char_t kExecSlaveTerminate;  //!key to mark SlaveTerminate
    static const Char_t kExecTerminate;       //!key to mark Terminate
    
-   // to be called by friend class TAMSelector only
    void                AbortAnalysis();
    void                AbortEvent();
    void                AbortModule();
@@ -74,9 +73,10 @@ protected:
    virtual Bool_t      AddObjThisEvt(TObject* obj, const char *name);
    template <class OC>
    void                AddOutput(OC* const & obj);
-   const TAMSelector  *GetSelector()       const { return fSelector; }
-   Bool_t              IsEventAborted()    const { return (fSelector==0) ? kFALSE : fSelector->IsEventAborted(); }
-   Bool_t              IsAnalysisAborted() const { return (fSelector==0) ? kFALSE : fSelector->IsAnalysisAborted(); }
+   const TAMSelector  *GetSelector()         const { return fSelector; }
+   Bool_t              IsEventAborted()      const { return (fSelector==0) ? kFALSE : fSelector->IsEventAborted(); }
+   Bool_t              IsAnalysisAborted()   const { return (fSelector==0) ? kFALSE : fSelector->IsAnalysisAborted(); }
+   void                ls(Option_t *option)  const;
    void                LoadBranch(const Char_t* bname);
    virtual TObject    *FindObjThisEvt(const Char_t* name) const;
    virtual Bool_t      Notify()                  { return kTRUE; }

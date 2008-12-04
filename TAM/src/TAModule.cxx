@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx,v 1.2 2008/06/23 10:53:00 loizides Exp $
+// $Id: TAModule.cxx,v 1.3 2008/11/23 19:52:13 loizides Exp $
 //
 
 #include "TAModule.h"
@@ -16,6 +16,12 @@
 #endif
 #ifndef ROOT_TAMOutput
 #include "TAMOutput.h"
+#endif
+#ifndef ROOT_TROOT
+#include "TROOT.h"
+#endif
+#ifndef ROOT_TRegexp
+#include "TRegexp.h"
 #endif
 
 
@@ -335,6 +341,32 @@ TObject* TAModule::FindPublicObj(const Char_t* name) const {
 
 
 //______________________________________________________________________________
+void TAModule::ls(Option_t *option) const
+{
+   // List the modules inside this module and its submodules if requested.
+   // Note: The following is take from TTask::ls(option) but fixed to avoid 
+   // usage of null string in TRegexp.
+
+   TROOT::IndentLevel();
+   cout <<GetName()<<"\t"<<GetTitle()<<endl;
+   TString opta = option;
+   TString opt  = opta.Strip(TString::kBoth);
+   if (opt.IsNull()) return;
+
+   TRegexp re(opt, kTRUE);
+   TROOT::IncreaseDirLevel();
+   TObject *obj;
+   TIter nextobj(fTasks);
+   while ((obj = static_cast<TObject*>(nextobj()))) {
+      TString s = obj->GetName();
+      if (s.Index(re) == kNPOS) continue;
+      obj->ls(option);
+   }
+   TROOT::DecreaseDirLevel();
+}
+
+
+//______________________________________________________________________________
 void TAModule::LoadBranch(const Char_t* bname) 
 {
    // Loads the current entry for the specified branch.
@@ -406,8 +438,9 @@ void TAModule::NewOutputList(TList* list)
 
 
 //______________________________________________________________________________
-Bool_t TAModule::NotifyAll() {
-   // recursively call Notify
+Bool_t TAModule::NotifyAll() 
+{
+   // Recursively call Notify.
    
    Bool_t ret = Notify();
    TAModule* task=0;
@@ -423,8 +456,8 @@ Bool_t TAModule::NotifyAll() {
 void TAModule::Print(Option_t *option/*=""*/) const 
 {
    // Print the modules inside this module and its submodules.
-   
-   TTask::ls(option);
+
+   ls(option);
 }
 
 
