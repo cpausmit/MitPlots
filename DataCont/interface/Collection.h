@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
+// $Id: Collection.h,v 1.4 2008/12/01 17:17:20 bendavid Exp $
 //
 // Collection
 //
@@ -42,7 +42,7 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-void mithep::Collection<ArrayElement>::Print(Option_t *opt) const
+void mithep::Collection<ArrayElement>::Print(Option_t */*opt*/) const
 {
   printf("%s: Contains %d (out of %d) objs\n",
          GetName(), GetEntries(), GetSize());
