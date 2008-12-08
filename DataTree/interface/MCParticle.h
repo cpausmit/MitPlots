@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.9 2008/11/24 14:11:47 loizides Exp $
+// $Id: MCParticle.h,v 1.10 2008/12/03 16:58:17 bendavid Exp $
 //
 // MCParticle
 //
@@ -42,8 +42,11 @@ namespace mithep
       Bool_t              HasMother(const MCParticle *m)                    const;
       Bool_t              HasMother(Int_t pid, Bool_t checkCharge=kFALSE)   const;
       Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
+      Bool_t              IsNot(Int_t pid, Bool_t checkCharge=kFALSE)       const;
       Bool_t              IsGenerated()            const { return fIsGenerated; }
+      Bool_t              IsGluon()                const { return fPdgId == kGlu; }
       Bool_t              IsNeutrino()             const;
+      Bool_t              IsParton()               const { return (IsGluon() || IsQuark()); }
       Bool_t              IsQuark()                const { return (AbsPdgId()>0 && AbsPdgId()<7); }
       Bool_t              IsSimulated()            const { return fIsSimulated; }
       const MCParticle   *Mother()                 const;
@@ -180,6 +183,15 @@ inline Bool_t mithep::MCParticle::Is(Int_t pid, Bool_t checkCharge) const
 
   Int_t apid = pid>0?pid:-pid;
   return (AbsPdgId() == apid);
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::MCParticle::IsNot(Int_t pid, Bool_t checkCharge) const 
+{ 
+  // Return true if particle is not of given type. If checkCharge is false then just the type of 
+  // particle is checked (ie particle and anti-particle).
+
+  return !Is(pid, checkCharge);
 }
 
 //--------------------------------------------------------------------------------------------------
