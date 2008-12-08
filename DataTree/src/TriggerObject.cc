@@ -1,4 +1,4 @@
-// $Id: TriggerObject.cc,v 1.2 2008/09/27 06:08:22 loizides Exp $
+// $Id: TriggerObject.cc,v 1.3 2008/12/01 17:30:01 loizides Exp $
 
 #include "MitAna/DataTree/interface/TriggerObject.h"
 
@@ -20,10 +20,10 @@ void TriggerObjectsTable::Print(Option_t *opt) const
 {
   // Print trigger objects table content.
 
-  TIterator *iter = MakeIterator();
-  const TriggerObject *to = dynamic_cast<const TriggerObject*>(iter->Next());
+  TIter iter(MakeIterator());
+  const TriggerObject *to = dynamic_cast<const TriggerObject*>(iter.Next());
   while (to) {
     to->Print();
-    to = dynamic_cast<const TriggerObject*>(iter->Next());
+    to = dynamic_cast<const TriggerObject*>(iter.Next());
   }
 }
