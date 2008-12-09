@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.8 2008/12/03 16:57:08 bendavid Exp $
+// $Id: ObjArray.h,v 1.9 2008/12/08 15:26:11 loizides Exp $
 //
 // ObjArray
 //
@@ -102,6 +102,7 @@ inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
       AddLast(to);
       to = dynamic_cast<ArrayElement *>(iter->Next());
     }
+    delete iter;
   }
 }
 
