@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.5 2008/12/01 17:17:20 bendavid Exp $
+// $Id: Array.h,v 1.6 2008/12/08 15:26:11 loizides Exp $
 //
 // Array
 //
@@ -44,6 +44,7 @@ namespace mithep
       void                 SetMustClearBit()                          { this->SetBit(14); }
       void                 SetMustDeleteBit()                         { this->SetBit(15); }
       void                 SetName(const char *name)                  { fArray.SetName(name); }
+      void                 Sort()                                     { fArray.Sort(); }
       void                 Trim()                                     { fArray.Compress(); }
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)              const;
