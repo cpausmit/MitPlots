@@ -1,4 +1,4 @@
-// $Id: SimpleExampleMod.cc,v 1.2 2008/11/28 20:27:23 loizides Exp $
+// $Id: SimpleExampleMod.cc,v 1.3 2008/12/04 13:52:27 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include <TH1D.h>
@@ -67,10 +67,8 @@ void SimpleExampleMod::SlaveBegin()
 
   ReqBranch(GetPartName(), fParticles);
 
-  fPtHist  = new TH1D("hPtHist",";p_{t};#",100,0.,25.);
-  AddOutput(fPtHist);
-  fEtaHist = new TH1D("hEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fEtaHist);
+  AddTH1(fPtHist,"hPtHist",";p_{t};#",100,0.,25.);
+  AddTH1(fEtaHist,"hEtaHist",";#eta;#",160,-8.,8.);
 }
 
 //--------------------------------------------------------------------------------------------------

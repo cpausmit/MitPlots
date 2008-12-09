@@ -1,4 +1,4 @@
-// $Id: FullExampleMod.cc,v 1.1 2008/11/25 14:30:54 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.2 2008/12/04 13:52:27 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -85,22 +85,14 @@ void FullExampleMod::SlaveBegin()
   ReqBranch(fMuonName,     fMuons);
   ReqBranch(fElectronName, fElectrons);
 
-  fMCPtHist = new TH1D("hMCPtHist",";p_{t};#",100,0.,250.);
-  AddOutput(fMCPtHist);
-  fMCEtaHist = new TH1D("hMCEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fMCEtaHist);
-  fTrackPtHist = new TH1D("hTrackPtHist",";p_{t};#",100,0.,250.);
-  AddOutput(fTrackPtHist);
-  fTrackEtaHist = new TH1D("hTrackEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fTrackEtaHist);
-  fMuonPtHist = new TH1D("hMuonPtHist",";p_{t};#",100,0.,250.);
-  AddOutput(fMuonPtHist);
-  fMuonEtaHist = new TH1D("hMuonEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fMuonEtaHist);
-  fElectronPtHist = new TH1D("hElectronPtHist",";p_{t};#",100,0.,250.);
-  AddOutput(fElectronPtHist);
-  fElectronEtaHist = new TH1D("hElectronEtaHist",";#eta;#",160,-8.,8.);
-  AddOutput(fElectronEtaHist);
+  AddTH1(fMCPtHist,"hMCPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fMCEtaHist,"hMCEtaHist",";#eta;#",160,-8.,8.);
+  AddTH1(fTrackPtHist,"hTrackPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fTrackEtaHist,"hTrackEtaHist",";#eta;#",160,-8.,8.);
+  AddTH1(fMuonPtHist,"hMuonPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fMuonEtaHist,"hMuonEtaHist",";#eta;#",160,-8.,8.);
+  AddTH1(fElectronPtHist,"hElectronPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fElectronEtaHist,"hElectronEtaHist",";#eta;#",160,-8.,8.);
 }
 
 //--------------------------------------------------------------------------------------------------
