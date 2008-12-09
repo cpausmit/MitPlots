@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.3 2008/12/03 17:44:05 loizides Exp $
+// $Id: OutputMod.cc,v 1.4 2008/12/04 13:55:06 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -129,12 +129,12 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
 
   const THashTable &ht = GetSel()->GetBranchTable();
 
-  TIterator *iter = ht.MakeIterator();
-  const TAMBranchInfo *next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
+  TIter iter(ht.MakeIterator());
+  const TAMBranchInfo *next = dynamic_cast<const TAMBranchInfo*>(iter.Next());
 
   while (next) {
     const TAMBranchInfo *cur = next;
-    next = dynamic_cast<const TAMBranchInfo*>(iter->Next());
+    next = dynamic_cast<const TAMBranchInfo*>(iter.Next());
     Bool_t isloaded = cur->IsLoaded();
     if (!isloaded)
       continue;
