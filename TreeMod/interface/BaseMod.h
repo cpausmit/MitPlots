@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.12 2008/12/03 17:38:16 loizides Exp $
+// $Id: BaseMod.h,v 1.13 2008/12/04 13:48:34 loizides Exp $
 //
 // BaseMod
 //
@@ -30,13 +30,19 @@ namespace mithep
       ~BaseMod() {}
 
     protected:
-      void                        IncNEventsProcessed()       { ++fNEventsProcessed; }
+      template <class T> void     AddTH1(T *&ptr, const char *name, const char *title, 
+                                         Int_t nbins, Double_t xmin, Double_t xmax);
+      template <class T> void     AddTH2(T *&ptr, const char *name, const char *title, 
+                                         Int_t nbinsx, Double_t xmin, Double_t xmax,
+                                         Int_t nbinsy, Double_t ymin, Double_t ymax);
+      void                        IncNEventsProcessed()       { ++fNEventsProc; }
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
+      Bool_t                      GetFillHist()         const { return fFillHist; }
       const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod; }
       const TriggerObjectCol     *GetHLTObjects(const char *name) const;
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
-      Int_t                       GetNEventsProcessed()           const { return fNEventsProcessed; }
+      Int_t                       GetNEventsProcessed()           const { return fNEventsProc; }
       template <class T> const T *GetObjThisEvt(const char *name) const;
       template <class T> T       *GetObjThisEvt(const char *name);
       template <class T> const T *GetPublicObj(const char *name)  const;
@@ -47,14 +53,41 @@ namespace mithep
       template <class T> void     ReqBranch(const char *bname, const T *&address);
       Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo(); } 
       void                        SaveNEventsProcessed(const char *name="hDEvents");
+      void                        SetFillHist(Bool_t b)       { fFillHist = b; }
 
     private:
+      Bool_t                      fFillHist;            //=true then fill histos (def=0)
       mutable const HLTFwkMod    *fHltFwkMod;           //!pointer to HLTFwdMod
       const TString               fHltFwkModName;       //!name of HLTFwkMod
-      Int_t                       fNEventsProcessed; 	//number of events
+      Int_t                       fNEventsProc;         //!number of events
 
     ClassDef(BaseMod,1) // Base TAM module
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+inline void mithep::BaseMod::AddTH1(T *&ptr, const char *name, const char *title, 
+                                    Int_t nbins, Double_t xmin, Double_t xmax)
+{
+  // Create ROOT histogram and add it to the output list.
+
+  ptr = new T(name, title, nbins, xmin, xmax);
+  ptr->Sumw2();
+  AddOutput(ptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+inline void mithep::BaseMod::AddTH2(T *&ptr, const char *name, const char *title, 
+                                    Int_t nbinsx, Double_t xmin, Double_t xmax,
+                                    Int_t nbinsy, Double_t ymin, Double_t ymax)
+{
+  // Create ROOT histogram and add it to the output list.
+
+  ptr = new T(name, title, nbinsx, xmin, xmax, nbinsy, ymin, ymax);
+  ptr->Sumw2();
+  AddOutput(ptr);
 }
 
 //--------------------------------------------------------------------------------------------------
