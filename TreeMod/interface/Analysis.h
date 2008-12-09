@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.13 2008/11/12 23:31:29 paus Exp $
+// $Id: Analysis.h,v 1.14 2008/12/01 17:41:43 loizides Exp $
 //
 // Analysis
 //
@@ -43,32 +43,33 @@ namespace mithep
       Analysis(Bool_t useproof=kFALSE);
       ~Analysis();
 
+      void                      AddSuperModule(TAModule *mod);
       Bool_t                    AddDataset(const Dataset *dataset);
       Bool_t                    AddFile(const char *pname);
       Bool_t                    AddFiles(const char *pname, Int_t nmax=-1);
       void                      AddLoader(TAMVirtualLoader *l);
       void                      AddPackage(const char *name);
       void                      AddPackages(TList *list);
-      const char               *GetAnaOutputName()            const { return fAnaOutput;}
-      const TList              *GetOutput()                   const { return fOutput;   }
-      Bool_t                    GetUseProof()                 const { return fUseProof; }
+      const char               *GetAnaOutputName()            const { return fAnaOutput;          }
+      const TList              *GetOutput()                   const { return fOutput;             }
+      Bool_t                    GetUseProof()                 const { return fUseProof;           }
       Bool_t                    Init();
-      Bool_t                    IsInit()                      const { return fState==kInit;      }
-      Bool_t                    IsRun()                       const { return fState==kRun;       }
-      Bool_t                    IsTerminated()                const { return fState==kTerminate; }
+      Bool_t                    IsInit()                      const { return fState==kInit;       }
+      Bool_t                    IsRun()                       const { return fState==kRun;        }
+      Bool_t                    IsTerminated()                const { return fState==kTerminate;  }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents  = n;     }
-      void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level; }
-      void                      SetConfigName(const char* name)     { fConfig     = name;  }
-      void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;     }
-      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy  = b;     }
-      void                      SetMasterName(const char* name)     { fMaster     = name;  }
-      void                      SetOutputName(const char *name)     { fAnaOutput  = name;  }
-      void                      SetSuperModule(TAModule *mod)       { fSuperMod   = mod;   }
-      void                      SetTreeName(const char *name)       { fTreeName   = name;  }
-      void                      SetUseHLT(Bool_t hlt)               { fUseHLT     = hlt;   }
-      void                      SetUseProof(Bool_t up)              { fUseProof   = up;    }
+      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents  = n;            }
+      void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level;        }
+      void                      SetConfigName(const char* name)     { fConfig     = name;         }
+      void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;            }
+      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy  = b;            }
+      void                      SetMasterName(const char* name)     { fMaster     = name;         }
+      void                      SetOutputName(const char *name)     { fAnaOutput  = name;         }
+      void                      SetSuperModule(TAModule *mod);
+      void                      SetTreeName(const char *name)       { fTreeName   = name;         }
+      void                      SetUseHLT(Bool_t hlt)               { fUseHLT     = hlt;          }
+      void                      SetUseProof(Bool_t up)              { fUseProof   = up;           }
       void                      Terminate();
 
     protected:
@@ -88,7 +89,7 @@ namespace mithep
       TList                    *fOutput;          //output as obtained from TAM (not owned)
       TList                    *fPackages;        //list of package names for PROOF upload
       TList                    *fLoaders;         //list of loaders
-      TAModule                 *fSuperMod;        //top level TAM module (not owned)
+      TList                    *fSuperMods;       //top level TAM module(s) (not owned)
       TAMSelector              *fSelector;        //selector for non-PROOF usage
       TChain                   *fChain;           //trees or friend trees for non-PROOF usage
       TDSet                    *fSet;             //set of trees or friend trees for PROOF usage

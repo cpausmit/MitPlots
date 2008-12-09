@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.19 2008/11/25 15:12:33 loizides Exp $
+// $Id: Analysis.cc,v 1.20 2008/11/26 17:09:05 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -37,7 +37,7 @@ Analysis::Analysis(Bool_t useproof) :
   fOutput(0), 
   fPackages(new TList), 
   fLoaders(new TList),
-  fSuperMod(0), 
+  fSuperMods(new TList), 
   fSelector(0), 
   fChain(0), 
   fSet(0), 
@@ -70,8 +70,8 @@ Analysis::~Analysis()
   delete fLoaders;
   delete fDeleteList;
   delete fSelector;
-  fOutput   = 0;   // owned by TAM
-  fSuperMod = 0;   // owned by user
+  delete fSuperMods;
+  fOutput    = 0;   // owned by TAM
 
   delete fProof;
 }
@@ -255,6 +255,14 @@ void Analysis::AddPackages(TList *list)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Analysis::AddSuperModule(TAModule *mod)
+{ 
+  // Add a top-level module to list of top-level (super) modules.
+
+  fSuperMods->Add(mod);       
+}
+
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::Init()
 {
   // Setup the TDSet and TChain to be used for the analysis with or without PROOF. If more than one
@@ -271,7 +279,7 @@ Bool_t Analysis::Init()
     return kFALSE;
   }
 
-  if (!fSuperMod) {
+  if (!fSuperMods->First()) {
     Error("Init", "Top-level TAM module is NULL!");
     return kFALSE;
   }
@@ -348,7 +356,13 @@ Bool_t Analysis::Init()
     if (hltmod) 
       fProof->AddInput(hltmod);
 
-    fProof->AddInput(fSuperMod);
+    TIter iter(fSuperMods->MakeIterator());
+    while (1) {
+      TAModule *next = dynamic_cast<TAModule*>(iter.Next());
+      if (!next) break;
+      fProof->AddInput(next);
+    }
+
     fLoaders->SetName("TAM_LOADERS");
     fProof->AddInput(fLoaders);      
 
@@ -362,7 +376,14 @@ Bool_t Analysis::Init()
 
     if (hltmod) 
       fSelector->AddInput(hltmod);
-    fSelector->AddInput(fSuperMod);
+
+    TIter iter(fSuperMods->MakeIterator());
+    while (1) {
+      TAModule *next = dynamic_cast<TAModule*>(iter.Next());
+      if (!next) break;
+      fSelector->AddInput(next);
+    }
+
     MDB(kAnalysis, 2)
       fSelector->SetVerbosity(1);
 
@@ -464,6 +485,14 @@ Bool_t Analysis::Run(Bool_t browse)
 
   Error("Execute", "Could not initialize analysis.");
   return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Analysis::SetSuperModule(TAModule *mod)
+{ 
+  // Set the first top-level module in the list of top-level (super) modules.
+
+  fSuperMods->AddFirst(mod);       
 }
 
 //--------------------------------------------------------------------------------------------------
