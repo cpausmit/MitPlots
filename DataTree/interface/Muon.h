@@ -1,54 +1,57 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.21 2008/12/03 16:58:17 bendavid Exp $
+// $Id: Muon.h,v 1.22 2008/12/04 15:34:24 pharris Exp $
 //
 // Muon
-// Classified into 3 Types
-//  Standalone  : Muon Fit from hits in the Muon Chambers
-//  Tracker     : Tracker Matched Track to Muon Chambers with segments
-//  Global      : Combined Track and Muon Chambers Fit
 //
-//  In the Muon class all three Muons exist and can be determined by checking
-//  whether a fit track exists for such a Muon (eg TrackerTrk() == 0). When 
-//  BestTrk function is called the Global Fit is returned, if that does not
-//  exist the Tracker Fit is returned upon that failure the Standalone Muon
-//  is subsequently returned. To consult More see:
+// Classified into 3 Types
+//  Standalone  : Muon fit from hits in the muon chambers
+//  Tracker     : Tracker matched track to muon chambers with segments
+//  Global      : Combined track and muon chambers fit
+//
+//  In the muon class all three muon classes exist and can be determined by checking
+//  whether a fit track exists for such a Muon (eg HasTrackerTrk() == kTRUE). When 
+//  BestTrk function is called the global fit is returned, if that does not
+//  exist the tracker fit is returned upon that failure the standalone muon
+//  is subsequently returned. To consult more see:
 //  http://cmsdoc.cern.ch/cms/Physics/muon/MPOG/Notes/MuonReco.pdf
 //
 // Quality Varaibles for Selection
 //  Isolation : decomposed to IsoRNNXXXXX 
 //    NN = 03,05 to denote R =0.3,0.5 in Isolation Cone
-//    XXXXX = SumPt  -Sum of Pt of Tracks in Cone (using all Pt Tracks)
-//    XXXXX = EmEt   -Sum of Et of Em component of Calo Towers  (Veto=0.08)
-//    XXXXX = HadEt  -Sum of Et of Had component of Calo Towers (Veto=0.1)
-//    XXXXX = HoEt   -Sum of Pt of Ho component of Calo Towers  (Veto=0.1)
-//    XXXXX = NTrk   -Number of Tracks within Cone (using all Pt Tracks)
-//    XXXXX = NJet   -Sum of Jets inside Cone
+//    XXXXX = SumPt - Sum of Pt of Tracks in Cone (using all Pt Tracks)
+//    XXXXX = EmEt  - Sum of Et of Em component of Calo Towers  (Veto=0.08)
+//    XXXXX = HadEt - Sum of Et of Had component of Calo Towers (Veto=0.1)
+//    XXXXX = HoEt  - Sum of Pt of Ho component of Calo Towers  (Veto=0.1)
+//    XXXXX = NTrk  - Number of Tracks within Cone (using all Pt Tracks)
+//    XXXXX = NJet  - Sum of Jets inside Cone
+//
 // Muon Quality Variables
 //  Extracted from the Muon Tracking Associator 
-//  For more se https://twiki.cern.ch/twiki/bin/view/CMS/TrackAssociator
+//   For more se https://twiki.cern.ch/twiki/bin/view/CMS/TrackAssociator
 //  Energy Variables : Energy within (5x5 Ecal Crystal/Hcal/Ho) along Track 
-//   Using Calo Towers
-//  S9 Energy Variables : Energy using RecHits CaloTowers Default
+//   using calo towers
+//  S9 Energy Variables : Energy using reconstructed hits calo towers default
 //  Segment Variables :
 //   Segment variables are stored in array of 8:
-//     0-3 Correspond to segments in 4 DT chambers in->outward(3 has no Y Res)
-//     4-7 Correspnod to segments in 4 CSC chambers in->out
+//     0-3: Correspond to segments in 4 DT chambers  in->outward(3 has no Y res)
+//     4-7: Correspond to segments in 4 CSC chambers in->out
 //    If value undetermined 999999 is returned.
 //   Variables:
-//    DX,DY,PullX,PullY: Uncertainties/Pulls of Propagated Track 
-//     with respect to local Muon Segment
-//   TrackDist,TrackDistErr: Summed Dist/Err (in X,Y) of Segment with respect
-//    to propagated Track
-//   NSegments : Number of Segements in Muon using Segment + Track Arbitration 
-//   NChambers : Number of Muon Chambers Traverresed in Propagated Track
-//   LastHit   : Returns farthest (from Center) station with a recorded Segment
-//   LastStation  : Returns farhtest station using Segment+Track Arbitration
+//    DX,DY,PullX,PullY: Uncertainties/Pulls of propagated track 
+//     with respect to local muon segment
+//   TrackDist,TrackDistErr: Summed Dist/Err (in X,Y) of segment with respect
+//    to propagated track
+//   NSegments : Number of segments in muon using Segment+Track Arbitration 
+//   NChambers : Number of muon chambers traversed in propagated track
+//   LastHit   : Returns farest (from center) station with a recorded segment
+//   LastStation  : Returns farest station using Segment+Track Arbitration
+//
 //  Muon Id Methods: Please see Muon Id Note(as of now unpublished): 
 //      https://www.cmsaf.mit.edu/twiki/pub/CmsHep/HepWAnalysis/MuonID-ingo.pdf
-//   TMOneStation : Returns bool whether Muon passes Tracker Muon One StationId
-//    -Matching criteria for One of all Segements Matched to Muon
-//   TMLastStation : Returns bool whether Muon pass LastStation Id criteria
-//    -Matching criteria for Last most Segement 
+//   TMOneStation : Returns bool whether muon passes "Tracker Muon One StationId"
+//    -Matching criteria for one of all segments matched to muon
+//   TMLastStation : Returns bool whether muon passes "LastStation Id" criteria
+//    -Matching criteria for last most segment 
 //
 // Authors: J.Bendavid, C.Loizides, C.Paus, P.Harris
 //--------------------------------------------------------------------------------------------------
@@ -74,33 +77,13 @@ namespace mithep {
         kAny                //any "best" of the above
       };
       
-      const Track   *BestTrk()             const;
-      const Track   *GlobalTrk()           const;
-      const Track   *StandaloneTrk()       const;
-      const Track   *TrackerTrk()          const;
-      const Track   *Trk()                 const { return BestTrk();          }
-      Double_t       IsoR03SumPt()         const { return fIsoR03SumPt;       }
-      Double_t       IsoR03EmEt()          const { return fIsoR03EmEt;        }
-      Double_t       IsoR03HadEt()         const { return fIsoR03HadEt;       }
-      Double_t       IsoR03HoEt()          const { return fIsoR03HoEt;        }
-      Int_t          IsoR03NTracks()       const { return fIsoR03NTracks;     }
-      Int_t          IsoR03NJets()         const { return fIsoR03NJets;       }
-      Double_t       IsoR05SumPt()         const { return fIsoR05SumPt;       }
-      Double_t       IsoR05EmEt()          const { return fIsoR05EmEt;        }
-      Double_t       IsoR05HadEt()         const { return fIsoR05HadEt;       }
-      Double_t       IsoR05HoEt()          const { return fIsoR05HoEt;        }
-      Int_t          IsoR05NTracks()       const { return fIsoR05NTracks;     }
-      Int_t          IsoR05NJets()         const { return fIsoR05NJets;       }            
-      Double_t       EmEnergy()            const { return fEmEnergy;          }
-      Double_t       HadEnergy()           const { return fHadEnergy;         }
-      Double_t       HoEnergy()            const { return fHoEnergy;          }
-      Double_t       EmS9Energy()          const { return fEmS9Energy;        }
-      Double_t       HadS9Energy()         const { return fHadS9Energy;       }
-      Double_t       HoS9Energy()          const { return fHoS9Energy;        }
-      Double_t       Mass()                const { return 105.658369e-3;             }  
-      Int_t          NChambers()           const { return fNTraversedChambers;       }
-      Int_t          NSegments()           const { return fStationMask.NBitsSet();   }
-      Bool_t         StationBit(Int_t bit) const { return fStationMask.TestBit(bit); }
+      const Track   *BestTrk()                       const;
+      const Track   *GlobalTrk()                     const;
+      const Track   *StandaloneTrk()                 const;
+      const Track   *TrackerTrk()                    const;
+      const Track   *Trk()                           const { return BestTrk();                 }
+      Double_t       EmEnergy()                      const { return fEmEnergy;                 }
+      Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
       Double_t       GetDX(Int_t iStation)           const;
       Double_t       GetDY(Int_t iStation)           const;
       Double_t       GetPullX(Int_t iStation)        const;
@@ -108,22 +91,56 @@ namespace mithep {
       Double_t       GetTrackDist(Int_t iStation)    const;
       Double_t       GetTrackDistErr(Int_t iStation) const;
       Int_t          GetNSegments(Int_t iStation)    const;
-      Bool_t         HasGlobalTrk()                  const { return fGlobalTrackRef.IsValid(); }
-      Bool_t         HasStandaloneTrk()              const { return fStandaloneTrackRef.IsValid(); }
-      Bool_t         HasTrackerTrk()                 const { return fTrackerTrackRef.IsValid(); }
       Bool_t         Has(EClassType type)            const;
+      Bool_t         HasTrk()                        const;
+      Bool_t         HasGlobalTrk()                  const { return fGlobalTrackRef.IsValid();   }
+      Bool_t         HasStandaloneTrk()              const 
+                       { return fStandaloneTrackRef.IsValid(); }
+      Bool_t         HasTrackerTrk()                 const { return fTrackerTrackRef.IsValid();  }
+      Double_t       HadEnergy()                     const { return fHadEnergy;                }
+      Double_t       HadS9Energy()                   const { return fHadS9Energy;              }
+      Double_t       HoEnergy()                      const { return fHoEnergy;                 }
+      Double_t       HoS9Energy()                    const { return fHoS9Energy;               }
       EClassType     Is()                            const;
+      Double_t       IsoR03SumPt()                   const { return fIsoR03SumPt;              }
+      Double_t       IsoR03EmEt()                    const { return fIsoR03EmEt;               }
+      Double_t       IsoR03HadEt()                   const { return fIsoR03HadEt;              }
+      Double_t       IsoR03HoEt()                    const { return fIsoR03HoEt;               }
+      Int_t          IsoR03NTracks()                 const { return fIsoR03NTracks;            }
+      Int_t          IsoR03NJets()                   const { return fIsoR03NJets;              } 
+      Double_t       IsoR05SumPt()                   const { return fIsoR05SumPt;              }
+      Double_t       IsoR05EmEt()                    const { return fIsoR05EmEt;               }
+      Double_t       IsoR05HadEt()                   const { return fIsoR05HadEt;              }
+      Double_t       IsoR05HoEt()                    const { return fIsoR05HoEt;               }
+      Int_t          IsoR05NTracks()                 const { return fIsoR05NTracks;            }
+      Int_t          IsoR05NJets()                   const { return fIsoR05NJets;              }
+      Double_t       Mass()                          const { return 105.658369e-3;             }  
+      Int_t          NChambers()                     const { return fNTraversedChambers;       }
+      Int_t          NSegments()                     const { return fStationMask.NBitsSet();   }
       Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)                                 const;
+      EObjType       ObjType()                       const { return kMuon; }       
       Bool_t         PromptTight(EClassType type)                              const;
+      Bool_t         StationBit(Int_t bit)           const { return fStationMask.TestBit(bit); }
       Bool_t         TMLastStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                    Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
-      void	     SetGlobalTrk(const Track *t)          { fGlobalTrackRef = const_cast<Track*>(t); }
-      void	     SetStandaloneTrk(const Track *t)      { fStandaloneTrackRef = const_cast<Track*>(t); }
-      void	     SetTrackerTrk(const Track *t)         { fTrackerTrackRef = const_cast<Track*>(t); }
+      void	     SetGlobalTrk(const Track *t)     
+                       { fGlobalTrackRef = const_cast<Track*>(t);   }
+      void	     SetStandaloneTrk(const Track *t) 
+                       { fStandaloneTrackRef = const_cast<Track*>(t); }
+      void	     SetTrackerTrk(const Track *t)    
+                       { fTrackerTrackRef = const_cast<Track*>(t);  }
+      void           SetDX(Int_t iStation, Double_t iDX);
+      void           SetDY(Int_t iStation, Double_t iDY);
+      void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;           }
+      void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;       }
+      void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;         }
+      void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;     }
+      void           SetHoEnergy(Double_t HoEnergy)        { fHoEnergy = HoEnergy;           }
+      void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;       }
       void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;     }
       void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;       }
       void           SetIsoR03HadEt(Double_t isoR03HadEt)  { fIsoR03HadEt = isoR03HadEt;     }
@@ -136,21 +153,13 @@ namespace mithep {
       void           SetIsoR05HoEt(Double_t isoR05HoEt)    { fIsoR05HoEt = isoR05HoEt;       }
       void           SetIsoR05NTracks(Int_t isoR05NTracks) { fIsoR05NTracks = isoR05NTracks; }
       void           SetIsoR05NJets(Int_t isoR05NJets)     { fIsoR05NJets = isoR05NJets;     }      
-      void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;           }
-      void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;         }
-      void           SetHoEnergy(Double_t HoEnergy)        { fHoEnergy = HoEnergy;           }
-      void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;       }
-      void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;     }
-      void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;       }
       void           SetNChambers(Int_t iNTraCh)           { fNTraversedChambers = iNTraCh;  }
-      void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);  }
-      void           SetDX(Int_t iStation, Double_t iDX);
-      void           SetDY(Int_t iStation, Double_t iDY);
+      void           SetNSegments(Int_t iStation, Int_t NSegments);
       void           SetPullX(Int_t iStation, Double_t iPullX);
       void           SetPullY(Int_t iStation, Double_t iPullY);
+      void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);  }
       void           SetTrackDist(Int_t iStation, Double_t iDist);
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
-      void           SetNSegments(Int_t iStation, Int_t NSegments);
 
     protected:
       TRef	     fGlobalTrackRef;      //global combined track reference
@@ -171,9 +180,9 @@ namespace mithep {
       Double32_t     fEmEnergy;            //energy deposit in ecal
       Double32_t     fHadEnergy;           //energy deposit in hcal
       Double32_t     fHoEnergy;            //energy deposit in outer hcal
-      Double32_t     fEmS9Energy;          //?
-      Double32_t     fHadS9Energy;         //?
-      Double32_t     fHoS9Energy;          //?
+      Double32_t     fEmS9Energy;          //energy deposit in 3x3 ecal 
+      Double32_t     fHadS9Energy;         //energy deposit in 3x3 hcal
+      Double32_t     fHoS9Energy;          //energy deposit in 3x3 outer hcal
       Int_t          fNTraversedChambers;  //number of tranversed chambers
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
       Double32_t     fDX[8];               //uncertainty in x in given muon chamber
@@ -193,11 +202,11 @@ inline const mithep::Track *mithep::Muon::BestTrk() const
 {
   // Return "best" track.
 
-  if (GlobalTrk())
+  if (HasGlobalTrk())
     return GlobalTrk();
-  else if (TrackerTrk())
+  else if (HasTrackerTrk())
     return TrackerTrk();
-  else if (StandaloneTrk())
+  else if (HasStandaloneTrk())
     return StandaloneTrk();
 
   Error("BestTrk", "No track reference found, returning NULL pointer.");
@@ -298,23 +307,23 @@ inline Bool_t mithep::Muon::Has(EClassType type) const
 
   switch (type) {
     case kAny:
-      if (BestTrk()) 
+      if (HasTrk()) 
         return kTRUE;
       break;
     case kGlobal:
-      if (GlobalTrk()) 
+      if (HasGlobalTrk()) 
         return kTRUE;
       break;
     case kTrackerOnly:
-      if (TrackerTrk()) 
+      if (HasTrackerTrk()) 
         return kTRUE;
       break;
     case kSta:
-      if (StandaloneTrk()) 
+      if (HasStandaloneTrk()) 
         return kTRUE;
       break;
     case kNone:
-      if (!BestTrk()) 
+      if (!HasTrk()) 
         return kTRUE;
       break;
     default:
@@ -325,15 +334,23 @@ inline Bool_t mithep::Muon::Has(EClassType type) const
 }
 
 //--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::Muon::HasTrk() const
+{
+  // Return true if the muon has assigned any kind of track.
+
+  return (HasGlobalTrk() || HasTrackerTrk() || HasStandaloneTrk());
+}
+
+//--------------------------------------------------------------------------------------------------
 inline mithep::Muon::EClassType mithep::Muon::Is() const
 {
   // Return the "best" classification of the muon according to the assigned tracks.
 
-  if (GlobalTrk())
+  if (HasGlobalTrk())
     return kGlobal;
-  else if (TrackerTrk())
+  else if (HasTrackerTrk())
     return kTrackerOnly;
-  else if (StandaloneTrk())
+  else if (HasStandaloneTrk())
     return kSta;
 
   return kNone;
@@ -514,6 +531,7 @@ inline void mithep::Muon::SetPullY(Int_t iStation, Double_t iPullY)
 
 //--------------------------------------------------------------------------------------------------
 inline void mithep::Muon::SetTrackDist(Int_t iStation, Double_t iDist) 
+
 {
   // Set track distance in given chamber.
 

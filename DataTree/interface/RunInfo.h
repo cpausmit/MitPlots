@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunInfo.h,v 1.7 2008/12/02 09:30:11 loizides Exp $
+// $Id: RunInfo.h,v 1.8 2008/12/03 17:37:47 loizides Exp $
 //
 // RunInfo
 //
@@ -23,11 +23,12 @@ namespace mithep
       ~RunInfo() {}
 
       Int_t               HltEntry()     const { return fHltEntry; }
-      Int_t               L1Entry()      const { return fL1Entry; }
-      UInt_t              RunNum()       const { return fRunNum; }
-      void                SetL1Entry(Int_t i)  { fL1Entry=i; }
-      void                SetHltEntry(Int_t i) { fHltEntry=i; }
-      void                SetRunNum(UInt_t i)  { fRunNum=i; }
+      Int_t               L1Entry()      const { return fL1Entry;  }
+      EObjType            ObjType()      const { return kRunInfo;  }      
+      UInt_t              RunNum()       const { return fRunNum;   }
+      void                SetL1Entry(Int_t i)  { fL1Entry=i;       }
+      void                SetHltEntry(Int_t i) { fHltEntry=i;      }
+      void                SetRunNum(UInt_t i)  { fRunNum=i;        }
 
     protected:
       UInt_t              fRunNum;          //run number

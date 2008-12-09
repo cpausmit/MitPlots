@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCEventInfo.h,v 1.4 2008/12/02 09:30:11 loizides Exp $
+// $Id: MCEventInfo.h,v 1.5 2008/12/03 17:37:47 loizides Exp $
 //
 // MCEventInfo
 //
@@ -19,8 +19,9 @@ namespace mithep
       MCEventInfo(Double_t w=0) : fWeight(w)  {}
       ~MCEventInfo() {}
 
-      Double_t            Weight()              const { return fWeight; }
-      void                SetWeight(Double_t w)       { fWeight=w; }
+      EObjType            ObjType()             const { return kMCEventInfo; }      
+      Double_t            Weight()              const { return fWeight;      }
+      void                SetWeight(Double_t w)       { fWeight=w;           }
 
     protected:
       Double32_t          fWeight;              //event weight

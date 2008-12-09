@@ -1,11 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.3 2008/12/03 16:58:17 bendavid Exp $
+// $Id: DaughterData.h,v 1.4 2008/12/03 17:37:46 loizides Exp $
 //
 // DaughterData
 //
-// Additional information on a daughter which is specific to a particular decay
+// Daughter decay information: Keep reference to original particle.
 // 
-//
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
@@ -25,18 +24,20 @@ namespace mithep
       ~DaughterData() {}
 
       Double_t             Charge()    const { return Original()->Charge(); }
+      EObjType             ObjType()   const { return kDaughterData;        }
       const Particle      *Original()  const;
 
     protected:
-      TRef                 fOriginal; //TRef to original particle
+      TRef                 fOriginal; //reference to original particle
 
-    ClassDef(DaughterData, 1) // Stable daughter class
+    ClassDef(DaughterData, 1) // Daughter data class
   };
 }
 
+//--------------------------------------------------------------------------------------------------
 inline const mithep::Particle *mithep::DaughterData::Original() const
 {
-  // Return global combined track.
+  // Return original particle.
 
   return static_cast<const Particle*>(fOriginal.GetObject());
 }

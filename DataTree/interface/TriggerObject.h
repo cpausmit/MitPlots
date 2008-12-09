@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.3 2008/10/23 18:24:17 loizides Exp $
+// $Id: TriggerObject.h,v 1.4 2008/11/18 16:41:39 loizides Exp $
 //
 // TriggerObject
 //
@@ -39,6 +39,7 @@ namespace mithep
       Double_t		    Mt()      const { return TMath::Sqrt(fMom.Mt2()); }
       FourVector            Mom()     const { return FourVector(fMom.Px(),fMom.Py(),
                                                                 fMom.Pz(),fMom.E()); }
+      EObjType              ObjType() const { return kTriggerObjectBase; }      
       Double_t              Phi()     const { return fMom.Phi();}
       Double_t	            Pt()      const { return fMom.Pt(); }
       Double_t		    Px()      const { return fMom.Px(); }
@@ -61,11 +62,12 @@ namespace mithep
         fTrgId(id), fType(type), fObjInd(obj), fModInd(mod), fFilterInd(fil) {}
       ~TriggerObjectRel() {}
 
+      UShort_t              FilterInd() const { return fFilterInd; }
+      UShort_t              ModInd()    const { return fModInd; }
+      UShort_t              ObjInd()    const { return fObjInd; }
+      EObjType              ObjType()   const { return kTriggerObjectRef; }      
       UChar_t               TrgId()     const { return fTrgId; }
       UChar_t               Type()      const { return fType; }
-      UShort_t              ObjInd()    const { return fObjInd; }
-      UShort_t              ModInd()    const { return fModInd; }
-      UShort_t              FilterInd() const { return fFilterInd; }
 
     protected:
       UChar_t               fTrgId;       //trigger id
@@ -116,13 +118,14 @@ namespace mithep
       ULong_t               Hash()        const { return fTrgId; }
       const char           *FilterName()  const { return fFilName; }
       const char           *ModuleName()  const { return fModName; }
+      EObjType              ObjType()     const { return kTriggerObject; }      
       void                  Print(Option_t *opt="") const;
-      void                  SetTrigName(const char *n)   { fTrigName = n; }
-      void                  SetModuleName(const char *n) { fModName = n; }
-      void                  SetFilterName(const char *n) { fFilName = n; }
       const char           *TrigName()    const { return fTrigName; }
       UShort_t              TrgId()       const { return fTrgId; }
       ETriggerObject        Type()        const { return fType; }
+      void                  SetTrigName(const char *n)   { fTrigName = n; }
+      void                  SetModuleName(const char *n) { fModName = n; }
+      void                  SetFilterName(const char *n) { fFilName = n; }
 
     protected:
       UChar_t               fTrgId;       //trigger id

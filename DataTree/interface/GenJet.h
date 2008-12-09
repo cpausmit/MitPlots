@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenJet.h,v 1.1 2008/09/16 18:12:29 sixie Exp $
+// $Id: GenJet.h,v 1.2 2008/09/17 04:21:16 loizides Exp $
 //
 // GenJet
 //
-// Details to be worked out...
+// This class holds information about reconstructed jets at generation level.
 //
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
@@ -25,14 +25,14 @@ namespace mithep
         fAuxiliaryEnergy(0), fMatchedMCFlavor(0)  {}
       ~GenJet() {}
 
-      FourVector	Mom()                         const { return fMom;                       }
-      Double_t          Charge()                      const { return 0;                          }
-      Double_t          HadEnergy()                   const { return fHadEnergy;                 } 
-      Double_t          EmEnergy()                    const { return fEmEnergy;                  } 
-      Double_t          InvisibleEnergy()             const { return fInvisibleEnergy;           }
       Double_t          AuxiliaryEnergy()             const { return fAuxiliaryEnergy;           }
+      Double_t          Charge()                      const { return 0;                          }
+      Double_t          EmEnergy()                    const { return fEmEnergy;                  } 
+      Double_t          HadEnergy()                   const { return fHadEnergy;                 } 
+      Double_t          InvisibleEnergy()             const { return fInvisibleEnergy;           }
       Int_t             MatchedMCFlavor()             const { return fMatchedMCFlavor;           }
-
+      FourVector	Mom()                         const { return fMom;                       }
+      EObjType          ObjType()                     const { return kGenJet;                    }
       void              SetHadEnergy(Double_t val)          { fHadEnergy        = val;           } 
       void              SetEmEnergy(Double_t val)           { fEmEnergy         = val;           }
       void              SetInvisibleEnergy(Double_t val)    { fInvisibleEnergy  = val;           }
@@ -47,7 +47,7 @@ namespace mithep
       Double_t   fAuxiliaryEnergy; 	  //anything else (eg. undecayed sigmas)
       Int_t      fMatchedMCFlavor;        //pdg ID of the quark flavor that the jet matched to
 
-    ClassDef(GenJet, 1) // GenJet class
+    ClassDef(GenJet, 1) // Jet class at generation level
   };
 }
 #endif

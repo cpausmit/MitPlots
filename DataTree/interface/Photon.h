@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.17 2008/11/14 14:46:35 bendavid Exp $
+// $Id: Photon.h,v 1.18 2008/12/03 16:58:17 bendavid Exp $
 //
 // Photon
 //
-// Details to be worked out...
+// Details to be worked out...(TODO)
 //
 // Authors: J.Bendavid, C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -26,19 +26,15 @@ namespace mithep
         fFourVector(FourVector(px,py,pz,e)) {}
       ~Photon() {}
 
-      void                      AddConversion(const Conversion *c) { fConversions.Add(c);  }
       Double_t                  Charge()                const { return 0;                  }
-      Double_t                  R9()                    const { return fR9;                }
-      Double_t                  R19()                   const { return fR19;               }
+      const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
       Double_t                  E5x5()                  const { return fE5x5;              }
+      Double_t                  EcalRecHitIso()         const { return fEcalRecHitIso;     }
       Double_t                  HadOverEm()             const { return fHadOverEm;         }
       Double_t                  HasPixelSeed()          const { return fHasPixelSeed;      }
-      Double_t                  EcalRecHitIso()         const { return fEcalRecHitIso;     }
       Double_t                  HcalRecHitIso()         const { return fHcalRecHitIso;     }
-      Double_t                  SolidConeTrkIso()       const { return fSolidConeTrkIso;   }
-      Double_t                  HollowConeTrkIso()      const { return fHollowConeTrkIso;  }
-      Int_t                     SolidConeNTrk()         const { return fSolidConeNTrk;     }
       Int_t                     HollowConeNTrk()        const { return fHollowConeNTrk;    }
+      Double_t                  HollowConeTrkIso()      const { return fHollowConeTrkIso;  }
       Bool_t                    IsEBGap()               const { return fIsEBGap;           }
       Bool_t                    IsEEGap()               const { return fIsEEGap;           }
       Bool_t                    IsEBEEGap()             const { return fIsEBEEGap;         }
@@ -46,14 +42,19 @@ namespace mithep
       Bool_t                    IsLoosePhoton()         const { return fIsLoosePhoton;     }
       Bool_t                    IsTightPhoton()         const { return fIsTightPhoton;     }
       Bool_t                    IsConverted()           const { return fIsConverted;       }
-      const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
+      FourVector 	        Mom()                   const { return FourVector(fFourVector);   }
       UInt_t                    NConversions()          const { return fConversions.GetEntries(); }
+      EObjType                  ObjType()               const { return kPhoton;            }      
+      Double_t                  R9()                    const { return fR9;                }
+      Double_t                  R19()                   const { return fR19;               }
       const SuperCluster       *SCluster()              const;
-      FourVector 	        Mom()                   const { return FourVector(fFourVector); }
-      void                      Clear(Option_t *opt="")       { fConversions.Clear(opt);   }
-      void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv; }
+      Double_t                  SolidConeTrkIso()       const { return fSolidConeTrkIso;   }
+      Int_t                     SolidConeNTrk()         const { return fSolidConeNTrk;     }
+      void                      AddConversion(const Conversion *c) { fConversions.Add(c);  }
+      void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv;            }
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
+      void                      SetSuperCluster(const SuperCluster* sc) 
+                                  { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
       void                      SetR9(Double_t x)                 { fR9 = x;               }
       void                      SetR19(Double_t x)                { fR19 = x;              }
       void                      SetE5x5(Double_t x)               { fE5x5 = x;             }

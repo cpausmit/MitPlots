@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.8 2008/12/02 09:30:11 loizides Exp $
+// $Id: EventHeader.h,v 1.9 2008/12/03 17:37:19 loizides Exp $
 //
 // EventHeader
 //
@@ -26,16 +26,17 @@ namespace mithep
         fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1), fIsRemoved(0)        {}
       ~EventHeader() {}
 
-      UInt_t              EvtNum()          const { return fEvtNum;    }
-      Bool_t              IsRemoved()       const { return fIsRemoved; }
-      UInt_t              LumiSec()         const { return fLumiSec;   }
-      Int_t               RunEntry()        const { return fRunEntry;  }
-      UInt_t              RunNum()          const { return fRunNum;    }
-      void                SetEvtNum(UInt_t i)     { fEvtNum=i;         }
-      void                SetIsRemoved(Bool_t b)  { fIsRemoved = b;    }
-      void                SetLumiSec(UInt_t i)    { fLumiSec=i;        }
-      void                SetRunEntry(Int_t i)    { fRunEntry=i;       }
-      void                SetRunNum(UInt_t i)     { fRunNum=i;         }
+      UInt_t              EvtNum()          const { return fEvtNum;      }
+      Bool_t              IsRemoved()       const { return fIsRemoved;   }
+      UInt_t              LumiSec()         const { return fLumiSec;     }
+      EObjType            ObjType()         const { return kEventHeader; }
+      Int_t               RunEntry()        const { return fRunEntry;    }
+      UInt_t              RunNum()          const { return fRunNum;      }
+      void                SetEvtNum(UInt_t i)     { fEvtNum=i;           }
+      void                SetIsRemoved(Bool_t b)  { fIsRemoved = b;      }
+      void                SetLumiSec(UInt_t i)    { fLumiSec=i;          }
+      void                SetRunEntry(Int_t i)    { fRunEntry=i;         }
+      void                SetRunNum(UInt_t i)     { fRunNum=i;           }
 
     protected:
       UInt_t              fRunNum;          //run number

@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.6 2008/09/16 22:04:59 ksung Exp $
+// $Id: Met.h,v 1.7 2008/11/25 13:50:48 loizides Exp $
 //
 // Met
 //
-// Details to be worked out...
+// Class to store missing et information.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -31,47 +31,50 @@ namespace mithep
       Double_t                     Charge()             const { return 0; }
       Double_t		           E()                  const { return Pt();}
       Double_t		           Eta()                const { return Mom().Eta();}
-      Double_t	 	           Mass()               const { return TMath::Sqrt(Mom().M2()); }
-      FourVector	           Mom()                const { return FourVector(fMex,fMey,0,Pt()); }
-      Double_t		           Phi()                const { return TMath::ATan2(fMey,fMex); }
-      Double_t		           Pt()                 const { return TMath::Sqrt(fMex*fMex+fMey*fMey);}
-      Double_t	 	           Px()                 const { return fMex;}
-      Double_t		           Py()                 const { return fMey;}
-      Double_t		           Pz()                 const { return 0; }
-      Double_t		           P()                  const { return Pt(); }
-      Double_t                     SumEt()              const { return fSumEt; } 
-      Double_t                     MetSig()             const { return fMetSig; }    
-      Double_t                     E_longitudinal()     const { return fElongit; }
-      const std::vector<Double_t> &Dmex()               const { return fDmex; }
-      const std::vector<Double_t> &Dmey()               const { return fDmey; }
-      const std::vector<Double_t> &DSumEt()             const { return fDSumEt; }
-      Double_t                     MaxEtInEmTowers()    const { return fMaxEtInEmTowers; }
-      Double_t                     MaxEtInHadTowers()   const { return fMaxEtInHadTowers; }
-      Double_t                     EtFractionHadronic() const { return fEtFractionHadronic; }
-      Double_t                     EmEtFraction()       const { return fEmEtFraction; }
-      Double_t                     HadEtInHB()          const { return fHadEtInHB; }
-      Double_t                     HadEtInHO()          const { return fHadEtInHO; } 
-      Double_t                     HadEtInHE()          const { return fHadEtInHE; }
-      Double_t                     HadEtInHF()          const { return fHadEtInHF; }
-      Double_t                     EmEtInEB()           const { return fEmEtInEB; }
-      Double_t                     EmEtInEE()           const { return fEmEtInEE; }
-      Double_t                     EmEtInHF()           const { return fEmEtInHF; }
       Double_t                     CaloSumEtInpHF()     const { return fCaloSumEtInpHF; }
       Double_t                     CaloSumEtInmHF()     const { return fCaloSumEtInmHF; }      
       Double_t                     CaloMetInpHF()       const { return fCaloMetInpHF; }
       Double_t                     CaloMetInmHF()       const { return fCaloMetInmHF; }
       Double_t                     CaloMetPhiInpHF()    const { return fCaloMetPhiInpHF; }
       Double_t                     CaloMetPhiInmHF()    const { return fCaloMetPhiInmHF; }
-      void                         SetSumEt(Double_t x)              { fSumEt = x; }
-      void                         SetE_longitudinal(Double_t x)     { fElongit = x; }
-      void                         SetMetSig(Double_t x)             { fMetSig = x; }
+      const std::vector<Double_t> &Dmex()               const { return fDmex; }
+      const std::vector<Double_t> &Dmey()               const { return fDmey; }
+      const std::vector<Double_t> &DSumEt()             const { return fDSumEt; }
+      Double_t                     EmEtFraction()       const { return fEmEtFraction; }
+      Double_t                     EmEtInEB()           const { return fEmEtInEB; }
+      Double_t                     EmEtInEE()           const { return fEmEtInEE; }
+      Double_t                     EmEtInHF()           const { return fEmEtInHF; }
+      Double_t                     Elongitudinal()      const { return fElongit; }
+      Double_t                     EtFractionHadronic() const { return fEtFractionHadronic; }
+      Double_t                     HadEtInHB()          const { return fHadEtInHB; }
+      Double_t                     HadEtInHO()          const { return fHadEtInHO; } 
+      Double_t                     HadEtInHE()          const { return fHadEtInHE; }
+      Double_t                     HadEtInHF()          const { return fHadEtInHF; }
+      Double_t	 	           Mass()       const { return TMath::Sqrt(Mom().M2()); }
+      Double_t                     MaxEtInEmTowers()    const { return fMaxEtInEmTowers; }
+      Double_t                     MaxEtInHadTowers()   const { return fMaxEtInHadTowers; }
+      Double_t                     MetSig()             const { return fMetSig; }    
+      FourVector	           Mom()        const { return FourVector(fMex,fMey,0,Pt()); }
+      EObjType                     ObjType()            const { return kMet;             }      
+      Double_t		           Phi()        const { return TMath::ATan2(fMey,fMex); }
+      Double_t		           Pt()         const { return TMath::Sqrt(fMex*fMex+fMey*fMey);}
+      Double_t	 	           Px()                 const { return fMex;}
+      Double_t		           Py()                 const { return fMey;}
+      Double_t		           Pz()                 const { return 0; }
+      Double_t		           P()                  const { return Pt(); }
+      Double_t                     SumEt()              const { return fSumEt; } 
       void                         PushCorrectionX(Double_t x)       { fDmex.push_back(x); }
       void                         PushCorrectionY(Double_t x)       { fDmey.push_back(x); }
       void                         PushCorrectionSumEt(Double_t x)   { fDSumEt.push_back(x); }
-      void                         SetMaxEtInEmTowers(Double_t x)    { fMaxEtInEmTowers = x; }
-      void                         SetMaxEtInHadTowers(Double_t x)   { fMaxEtInHadTowers = x; }
-      void                         SetEtFractionHadronic(Double_t x) { fEtFractionHadronic = x; }
+      void                         SetCaloSumEtInpHF(Double_t x)     { fCaloSumEtInpHF = x; }
+      void                         SetCaloSumEtInmHF(Double_t x)     { fCaloSumEtInmHF = x; }
+      void                         SetCaloMetInpHF(Double_t x)       { fCaloMetInpHF = x; }
+      void                         SetCaloMetInmHF(Double_t x)       { fCaloMetInmHF = x; }
+      void                         SetCaloMetPhiInpHF(Double_t x)    { fCaloMetPhiInpHF = x; }
+      void                         SetCaloMetPhiInmHF(Double_t x)    { fCaloMetPhiInmHF = x; }
       void                         SetEmEtFraction(Double_t x)       { fEmEtFraction = x; }
+      void                         SetElongitudinal(Double_t x)      { fElongit = x; }
+      void                         SetEtFractionHadronic(Double_t x) { fEtFractionHadronic = x; }
       void                         SetHadEtInHB(Double_t x)          { fHadEtInHB = x; }
       void                         SetHadEtInHO(Double_t x)          { fHadEtInHO = x; }
       void                         SetHadEtInHE(Double_t x)          { fHadEtInHE = x; }
@@ -79,12 +82,10 @@ namespace mithep
       void                         SetEmEtInEB(Double_t x)           { fEmEtInEB = x; }
       void                         SetEmEtInEE(Double_t x)           { fEmEtInEE = x; }
       void                         SetEmEtInHF(Double_t x)           { fEmEtInHF = x; }
-      void                         SetCaloSumEtInpHF(Double_t x)     { fCaloSumEtInpHF = x; }
-      void                         SetCaloSumEtInmHF(Double_t x)     { fCaloSumEtInmHF = x; }
-      void                         SetCaloMetInpHF(Double_t x)       { fCaloMetInpHF = x; }
-      void                         SetCaloMetInmHF(Double_t x)       { fCaloMetInmHF = x; }
-      void                         SetCaloMetPhiInpHF(Double_t x)    { fCaloMetPhiInpHF = x; }
-      void                         SetCaloMetPhiInmHF(Double_t x)    { fCaloMetPhiInmHF = x; }
+      void                         SetMaxEtInEmTowers(Double_t x)    { fMaxEtInEmTowers = x; }
+      void                         SetMaxEtInHadTowers(Double_t x)   { fMaxEtInHadTowers = x; }
+      void                         SetMetSig(Double_t x)             { fMetSig = x; }
+      void                         SetSumEt(Double_t x)              { fSumEt = x; }
       
     protected:
       void                         Clear(Option_t * /*option*/ ="");

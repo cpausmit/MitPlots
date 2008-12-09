@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.10 2008/12/03 16:58:17 bendavid Exp $
+// $Id: MCParticle.h,v 1.11 2008/12/08 14:56:09 loizides Exp $
 //
 // MCParticle
 //
-// Stores MC information for both gen and sim level
+// Stores MC information for both generated and simulated particles.
 //
-// Authors: C.Loizides, J.Bendavid...
+// Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_MCPARTICLE_H
@@ -51,6 +51,7 @@ namespace mithep
       Bool_t              IsSimulated()            const { return fIsSimulated; }
       const MCParticle   *Mother()                 const;
       FourVector	  Mom()                    const { return FourVector(fFourVector); }
+      EObjType            ObjType()                const { return kMCParticle;             }      
       void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t; }
       void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t; }
       TParticlePDG       *PdgEntry()               const;

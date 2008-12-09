@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.23 2008/11/27 16:14:03 loizides Exp $
+// $Id: Names.h,v 1.24 2008/12/03 17:37:40 loizides Exp $
 //
 // Names
 //
@@ -12,8 +12,6 @@
 #ifndef MITANA_DATATREE_NAMES_H
 #define MITANA_DATATREE_NAMES_H
  
-#include "MitAna/DataTree/interface/Types.h"
-
 namespace mithep 
 {
   class Names 

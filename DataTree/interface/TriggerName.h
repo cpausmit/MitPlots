@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerName.h,v 1.2 2008/09/27 06:06:36 loizides Exp $
+// $Id: TriggerName.h,v 1.3 2008/12/02 09:30:11 loizides Exp $
 //
 // TriggerName
 //
@@ -35,6 +35,7 @@ namespace mithep
       const char           *GetName() const { return fName; }
       ULong_t               Hash()    const { return fHash; }
       const char           *Name()    const { return fName; }
+      EObjType              ObjType() const { return kTriggerName; }      
       void                  Print(Option_t *opt="") const;
 
     protected:

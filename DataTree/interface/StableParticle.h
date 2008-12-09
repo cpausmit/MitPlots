@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.5 2008/09/10 03:33:27 loizides Exp $
+// $Id: StableParticle.h,v 1.6 2008/10/31 17:41:44 bendavid Exp $
 //
 // StableParticle
 //
@@ -23,14 +23,14 @@ namespace mithep
       StableParticle(UInt_t absPdgId, Track *track) : fAbsPdgId(absPdgId), fTrackRef(track) {}
       ~StableParticle() {}
       
-      UInt_t               AbsPdgId()         const { return fAbsPdgId; }
+      UInt_t               AbsPdgId()         const { return fAbsPdgId;       }
       const Track         *Trk()              const;
-      const Track         *TrackerTrk()       const { return Trk(); }
+      const Track         *TrackerTrk()       const { return Trk();           }
       Double_t             Mass()             const;
+      EObjType             ObjType()          const { return kStableParticle; }      
       TParticlePDG        *ParticlePdgEntry() const;
-      
       void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
-      void	           SetTrk(Track *t)             { fTrackRef = t; }
+      void	           SetTrk(Track *t)             { fTrackRef = t;      }
       
     protected:
       UInt_t               fAbsPdgId; //pdg identifier (absolute value)

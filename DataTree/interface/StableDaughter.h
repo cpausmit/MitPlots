@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableDaughter.h,v 1.4 2008/07/29 17:00:12 loizides Exp $
+// $Id: StableDaughter.h,v 1.5 2008/09/10 03:33:27 loizides Exp $
 //
 // StableDaughter
 //
@@ -23,20 +23,20 @@ namespace mithep
       StableDaughter() {}
       StableDaughter(UInt_t absPdgId, Track *track) : StableParticle(absPdgId, track) {}
       StableDaughter(UInt_t absPdgId, Track *track, Double_t px, Double_t py, Double_t pz) :
-        StableParticle(absPdgId, track),
-        fMomAtVertex(px,py,pz) {}
+        StableParticle(absPdgId, track), fMomAtVertex(px,py,pz) {}
       ~StableDaughter() {}
 
       Double_t             Eta()       const { return fMomAtVertex.Eta(); }
       const Particle      *Mother()    const;
+      EObjType             ObjType()   const { return kStableDaughter;    }      
       Double_t             Phi()       const { return fMomAtVertex.Phi(); }
-      Double_t             P()         const { return fMomAtVertex.R();  }
+      Double_t             P()         const { return fMomAtVertex.R();   }
       Double_t             Pt()        const { return fMomAtVertex.Rho(); }
-      Double_t             Px()        const { return fMomAtVertex.X(); }
-      Double_t             Py()        const { return fMomAtVertex.Y(); }
-      Double_t             Pz()        const { return fMomAtVertex.Z(); }
+      Double_t             Px()        const { return fMomAtVertex.X();   }
+      Double_t             Py()        const { return fMomAtVertex.Y();   }
+      Double_t             Pz()        const { return fMomAtVertex.Z();   }
+      const ThreeVector   &ThreeMom()  const { return fMomAtVertex;       }
       void                 SetThreeMom(Double_t px, Double_t y, Double_t z);
-      const ThreeVector   &ThreeMom()  const { return fMomAtVertex; }
 
     protected:
       ThreeVector          fMomAtVertex;      //fitted momentum at vertex

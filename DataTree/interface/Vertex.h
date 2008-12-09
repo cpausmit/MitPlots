@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.5 2008/10/14 05:27:54 loizides Exp $
+// $Id: Vertex.h,v 1.6 2008/11/12 18:18:27 bendavid Exp $
 //
 // Vertex
 //
@@ -22,21 +22,21 @@ namespace mithep
       Vertex() : 
         fChi2(0.0), fNdof(0), fNTracks(0) {}
       Vertex(Double_t x, Double_t y, Double_t z) : 
-        BaseVertex(x,y,z), fChi2(0.0), fNdof(0), fNTracks(0) {}
-
+        BaseVertex(x,y,z), fChi2(0), fNdof(0), fNTracks(0) {}
       Vertex(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) :
         BaseVertex(x,y,z,xErr,yErr,zErr), fChi2(0.0), fNdof(0), fNTracks(0) {}
       Vertex(const ThreeVector &pos) :
-        BaseVertex(pos), fChi2(0.0), fNdof(0), fNTracks(0) {}
+        BaseVertex(pos), fChi2(0), fNdof(0), fNTracks(0) {}
       ~Vertex() {}
       
-      Double_t            Chi2()      const { return fChi2; } 
-      UInt_t              Ndof()      const { return fNdof; }
-      UInt_t              NTracks()   const { return fNTracks; }
+      Double_t            Chi2()      const { return fChi2;                    } 
+      UInt_t              Ndof()      const { return fNdof;                    }
+      UInt_t              NTracks()   const { return fNTracks;                 }
+      EObjType            ObjType()   const { return kVertex;                  }      
       Double_t            Prob()      const { return TMath::Prob(fChi2,fNdof); }
-      void                SetChi2(Double_t chi2)              { fChi2 = chi2; }
-      void                SetNdof(UInt_t nDof)                { fNdof = nDof; } 
-      void                SetNTracks(UInt_t ntrks)            { fNTracks = ntrks; }
+      void                SetChi2(Double_t chi2)     { fChi2 = chi2;     }
+      void                SetNdof(UInt_t nDof)       { fNdof = nDof;     } 
+      void                SetNTracks(UInt_t ntrks)   { fNTracks = ntrks; }
             
     protected:
       Double32_t          fChi2;     //chi squared of conversion vertex fit

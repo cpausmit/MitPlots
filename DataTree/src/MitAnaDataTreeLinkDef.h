@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.45 2008/12/01 17:38:22 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.46 2008/12/02 09:30:11 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/ObjTypes.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/Collections.h"
 
@@ -64,6 +65,7 @@
 #pragma link C++ typedef mithep::StringVec;
 
 #pragma link C++ class mithep::DataBase+;
+#pragma link C++ enum mithep::EObjType;
 
 #pragma link C++ class mithep::BitMask<1>+;
 #pragma link C++ class mithep::BitMask<2>+;

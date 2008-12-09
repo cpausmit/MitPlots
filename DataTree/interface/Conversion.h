@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.9 2008/09/30 12:51:37 bendavid Exp $
+// $Id: Conversion.h,v 1.10 2008/11/14 14:46:35 bendavid Exp $
 //
 // Conversion
 //
@@ -27,21 +27,22 @@ namespace mithep
       ~Conversion() {}
       
       const Electron           *Daughter(UInt_t i)         const;
-      Double_t                  DCotTheta()                const { return fDCotTheta; }
-      Double_t                  EOverP()                   const { return fEOverP; }
-      Double_t                  PairMass()                 const { return fPairMass; }
+      Double_t                  DCotTheta()                const { return fDCotTheta;    }
+      Double_t                  EOverP()                   const { return fEOverP;       }
+      Double_t                  PairMass()                 const { return fPairMass;     }
       const ThreeVector        &PairMomentum()             const { return fPairMomentum; }
-      const Vertex             &DecayVertex()              const { return fVertex; }
-      Vertex                   &DecayVertex()                    { return fVertex; }
-      void                      SetDCotTheta(Double_t dCotTheta) { fDCotTheta = dCotTheta;}
-      void                      SetEOverP(Double_t eOverP)       { fEOverP = eOverP;}
-      void                      SetPairMass(Double_t pairMass)   { fPairMass = pairMass;}
+      const Vertex             &DecayVertex()              const { return fVertex;       }
+      Vertex                   &DecayVertex()                    { return fVertex;       }
+      EObjType                  ObjType()                  const { return kConversion;   }
+      void                      SetDCotTheta(Double_t dCotTh)    { fDCotTheta = dCotTh;  }
+      void                      SetEOverP(Double_t eOverP)       { fEOverP = eOverP;     }
+      void                      SetPairMass(Double_t pairMass)   { fPairMass = pairMass; }
       void                      SetPairMomentum(Double_t px, Double_t py, Double_t pz);
         
     protected:
       Vertex                    fVertex;       //reconstructed decay vertex
       Double32_t                fDCotTheta;    //delta cot theta wrt tracks at the conversion point
-      Double32_t                fEOverP;       //E over p of conversion tracks
+      Double32_t                fEOverP;       //energy over momentum of conversion tracks
       Double32_t                fPairMass;     //mass of electron-positron pair at conversion point
       ThreeVector32             fPairMomentum; //momentum of tracks at conversion point
       

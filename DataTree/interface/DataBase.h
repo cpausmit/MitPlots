@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataBase.h,v 1.14 2008/09/17 04:21:16 loizides Exp $
+// $Id: DataBase.h,v 1.1 2008/12/02 09:30:11 loizides Exp $
 //
 // DataBase
 //
@@ -12,6 +12,7 @@
 #ifndef MITANA_DATATREE_DATABASE_H
 #define MITANA_DATATREE_DATABASE_H
  
+#include "MitAna/DataTree/interface/ObjTypes.h"
 #include <TObject.h>
 
 namespace mithep
@@ -25,6 +26,7 @@ namespace mithep
       Bool_t               IsCached()    const { return TestBit(23); }
       Bool_t               MustClear()   const { return TestBit(14); }
       Bool_t               MustDelete()  const { return TestBit(15); }
+      virtual EObjType     ObjType()     const { return kDataBase;   }
 
     protected:
       void                 ResetCacheBit()     { SetBit(23,0); }

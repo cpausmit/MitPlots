@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.15 2008/12/02 09:30:11 loizides Exp $
+// $Id: DataObject.h,v 1.16 2008/12/02 14:17:54 bendavid Exp $
 //
 // DataObject
 //
 // This is the common base class for all objects in the tree that do require the TObject
-// bits to be written out (as opposed to DataBase).
+// bits to be written out (as opposed to DataBase). Typically these are all objects that
+// can be persistently linked.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -13,6 +14,7 @@
 #define MITANA_DATATREE_DATAOBJECT_H
  
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataTree/interface/ObjTypes.h"
 #include <TObject.h>
 #include <TROOT.h>
 #include <TClass.h>
@@ -31,6 +33,7 @@ namespace mithep
       Bool_t               IsCached()    const { return TestBit(23); }
       Bool_t               MustClear()   const { return TestBit(14); }
       Bool_t               MustDelete()  const { return TestBit(15); }
+      virtual EObjType     ObjType()     const { return kDataObject; }
       template <class Col> 
       const Col           *ParentCol()   const;
 
