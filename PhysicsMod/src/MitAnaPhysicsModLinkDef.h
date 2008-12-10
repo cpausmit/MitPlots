@@ -1,4 +1,4 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.6 2008/12/04 13:52:27 loizides Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.7 2008/12/09 10:18:33 loizides Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
@@ -8,7 +8,6 @@
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/PhysicsMod/interface/PlotKineMod.h"
 #include "MitAna/PhysicsMod/interface/PublisherMod.h"
-#include "MitAna/PhysicsMod/interface/GenericSelMod.h"
 #endif
 
 #ifdef __CINT__
@@ -22,6 +21,7 @@
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::HLTExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
+#pragma link C++ class mithep::PlotKineMod<mithep::Particle>+;
 #pragma link C++ class mithep::PlotKineMod<mithep::CompositeParticle>+;
 #pragma link C++ class mithep::PlotKineMod<mithep::Conversion>+;
 #pragma link C++ class mithep::PlotKineMod<mithep::Electron>+;
@@ -45,16 +45,4 @@
 #pragma link C++ class mithep::PublisherMod<mithep::Photon>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Track>+;
 #pragma link C++ class mithep::PublisherMod<mithep::TriggerObject>+;
-
-#pragma link C++ class mithep::GenericSelMod<mithep::CompositeParticle>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Conversion>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Electron>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::GenJet>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Jet>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::MCParticle>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Met>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Muon>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Photon>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::Track>+;
-#pragma link C++ class mithep::GenericSelMod<mithep::TriggerObject>+;
 #endif
