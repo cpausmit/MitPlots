@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.4 2008/12/10 16:29:30 loizides Exp $
+// $Id: PlotKineMod.h,v 1.5 2008/12/10 16:52:42 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -55,7 +55,7 @@ namespace mithep
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
 
-      ClassDefT(PlotKineMod,1) // Plot kinematics module
+      ClassDefT(PlotKineMod, 1) // Plot kinematics module
   };
 }
 
@@ -129,7 +129,7 @@ template<class T>
 void mithep::PlotKineMod<T>::SlaveBegin()
 {
   // Request a branch and create the histograms.
-
+  
   if (GetLoadBranch()) 
     ReqBranch(GetColName(), fCol);
 

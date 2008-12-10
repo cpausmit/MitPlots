@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.2 2008/11/28 20:27:23 loizides Exp $
+// $Id: SimpleExampleMod.h,v 1.3 2008/12/04 13:52:27 loizides Exp $
 //
 // SimpleExampleAnaMod
 //
@@ -50,7 +50,7 @@ namespace mithep
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
 
-      ClassDef(SimpleExampleMod,1) // Simple example analysis module
+      ClassDef(SimpleExampleMod, 1) // Simple example analysis module
   };
 }
 #endif

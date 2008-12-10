@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTExampleMod.h,v 1.1 2008/09/28 02:41:21 loizides Exp $
+// $Id: HLTExampleMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
 //
 // HLTExampleAnaMod
 //
@@ -37,7 +37,7 @@ namespace mithep
       void         Process();
       void         SlaveBegin();
 
-      ClassDef(HLTExampleMod,1) // HLT example analysis module
+      ClassDef(HLTExampleMod, 1) // HLT example analysis module
   };
 }
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
+// $Id: FullExampleMod.h,v 1.2 2008/12/04 13:52:27 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -53,7 +53,7 @@ namespace mithep
       TH1D                    *fElectronPtHist;	    //!Electron pt histogram
       TH1D                    *fElectronEtaHist;    //!Electron eta histogram
 
-      ClassDef(FullExampleMod,1) // Full example analysis module
+      ClassDef(FullExampleMod, 1) // Full example analysis module
   };
 }
 #endif
