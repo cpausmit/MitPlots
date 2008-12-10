@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ProcIDRef.h,v 1.1 2008/10/31 18:56:14 bendavid Exp $
+// $Id: ProcIDRef.h,v 1.2 2008/11/20 17:49:15 loizides Exp $
 //
 // ProcIDRef
 //
@@ -30,7 +30,7 @@ namespace mithep
     protected:
       TProcessID        *fProcID; //!ptr to the Process Unique Identifier
 
-    ClassDef(ProcIDRef,1) // Implementation of our own TProcIDRef
+    ClassDef(ProcIDRef, 1) // Implementation of our own TProcIDRef
   };
 }
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.5 2008/12/01 17:17:20 bendavid Exp $
+// $Id: StackArray.h,v 1.6 2008/12/03 16:56:28 bendavid Exp $
 //
 // StackArray
 //
@@ -33,19 +33,21 @@ namespace mithep
       ArrayElement             *AddNew();
       ArrayElement             *Allocate();
       ArrayElement             *At(UInt_t idx);
-      const ArrayElement       *At(UInt_t idx)                    const;
-      void                      Clear(Option_t */*opt*/="")             {}
-      UInt_t                    Entries()                         const { return GetEntries(); }
-      UInt_t                    GetEntries()                      const { return fSize; }
-      UInt_t                    GetSize()                         const { return N; }
+      const ArrayElement       *At(UInt_t idx)                     const;
+      void                      Clear(Option_t */*opt*/="")              {}
+      UInt_t                    Entries()                          const { return GetEntries(); }
+      UInt_t                    GetEntries()                       const { return fSize;        }
+      UInt_t                    GetSize()                          const { return N;            }
       Bool_t                    HasObject(const ArrayElement *obj) const;
-      Bool_t                    IsOwner()                         const { return kTRUE; }
-      void                      Reset()                                 { fSize = 0; }
-      void                      Trim()                                  {}
+      Bool_t                    IsOwner()                          const { return kTRUE;        }
+      TObject                  *ObjAt(UInt_t idx);
+      const TObject            *ObjAt(UInt_t idx)                  const;
+      void                      Reset()                                  { fSize = 0;           }
+      void                      Trim()                                   {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
-      const ArrayElement       *UncheckedAt(UInt_t idx)           const;
+      const ArrayElement       *UncheckedAt(UInt_t idx)            const;
       ArrayElement             *operator[](UInt_t idx);
-      const ArrayElement       *operator[](UInt_t idx)            const;
+      const ArrayElement       *operator[](UInt_t idx)             const;
 
     protected:
       TClass                   *fClass;    //!pointer to TClass object used by streamer
@@ -83,7 +85,7 @@ void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
 {
   // Add a copy of an existing object.
 
-  if(fSize>=N) {
+  if (fSize>=N) {
     TObject::Fatal("AddCopy", "Maximum number of slots reached (%d>=%d): "
                    "To support more requires a different template!", fSize, N);
     return;
@@ -108,7 +110,7 @@ ArrayElement* mithep::StackArray<ArrayElement, N>::Allocate()
 {
   // Return next slot in the array, *only* to be used in placement new operator.
 
-  if(fSize>=N) {
+  if (fSize>=N) {
     TObject::Fatal("Allocate", "Maximum number of slots reached (%d>=%d): "
                    "To support more requires a different template!", fSize, N);
     return 0;
@@ -124,7 +126,7 @@ inline ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if (idx<fSize)  
      return static_cast<ArrayElement*>(&fArray[idx]);
 
   ArrayElement tmp;
@@ -139,7 +141,7 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx) c
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if (idx<fSize)  
      return static_cast<const ArrayElement*>(&fArray[idx]);
 
   ArrayElement tmp;
@@ -160,6 +162,24 @@ inline Bool_t mithep::StackArray<ArrayElement, N>::HasObject(const ArrayElement 
   }
   
   return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline TObject *mithep::StackArray<ArrayElement, N>::ObjAt(UInt_t idx)
+{
+  // Return object at given index.
+
+  return static_cast<TObject*>(At(idx));
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline const TObject *mithep::StackArray<ArrayElement, N>::ObjAt(UInt_t idx) const
+{
+  // Return object at given index.
+
+  return static_cast<const TObject*>(At(idx));
 }
 
 //-------------------------------------------------------------------------------------------------

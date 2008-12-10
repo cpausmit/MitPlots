@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
+// $Id: Vector.h,v 1.4 2008/12/01 17:17:20 bendavid Exp $
 //
 // Vector
 //
@@ -38,8 +38,10 @@ namespace mithep
       UInt_t                           Entries()                     const { return fV.size(); }
       UInt_t                           GetEntries()                  const { return fV.size(); }
       UInt_t                           GetSize()                     const { return fV.capacity(); }
-      Bool_t                           HasObject(const ArrayElement *obj) const;// { return false; }
+      Bool_t                           HasObject(const ArrayElement *obj) const;
       Bool_t                           IsOwner()                     const { return kTRUE; }
+      TObject                         *ObjAt(UInt_t idx)                   { return 0; } //TODO_008
+      const TObject                   *ObjAt(UInt_t idx)             const { return 0; } //TODO_008
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
       void                             Reset()                             { fV.clear(); }
@@ -75,7 +77,7 @@ inline void mithep::Vector<ArrayElement>::Clear(Option_t */*opt*/)
 template<class ArrayElement>
 inline Bool_t mithep::Vector<ArrayElement>::HasObject(const ArrayElement *obj) const
 {
-  // Check whether object is in array.  If ArrayElement inherits from TObject, use the
+  // Check whether object is in array. If ArrayElement inherits from TObject, use the
   // isEqual function for the comparison, otherwise use the default pointer comparison.
 
   const TObject *tobj = 0;
@@ -84,15 +86,14 @@ inline Bool_t mithep::Vector<ArrayElement>::HasObject(const ArrayElement *obj) c
 
   for (UInt_t i=0; i<fV.size(); ++i) {
     if (tobj)
-      if ( reinterpret_cast<const TObject*>(&fV.at(i))->IsEqual(tobj) )
-        return true;
-    else if ( &fV.at(i) == obj )
-      return true;
+      if (reinterpret_cast<const TObject*>(&fV.at(i))->IsEqual(tobj))
+        return kTRUE;
+    else if (&fV.at(i) == obj)
+      return kTRUE;
   }
   
-  return false;
+  return kFALSE;
 }
-
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>

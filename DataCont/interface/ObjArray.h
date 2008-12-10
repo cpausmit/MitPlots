@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.9 2008/12/08 15:26:11 loizides Exp $
+// $Id: ObjArray.h,v 1.10 2008/12/09 17:42:20 loizides Exp $
 //
 // ObjArray
 //
@@ -26,6 +26,7 @@ namespace mithep
       ~ObjArray() {}
 
       void                 Add(const ArrayElement *ae);
+      void                 Add(const BaseCollection *col);
       void                 Add(const TCollection *col);
       void                 AddOwned(ArrayElement *ae);
       const TObjArray     &Arr()                                 const { return fArray; }
@@ -41,6 +42,8 @@ namespace mithep
       const ArrayElement  *Find(const char *name)                const;
       ArrayElement        *Find(const char *name);
       void                 Print(Option_t *opt="")               const;
+      TObject             *ObjAt(UInt_t idx);
+      const TObject       *ObjAt(UInt_t idx)                     const;
       void                 Remove(UInt_t idx);
       void                 Remove(const char *name);
       void                 Remove(ArrayElement *ae);
@@ -65,7 +68,7 @@ namespace mithep
     private:
       ObjArray(const ObjArray &a);
 
-    ClassDefT(ObjArray,1) // Wrapper around TClonesArray class
+    ClassDefT(ObjArray, 1) // Wrapper around TClonesArray class
   };
 }
 
@@ -91,18 +94,40 @@ inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
     return;
 
   if (IsOwner()) {
-    TObject::Error("Add","Can not add collection since IsOwner() returns kTRUE.");
+    TObject::Error("Add", "Can not add collection since IsOwner() returns kTRUE.");
     return;
   }
 
-  TIterator *iter = col->MakeIterator();
-  if (iter) {
-    ArrayElement *to = dynamic_cast<ArrayElement *>(iter->Next());
-    while (to) {
+  TIter iter(col->MakeIterator());
+  while (1) {
+    TObject *obj = iter.Next();
+    if (!obj) 
+      break;
+    const ArrayElement *to = dynamic_cast<const ArrayElement*>(obj);
+    if (to) 
       AddLast(to);
-      to = dynamic_cast<ArrayElement *>(iter->Next());
-    }
-    delete iter;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Add(const BaseCollection *col)
+{
+  // Add objects from collection to array.
+
+  if (!col)
+    return;
+
+  if (IsOwner()) {
+    TObject::Error("Add", "Can not add collection since IsOwner() returns kTRUE.");
+    return;
+  }
+
+  UInt_t n = col->GetEntries();
+  for (UInt_t i=0; i<n; ++i) {
+    const ArrayElement *to = dynamic_cast<const ArrayElement*>(col->ObjAt(i));
+    if (to) 
+      AddLast(to);
   }
 }
 
@@ -113,7 +138,7 @@ inline void mithep::ObjArray<ArrayElement>::Add(const ArrayElement *ae)
   // Add object to array. This function should be used in cases the array does not own the objects.
 
   if (IsOwner()) {
-    TObject::Error("Add","Can not add object since IsOwner() returns kTRUE.");
+    TObject::Error("Add", "Can not add object since IsOwner() returns kTRUE.");
     return;
   }
 
@@ -201,28 +226,69 @@ inline Bool_t mithep::ObjArray<ArrayElement>::HasObject(const ArrayElement *obj)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
+TObject *mithep::ObjArray<ArrayElement>::ObjAt(UInt_t idx)
+{
+  // Return object at given index.
+
+  if (idx<fNumEntries)
+    return fArray.UncheckedAt(idx);
+
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+const TObject *mithep::ObjArray<ArrayElement>::ObjAt(UInt_t idx) const
+{
+  // Return object at given index.
+
+  if (idx<fNumEntries)
+    return static_cast<const TObject*>(fArray.UncheckedAt(idx));
+
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Remove(UInt_t idx)
 {
-  // Remove object at given index from array. You probably want to call Trim as well.
+  // Remove object at given index from array. You probably want to call Trim() as well.
+
+  if (idx>=fNumEntries)
+    return;
 
   fArray.RemoveAt(idx);
+  --fNumEntries;
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Remove(const char *name)
 {
-  // Remove object from array. You probably want to call Trim as well.
+  // Remove object with given name from array. You probably want to call Trim() as well.
 
   TObject *obj = fArray.FindObject(name);
-  if (obj) fArray.Remove(obj);
+  if (!obj)
+    return;
+  fArray.Remove(obj);
+  --fNumEntries;
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline void mithep::ObjArray<ArrayElement>::Remove(ArrayElement *ae)
 {
+  // Remove object from array. You probably want to call Trim() as well.
+
+  if (!ae)
+    return;
+
   fArray.Remove(ae);
+  --fNumEntries;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -248,9 +314,7 @@ inline void mithep::ObjArray<ArrayElement>::SetOwner(Bool_t o)
   }
   
   fArray.SetOwner(o);
-
 }
-
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.8 2008/11/20 17:49:15 loizides Exp $
+// $Id: RefArray.h,v 1.9 2008/12/03 11:36:02 loizides Exp $
 //
 // RefArray
 //
@@ -30,7 +30,7 @@
 namespace mithep 
 {
   template<class ArrayElement, UInt_t N>
-  class RefArray /*: public Collection<ArrayElement>*/
+  class RefArray /*: public Collection<ArrayElement> TODO to be enabled for Mit_008*/
   {
     public:
       RefArray();
@@ -44,6 +44,8 @@ namespace mithep
       UInt_t                    GetEntries()                 const { return fUIDs.GetEntries(); }
       UInt_t                    GetSize()                    const { return N; }
       Bool_t                    IsOwner()                    const { return kTRUE; }
+      TObject                  *ObjAt(UInt_t idx);       
+      const TObject            *ObjAt(UInt_t idx)            const;
       void                      Reset();
       void                      Trim()                             {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
@@ -58,7 +60,7 @@ namespace mithep
       StackArray<ProcIDRef,N>      fPIDs;//|| process ids of referenced objects
       StackArrayBasic<UInt_t,N>    fUIDs;//|| unique ids of referenced objects
 
-    ClassDef(RefArray,2) // Implementation of our own TRefArray
+    ClassDef(RefArray, 2) // Implementation of our own TRefArray
   };
 }
 
@@ -67,9 +69,6 @@ template<class ArrayElement, UInt_t N>
 inline mithep::RefArray<ArrayElement,N>::RefArray()
 {
   // Default constructor.
-
-  // Unfortunately the following only would make sense if TObject was our direct ancestor:
-  //   this->Class()->IgnoreTObjectStreamer(1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,7 +77,7 @@ void mithep::RefArray<ArrayElement,N>::Add(const ArrayElement *ae)
 {
   // Add new reference to object.
 
-  if(GetEntries()>=N) {
+  if (GetEntries()>=N) {
     Fatal("Add", "Maximum number of slots reached (%d>=%d): "
           "To support more requires a different template!", GetEntries(), N);
     return;
@@ -123,7 +122,7 @@ inline ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if(idx<GetEntries())  
+  if (idx<GetEntries())  
      return static_cast<ArrayElement*>(GetObject(idx));
 
   Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
@@ -136,7 +135,7 @@ inline const ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx) cons
 {
   // Return entry at given index.
 
-  if(idx<GetEntries())  
+  if (idx<GetEntries())  
      return static_cast<const ArrayElement*>(GetObject(idx));
 
   Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
@@ -186,6 +185,32 @@ inline UInt_t mithep::RefArray<ArrayElement,N>::GetUID(UInt_t idx) const
   // Return uid corresponding to idx.
 
   return fUIDs.At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+TObject *mithep::RefArray<ArrayElement,N>::ObjAt(UInt_t idx)
+{
+  // Return object at given index.
+
+  if (idx<GetEntries())  
+     return GetObject(idx);
+
+  Fatal("ObjAt", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement,UInt_t N>
+const TObject *mithep::RefArray<ArrayElement,N>::ObjAt(UInt_t idx) const
+{
+  // Return object at given index.
+
+  if (idx<GetEntries())  
+    return static_cast<const TObject*>(GetObject(idx));
+
+  Fatal("ObjAt", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------

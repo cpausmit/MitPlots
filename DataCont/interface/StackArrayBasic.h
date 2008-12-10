@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.1 2008/10/31 18:56:14 bendavid Exp $
+// $Id: StackArrayBasic.h,v 1.2 2008/11/20 17:49:15 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -7,7 +7,8 @@
 // memory. For various reasons, the array can not be written in split 
 // mode. Maximum size is set by template parameter. Array is meant to 
 // store basic data types as opposed to StackArray which can hold 
-// classes.
+// classes. Note that this array as opposed to the others does not
+// derive from the templated Collection interface.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -16,12 +17,12 @@
 #define MITANA_DATACONT_STACKARRAYBASIC
 
 #include <TObject.h>
-#include "MitAna/DataCont/interface/Collection.h"
+#include "MitAna/DataCont/interface/BaseCollection.h"
 
 namespace mithep 
 {
   template<class ArrayElement, UInt_t N>
-  class StackArrayBasic : public TObject
+  class StackArrayBasic : public BaseCollection
   {
     public:
       StackArrayBasic();
@@ -31,12 +32,13 @@ namespace mithep
       void                      Add(const ArrayElement &ae);
       ArrayElement              At(UInt_t idx);
       const ArrayElement        At(UInt_t idx)                    const;
-      void                      Clear(Option_t */*opt*/="")             {}
       UInt_t                    Entries()                         const { return GetEntries(); }
-      UInt_t                    GetEntries()                      const { return fSize; }
-      UInt_t                    GetSize()                         const { return N; }
-      Bool_t                    IsOwner()                         const { return kTRUE; }
-      void                      Reset()                                 { fSize = 0; }
+      UInt_t                    GetEntries()                      const { return fSize;        }
+      UInt_t                    GetSize()                         const { return N;            }
+      Bool_t                    IsOwner()                         const { return kTRUE;        }
+      TObject                  *ObjAt(UInt_t idx)                       { return 0;            }
+      const TObject            *ObjAt(UInt_t idx)                 const { return 0;            }
+      void                      Reset()                                 { fSize = 0;           }
       void                      Trim()                                  {}
       ArrayElement              UncheckedAt(UInt_t idx);                 
       const ArrayElement        UncheckedAt(UInt_t idx)           const;
@@ -47,7 +49,7 @@ namespace mithep
       UShort_t                  fSize;      //size of array
       ArrayElement              fArray[N];  //storage for basic types
 
-    ClassDef(StackArrayBasic,1) // Array on stack for basic types
+    ClassDef(StackArrayBasic, 1) // Array on stack for basic types
   };
 }
 
@@ -76,7 +78,7 @@ void mithep::StackArrayBasic<ArrayElement, N>::Add(const ArrayElement &ae)
 {
   // Add element to array.
 
-  if(fSize>=N) {
+  if (fSize>=N) {
     TObject::Fatal("Add", "Maximum number of slots reached (%d>=%d): "
                    "To support more requires a different template!", fSize, N);
     return;
@@ -92,7 +94,7 @@ inline ArrayElement mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if (idx<fSize)  
      return fArray[idx];
 
   ArrayElement tmp;
@@ -107,7 +109,7 @@ inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t i
 {
   // Return entry at given index.
 
-  if(idx<fSize)  
+  if (idx<fSize)  
      return fArray[idx];
 
   ArrayElement tmp;

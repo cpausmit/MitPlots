@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.6 2008/12/08 15:26:11 loizides Exp $
+// $Id: Array.h,v 1.7 2008/12/09 17:42:32 loizides Exp $
 //
 // Array
 //
@@ -39,6 +39,8 @@ namespace mithep
       TIterator           *Iterator(Bool_t dir = kIterForward)  const;
       Bool_t               MustClear()                          const { return this->TestBit(14); }
       Bool_t               MustDelete()                         const { return this->TestBit(15); }
+      TObject             *ObjAt(UInt_t idx);
+      const TObject       *ObjAt(UInt_t idx)                    const;
       void                 Print(Option_t *opt="")              const;
       void                 Reset();
       void                 SetMustClearBit()                          { this->SetBit(14); }
@@ -58,7 +60,7 @@ namespace mithep
     private:
       Array(const Array &a);
 
-    ClassDefT(Array,1) // Wrapper around TClonesArray class
+    ClassDefT(Array, 1) // Wrapper around TClonesArray class
   };
 }
 
@@ -109,9 +111,8 @@ inline ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  ArrayElement tmp;
   TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-                 idx, fNumEntries, GetName(), tmp.GetName()); 
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
 
@@ -124,9 +125,8 @@ inline const ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  ArrayElement tmp;
   TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
-                 idx, fNumEntries, GetName(), tmp.GetName()); 
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
 
@@ -164,6 +164,34 @@ void mithep::Array<ArrayElement>::Print(Option_t *opt) const
       At(i)->Print(opt);
     }
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline TObject *mithep::Array<ArrayElement>::ObjAt(UInt_t idx)
+{
+  // Return object at given index.
+
+  if (idx<fNumEntries)
+    return fArray.UncheckedAt(idx);
+
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
+  return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+const TObject *mithep::Array<ArrayElement>::ObjAt(UInt_t idx) const
+{
+  // Return object at given index.
+
+  if (idx<fNumEntries)
+    return static_cast<const TObject*>(fArray.UncheckedAt(idx));
+
+  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+                 idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
+  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
