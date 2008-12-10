@@ -1,10 +1,11 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.13 2008/11/25 14:29:41 loizides Exp $
+// $Id: MitAnaTreeModLinkDef.h,v 1.14 2008/12/01 17:42:23 loizides Exp $
 
 #ifndef MITANA_TREEMOD_LINKDEF_H
 #define MITANA_TREEMOD_LINKDEF_H
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include "MitAna/TreeMod/interface/BaseMod.h"
+#include "MitAna/TreeMod/interface/BaseSelMod.h"
 #include "MitAna/TreeMod/interface/CatalogingMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/TreeMod/interface/HLTMod.h"
@@ -25,6 +26,7 @@
 #pragma link C++ class mithep::AnaFwkMod+;
 #pragma link C++ class mithep::Analysis+;
 #pragma link C++ class mithep::BaseMod+;
+#pragma link C++ class mithep::BaseSelMod+;
 #pragma link C++ class mithep::CatalogingMod+;
 #pragma link C++ class mithep::HLTFwkMod+;
 #pragma link C++ class mithep::HLTMod+;
