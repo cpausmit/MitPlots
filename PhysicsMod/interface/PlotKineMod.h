@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.2 2008/12/04 13:52:27 loizides Exp $
+// $Id: PlotKineMod.h,v 1.3 2008/12/09 10:18:33 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -52,8 +52,6 @@ namespace mithep
       const Collection<T>     *fCol;        //!pointer to collection 
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
-      TH1D                    *fMassHist;   //!mass histogram
-      TH1D                    *fMtHist;     //!mt histogram
 
       ClassDefT(PlotKineMod,1) // Plot kinematics module
   };
@@ -75,7 +73,7 @@ mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) :
 {
   // Constructor.
 
-  this->SetFillHist(1);
+  SetFillHist(1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,7 +97,7 @@ void mithep::PlotKineMod<T>::Process()
   // Process entries of the tree: Just load the branch and fill the histograms.
 
   if (!Load()) {
-    this->SendError(kAbortModule, "Process", "Could not load data!");
+    SendError(kAbortModule, "Process", "Could not load data!");
     return;
   }
 
