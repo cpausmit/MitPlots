@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeLoader.h,v 1.2 2008/09/10 03:33:28 loizides Exp $
+// $Id: TreeLoader.h,v 1.3 2008/09/17 04:23:17 loizides Exp $
 //
 // TreeLoader
 //
@@ -26,7 +26,7 @@ namespace mithep {
 
       TAMVirtualBranchLoader *CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo);
 
-    ClassDef(TreeLoader,1)  // Plugin loader to load our tree branch loader into TAM
+    ClassDef(TreeLoader, 1)  // Plugin loader to load our tree branch loader into TAM
   };
 }
 #endif

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.14 2008/12/01 17:41:43 loizides Exp $
+// $Id: Analysis.h,v 1.15 2008/12/09 10:13:00 loizides Exp $
 //
 // Analysis
 //
@@ -109,7 +109,7 @@ namespace mithep
       Bool_t                    InitProof();
       Bool_t                    UploadPackages(TList *packages);
 
-    ClassDef(Analysis,0) // Top-level analysis class 
+    ClassDef(Analysis, 0) // Top-level analysis class 
   };
 }
 #endif

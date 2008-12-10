@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.2 2008/10/23 17:02:16 loizides Exp $
+// $Id: HLTMod.h,v 1.3 2008/12/04 13:49:14 loizides Exp $
 //
 // HLTMod
 //
@@ -72,7 +72,7 @@ namespace mithep
       Int_t                       fNAcceped;      //!number of accepted events
       Int_t                       fNFailed;       //!number of failed events
 
-    ClassDef(HLTMod,1) // HLT TAM module
+    ClassDef(HLTMod, 1) // HLT TAM module
   };
 }
 #endif

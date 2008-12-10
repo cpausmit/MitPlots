@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.8 2008/12/03 17:42:36 loizides Exp $
+// $Id: Selector.h,v 1.9 2008/12/04 13:50:15 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -69,7 +69,7 @@ namespace mithep {
 
       friend class OutputMod;
 
-    ClassDef(Selector,1)
+    ClassDef(Selector, 1) // Customized selector class
   };
 }
 

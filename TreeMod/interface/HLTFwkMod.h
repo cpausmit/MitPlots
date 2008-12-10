@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.2 2008/12/02 09:33:45 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.3 2008/12/04 13:48:57 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -67,7 +67,7 @@ namespace mithep
 
       friend class OutputMod;
 
-    ClassDef(HLTFwkMod,1) // HLT framework TAM module
+    ClassDef(HLTFwkMod, 1) // HLT framework TAM module
   };
 }
 #endif

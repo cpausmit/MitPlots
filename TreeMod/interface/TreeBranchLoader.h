@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeBranchLoader.h,v 1.2 2008/09/10 03:33:28 loizides Exp $
+// $Id: TreeBranchLoader.h,v 1.3 2008/12/01 17:40:57 loizides Exp $
 //
 // TreeBranchLoader
 //
@@ -30,7 +30,7 @@ namespace mithep {
       TBranch             *GetBranch()                 { return fBranch; }
       Bool_t               Notify(TTree *tree);
 
-    ClassDef(TreeBranchLoader,0)  // TAM plugin to load data from a single branch
+    ClassDef(TreeBranchLoader, 0)  // TAM plugin to load data from a single branch
   };
 }
 #endif

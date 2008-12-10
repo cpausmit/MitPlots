@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.13 2008/12/04 13:48:34 loizides Exp $
+// $Id: BaseMod.h,v 1.14 2008/12/09 10:16:24 loizides Exp $
 //
 // BaseMod
 //
@@ -61,7 +61,7 @@ namespace mithep
       const TString               fHltFwkModName;       //!name of HLTFwkMod
       Int_t                       fNEventsProc;         //!number of events
 
-    ClassDef(BaseMod,1) // Base TAM module
+    ClassDef(BaseMod, 1) // Base TAM module
   };
 }
 

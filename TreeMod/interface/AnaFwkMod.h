@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.1 2008/11/19 15:30:26 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.2 2008/11/25 15:57:49 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -35,7 +35,7 @@ namespace mithep
       void           SlaveBegin();
       void           SlaveTerminate();
     
-      ClassDef(AnaFwkMod,1) // Analysis framework module
+      ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
 }
 #endif

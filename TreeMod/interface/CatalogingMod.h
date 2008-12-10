@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CatalogingMod.h,v 1.2 2008/07/10 21:31:46 loizides Exp $
+// $Id: CatalogingMod.h,v 1.3 2008/09/10 03:33:28 loizides Exp $
 //
 // CatalogingMod
 //
@@ -27,10 +27,10 @@ namespace mithep
                     const char *title = "Cataloging module producing a fileset catalog");
       ~CatalogingMod() {}
 
-      void                     SetMetaDataString(const char* s) { fMetaDataString = TString(s); }
-      const char              *MetaDataString() const           { return fMetaDataString.Data(); }
-      void                     SetNFileSet(Int_t i)             { fNFileSet = i; }
-      Int_t                    NFileSet()       const           { return fNFileSet; }
+      Int_t                    NFileSet()       const                 { return fNFileSet; }
+      const char              *MetaDataString()                 const { return fMetaDataString; }
+      void                     SetNFileSet(Int_t i)                   { fNFileSet = i; }
+      void                     SetMetaDataString(const char* s)       { fMetaDataString = s;    }
 
     protected:
       void                     SlaveBegin();
@@ -39,12 +39,12 @@ namespace mithep
       void                     SlaveTerminate();
 
     private:
-      TString                  fMetaDataString;      // 
-      Int_t                    fNFileSet;            //
-      UInt_t                   fLastLumiSec;         //last active lumi section
-      BaseMetaData             fMetaData;            //
+      TString                  fMetaDataString;      //metadata description
+      Int_t                    fNFileSet;            //number of fileset
+      UInt_t                   fLastLumiSec;         //!last active lumi section
+      BaseMetaData             fMetaData;            //!meta data info
 
-      ClassDef(CatalogingMod,1) // Cataloging module
+      ClassDef(CatalogingMod, 1) // Cataloging module
   };
 }
 #endif

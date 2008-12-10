@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.3 2008/12/03 17:44:05 loizides Exp $
+// $Id: OutputMod.h,v 1.4 2008/12/04 13:55:06 loizides Exp $
 //
 // OutputMod
 //
@@ -106,7 +106,7 @@ namespace mithep
 
       friend class Selector;
 
-    ClassDef(OutputMod,1) // Output module
+    ClassDef(OutputMod, 1) // Output module
   };
 }
 
