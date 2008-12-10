@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.11 2008/10/06 16:53:25 loizides Exp $
+// $Id: TreeWriter.h,v 1.12 2008/12/01 17:39:20 loizides Exp $
 //
 // TreeWriter
 //
@@ -125,7 +125,7 @@ namespace mithep
     private:
       const char          *CName(void *obj)             const; 
 
-    ClassDef(TreeWriter,0) // Tree writer class
+    ClassDef(TreeWriter, 0) // Tree writer class
   };
 }
 #endif

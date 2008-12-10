@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenRelValMod.h,v 1.4 2008/11/21 20:12:26 loizides Exp $
+// $Id: GenRelValMod.h,v 1.5 2008/12/04 13:52:38 loizides Exp $
 //
 // GenRelValMod
 //
@@ -38,7 +38,7 @@ namespace mithep
       const MCParticleCol   *fParticles;    //!particle branch
       std::ofstream         *ofile;         //!output text file
 
-      ClassDef(GenRelValMod,1) // GenParticle validation module
+      ClassDef(GenRelValMod, 1) // GenParticle validation module
   };
 }
 #endif
