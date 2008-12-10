@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.30 2008/10/31 17:42:08 bendavid Exp $
+// $Id: Collections.h,v 1.31 2008/11/12 18:18:27 bendavid Exp $
 //
 // Collections
 //
@@ -122,6 +122,7 @@ namespace mithep
   typedef ObjArray<BasicCluster>        BasicClusterOArr;
   typedef ObjArray<SuperCluster>        SuperClusterOArr;
   typedef ObjArray<CaloTower>           CaloTowerOArr; 
+  typedef ObjArray<Particle>            ParticleOArr;
   typedef ObjArray<ChargedParticle>     ChargedParticleOArr;
   typedef ObjArray<Muon>                MuonOArr;
   typedef ObjArray<Electron>            ElectronOArr;

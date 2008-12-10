@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.46 2008/12/02 09:30:11 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.47 2008/12/09 17:47:11 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -59,10 +59,10 @@
 #pragma link C++ class mithep::Names+;
 
 #pragma link C++ class mithep::Collection<TRef>+;
-#pragma link C++ class mithep::Collection<std::string>+;
-#pragma link C++ typedef mithep::StringCol;
-#pragma link C++ class mithep::Vector<std::string>+;
-#pragma link C++ typedef mithep::StringVec;
+#pragma link C++ class mithep::Collection<std::string>+; //todo  remove for Mit_008
+#pragma link C++ typedef mithep::StringCol;              //todo  remove for Mit_008
+#pragma link C++ class mithep::Vector<std::string>+;     //todo  remove for Mit_008
+#pragma link C++ typedef mithep::StringVec;              //todo  remove for Mit_008
 
 #pragma link C++ class mithep::DataBase+;
 #pragma link C++ enum mithep::EObjType;
@@ -186,7 +186,9 @@
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;
 #pragma link C++ class mithep::RefArray<mithep::Particle,1024>+;
+#pragma link C++ class mithep::ObjArray<mithep::Particle>+;
 #pragma link C++ typedef mithep::ParticleCol;
+#pragma link C++ typedef mithep::ParticleOArr;
 
 #pragma link C++ class mithep::ChargedParticle+;
 #pragma link C++ class mithep::Collection<mithep::ChargedParticle>+;
