@@ -1,10 +1,9 @@
-// $Id: DataObject.cc,v 1.1 2008/06/04 09:08:36 loizides Exp $
+// $Id: DataBase.cc,v 1.1 2008/12/02 09:30:11 loizides Exp $
 
 #include "MitAna/DataTree/interface/DataBase.h"
 #include <TClass.h>
 
 ClassImp(mithep::DataBase)
-
 
 //--------------------------------------------------------------------------------------------------
 namespace {
@@ -12,7 +11,8 @@ namespace {
     public:
       DataBaseIgnoreTObject() {
         TClass *cls = TClass::GetClass("mithep::DataBase");
-        cls->IgnoreTObjectStreamer();
+        if (cls) 
+          cls->IgnoreTObjectStreamer();
       }
   };
   DataBaseIgnoreTObject dummy;
