@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.3 2008/12/09 10:18:33 loizides Exp $
+// $Id: PlotKineMod.h,v 1.4 2008/12/10 16:29:30 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -25,18 +25,20 @@ namespace mithep
                   const char *title="Plot kinematics module");
       ~PlotKineMod() {}
 
-      const char              *GetColName()              const { return fColName; }
-      Double_t                 GetEtaMin()               const { return fEtaMin;  }
-      Double_t                 GetEtaMax()               const { return fEtaMax;  }
-      Double_t                 GetPtMin()                const { return fPtMin;   }
-      Double_t                 GetPtMax()                const { return fPtMax;   }
-      Bool_t                   GetLoadBranch()           const { return fLoadBr;  }
-      void                     SetColName(const char *n)       { fColName=n;      }
-      void                     SetEtaMin(Double_t e)           { fEtaMin = e;     }
-      void                     SetEtaMax(Double_t e)           { fEtaMax = e;     }
-      void                     SetLoadBranch(Bool_t b)         { fLoadBr = b;     }
-      void                     SetPtMin(Double_t pt)           { fPtMin = pt;     }
-      void                     SetPtMax(Double_t pt)           { fPtMax = pt;     }
+      const char              *GetColName()              const { return fColName;     }
+      Double_t                 GetEtaMin()               const { return fEtaMin;      }
+      Double_t                 GetEtaMax()               const { return fEtaMax;      }
+      const char              *GetInputName()            const { return GetColName(); }
+      Double_t                 GetPtMin()                const { return fPtMin;       }
+      Double_t                 GetPtMax()                const { return fPtMax;       }
+      Bool_t                   GetLoadBranch()           const { return fLoadBr;      }
+      void                     SetColName(const char *n)       { fColName=n;          }
+      void                     SetEtaMin(Double_t e)           { fEtaMin = e;         }
+      void                     SetEtaMax(Double_t e)           { fEtaMax = e;         }
+      void                     SetInputName(const char *n)     { SetColName(n);       }
+      void                     SetLoadBranch(Bool_t b)         { fLoadBr = b;         }
+      void                     SetPtMin(Double_t pt)           { fPtMin = pt;         }
+      void                     SetPtMax(Double_t pt)           { fPtMax = pt;         }
 
     protected:
       Bool_t                   Load();
