@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.47 2008/12/09 17:47:11 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.48 2008/12/10 11:29:25 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -58,13 +58,22 @@
 
 #pragma link C++ class mithep::Names+;
 
-#pragma link C++ class mithep::Collection<TRef>+;
+#pragma link C++ class mithep::Collection<TRef>+;        //todo  remvoe for Mit_008
 #pragma link C++ class mithep::Collection<std::string>+; //todo  remove for Mit_008
 #pragma link C++ typedef mithep::StringCol;              //todo  remove for Mit_008
 #pragma link C++ class mithep::Vector<std::string>+;     //todo  remove for Mit_008
 #pragma link C++ typedef mithep::StringVec;              //todo  remove for Mit_008
 
+#pragma link C++ class mithep::Collection<TObject>+;
+#pragma link C++ class mithep::ObjArray<TObject>+;
+
 #pragma link C++ class mithep::DataBase+;
+#pragma link C++ class mithep::Collection<mithep::DataBase>+;
+#pragma link C++ class mithep::Array<mithep::DataBase>+;
+#pragma link C++ class mithep::ObjArray<mithep::DataBase>+;
+#pragma link C++ typedef mithep::DataObjectCol;
+#pragma link C++ typedef mithep::DataObjectArr;
+#pragma link C++ typedef mithep::DataObjectOArr;
 #pragma link C++ enum mithep::EObjType;
 
 #pragma link C++ class mithep::BitMask<1>+;

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.31 2008/11/12 18:18:27 bendavid Exp $
+// $Id: Collections.h,v 1.32 2008/12/10 11:30:00 loizides Exp $
 //
 // Collections
 //
@@ -46,6 +46,9 @@
 
 namespace mithep 
 {
+  typedef Collection<TObject>           ObjectCol;
+  typedef Collection<DataBase>          DataBaseCol;
+
   typedef Collection<BitMask<1> >       BitMask8Col;
   typedef Collection<BitMask<2> >       BitMask16Col;
   typedef Collection<BitMask<4> >       BitMask32Col;
@@ -90,6 +93,7 @@ namespace mithep
   typedef Collection<Vertex>            VertexCol;
   typedef Collection<BeamSpot>          BeamSpotCol;
 
+  typedef Array<DataBase>               DataBaseArr;
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<Track>                  TrackArr;
   typedef Array<BasicCluster>           BasicClusterArr;
@@ -117,6 +121,8 @@ namespace mithep
   typedef Array<Vertex>                 VertexArr;
   typedef Array<BeamSpot>               BeamSpotArr;
 
+  typedef ObjArray<TObject>             ObjectOArr;
+  typedef ObjArray<DataBase>            DataBaseOArr;
   typedef ObjArray<DataObject>          DataObjectOArr;
   typedef ObjArray<Track>               TrackOArr;
   typedef ObjArray<BasicCluster>        BasicClusterOArr;
