@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.4 2008/11/14 14:46:35 bendavid Exp $
+// $Id: BasicCluster.h,v 1.5 2008/12/09 17:46:59 loizides Exp $
 //
 // Basic Clusters
 //
@@ -19,23 +19,23 @@ namespace mithep
   class BasicCluster : public DataObject
   {
     public:
-      BasicCluster() : fEnergy(0.0), fPoint(0,0,0) {}
+      BasicCluster() : fEnergy(0), fPoint(0,0,0) {}
       BasicCluster(Double_t Energy, ThreeVector Point) : fEnergy(Energy), fPoint(Point) {}
       ~BasicCluster() {}
      
-      Int_t	       AlgoId()                 const { return fAlgoId; }
-      Double_t	       ChiSq()                  const { return fChiSq;  }       
-      Double_t         Energy()                 const { return fEnergy; }      
+      Int_t	       AlgoId()                 const { return fAlgoId;       }
+      Double_t	       ChiSq()                  const { return fChiSq;        }       
+      Double_t         Energy()                 const { return fEnergy;       }       
       Double_t         Eta()                    const { return fPoint.Eta();  }
       EObjType         ObjType()                const { return kBasicCluster; }       
       Double_t         Phi()                    const { return fPoint.Phi();  }
-      Double_t         X()                      const { return fPoint.X(); }
-      Double_t         Y()                      const { return fPoint.Y(); }
-      Double_t         Z()                      const { return fPoint.Z(); }      
+      Double_t         X()                      const { return fPoint.X();    }
+      Double_t         Y()                      const { return fPoint.Y();    }
+      Double_t         Z()                      const { return fPoint.Z();    }        
       void             Print(Option_t *opt="")  const;
-      void	       SetAlgoId(Int_t algoId)                    { fAlgoId = algoId; }
-      void	       SetChiSq(Double_t chiSq)                   { fChiSq = chiSq; }           
-      void	       SetEnergy(Double_t energy)                 { fEnergy = energy; }      
+      void	       SetAlgoId(Int_t algoId)                    { fAlgoId = algoId;     }
+      void	       SetChiSq(Double_t chiSq)                   { fChiSq  = chiSq;      }
+      void	       SetEnergy(Double_t energy)                 { fEnergy = energy;     }      
       void	       SetXYZ(Double_t x, Double_t y, Double_t z) { fPoint.SetXYZ(x,y,z); } 
 
     protected:
