@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.21 2008/12/09 10:13:01 loizides Exp $
+// $Id: Analysis.cc,v 1.22 2008/12/11 15:29:09 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -281,7 +281,7 @@ void Analysis::FileInputFromEnv()
 
   if ((catalog.IsNull() || book.IsNull() || dataset.IsNull()) && files.IsNull()) {
       Warning("FileInputFromEnv", "Called to get file info from environment, but did not get"
-              " consistent set of variables:\n\tMIT_CATALOG=%s\n\tMIT_BOOK=%s,\n\t"
+              " consistent set of variables:\n\tMIT_CATALOG=%s\n\tMIT_BOOK=%s\n\t"
               "MIT_DATASET=%s\n\tMIT_FILESETS=%s\n\tMIT_FILES=%s\n", 
               catalog.Data(), book.Data(), dataset.Data(), filesets.Data(), files.Data());
       return;
@@ -305,7 +305,7 @@ void Analysis::FileInputFromEnv()
   }
 
   Info("FileInputFromEnv", "Got from environment:\n"
-       "\tMIT_CATALOG=%s\n\tMIT_BOOK=%s,\n\tMIT_DATASET=%s\n\tMIT_FILESETS=%s\n", 
+       "\tMIT_CATALOG=%s\n\tMIT_BOOK=%s\n\tMIT_DATASET=%s\n\tMIT_FILESETS=%s\n", 
        catalog.Data(), book.Data(), dataset.Data(), filesets.Data());
 
   Catalog cat(catalog);

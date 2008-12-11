@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.16 2008/12/10 14:20:26 loizides Exp $
+// $Id: Analysis.h,v 1.17 2008/12/11 15:29:09 loizides Exp $
 //
 // Analysis
 //
@@ -12,12 +12,12 @@
 //  b) Use a text file to point to files to be analyzed using Analysis::AddFiles
 //  c) Add files using a catalog using Analysis::AddDataset
 //  d) Use of environment variables (only will be attempted if none of a-c is provided)
-//     MIT_CATALOG  (=/home/mitprod/catalog)
-//     MIT_BOOK     (=mit/filler/006)
-//     MIT_DATASET  (=s8-ttbar-id9)
-//     MIT_FILESETS (=0000;0001;0002)
+//     MIT_CATALOG  (eg. export MIT_CATALOG=/home/mitprod/catalog)
+//     MIT_BOOK     (eg. export MIT_BOOK=mit/filler/006)
+//     MIT_DATASET  (eg. export MIT_DATASET=s8-ttbar-id9)
+//     MIT_FILESETS (eg. export MIT_FILESETS=0000;0001;0002)
 //   or   
-//     MIT_FILES    (=file1;file2;file3)
+//     MIT_FILES    (eg. export MIT_FILES=file1;file2;file3)
 //
 // See $CMSSW_BASE/src/MitAna/macros/examples/runSimpleExample.C
 // for an example of how to use this class.
