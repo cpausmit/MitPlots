@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.15 2008/12/09 10:13:00 loizides Exp $
+// $Id: Analysis.h,v 1.16 2008/12/10 14:20:26 loizides Exp $
 //
 // Analysis
 //
@@ -11,6 +11,13 @@
 //  a) Add single files to be analyzed using Analysis::AddFile
 //  b) Use a text file to point to files to be analyzed using Analysis::AddFiles
 //  c) Add files using a catalog using Analysis::AddDataset
+//  d) Use of environment variables (only will be attempted if none of a-c is provided)
+//     MIT_CATALOG  (=/home/mitprod/catalog)
+//     MIT_BOOK     (=mit/filler/006)
+//     MIT_DATASET  (=s8-ttbar-id9)
+//     MIT_FILESETS (=0000;0001;0002)
+//   or   
+//     MIT_FILES    (=file1;file2;file3)
 //
 // See $CMSSW_BASE/src/MitAna/macros/examples/runSimpleExample.C
 // for an example of how to use this class.
@@ -43,13 +50,13 @@ namespace mithep
       Analysis(Bool_t useproof=kFALSE);
       ~Analysis();
 
-      void                      AddSuperModule(TAModule *mod);
       Bool_t                    AddDataset(const Dataset *dataset);
       Bool_t                    AddFile(const char *pname);
       Bool_t                    AddFiles(const char *pname, Int_t nmax=-1);
       void                      AddLoader(TAMVirtualLoader *l);
       void                      AddPackage(const char *name);
       void                      AddPackages(TList *list);
+      void                      AddSuperModule(TAModule *mod);
       const char               *GetAnaOutputName()            const { return fAnaOutput;          }
       const TList              *GetOutput()                   const { return fOutput;             }
       Bool_t                    GetUseProof()                 const { return fUseProof;           }
@@ -73,6 +80,14 @@ namespace mithep
       void                      Terminate();
 
     protected:
+      void                      AddFile(const char *pname, Int_t eventlist);
+      void                      AddFile(const TObject *oname, Int_t eventlist);
+      void                      AddList(TList *list, Int_t eventlist);
+      void                      FileInputFromEnv();
+      Bool_t                    IsValidName(const char */*name*/) { return kTRUE; }
+      Bool_t                    InitProof();
+      Bool_t                    UploadPackages(TList *packages);
+
       enum EState {  kPristine,  //after constructor
                      kInit,      //after init
                      kRun,       //after run
@@ -101,13 +116,6 @@ namespace mithep
       Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
       Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
-
-      void                      AddFile(const char *pname, Int_t eventlist);
-      void                      AddFile(const TObject *oname, Int_t eventlist);
-      void                      AddList(TList *list, Int_t eventlist);
-      Bool_t                    IsValidName(const char */*name*/) { return kTRUE; }
-      Bool_t                    InitProof();
-      Bool_t                    UploadPackages(TList *packages);
 
     ClassDef(Analysis, 0) // Top-level analysis class 
   };

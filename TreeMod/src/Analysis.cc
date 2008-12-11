@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.20 2008/11/26 17:09:05 loizides Exp $
+// $Id: Analysis.cc,v 1.21 2008/12/09 10:13:01 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -19,6 +19,7 @@
 #include "MitAna/TreeMod/interface/TreeLoader.h"
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
+#include "MitAna/Catalog/interface/Catalog.h"
 #include "MitAna/Catalog/interface/Dataset.h"
 
 ClassImp(mithep::Analysis)
@@ -77,6 +78,19 @@ Analysis::~Analysis()
 }
 
 //--------------------------------------------------------------------------------------------------
+Bool_t Analysis::AddDataset(const Dataset *dataset)
+{
+  // Add a full dataset to the analysis.
+
+  Bool_t status = true;
+
+  for (UInt_t i=0; i<dataset->NFiles(); ++i)
+    status = (status && AddFile(dataset->FileUrl(i)));
+
+  return status;
+}
+
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::AddFile(const char *pname)
 {
   // Add file with given name to the list of files to be processed. Using the token "|", you can
@@ -88,21 +102,26 @@ Bool_t Analysis::AddFile(const char *pname)
   }
 
   TString pnamestr(pname);
+  if (pnamestr.IsNull()) 
+    return kFALSE;
+
   TString tok("|");
   TObjArray *arr = pnamestr.Tokenize(tok);
-  TString msg;
+  if (!arr)
+    return kFALSE;
 
-  for(Int_t i=0; i<arr->GetEntries(); i++){
-      
+  TString msg;
+  for (Int_t i=0; i<arr->GetEntries(); ++i) {
+  
     TObjString *dummy = dynamic_cast<TObjString*>(arr->At(i));
-    if (!dummy) continue;
+    if (!dummy) 
+      continue;
 
     AddFile(dummy->GetName(),i);      
-    if (i==0) msg=dummy->GetName();
-    else {
-      Info("AddFile", "Add file %s as friend to %s", 
-           dummy->GetName(), msg.Data());
-    }
+    if (i==0) 
+      msg=dummy->GetName();
+    else
+      Info("AddFile", "Add file %s as friend to %s", dummy->GetName(), msg.Data());
   }
   delete arr;
 
@@ -132,7 +151,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     l = new TList;
     l->SetOwner();
     fList->Add(l);
-    fNFriends++;
+    ++fNFriends;
 
   } else if (eventlist < 0 || eventlist > fNFriends) {
     Error("AddFile", "Specified list %d not in [0,%d]", eventlist, fNFriends);
@@ -198,19 +217,6 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
 }
 
 //--------------------------------------------------------------------------------------------------
-Bool_t Analysis::AddDataset(const Dataset *dataset)
-{
-  // Add a full dataset to the analysis.
-
-  Bool_t status = true;
-
-  for (UInt_t i=0; i<dataset->NFiles(); i++)
-    status = (status && AddFile(dataset->FileUrl(i)));
-
-  return status;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Analysis::AddList(TList *list, Int_t eventlist)
 {
   // Add file name to the event list specified by eventlist. The lists are used to hold filenames of
@@ -263,6 +269,63 @@ void Analysis::AddSuperModule(TAModule *mod)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Analysis::FileInputFromEnv()
+{
+  // Attempt to get list of filesets/files from environment.
+
+  TString catalog(gSystem->Getenv("MIT_CATALOG"));
+  TString book(gSystem->Getenv("MIT_BOOK"));
+  TString dataset(gSystem->Getenv("MIT_DATASET"));
+  TString filesets(gSystem->Getenv("MIT_FILESETS"));
+  TString files(gSystem->Getenv("MIT_FILES"));
+
+  if ((catalog.IsNull() || book.IsNull() || dataset.IsNull()) && files.IsNull()) {
+      Warning("FileInputFromEnv", "Called to get file info from environment, but did not get"
+              " consistent set of variables:\n\tMIT_CATALOG=%s\n\tMIT_BOOK=%s,\n\t"
+              "MIT_DATASET=%s\n\tMIT_FILESETS=%s\n\tMIT_FILES=%s\n", 
+              catalog.Data(), book.Data(), dataset.Data(), filesets.Data(), files.Data());
+      return;
+  }
+
+
+  if (!files.IsNull()) { // add local files
+    Info("FileInputFromEnv", "Got from environment:\n"
+         "\n\tMIT_FILES=%s\n", files.Data());
+    TString tok(";");
+    TObjArray *arr = files.Tokenize(tok);
+    if (arr) {
+      for (Int_t i=0; i<arr->GetEntries(); ++i) {
+        TObjString *dummy = dynamic_cast<TObjString*>(arr->At(i));
+        if (!dummy) continue;
+        AddFile(dummy->GetName(),0);      
+      }
+      delete arr;
+    }
+    return;
+  }
+
+  Info("FileInputFromEnv", "Got from environment:\n"
+       "\tMIT_CATALOG=%s\n\tMIT_BOOK=%s,\n\tMIT_DATASET=%s\n\tMIT_FILESETS=%s\n", 
+       catalog.Data(), book.Data(), dataset.Data(), filesets.Data());
+
+  Catalog cat(catalog);
+  TString tok(";");
+  TObjArray *arr = filesets.Tokenize(tok);
+  if (arr) {
+    for (Int_t i=0; i<arr->GetEntries(); ++i) {
+      TObjString *fileset = dynamic_cast<TObjString*>(arr->At(i));
+      if (!fileset) continue;
+      Dataset *d = cat.FindDataset(book, dataset, fileset->String());
+      if (!d)
+        continue;
+      AddDataset(d);
+      delete d;
+    }
+    delete arr;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
 Bool_t Analysis::Init()
 {
   // Setup the TDSet and TChain to be used for the analysis with or without PROOF. If more than one
@@ -273,6 +336,10 @@ Bool_t Analysis::Init()
           Int_t(fState));
     return kFALSE;
   }
+
+  // check if we should attempt to get filesets/filenames from environment
+  if (fNFriends == 0)
+    FileInputFromEnv();
 
   if (fNFriends <= 0) {
     Error("Init", "List of friend lists is empty!");
@@ -285,7 +352,8 @@ Bool_t Analysis::Init()
   }
 
   if (fUseProof) { // first init our PROOF session
-    if (!InitProof()) return kFALSE;
+    if (!InitProof()) 
+      return kFALSE;
   }
 
   // we do this here instead in Terminate() so that 
@@ -296,7 +364,7 @@ Bool_t Analysis::Init()
   fChain = new TChain(fTreeName); 
   fSet   = new TDSet("TTree",fTreeName);
 
-  for(Int_t i=0; i<fNFriends; i++){
+  for (Int_t i=0; i<fNFriends; ++i) {
 
     TList *l = dynamic_cast<TList*>(fList->At(i));
     if (!l) {
@@ -306,7 +374,7 @@ Bool_t Analysis::Init()
 
     if (i == 0) {
       TIter next(l);                           
-      while ( TObjString *obj = dynamic_cast<TObjString*>(next()) ) {
+      while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         fChain->Add(obj->GetName());
         fSet->Add(obj->GetName());
       }
@@ -389,7 +457,7 @@ Bool_t Analysis::Init()
 
     // pass loaders to selector
     TIter next(fLoaders);                           
-    while ( TAMVirtualLoader *l = dynamic_cast<TAMVirtualLoader*>(next()) )
+    while (TAMVirtualLoader *l = dynamic_cast<TAMVirtualLoader*>(next()))
       fSelector->AddLoader(l);
   }
 
@@ -408,7 +476,7 @@ Bool_t Analysis::InitProof()
   delete fProof;
 
   if (fMaster.Contains("rcf.bnl.gov")) {
-    for(Int_t i=0;i<5;i++) {
+    for (Int_t i=0; i<5; ++i) {
       Warning("InitProof", "*** DID YOU RUN PROOF_KINIT? %d (5) ***", i);
       gSystem->Sleep(1000);
     }
@@ -558,7 +626,7 @@ Bool_t Analysis::UploadPackages(TList *packages)
 
   MitAssert("UploadPackages", packages != 0);
 
-  for (Int_t i=0; i<packages->GetEntries(); i++) {
+  for (Int_t i=0; i<packages->GetEntries(); ++i) {
 
     TObject* objstr = packages->At(i); 
     if (!objstr) {
