@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.16 2008/12/02 14:17:54 bendavid Exp $
+// $Id: DataObject.h,v 1.17 2008/12/09 17:46:59 loizides Exp $
 //
 // DataObject
 //
@@ -30,18 +30,19 @@ namespace mithep
       DataObject() {}
       ~DataObject() {}
 
-      Bool_t               IsCached()    const { return TestBit(23); }
-      Bool_t               MustClear()   const { return TestBit(14); }
-      Bool_t               MustDelete()  const { return TestBit(15); }
-      virtual EObjType     ObjType()     const { return kDataObject; }
+      Bool_t               Is(EObjType t) const { return (ObjType()==t); }
+      Bool_t               IsCached()     const { return TestBit(23);    }
+      Bool_t               MustClear()    const { return TestBit(14);    }
+      Bool_t               MustDelete()   const { return TestBit(15);    }
+      virtual EObjType     ObjType()      const { return kDataObject;    }
       template <class Col> 
-      const Col           *ParentCol()   const;
+      const Col           *ParentCol()    const;
 
     protected:
-      void                 ResetCacheBit()     { SetBit(23,0); }
-      void                 SetCacheBit()       { SetBit(23);   }
-      void                 SetClearBit()       { SetBit(14);   }
-      void                 SetDeleteBit()      { SetBit(15);   }
+      void                 ResetCacheBit()      { SetBit(23,0); }
+      void                 SetCacheBit()        { SetBit(23);   }
+      void                 SetClearBit()        { SetBit(14);   }
+      void                 SetDeleteBit()       { SetBit(15);   }
 
     ClassDef(DataObject, 1)
   };
