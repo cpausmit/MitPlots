@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.22 2008/12/11 15:29:09 loizides Exp $
+// $Id: Analysis.cc,v 1.23 2008/12/11 15:53:26 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -46,7 +46,8 @@ Analysis::Analysis(Bool_t useproof) :
   fTreeName(Names::gkEvtTreeName),
   fCompLevel(2), 
   fProof(0),
-  fDoNEvents(TChain::kBigNumber)
+  fDoNEvents(TChain::kBigNumber),
+  fCacheSize(134217728)
 {
   // Default constructor.
 
@@ -363,6 +364,8 @@ Bool_t Analysis::Init()
 
   fChain = new TChain(fTreeName); 
   fSet   = new TDSet("TTree",fTreeName);
+  
+  fChain->SetCacheSize(fCacheSize);
 
   for (Int_t i=0; i<fNFriends; ++i) {
 

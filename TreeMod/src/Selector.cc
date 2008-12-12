@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.7 2008/12/04 13:50:15 loizides Exp $
+// $Id: Selector.cc,v 1.8 2008/12/04 14:13:44 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -111,6 +111,9 @@ Bool_t Selector::Notify()
   if (fDoRunInfo) 
     UpdateRunInfoTree();
 
+  //needed to force caching to occur for all files  
+  fTree->GetTree()->SetCacheSize(fTree->GetCacheSize());
+    
   return TAMSelector::Notify();
 }
 

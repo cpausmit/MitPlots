@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.17 2008/12/11 15:29:09 loizides Exp $
+// $Id: Analysis.h,v 1.18 2008/12/11 15:53:26 loizides Exp $
 //
 // Analysis
 //
@@ -67,6 +67,7 @@ namespace mithep
       void                      Run();
       Bool_t                    Run(Bool_t browse);
       void                      SetProcessNEvents(Long64_t n)       { fDoNEvents  = n;            }
+      void                      SetCacheSize(Int_t cache)           { fCacheSize  = cache;        }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level;        }
       void                      SetConfigName(const char* name)     { fConfig     = name;         }
       void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;            }
@@ -116,6 +117,7 @@ namespace mithep
       Int_t                     fCompLevel;       //compression level for output file (def=2)
       TProof                   *fProof;           //pointer to the PROOF session
       Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
+      Int_t                     fCacheSize;       //size of read cache for events tree
 
     ClassDef(Analysis, 0) // Top-level analysis class 
   };
