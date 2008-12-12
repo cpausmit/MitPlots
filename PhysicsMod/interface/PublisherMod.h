@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.3 2008/12/09 10:18:33 loizides Exp $
+// $Id: PublisherMod.h,v 1.4 2008/12/10 17:25:16 loizides Exp $
 //
 // PublisherMod
 //
@@ -26,12 +26,16 @@ namespace mithep
                    const char *title="Publisher module");
       ~PublisherMod() {}
 
-      const char              *GetBranchName()              const { return fBranchName;  }
-      const char              *GetPublicName()              const { return fPublicName;  }
-      Bool_t                   GetPubPerEvent()             const { return fPubPerEvent; }
-      void                     SetBranchName(const char *n)       { fBranchName=n;       }
-      void                     SetPublicName(const char *n)       { fPublicName=n;       }
-      void                     PublishPerEvent(Bool_t b)          { fPubPerEvent = b;    }
+      const char              *GetBranchName()              const { return fBranchName;     }
+      const char              *GetInputName()               const { return GetBranchName(); }
+      const char              *GetOutputName()              const { return GetPublicName(); }
+      const char              *GetPublicName()              const { return fPublicName;     }
+      Bool_t                   GetPubPerEvent()             const { return fPubPerEvent;    }
+      void                     SetBranchName(const char *n)       { fBranchName=n;          }
+      void                     SetInputName(const char *n)        { SetBranchName(n);       }
+      void                     SetOutputName(const char *n)       { SetPublicName(n);       }
+      void                     SetPublicName(const char *n)       { fPublicName=n;          }
+      void                     PublishPerEvent(Bool_t b)          { fPubPerEvent = b;       }
 
     protected:
       TString                  fBranchName;    //name of collection
