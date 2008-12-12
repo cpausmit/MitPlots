@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.5 2008/12/10 16:52:42 loizides Exp $
+// $Id: PlotKineMod.h,v 1.6 2008/12/10 17:25:16 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -134,8 +134,10 @@ void mithep::PlotKineMod<T>::SlaveBegin()
     ReqBranch(GetColName(), fCol);
 
   if (GetFillHist()) {
-    AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",100,0.,250.);
-    AddTH1(fEtaHist,"hEtaHist",";#eta;#",160,-8.,8.);
+    Int_t ptbins = (Int_t)((fPtMax-fPtMin)/2.5);
+    AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",ptbins,fPtMin,fPtMax);
+    Int_t etabins = (Int_t)((fEtaMax-fEtaMin)/0.1);
+    AddTH1(fEtaHist,"hEtaHist",";#eta;#",etabins,fEtaMin,fEtaMax);
   }
 }
 #endif
