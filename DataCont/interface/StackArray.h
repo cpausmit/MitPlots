@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.6 2008/12/03 16:56:28 bendavid Exp $
+// $Id: StackArray.h,v 1.7 2008/12/10 11:26:52 loizides Exp $
 //
 // StackArray
 //
@@ -130,7 +130,7 @@ inline ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx)
      return static_cast<ArrayElement*>(&fArray[idx]);
 
   ArrayElement tmp;
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fSize, this->GetName(), typeid(tmp).name()); 
   return 0;
 }
@@ -145,7 +145,7 @@ inline const ArrayElement *mithep::StackArray<ArrayElement, N>::At(UInt_t idx) c
      return static_cast<const ArrayElement*>(&fArray[idx]);
 
   ArrayElement tmp;
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fSize, this->GetName(), typeid(tmp).name()); 
   return 0;
 }

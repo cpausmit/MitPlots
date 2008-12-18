@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.2 2008/11/20 17:49:15 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.3 2008/12/10 11:26:52 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -98,7 +98,7 @@ inline ArrayElement mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t idx)
      return fArray[idx];
 
   ArrayElement tmp;
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fSize, GetName(), typeid(tmp).name()); 
   return 0;
 }
@@ -113,7 +113,7 @@ inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t i
      return fArray[idx];
 
   ArrayElement tmp;
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fSize, GetName(), typeid(tmp).name()); 
   return 0;
 }

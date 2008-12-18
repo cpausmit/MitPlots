@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.9 2008/12/03 11:36:02 loizides Exp $
+// $Id: RefArray.h,v 1.10 2008/12/10 11:26:52 loizides Exp $
 //
 // RefArray
 //
@@ -125,7 +125,7 @@ inline ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx)
   if (idx<GetEntries())  
      return static_cast<ArrayElement*>(GetObject(idx));
 
-  Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
   return 0;
 }
 
@@ -138,7 +138,7 @@ inline const ArrayElement *mithep::RefArray<ArrayElement,N>::At(UInt_t idx) cons
   if (idx<GetEntries())  
      return static_cast<const ArrayElement*>(GetObject(idx));
 
-  Fatal("At", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
   return 0;
 }
 
@@ -196,7 +196,7 @@ TObject *mithep::RefArray<ArrayElement,N>::ObjAt(UInt_t idx)
   if (idx<GetEntries())  
      return GetObject(idx);
 
-  Fatal("ObjAt", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
   return 0;
 }
 
@@ -209,7 +209,7 @@ const TObject *mithep::RefArray<ArrayElement,N>::ObjAt(UInt_t idx) const
   if (idx<GetEntries())  
     return static_cast<const TObject*>(GetObject(idx));
 
-  Fatal("ObjAt", "Given index (%ud) is larger than array size (%ud)", idx, GetEntries());
+  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
   return 0;
 }
 

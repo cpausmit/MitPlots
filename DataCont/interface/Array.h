@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.7 2008/12/09 17:42:32 loizides Exp $
+// $Id: Array.h,v 1.8 2008/12/10 11:26:52 loizides Exp $
 //
 // Array
 //
@@ -111,7 +111,7 @@ inline ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx)
   if (idx<fNumEntries)
     return static_cast<ArrayElement*>(fArray.UncheckedAt(idx));
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
@@ -125,7 +125,7 @@ inline const ArrayElement *mithep::Array<ArrayElement>::At(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const ArrayElement*>(fArray.UncheckedAt(idx));
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
@@ -175,7 +175,7 @@ inline TObject *mithep::Array<ArrayElement>::ObjAt(UInt_t idx)
   if (idx<fNumEntries)
     return fArray.UncheckedAt(idx);
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
@@ -189,7 +189,7 @@ const TObject *mithep::Array<ArrayElement>::ObjAt(UInt_t idx) const
   if (idx<fNumEntries)
     return static_cast<const TObject*>(fArray.UncheckedAt(idx));
 
-  TObject::Fatal("At","Index too large: (%ud < %ud violated) for %s containing %s",
+  TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fNumEntries, GetName(), ArrayElement::Class_Name()); 
   return 0;
 }
