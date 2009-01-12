@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.11 2008/12/03 16:58:17 bendavid Exp $
+// $Id: Jet.h,v 1.12 2008/12/09 17:47:00 loizides Exp $
 //
 // Jet
 //
@@ -102,6 +102,7 @@ namespace mithep
                                                    {   fImpactParameterMVABJetTagsDisc = d;        }
       void       SetJetProbabilityBJetTagsDisc(Double_t d)  { fJetProbabilityBJetTagsDisc = d;     }
       void       SetJetBProbabilityBJetTagsDisc(Double_t d) { fJetBProbabilityBJetTagsDisc = d;    }
+      void       SetMom(const FourVector &mom)     { fMom              = mom;          }
       void       SetN(UShort_t n)                  { fN                = n;            }
       void       SetN60(UShort_t n)                { fN60              = n;            }
       void       SetN90(UShort_t n)                { fN90              = n;            }
