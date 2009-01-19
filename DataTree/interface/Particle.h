@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.23 2008/12/01 17:30:48 loizides Exp $
+// $Id: Particle.h,v 1.24 2008/12/09 17:47:00 loizides Exp $
 //
 // Particle
 //
@@ -41,6 +41,7 @@ namespace mithep
       virtual Double_t		Pz()                      const { return Mom().Pz();    }
       virtual Double_t		P()                       const { return Mom().P();     }
       virtual Double_t          Theta()                   const { return Mom().Theta(); }
+      virtual Double_t		TMass()                   const;
       void                      Print(Option_t *opt="")   const;
      
     ClassDef(Particle, 1) // Generic particle class
@@ -72,6 +73,14 @@ inline Double_t mithep::Particle::Et() const
 {
   // Return transverse energy.
 
-  return Mom().E()*Mom().Pt()/Mom().P(); 
+  return E()*Pt()/P(); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Particle::TMass() const
+{
+  // Return transverse mass.
+
+  return Mass()*Pt()/P();
 }
 #endif
