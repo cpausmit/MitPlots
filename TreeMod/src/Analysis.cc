@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.23 2008/12/11 15:53:26 loizides Exp $
+// $Id: Analysis.cc,v 1.24 2008/12/12 16:57:42 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -288,7 +288,6 @@ void Analysis::FileInputFromEnv()
       return;
   }
 
-
   if (!files.IsNull()) { // add local files
     Info("FileInputFromEnv", "Got from environment:\n"
          "\n\tMIT_FILES=%s\n", files.Data());
@@ -310,19 +309,27 @@ void Analysis::FileInputFromEnv()
        catalog.Data(), book.Data(), dataset.Data(), filesets.Data());
 
   Catalog cat(catalog);
-  TString tok(";");
-  TObjArray *arr = filesets.Tokenize(tok);
-  if (arr) {
-    for (Int_t i=0; i<arr->GetEntries(); ++i) {
-      TObjString *fileset = dynamic_cast<TObjString*>(arr->At(i));
-      if (!fileset) continue;
-      Dataset *d = cat.FindDataset(book, dataset, fileset->String());
-      if (!d)
-        continue;
+  if (filesets.IsNull()) {
+    Dataset *d = cat.FindDataset(book, dataset);
+    if (d) {
       AddDataset(d);
       delete d;
     }
-    delete arr;
+  } else {
+    TString tok(";");
+    TObjArray *arr = filesets.Tokenize(tok);
+    if (arr) {
+      for (Int_t i=0; i<arr->GetEntries(); ++i) {
+        TObjString *fileset = dynamic_cast<TObjString*>(arr->At(i));
+        if (!fileset) continue;
+        Dataset *d = cat.FindDataset(book, dataset, fileset->String());
+        if (!d)
+          continue;
+        AddDataset(d);
+        delete d;
+      }
+      delete arr;
+    }
   }
 }
 
