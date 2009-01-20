@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FileMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
+// $Id: FileMetaData.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
 //
 // FileMetaData
 //
@@ -28,7 +28,7 @@ namespace mithep
       void                         Print   () const;
 
     protected:
-      TString                      fFileName;            //name of the file (no path included)
+      TString                      fFileName;  //name of the file (no path included)
 
     ClassDef(FileMetaData, 1) // Class for keeping meta data of a file
   };

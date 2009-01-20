@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Catalog.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
+// $Id: Catalog.h,v 1.4 2008/11/12 01:55:40 paus Exp $
 //
 // Catalog
 //
@@ -25,12 +25,12 @@ namespace mithep
       Catalog(const char *location);
       virtual ~Catalog() {}
 
-      const TString           &Location() const { return fLocation; }
+      const TString           &Location()                            const { return fLocation; }
       Dataset                 *FindDataset(const char *book, const char *dataset,
-					   const char *fileset = "");
+					   const char *fileset = "") const;
 
     private:
-      TString                  fLocation;    //Location of catalog
+      TString                  fLocation;    //location of catalog
 
     ClassDef(Catalog, 0) // Simple catalog for books consisting of datasets
   };

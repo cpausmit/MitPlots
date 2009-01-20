@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilesetMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
+// $Id: FilesetMetaData.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
 //
 // FilesetMetaData
 //
@@ -27,16 +27,16 @@ namespace mithep
       ~FilesetMetaData() {}
 
       void                         AddFile     (const FileMetaData *f);
-      const FileMetaData          *File        (UInt_t i) const { return &fFileList[i]; }
-      const TString               *FilesetName ()         const { return &fFilesetName; }
+      const FileMetaData          *File        (UInt_t i) const { return &fFileList[i];    }
+      const TString               *FilesetName ()         const { return &fFilesetName;    }
       UInt_t                       NFiles      ()         const { return fFileList.size(); }
-      const TString               *Location    ()         const { return &fLocation; }
+      const TString               *Location    ()         const { return &fLocation;       }
       void                         Print       () const;
 
     protected:
-      TString                      fFilesetName;          //name of the fileset
-      TString                      fLocation;             //location of the fileset
-      std::vector<FileMetaData>    fFileList;             //list of files contained in the fileset
+      TString                      fFilesetName;   //name of the fileset
+      TString                      fLocation;      //location of the fileset
+      std::vector<FileMetaData>    fFileList;      //list of files contained in the fileset
 
     ClassDef(FilesetMetaData, 1) // Class keeping meta data of a file
   };
