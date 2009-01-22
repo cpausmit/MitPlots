@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.19 2008/12/03 16:58:17 bendavid Exp $
+// $Id: DecayParticle.h,v 1.20 2008/12/09 17:46:59 loizides Exp $
 //
 // DecayParticle
 //
@@ -12,8 +12,8 @@
 // Authors: C.Paus, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_DECAYPARTICLE_H
-#define DATATREE_DECAYPARTICLE_H
+#ifndef MITANA_DATATREE_DECAYPARTICLE_H
+#define MITANA_DATATREE_DECAYPARTICLE_H
  
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"

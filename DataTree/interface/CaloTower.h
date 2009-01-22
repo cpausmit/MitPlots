@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.5 2008/12/01 17:31:04 loizides Exp $
+// $Id: CaloTower.h,v 1.6 2008/12/09 17:46:59 loizides Exp $
 //
 // CaloTower
 //
@@ -8,8 +8,8 @@
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_CALOTOWER_H
-#define DATATREE_CALOTOWER_H
+#ifndef MITANA_DATATREE_CALOTOWER_H
+#define MITANA_DATATREE_CALOTOWER_H
  
 #include "MitAna/DataTree/interface/DataObject.h"
 #include <TMath.h>

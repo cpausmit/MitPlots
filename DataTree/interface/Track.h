@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.30 2008/12/04 07:22:57 loizides Exp $
+// $Id: Track.h,v 1.31 2008/12/09 17:47:00 loizides Exp $
 //
 // Track
 //
@@ -144,49 +144,49 @@ namespace mithep
                 fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
-      Int_t               Charge()          const { return (fQOverP>0) ? 1 : -1; }
-      Double_t            Chi2()            const { return fChi2; }
-      Double_t            RChi2()           const { return fChi2/(Double_t)fNdof; }
+      Int_t               Charge()         const { return (fQOverP>0) ? 1 : -1; }
+      Double_t            Chi2()           const { return fChi2; }
+      Double_t            RChi2()          const { return fChi2/(Double_t)fNdof; }
       void                ClearHit(EHitLayer l)  { fHits.ClearBit(l); } 
-      Double_t	          D0()              const { return -fDxy; }
+      Double_t	          D0()             const { return -fDxy; }
       Double_t            D0Corrected(const BaseVertex *iVertex) const;
-      Double_t	          D0Err()           const { return fDxyErr; }
-      Double_t            Dsz()             const { return fDsz; }
-      Double_t            DszErr()          const { return fDszErr; }
-      Double_t            Dxy()             const { return fDxy; }
-      Double_t            DxyErr()          const { return fDxyErr; }
-      Double_t            E(Double_t m)     const { return TMath::Sqrt(E2(m)); }
-      Double_t            E2(Double_t m)    const { return P2()+m*m; }
-      Double_t            Eta()             const { return Mom().Eta(); }
-      Double_t            EtaEcal()         const { return fEtaEcal; }
-      Bool_t              Hit(EHitLayer l)  const { return fHits.TestBit(l); }
-      const BitMask48    &Hits()            const { return fHits; }
-      Double_t            Lambda()          const { return fLambda; }
-      Double_t            LambdaErr()       const { return fLambdaErr; }
-      const MCParticle   *MCPart()          const;
-      ThreeVector         Mom()             const { return ThreeVector(Px(),Py(),Pz()); }
-      FourVector          Mom4(Double_t m)  const { return FourVector(Px(),Py(),Pz(),E(m)); }
-      UInt_t              Ndof()            const { return fNdof; }
-      UInt_t              NHits()           const { return fHits.NBitsSet(); }
-      UInt_t              NStereoHits()     const { return StereoHits().NBitsSet(); }
-      EObjType            ObjType()         const { return kTrack; }      
-      Double_t            P2()              const { return P()*P(); }
-      Double_t            P()               const { return TMath::Abs(1./fQOverP); }
-      Double_t            Phi()             const { return fPhi0; }
-      Double_t	          Phi0()            const { return fPhi0; }
-      Double_t	          Phi0Err()         const { return fPhi0Err; }
-      Double_t            PhiEcal()         const { return fPhiEcal; }
-      Double_t            Prob()            const { return TMath::Prob(fChi2,fNdof); }
-      Double_t	          Pt()              const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
-      Double_t            Px()              const { return Pt()*TMath::Cos(fPhi0); }      
-      Double_t            Py()              const { return Pt()*TMath::Sin(fPhi0); }
-      Double_t            Pz()              const { return P()*TMath::Sin(fLambda); }
-      Double_t            QOverP()          const { return fQOverP; }
-      Double_t            QOverPErr()       const { return fQOverPErr; }
-      Double_t            Theta()           const { return (TMath::PiOver2() - fLambda); }
-      Double_t            Z0()              const { return fDsz/TMath::Cos(fLambda); }
-      const SuperCluster *SCluster()        const;
-      const BitMask48     StereoHits()      const { return (fHits & StereoLayers()); }
+      Double_t	          D0Err()          const { return fDxyErr; }
+      Double_t            Dsz()            const { return fDsz; }
+      Double_t            DszErr()         const { return fDszErr; }
+      Double_t            Dxy()            const { return fDxy; }
+      Double_t            DxyErr()         const { return fDxyErr; }
+      Double_t            E(Double_t m)    const { return TMath::Sqrt(E2(m)); }
+      Double_t            E2(Double_t m)   const { return P2()+m*m; }
+      Double_t            Eta()            const { return Mom().Eta(); }
+      Double_t            EtaEcal()        const { return fEtaEcal; }
+      Bool_t              Hit(EHitLayer l) const { return fHits.TestBit(l); }
+      const BitMask48    &Hits()           const { return fHits; }
+      Double_t            Lambda()         const { return fLambda; }
+      Double_t            LambdaErr()      const { return fLambdaErr; }
+      const MCParticle   *MCPart()         const;
+      ThreeVector         Mom()            const { return ThreeVector(Px(),Py(),Pz()); }
+      FourVector          Mom4(Double_t m) const { return FourVector(Px(),Py(),Pz(),E(m)); }
+      UInt_t              Ndof()           const { return fNdof; }
+      UInt_t              NHits()          const { return fHits.NBitsSet(); }
+      UInt_t              NStereoHits()    const { return StereoHits().NBitsSet(); }
+      EObjType            ObjType()        const { return kTrack; }      
+      Double_t            P2()             const { return P()*P(); }
+      Double_t            P()              const { return TMath::Abs(1./fQOverP); }
+      Double_t            Phi()            const { return fPhi0; }
+      Double_t	          Phi0()           const { return fPhi0; }
+      Double_t	          Phi0Err()        const { return fPhi0Err; }
+      Double_t            PhiEcal()        const { return fPhiEcal; }
+      Double_t            Prob()           const { return TMath::Prob(fChi2,fNdof); }
+      Double_t	          Pt()             const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
+      Double_t            Px()             const { return Pt()*TMath::Cos(fPhi0); }      
+      Double_t            Py()             const { return Pt()*TMath::Sin(fPhi0); }
+      Double_t            Pz()             const { return P()*TMath::Sin(fLambda); }
+      Double_t            QOverP()         const { return fQOverP; }
+      Double_t            QOverPErr()      const { return fQOverPErr; }
+      Double_t            Theta()          const { return (TMath::PiOver2() - fLambda); }
+      Double_t            Z0()             const { return fDsz/TMath::Cos(fLambda); }
+      const SuperCluster *SCluster()       const;
+      const BitMask48     StereoHits()     const { return (fHits & StereoLayers()); }
       void                SetChi2(Double_t chi2)   { fChi2 = chi2; }
       void	          SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
                                     Double_t dXyErr, Double_t dSzErr);

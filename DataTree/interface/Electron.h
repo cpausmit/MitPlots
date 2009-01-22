@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.21 2008/12/03 16:58:17 bendavid Exp $
+// $Id: Electron.h,v 1.22 2008/12/09 17:47:00 loizides Exp $
 //
 // Electron
 //
@@ -8,8 +8,8 @@
 // Authors: C.Loizides, J.Bendavid, S.Xie
 //--------------------------------------------------------------------------------------------------
 
-#ifndef DATATREE_ELECTRON_H
-#define DATATREE_ELECTRON_H
+#ifndef MITANA_DATATREE_ELECTRON_H
+#define MITANA_DATATREE_ELECTRON_H
  
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
