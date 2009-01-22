@@ -1,4 +1,4 @@
-// $Id: runCataloging.C,v 1.2 2008/07/08 05:52:09 loizides Exp $
+// $Id: runCataloging.C,v 1.3 2008/07/28 23:13:43 paus Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -15,55 +15,55 @@ using namespace mithep;
 const Int_t   gNFilesPerSet = 5;
 const TString slash   = "/";
 
-void catalogData(const char *dir, int iFileSet = 0);
-void catalogFile(const char *dir, const char *file, int iFileSet = 0);
+void catalogData(const char *dir, Int_t iFileSet = 0);
+void catalogFile(const char *dir, const char *file, Int_t iFileSet = 0);
 void reset();
 
 Analysis      *gAna(0);
 CatalogingMod *gMod(0);
 
 //--------------------------------------------------------------------------------------------------
-void runCataloging(const char *catalogDir  = "/home/mitprod/catalog",
-		   const char *dataBaseDir = "/server/03b/paus",
-		   const char *book        = "filler/000",
-		   const char *dataset     = "jpsi-csa08-10pb")
+void runCataloging(const char *dataBaseDir = "/castor/cern.ch/user/p/paus",
+		   const char *book        = "filler/006",
+		   const char *dataset     = "s8-ttbar-mg-id9")
 {
   // -----------------------------------------------------------------------------------------------
   // This script runs a full cataloging action on the given directory
   // -----------------------------------------------------------------------------------------------
   gDebugMask        = Debug::kNone;
-<<<<<<< runCataloging.C
-  gDebugLevel       = 0;
-=======
   gDebugLevel       = 1;
->>>>>>> 1.2
   gErrorIgnoreLevel = kWarning;
 
-<<<<<<< runCataloging.C
-  // Create information per files
-  TString fullDir = dataBaseDir +slash+ book +slash+ dataset;
-=======
   // create information per files
-  TString fullDir = baseDir +slash+ book +slash+ dataset;
->>>>>>> 1.2
+  TString fullDir = dataBaseDir +slash+ book +slash+ dataset;
+
   TString cmd     = TString("ls -1 ")+fullDir;
-  char    file[1000];
-  int i = 0;
-  FILE* f = gSystem->OpenPipe(cmd.Data(),"r");
-  while (fscanf(f,"%s",file) != EOF) {
+  if (fullDir.BeginsWith("/castor/"))
+    cmd = TString("nsls ")+fullDir;
+
+  Char_t dummy[4096];
+  Int_t i = 0;
+  FILE *f = gSystem->OpenPipe(cmd.Data(),"r");
+  while (fscanf(f,"%s",dummy) != EOF) {
+    TString fstr(dummy);
+    if (!fstr.EndsWith(".root"))
+      continue;
     if (gDebugLevel > 0)
-      printf(" LINE %s\n",file);
+      printf(" LINE %s\n",dummy);
     reset();
-    catalogFile(fullDir.Data(),file, i++/gNFilesPerSet);
+    catalogFile(fullDir.Data(),fstr, i++/gNFilesPerSet);
   }
   gSystem->ClosePipe(f);
 
   // create information per file set
   i = 0;
-  int iF = 0, iFLast = 0;
+  Int_t iF = 0, iFLast = 0;
   reset();
   f = gSystem->OpenPipe(cmd.Data(),"r");
-  while (fscanf(f,"%s",file) != EOF) {
+  while (fscanf(f,"%s",dummy) != EOF) {
+    TString fstr(dummy);
+    if (!fstr.EndsWith(".root"))
+      continue;
     iF = i/gNFilesPerSet;
     if (gDebugLevel > 0)
       printf(" I: %2d  ISet: %2d  ",i,i/gNFilesPerSet);
@@ -78,7 +78,7 @@ void runCataloging(const char *catalogDir  = "/home/mitprod/catalog",
 
     if (gDebugLevel > 0)
       printf(" Add file: %2d\n",i);
-    gAna->AddFile(fullDir+slash+TString(file));
+    gAna->AddFile(fullDir+slash+TString(dummy));
     i++;
   }
 
@@ -95,7 +95,7 @@ void runCataloging(const char *catalogDir  = "/home/mitprod/catalog",
 }
 
 //--------------------------------------------------------------------------------------------------
-void catalogData(const char *dir, int iFileSet)
+void catalogData(const char *dir, Int_t iFileSet)
 {
   // set up the modules
   gMod->SetMetaDataString(dir);
@@ -105,11 +105,11 @@ void catalogData(const char *dir, int iFileSet)
   gAna->SetSuperModule(gMod);
 
   // run the analysis after successful initialisation
-  gAna->Run(false);  
+  gAna->Run(kFALSE);  
 }
 
 //--------------------------------------------------------------------------------------------------
-void catalogFile(const char *dir, const char *file, int iFileSet)
+void catalogFile(const char *dir, const char *file, Int_t iFileSet)
 {
   // set up the modules
   gMod->SetMetaDataString(file);
@@ -120,7 +120,7 @@ void catalogFile(const char *dir, const char *file, int iFileSet)
   gAna->AddFile(TString(dir)+slash+TString(file));
 
   // run the analysis after successful initialisation
-  gAna->Run(false);  
+  gAna->Run(kFALSE);  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,6 +130,7 @@ void reset()
   if (gAna)
     delete gAna;
   gAna = new Analysis();
+  gAna->SetUseHLT(0);
   if (gMod)
     delete gMod;
   gMod = new CatalogingMod();
