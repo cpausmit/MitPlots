@@ -1,4 +1,4 @@
-// $Id: EventHeader.cc,v 1.1 2008/06/17 14:45:22 loizides Exp $
+// $Id: SimpleTable.cc,v 1.1 2009/01/23 07:34:34 loizides Exp $
 
 #include "MitAna/Utils/interface/SimpleTable.h"
 #include <Riostream.h>
@@ -39,9 +39,12 @@ SimpleTable::SimpleTable(const char *input)
   TString name;
   TString value;
   while(!in.eof()) {
-    in >> name >> value;
-    if ((name.IsNull()) || name.BeginsWith("#"))
+    in >> name;
+    if ((name.IsNull()) || name.BeginsWith("#")) {
+      in.getline(dummy,1024);
       continue;
+    }
+    in >> value;
     in.getline(dummy,1024);
 
     TFormula fval("formula",value);
@@ -57,7 +60,7 @@ Double_t SimpleTable::Get(const char *name) const
 
   const MyParameter *p = dynamic_cast<const MyParameter*>(fTable.FindObject(name));
   
-  if(p)
+  if(!p)
     Fatal("Get", "Could not get value for given name %s", name);
 
   return p->GetVal();
