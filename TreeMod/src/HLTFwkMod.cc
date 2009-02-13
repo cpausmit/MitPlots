@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.2 2008/11/25 14:29:41 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.3 2008/11/25 15:12:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -134,6 +134,13 @@ Bool_t HLTFwkMod::LoadTriggerTable()
 
   if (fCurEnt<0)
     return kFALSE;
+
+  if ((fCurEnt==1) && (fHLTTree->GetEntries()==1)) {
+    if (1)
+      SendError(kWarning, "LoadTriggerTable", 
+                "Loading trigger table omitted due to a bug fix for Mit_006.");
+    return kTRUE;
+  }
 
   // delete old tables
   fTriggers->Delete();
