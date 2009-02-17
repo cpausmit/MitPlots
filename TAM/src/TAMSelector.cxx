@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.9 2008/10/08 11:33:24 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.10 2009/02/17 14:21:42 bendavid Exp $
 //
 
 #include "TAMSelector.h"
@@ -436,6 +436,10 @@ void TAMSelector::Begin(TTree */*tree*/)
 //______________________________________________________________________________
 void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
 {
+
+  //clear from the object table of a given process id, all pointers for objects
+  //with uids after lastKeptUid
+
   TObjArray *objTable = pid->GetObjects();
   
   Int_t lastIdxKept = lastKeptUID & 0xffffff;
@@ -868,6 +872,8 @@ Bool_t TAMSelector::Process(Long64_t entry)
    // restore object counter
    TProcessID::SetObjectCount(fObjCounter);
    //Clean object table for current process id
+   //This guarantees that objects which are not yet loaded in the current event have null
+   //pointers in the object table
    CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
    
    //clean object tables for process ids being read from the file
