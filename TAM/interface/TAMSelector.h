@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.7 2008/10/08 11:33:24 loizides Exp $
+// $Id: TAMSelector.h,v 1.8 2008/12/04 13:50:56 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -88,6 +88,7 @@ protected:
    TList             fLoaders;         //list of data loaders
 
    void              AddNewOutputLists();
+   void              CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const;
    void              ClearAllLoaders();
    void              CopyModsFromInput();
    Bool_t            FindLoader(TAMBranchInfo* brInfo);

@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.8 2008/10/07 16:02:34 bendavid Exp $
+// $Id: TAMSelector.cxx,v 1.9 2008/10/08 11:33:24 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -59,6 +59,7 @@
 #ifndef TAM_TAMTreeLoader
 #include "TAMTreeLoader.h"
 #endif
+#include <map>
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -432,6 +433,30 @@ void TAMSelector::Begin(TTree */*tree*/)
    fInput->AddLast(&fLoaders);
 }
 
+//______________________________________________________________________________
+void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
+{
+  TObjArray *objTable = pid->GetObjects();
+  
+  Int_t lastIdxKept = lastKeptUID & 0xffffff;
+  Int_t last = objTable->GetLast();
+
+  //printf("LastIdxKept = %i, last = %i\n",lastIdxKept,last);
+
+  if (last==-1)
+    return;
+  
+  if (lastIdxKept>=0 && lastIdxKept<=last) {
+    TObject **cont = objTable->GetObjectRef(0);
+    memset(&cont[lastIdxKept+1],0,(last-lastIdxKept)*sizeof(TObject*));
+    objTable->SetLast(lastIdxKept);
+  }
+  else
+    Error("TAMSelector::CleanObjTable",
+          "Out of Bounds trying to clean object table from Process ID.");
+   
+  return;
+}
 
 //______________________________________________________________________________
 void TAMSelector::ClearAllLoaders()
@@ -809,6 +834,17 @@ Bool_t TAMSelector::Process(Long64_t entry)
 
    // store object counter and process event
    fObjCounter=TProcessID::GetObjectCount();;
+   TObjArray *pids = GetCurrentFile()->GetListOfProcessIDs();
+   //store uids for later cleaning for object tables from file
+   std::map<TProcessID*, UInt_t> lastUIDs;
+   for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
+     TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
+     Int_t last = pid->GetObjects()->GetLast();
+     if (last==-1)
+       last = 0;
+     lastUIDs[pid] = last;
+   }
+
    if (fVerbosity>9) {
      if ((entry % 100)==0) {
        fprintf(stderr,"Processing entry %lld...                       \r",
@@ -831,6 +867,20 @@ Bool_t TAMSelector::Process(Long64_t entry)
 
    // restore object counter
    TProcessID::SetObjectCount(fObjCounter);
+   //Clean object table for current process id
+   CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
+   
+   //clean object tables for process ids being read from the file
+   for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
+     TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
+     std::map<TProcessID*, UInt_t>::const_iterator lastUID = lastUIDs.find(pid);
+     if (lastUID != lastUIDs.end()) {
+       CleanObjTable(pid, lastUID->second);
+     }
+     else {
+       CleanObjTable(pid, 0);
+     }
+   }
 
    return kTRUE;
 }
