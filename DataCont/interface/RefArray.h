@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.12 2009/02/17 14:22:57 bendavid Exp $
+// $Id: RefArray.h,v 1.13 2009/02/17 14:37:30 bendavid Exp $
 //
 // RefArray
 //
@@ -22,6 +22,7 @@
 #include <TRefTable.h>
 #include <TProcessID.h>
 #include <TError.h>
+#include "MitAna/TAM/interface/TAMSelector.h"
 #include "MitAna/DataCont/interface/Collection.h"
 #include "MitAna/DataCont/interface/StackArray.h"
 #include "MitAna/DataCont/interface/StackArrayBasic.h"
@@ -164,25 +165,23 @@ TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 
   UInt_t uid = GetUID(idx);
 
-  //try to find the object from the table of the corresponding PID
-  TObject *obj = pid->GetObjectWithID(uid);
-
-  //We are now assuming that the object table is cleaned so that all unloaded objects have null
-  //pointers in the object table
-  //This guarantees that the check below is valid for determining whether we need to go to the
-  //TRefTable
-  if (obj)
-    return obj;
-
+  //try to autoload from TAM
+  TAMSelector *tSel = TAMSelector::GetEvtSelector();
+  if (tSel) {
+    return tSel->GetObjectWithID(uid,pid);
+  }
+  
+  //no TAM proxy present, fall back to standard Root calls
+  
   //the reference may be in the TRefTable
   TRefTable *table = TRefTable::GetRefTable();
   if (table) {
     table->SetUID(uid, pid);
     table->Notify();
-    obj = pid->GetObjectWithID(uid);
   }
 
-  return obj;
+  return pid->GetObjectWithID(uid);
+
 }
 
 //--------------------------------------------------------------------------------------------------

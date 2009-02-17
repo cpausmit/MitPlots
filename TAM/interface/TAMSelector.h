@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.8 2008/12/04 13:50:56 loizides Exp $
+// $Id: TAMSelector.h,v 1.9 2009/02/17 14:21:42 bendavid Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -51,27 +51,7 @@ protected:
       virtual ~TAMEvtObj() { if (fObj!=0) delete fObj; }
    };
 
-   class TAMAutoLoadProxy : public TObject {
-      // Class that acts as a proxy between the TRefTable, TAM and TBranchRef.
-      // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done via
-      // TAM loaders.
-   protected:
-       TAMSelector *fSel;          //ptr to TAMSelector (we are a friend)
-       TRefTable   *fOrig;         //ptr to original TRefTable filled by I/O (owner is TBranchRef)
-       TRefTable   *fFake;         //ptr to our fake TRefTable of which we are owner
-       Long64_t     fCurEntry;     //cache of current entry
-       Bool_t       fBrRead[1024]; //flag which TBranchRef branch was read
-
-   public:
-       TAMAutoLoadProxy(TAMSelector *sel, Bool_t e=kFALSE);
-       virtual ~TAMAutoLoadProxy();
-       void   Disable();
-       void   Enable();
-       Bool_t Notify();
-   };
-
    TTree            *fTree;            //!the tree or chain
-   TAMAutoLoadProxy *fProxy;           //!the proxy for autoload branch loading
    THashTable        fBranchTable;     //!table of requested branches
    THashTable        fEventObjs;       //!table of objects available to any module while the current event is processed
    TAModule         *fAModules;        //!the top-most TAModule. nothing but a container for more modules
@@ -84,8 +64,13 @@ protected:
    UInt_t            fObjCounter;      //!keep object counter for resetting it in the process loop
    UInt_t            fObjCounterRun;   //!keep object counter for resetting it in the process loop when end of run is reached
    UInt_t            fVerbosity;       //true if one wants to print debug info
-   Bool_t            fDoProxy;         //true if TAMAutoLoadProxy should be enabled
+   Bool_t            fDoProxy;         //true if TAMSelector should be proxy for Ref branch autoloads
+   Bool_t            fDoObjTableCleaning; //true if TAMSelector should clean Object Tables of process id's
+   Bool_t            fObjTablesClean; //bool to track whether object tables of process id's are currently clean
    TList             fLoaders;         //list of data loaders
+   Long64_t          fCurEntry;     //cache of current entry for TBranchRef
+   Bool_t            fBrRead[1024]; //flag which TBranchRef branch was read
+   static TAMSelector *fEvtSelector;   //static pointer to event loop selector
 
    void              AddNewOutputLists();
    void              CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const;
@@ -97,11 +82,12 @@ protected:
    void              TakeLoadersFromInput();
    void              ZeroAllBranches();
 
-   friend class TAMAutoLoadProxy;
    
 public:
    TAMSelector();
    virtual ~TAMSelector();
+   
+   static TAMSelector *GetEvtSelector() { return fEvtSelector; }
    
    void              AbortAnalysis();
    void              AbortEvent();
@@ -121,6 +107,7 @@ public:
    TFile            *GetCurrentFile();
    const TAMOutput  *GetModOutput()      const;
    TAMOutput        *GetModOutput();
+   TObject          *GetObjectWithID(UInt_t uid, TProcessID *pid);
    const TAModule   *GetTopModule()      const { return fAModules; }
    const TTree      *GetTree()           const { return fTree; }
    TTree            *GetTree()                 { return fTree; }
@@ -139,6 +126,7 @@ public:
    virtual TObject  *RemoveObjThisEvt(const Char_t* name);
    virtual TObject  *RetractObj(const Char_t* name);
    void              SetDoProxy(Bool_t b)      { fDoProxy = b; }
+   void              SetDoObjTableCleaning(Bool_t b)      { fDoObjTableCleaning = b; }
    void              SetVerbosity(UInt_t vb)   { fVerbosity = vb; }
    void              SlaveBegin(TTree* tree);
    void              SlaveTerminate();

@@ -1,7 +1,8 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.1 2008/07/29 10:36:20 loizides Exp $
+# $Id: BuildFile,v 1.2 2008/09/03 20:51:48 loizides Exp $
 
 <use name=root>
+<use name=MitAna/TAM>
 #<flags CXXFLAGS="-g">
 <export>
    <lib name=MitAnaDataCont>

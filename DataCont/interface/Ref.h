@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.3 2008/12/10 11:25:00 loizides Exp $
+// $Id: Ref.h,v 1.1 2009/02/17 14:57:29 bendavid Exp $
 //
 // Ref
 //
@@ -15,6 +15,7 @@
 #include <TRefTable.h>
 #include <TProcessID.h>
 #include <TError.h>
+#include "MitAna/TAM/interface/TAMSelector.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
  
 namespace mithep 
@@ -40,6 +41,7 @@ namespace mithep
     protected:
       TObject                     *GetObject()     const;
     
+      static Bool_t                fOptimizedLoading;
       ProcIDRef                    fPID;//||
       UInt_t                       fUID;
 
@@ -68,25 +70,22 @@ TObject *mithep::Ref<ArrayElement>::GetObject() const
     return 0;
   }
 
-  //try to find the object from the table of the corresponding PID
-  TObject *obj = pid->GetObjectWithID(fUID);
-
-  //We are now assuming that the object table is cleaned so that all unloaded objects have null
-  //pointers in the object table
-  //This guarantees that the check below is valid for determining whether we need to go to the
-  //TRefTable
-  if (obj)
-    return obj;
-
+  //try to autoload from TAM
+  TAMSelector *tSel = TAMSelector::GetEvtSelector();
+  if (tSel) {
+    return tSel->GetObjectWithID(fUID,pid);
+  }
+  
+  //no TAM proxy present, fall back to standard Root calls
+  
   //the reference may be in the TRefTable
   TRefTable *table = TRefTable::GetRefTable();
   if (table) {
     table->SetUID(fUID, pid);
     table->Notify();
-    obj = pid->GetObjectWithID(fUID);
   }
 
-  return obj;
+  return pid->GetObjectWithID(fUID);
   
 }
 

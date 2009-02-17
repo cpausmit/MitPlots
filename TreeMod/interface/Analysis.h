@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.18 2008/12/11 15:53:26 loizides Exp $
+// $Id: Analysis.h,v 1.19 2008/12/12 16:57:42 bendavid Exp $
 //
 // Analysis
 //
@@ -99,6 +99,7 @@ namespace mithep
       Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
       Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
       Bool_t                    fDoProxy;         //=true if branch autoload is used (def=1)
+      Bool_t                    fDoObjTableCleaning; //=true if object table cleaning is used (def=1)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names
