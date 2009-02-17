@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.31 2008/12/09 17:47:00 loizides Exp $
+// $Id: Track.h,v 1.32 2009/01/22 14:21:32 loizides Exp $
 //
 // Track
 //
@@ -163,7 +163,7 @@ namespace mithep
       const BitMask48    &Hits()           const { return fHits; }
       Double_t            Lambda()         const { return fLambda; }
       Double_t            LambdaErr()      const { return fLambdaErr; }
-      const MCParticle   *MCPart()         const;
+      const MCParticle   *MCPart()         const { return fMCParticleRef.Obj(); }
       ThreeVector         Mom()            const { return ThreeVector(Px(),Py(),Pz()); }
       FourVector          Mom4(Double_t m) const { return FourVector(Px(),Py(),Pz(),E(m)); }
       UInt_t              Ndof()           const { return fNdof; }
@@ -185,7 +185,7 @@ namespace mithep
       Double_t            QOverPErr()      const { return fQOverPErr; }
       Double_t            Theta()          const { return (TMath::PiOver2() - fLambda); }
       Double_t            Z0()             const { return fDsz/TMath::Cos(fLambda); }
-      const SuperCluster *SCluster()       const;
+      const SuperCluster *SCluster()       const { return fSuperClusterRef.Obj();   }
       const BitMask48     StereoHits()     const { return (fHits & StereoLayers()); }
       void                SetChi2(Double_t chi2)   { fChi2 = chi2; }
       void	          SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
@@ -196,11 +196,9 @@ namespace mithep
       void                SetHit(EHitLayer l)      { fHits.SetBit(l); }
       void                SetHits(const BitMask48 &hits) { fHits = hits; }
       void                SetNdof(UInt_t dof)      { fNdof = dof; }
-      void	          SetMCPart(const MCParticle *p) 
-                            { fMCParticleRef = const_cast<MCParticle*>(p); }
+      void	          SetMCPart(const MCParticle *p) { fMCParticleRef = p; }
       void                SetPhiEcal(Double_t phi) { fPhiEcal = phi; }
-      void	          SetSCluster(const SuperCluster* sc) 
-                            { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
+      void	          SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
 
       static 
       const BitMask48    StereoLayers();
@@ -221,8 +219,8 @@ namespace mithep
       UInt_t              fNdof;                //degree-of-freedom of track fit
       Double32_t          fEtaEcal;             //eta of track at Ecal front face
       Double32_t          fPhiEcal;             //phi of track at Ecal front face
-      TRef                fSuperClusterRef;     //superCluster crossed by track
-      TRef                fMCParticleRef;       //reference to sim particle (for monte carlo)
+      Ref<SuperCluster>   fSuperClusterRef;     //superCluster crossed by track
+      Ref<MCParticle>     fMCParticleRef;       //reference to sim particle (for monte carlo)
 	      
     ClassDef(Track, 2) // Track class
   };
@@ -268,23 +266,6 @@ void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t p
   fPhi0Err   = phi0Err;
   fDxyErr    = dxyErr;
   fDszErr    = dszErr;
-}
-
-//--------------------------------------------------------------------------------------------------
-inline
-const mithep::MCParticle *mithep::Track::MCPart() const 
-{ 
-  // Get reference to simulated particle.
-
-  return static_cast<const MCParticle*>(fMCParticleRef.GetObject()); 
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::SuperCluster *mithep::Track::SCluster() const
-{
-  // Return Super cluster
-
-  return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------

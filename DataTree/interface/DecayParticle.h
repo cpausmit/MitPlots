@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.20 2008/12/09 17:46:59 loizides Exp $
+// $Id: DecayParticle.h,v 1.21 2009/01/22 14:21:32 loizides Exp $
 //
 // DecayParticle
 //
@@ -45,6 +45,8 @@ namespace mithep
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                    HasSameDaughters(const DecayParticle *p)  const;
+      Bool_t                    HasPriVertex()        const { return fPriVertex.IsValid();       }
+      Bool_t                    HasPriVertex(const Vertex *v) const { return fPriVertex.RefsObject(v); }
       Double_t                  Lxy()                 const { return fLxy;       }
       Double_t                  LxyError()            const { return fLxyError;  }
       Double_t                  MassError()           const { return fMassError; }
@@ -59,7 +61,7 @@ namespace mithep
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);   }
       const ThreeVector         Position()            const;
       const ThreeVector         RelativePosition()    const;
-      const Vertex             *PriVertex()           const;
+      const Vertex             *PriVertex()           const { return fPriVertex.Obj();           }
       void                      AddDaughterData(const DaughterData *dd) { fDaughterData.Add(dd); }
       void                      SetAbsPdgId(UInt_t apid) { fAbsPdgId=apid; }
       void                      SetChi2(Double_t chi2) { fChi2 = chi2;}
@@ -73,8 +75,7 @@ namespace mithep
       void                      SetLxyError(Double_t lxyError) { fLxyError = lxyError;}
       void                      SetLz(Double_t lz) { fLz = lz;}
       void                      SetLzError(Double_t lzError) { fLzError = lzError;}
-      void                      SetPriVertex(const Vertex *v) 
-                                  { fPriVertex = const_cast<Vertex*>(v); }
+      void                      SetPriVertex(const Vertex *v) { fPriVertex = v; }
       using TObject::Error;
 
     protected:
@@ -90,7 +91,7 @@ namespace mithep
       Double32_t                fLzError;      //fitted lz error
       FourVectorM32             fMomentum;     //momentum fourvector
       RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
-      TRef                      fPriVertex;    //reference to primary vertex
+      Ref<Vertex>               fPriVertex;    //reference to primary vertex
       
       ClassDef(DecayParticle, 1) // Decay particle class
   };
@@ -138,11 +139,4 @@ inline const mithep::ThreeVector mithep::DecayParticle::RelativePosition() const
   return (dxy+dlxy+dz);
 }
 
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Vertex *mithep::DecayParticle::PriVertex() const
-{
-  // return primary vertex
-
-  return static_cast<const Vertex*>(fPriVertex.GetObject());
-}
 #endif

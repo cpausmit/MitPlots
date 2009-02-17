@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.22 2008/12/09 17:47:00 loizides Exp $
+// $Id: Electron.h,v 1.23 2009/01/22 14:21:32 loizides Exp $
 //
 // Electron
 //
@@ -13,6 +13,7 @@
  
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
+#include "MitAna/DataCont/interface/Ref.h"
 
 namespace mithep 
 {
@@ -30,9 +31,9 @@ namespace mithep
       ~Electron() {}
       
       const Track         *BestTrk()               const;
-      const Track         *GsfTrk()                const;
-      const Track         *TrackerTrk()            const;
-      const SuperCluster  *SCluster()              const;
+      const Track         *GsfTrk()                const { return fGsfTrackRef.Obj();       }
+      const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
+      const SuperCluster  *SCluster()              const { return fSuperClusterRef.Obj();   }
       FourVector           Mom()                   const;
       const Track         *Trk()                   const { return BestTrk();                }
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
@@ -57,6 +58,9 @@ namespace mithep
       Double_t    IsEnergyScaleCorrected()         const { return fIsEnergyScaleCorrected;  }
       Double_t    IsMomentumCorrected()            const { return fIsMomentumCorrected;     }
       Double_t    HadronicOverEm()                 const { return fHadronicOverEm;          }
+      Bool_t      HasGsfTrk()                      const { return fGsfTrackRef.IsValid();   }
+      Bool_t      HasTrackerTrk()                  const { return fTrackerTrackRef.IsValid(); }
+      Bool_t      HasSuperCluster()                const { return fSuperClusterRef.IsValid(); }
       Double_t    HcalIsolation()                  const { return fHcalJurassicIsolation;   }
       Double_t    Mass()                           const { return 0.51099892e-3;            }
       Double_t    NumberOfClusters()               const { return fNumberOfClusters;        }
@@ -71,12 +75,9 @@ namespace mithep
       Double_t    Py()                             const;
       Double_t    Pz()                             const;
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
-      void	  SetGsfTrk(const Track* t)                     
-                    { fGsfTrackRef = const_cast<Track*>(t); }
-      void	  SetTrackerTrk(const Track* t)                 
-                    { fTrackerTrackRef = const_cast<Track*>(t); }
-      void	  SetSuperCluster(const SuperCluster* sc)       
-                    { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
+      void	  SetGsfTrk(const Track* t)              { fGsfTrackRef = t;                }
+      void	  SetTrackerTrk(const Track* t)          { fTrackerTrackRef = t;            }
+      void	  SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc;          }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetClassification(Double_t x)                 { fClassification = x;             }
@@ -106,9 +107,9 @@ namespace mithep
       void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
 
     protected:
-      TRef	  fGsfTrackRef;               //global combined track reference
-      TRef	  fTrackerTrackRef;           //tracker track reference
-      TRef        fSuperClusterRef;           //reference to SuperCluster
+      Ref<Track>  fGsfTrackRef;               //gsf track reference
+      Ref<Track>  fTrackerTrackRef;           //tracker track reference
+      Ref<SuperCluster> fSuperClusterRef;     //reference to SuperCluster
       Double_t    fESuperClusterOverP;        //
       Double_t    fESeedClusterOverPout;      //
       Double_t    fDeltaEtaSuperClTrkAtVtx;   //
@@ -146,35 +147,12 @@ inline const mithep::Track *mithep::Electron::BestTrk() const
 {
   // Return "best" track.
 
-  if (GsfTrk())
+  if (HasGsfTrk())
     return GsfTrk();
-  else if (TrackerTrk())
+  else if (HasTrackerTrk())
     return TrackerTrk();
 
   return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Electron::GsfTrk() const
-{
-  // Return global combined track.
-
-  return static_cast<const Track*>(fGsfTrackRef.GetObject());
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Electron::TrackerTrk() const
-{
-  // Return tracker track.
-
-  return static_cast<const Track*>(fTrackerTrackRef.GetObject());
-}
-//--------------------------------------------------------------------------------------------------
-inline const mithep::SuperCluster *mithep::Electron::SCluster() const
-{
-  // Return super cluster.
-
-  return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.22 2008/12/04 15:34:24 pharris Exp $
+// $Id: Muon.h,v 1.23 2008/12/09 17:47:00 loizides Exp $
 //
 // Muon
 //
@@ -59,7 +59,6 @@
 #ifndef MITANA_DATATREE_MUON_H
 #define MITANA_DATATREE_MUON_H
 
-#include <TRef.h>
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
 
@@ -78,9 +77,9 @@ namespace mithep {
       };
       
       const Track   *BestTrk()                       const;
-      const Track   *GlobalTrk()                     const;
-      const Track   *StandaloneTrk()                 const;
-      const Track   *TrackerTrk()                    const;
+      const Track   *GlobalTrk()                     const { return fGlobalTrackRef.Obj();     }
+      const Track   *StandaloneTrk()                 const { return fStandaloneTrackRef.Obj(); }
+      const Track   *TrackerTrk()                    const { return fTrackerTrackRef.Obj();    }
       const Track   *Trk()                           const { return BestTrk();                 }
       Double_t       EmEnergy()                      const { return fEmEnergy;                 }
       Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
@@ -127,12 +126,9 @@ namespace mithep {
                                    Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
-      void	     SetGlobalTrk(const Track *t)     
-                       { fGlobalTrackRef = const_cast<Track*>(t);   }
-      void	     SetStandaloneTrk(const Track *t) 
-                       { fStandaloneTrackRef = const_cast<Track*>(t); }
-      void	     SetTrackerTrk(const Track *t)    
-                       { fTrackerTrackRef = const_cast<Track*>(t);  }
+      void	     SetGlobalTrk(const Track *t)          { fGlobalTrackRef = t;            }
+      void	     SetStandaloneTrk(const Track *t)      { fStandaloneTrackRef = t;        }
+      void	     SetTrackerTrk(const Track *t)         { fTrackerTrackRef = t;           }
       void           SetDX(Int_t iStation, Double_t iDX);
       void           SetDY(Int_t iStation, Double_t iDY);
       void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;           }
@@ -162,9 +158,9 @@ namespace mithep {
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
     protected:
-      TRef	     fGlobalTrackRef;      //global combined track reference
-      TRef	     fStandaloneTrackRef;  //standalone muon track reference
-      TRef	     fTrackerTrackRef;     //tracker track reference
+      Ref<Track>     fGlobalTrackRef;      //global combined track reference
+      Ref<Track>     fStandaloneTrackRef;  //standalone muon track reference
+      Ref<Track>     fTrackerTrackRef;     //tracker track reference
       Double32_t     fIsoR03SumPt;         //isolation size R=0.3 sum pt
       Double32_t     fIsoR03EmEt;          //isolation size R=0.3 em  trans energy 
       Double32_t     fIsoR03HadEt;         //isolation size R=0.3 had trans energy
@@ -211,30 +207,6 @@ inline const mithep::Track *mithep::Muon::BestTrk() const
 
   Error("BestTrk", "No track reference found, returning NULL pointer.");
   return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::GlobalTrk() const 
-{ 
-  // Return global combined track.
-
-  return static_cast<const Track*>(fGlobalTrackRef.GetObject()); 
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::StandaloneTrk() const 
-{ 
-  // Return standalone track.
-
-  return static_cast<const Track*>(fStandaloneTrackRef.GetObject()); 
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::TrackerTrk() const 
-{ 
-  // Return tracker track.
-
-  return static_cast<const Track*>(fTrackerTrackRef.GetObject()); 
 }
 
 //--------------------------------------------------------------------------------------------------

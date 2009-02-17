@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableDaughter.h,v 1.5 2008/09/10 03:33:27 loizides Exp $
+// $Id: StableDaughter.h,v 1.6 2008/12/09 17:47:00 loizides Exp $
 //
 // StableDaughter
 //
@@ -27,7 +27,7 @@ namespace mithep
       ~StableDaughter() {}
 
       Double_t             Eta()       const { return fMomAtVertex.Eta(); }
-      const Particle      *Mother()    const;
+      const Particle      *Mother()    const { return fMother.Obj();      }
       EObjType             ObjType()   const { return kStableDaughter;    }      
       Double_t             Phi()       const { return fMomAtVertex.Phi(); }
       Double_t             P()         const { return fMomAtVertex.R();   }
@@ -40,18 +40,10 @@ namespace mithep
 
     protected:
       ThreeVector          fMomAtVertex;      //fitted momentum at vertex
-      TRef	           fMother;           //tracker track reference
+      Ref<Particle>        fMother;           //decay mother reference
 
     ClassDef(StableDaughter, 1) // Stable daughter class
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Particle *mithep::StableDaughter::Mother() const
-{
-  // Return decay mother.
-
-  return static_cast<const Particle*>(fMother.GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.6 2008/10/31 17:41:44 bendavid Exp $
+// $Id: StableParticle.h,v 1.7 2008/12/09 17:47:00 loizides Exp $
 //
 // StableParticle
 //
@@ -20,32 +20,24 @@ namespace mithep
     public:
       StableParticle() : fAbsPdgId(0) {}
       StableParticle(UInt_t absPdgId) : fAbsPdgId(absPdgId) {}
-      StableParticle(UInt_t absPdgId, Track *track) : fAbsPdgId(absPdgId), fTrackRef(track) {}
+      StableParticle(UInt_t absPdgId, const Track *track) : fAbsPdgId(absPdgId), fTrackRef(track) {}
       ~StableParticle() {}
       
       UInt_t               AbsPdgId()         const { return fAbsPdgId;       }
-      const Track         *Trk()              const;
+      const Track         *Trk()              const { return fTrackRef.Obj(); }
       const Track         *TrackerTrk()       const { return Trk();           }
       Double_t             Mass()             const;
       EObjType             ObjType()          const { return kStableParticle; }      
       TParticlePDG        *ParticlePdgEntry() const;
       void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
-      void	           SetTrk(Track *t)             { fTrackRef = t;      }
+      void	           SetTrk(const Track *t) { fTrackRef = t;            }
       
     protected:
       UInt_t               fAbsPdgId; //pdg identifier (absolute value)
-      TRef	           fTrackRef; //tracker track reference
+      Ref<Track>           fTrackRef; //tracker track reference
       
     ClassDef(StableParticle, 1) // Stable particle class
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::StableParticle::Trk() const
-{
-  // Return tracker track.
-
-  return static_cast<const Track*>(fTrackRef.GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------

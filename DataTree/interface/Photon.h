@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.18 2008/12/03 16:58:17 bendavid Exp $
+// $Id: Photon.h,v 1.19 2008/12/09 17:47:00 loizides Exp $
 //
 // Photon
 //
@@ -47,14 +47,13 @@ namespace mithep
       EObjType                  ObjType()               const { return kPhoton;            }      
       Double_t                  R9()                    const { return fR9;                }
       Double_t                  R19()                   const { return fR19;               }
-      const SuperCluster       *SCluster()              const;
+      const SuperCluster       *SCluster()              const { return fSuperClusterRef.Obj(); }
       Double_t                  SolidConeTrkIso()       const { return fSolidConeTrkIso;   }
       Int_t                     SolidConeNTrk()         const { return fSolidConeNTrk;     }
       void                      AddConversion(const Conversion *c) { fConversions.Add(c);  }
       void                      SetIsConverted(Bool_t isConv) { fIsConverted = isConv;            }
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      SetSuperCluster(const SuperCluster* sc) 
-                                  { fSuperClusterRef = const_cast<SuperCluster*>(sc); }
+      void                      SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
       void                      SetR9(Double_t x)                 { fR9 = x;               }
       void                      SetR19(Double_t x)                { fR19 = x;              }
       void                      SetE5x5(Double_t x)               { fE5x5 = x;             }
@@ -94,7 +93,7 @@ namespace mithep
       Bool_t                    fIsTightPhoton;
       RefArray<Conversion,128>  fConversions; //references to associated conversion candidates
       Bool_t                    fIsConverted; //conversion flag
-      TRef                      fSuperClusterRef; //superCluster
+      Ref<SuperCluster>         fSuperClusterRef; //superCluster
 	
     ClassDef(Photon,1) // Photon class
   };
@@ -108,11 +107,4 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   fFourVector.SetXYZT(px, py, pz, e);
 }
 
-//--------------------------------------------------------------------------------------------------
-inline const mithep::SuperCluster *mithep::Photon::SCluster() const
-{
-  // Return Super cluster
-
-  return static_cast<const SuperCluster*>(fSuperClusterRef.GetObject());
-}
 #endif

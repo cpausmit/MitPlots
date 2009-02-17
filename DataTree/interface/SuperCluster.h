@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.6 2008/11/14 14:46:35 bendavid Exp $
+// $Id: SuperCluster.h,v 1.7 2008/12/09 17:47:00 loizides Exp $
 //
 // SuperCluster
 //
@@ -15,6 +15,7 @@
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataCont/interface/RefArray.h"
+#include "MitAna/DataCont/interface/Ref.h"
 
 namespace mithep 
 {
@@ -36,7 +37,7 @@ namespace mithep
       void                 Print(Option_t *opt="") const;
       Double_t             PreshowerEnergy()       const { return fPreshowerEnergy; }
       Double_t             RawEnergy()             const { return fRawEnergy; }      
-      const BasicCluster  *Seed()                  const;       
+      const BasicCluster  *Seed()                  const { return fSeedRef.Obj(); }     
       Double_t             X()                     const { return fPoint.X(); }
       Double_t             Y()                     const { return fPoint.Y(); }
       Double_t             Z()                     const { return fPoint.Z(); }
@@ -46,8 +47,7 @@ namespace mithep
       void	           SetPhiWidth(Double_t phiWidth)               { fPhiWidth = phiWidth;   }
       void	           SetPreshowerEnergy(Double_t e)               { fPreshowerEnergy = e;   }
       void	           SetRawEnergy(Double_t rawEnergy)             { fRawEnergy = rawEnergy; }
-      void	           SetSeed(const BasicCluster *s)               
-                             { fSeedRef = const_cast<BasicCluster*>(s); } 
+      void	           SetSeed(const BasicCluster *s)               { fSeedRef = s;           } 
       void	           SetXYZ(Double_t x, Double_t y, Double_t z)   { fPoint.SetXYZ(x,y,z);   }
       
     protected:
@@ -58,17 +58,10 @@ namespace mithep
       Double32_t                  fPhiWidth;        //width in Phi
       Double32_t                  fRawEnergy;       //super cluster raw energy
       RefArray<BasicCluster,1024> fClusters;        //assigned basic clusters
-      TRef                        fSeedRef;         //seed cluster
+      Ref<BasicCluster>           fSeedRef;         //seed cluster
 
     ClassDef(SuperCluster, 1) // Super cluster class
   };
 }
 
-//--------------------------------------------------------------------------------------------------
-inline const mithep::BasicCluster *mithep::SuperCluster::Seed() const 
-{ 
-  // Return basic cluster seed.
-
-  return static_cast<const BasicCluster*>(fSeedRef.GetObject()); 
-}
 #endif

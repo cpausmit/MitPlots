@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.4 2008/12/03 17:37:46 loizides Exp $
+// $Id: DaughterData.h,v 1.5 2008/12/09 17:46:59 loizides Exp $
 //
 // DaughterData
 //
@@ -13,6 +13,7 @@
  
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitAna/DataCont/interface/Ref.h"
 
 namespace mithep 
 {
@@ -20,25 +21,19 @@ namespace mithep
   {
     public:
       DaughterData() {}
-      DaughterData(const Particle *orig) : fOriginal(const_cast<Particle*>(orig)) {}
+      DaughterData(const Particle *orig) : fOriginal(orig) {}
       ~DaughterData() {}
 
-      Double_t             Charge()    const { return Original()->Charge(); }
-      EObjType             ObjType()   const { return kDaughterData;        }
-      const Particle      *Original()  const;
+      Double_t             Charge()                       const { return Original()->Charge();    }
+      Bool_t               HasOriginal()                  const { return fOriginal.IsValid();     }
+      Bool_t               HasOriginal(const Particle *p) const { return fOriginal.RefsObject(p); }
+      EObjType             ObjType()                      const { return kDaughterData;           }
+      const Particle      *Original()                     const { return fOriginal.Obj();         }
 
     protected:
-      TRef                 fOriginal; //reference to original particle
+      Ref<Particle>        fOriginal; //reference to original particle
 
     ClassDef(DaughterData, 1) // Daughter data class
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::Particle *mithep::DaughterData::Original() const
-{
-  // Return original particle.
-
-  return static_cast<const Particle*>(fOriginal.GetObject());
 }
 #endif
