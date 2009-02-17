@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.12 2008/12/09 17:47:00 loizides Exp $
+// $Id: Jet.h,v 1.13 2009/01/12 10:27:42 bendavid Exp $
 //
 // Jet
 //
@@ -46,7 +46,8 @@ namespace mithep
       Double_t   HadEnergyInHO()               const { return fHadEnergyInHO;             } 
       Double_t   HadEnergyInHB()               const { return fHadEnergyInHB;             } 
       Double_t   HadEnergyInHF()               const { return fHadEnergyInHF;             } 
-      Double_t   HadEnergyInHE()               const { return fHadEnergyInHE;             } 
+      Double_t   HadEnergyInHE()               const { return fHadEnergyInHE;             }
+      Bool_t     HasTower(const CaloTower *t)  const { return fTowers.HasObject(t);       }
       Double_t   ImpactParameterMVABJetTagsDisc()               const 
                    { return fImpactParameterMVABJetTagsDisc;         }
       Double_t   JetProbabilityBJetTagsDisc()                   const 
