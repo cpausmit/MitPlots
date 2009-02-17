@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.10 2008/12/10 11:26:52 loizides Exp $
+// $Id: RefArray.h,v 1.11 2008/12/18 13:34:16 loizides Exp $
 //
 // RefArray
 //
@@ -43,6 +43,7 @@ namespace mithep
       UInt_t                    Entries()                    const { return GetEntries(); }
       UInt_t                    GetEntries()                 const { return fUIDs.GetEntries(); }
       UInt_t                    GetSize()                    const { return N; }
+      Bool_t                    HasObject(const ArrayElement *obj) const;
       Bool_t                    IsOwner()                    const { return kTRUE; }
       TObject                  *ObjAt(UInt_t idx);       
       const TObject            *ObjAt(UInt_t idx)            const;
@@ -55,6 +56,7 @@ namespace mithep
 
     protected:
       TObject                  *GetObject(UInt_t idx)        const;
+      TProcessID               *GetPID(UInt_t idx)           const;
       UInt_t                    GetUID(UInt_t idx)           const;
     
       StackArray<ProcIDRef,N>      fPIDs;//|| process ids of referenced objects
@@ -148,11 +150,7 @@ TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 {
   // Return entry at given index. Code adapted from TRef::GetObject().
 
-  TProcessID *pid=0; 
-  if (fPIDs.GetEntries()>1)
-    pid = fPIDs.At(idx)->Pid();
-  else
-    pid = fPIDs.At(0)->Pid();
+  TProcessID *pid = GetPID(idx); 
   
   if (!pid) {
     Fatal("GetObject","Process id pointer is null!");
@@ -166,16 +164,45 @@ TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 
   UInt_t uid = GetUID(idx);
 
+  //try to find the object from the table of the corresponding PID
+  TObject *obj = pid->GetObjectWithID(uid);
+//   const TObjArray *objTable = pid->GetObjects();
+//   Int_t objIdx = uid & 0xffffff;
+//   if (objTable==0 || objIdx >= fObjects->GetSize())
+//   TObject *obj = objTable->At(rawUid);
+// //   printf("Initial try for uid\n");
+// //   Int_t j = uid - objTable->LowerBound();
+// //   if (j >= 0 && j < objTable->Capacity())
+// //     obj = objTable->UncheckedAt(uid);
+// //   else
+// //     obj = 0;
+  if (obj)
+    return obj;
+
   //the reference may be in the TRefTable
   TRefTable *table = TRefTable::GetRefTable();
   if (table) {
     table->SetUID(uid, pid);
     table->Notify();
+    obj = pid->GetObjectWithID(uid);
   }
 
-  //try to find the object from the table of the corresponding PID
-  TObject *obj = pid->GetObjectWithID(uid);
   return obj;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+inline TProcessID *mithep::RefArray<ArrayElement,N>::GetPID(UInt_t idx) const
+{
+  // Return pid corresponding to idx.
+
+  TProcessID *pid = 0;
+  if (fPIDs.GetEntries()>1)
+    pid = fPIDs.At(idx)->Pid();
+  else
+    pid = fPIDs.At(0)->Pid();
+    
+  return pid;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,6 +212,27 @@ inline UInt_t mithep::RefArray<ArrayElement,N>::GetUID(UInt_t idx) const
   // Return uid corresponding to idx.
 
   return fUIDs.At(idx);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+Bool_t mithep::RefArray<ArrayElement,N>::HasObject(const ArrayElement *obj) const
+{
+  // check whether RefArray contains a given object
+
+  if (!obj->TestBit(kIsReferenced))
+    return kFALSE;
+  
+  UInt_t oUid = obj->GetUniqueID();
+  TProcessID *oPid = TProcessID::GetProcessWithUID(oUid, const_cast<ArrayElement*>(obj));
+  
+  for (UInt_t i=0; i<GetEntries(); ++i) {
+    if ( (GetUID(i)&0xffffff)==(oUid&0xffffff) && GetPID(i)->GetUniqueID()==oPid->GetUniqueID())
+      return kTRUE;
+  }
+  
+  return kFALSE;
+  
 }
 
 //--------------------------------------------------------------------------------------------------
