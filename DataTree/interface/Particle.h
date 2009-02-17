@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.24 2008/12/09 17:47:00 loizides Exp $
+// $Id: Particle.h,v 1.25 2009/01/19 14:51:37 loizides Exp $
 //
 // Particle
 //
@@ -13,6 +13,7 @@
  
 #include <TMath.h>
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/CacheFlag.h"
 
 namespace mithep 
 {
@@ -44,6 +45,9 @@ namespace mithep
       virtual Double_t		TMass()                   const;
       void                      Print(Option_t *opt="")   const;
      
+    protected:
+      mutable CacheFlag         fCacheFlag; //|| cache validity flag for cached momentum vector
+      
     ClassDef(Particle, 1) // Generic particle class
   };
 }

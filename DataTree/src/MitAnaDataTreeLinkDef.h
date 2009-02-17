@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.49 2008/12/11 17:05:23 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.50 2009/02/17 15:09:44 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -68,7 +68,7 @@
 #pragma link C++ class mithep::Collection<TObject>+;
 #pragma link C++ class mithep::ObjArray<TObject>+;
 
-//#pragma link C++ class mithep::CachedFourVector-;
+#pragma link C++ class mithep::CacheFlag-;
 
 #pragma link C++ class mithep::DataBase+;
 #pragma link C++ class mithep::Collection<mithep::DataBase>+;
