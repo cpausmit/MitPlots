@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.11 2008/12/18 13:34:16 loizides Exp $
+// $Id: RefArray.h,v 1.12 2009/02/17 14:22:57 bendavid Exp $
 //
 // RefArray
 //
@@ -166,16 +166,11 @@ TObject *mithep::RefArray<ArrayElement,N>::GetObject(UInt_t idx) const
 
   //try to find the object from the table of the corresponding PID
   TObject *obj = pid->GetObjectWithID(uid);
-//   const TObjArray *objTable = pid->GetObjects();
-//   Int_t objIdx = uid & 0xffffff;
-//   if (objTable==0 || objIdx >= fObjects->GetSize())
-//   TObject *obj = objTable->At(rawUid);
-// //   printf("Initial try for uid\n");
-// //   Int_t j = uid - objTable->LowerBound();
-// //   if (j >= 0 && j < objTable->Capacity())
-// //     obj = objTable->UncheckedAt(uid);
-// //   else
-// //     obj = 0;
+
+  //We are now assuming that the object table is cleaned so that all unloaded objects have null
+  //pointers in the object table
+  //This guarantees that the check below is valid for determining whether we need to go to the
+  //TRefTable
   if (obj)
     return obj;
 
