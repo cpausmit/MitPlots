@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.11 2009/02/17 14:34:58 bendavid Exp $
+// $Id: TAMSelector.cxx,v 1.12 2009/02/17 21:54:17 bendavid Exp $
 //
 
 #include "TAMSelector.h"
@@ -497,7 +497,7 @@ TObject *TAMSelector::GetObjectWithID(UInt_t uid, TProcessID *pid)
   
   TBranchRef *br = GetTree()->GetTree()->GetBranchRef();
   if (!br) 
-    return 0;
+    return pid->GetObjectWithID(uid);
   
   TRefTable *table = br->GetRefTable();
     
@@ -564,13 +564,13 @@ TObject *TAMSelector::GetObjectWithID(UInt_t uid, TProcessID *pid)
   fCurEntry = readentry;
   
   if (!branch) {
-    return 0;
+    return pid->GetObjectWithID(uid);
   }
   
   // access the main branch
   TBranch *readbranch = branch->GetMother();
   if (!readbranch) {
-    return 0;
+    return pid->GetObjectWithID(uid);
   }
   
   // check if TAMBranchInfo already exists
