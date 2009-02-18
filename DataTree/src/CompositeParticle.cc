@@ -1,4 +1,4 @@
-// $Id: CompositeParticle.cc,v 1.4 2008/07/16 09:32:05 bendavid Exp $
+// $Id: CompositeParticle.cc,v 1.5 2008/07/16 18:56:49 loizides Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
@@ -25,14 +25,7 @@ Bool_t CompositeParticle::HasDaughter(const Particle* p) const
 
   if(!p) return kFALSE;
 
-  if (!NDaughters())
-    return kFALSE;
-
-  for (UInt_t i=0; i<NDaughters(); ++i)
-    if (Daughter(i)==p)
-      return kTRUE;
-  
-  return kFALSE;
+  return fDaughters.HasObject(p);
 }
 
 //--------------------------------------------------------------------------------------------------
