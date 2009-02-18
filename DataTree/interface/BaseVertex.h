@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseVertex.h,v 1.2 2008/11/14 14:46:35 bendavid Exp $
+// $Id: BaseVertex.h,v 1.3 2008/12/09 17:46:59 loizides Exp $
 //
 // BaseVertex
 //
@@ -19,14 +19,13 @@ namespace mithep
   {
     public:
       BaseVertex() : 
-        fPosition(0,0,0), fXErr(0.0), fYErr(0.0), fZErr(0.0)    {}
+        fPosition(0,0,0), fXErr(0), fYErr(0), fZErr(0)    {}
       BaseVertex(Double_t x, Double_t y, Double_t z) : 
-        fPosition(x,y,z), fXErr(0.0), fYErr(0.0), fZErr(0.0)    {}
+        fPosition(x,y,z), fXErr(0), fYErr(0), fZErr(0)    {}
       BaseVertex(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) :
         fPosition(x,y,z), fXErr(xErr), fYErr(yErr), fZErr(zErr) {}
       BaseVertex(const ThreeVector &pos) :
-        fPosition(pos), fXErr(0.0), fYErr(0.0), fZErr(0.0)      {}
-      ~BaseVertex() {}
+        fPosition(pos), fXErr(0), fYErr(0), fZErr(0)      {}
       
       EObjType            ObjType()   const { return kBaseVertex;      }
       Double_t            Phi()       const { return fPosition.Phi();  }
@@ -69,5 +68,4 @@ inline void mithep::BaseVertex::SetPosition(Double_t x, Double_t y, Double_t z)
 
   fPosition.SetXYZ(x,y,z);
 }
-
 #endif

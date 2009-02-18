@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.7 2008/11/25 13:50:48 loizides Exp $
+// $Id: Met.h,v 1.8 2008/12/09 17:47:00 loizides Exp $
 //
 // Met
 //
-// Class to store missing et information.
+// Class to store missing transverse energy information.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -19,18 +19,19 @@ namespace mithep
   class Met : public Particle
   {
     public:
-      Met() : fMex(0), fMey(0) {}
+      Met() :
+        fMex(0), fMey(0), fSumEt(0), fMetSig(0), fElongit(0), fDmex(0), fDmey(0),
+        fDSumEt(0), fMaxEtInEmTowers(0), fMaxEtInHadTowers(0), fEtFractionHadronic(0), 
+        fEmEtFraction(0), fHadEtInHB(0), fHadEtInHO(0), fHadEtInHE(0), fHadEtInHF(0), 
+        fEmEtInEB(0), fEmEtInEE(0), fEmEtInHF(0), fCaloSumEtInpHF(0), fCaloSumEtInmHF(0), 
+        fCaloMetInmHF(0), fCaloMetPhiInpHF(0), fCaloMetPhiInmHF(0) { SetClearBit(); }
       Met(Double_t mex, Double_t mey) : 
         fMex(mex), fMey(mey), fSumEt(0), fMetSig(0), fElongit(0), fDmex(0), fDmey(0),
         fDSumEt(0), fMaxEtInEmTowers(0), fMaxEtInHadTowers(0), fEtFractionHadronic(0), 
         fEmEtFraction(0), fHadEtInHB(0), fHadEtInHO(0), fHadEtInHE(0), fHadEtInHF(0), 
         fEmEtInEB(0), fEmEtInEE(0), fEmEtInHF(0), fCaloSumEtInpHF(0), fCaloSumEtInmHF(0), 
         fCaloMetInmHF(0), fCaloMetPhiInpHF(0), fCaloMetPhiInmHF(0) { SetClearBit(); }
-      ~Met() {}
 
-      Double_t                     Charge()             const { return 0; }
-      Double_t		           E()                  const { return Pt();}
-      Double_t		           Eta()                const { return Mom().Eta();}
       Double_t                     CaloSumEtInpHF()     const { return fCaloSumEtInpHF; }
       Double_t                     CaloSumEtInmHF()     const { return fCaloSumEtInmHF; }      
       Double_t                     CaloMetInpHF()       const { return fCaloMetInpHF; }
@@ -50,18 +51,10 @@ namespace mithep
       Double_t                     HadEtInHO()          const { return fHadEtInHO; } 
       Double_t                     HadEtInHE()          const { return fHadEtInHE; }
       Double_t                     HadEtInHF()          const { return fHadEtInHF; }
-      Double_t	 	           Mass()       const { return TMath::Sqrt(Mom().M2()); }
       Double_t                     MaxEtInEmTowers()    const { return fMaxEtInEmTowers; }
       Double_t                     MaxEtInHadTowers()   const { return fMaxEtInHadTowers; }
       Double_t                     MetSig()             const { return fMetSig; }    
-      FourVector	           Mom()        const { return FourVector(fMex,fMey,0,Pt()); }
       EObjType                     ObjType()            const { return kMet;             }      
-      Double_t		           Phi()        const { return TMath::ATan2(fMey,fMex); }
-      Double_t		           Pt()         const { return TMath::Sqrt(fMex*fMex+fMey*fMey);}
-      Double_t	 	           Px()                 const { return fMex;}
-      Double_t		           Py()                 const { return fMey;}
-      Double_t		           Pz()                 const { return 0; }
-      Double_t		           P()                  const { return Pt(); }
       Double_t                     SumEt()              const { return fSumEt; } 
       void                         PushCorrectionX(Double_t x)       { fDmex.push_back(x); }
       void                         PushCorrectionY(Double_t x)       { fDmey.push_back(x); }
@@ -89,6 +82,7 @@ namespace mithep
       
     protected:
       void                         Clear(Option_t * /*option*/ ="");
+      void	                   GetMom()             const;
 
       Double_t                     fMex;                 //x-component
       Double_t                     fMey;                 //y-component              
@@ -116,10 +110,11 @@ namespace mithep
       Double_t                     fCaloMetPhiInpHF;     //MET-phi in HF+
       Double_t                     fCaloMetPhiInmHF;     //MET-phi in HF-
     
-    ClassDef(Met, 1) // Missing Et class
+    ClassDef(Met, 1) // Missing transverse energy class
   };
 }
 
+//--------------------------------------------------------------------------------------------------
 inline void mithep::Met::Clear(Option_t *)
 { 
   // Clear by deleting the std::vectors.
@@ -129,4 +124,13 @@ inline void mithep::Met::Clear(Option_t *)
   fDSumEt.~vector<Double_t>();
 }
 
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Met::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  Double_t pt = TMath::Sqrt(fMex*fMex+fMey*fMey);
+  Double_t phi = TMath::ATan2(fMey,fMex);
+  fCachedMom.SetCoordinates(pt,0,phi,0);
+}
 #endif

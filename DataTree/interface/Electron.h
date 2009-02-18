@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.23 2009/01/22 14:21:32 loizides Exp $
+// $Id: Electron.h,v 1.24 2009/02/17 15:09:45 bendavid Exp $
 //
 // Electron
 //
@@ -28,13 +28,11 @@ namespace mithep
                    fCaloIsolation(0), fCaloTowerIsolation(0), fTrackIsolation(0), 
                    fEcalJurassicIsolation(0), fHcalJurassicIsolation(0), fPassLooseID(0),
                    fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0) {}
-      ~Electron() {}
       
       const Track         *BestTrk()               const;
       const Track         *GsfTrk()                const { return fGsfTrackRef.Obj();       }
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
       const SuperCluster  *SCluster()              const { return fSuperClusterRef.Obj();   }
-      FourVector           Mom()                   const;
       const Track         *Trk()                   const { return BestTrk();                }
       Double_t    CaloIsolation()                  const { return fCaloIsolation;           }
       Double_t    CaloTowerIsolation()             const { return fCaloTowerIsolation;      }
@@ -47,7 +45,6 @@ namespace mithep
       Double_t    DeltaEtaSeedClusterTrackAtCalo() const { return fDeltaEtaSeedClTrkAtCalo; }
       Double_t    DeltaPhiSuperClusterTrackAtVtx() const { return fDeltaPhiSuperClTrkAtVtx; }
       Double_t    DeltaPhiSeedClusterTrackAtCalo() const { return fDeltaPhiSeedClTrkAtCalo; }
-      Double_t    E()                              const;
       Double_t    E33()                            const { return fE33;                     }
       Double_t    E55()                            const { return fE55;                     }
       Double_t    EcalJurassicIsolation()          const { return fEcalJurassicIsolation;   }
@@ -62,22 +59,16 @@ namespace mithep
       Bool_t      HasTrackerTrk()                  const { return fTrackerTrackRef.IsValid(); }
       Bool_t      HasSuperCluster()                const { return fSuperClusterRef.IsValid(); }
       Double_t    HcalIsolation()                  const { return fHcalJurassicIsolation;   }
-      Double_t    Mass()                           const { return 0.51099892e-3;            }
       Double_t    NumberOfClusters()               const { return fNumberOfClusters;        }
       EObjType    ObjType()                        const { return kElectron;                }      
       Double_t    PassLooseID()                    const { return fPassLooseID;             }
       Double_t    PassTightID()                    const { return fPassTightID;             }
       Double_t    PIn()                            const { return fPIn;                     }
       Double_t    POut()                           const { return fPOut;                    }
-      Double_t    P()                              const;
-      Double_t    Pt()                             const;
-      Double_t    Px()                             const;
-      Double_t    Py()                             const;
-      Double_t    Pz()                             const;
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
-      void	  SetGsfTrk(const Track* t)              { fGsfTrackRef = t;                }
-      void	  SetTrackerTrk(const Track* t)          { fTrackerTrackRef = t;            }
-      void	  SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc;          }
+      void	  SetGsfTrk(const Track* t)                     { fGsfTrackRef = t;                }
+      void	  SetTrackerTrk(const Track* t)                 { fTrackerTrackRef = t;            }
+      void	  SetSuperCluster(const SuperCluster* sc)       { fSuperClusterRef = sc;           }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetClassification(Double_t x)                 { fClassification = x;             }
@@ -104,9 +95,12 @@ namespace mithep
       void        SetPassTightID(Double_t passTightID)          { fPassTightID = passTightID;      }
       void        SetPIn(Double_t PIn)                          { fPIn = PIn;                      }
       void        SetPOut(Double_t POut)                        { fPOut = POut;                    }
-      void        SetTrackIsolation(Double_t TrackIsolation)    { fTrackIsolation = TrackIsolation;}
+      void        SetTrackIsolation(Double_t trkiso)            { fTrackIsolation = trkiso;        }
 
     protected:
+      Double_t    GetMass()                  const              { return 0.51099892e-3;            }
+      void        GetMom()                   const;
+
       Ref<Track>  fGsfTrackRef;               //gsf track reference
       Ref<Track>  fTrackerTrackRef;           //tracker track reference
       Ref<SuperCluster> fSuperClusterRef;     //reference to SuperCluster
@@ -155,13 +149,30 @@ inline const mithep::Track *mithep::Electron::BestTrk() const
   return 0;
 }
 
-//-------------------------------------------------------------------------------------------------
-inline mithep::FourVector mithep::Electron::Mom() const
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Electron::GetMom() const
 {
-  // Return momentum of the electron. We use the direction of the
+  // Get momentum of the electron. We use the direction of the
   // track and the energy of the SuperCluster.
 
-  return FourVector(Px(), Py(), Pz(), E());
+  const mithep::Track *trk = Trk();
+
+  if (!trk) {
+    fCachedMom.SetCoordinates(0,0,0,0);
+    return;
+  }
+
+  Double_t p = 0;
+  Double_t mass = GetMass();
+
+  const mithep::SuperCluster *sc = SCluster();
+  if (sc)
+    p = TMath::Sqrt(sc->Energy()*sc->Energy() - mass*mass);
+  else
+    p = trk->P();
+
+  Double_t pt = TMath::Abs(p*TMath::Cos(trk->Lambda()));
+  fCachedMom.SetCoordinates(pt,trk->Eta(),trk->Phi(),mass);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -171,63 +182,5 @@ inline Double_t mithep::Electron::ESeedClusterOverPIn() const
   // of the track momentum at the vertex.
   
   return SCluster()->Seed()->Energy() / PIn();
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::E() const
-{
-  // Return energy of the SuperCluster if present
-  // or else return energy derived from the track.
-  
-  const mithep::SuperCluster *sc = SCluster();
-  if (sc)
-    return sc->Energy();
-  else
-    return TMath::Sqrt(Trk()->P()*Trk()->P() + Mass()*Mass());
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::P() const
-{
-  // Return momentum derived from the SuperCluster if present
-  // or else return momentum from the track.
-  
-  const mithep::SuperCluster *sc = SCluster();
-  if (sc)
-    return TMath::Sqrt(sc->Energy()*sc->Energy() - Mass()*Mass());
-  else
-    return Trk()->P();
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::Px() const
-{
-  // Return px.
-
-  return Pt()*TMath::Cos(Trk()->Phi());
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::Py() const
-{
-  // Return py.
-
-  return Pt()*TMath::Sin(Trk()->Phi());
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::Pz() const
-{
-  // Return pz.
-
-  return P()*TMath::Sin(Trk()->Lambda());
-}
-
-//-------------------------------------------------------------------------------------------------
-inline Double_t mithep::Electron::Pt() const
-{
-  // Return pt.
-
-  return TMath::Abs(P()*TMath::Cos(Trk()->Lambda()));
 }
 #endif

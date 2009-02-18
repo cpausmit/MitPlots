@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.32 2008/12/10 11:30:00 loizides Exp $
+// $Id: Collections.h,v 1.33 2008/12/11 17:05:23 loizides Exp $
 //
 // Collections
 //
@@ -39,7 +39,6 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
-#include "MitAna/DataTree/interface/StableDaughter.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataTree/interface/BeamSpot.h"
@@ -88,7 +87,6 @@ namespace mithep
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
-  typedef Collection<StableDaughter>    StableDaughterCol;
   typedef Collection<BaseVertex>        BaseVertexCol;
   typedef Collection<Vertex>            VertexCol;
   typedef Collection<BeamSpot>          BeamSpotCol;
@@ -116,7 +114,6 @@ namespace mithep
   typedef Array<Conversion>             ConversionArr;
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
-  typedef Array<StableDaughter>         StableDaughterArr;
   typedef Array<BaseVertex>             BaseVertexArr;
   typedef Array<Vertex>                 VertexArr;
   typedef Array<BeamSpot>               BeamSpotArr;
@@ -144,7 +141,6 @@ namespace mithep
   typedef ObjArray<Conversion>          ConversionOArr;
   typedef ObjArray<Photon>              PhotonOArr;
   typedef ObjArray<StableParticle>      StableParticleOArr;
-  typedef ObjArray<StableDaughter>      StableDaughterOArr;
   typedef ObjArray<BaseVertex>          BaseVertexOArr;
   typedef ObjArray<Vertex>              VertexOArr;
   typedef ObjArray<BeamSpot>            BeamSpotOArr;

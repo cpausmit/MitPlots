@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.16 2008/12/03 11:35:21 loizides Exp $
+// $Id: CompositeParticle.h,v 1.17 2008/12/09 17:46:59 loizides Exp $
 //
 // Composite Particle
 //
@@ -21,23 +21,47 @@ namespace mithep
   {
     public:
       CompositeParticle() {}
-      ~CompositeParticle() {}
     
       void                      AddDaughter(const Particle *p)    { fDaughters.Add(p);           }
-      Double_t		        Charge()              const;
       void                      Clear(Option_t *opt="")           { fDaughters.Clear(opt);       }
       const Particle           *Daughter(UInt_t i)    const       { return fDaughters.At(i);     }
       UInt_t                    NDaughters()          const       { return fDaughters.Entries(); }
       Bool_t			HasDaughter(const Particle *p)                const;
       Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
       Bool_t			HasSameDaughters(const CompositeParticle *p)  const;
-      FourVector	        Mom()                 const;
       EObjType                  ObjType()             const       { return kCompositeParticle;   }
 
     protected:
+      Double_t		        GetCharge()           const;
+      void	                GetMom()              const;
+
       RefArray<Particle,1024>   fDaughters; //references to daughter particles
       
     ClassDef(CompositeParticle, 1) // Composite particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::CompositeParticle::GetCharge() const 
+{
+  // Return sum of charge of daughter particles.
+
+  Double_t charge = 0;
+  for (UInt_t i=0; i<NDaughters(); ++i)
+    charge += Daughter(i)->Charge();
+  
+  return charge;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::CompositeParticle::GetMom() const 
+{
+  // Calculate the vector sum of the momenta of the daughters.
+
+  FourVector mom;
+  for (UInt_t i=0; i<NDaughters(); ++i)
+    mom += (Daughter(i))->Mom();
+  
+  fCachedMom.SetCoordinates(mom.Pt(),mom.Eta(),mom.Phi(),mom.M()); 
 }
 #endif

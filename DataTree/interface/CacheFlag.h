@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ProcIDRef.h,v 1.3 2008/12/10 11:26:52 loizides Exp $
+// $Id: CacheFlag.h,v 1.1 2009/02/17 15:52:51 bendavid Exp $
 //
 // CacheFlag
 //
-// Container for a transient Bool_t which is set by the reading streamer to kFALSE
+// Container for a transient Bool_t which is set by the reading streamer to kFALSE.
 // This meant to be used as a cache valid flag for transient cached quantities.
 //
 // Authors: J.Bendavid
@@ -17,20 +17,19 @@
 
 namespace mithep 
 {
-  class CacheFlag : public TObject
+  class CacheFlag
   {
     public:
-      CacheFlag() : fIsValid(kFALSE) {};
-      ~CacheFlag() {}
+      CacheFlag() : fIsValid(kFALSE) {}
 
-      Bool_t             IsValid()            const { return fIsValid; }
       void               ClearCache()               { fIsValid = kFALSE; }
-      void               SetCache(Bool_t v = kTRUE) { fIsValid = v; }
+      Bool_t             IsValid()            const { return fIsValid; }
+      void               SetValid(Bool_t v = kTRUE) { fIsValid = v; }
       
     protected:
-      Bool_t         fIsValid; //!flag whether cache is valid
+      Bool_t             fIsValid; //!flag whether cache is valid
 
-    ClassDef(CacheFlag, 1) // Implementation of our own TProcIDRef
+    ClassDef(CacheFlag, 1) // Implementation of a transient Bool_t container
   };
 }
 #endif

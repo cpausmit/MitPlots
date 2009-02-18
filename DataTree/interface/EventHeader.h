@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.10 2008/12/09 17:47:00 loizides Exp $
+// $Id: EventHeader.h,v 1.11 2009/01/22 14:21:32 loizides Exp $
 //
 // EventHeader
 //
@@ -24,7 +24,6 @@ namespace mithep
       EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0), fRunEntry(-1), fIsRemoved(0) {}
       EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : 
         fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1), fIsRemoved(0)        {}
-      ~EventHeader() {}
 
       UInt_t              EvtNum()          const { return fEvtNum;      }
       Bool_t              IsRemoved()       const { return fIsRemoved;   }
@@ -45,7 +44,7 @@ namespace mithep
       Int_t               fRunEntry;        //entry for run block
       Bool_t              fIsRemoved;       //=true if event content was removed (skimming) 
 
-    ClassDef(EventHeader, 2) // Event header class
+    ClassDef(EventHeader, 1) // Event header class
   };
 }
 #endif

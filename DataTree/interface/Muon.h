@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.23 2008/12/09 17:47:00 loizides Exp $
+// $Id: Muon.h,v 1.24 2009/02/17 15:09:45 bendavid Exp $
 //
 // Muon
 //
@@ -66,7 +66,6 @@ namespace mithep {
   class Muon : public ChargedParticle {
     public:
       Muon();
-      ~Muon() {}
 
       enum EClassType {
         kNone,              //no track assigned
@@ -77,12 +76,12 @@ namespace mithep {
       };
       
       const Track   *BestTrk()                       const;
-      const Track   *GlobalTrk()                     const { return fGlobalTrackRef.Obj();     }
-      const Track   *StandaloneTrk()                 const { return fStandaloneTrackRef.Obj(); }
-      const Track   *TrackerTrk()                    const { return fTrackerTrackRef.Obj();    }
-      const Track   *Trk()                           const { return BestTrk();                 }
-      Double_t       EmEnergy()                      const { return fEmEnergy;                 }
-      Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
+      const Track   *GlobalTrk()                     const { return fGlobalTrkRef.Obj(); }
+      const Track   *StandaloneTrk()                 const { return fStaTrkRef.Obj();    }
+      const Track   *TrackerTrk()                    const { return fTrkTrkRef.Obj();    }
+      const Track   *Trk()                           const { return BestTrk();           }
+      Double_t       EmEnergy()                      const { return fEmEnergy;           }
+      Double_t       EmS9Energy()                    const { return fEmS9Energy;         }
       Double_t       GetDX(Int_t iStation)           const;
       Double_t       GetDY(Int_t iStation)           const;
       Double_t       GetPullX(Int_t iStation)        const;
@@ -92,10 +91,9 @@ namespace mithep {
       Int_t          GetNSegments(Int_t iStation)    const;
       Bool_t         Has(EClassType type)            const;
       Bool_t         HasTrk()                        const;
-      Bool_t         HasGlobalTrk()                  const { return fGlobalTrackRef.IsValid();   }
-      Bool_t         HasStandaloneTrk()              const 
-                       { return fStandaloneTrackRef.IsValid(); }
-      Bool_t         HasTrackerTrk()                 const { return fTrackerTrackRef.IsValid();  }
+      Bool_t         HasGlobalTrk()                  const { return fGlobalTrkRef.IsValid();   }
+      Bool_t         HasStandaloneTrk()              const { return fStaTrkRef.IsValid();      }
+      Bool_t         HasTrackerTrk()                 const { return fTrkTrkRef.IsValid();      }
       Double_t       HadEnergy()                     const { return fHadEnergy;                }
       Double_t       HadS9Energy()                   const { return fHadS9Energy;              }
       Double_t       HoEnergy()                      const { return fHoEnergy;                 }
@@ -113,54 +111,55 @@ namespace mithep {
       Double_t       IsoR05HoEt()                    const { return fIsoR05HoEt;               }
       Int_t          IsoR05NTracks()                 const { return fIsoR05NTracks;            }
       Int_t          IsoR05NJets()                   const { return fIsoR05NJets;              }
-      Double_t       Mass()                          const { return 105.658369e-3;             }  
       Int_t          NChambers()                     const { return fNTraversedChambers;       }
       Int_t          NSegments()                     const { return fStationMask.NBitsSet();   }
       Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)                                 const;
-      EObjType       ObjType()                       const { return kMuon; }       
+      EObjType       ObjType()                       const { return kMuon;                     }
       Bool_t         PromptTight(EClassType type)                              const;
       Bool_t         StationBit(Int_t bit)           const { return fStationMask.TestBit(bit); }
       Bool_t         TMLastStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                    Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
-      void	     SetGlobalTrk(const Track *t)          { fGlobalTrackRef = t;            }
-      void	     SetStandaloneTrk(const Track *t)      { fStandaloneTrackRef = t;        }
-      void	     SetTrackerTrk(const Track *t)         { fTrackerTrackRef = t;           }
+      void	     SetGlobalTrk(const Track *t)          { fGlobalTrkRef = t;                }
+      void	     SetStandaloneTrk(const Track *t)      { fStaTrkRef = t;                   }
+      void	     SetTrackerTrk(const Track *t)         { fTrkTrkRef = t;                   }
       void           SetDX(Int_t iStation, Double_t iDX);
       void           SetDY(Int_t iStation, Double_t iDY);
-      void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;           }
-      void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;       }
-      void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;         }
-      void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;     }
-      void           SetHoEnergy(Double_t HoEnergy)        { fHoEnergy = HoEnergy;           }
-      void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;       }
-      void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;     }
-      void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;       }
-      void           SetIsoR03HadEt(Double_t isoR03HadEt)  { fIsoR03HadEt = isoR03HadEt;     }
-      void           SetIsoR03HoEt(Double_t isoR03HoEt)    { fIsoR03HoEt = isoR03HoEt;       }
-      void           SetIsoR03NTracks(Int_t isoR03NTracks) { fIsoR03NTracks = isoR03NTracks; }
-      void           SetIsoR03NJets(Int_t isoR03NJets)     { fIsoR03NJets = isoR03NJets;     }
-      void           SetIsoR05SumPt(Double_t isoR05SumPt)  { fIsoR05SumPt = isoR05SumPt;     }
-      void           SetIsoR05EmEt(Double_t isoR05EmEt)    { fIsoR05EmEt = isoR05EmEt;       }
-      void           SetIsoR05HadEt(Double_t isoR05HadEt)  { fIsoR05HadEt = isoR05HadEt;     }
-      void           SetIsoR05HoEt(Double_t isoR05HoEt)    { fIsoR05HoEt = isoR05HoEt;       }
-      void           SetIsoR05NTracks(Int_t isoR05NTracks) { fIsoR05NTracks = isoR05NTracks; }
-      void           SetIsoR05NJets(Int_t isoR05NJets)     { fIsoR05NJets = isoR05NJets;     }      
-      void           SetNChambers(Int_t iNTraCh)           { fNTraversedChambers = iNTraCh;  }
+      void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;             }
+      void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;         }
+      void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;           }
+      void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;       }
+      void           SetHoEnergy(Double_t HoEnergy)        { fHoEnergy = HoEnergy;             }
+      void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;         }
+      void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;       }
+      void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;         }
+      void           SetIsoR03HadEt(Double_t isoR03HadEt)  { fIsoR03HadEt = isoR03HadEt;       }
+      void           SetIsoR03HoEt(Double_t isoR03HoEt)    { fIsoR03HoEt = isoR03HoEt;         }
+      void           SetIsoR03NTracks(Int_t isoR03NTracks) { fIsoR03NTracks = isoR03NTracks;   }
+      void           SetIsoR03NJets(Int_t isoR03NJets)     { fIsoR03NJets = isoR03NJets;       }
+      void           SetIsoR05SumPt(Double_t isoR05SumPt)  { fIsoR05SumPt = isoR05SumPt;       }
+      void           SetIsoR05EmEt(Double_t isoR05EmEt)    { fIsoR05EmEt = isoR05EmEt;         }
+      void           SetIsoR05HadEt(Double_t isoR05HadEt)  { fIsoR05HadEt = isoR05HadEt;       }
+      void           SetIsoR05HoEt(Double_t isoR05HoEt)    { fIsoR05HoEt = isoR05HoEt;         }
+      void           SetIsoR05NTracks(Int_t isoR05NTracks) { fIsoR05NTracks = isoR05NTracks;   }
+      void           SetIsoR05NJets(Int_t isoR05NJets)     { fIsoR05NJets = isoR05NJets;       }
+      void           SetNChambers(Int_t iNTraCh)           { fNTraversedChambers = iNTraCh;    }
       void           SetNSegments(Int_t iStation, Int_t NSegments);
       void           SetPullX(Int_t iStation, Double_t iPullX);
       void           SetPullY(Int_t iStation, Double_t iPullY);
-      void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);  }
+      void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);    }
       void           SetTrackDist(Int_t iStation, Double_t iDist);
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
     protected:
-      Ref<Track>     fGlobalTrackRef;      //global combined track reference
-      Ref<Track>     fStandaloneTrackRef;  //standalone muon track reference
-      Ref<Track>     fTrackerTrackRef;     //tracker track reference
+      Double_t       GetMass()                       const { return 105.658369e-3;             }  
+
+      Ref<Track>     fGlobalTrkRef;        //global combined track reference
+      Ref<Track>     fStaTrkRef;           //standalone muon track reference
+      Ref<Track>     fTrkTrkRef;           //tracker track reference
       Double32_t     fIsoR03SumPt;         //isolation size R=0.3 sum pt
       Double32_t     fIsoR03EmEt;          //isolation size R=0.3 em  trans energy 
       Double32_t     fIsoR03HadEt;         //isolation size R=0.3 had trans energy

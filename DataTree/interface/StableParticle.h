@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.7 2008/12/09 17:47:00 loizides Exp $
+// $Id: StableParticle.h,v 1.8 2009/02/17 15:09:45 bendavid Exp $
 //
 // StableParticle
 //
@@ -21,23 +21,38 @@ namespace mithep
       StableParticle() : fAbsPdgId(0) {}
       StableParticle(UInt_t absPdgId) : fAbsPdgId(absPdgId) {}
       StableParticle(UInt_t absPdgId, const Track *track) : fAbsPdgId(absPdgId), fTrackRef(track) {}
-      ~StableParticle() {}
       
       UInt_t               AbsPdgId()         const { return fAbsPdgId;       }
       const Track         *Trk()              const { return fTrackRef.Obj(); }
       const Track         *TrackerTrk()       const { return Trk();           }
-      Double_t             Mass()             const;
       EObjType             ObjType()          const { return kStableParticle; }      
       TParticlePDG        *ParticlePdgEntry() const;
       void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
       void	           SetTrk(const Track *t) { fTrackRef = t;            }
       
     protected:
+      Double_t             GetMass()          const;
+
       UInt_t               fAbsPdgId; //pdg identifier (absolute value)
       Ref<Track>           fTrackRef; //tracker track reference
       
     ClassDef(StableParticle, 1) // Stable particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::StableParticle::GetMass() const
+{
+  // Get Mass from Pdg Lookup
+
+  TParticlePDG* pdgEntry = ParticlePdgEntry();
+  if (pdgEntry)
+    return pdgEntry->Mass();
+  else {
+    Error("GetMass", 
+          "Absolute pdg code %i not found in table, returning mass=-99.0 GeV", fAbsPdgId);
+    return -99.0;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

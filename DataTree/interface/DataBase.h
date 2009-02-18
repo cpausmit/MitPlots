@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataBase.h,v 1.2 2008/12/09 17:46:59 loizides Exp $
+// $Id: DataBase.h,v 1.3 2008/12/11 17:04:29 loizides Exp $
 //
 // DataBase
 //
@@ -21,7 +21,6 @@ namespace mithep
   {
     public:
       DataBase() {}
-      ~DataBase() {}
 
       Bool_t               Is(EObjType t) const { return (ObjType()==t); }
       Bool_t               IsCached()     const { return TestBit(23);    }
@@ -35,7 +34,7 @@ namespace mithep
       void                 SetClearBit()        { SetBit(14);   }
       void                 SetDeleteBit()       { SetBit(15);   }
 
-    ClassDef(DataBase, 1)
+    ClassDef(DataBase, 1) // Common base for objects that do not get referenced
   };
 }
 #endif

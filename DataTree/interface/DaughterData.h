@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.5 2008/12/09 17:46:59 loizides Exp $
+// $Id: DaughterData.h,v 1.6 2009/02/17 15:09:45 bendavid Exp $
 //
 // DaughterData
 //
@@ -22,7 +22,6 @@ namespace mithep
     public:
       DaughterData() {}
       DaughterData(const Particle *orig) : fOriginal(orig) {}
-      ~DaughterData() {}
 
       Double_t             Charge()                       const { return Original()->Charge();    }
       Bool_t               HasOriginal()                  const { return fOriginal.IsValid();     }

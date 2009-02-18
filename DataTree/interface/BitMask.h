@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.11 2008/12/03 17:37:46 loizides Exp $
+// $Id: BitMask.h,v 1.12 2008/12/09 17:46:59 loizides Exp $
 //
 // BitMask
 //
@@ -21,12 +21,10 @@ namespace mithep
   class BitMask : public DataBase
   {
     public:
-      BitMask()                  { Clear();              }
-      BitMask(const char *bits)  { SetBits(bits);        }
-      BitMask(const BitMask<N> &copy) : DataBase(copy) 
-                                 { SetBits(copy.Bits()); }
-      BitMask(Long64_t bits)     { SetBits(bits);        }
-      ~BitMask() {}
+      BitMask()                                             { Clear();              }
+      BitMask(const char *bits)                             { SetBits(bits);        }
+      BitMask(const BitMask<N> &copy) : DataBase(copy)      { SetBits(copy.Bits()); }
+      BitMask(Long64_t bits)                                { SetBits(bits);        }
 
       const char             *Bits()                  const { return fBitMask;      }
       void                    Clear(Option_t */*opt*/="")   { memset(fBitMask,0,N); }
@@ -59,7 +57,7 @@ namespace mithep
     protected:
       Char_t                  fBitMask[N]; //the actual bitmask
     
-    ClassDefT(BitMask, 2) // Generic templated bitmask
+    ClassDefT(BitMask, 1) // Generic templated bitmask
   };
 }
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.6 2008/12/09 17:46:59 loizides Exp $
+// $Id: CaloTower.h,v 1.7 2009/01/22 14:21:32 loizides Exp $
 //
 // CaloTower
 //
@@ -19,9 +19,7 @@ namespace mithep
   class CaloTower : public DataObject
   {
     public:
-      CaloTower() {}
-      ~CaloTower() {}
-     
+      CaloTower() : fEmEnergy(0), fHadEnergy(0), fOuterEnergy(0) {}
 
       Double_t            E()           const { return (fEmEnergy + fHadEnergy);                }
       Double_t            EmEt()        const { return fEmEnergy*TMath::Sin(Theta());           }
@@ -39,7 +37,6 @@ namespace mithep
       Double_t            OuterEt()     const { return fOuterEnergy*TMath::Sin(Theta());        }
       const ThreeVectorC  Position()    const { return fPosition;                               } 
       Double_t            Theta()       const { return fPosition.Theta();                       }
-
       void	          SetEmEnergy(Double_t EmEnergy)       { fEmEnergy    = EmEnergy;       }
       void	          SetHadEnergy(Double_t HadEnergy)     { fHadEnergy   = HadEnergy;      }
       void	          SetOuterEnergy(Double_t OuterEnergy) { fOuterEnergy = OuterEnergy;    }
@@ -61,7 +58,7 @@ inline const mithep::FourVectorM mithep::CaloTower::Mom() const
 {
   // Compute and return four momentum.
 
-  if ( E() > 0 )
+  if (E() > 0)
     return mithep::FourVectorM(Et(),Eta(),Phi(),0.0);
   else
     return mithep::FourVectorM();

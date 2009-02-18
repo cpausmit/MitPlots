@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.5 2008/12/09 17:46:59 loizides Exp $
+// $Id: BasicCluster.h,v 1.6 2008/12/11 17:04:50 loizides Exp $
 //
-// Basic Clusters
+// BasicCluster
 //
 // This class holds information of basic reconstructed clusters.
 //
@@ -19,9 +19,9 @@ namespace mithep
   class BasicCluster : public DataObject
   {
     public:
-      BasicCluster() : fEnergy(0), fPoint(0,0,0) {}
-      BasicCluster(Double_t Energy, ThreeVector Point) : fEnergy(Energy), fPoint(Point) {}
-      ~BasicCluster() {}
+      BasicCluster() : fEnergy(0), fAlgoId(0), fChiSq(0) {}
+      BasicCluster(Double_t e, const ThreeVector &p) : 
+        fEnergy(e), fPoint(p), fAlgoId(0), fChiSq(0) {}
      
       Int_t	       AlgoId()                 const { return fAlgoId;       }
       Double_t	       ChiSq()                  const { return fChiSq;        }       

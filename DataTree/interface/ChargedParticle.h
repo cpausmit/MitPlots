@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.6 2008/12/01 17:33:03 loizides Exp $
+// $Id: ChargedParticle.h,v 1.7 2008/12/09 17:46:59 loizides Exp $
 //
 // ChargedParticle
 //
@@ -20,32 +20,40 @@ namespace mithep
   {
     public:
       ChargedParticle() {}
-      ~ChargedParticle() {}
 
-      Double_t                Charge()     const { return Trk()?Trk()->Charge():0;        }
-      Double_t                E()          const; 
-      Double_t                Eta()        const { return Trk()?Trk()->Mom().Eta():0;     }
-      virtual const Track    *Trk()        const = 0;
-      virtual const Track    *TrackerTrk() const = 0;
-      FourVector              Mom()        const { return FourVector(Px(),Py(),Pz(),E()); }
       EObjType                ObjType()    const { return kChargedParticle;     }
-      Double_t                Phi()        const { return Trk()?Trk()->Phi():0; }
-      Double_t                P()          const { return Trk()?Trk()->P():0;   }
-      Double_t                Pt()         const { return Trk()?Trk()->Pt():0;  }
-      Double_t                Px()         const { return Trk()?Trk()->Px():0;  }
-      Double_t                Py()         const { return Trk()?Trk()->Py():0;  }
-      Double_t                Pz()         const { return Trk()?Trk()->Pz():0;  }
+      virtual const Track    *TrackerTrk() const { return Trk(); }
+      virtual const Track    *Trk()        const = 0;
+
+    protected:
+      Double_t                GetCharge()  const;
+      void                    GetMom()     const;
 
     ClassDef(ChargedParticle, 1) // Charged particle class
   };
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::ChargedParticle::E() const
+inline Double_t mithep::ChargedParticle::GetCharge() const
 {
-  if (!Trk())
-    return Mass()*Mass();
+  // Get charge from track.
 
-  return TMath::Sqrt(Trk()->P()*Trk()->P() + Mass()*Mass());
+  const mithep::Track *trk = Trk();
+  if (trk) 
+    return trk->Charge();
+  else 
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::ChargedParticle::GetMom() const
+{
+  // Get momentum values from track.
+
+  const mithep::Track *trk = Trk();
+  if (trk)
+    fCachedMom.SetCoordinates(trk->Pt(),trk->Eta(),trk->Phi(),GetMass());
+  else 
+    fCachedMom.SetCoordinates(0,0,0,0);
 }
 #endif

@@ -1,22 +1,10 @@
-// $Id: CompositeParticle.cc,v 1.5 2008/07/16 18:56:49 loizides Exp $
+// $Id: CompositeParticle.cc,v 1.6 2009/02/18 08:18:36 bendavid Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
 ClassImp(mithep::CompositeParticle)
 
 using namespace mithep;
-
-//--------------------------------------------------------------------------------------------------
-Double_t CompositeParticle::Charge() const 
-{
-  // Return sum of charge of daughter particles.
-
-  Double_t charge = 0;
-  for (UInt_t i=0; i<NDaughters(); ++i)
-    charge += Daughter(i)->Charge();
-  
-  return charge;
-}
 
 //--------------------------------------------------------------------------------------------------
 Bool_t CompositeParticle::HasDaughter(const Particle* p) const 
@@ -57,16 +45,4 @@ Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle* p) const
         return kFALSE;
 	
   return kTRUE;
-}
-
-//--------------------------------------------------------------------------------------------------
-FourVector CompositeParticle::Mom() const 
-{
-  // Return the vector sum of the momenta of the daughters.
-
-  FourVector mom;
-  for (UInt_t i=0; i<NDaughters(); ++i)
-    mom += (Daughter(i))->Mom();
-  
-  return mom;
 }

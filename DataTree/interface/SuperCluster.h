@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.7 2008/12/09 17:47:00 loizides Exp $
+// $Id: SuperCluster.h,v 1.8 2009/02/17 15:09:45 bendavid Exp $
 //
 // SuperCluster
 //
@@ -24,7 +24,6 @@ namespace mithep
     public:
       SuperCluster() : fEnergy(0), fEtaWidth(0), fPreshowerEnergy(0), 
                        fPhiWidth(0), fRawEnergy(0) {}     
-      ~SuperCluster() {}
  
       const BasicCluster  *Cluster(UInt_t i)       const { return fClusters.At(i); }
       UInt_t               ClusterSize()           const { return fClusters.GetEntries(); }

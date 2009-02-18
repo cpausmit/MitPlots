@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.17 2008/12/09 17:46:59 loizides Exp $
+// $Id: DataObject.h,v 1.18 2008/12/11 17:04:29 loizides Exp $
 //
 // DataObject
 //
@@ -28,7 +28,6 @@ namespace mithep
   {
     public:
       DataObject() {}
-      ~DataObject() {}
 
       Bool_t               Is(EObjType t) const { return (ObjType()==t); }
       Bool_t               IsCached()     const { return TestBit(23);    }
@@ -44,7 +43,7 @@ namespace mithep
       void                 SetClearBit()        { SetBit(14);   }
       void                 SetDeleteBit()       { SetBit(15);   }
 
-    ClassDef(DataObject, 1)
+    ClassDef(DataObject, 1) // Common base for objects that do get referenced
   };
 }
 
@@ -56,22 +55,28 @@ const Col* mithep::DataObject::ParentCol() const
   // Also note this function will only work for objects which were referenced prior to being 
   // written. Otherwise a null pointer will be returned.
   
-  const Col* colObj=0;
-  
-  if ( !this->TestBit(kIsReferenced) )
-    return colObj;
+  if (!this->TestBit(kIsReferenced))
+    return 0;
   
   TRefTable *table = TRefTable::GetRefTable();
   if (!table)
-    return colObj;
+    return 0;
     
   UInt_t uid = this->GetUniqueID();
-  //cast away const is a hack, this is fixed in newer root versions
+  //cast away const is a hack, this is fixed in newer ROOT versions
   TProcessID *pid = TProcessID::GetProcessWithUID(uid, const_cast<DataObject*>(this));
+  if (!pid) 
+    return 0;
   table->SetUID(uid, pid);
   table->Notify(); 
+
   TBranchElement *trackParent = 
     static_cast<TBranchElement*>(table->GetParent(uid, pid));
+  if (!trackParent)
+    return 0;
+
+  const Col *colObj=0;
+
   while (!colObj) {
     if (!trackParent)
       return colObj;

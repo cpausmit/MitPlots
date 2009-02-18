@@ -1,9 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.25 2009/01/19 14:51:37 loizides Exp $
+// $Id: Particle.h,v 1.26 2009/02/17 15:52:51 bendavid Exp $
 //
 // Particle
 //
-// Details to be worked out...
+// General particle class. It provides an abstract interface to kinematical quantities
+// computed by derived classes.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -21,35 +22,54 @@ namespace mithep
   {
     public:
       Particle() {}
-      ~Particle() {}
      
-      Double_t                  AbsEta()                  const { return TMath::Abs(Eta()); }
-      virtual Double_t 		Charge()                  const = 0;
+      Double_t                  AbsEta()                  const { return TMath::Abs(Eta());        }
+      Double_t 		        Charge()                  const;
       Int_t                     Compare(const TObject *o) const;   
-      virtual Double_t		E()                       const { return Mom().E();     }
-      virtual Double_t		Et()                      const;
-      virtual Double_t		Eta()                     const { return Mom().Eta();   }
-      Bool_t                    IsSortable()              const { return kTRUE;         }
-      virtual Double_t		Mass()                    const { return TMath::Sqrt(Mom().M2());  }
-      virtual Double_t		Mt()                      const { return TMath::Sqrt(Mom().Mt2()); }
-      virtual FourVector	Mom()                     const = 0;
+      Double_t		        E()                       const { return Mom().E();                }
+      Double_t		        Et()                      const;
+      Double_t		        Eta()                     const { return Mom().Eta();              }
+      Bool_t                    IsSortable()              const { return kTRUE;                    }
+      Double_t		        Mass()                    const { return Mom().M();                }
+      Double_t		        Mt()                      const { return Mom().Mt();               }
+      FourVectorM              &Mom()                     const;
       EObjType                  ObjType()                 const { return kParticle;                }
-      virtual Double_t		Phi()                     const { return Mom().Phi();              }
+      Double_t		        Phi()                     const { return Mom().Phi();              }
       Double_t                  PhiDeg()                  const { return Phi() * 180 /TMath::Pi(); }
-      virtual Double_t		Pt()                      const { return Mom().Pt();    }
-      virtual Double_t		Px()                      const { return Mom().Px();    }
-      virtual Double_t		Py()                      const { return Mom().Py();    }
-      virtual Double_t		Pz()                      const { return Mom().Pz();    }
-      virtual Double_t		P()                       const { return Mom().P();     }
-      virtual Double_t          Theta()                   const { return Mom().Theta(); }
-      virtual Double_t		TMass()                   const;
+      Double_t		        Pt()                      const { return Mom().Pt();               }
+      Double_t		        Px()                      const { return Mom().Px();               }
+      Double_t		        Py()                      const { return Mom().Py();               }
+      Double_t		        Pz()                      const { return Mom().Pz();               }
+      Double_t		        P()                       const { return Mom().P();                }
+      Double_t                  Theta()                   const { return Mom().Theta();            }
+      Double_t		        TMass()                   const;
       void                      Print(Option_t *opt="")   const;
      
     protected:
-      mutable CacheFlag         fCacheFlag; //|| cache validity flag for cached momentum vector
-      
+      virtual Double_t          GetCharge()               const { return 0; }
+      virtual Double_t          GetMass()                 const { return 0; }
+      virtual void              GetMom()                  const = 0; 
+
+      mutable CacheFlag         fCacheMomFlag; //||cache validity flag for momentum
+      mutable CacheFlag         fCacheQFlag;   //||cache validity flag for charge
+      mutable FourVectorM       fCachedMom;    //!cached momentum vector (filled by derived classes)
+      mutable Double_t          fCachedQ;      //!chached charge value (filled by derived classes)
+
     ClassDef(Particle, 1) // Generic particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Particle::Charge() const
+{
+  // Return cached charge value.
+
+  if (!fCacheQFlag.IsValid()) {
+    fCachedQ = GetCharge();
+    fCacheQFlag.SetValid();
+  }
+
+  return fCachedQ;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,6 +98,19 @@ inline Double_t mithep::Particle::Et() const
   // Return transverse energy.
 
   return E()*Pt()/P(); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline mithep::FourVectorM &mithep::Particle::Mom() const
+{
+  // Return cached momentum value.
+
+  if (!fCacheMomFlag.IsValid()) {
+    GetMom();
+    fCacheMomFlag.SetValid();
+  }
+
+  return fCachedMom;
 }
 
 //--------------------------------------------------------------------------------------------------

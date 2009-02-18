@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.12 2008/12/09 17:47:00 loizides Exp $
+// $Id: MCParticle.h,v 1.13 2009/02/18 08:17:03 bendavid Exp $
 //
 // MCParticle
 //
@@ -25,11 +25,9 @@ namespace mithep
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
         fPdgId(id), fStatus(s), fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
-      ~MCParticle() {}
 
       Int_t               AbsPdgId()               const { return (fPdgId<0 ? -fPdgId:fPdgId); }
       void		  AddDaughter(const MCParticle *p) { fDaughters.Add(p); }
-      Double_t            Charge()                 const;
       const ThreeVector  &DecayVertex()            const { return fDecayVertex; }
       const MCParticle   *Daughter(UInt_t i)       const;
       const MCParticle   *DistinctMother()         const;
@@ -75,6 +73,9 @@ namespace mithep
       };
       
     protected:
+      Double_t            GetCharge()              const;
+      void                GetMom()                 const;
+
       Int_t               fPdgId;        //pdg identifier
       Int_t               fStatus;       //status flag of generator or simulation
       FourVectorM32       fFourVector;   //four momentum vector
@@ -83,7 +84,7 @@ namespace mithep
       Bool_t              fIsGenerated;  //=true if generated particle
       Bool_t              fIsSimulated;  //=true if simulated particle
 
-    ClassDef(MCParticle,3) // Generated particle class
+    ClassDef(MCParticle,1) // Generated particle class
   };
 }
 
@@ -110,6 +111,28 @@ inline const mithep::MCParticle *mithep::MCParticle::DistinctMother() const
     mother = mother->Mother();
     
   return mother;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::MCParticle::GetCharge() const
+{
+  // Get charge from pdg lookup.
+
+  TParticlePDG *pdgEntry = PdgEntry();
+  if (pdgEntry)
+    return pdgEntry->Charge()/3.0;
+  else {
+    Error("Charge", "Pdg code for %i not found in table, returning charge=-99.0", fPdgId);
+    return -99.0;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::MCParticle::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  fCachedMom.SetCoordinates(fFourVector.Pt(),fFourVector.Eta(),fFourVector.Phi(),fFourVector.M()); 
 }
 
 //--------------------------------------------------------------------------------------------------

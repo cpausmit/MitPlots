@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: LAHeader.h,v 1.5 2008/12/03 17:37:47 loizides Exp $
+// $Id: LAHeader.h,v 1.6 2008/12/09 17:47:00 loizides Exp $
 //
 // LAHeader
 //
@@ -21,7 +21,6 @@ namespace mithep
     public:
       LAHeader() : fRunNum(0) {}
       LAHeader(UInt_t run) : fRunNum(run) {}
-      ~LAHeader() {}
 
       EObjType            ObjType()      const { return kLAHeader; }      
       UInt_t              RunNum()       const { return fRunNum; }
@@ -30,7 +29,7 @@ namespace mithep
     protected:
       UInt_t              fRunNum;          //run number
       
-    ClassDef(LAHeader, 2) // Look-ahead event header class
+    ClassDef(LAHeader, 1) // Look-ahead event header class
   };
 }
 #endif

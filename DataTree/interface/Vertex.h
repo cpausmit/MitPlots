@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.6 2008/11/12 18:18:27 bendavid Exp $
+// $Id: Vertex.h,v 1.7 2008/12/09 17:47:00 loizides Exp $
 //
 // Vertex
 //
@@ -19,15 +19,13 @@ namespace mithep
   class Vertex : public BaseVertex
   {
     public:
-      Vertex() : 
-        fChi2(0.0), fNdof(0), fNTracks(0) {}
+      Vertex() : fChi2(0.0), fNdof(0), fNTracks(0) {}
       Vertex(Double_t x, Double_t y, Double_t z) : 
         BaseVertex(x,y,z), fChi2(0), fNdof(0), fNTracks(0) {}
       Vertex(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) :
         BaseVertex(x,y,z,xErr,yErr,zErr), fChi2(0.0), fNdof(0), fNTracks(0) {}
-      Vertex(const ThreeVector &pos) :
+      Vertex(const ThreeVector &pos) : 
         BaseVertex(pos), fChi2(0), fNdof(0), fNTracks(0) {}
-      ~Vertex() {}
       
       Double_t            Chi2()      const { return fChi2;                    } 
       UInt_t              Ndof()      const { return fNdof;                    }

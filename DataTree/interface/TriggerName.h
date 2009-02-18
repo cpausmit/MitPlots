@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerName.h,v 1.3 2008/12/02 09:30:11 loizides Exp $
+// $Id: TriggerName.h,v 1.4 2008/12/09 17:47:00 loizides Exp $
 //
 // TriggerName
 //
@@ -22,14 +22,13 @@ namespace mithep
   class TriggerName : public DataBase
   {
     public:
-      TriggerName() : fId(0) {}
+      TriggerName() : fId(0), fHash(0) {}
       TriggerName(const char *name, UShort_t id) : 
         fName(name), fId(id), fHash(fName.Hash()) {}
       TriggerName(const std::string &name, UShort_t id) : 
         fName(name), fId(id), fHash(fName.Hash()) {}
       TriggerName(const TString &name, UShort_t id) : 
         fName(name), fId(id), fHash(fName.Hash()) {}
-      ~TriggerName() {}
 
       UShort_t              Id()      const { return fId; }
       const char           *GetName() const { return fName; }
@@ -43,7 +42,7 @@ namespace mithep
       UShort_t              fId;          //id
       UInt_t                fHash;        //hash
 
-    ClassDef(TriggerName, 2) // Trigger name class
+    ClassDef(TriggerName, 1) // Trigger name class
   };
 
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +57,6 @@ namespace mithep
     public:
       TriggerTable(Int_t capacity = TCollection::kInitHashTableCapacity, Int_t rehash = 0) :
         THashTable(capacity,rehash) {}
-      ~TriggerTable() {}
 
       const TriggerName *Get(const char *name)   const;
       UShort_t           GetId(const char *name) const;
@@ -87,5 +85,4 @@ inline UShort_t mithep::TriggerTable::GetId(const char *name) const
   Error("GetId", "TriggerName for %s not found. Returning 65535.", name);
   return 65535;
 }
-
 #endif

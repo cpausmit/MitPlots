@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.5 2008/12/03 17:37:46 loizides Exp $
+// $Id: DecayData.h,v 1.6 2008/12/09 17:46:59 loizides Exp $
 //
 // DecayData
 //
@@ -19,9 +19,10 @@ namespace mithep
   class DecayData : public DaughterData
   {
     public:
-      DecayData() {}
-      DecayData(const Particle *p, const FourVector &mom) : DaughterData(p), fMomAtVertex(mom) {}
-      ~DecayData() {}
+      DecayData() : fMassError(0), fLxy(0), fLxyError(0), 
+                    fDxy(0), fDxyError(0), fLz(0), fLzError(0){}
+      DecayData(const Particle *p, const FourVector &mom) : DaughterData(p), fMomAtVertex(mom), 
+        fMassError(0), fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
 
       Double_t             Dxy()       const { return fDxy;                     }
       Double_t             DxyError()  const { return fDxyError;                }
@@ -31,12 +32,7 @@ namespace mithep
       Double_t             Lz()        const { return fLz;                      }
       Double_t             LzError()   const { return fLzError;                 }
       Double_t             MassError() const { return fMassError;               }
-      FourVector           Mom()       const { return FourVector(fMomAtVertex); }
       EObjType             ObjType()   const { return kDecayData;               }
-      Double_t             P()         const { return fMomAtVertex.P();         }
-      Double_t             Px()        const { return fMomAtVertex.Px();        }
-      Double_t             Py()        const { return fMomAtVertex.Py();        }
-      Double_t             Pz()        const { return fMomAtVertex.Pz();        }
       const ThreeVector32  RelativePosition() const;
       void                 SetDxy(Double_t dxy)             { fDxy = dxy;             }
       void                 SetDxyError(Double_t dxyError)   { fDxyError = dxyError;   }
@@ -49,6 +45,8 @@ namespace mithep
       void                 SetMassError(Double_t massError) { fMassError = massError; }
 
     protected:
+      void                 GetMom()    const;
+
       FourVectorM32        fMomAtVertex;      //fitted momentum at vertex
       Double32_t           fMassError;        //fitted mass error
       Double32_t           fLxy;              //fitted lxy
@@ -61,6 +59,16 @@ namespace mithep
     ClassDef(DecayData, 1) // Decay data for stable daughter class
   };
 }
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayData::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  fCachedMom.SetCoordinates(fMomAtVertex.Pt(),fMomAtVertex.Eta(),
+                            fMomAtVertex.Phi(),fMomAtVertex.M()); 
+}
+
 //--------------------------------------------------------------------------------------------------
 inline void mithep::DecayData::SetMom(Double32_t px, Double32_t py, Double32_t pz, Double32_t e)
 {

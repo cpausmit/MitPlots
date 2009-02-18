@@ -1,36 +1,10 @@
-// $Id: DecayParticle.cc,v 1.4 2008/09/30 12:53:59 bendavid Exp $
+// $Id: DecayParticle.cc,v 1.5 2008/10/29 17:02:55 bendavid Exp $
 
 #include "MitAna/DataTree/interface/DecayParticle.h"
 
 ClassImp(mithep::DecayParticle)
 
 using namespace mithep;
-
-//--------------------------------------------------------------------------------------------------
-Double_t DecayParticle::Charge() const 
-{
-  // Return sum of charge of daughter particles.
-
-  Double_t charge = 0;
-  for (UInt_t i=0; i<NDaughters(); ++i)
-    charge += DaughterDat(i)->Charge();
-  
-  return charge;
-}
-
-//--------------------------------------------------------------------------------------------------
-Double_t DecayParticle::PdgMass() const
-{
-  // Get Mass from Pdg Lookup
-
-  TParticlePDG* pdgEntry = ParticlePdgEntry();
-  if (pdgEntry)
-    return pdgEntry->Mass();
-  else {
-    return -99.0;
-    printf("Absolute Pdg Code %i not found in table, returning Mass=-99.0 GeV", fAbsPdgId);
-  }
-}
 
 //--------------------------------------------------------------------------------------------------
 Bool_t DecayParticle::HasDaughter(const Particle* p) const 
@@ -78,4 +52,19 @@ Bool_t DecayParticle::HasSameDaughters(const DecayParticle* p) const
         return kFALSE;
 	
   return kTRUE;
+}
+
+//--------------------------------------------------------------------------------------------------
+Double_t DecayParticle::PdgMass() const
+{
+  // Get mass from pdg lookup.
+
+  TParticlePDG* pdgEntry = ParticlePdgEntry();
+  if (pdgEntry)
+    return pdgEntry->Mass();
+  else {
+    Error("PdgMass", 
+          "Absolute pdg code %i not found in table, returning mass=-99.0 GeV", fAbsPdgId);
+    return -99.0;
+  }
 }

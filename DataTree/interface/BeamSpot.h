@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BeamSpot.h,v 1.1 2008/11/12 18:18:27 bendavid Exp $
+// $Id: BeamSpot.h,v 1.2 2008/12/09 17:46:59 loizides Exp $
 //
 // BeamSpot
 //
@@ -30,7 +30,6 @@ namespace mithep
       BeamSpot(const ThreeVector &pos) :
         BaseVertex(pos), fSigmaZ(0), fBeamWidth(0), fDxDz(0), fDyDz(0),
         fSigmaZErr(0), fBeamWidthErr(0), fDxDzErr(0), fDyDzErr(0) {}
-      ~BeamSpot() {}
       
       Double_t            BeamWidth()                            const { return fBeamWidth;    }
       Double_t            BeamWidthErr()                         const { return fBeamWidthErr; }

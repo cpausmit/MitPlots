@@ -1,24 +1,10 @@
-// $Id: MCParticle.cc,v 1.3 2008/11/24 11:51:21 loizides Exp $
+// $Id: MCParticle.cc,v 1.4 2008/11/24 14:11:47 loizides Exp $
 
 #include "MitAna/DataTree/interface/MCParticle.h"
 
 ClassImp(mithep::MCParticle)
 
 using namespace mithep;
-
-//--------------------------------------------------------------------------------------------------
-Double_t MCParticle::Charge() const
-{
-  // Get charge from pdg lookup.
-
-  TParticlePDG* pdgEntry = PdgEntry();
-  if (pdgEntry)
-    return pdgEntry->Charge()/3.0;
-  else {
-    Error("Charge", "Pdg code %i not found in table, returning charge=-99.0", fPdgId);
-    return -99.0;
-  }
-}
 
 //--------------------------------------------------------------------------------------------------
 const MCParticle *MCParticle::FindDaughter(Int_t pid, 

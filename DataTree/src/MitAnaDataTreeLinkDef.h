@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.51 2009/02/17 15:52:52 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.52 2009/02/18 08:17:47 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -46,7 +46,6 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
-#include "MitAna/DataTree/interface/StableDaughter.h"
 #endif
 
 #ifdef __CINT__
@@ -358,14 +357,5 @@
 #pragma link C++ typedef mithep::StableParticleCol;
 #pragma link C++ typedef mithep::StableParticleArr;
 #pragma link C++ typedef mithep::StableParticleOArr;
-
-#pragma link C++ class mithep::StableDaughter+;
-#pragma link C++ class mithep::Collection<mithep::StableDaughter>+;
-#pragma link C++ class mithep::Array<mithep::StableDaughter>+;
-#pragma link C++ class mithep::ObjArray<mithep::StableDaughter>+;
-#pragma link C++ class mithep::Ref<mithep::StableDaughter>+;
-#pragma link C++ typedef mithep::StableDaughterCol;
-#pragma link C++ typedef mithep::StableDaughterArr;
-#pragma link C++ typedef mithep::StableDaughterOArr;
 
 #endif

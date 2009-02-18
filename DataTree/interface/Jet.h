@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.13 2009/01/12 10:27:42 bendavid Exp $
+// $Id: Jet.h,v 1.14 2009/02/17 14:23:41 bendavid Exp $
 //
 // Jet
 //
@@ -29,11 +29,9 @@ namespace mithep
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
               fN60(0), fN90(0), fMatchedMCFlavor(0) {}
-      ~Jet() {}
 
       Double_t   Alpha()                       const { return fAlpha;                     }
       Double_t   Beta()                        const { return fBeta;                      }
-      Double_t   Charge()                      const { return 0;                          }
       Double_t   CombinedSecondaryVertexBJetTagsDisc()          const 
                    { return fCombinedSecondaryVertexBJetTagsDisc;    } 
       Double_t   CombinedSecondaryVertexMVABJetTagsDisc()       const 
@@ -57,7 +55,6 @@ namespace mithep
       Int_t      MatchedMCFlavor()             const { return fMatchedMCFlavor;           }
       Double_t   MaxEInEmTowers()              const { return fMaxEInEmTowers;            }
       Double_t   MaxEInHadTowers()             const { return fMaxEInHadTowers;           }
-      FourVector Mom()                         const { return fMom;                       }
       UShort_t   N()                           const { return fN;                         }
       UShort_t   N60()                         const { return fN60;                       }
       UShort_t   N90()                         const { return fN90;                       }
@@ -67,19 +64,19 @@ namespace mithep
       Double_t   L4EMFCorrectionScale()        const { return fL4EMFCorrectionScale;      }
       Double_t   L5FlavorCorrectionScale()     const { return fL5FlavorCorrectionScale;   }
       Double_t   L7PartonCorrectionScale()     const { return fL7PartonCorrectionScale;   }
-      EObjType    ObjType()                    const { return kJet;                       }      
+      EObjType   ObjType()                     const { return kJet;                       }      
       Double_t   SimpleSecondaryVertexBJetTagsDisc()            const 
-                   { return fSimpleSecondaryVertexBJetTagsDisc;      }
+                   { return fSimpleSecondaryVertexBJetTagsDisc; }
       Double_t   SoftMuonBJetTagsDisc()                         const 
-                   { return fSoftMuonBJetTagsDisc;                   }
+                   { return fSoftMuonBJetTagsDisc;              }
       Double_t   SoftMuonNoIPBJetTagsDisc()                     const 
-                   { return fSoftMuonNoIPBJetTagsDisc;               }
+                   { return fSoftMuonNoIPBJetTagsDisc;          }
       Double_t   SoftElectronBJetTagsDisc()                     const 
-                   { return fSoftElectronBJetTagsDisc;               }
+                   { return fSoftElectronBJetTagsDisc;          }
       Double_t   TrackCountingHighEffBJetTagsDisc()             const 
-                   { return fTrackCountingHighEffBJetTagsDisc;       }
+                   { return fTrackCountingHighEffBJetTagsDisc;  }
       Double_t   TrackCountingHighPurBJetTagsDisc()             const 
-                   { return fTrackCountingHighPurBJetTagsDisc;       }
+                   { return fTrackCountingHighPurBJetTagsDisc;  }
       const CaloTower  
                 *Tower(UInt_t i)               const { return fTowers.At(i);           }
       Double_t   TowersArea()                  const { return fTowersArea;             }
@@ -87,9 +84,9 @@ namespace mithep
       void       SetAlpha(Double_t val)            { fAlpha            = val;          }
       void       SetBeta(Double_t val)             { fBeta             = val;          } 
       void       SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) 
-                                                   { fCombinedSecondaryVertexBJetTagsDisc = d;     }
+                                                   { fCombinedSecondaryVertexBJetTagsDisc = d;    }
       void       SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) 
-                                                   { fCombinedSecondaryVertexMVABJetTagsDisc = d;  }
+                                                   { fCombinedSecondaryVertexMVABJetTagsDisc = d; }
       void       SetEmEnergyInEB(Double_t val)     { fEmEnergyInEB     = val;          } 
       void       SetEmEnergyInEE(Double_t val)     { fEmEnergyInEE     = val;          } 
       void       SetEmEnergyInHF(Double_t val)     { fEmEnergyInHF     = val;          } 
@@ -100,9 +97,9 @@ namespace mithep
       void       SetHadEnergyInHF(Double_t val)    { fHadEnergyInHF    = val;          } 
       void       SetHadEnergyInHE(Double_t val)    { fHadEnergyInHE    = val;          } 
       void       SetImpactParameterMVABJetTagsDisc (Double_t d) 
-                                                   {   fImpactParameterMVABJetTagsDisc = d;        }
-      void       SetJetProbabilityBJetTagsDisc(Double_t d)  { fJetProbabilityBJetTagsDisc = d;     }
-      void       SetJetBProbabilityBJetTagsDisc(Double_t d) { fJetBProbabilityBJetTagsDisc = d;    }
+                                                   { fImpactParameterMVABJetTagsDisc = d;        }
+      void       SetJetProbabilityBJetTagsDisc(Double_t d)  { fJetProbabilityBJetTagsDisc = d;   }
+      void       SetJetBProbabilityBJetTagsDisc(Double_t d) { fJetBProbabilityBJetTagsDisc = d;  }
       void       SetMom(const FourVector &mom)     { fMom              = mom;          }
       void       SetN(UShort_t n)                  { fN                = n;            }
       void       SetN60(UShort_t n)                { fN60              = n;            }
@@ -117,16 +114,18 @@ namespace mithep
       void       SetL7PartonCorrectionScale(Double_t s )     { fL7PartonCorrectionScale = s;     }
       void       SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) 
                                                    { fSimpleSecondaryVertexBJetTagsDisc = d;     }
-      void       SetSoftMuonBJetTagsDisc(Double_t d )        { fSoftMuonBJetTagsDisc = d;        }
-      void       SetSoftMuonNoIPBJetTagsDisc(Double_t d )    { fSoftMuonNoIPBJetTagsDisc = d;    }
-      void       SetSoftElectronBJetTagsDisc(Double_t d )    { fSoftElectronBJetTagsDisc = d;    }
+      void       SetSoftMuonBJetTagsDisc(Double_t d)         { fSoftMuonBJetTagsDisc = d;        }
+      void       SetSoftMuonNoIPBJetTagsDisc(Double_t d)     { fSoftMuonNoIPBJetTagsDisc = d;    }
+      void       SetSoftElectronBJetTagsDisc(Double_t d)     { fSoftElectronBJetTagsDisc = d;    }
       void       SetTowersArea(Double_t val)       { fTowersArea       = val;          } 
-      void       SetTrackCountingHighEffBJetTagsDisc( Double_t d) 
+      void       SetTrackCountingHighEffBJetTagsDisc(Double_t d) 
                                                    { fTrackCountingHighEffBJetTagsDisc = d;      }
       void       SetTrackCountingHighPurBJetTagsDisc(Double_t d) 
                                                    { fTrackCountingHighPurBJetTagsDisc = d;      }
 
     protected:
+      void       GetMom()                      const;
+
       FourVector fMom;                    //four momentum of jet
       Double_t   fMaxEInEmTowers;         //maximum energy in EM towers
       Double_t   fMaxEInHadTowers;        //maximum energy in HCAL towers
@@ -166,5 +165,13 @@ namespace mithep
 
     ClassDef(Jet, 1) // Jet class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Jet::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
 }
 #endif

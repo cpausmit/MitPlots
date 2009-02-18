@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.21 2009/01/22 14:21:32 loizides Exp $
+// $Id: DecayParticle.h,v 1.22 2009/02/17 15:09:45 bendavid Exp $
 //
 // DecayParticle
 //
@@ -23,20 +23,19 @@
 #include <TDatabasePDG.h>
 #include <TParticlePDG.h> 
 
-
 namespace mithep 
 {
   class DecayParticle : public Particle
   {
     public:
-      DecayParticle() {}
+      DecayParticle() :
+        fAbsPdgId(0), fChi2(0), fNdof(0), fMassError(0), 
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
       DecayParticle(Int_t absPdgId) : 
-        fAbsPdgId(absPdgId), fChi2(0), fNdof(0), fMassError(0), fLxy(0), fLxyError(0), fDxy(0), 
-        fDxyError(0), fLz(0), fLzError(0) {}
-      ~DecayParticle() {}
+        fAbsPdgId(absPdgId), fChi2(0), fNdof(0), fMassError(0), 
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
 
       UInt_t                    AbsPdgId()            const { return fAbsPdgId;                  }
-      Double_t                  Charge()              const;
       Double_t                  Chi2()                const { return fChi2;                      }
       const Particle           *Daughter(UInt_t i)    const { return DaughterDat(i)->Original(); }
       const DaughterData       *DaughterDat(UInt_t i) const { return fDaughterData.At(i);        }
@@ -45,15 +44,15 @@ namespace mithep
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                    HasSameDaughters(const DecayParticle *p)  const;
-      Bool_t                    HasPriVertex()        const { return fPriVertex.IsValid();       }
-      Bool_t                    HasPriVertex(const Vertex *v) const { return fPriVertex.RefsObject(v); }
+      Bool_t                    HasPriVertex()        const { return fPriVtx.IsValid();          }
+      Bool_t                    HasPriVertex(const Vertex *v) 
+                                                      const { return fPriVtx.RefsObject(v);      }
       Double_t                  Lxy()                 const { return fLxy;       }
       Double_t                  LxyError()            const { return fLxyError;  }
       Double_t                  MassError()           const { return fMassError; }
       UInt_t                    Ndof()                const { return fNdof;      }
       Double_t                  Lz()                  const { return fLz;        }
       Double_t                  LzError()             const { return fLzError;   }
-      FourVector	        Mom()                 const { return FourVector(fMomentum);      }
       UInt_t                    NDaughters()          const { return fDaughterData.Entries();    }
       EObjType                  ObjType()             const { return kDecayParticle;             }
       TParticlePDG             *ParticlePdgEntry()    const;
@@ -61,24 +60,27 @@ namespace mithep
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);   }
       const ThreeVector         Position()            const;
       const ThreeVector         RelativePosition()    const;
-      const Vertex             *PriVertex()           const { return fPriVertex.Obj();           }
+      const Vertex             *PriVertex()           const { return fPriVtx.Obj();              }
       void                      AddDaughterData(const DaughterData *dd) { fDaughterData.Add(dd); }
-      void                      SetAbsPdgId(UInt_t apid) { fAbsPdgId=apid; }
-      void                      SetChi2(Double_t chi2) { fChi2 = chi2;}
-      void                      SetMassError(Double_t massError) { fMassError = massError;}
+      void                      SetAbsPdgId(UInt_t apid)                { fAbsPdgId=apid;        }
+      void                      SetChi2(Double_t chi2)                  { fChi2 = chi2;          }
+      void                      SetMassError(Double_t massError)        { fMassError = massError;}
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      SetMom(const FourVector &p) { fMomentum = p; }
-      void                      SetNdof(UInt_t   ndof) { fNdof = ndof;}
-      void                      SetDxy(Double_t dxy) { fDxy = dxy;}
-      void                      SetDxyError(Double_t dxyError) { fDxyError = dxyError;}
-      void                      SetLxy(Double_t lxy) { fLxy = lxy;}
-      void                      SetLxyError(Double_t lxyError) { fLxyError = lxyError;}
-      void                      SetLz(Double_t lz) { fLz = lz;}
-      void                      SetLzError(Double_t lzError) { fLzError = lzError;}
-      void                      SetPriVertex(const Vertex *v) { fPriVertex = v; }
+      void                      SetMom(const FourVector &p)             { fMomentum = p;         }
+      void                      SetNdof(UInt_t   ndof)                  { fNdof = ndof;          }
+      void                      SetDxy(Double_t dxy)                    { fDxy = dxy;            }
+      void                      SetDxyError(Double_t dxyError)          { fDxyError = dxyError;  }
+      void                      SetLxy(Double_t lxy)                    { fLxy = lxy;            }
+      void                      SetLxyError(Double_t lxyError)          { fLxyError = lxyError;  }
+      void                      SetLz(Double_t lz)                      { fLz = lz;              }
+      void                      SetLzError(Double_t lzError)            { fLzError = lzError;    }
+      void                      SetPriVertex(const Vertex *v)           { fPriVtx = v;           }
       using TObject::Error;
 
     protected:
+      Double_t                  GetCharge()           const;
+      void	                GetMom()              const;
+
       UInt_t                    fAbsPdgId;     //absolute value of pid code
       Double32_t                fChi2;         //chi-squared of fit
       UInt_t                    fNdof;         //degrees of freedom for fit
@@ -91,10 +93,31 @@ namespace mithep
       Double32_t                fLzError;      //fitted lz error
       FourVectorM32             fMomentum;     //momentum fourvector
       RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
-      Ref<Vertex>               fPriVertex;    //reference to primary vertex
+      Ref<Vertex>               fPriVtx;    //reference to primary vertex
       
       ClassDef(DecayParticle, 1) // Decay particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::GetCharge() const 
+{
+  // Return sum of charge of daughter particles.
+
+  Double_t charge = 0;
+  for (UInt_t i=0; i<NDaughters(); ++i)
+    charge += DaughterDat(i)->Charge();
+  
+  return charge;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayParticle::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  fCachedMom.SetCoordinates(fMomentum.Pt(),fMomentum.Eta(),
+                            fMomentum.Phi(),fMomentum.M()); 
 }
 
 //--------------------------------------------------------------------------------------------------

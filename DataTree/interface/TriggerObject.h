@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.4 2008/11/18 16:41:39 loizides Exp $
+// $Id: TriggerObject.h,v 1.5 2008/12/09 17:47:00 loizides Exp $
 //
 // TriggerObject
 //
@@ -27,27 +27,13 @@ namespace mithep
       TriggerObjectBase(Int_t id, const FourVectorM32 &mom) : fId(id), fMom(mom) {}
       TriggerObjectBase(Int_t id, Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
         fId(id), fMom(pt,eta,phi,mass) {}
-      ~TriggerObjectBase() {}
 
       Int_t                 Id()      const { return fId;  }
-      const FourVectorM32  &MomM32()  const { return fMom; }
-      Double_t 		    Charge()  const { return 0.;   }
-      Double_t		    E()       const { return fMom.E();  }
-      Double_t	            Et()      const { return fMom.Et();  }
-      Double_t	            Eta()     const { return fMom.Eta(); }
-      Double_t              Mass()    const { return TMath::Sqrt(fMom.M2()); }
-      Double_t		    Mt()      const { return TMath::Sqrt(fMom.Mt2()); }
-      FourVector            Mom()     const { return FourVector(fMom.Px(),fMom.Py(),
-                                                                fMom.Pz(),fMom.E()); }
       EObjType              ObjType() const { return kTriggerObjectBase; }      
-      Double_t              Phi()     const { return fMom.Phi();}
-      Double_t	            Pt()      const { return fMom.Pt(); }
-      Double_t		    Px()      const { return fMom.Px(); }
-      Double_t		    Py()      const { return fMom.Py(); }
-      Double_t		    Pz()      const { return fMom.Pz(); }
-      Double_t		    P()       const { return fMom.P();  }
 
     protected:
+      void                  GetMom()  const;
+
       Int_t                 fId;          //id or physics type (similar to pdgId)
       FourVectorM32         fMom;         //object momentum
 
@@ -60,7 +46,6 @@ namespace mithep
       TriggerObjectRel() : fTrgId(0), fType(0), fObjInd(0), fModInd(0), fFilterInd(0) {}
       TriggerObjectRel(UChar_t id, UChar_t type, Short_t obj, Short_t mod, Short_t fil) : 
         fTrgId(id), fType(type), fObjInd(obj), fModInd(mod), fFilterInd(fil) {}
-      ~TriggerObjectRel() {}
 
       UShort_t              FilterInd() const { return fFilterInd; }
       UShort_t              ModInd()    const { return fModInd; }
@@ -109,23 +94,22 @@ namespace mithep
       TriggerObject() : fTrgId(0), fType(None), fTrigName(0), fModName(0), fFilName(0) {}
       TriggerObject(UChar_t tid, UChar_t type, Int_t id, const FourVectorM32 &mom) : 
         TriggerObjectBase(id,mom), fTrgId(tid), fType(static_cast<ETriggerObject>(type)) {}
-      TriggerObject(UChar_t tid, UChar_t type, Int_t id,
+      TriggerObject(UChar_t tid, UChar_t type, Int_t id, 
                     Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
         TriggerObjectBase(id,pt,eta,phi,mass), fTrgId(tid), 
         fType(static_cast<ETriggerObject>(type)) {}
-      ~TriggerObject() {}
 
-      ULong_t               Hash()        const { return fTrgId; }
-      const char           *FilterName()  const { return fFilName; }
-      const char           *ModuleName()  const { return fModName; }
-      EObjType              ObjType()     const { return kTriggerObject; }      
+      ULong_t               Hash()                  const { return fTrgId; }
+      const char           *FilterName()            const { return fFilName; }
+      const char           *ModuleName()            const { return fModName; }
+      EObjType              ObjType()               const { return kTriggerObject; }      
       void                  Print(Option_t *opt="") const;
-      const char           *TrigName()    const { return fTrigName; }
-      UShort_t              TrgId()       const { return fTrgId; }
-      ETriggerObject        Type()        const { return fType; }
-      void                  SetTrigName(const char *n)   { fTrigName = n; }
-      void                  SetModuleName(const char *n) { fModName = n; }
-      void                  SetFilterName(const char *n) { fFilName = n; }
+      const char           *TrigName()              const { return fTrigName; }
+      UShort_t              TrgId()                 const { return fTrgId; }
+      ETriggerObject        Type()                  const { return fType; }
+      void                  SetTrigName(const char *n)    { fTrigName = n; }
+      void                  SetModuleName(const char *n)  { fModName = n; }
+      void                  SetFilterName(const char *n)  { fFilName = n; }
 
     protected:
       UChar_t               fTrgId;       //trigger id
@@ -160,7 +144,6 @@ namespace mithep
       TriggerObjectsTable(const TriggerTable *table, 
                           Int_t capacity = TCollection::kInitHashTableCapacity, Int_t rehash = 0) :
         THashTable(capacity,rehash), fTriggers(table) {}
-      ~TriggerObjectsTable() {}
 
       const TList         *GetList(const char *name) const;
       const TList         *GetList(ULong_t id)       const;
@@ -171,6 +154,14 @@ namespace mithep
       const TriggerTable *fTriggers; //trigger table
   };
  
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::TriggerObjectBase::GetMom() const
+{
+  // Get momentum values from stored values.
+
+  fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
 }
 
 //--------------------------------------------------------------------------------------------------
