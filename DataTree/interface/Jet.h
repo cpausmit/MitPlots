@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.15 2009/02/18 15:38:54 loizides Exp $
+// $Id: Jet.h,v 1.16 2009/02/26 17:06:24 bendavid Exp $
 //
 // Jet
 //
@@ -20,15 +20,44 @@ namespace mithep
   class Jet : public Particle
   {
     public:
+      enum ECorr { 
+        L1 = 0, 
+        L2,
+        L3,
+        L4,
+        L5,
+        L6,
+        L7,
+        Custom
+      };
+    
       Jet() : fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
-              fN60(0), fN90(0), fMatchedMCFlavor(0) {}
-      Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(FourVector(px,py,pz,e)),
+              fN60(0), fN90(0), fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
+              fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
+              fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
+              fCombinedSecondaryVertexMVABJetTagsDisc(0), fImpactParameterMVABJetTagsDisc(0),
+              fTrackCountingHighEffBJetTagsDisc(0), fTrackCountingHighPurBJetTagsDisc(0),
+              fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
+              fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
+              fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
+              fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0)
+              {}
+      Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : fRawMom(FourVector(px,py,pz,e)),
               fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
-              fN60(0), fN90(0), fMatchedMCFlavor(0) {}
+              fN60(0), fN90(0), fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
+              fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
+              fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
+              fCombinedSecondaryVertexMVABJetTagsDisc(0), fImpactParameterMVABJetTagsDisc(0),
+              fTrackCountingHighEffBJetTagsDisc(0), fTrackCountingHighPurBJetTagsDisc(0),
+              fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
+              fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
+              fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
+              fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0)
+              {}
 
       Double_t   Alpha()                       const { return fAlpha;                     }
       Double_t   Beta()                        const { return fBeta;                      }
@@ -36,9 +65,14 @@ namespace mithep
                    { return fCombinedSecondaryVertexBJetTagsDisc;    } 
       Double_t   CombinedSecondaryVertexMVABJetTagsDisc()       const 
                    { return fCombinedSecondaryVertexMVABJetTagsDisc; }
+      Double_t   CustomCorrectionScale()       const { return fCustomCorrectionScale;     }
+      void       DisableCorrection(ECorr c)          { fCorrections.ClearBit(c); ClearMom(); }
+      void       DisableCorrections()                { fCorrections.Clear(); ClearMom();  }
       Double_t   EmEnergyInEB()                const { return fEmEnergyInEB;              } 
       Double_t   EmEnergyInEE()                const { return fEmEnergyInEE;              } 
       Double_t   EmEnergyInHF()                const { return fEmEnergyInHF;              } 
+      void       EnableCorrection(ECorr c)           { fCorrections.SetBit(c); ClearMom();}
+      Bool_t     CorrectionActive(ECorr c)     const { return fCorrections.TestBit(c);  }
       Double_t   EnergyFractionH()             const { return fEnergyFractionH;           }
       Double_t   EnergyFractionEm()            const { return fEnergyFractionEm;          }
       Double_t   HadEnergyInHO()               const { return fHadEnergyInHO;             } 
@@ -81,12 +115,13 @@ namespace mithep
                 *Tower(UInt_t i)               const { return fTowers.At(i);           }
       Double_t   TowersArea()                  const { return fTowersArea;             }
       void	 AddTower(const CaloTower *tower)  { fTowers.Add(tower);               }
+      const FourVectorM &RawMom()              const { return fRawMom;                 }
       void       SetAlpha(Double_t val)            { fAlpha            = val;          }
       void       SetBeta(Double_t val)             { fBeta             = val;          } 
       void       SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) 
                                                    { fCombinedSecondaryVertexBJetTagsDisc = d;    }
       void       SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) 
-                                                   { fCombinedSecondaryVertexMVABJetTagsDisc = d; }
+                                                   { fCombinedSecondaryVertexMVABJetTagsDisc = d; }                                      
       void       SetEmEnergyInEB(Double_t val)     { fEmEnergyInEB     = val;          } 
       void       SetEmEnergyInEE(Double_t val)     { fEmEnergyInEE     = val;          } 
       void       SetEmEnergyInHF(Double_t val)     { fEmEnergyInHF     = val;          } 
@@ -100,18 +135,19 @@ namespace mithep
                                                    { fImpactParameterMVABJetTagsDisc = d;        }
       void       SetJetProbabilityBJetTagsDisc(Double_t d)  { fJetProbabilityBJetTagsDisc = d;   }
       void       SetJetBProbabilityBJetTagsDisc(Double_t d) { fJetBProbabilityBJetTagsDisc = d;  }
-      void       SetMom(const FourVectorM &mom)     { fMom             = mom; ClearMom(); }
+      void       SetRawMom(const FourVectorM &mom) { fRawMom = mom; ClearMom(); }
       void       SetN(UShort_t n)                  { fN                = n;            }
       void       SetN60(UShort_t n)                { fN60              = n;            }
       void       SetN90(UShort_t n)                { fN90              = n;            }
       void       SetMatchedMCFlavor(Int_t flavor)  { fMatchedMCFlavor = flavor;        }
       void       SetMaxEInEmTowers(Double_t val)   { fMaxEInEmTowers   = val;          }
       void       SetMaxEInHadTowers(Double_t val)  { fMaxEInHadTowers  = val;          }
-      void       SetL2RelativeCorrectionScale(Double_t s )   { fL2RelativeCorrectionScale = s;   }
-      void       SetL3AbsoluteCorrectionScale(Double_t s )   { fL3AbsoluteCorrectionScale = s;   }
-      void       SetL4EMFCorrectionScale(Double_t s )        { fL4EMFCorrectionScale = s;        }
-      void       SetL5FlavorCorrectionScale(Double_t s )     { fL5FlavorCorrectionScale = s;     }
-      void       SetL7PartonCorrectionScale(Double_t s )     { fL7PartonCorrectionScale = s;     }
+      void       SetL2RelativeCorrectionScale(Double_t s )   { fL2RelativeCorrectionScale = s; ClearMom(); }
+      void       SetL3AbsoluteCorrectionScale(Double_t s )   { fL3AbsoluteCorrectionScale = s; ClearMom(); }
+      void       SetL4EMFCorrectionScale(Double_t s )        { fL4EMFCorrectionScale = s; ClearMom();    }
+      void       SetL5FlavorCorrectionScale(Double_t s )     { fL5FlavorCorrectionScale = s; ClearMom(); }
+      void       SetL7PartonCorrectionScale(Double_t s )     { fL7PartonCorrectionScale = s; ClearMom(); }
+      void       SetCustomCorrectionScale(Double_t s)        { fCustomCorrectionScale = s; ClearMom(); }
       void       SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) 
                                                    { fSimpleSecondaryVertexBJetTagsDisc = d;     }
       void       SetSoftMuonBJetTagsDisc(Double_t d)         { fSoftMuonBJetTagsDisc = d;        }
@@ -126,7 +162,7 @@ namespace mithep
     protected:
       void       GetMom()                      const;
 
-      FourVectorM32 fMom;                 //four momentum of jet
+      FourVectorM32 fRawMom;              //uncorrected four momentum of jet
       Double_t   fMaxEInEmTowers;         //maximum energy in EM towers
       Double_t   fMaxEInHadTowers;        //maximum energy in HCAL towers
       Double_t   fEnergyFractionH;        //hadronic energy fraction
@@ -156,12 +192,14 @@ namespace mithep
       Double_t   fSoftMuonBJetTagsDisc;                    //
       Double_t   fSoftMuonNoIPBJetTagsDisc;                // 
       Double_t   fSoftElectronBJetTagsDisc;                //
-      Double_t   fL2RelativeCorrectionScale;               //
-      Double_t   fL3AbsoluteCorrectionScale;               //
-      Double_t   fL4EMFCorrectionScale;                    //
-      Double_t   fL5FlavorCorrectionScale;                 // 
-      Double_t   fL7PartonCorrectionScale;                 //
-      RefArray<CaloTower>      fTowers;                    //calo towers assigned to this jet
+      Double_t   fL2RelativeCorrectionScale;           //
+      Double_t   fL3AbsoluteCorrectionScale;           //
+      Double_t   fL4EMFCorrectionScale;                //
+      Double_t   fL5FlavorCorrectionScale;             // 
+      Double_t   fL7PartonCorrectionScale;             //
+      Double_t   fCustomCorrectionScale;               //
+      BitMask8   fCorrections;                         //mask of which corrections should be applied
+      RefArray<CaloTower>      fTowers;                //calo towers assigned to this jet
 
     ClassDef(Jet, 1) // Jet class
   };
@@ -172,6 +210,24 @@ inline void mithep::Jet::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom = fMom; 
+  fCachedMom = fRawMom;
+  
+  if (CorrectionActive(L2))
+    fCachedMom *= fL2RelativeCorrectionScale;
+    
+  if (CorrectionActive(L3))
+    fCachedMom *= fL3AbsoluteCorrectionScale;
+  
+  if (CorrectionActive(L4))
+    fCachedMom *= fL4EMFCorrectionScale;
+    
+  if (CorrectionActive(L5))
+    fCachedMom *= fL5FlavorCorrectionScale;
+    
+  if (CorrectionActive(L7))
+    fCachedMom *= fL7PartonCorrectionScale;
+    
+  if (CorrectionActive(Custom))
+    fCachedMom *= fCustomCorrectionScale;
 }
 #endif
