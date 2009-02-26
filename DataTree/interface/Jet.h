@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.14 2009/02/17 14:23:41 bendavid Exp $
+// $Id: Jet.h,v 1.15 2009/02/18 15:38:54 loizides Exp $
 //
 // Jet
 //
@@ -24,7 +24,7 @@ namespace mithep
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
               fN60(0), fN90(0), fMatchedMCFlavor(0) {}
-      Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(px,py,pz,e),
+      Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(FourVector(px,py,pz,e)),
               fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
               fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0), fHadEnergyInHF(0),
               fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0), fTowersArea(0), fN(0), 
@@ -100,7 +100,7 @@ namespace mithep
                                                    { fImpactParameterMVABJetTagsDisc = d;        }
       void       SetJetProbabilityBJetTagsDisc(Double_t d)  { fJetProbabilityBJetTagsDisc = d;   }
       void       SetJetBProbabilityBJetTagsDisc(Double_t d) { fJetBProbabilityBJetTagsDisc = d;  }
-      void       SetMom(const FourVector &mom)     { fMom              = mom;          }
+      void       SetMom(const FourVectorM &mom)     { fMom             = mom; ClearMom(); }
       void       SetN(UShort_t n)                  { fN                = n;            }
       void       SetN60(UShort_t n)                { fN60              = n;            }
       void       SetN90(UShort_t n)                { fN90              = n;            }
@@ -126,7 +126,7 @@ namespace mithep
     protected:
       void       GetMom()                      const;
 
-      FourVector fMom;                    //four momentum of jet
+      FourVectorM32 fMom;                 //four momentum of jet
       Double_t   fMaxEInEmTowers;         //maximum energy in EM towers
       Double_t   fMaxEInHadTowers;        //maximum energy in HCAL towers
       Double_t   fEnergyFractionH;        //hadronic energy fraction
@@ -161,7 +161,7 @@ namespace mithep
       Double_t   fL4EMFCorrectionScale;                    //
       Double_t   fL5FlavorCorrectionScale;                 // 
       Double_t   fL7PartonCorrectionScale;                 //
-      RefArray<CaloTower,1024> fTowers;                    //calo towers assigned to this jet
+      RefArray<CaloTower>      fTowers;                    //calo towers assigned to this jet
 
     ClassDef(Jet, 1) // Jet class
   };
@@ -172,6 +172,6 @@ inline void mithep::Jet::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
+  fCachedMom = fMom; 
 }
 #endif

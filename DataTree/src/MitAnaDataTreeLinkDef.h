@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.52 2009/02/18 08:17:47 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.53 2009/02/18 15:38:55 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -178,7 +178,7 @@
 #pragma link C++ class mithep::Array<mithep::BasicCluster>+;
 #pragma link C++ class mithep::ObjArray<mithep::BasicCluster>+;
 #pragma link C++ class mithep::Ref<mithep::BasicCluster>+;
-#pragma link C++ class mithep::RefArray<mithep::BasicCluster,1024>+;
+#pragma link C++ class mithep::RefArray<mithep::BasicCluster>+;
 #pragma link C++ typedef mithep::BasicClusterCol;
 #pragma link C++ typedef mithep::BasicClusterArr;
 #pragma link C++ typedef mithep::BasicClusterOArr;
@@ -207,14 +207,14 @@
 #pragma link C++ class mithep::Array<mithep::CaloTower>+;
 #pragma link C++ class mithep::ObjArray<mithep::CaloTower>+;
 #pragma link C++ class mithep::Ref<mithep::CaloTower>+;
-#pragma link C++ class mithep::RefArray<mithep::CaloTower,1024>+;
+#pragma link C++ class mithep::RefArray<mithep::CaloTower>+;
 #pragma link C++ typedef mithep::CaloTowerCol;
 #pragma link C++ typedef mithep::CaloTowerArr;
 #pragma link C++ typedef mithep::CaloTowerOArr;
 
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;
-#pragma link C++ class mithep::RefArray<mithep::Particle,1024>+;
+#pragma link C++ class mithep::RefArray<mithep::Particle>+;
 #pragma link C++ class mithep::ObjArray<mithep::Particle>+;
 #pragma link C++ class mithep::Ref<mithep::Particle>+;
 #pragma link C++ typedef mithep::ParticleCol;
@@ -308,7 +308,7 @@
 
 #pragma link C++ class mithep::DaughterData+;
 #pragma link C++ class mithep::Collection<mithep::DaughterData>+;
-#pragma link C++ class mithep::RefArray<mithep::DaughterData,32>+;
+#pragma link C++ class mithep::RefArray<mithep::DaughterData>+;
 
 #pragma link C++ class mithep::StableData+;
 #pragma link C++ class mithep::Collection<mithep::StableData>+;
@@ -335,7 +335,7 @@
 #pragma link C++ class mithep::Array<mithep::Conversion>+;
 #pragma link C++ class mithep::ObjArray<mithep::Conversion>+;
 #pragma link C++ class mithep::Ref<mithep::Conversion>+;
-#pragma link C++ class mithep::RefArray<mithep::Conversion,128>+;
+#pragma link C++ class mithep::RefArray<mithep::Conversion>+;
 #pragma link C++ typedef mithep::ConversionCol;
 #pragma link C++ typedef mithep::ConversionArr;
 #pragma link C++ typedef mithep::ConversionOArr;

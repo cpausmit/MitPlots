@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.11 2008/12/09 17:46:59 loizides Exp $
+// $Id: Conversion.h,v 1.12 2009/02/18 15:38:54 loizides Exp $
 //
 // Conversion
 //
@@ -63,6 +63,7 @@ inline void mithep::Conversion::SetPairMomentum(Double_t px, Double_t py, Double
 { 
   // Set pair momentum.
 
-  fPairMomentum.SetXYZ(px,py,pz);; 
+  fPairMomentum.SetXYZ(px,py,pz);
+  ClearMom();
 }
 #endif

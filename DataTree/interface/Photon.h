@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.20 2009/02/17 15:09:45 bendavid Exp $
+// $Id: Photon.h,v 1.21 2009/02/18 15:38:54 loizides Exp $
 //
 // Photon
 //
@@ -96,7 +96,7 @@ namespace mithep
       Bool_t                    fIsLooseEM;
       Bool_t                    fIsLoosePhoton;
       Bool_t                    fIsTightPhoton;
-      RefArray<Conversion,128>  fConversions;       //references to associated conversion candidates
+      RefArray<Conversion>      fConversions;       //references to associated conversion candidates
       Bool_t                    fIsConverted;       //conversion flag
       Ref<SuperCluster>         fSuperClusterRef;   //superCluster
 	
@@ -109,7 +109,7 @@ inline void mithep::Photon::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
+  fCachedMom = fMom; 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,5 +118,6 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   // Set momentum vector.
 
   fMom.SetXYZT(px, py, pz, e);
+  ClearMom();
 }
 #endif

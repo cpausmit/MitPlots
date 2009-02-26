@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.13 2009/02/18 08:17:03 bendavid Exp $
+// $Id: MCParticle.h,v 1.14 2009/02/18 15:38:54 loizides Exp $
 //
 // MCParticle
 //
@@ -132,7 +132,7 @@ inline void mithep::MCParticle::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom.SetCoordinates(fFourVector.Pt(),fFourVector.Eta(),fFourVector.Phi(),fFourVector.M()); 
+  fCachedMom = fFourVector; 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -246,6 +246,7 @@ inline void mithep::MCParticle::SetMom(Double_t px, Double_t py, Double_t pz, Do
   // Set four vector.
 
   fFourVector.SetXYZT(px, py, pz, e);
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------

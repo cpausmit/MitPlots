@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.26 2009/02/17 15:52:51 bendavid Exp $
+// $Id: Particle.h,v 1.27 2009/02/18 15:38:54 loizides Exp $
 //
 // Particle
 //
@@ -32,7 +32,7 @@ namespace mithep
       Bool_t                    IsSortable()              const { return kTRUE;                    }
       Double_t		        Mass()                    const { return Mom().M();                }
       Double_t		        Mt()                      const { return Mom().Mt();               }
-      FourVectorM              &Mom()                     const;
+      const FourVectorM        &Mom()                     const;
       EObjType                  ObjType()                 const { return kParticle;                }
       Double_t		        Phi()                     const { return Mom().Phi();              }
       Double_t                  PhiDeg()                  const { return Phi() * 180 /TMath::Pi(); }
@@ -46,6 +46,8 @@ namespace mithep
       void                      Print(Option_t *opt="")   const;
      
     protected:
+      void                      ClearCharge()             const { fCacheQFlag.ClearCache();   }
+      void                      ClearMom()                const { fCacheMomFlag.ClearCache(); }
       virtual Double_t          GetCharge()               const { return 0; }
       virtual Double_t          GetMass()                 const { return 0; }
       virtual void              GetMom()                  const = 0; 
@@ -101,7 +103,7 @@ inline Double_t mithep::Particle::Et() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline mithep::FourVectorM &mithep::Particle::Mom() const
+inline const mithep::FourVectorM &mithep::Particle::Mom() const
 {
   // Return cached momentum value.
 

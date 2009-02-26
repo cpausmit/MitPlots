@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.24 2009/02/17 15:09:45 bendavid Exp $
+// $Id: Electron.h,v 1.25 2009/02/18 15:38:54 loizides Exp $
 //
 // Electron
 //
@@ -66,9 +66,9 @@ namespace mithep
       Double_t    PIn()                            const { return fPIn;                     }
       Double_t    POut()                           const { return fPOut;                    }
       Double_t    TrackIsolation()                 const { return fTrackIsolation;          }
-      void	  SetGsfTrk(const Track* t)                     { fGsfTrackRef = t;                }
-      void	  SetTrackerTrk(const Track* t)                 { fTrackerTrackRef = t;            }
-      void	  SetSuperCluster(const SuperCluster* sc)       { fSuperClusterRef = sc;           }
+      void	  SetGsfTrk(const Track* t)                     { fGsfTrackRef = t; ClearMom(); ClearCharge(); }
+      void	  SetTrackerTrk(const Track* t)                 { fTrackerTrackRef = t; ClearMom(); ClearCharge(); }
+      void	  SetSuperCluster(const SuperCluster* sc)       { fSuperClusterRef = sc; ClearMom(); }
       void        SetCaloIsolation(Double_t CaloIsolation)      { fCaloIsolation = CaloIsolation;  }
       void        SetCaloTowerIsolation(Double_t TowerIso)      { fCaloTowerIsolation = TowerIso;  }
       void        SetClassification(Double_t x)                 { fClassification = x;             }

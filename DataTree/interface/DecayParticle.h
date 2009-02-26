@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.22 2009/02/17 15:09:45 bendavid Exp $
+// $Id: DecayParticle.h,v 1.23 2009/02/18 15:38:54 loizides Exp $
 //
 // DecayParticle
 //
@@ -58,28 +58,30 @@ namespace mithep
       TParticlePDG             *ParticlePdgEntry()    const;
       Double_t                  PdgMass()             const;
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);   }
-      const ThreeVector         Position()            const;
+      const ThreeVector        &Position()            const;
       const ThreeVector         RelativePosition()    const;
       const Vertex             *PriVertex()           const { return fPriVtx.Obj();              }
-      void                      AddDaughterData(const DaughterData *dd) { fDaughterData.Add(dd); }
+      void                      AddDaughterData(const DaughterData *dd) { fDaughterData.Add(dd); ClearCharge(); }
       void                      SetAbsPdgId(UInt_t apid)                { fAbsPdgId=apid;        }
       void                      SetChi2(Double_t chi2)                  { fChi2 = chi2;          }
       void                      SetMassError(Double_t massError)        { fMassError = massError;}
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      SetMom(const FourVector &p)             { fMomentum = p;         }
+      void                      SetMom(const FourVector &p)             { fMomentum = p; ClearMom(); ClearPos(); }
       void                      SetNdof(UInt_t   ndof)                  { fNdof = ndof;          }
-      void                      SetDxy(Double_t dxy)                    { fDxy = dxy;            }
+      void                      SetDxy(Double_t dxy)                    { fDxy = dxy; ClearPos(); }
       void                      SetDxyError(Double_t dxyError)          { fDxyError = dxyError;  }
-      void                      SetLxy(Double_t lxy)                    { fLxy = lxy;            }
+      void                      SetLxy(Double_t lxy)                    { fLxy = lxy; ClearPos(); }
       void                      SetLxyError(Double_t lxyError)          { fLxyError = lxyError;  }
-      void                      SetLz(Double_t lz)                      { fLz = lz;              }
+      void                      SetLz(Double_t lz)                      { fLz = lz; ClearPos();  }
       void                      SetLzError(Double_t lzError)            { fLzError = lzError;    }
-      void                      SetPriVertex(const Vertex *v)           { fPriVtx = v;           }
+      void                      SetPriVertex(const Vertex *v)           { fPriVtx = v; ClearPos(); }
       using TObject::Error;
 
     protected:
+      void                      ClearPos()            const { fCachePosFlag.ClearCache(); }
       Double_t                  GetCharge()           const;
       void	                GetMom()              const;
+      void                      GetPos()              const;
 
       UInt_t                    fAbsPdgId;     //absolute value of pid code
       Double32_t                fChi2;         //chi-squared of fit
@@ -92,8 +94,11 @@ namespace mithep
       Double32_t                fLz;           //fitted lz (decay length)
       Double32_t                fLzError;      //fitted lz error
       FourVectorM32             fMomentum;     //momentum fourvector
-      RefArray<DaughterData,32> fDaughterData; //momentum of daughters at vertex
+      RefArray<DaughterData>    fDaughterData; //momentum of daughters at vertex
       Ref<Vertex>               fPriVtx;    //reference to primary vertex
+      
+      mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
+      mutable ThreeVector       fCachedPos;    //!cached momentum vector (filled by derived classes)
       
       ClassDef(DecayParticle, 1) // Decay particle class
   };
@@ -116,8 +121,8 @@ inline void mithep::DecayParticle::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom.SetCoordinates(fMomentum.Pt(),fMomentum.Eta(),
-                            fMomentum.Phi(),fMomentum.M()); 
+  fCachedMom = fMomentum;
+  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -134,19 +139,34 @@ inline void mithep::DecayParticle::SetMom(Double_t px, Double_t py, Double_t pz,
   // Set four vector.
 
   fMomentum.SetXYZT(px,py,pz,e);
+  ClearMom();
+  ClearPos();
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::ThreeVector mithep::DecayParticle::Position() const
+inline const mithep::ThreeVector &mithep::DecayParticle::Position() const
+{
+  // Return cached momentum value.
+
+  if (!fCachePosFlag.IsValid()) {
+    GetPos();
+    fCachePosFlag.SetValid();
+  }
+
+  return fCachedPos;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayParticle::GetPos() const
 {
   // Return absolute position of decay.
 
   const mithep::Vertex *pv = PriVertex();
     
   if (pv)
-    return ( pv->Position() + RelativePosition() );
+    fCachedPos = pv->Position() + RelativePosition();
   else
-    return RelativePosition();
+    fCachedPos = RelativePosition();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.8 2009/02/17 15:09:45 bendavid Exp $
+// $Id: StableParticle.h,v 1.9 2009/02/18 15:38:55 loizides Exp $
 //
 // StableParticle
 //
@@ -27,8 +27,8 @@ namespace mithep
       const Track         *TrackerTrk()       const { return Trk();           }
       EObjType             ObjType()          const { return kStableParticle; }      
       TParticlePDG        *ParticlePdgEntry() const;
-      void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; }
-      void	           SetTrk(const Track *t) { fTrackRef = t;            }
+      void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; ClearMom(); }
+      void	           SetTrk(const Track *t) { fTrackRef = t; ClearMom(); ClearCharge(); }
       
     protected:
       Double_t             GetMass()          const;

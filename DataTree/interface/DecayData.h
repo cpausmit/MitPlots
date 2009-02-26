@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.6 2008/12/09 17:46:59 loizides Exp $
+// $Id: DecayData.h,v 1.7 2009/02/18 15:38:54 loizides Exp $
 //
 // DecayData
 //
@@ -41,7 +41,7 @@ namespace mithep
       void                 SetLz(Double_t lz)               { fLz = lz;}
       void                 SetLzError(Double_t lzError)     { fLzError = lzError;     }      
       void                 SetMom(Double_t px, Double_t y, Double_t z, Double_t e);
-      void                 SetMom(const FourVector &mom)    { fMomAtVertex = mom;     }
+      void                 SetMom(const FourVector &mom)    { fMomAtVertex = mom; ClearMom(); }
       void                 SetMassError(Double_t massError) { fMassError = massError; }
 
     protected:
@@ -75,6 +75,7 @@ inline void mithep::DecayData::SetMom(Double32_t px, Double32_t py, Double32_t p
   // Set four momentum.
 
   fMomAtVertex.SetXYZT(px, py, pz, e);
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------

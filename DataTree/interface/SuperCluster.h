@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.8 2009/02/17 15:09:45 bendavid Exp $
+// $Id: SuperCluster.h,v 1.9 2009/02/18 15:38:55 loizides Exp $
 //
 // SuperCluster
 //
@@ -56,7 +56,7 @@ namespace mithep
       Double32_t                  fPreshowerEnergy; //energy in the preshower
       Double32_t                  fPhiWidth;        //width in Phi
       Double32_t                  fRawEnergy;       //super cluster raw energy
-      RefArray<BasicCluster,1024> fClusters;        //assigned basic clusters
+      RefArray<BasicCluster>      fClusters;        //assigned basic clusters
       Ref<BasicCluster>           fSeedRef;         //seed cluster
 
     ClassDef(SuperCluster, 1) // Super cluster class

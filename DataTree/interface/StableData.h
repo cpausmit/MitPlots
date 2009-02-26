@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableData.h,v 1.5 2008/12/09 17:47:00 loizides Exp $
+// $Id: StableData.h,v 1.6 2009/02/18 15:38:54 loizides Exp $
 //
 // StableData
 //
@@ -41,7 +41,7 @@ namespace mithep
       void                 SetBadLayer(Track::EHitLayer l)       { fBadLayers.SetBit(l); }
       void                 SetBadLayers(const BitMask48 &layers) { fBadLayers = layers; }
       void                 SetThreeMom(Double_t px, Double_t y, Double_t z);
-      void                 SetThreeMom(const ThreeVector &mom)   { fMomAtVertex = mom; }
+      void                 SetThreeMom(const ThreeVector &mom)   { fMomAtVertex = mom; ClearMom(); }
 
     protected:
       Double_t             GetMass()     const { return Original()->Mass(); }
@@ -71,5 +71,6 @@ inline void mithep::StableData::SetThreeMom(Double_t px, Double_t py, Double_t p
   // Set four momentum.
 
   fMomAtVertex.SetXYZ(px, py, pz);
+  ClearMom();
 }
 #endif

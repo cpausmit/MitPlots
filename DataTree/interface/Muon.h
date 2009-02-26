@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.24 2009/02/17 15:09:45 bendavid Exp $
+// $Id: Muon.h,v 1.25 2009/02/18 15:38:54 loizides Exp $
 //
 // Muon
 //
@@ -123,9 +123,9 @@ namespace mithep {
                                    Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3., Double_t iPYMin = 3.,
                                   Double_t iDXMin = 3., Double_t iPXMin = 3.,Int_t iN = 1)  const;
-      void	     SetGlobalTrk(const Track *t)          { fGlobalTrkRef = t;                }
-      void	     SetStandaloneTrk(const Track *t)      { fStaTrkRef = t;                   }
-      void	     SetTrackerTrk(const Track *t)         { fTrkTrkRef = t;                   }
+      void	     SetGlobalTrk(const Track *t)          { fGlobalTrkRef = t; ClearMom(); ClearCharge(); }
+      void	     SetStandaloneTrk(const Track *t)      { fStaTrkRef = t;    ClearMom(); ClearCharge(); }
+      void	     SetTrackerTrk(const Track *t)         { fTrkTrkRef = t;    ClearMom(); ClearCharge(); }
       void           SetDX(Int_t iStation, Double_t iDX);
       void           SetDY(Int_t iStation, Double_t iDY);
       void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;             }
