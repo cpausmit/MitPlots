@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.8 2008/12/10 11:26:52 loizides Exp $
+// $Id: Array.h,v 1.9 2008/12/18 13:34:16 loizides Exp $
 //
 // Array
 //
@@ -30,6 +30,7 @@ namespace mithep
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                       const;
       void                 Clear(Option_t */*opt*/="")                { fArray.~TClonesArray(); }
+      void                 Delete();
       UInt_t               Entries()                            const { return fNumEntries; }
       UInt_t               GetEntries()                         const { return fNumEntries; }
       const char          *GetName()                            const { return fArray.GetName(); }
@@ -206,6 +207,17 @@ inline void mithep::Array<ArrayElement>::Reset()
     fArray.Clear("C"); //will call clear for every element
   else 
     fArray.Clear();
+
+  fNumEntries = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::Array<ArrayElement>::Delete()
+{
+  // ROOT implementation for clearing the array, deleting all objects inside
+
+  fArray.Delete();   //will call destructor for every element
 
   fNumEntries = 0;
 }
