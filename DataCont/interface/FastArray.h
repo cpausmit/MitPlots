@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.8 2008/12/18 13:34:16 loizides Exp $
+// $Id: FastArray.h,v 1.1 2009/02/26 17:05:18 bendavid Exp $
 //
 // FastArray
 //
@@ -84,13 +84,13 @@ inline mithep::FastArray<ArrayElement>::FastArray() :
 template<class ArrayElement>
 inline mithep::FastArray<ArrayElement>::FastArray(const FastArray &a) : 
   fClass(a.fClass),
-  fSize(a.fSize),
+  fSize(0),
   fCapacity(0),
   fNObjects(0),
   fArray(0)
 {
    // Copy constructor. Copy only elements which are used.
-   Init(fSize);
+   Init(a.fSize);
    
    for (UInt_t i=0; i<a.fSize; ++i)
      new(Allocate()) ArrayElement(a.fArray[i]);
