@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.19 2008/12/12 16:57:42 bendavid Exp $
+// $Id: Analysis.h,v 1.20 2009/02/17 21:54:28 bendavid Exp $
 //
 // Analysis
 //
@@ -66,18 +66,18 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate;  }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents  = n;            }
-      void                      SetCacheSize(Int_t cache)           { fCacheSize  = cache;        }
-      void                      SetCompressionLevel(Int_t level)    { fCompLevel  = level;        }
-      void                      SetConfigName(const char* name)     { fConfig     = name;         }
-      void                      SetAutoBranchLoad(Bool_t b)         { fDoProxy    = b;            }
-      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy  = b;            }
-      void                      SetMasterName(const char* name)     { fMaster     = name;         }
-      void                      SetOutputName(const char *name)     { fAnaOutput  = name;         }
+      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents     = n;         }
+      void                      SetCacheSize(Int_t cache)           { fCacheSize     = cache;     }
+      void                      SetCompressionLevel(Int_t level)    { fCompLevel     = level;     }
+      void                      SetConfigName(const char* name)     { fConfig        = name;      }
+      void                      SetDoObjTabClean(Bool_t b)          { fDoObjTabClean = b;         }
+      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
+      void                      SetMasterName(const char* name)     { fMaster        = name;      }
+      void                      SetOutputName(const char *name)     { fAnaOutput     = name;      }
       void                      SetSuperModule(TAModule *mod);
-      void                      SetTreeName(const char *name)       { fTreeName   = name;         }
-      void                      SetUseHLT(Bool_t hlt)               { fUseHLT     = hlt;          }
-      void                      SetUseProof(Bool_t up)              { fUseProof   = up;           }
+      void                      SetTreeName(const char *name)       { fTreeName      = name;      }
+      void                      SetUseHLT(Bool_t hlt)               { fUseHLT        = hlt;       }
+      void                      SetUseProof(Bool_t up)              { fUseProof      = up;        }
       void                      Terminate();
 
     protected:
@@ -98,8 +98,8 @@ namespace mithep
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
       Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
       Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
-      Bool_t                    fDoProxy;         //=true if branch autoload is used (def=1)
-      Bool_t                    fDoObjTableCleaning; //=true if object table cleaning is used (def=1)
+      Bool_t                    fDoProxy;         //=true if TRef branch autoload is used (def=0)
+      Bool_t                    fDoObjTabClean;   //=true if object table cleaning is used (def=1)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names

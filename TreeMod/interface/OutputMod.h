@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.4 2008/12/04 13:55:06 loizides Exp $
+// $Id: OutputMod.h,v 1.5 2008/12/10 14:20:27 loizides Exp $
 //
 // OutputMod
 //
@@ -62,7 +62,7 @@ namespace mithep
       Bool_t                   fDoReset;        //=true then reset pointers
       Bool_t                   fCheckTamBr;     //=true then check TAM loaded branches
       Bool_t                   fKeepTamBr;      //=true then keep TAM loaded branches
-      StringVec                fCmdList;        //list of keep/drop statements
+      StringVec                   fCmdList;        //list of keep/drop statements
 
     private:
       void                     CheckAndAddBranch(const char *bname, const char *cname);
@@ -115,7 +115,7 @@ inline void mithep::OutputMod::Drop(const char *bname)
 { 
   // Add branch name to be dropped (can be regular expression)
 
-  fCmdList.AddCopy(std::string(Form("drop %s", bname))); 
+//  fCmdList.push_back(std::string(Form("drop %s", bname))); 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,6 +123,6 @@ inline void mithep::OutputMod::Keep(const char *bname)
 { 
   // Add branch name to be kept (can be regular expression)
 
-  fCmdList.AddCopy(std::string(Form("keep %s", bname))); 
+//  fCmdList.push_back(std::string(Form("keep %s", bname))); 
 }
 #endif

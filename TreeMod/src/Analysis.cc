@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.25 2009/01/20 15:08:32 loizides Exp $
+// $Id: Analysis.cc,v 1.26 2009/02/17 21:54:29 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -31,8 +31,8 @@ Analysis::Analysis(Bool_t useproof) :
   fUseProof(useproof), 
   fUseHLT(kTRUE),
   fHierarchy(kTRUE), 
-  fDoProxy(kTRUE), 
-  fDoObjTableCleaning(kTRUE),
+  fDoProxy(kFALSE), 
+  fDoObjTabClean(kTRUE),
   fState(kPristine), 
   fNFriends(0), 
   fList(new TList), 
@@ -450,7 +450,7 @@ Bool_t Analysis::Init()
     // when not running Proof, we must make a selector
     fSelector = new Selector; 
     fSelector->SetDoProxy(fDoProxy);
-    fSelector->SetDoObjTableCleaning(fDoObjTableCleaning);
+    fSelector->SetDoObjTabClean(fDoObjTabClean);
 
     fSelector->AddInput(anamod);
 

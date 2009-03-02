@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.8 2008/12/04 14:13:44 loizides Exp $
+// $Id: Selector.cc,v 1.9 2008/12/12 16:57:42 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -6,6 +6,7 @@
 #include <TProcessID.h>
 #include <TFile.h>
 #include <TTree.h>
+#include <TROOT.h>
 
 using namespace mithep;
 
@@ -31,6 +32,7 @@ Selector::Selector() :
   // Constructor.
 
   fOutputMods.SetOwner(kFALSE);
+  gROOT->GetListOfSpecials()->Add(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -38,12 +40,13 @@ Selector::~Selector()
 {
   // Destructor.
 
-  fRunTree = 0;
+  fRunTree     = 0;
   fEventHeader = 0;
-  fRunInfo = 0;
-  fLATree = 0;
-  fLAHeader = 0;
-  fCurRunNum = UInt_t(-1);
+  fRunInfo     = 0;
+  fLATree      = 0;
+  fLAHeader    = 0;
+  fCurRunNum   = UInt_t(-1);
+  gROOT->GetListOfSpecials()->Remove(this);
 }
 
 //--------------------------------------------------------------------------------------------------
