@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.12 2009/02/17 21:54:17 bendavid Exp $
+// $Id: TAMSelector.cxx,v 1.13 2009/02/18 16:37:48 bendavid Exp $
 //
 
 #include "TAMSelector.h"
@@ -84,8 +84,6 @@
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
-TAMSelector *TAMSelector::fEvtSelector = 0;
-
 ClassImp(TAMSelector)
 
 
@@ -93,6 +91,197 @@ ClassImp(TAMSelector)
 #define R__ASSERT(e) \
    if (!(e)) Fatal("", kAssertMsg, _QUOTE_(e), __LINE__, __FILE__)
 #endif
+
+//______________________________________________________________________________
+TAMSelector::BranchProxy::BranchProxy(TAMSelector *sel, Bool_t e) : 
+   fSel(sel),
+   fOrig(0), 
+   fFake(0),
+   fCurEntry(-1)
+{ 
+   // Default constructor.
+
+   fFake = new TRefTable(this, 10);
+   memset(fBrRead, 0, 1024*sizeof(Bool_t));
+   if (e) 
+     Enable(); 
+}
+
+
+//______________________________________________________________________________
+TAMSelector::BranchProxy::~BranchProxy() 
+{ 
+   // Destructor.
+
+   Disable(); 
+   delete fFake; 
+   fFake = 0; 
+}
+
+
+//______________________________________________________________________________
+void TAMSelector::BranchProxy::Disable()
+{
+   // Disable the auto branch loading via TAM.
+
+   if (fOrig)
+      TRefTable::SetRefTable(fOrig);
+}
+
+
+//______________________________________________________________________________
+void TAMSelector::BranchProxy::Enable()
+{
+   // Enable the auto branch loading via TAM.
+   
+   TBranchRef *bref = fSel->GetTree()->GetTree()->GetBranchRef();
+   if (bref) {
+     fOrig = bref->GetRefTable();
+     TRefTable::SetRefTable(fFake);
+   }
+}
+
+
+//______________________________________________________________________________
+TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
+{
+   // This function should be called by a reference class which is designed to 
+   // use TAM. Branch loading via TAM is handled through the BranchProxy class.
+   // Optimized loading is used if the object table cleaning has been 
+   // enabled in TAM.
+  
+   if (fSel->GetObjTabClean()) {
+      // can trust that object table was cleaned
+      TObject *obj = pid->GetObjectWithID(uid);
+      if (obj)
+         return obj;
+   }
+  
+   TBranchRef *br = fSel->GetTree()->GetTree()->GetBranchRef();
+   if (!br) 
+      return pid->GetObjectWithID(uid);
+  
+   TRefTable *table = br->GetRefTable();
+   if (!table) 
+      return pid->GetObjectWithID(uid);
+   table->SetUID(uid,pid);
+
+   Load(uid,pid,br,table);
+
+   return pid->GetObjectWithID(uid);
+}
+
+
+//______________________________________________________________________________
+Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid, 
+                                      TBranchRef *br, TRefTable *table)
+{
+   // Find and load branch corresponding to given uid/pid.
+
+   // read entry for this event
+   Long64_t readentry = br->GetReadEntry();
+   Long64_t tamentry  = fSel->fCurEvt;
+   if (readentry!=tamentry) {
+      Fatal("Load", 
+            "Entries from BranchRef (%d) differs from TAM current entry (%d)",
+            readentry, tamentry);
+   }
+
+   // read branchref if needed
+   if (fCurEntry != readentry) {
+      Int_t bytes = br->GetEntry(readentry);
+      if (bytes<0) {
+         Fatal("Load", "Could not get entry %d from %s branch",
+               readentry, br->GetName());
+      }
+   }
+
+   // get branch from RefTable
+   TBranch *branch = dynamic_cast<TBranch*>(table->GetParent(uid, pid));
+
+   if (!branch) { //scan for possible friend Trees
+      TList *friends = fSel->GetTree()->GetListOfFriends();
+      if (friends) {
+
+         // reset branch read flags if new entry to be read
+         if (fCurEntry != readentry)
+            memset(fBrRead, 0, 1024*sizeof(Bool_t));
+
+         TObjLink *lnk = friends->FirstLink();
+         Int_t nfriend = 0;
+         while (lnk) {
+            TFriendElement *elem = 
+               static_cast<TFriendElement*>(lnk->GetObject());
+            TBranchRef *bref = elem->GetTree()->GetBranchRef();
+            if (bref) {
+               if (!fBrRead[nfriend]) {
+                  bref->GetEntry(readentry);
+                  fBrRead[nfriend] = kTRUE;
+               }
+               TBranch *branch = dynamic_cast<TBranch*>
+                  (bref->GetRefTable()->GetParent(uid, pid));
+               if (branch) 
+                 break; // found branch
+            }
+            lnk = lnk->Next();
+            ++nfriend;
+            R__ASSERT(nfriend<1024);
+         }
+      }
+   }
+
+   // cache last branch read attempt
+   fCurEntry = readentry;
+
+   if (!branch) {
+      return kFALSE;
+   }
+
+   // access the main branch
+   TBranch *readbranch = branch->GetMother();
+   if (!readbranch) {
+      return kFALSE;
+   }
+
+   // check if TAMBranchInfo already exists
+   // and if not add it
+   const char *brname = readbranch->GetName();
+   TObject *brInfo = fSel->fBranchTable.FindObject(brname);
+   TAMBranchInfo *branchInfo;
+   if (brInfo==0) {
+     branchInfo = new TAMBranchInfo(brname);
+     fSel->fBranchTable.Add(branchInfo);
+   }
+   else
+     branchInfo = dynamic_cast<TAMBranchInfo*>(brInfo);
+
+   // load the branch
+   fSel->LoadBranch(branchInfo);
+
+   return kTRUE;
+}
+
+
+//______________________________________________________________________________
+Bool_t TAMSelector::BranchProxy::Notify()
+{
+   // Notification received from TRefTable::Notify. Originally this would
+   // have been address to the TBranchRef owner of the TRefTable, but
+   // we intercept this call.
+
+   TBranchRef *br = dynamic_cast<TBranchRef*>(fOrig->GetOwner());
+   if (!br) 
+      return kFALSE;
+
+   // get the desired uid/pid pair
+   UInt_t      uid = fFake->GetUID();
+   TProcessID *pid = fFake->GetUIDContext();
+   fOrig->SetUID(uid,pid);
+   if (0) // this is what ROOT would have done
+      return br->Notify();
+   
+   return Load(uid, pid, br, fOrig);
+}
 
 //______________________________________________________________________________
 TAMSelector::TAMSelector() :
@@ -109,11 +298,11 @@ TAMSelector::TAMSelector() :
    fActNotify(kFALSE),
    fObjCounter(0),
    fVerbosity(0),
+   fProxy(this),
    fDoProxy(kFALSE),
-   fDoObjTableCleaning(kFALSE),
-   fObjTablesClean(kFALSE),
-   fLoaders(),
-   fCurEntry(-1)
+   fDoObjTabClean(kFALSE),
+   fObjTabClean(kFALSE),
+   fLoaders()
 {
    // Default constructor.
 
@@ -121,8 +310,6 @@ TAMSelector::TAMSelector() :
    fEventObjs.SetOwner(kTRUE);
    gROOT->GetListOfBrowsables()->Add(fAModules,"Analysis Modules");
    fLoaders.SetName("TAM_LOADERS");
-   
-   memset(fBrRead, 0, 1024*sizeof(Bool_t));
 }
 
 
@@ -136,9 +323,6 @@ TAMSelector::~TAMSelector()
    if (submods!=0) submods->Clear("nodelete");
    delete fAModules;
    delete fOwnInput;
-   
-   if (fEvtSelector==this)
-    fEvtSelector = 0;
 }
 
 
@@ -291,19 +475,17 @@ void TAMSelector::Begin(TTree */*tree*/)
    fInput->AddLast(&fLoaders);
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
 {
-
-  //clear from the object table of a given process id, all pointers for objects
-  //with uids after lastKeptUid
+  // Clear from the object table of a given process id, all pointers for objects
+  // with uids after lastKeptUid.
 
   TObjArray *objTable = pid->GetObjects();
   
   Int_t lastIdxKept = lastKeptUID & 0xffffff;
   Int_t last = objTable->GetLast();
-
-  //printf("LastIdxKept = %i, last = %i\n",lastIdxKept,last);
 
   if (last==-1)
     return;
@@ -316,9 +498,8 @@ void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
   else
     Error("TAMSelector::CleanObjTable",
           "Out of Bounds trying to clean object table from Process ID.");
-   
-  return;
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::ClearAllLoaders()
@@ -479,118 +660,18 @@ TAMOutput *TAMSelector::GetModOutput()
    return fAModules->GetModOutput();
 }
 
+
 //______________________________________________________________________________
 TObject *TAMSelector::GetObjectWithID(UInt_t uid, TProcessID *pid)
 {
-
-  //This function is called by a reference class which is 
-  //designed to use TAM.  Branch autoloading is handled
-  //through the TRefTable machinery of root.
-  //Optimized loading is used if the object table
-  //cleaning has been enabled in TAM.
+  // This function should be called by a reference class which is designed to 
+  // use TAM. Branch loading via TAM is handled through the BranchProxy class.
+  // Optimized loading is used if the object table cleaning has been 
+  // enabled in TAM.
   
-  if (fObjTablesClean) {
-    TObject *obj = pid->GetObjectWithID(uid);
-    if (obj)
-      return obj;
-  }
-  
-  TBranchRef *br = GetTree()->GetTree()->GetBranchRef();
-  if (!br) 
-    return pid->GetObjectWithID(uid);
-  
-  TRefTable *table = br->GetRefTable();
-    
-  table->SetUID(uid,pid);
-  
-//   if (0) { // this essentially is what ROOT would have done
-//     Bool_t ret = br->Notify();
-//     return ret;
-//   }
-  
-  // read entry for this event
-  Long64_t readentry = br->GetReadEntry();
-  Long64_t tamentry  = fCurEvt;
-  if (readentry!=tamentry) {
-    Fatal("Notify", 
-          "Entries from BranchRef (%d) differs from TAM current entry (%d)",
-          readentry, tamentry);
-  }
-  
-  // read branchref if needed
-  if (fCurEntry != readentry) {
-    Int_t bytes = br->GetEntry(readentry);
-    if (bytes<0) {
-        Fatal("Notify", "Could not get entry %d from %s branch",
-              readentry, br->GetName());
-    }
-  }
-  
-  // get branch from RefTable
-  TBranch *branch = dynamic_cast<TBranch*>(table->GetParent(uid, pid));
-  
-  if (!branch) { //scan for possible friend Trees
-    TList *friends = GetTree()->GetListOfFriends();
-    if (friends) {
-  
-        // reset branch read flags if new entry to be read
-        if (fCurEntry != readentry)
-          memset(fBrRead, 0, 1024*sizeof(Bool_t));
-  
-        TObjLink *lnk = friends->FirstLink();
-        Int_t nfriend = 0;
-        while (lnk) {
-          TFriendElement *elem = 
-              static_cast<TFriendElement*>(lnk->GetObject());
-          TBranchRef *bref = elem->GetTree()->GetBranchRef();
-          if (bref) {
-              if (!fBrRead[nfriend]) {
-                bref->GetEntry(readentry);
-                fBrRead[nfriend] = kTRUE;
-              }
-              TBranch *branch = dynamic_cast<TBranch*>
-                (bref->GetRefTable()->GetParent(uid, pid));
-              if (branch) 
-                break; // found branch
-          }
-          lnk = lnk->Next();
-          ++nfriend;
-          R__ASSERT(nfriend<1024);
-        }
-    }
-  }
-  
-  // cache last branch read attempt
-  fCurEntry = readentry;
-  
-  if (!branch) {
-    return pid->GetObjectWithID(uid);
-  }
-  
-  // access the main branch
-  TBranch *readbranch = branch->GetMother();
-  if (!readbranch) {
-    return pid->GetObjectWithID(uid);
-  }
-  
-  // check if TAMBranchInfo already exists
-  // and if not add it
-  const char *brname = readbranch->GetName();
-  TObject *brInfo = fBranchTable.FindObject(brname);
-  TAMBranchInfo *branchInfo;
-  if (brInfo==0) {
-    branchInfo = new TAMBranchInfo(brname);
-    fBranchTable.Add(branchInfo);
-  }
-  else
-    branchInfo = dynamic_cast<TAMBranchInfo*>(brInfo);
-  
-  // load the branch
-  LoadBranch(branchInfo);
-  
-  return pid->GetObjectWithID(uid);
-
+  return fProxy.GetObjectWithID(uid,pid);
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::Init(TTree *tree) {
@@ -613,6 +694,7 @@ void TAMSelector::Init(TTree *tree) {
       brInfo->Init();
    }
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::LoadBranch(const Char_t *bname)
@@ -640,6 +722,7 @@ void TAMSelector::LoadBranch(const Char_t *bname)
    
    LoadBranch(brInfo); 
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::LoadBranch(TAMBranchInfo* brInfo)
@@ -687,7 +770,7 @@ void TAMSelector::LoadBranch(TAMBranchInfo* brInfo)
 
    // make sure autoload proxy is enabled
    if (fDoProxy) 
-     fEvtSelector = this;
+     fProxy.Enable();
 }
 
 
@@ -809,18 +892,19 @@ Bool_t TAMSelector::Process(Long64_t entry)
    // store object counter and process event
    fObjCounter=TProcessID::GetObjectCount();;
    TObjArray *pids = GetCurrentFile()->GetListOfProcessIDs();
-   //store uids for later cleaning for object tables from file
+
+   // store uids for later cleaning for object tables from file
    std::map<TProcessID*, UInt_t> lastUIDs;
-   if (fDoObjTableCleaning) {
-    for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
-      TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
-      Int_t last = pid->GetObjects()->GetLast();
-      if (last==-1)
-        last = 0;
-      lastUIDs[pid] = last;
-    }
-    //set clean object tbale state variable to true
-    fObjTablesClean = kTRUE;
+   if (fDoObjTabClean) {
+     for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
+       TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
+       Int_t last = pid->GetObjects()->GetLast();
+       if (last==-1)
+         last = 0;
+       lastUIDs[pid] = last;
+     }
+     // set clean object table state variable to true
+     fObjTabClean = kTRUE;
    }
 
    if (fVerbosity>9) {
@@ -843,14 +927,14 @@ Bool_t TAMSelector::Process(Long64_t entry)
    if (fEventObjs.IsEmpty()==kFALSE) 
      fEventObjs.Delete();
 
-   //Set clean object table state variable to false
-   fObjTablesClean = kFALSE;
+   // set clean object table state variable to false
+   fObjTabClean = kFALSE;
+
    // restore object counter
    TProcessID::SetObjectCount(fObjCounter);
-   //Clean object table for current process id
-   //This guarantees that objects which are not yet loaded in the current event have null
-   //pointers in the object table
-   if (fDoObjTableCleaning) {
+   // Clean object table for current process id: This guarantees that objects which 
+   // are not yet loaded in the current event have null pointers in the object table.
+   if (fDoObjTabClean) {
     CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
     
     //clean object tables for process ids being read from the file
@@ -866,6 +950,22 @@ Bool_t TAMSelector::Process(Long64_t entry)
     }
    }
 
+   // Clean object table for current process id. This guarantees that objects which are 
+   // not yet loaded in the current event have null pointers in the object table.
+   if (fDoObjTabClean) {
+     CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
+    
+     //clean object tables for process ids being read from the file
+     for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
+       TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
+       std::map<TProcessID*, UInt_t>::const_iterator lastUID = lastUIDs.find(pid);
+       if (lastUID != lastUIDs.end()) 
+         CleanObjTable(pid, lastUID->second);
+       else
+         CleanObjTable(pid, 0);
+     }
+   }
+   
    return kTRUE;
 }
 

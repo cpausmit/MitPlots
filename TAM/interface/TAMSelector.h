@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.9 2009/02/17 14:21:42 bendavid Exp $
+// $Id: TAMSelector.h,v 1.10 2009/02/17 21:54:17 bendavid Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -51,6 +51,28 @@ protected:
       virtual ~TAMEvtObj() { if (fObj!=0) delete fObj; }
    };
 
+   class BranchProxy : public TObject {
+      // Class that acts as a proxy between the TRefTable, TAM and TBranchRef.
+      // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done via
+      // TAM loaders.
+   public:
+       BranchProxy(TAMSelector *sel, Bool_t e=kFALSE);
+       virtual       ~BranchProxy();
+       void          Disable();
+       void          Enable();
+       TObject      *GetObjectWithID(UInt_t uid, TProcessID *pid);
+       Bool_t        Notify();
+
+   protected:
+       Bool_t        Load(UInt_t uid, TProcessID *pid, TBranchRef *br, TRefTable *table);       
+
+       TAMSelector  *fSel;          //ptr to TAMSelector (we are a friend)
+       TRefTable    *fOrig;         //ptr to original TRefTable filled by I/O (owner is TBranchRef)
+       TRefTable    *fFake;         //ptr to our fake TRefTable of which we are owner
+       Long64_t      fCurEntry;     //cache of current entry
+       Bool_t        fBrRead[1024]; //flag which TBranchRef branch was read
+   };
+
    TTree            *fTree;            //!the tree or chain
    THashTable        fBranchTable;     //!table of requested branches
    THashTable        fEventObjs;       //!table of objects available to any module while the current event is processed
@@ -64,13 +86,11 @@ protected:
    UInt_t            fObjCounter;      //!keep object counter for resetting it in the process loop
    UInt_t            fObjCounterRun;   //!keep object counter for resetting it in the process loop when end of run is reached
    UInt_t            fVerbosity;       //true if one wants to print debug info
-   Bool_t            fDoProxy;         //true if TAMSelector should be proxy for Ref branch autoloads
-   Bool_t            fDoObjTableCleaning; //true if TAMSelector should clean Object Tables of process id's
-   Bool_t            fObjTablesClean; //bool to track whether object tables of process id's are currently clean
+   BranchProxy       fProxy;           //proxy for reference resolving branch loading via TAM
+   Bool_t            fDoProxy;         //true if TAMSelector should be proxy for TRef branch autoloads
+   Bool_t            fDoObjTabClean;   //true if TAMSelector should clean the object tables of process id's
+   Bool_t            fObjTabClean;     //bool to track whether object tables of process id's are currently clean
    TList             fLoaders;         //list of data loaders
-   Long64_t          fCurEntry;     //cache of current entry for TBranchRef
-   Bool_t            fBrRead[1024]; //flag which TBranchRef branch was read
-   static TAMSelector *fEvtSelector;   //static pointer to event loop selector
 
    void              AddNewOutputLists();
    void              CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const;
@@ -81,13 +101,10 @@ protected:
    void              TakeModsFromInput();
    void              TakeLoadersFromInput();
    void              ZeroAllBranches();
-
    
 public:
    TAMSelector();
    virtual ~TAMSelector();
-   
-   static TAMSelector *GetEvtSelector() { return fEvtSelector; }
    
    void              AbortAnalysis();
    void              AbortEvent();
@@ -108,13 +125,14 @@ public:
    const TAMOutput  *GetModOutput()      const;
    TAMOutput        *GetModOutput();
    TObject          *GetObjectWithID(UInt_t uid, TProcessID *pid);
-   const TAModule   *GetTopModule()      const { return fAModules; }
-   const TTree      *GetTree()           const { return fTree; }
-   TTree            *GetTree()                 { return fTree; }
-   UInt_t            GetVerbosity()      const { return fVerbosity; }
+   const TAModule   *GetTopModule()      const { return fAModules;    }
+   const TTree      *GetTree()           const { return fTree;        }
+   Bool_t            GetObjTabClean()    const { return fObjTabClean; }
+   TTree            *GetTree()                 { return fTree;        }
+   UInt_t            GetVerbosity()      const { return fVerbosity;   }
    void              Init(TTree* tree);
-   Bool_t            IsAModAborted()     const { return fModAborted; }
-   Bool_t            IsEventAborted()    const { return fEventAborted; }
+   Bool_t            IsAModAborted()     const { return fModAborted;      }
+   Bool_t            IsEventAborted()    const { return fEventAborted;    }
    Bool_t            IsAnalysisAborted() const { return fAnalysisAborted; }
    void              LoadBranch(const Char_t* bname);
    Bool_t            Notify();
@@ -125,9 +143,9 @@ public:
    void              ReqBranch(const Char_t* bname, T*& address);
    virtual TObject  *RemoveObjThisEvt(const Char_t* name);
    virtual TObject  *RetractObj(const Char_t* name);
-   void              SetDoProxy(Bool_t b)      { fDoProxy = b; }
-   void              SetDoObjTableCleaning(Bool_t b)      { fDoObjTableCleaning = b; }
-   void              SetVerbosity(UInt_t vb)   { fVerbosity = vb; }
+   void              SetDoProxy(Bool_t b)       { fDoProxy = b;       }
+   void              SetDoObjTabClean(Bool_t b) { fDoObjTabClean = b; }
+   void              SetVerbosity(UInt_t vb)    { fVerbosity = vb;    }
    void              SlaveBegin(TTree* tree);
    void              SlaveTerminate();
    void              Terminate();
@@ -156,6 +174,4 @@ inline void TAMSelector::ReqBranch(const Char_t* bname, T*& address)
    if (!brInfo->AddPtr(address)) 
      AbortAnalysis();
 }
-
-
 #endif //ROOT_TAMSelector
