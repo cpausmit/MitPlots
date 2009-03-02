@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.33 2008/12/11 17:05:23 loizides Exp $
+// $Id: Collections.h,v 1.34 2009/02/18 15:38:54 loizides Exp $
 //
 // Collections
 //
@@ -144,5 +144,10 @@ namespace mithep
   typedef ObjArray<BaseVertex>          BaseVertexOArr;
   typedef ObjArray<Vertex>              VertexOArr;
   typedef ObjArray<BeamSpot>            BeamSpotOArr;
+
+
+  typedef Collection<std::string>     StringCol;
+  typedef Vector<std::string> StringVec;
+
 }
 #endif

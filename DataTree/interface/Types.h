@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.20 2008/09/27 06:12:59 loizides Exp $
+// $Id: Types.h,v 1.21 2008/12/01 17:38:21 loizides Exp $
 //
 // Types
 //
@@ -27,8 +27,5 @@ namespace mithep
   typedef BitMask<8>  BitMask64;
   typedef BitMask<16> BitMask128;
   typedef BitMask<32> BitMask256;
-
-  typedef Collection<std::string>     StringCol;
-  typedef mithep::Vector<std::string> StringVec;
 }
 #endif
