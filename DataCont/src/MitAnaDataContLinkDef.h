@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.4 2009/02/26 17:05:19 bendavid Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.5 2009/03/02 12:34:00 loizides Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -8,8 +8,7 @@
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
 #include "MitAna/DataCont/interface/RefResolver.h"
-#include "MitAna/DataCont/interface/StackArray.h"
-#include "MitAna/DataCont/interface/StackArrayBasic.h"
+#include "MitAna/DataCont/interface/Types.h"
 #endif
 
 #ifdef __CINT__
@@ -25,5 +24,14 @@
 #pragma link C++ class mithep::ProcIDRef-;
 #pragma link C++ class mithep::Collection<mithep::ProcIDRef>+;
 #pragma link C++ class mithep::FastArray<mithep::ProcIDRef>-;
+
+#pragma link C++ class mithep::FastArrayBasic<Double_t, Double_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Double32_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Int_t>-;
 #pragma link C++ class mithep::FastArrayBasic<UInt_t>-;
+
+#pragma link C++ typedef mithep::FArrDouble;
+#pragma link C++ typedef mithep::FArrDouble32;
+#pragma link C++ typedef mithep::FArrInt;
+#pragma link C++ typedef mithep::FArrUInt;
 #endif

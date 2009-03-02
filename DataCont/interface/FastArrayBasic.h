@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.2 2009/02/27 09:16:30 bendavid Exp $
+// $Id: FastArrayBasic.h,v 1.3 2009/03/02 12:34:00 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -18,8 +18,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_FASTARRAYBASIC
-#define MITANA_DATACONT_FASTARRAYBASIC
+#ifndef MITANA_DATACONT_FASTARRAYBASIC_H
+#define MITANA_DATACONT_FASTARRAYBASIC_H
 
 #include <TObject.h>
 #include <TClass.h>
@@ -28,11 +28,11 @@
 
 namespace mithep 
 {
-  template<class ArrayElement>
+  template<class ArrayElement, class DE=Float_t>
   class FastArrayBasic : public BaseCollection
   {
     public:
-      FastArrayBasic();
+      FastArrayBasic(UShort_t icap=0);
       FastArrayBasic(const FastArrayBasic &a);
       ~FastArrayBasic() { Init(0); }
 
@@ -66,18 +66,21 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline mithep::FastArrayBasic<ArrayElement>::FastArrayBasic() : 
+template<class ArrayElement, class DE>
+inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(UShort_t icap) : 
   fSize(0),
   fCapacity(0),
   fArray(0)
 {
    // Default constructor.
+
+  if (icap)
+    Init(icap);
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline mithep::FastArrayBasic<ArrayElement>::FastArrayBasic(const FastArrayBasic &a) : 
+template<class ArrayElement, class DE>
+inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(const FastArrayBasic &a) : 
   fSize(0),
   fCapacity(0),
   fArray(0)
@@ -90,8 +93,8 @@ inline mithep::FastArrayBasic<ArrayElement>::FastArrayBasic(const FastArrayBasic
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-void mithep::FastArrayBasic<ArrayElement>::Add(const ArrayElement &ae)
+template<class ArrayElement, class DE>
+void mithep::FastArrayBasic<ArrayElement, DE>::Add(const ArrayElement &ae)
 {
   // Add a copy of an existing object.
   
@@ -103,8 +106,8 @@ void mithep::FastArrayBasic<ArrayElement>::Add(const ArrayElement &ae)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement>::At(UInt_t idx)
+template<class ArrayElement, class DE>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t idx)
 {
   // Return entry at given index. 
 
@@ -118,8 +121,8 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement>::At(UInt_t idx)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::At(UInt_t idx) const
+template<class ArrayElement, class DE>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -133,8 +136,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::At(UInt_t idx) c
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::FastArrayBasic<ArrayElement>::Expand(UShort_t s)
+template<class ArrayElement, class DE>
+inline void mithep::FastArrayBasic<ArrayElement, DE>::Expand(UShort_t s)
 {
 
   // Expand or shrink the array to given number of elements.
@@ -158,8 +161,8 @@ inline void mithep::FastArrayBasic<ArrayElement>::Expand(UShort_t s)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline void mithep::FastArrayBasic<ArrayElement>::Init(UShort_t s)
+template<class ArrayElement, class DE>
+inline void mithep::FastArrayBasic<ArrayElement, DE>::Init(UShort_t s)
 {
 
   // Initialize the array the heap.
@@ -176,8 +179,8 @@ inline void mithep::FastArrayBasic<ArrayElement>::Init(UShort_t s)
 }
 
 //-------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-void mithep::FastArrayBasic<ArrayElement>::Streamer(TBuffer &b)
+template<class ArrayElement, class DE>
+void mithep::FastArrayBasic<ArrayElement, DE>::Streamer(TBuffer &b)
 {
    // Stream all objects in the array to or from the I/O buffer.
 
@@ -198,8 +201,8 @@ void mithep::FastArrayBasic<ArrayElement>::Streamer(TBuffer &b)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement>::UncheckedAt(UInt_t idx)
+template<class ArrayElement, class DE>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -207,8 +210,8 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement>::UncheckedAt(UInt_t idx
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::UncheckedAt(UInt_t idx) const
+template<class ArrayElement, class DE>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -216,8 +219,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::UncheckedAt(UInt
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::operator[](UInt_t idx) const
+template<class ArrayElement, class DE>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -225,8 +228,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement>::operator[](UInt_
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement>::operator[](UInt_t idx)
+template<class ArrayElement, class DE>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 

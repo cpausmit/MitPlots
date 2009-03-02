@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.8 2008/12/18 13:34:16 loizides Exp $
+// $Id: StackArray.h,v 1.9 2009/03/02 12:34:00 loizides Exp $
 //
 // StackArray
 //
@@ -12,8 +12,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_STACKARRAY
-#define MITANA_DATACONT_STACKARRAY
+#ifndef MITANA_DATACONT_STACKARRAY_H
+#define MITANA_DATACONT_STACKARRAY_H
 
 #include <TObject.h>
 #include <TClass.h>

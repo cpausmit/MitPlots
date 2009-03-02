@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.4 2008/12/18 13:34:16 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.5 2009/03/02 12:34:00 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -13,8 +13,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_STACKARRAYBASIC
-#define MITANA_DATACONT_STACKARRAYBASIC
+#ifndef MITANA_DATACONT_STACKARRAYBASIC_H
+#define MITANA_DATACONT_STACKARRAYBASIC_H
 
 #include <TObject.h>
 #include "MitAna/DataCont/interface/BaseCollection.h"

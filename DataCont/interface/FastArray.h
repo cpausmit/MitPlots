@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.2 2009/02/27 09:16:30 bendavid Exp $
+// $Id: FastArray.h,v 1.3 2009/03/02 12:34:00 loizides Exp $
 //
 // FastArray
 //
@@ -16,8 +16,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_FASTARRAY
-#define MITANA_DATACONT_FASTARRAY
+#ifndef MITANA_DATACONT_FASTARRAY_H
+#define MITANA_DATACONT_FASTARRAY_H
 
 #include <TObject.h>
 #include <TClass.h>

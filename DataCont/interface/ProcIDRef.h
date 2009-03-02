@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ProcIDRef.h,v 1.3 2008/12/10 11:26:52 loizides Exp $
+// $Id: ProcIDRef.h,v 1.4 2009/03/02 12:34:00 loizides Exp $
 //
 // ProcIDRef
 //
@@ -9,8 +9,8 @@
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATACONT_PROCIDREF
-#define MITANA_DATACONT_PROCIDREF
+#ifndef MITANA_DATACONT_PROCIDREF_H
+#define MITANA_DATACONT_PROCIDREF_H
 
 #include <TObject.h>
 #include <TProcessID.h>
