@@ -1,5 +1,5 @@
-// $Id: Vector.cc,v 1.2 2008/06/17 13:30:37 loizides Exp $
+// $Id: Vector.cc,v 1.1 2008/07/29 10:36:22 loizides Exp $
 
 #include "MitAna/DataCont/interface/Vector.h"
 
-ClassImpT(mithep::Vector, ArrayElement)
+templateClassImp(mithep::Vector)

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.11 2008/12/10 11:26:52 loizides Exp $
+// $Id: ObjArray.h,v 1.12 2008/12/18 13:34:16 loizides Exp $
 //
 // ObjArray
 //
@@ -23,7 +23,6 @@ namespace mithep
   {
     public:
       ObjArray(UInt_t size=0, const char *name=0);
-      ~ObjArray() {}
 
       void                 Add(const ArrayElement *ae);
       void                 Add(const BaseCollection *col);
@@ -68,7 +67,7 @@ namespace mithep
     private:
       ObjArray(const ObjArray &a);
 
-    ClassDefT(ObjArray, 1) // Wrapper around TClonesArray class
+    ClassDef(ObjArray, 1) // Wrapper around TClonesArray class
   };
 }
 

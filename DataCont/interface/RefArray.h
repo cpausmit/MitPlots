@@ -1,15 +1,12 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.14 2009/02/17 21:54:35 bendavid Exp $
+// $Id: RefArray.h,v 1.15 2009/02/26 17:05:18 bendavid Exp $
 //
 // RefArray
 //
-// Implementation of a TRefArray using stack (and not heap) memory.
-// The maximum number of references is left as a template parameter.
-// Since all of the stack allocation is handled by the StackArrays
-// the RefArray itself can now actually be split.
+// Implementation of an efficient TRefArray using the FastArray.
 //
-// RefArray now supports objects from multiple PIDs, but only a single PID will be stored as long
-// as only objects from a single PID are added.
+// RefArray now supports objects from multiple PIDs, but only a single 
+// PID will be stored as long as only objects from a single PID are added.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -22,7 +19,7 @@
 #include <TRefTable.h>
 #include <TProcessID.h>
 #include <TError.h>
-#include "MitAna/TAM/interface/TAMSelector.h"
+#include "MitAna/DataCont/interface/RefResolver.h"
 #include "MitAna/DataCont/interface/Collection.h"
 #include "MitAna/DataCont/interface/FastArray.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
@@ -31,25 +28,24 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class RefArray /*: public Collection<ArrayElement> TODO to be enabled for Mit_008*/
+  class RefArray : public Collection<ArrayElement>
   {
     public:
       RefArray();
-      virtual ~RefArray() {}
 
       void                      Add(const ArrayElement *ae);
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)               const;
       void                      Clear(Option_t */*opt*/="")        { fPIDs.Clear(); fUIDs.Clear(); }
-      UInt_t                    Entries()                    const { return GetEntries(); }
-      UInt_t                    GetEntries()                 const { return fUIDs.GetEntries(); }
-      UInt_t                    GetSize()                    const { return fUIDs.GetSize(); }
+      UInt_t                    Entries()                    const { return GetEntries();          }
+      UInt_t                    GetEntries()                 const { return fUIDs.GetEntries();    }
+      UInt_t                    GetSize()                    const { return fUIDs.GetSize();       }
       Bool_t                    HasObject(const ArrayElement *obj) const;
       Bool_t                    IsOwner()                    const { return kTRUE; }
       TObject                  *ObjAt(UInt_t idx);       
       const TObject            *ObjAt(UInt_t idx)            const;
       void                      Reset();
-      void                      Trim()                             { fPIDs.Trim(); fUIDs.Trim(); }
+      void                      Trim()                             { fPIDs.Trim(); fUIDs.Trim();   }
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)      const;
       ArrayElement             *operator[](UInt_t idx);
@@ -60,10 +56,10 @@ namespace mithep
       TProcessID               *GetPID(UInt_t idx)           const;
       UInt_t                    GetUID(UInt_t idx)           const;
     
-      FastArray<ProcIDRef>      fPIDs;//|| process ids of referenced objects
-      FastArrayBasic<UInt_t>    fUIDs;//|| unique ids of referenced objects
+      FastArray<ProcIDRef>      fPIDs; //||process ids of referenced objects
+      FastArrayBasic<UInt_t>    fUIDs; //||unique ids of referenced objects
 
-    ClassDef(RefArray, 2) // Implementation of our own TRefArray
+      ClassDef(RefArray, 1) // Implementation of our own TRefArray
   };
 }
 
@@ -158,24 +154,7 @@ TObject *mithep::RefArray<ArrayElement>::GetObject(UInt_t idx) const
   }
 
   UInt_t uid = GetUID(idx);
-
-  //try to autoload from TAM
-  TAMSelector *tSel = TAMSelector::GetEvtSelector();
-  if (tSel) {
-    return tSel->GetObjectWithID(uid,pid);
-  }
-  
-  //no TAM proxy present, fall back to standard Root calls
-  
-  //the reference may be in the TRefTable
-  TRefTable *table = TRefTable::GetRefTable();
-  if (table) {
-    table->SetUID(uid, pid);
-    table->Notify();
-  }
-
-  return pid->GetObjectWithID(uid);
-
+  return RefResolver::GetObjectWithID(uid,pid);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,7 +199,6 @@ Bool_t mithep::RefArray<ArrayElement>::HasObject(const ArrayElement *obj) const
   }
   
   return kFALSE;
-  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,6 +231,8 @@ const TObject *mithep::RefArray<ArrayElement>::ObjAt(UInt_t idx) const
 template<class ArrayElement>
 inline void mithep::RefArray<ArrayElement>::Reset()
 {
+  // Reset the array.
+
   fUIDs.Reset();
   fPIDs.Reset();
 }

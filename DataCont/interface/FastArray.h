@@ -1,15 +1,17 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.1 2009/02/26 17:05:18 bendavid Exp $
+// $Id: FastArray.h,v 1.2 2009/02/27 09:16:30 bendavid Exp $
 //
 // FastArray
 //
-// Implementation of an array on the heap.  Memory is dynamically allocated, 
+// Implementation of a "fast" array on the heap: Memory is dynamically allocated, 
 // but there is an optimization in the read streamer similar to the TClonesArray
-// where the heap memory of an existing object is reused.  This class is meant to be used
-// as a datamember for objects which are contained inside a TClonesArray. 
-// For various reasons, the array can not be written in split 
-// mode. Array is meant to store classes as opposed to FastArrayBasic which should be used to 
-// hold basic types.
+// where the heap memory of an existing object is reused.  
+// This class is meant to be used as a datamember for objects which are contained 
+// inside a TClonesArray. It is assumed that those classed do not use heap memory 
+// themselves.
+// For various reasons, the array can not be written in split mode. 
+// Array is meant to store classes as opposed to FastArrayBasic which should be 
+// used to hold basic types.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -37,9 +39,9 @@ namespace mithep
       ArrayElement             *Allocate();
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                     const;
-      void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0); }
-      UInt_t                    Entries()                          const { return GetEntries(); }
-      UInt_t                    GetEntries()                       const { return fSize;        }
+      void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0);    }
+      UInt_t                    Entries()                          const { return fSize;        }
+      UInt_t                    GetEntries()                       const { return Entries();    }
       ArrayElement             *GetNew();
       UInt_t                    GetSize()                          const { return fCapacity;    }
       Bool_t                    HasObject(const ArrayElement *obj) const;
@@ -58,21 +60,21 @@ namespace mithep
       void                      Init(UShort_t s);
       void                      Expand(UShort_t s);
     
-      TClass                   *fClass;    //!pointer to TClass object used by streamer
       UShort_t                  fSize;     //size of array
+      const TClass             *fClass;    //!pointer to TClass object used by streamer
       UShort_t                  fCapacity; //!size of heap allocated
       UShort_t                  fNObjects; //!number of allocated objects
-      ArrayElement             *fArray;    //!
+      ArrayElement             *fArray;    //!the array on the heap
 
-    ClassDef(FastArray,1) // Array on stack for arbitrary classes
+    ClassDef(FastArray,1) // Array on heap for arbitrary classes
   };
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline mithep::FastArray<ArrayElement>::FastArray() : 
-  fClass(TClass::GetClass(typeid(ArrayElement))),
   fSize(0),
+  fClass(TClass::GetClass(typeid(ArrayElement))),
   fCapacity(0),
   fNObjects(0),
   fArray(0)
@@ -83,15 +85,15 @@ inline mithep::FastArray<ArrayElement>::FastArray() :
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 inline mithep::FastArray<ArrayElement>::FastArray(const FastArray &a) : 
-  fClass(a.fClass),
   fSize(0),
+  fClass(a.fClass),
   fCapacity(0),
   fNObjects(0),
   fArray(0)
 {
    // Copy constructor. Copy only elements which are used.
+
    Init(a.fSize);
-   
    for (UInt_t i=0; i<a.fSize; ++i)
      new(Allocate()) ArrayElement(a.fArray[i]);
 }
@@ -100,7 +102,7 @@ inline mithep::FastArray<ArrayElement>::FastArray(const FastArray &a) :
 template<class ArrayElement>
 ArrayElement* mithep::FastArray<ArrayElement>::AddBlank()
 {
-  // Construct additional blank objects for read streamer
+  // Construct additional blank objects for read streamer.
 
   if (fNObjects >= fCapacity)
     Expand(TMath::Max(16,2*fCapacity));
@@ -144,7 +146,6 @@ ArrayElement* mithep::FastArray<ArrayElement>::Allocate()
   ++fSize;
   fNObjects = TMath::Max(fNObjects,fSize);
   return &fArray[fSize-1];
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,7 +183,7 @@ template<class ArrayElement>
 inline void mithep::FastArray<ArrayElement>::Expand(UShort_t s)
 {
 
-  // Expand or shrink the array to s elements.
+  // Expand or shrink the array to the given number of elements.
   
   if (s < fSize) {
     TObject::Fatal("Expand", "Cannot shrink FastArray to less than fSize");
@@ -201,7 +202,6 @@ inline void mithep::FastArray<ArrayElement>::Expand(UShort_t s)
                                         fCapacity * sizeof(ArrayElement)));
   fCapacity = s;
   fNObjects = TMath::Min(fCapacity,fNObjects);
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,7 +214,6 @@ ArrayElement* mithep::FastArray<ArrayElement>::GetNew()
     return Allocate();
   else
     return AddNew();
-  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,9 +248,7 @@ inline void mithep::FastArray<ArrayElement>::Init(UShort_t s)
   fCapacity = s;
   
   if ( !fArray && fCapacity > 0 )
-    fArray = static_cast<ArrayElement*>(TStorage::Alloc(fCapacity*sizeof(ArrayElement))); //new TObject* [fSize];
-  //memset(fCont, 0, fSize*sizeof(TObject*));
-
+    fArray = static_cast<ArrayElement*>(TStorage::Alloc(fCapacity*sizeof(ArrayElement))); 
 }
 
 //--------------------------------------------------------------------------------------------------

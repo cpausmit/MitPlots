@@ -1,5 +1,5 @@
-// $Id: Array.cc,v 1.1 2008/06/17 13:30:37 loizides Exp $
+// $Id: Array.cc,v 1.1 2008/07/29 10:36:21 loizides Exp $
 
 #include "MitAna/DataCont/interface/Array.h"
 
-ClassImpT(mithep::Array, ArrayElement)
+templateClassImp(mithep::Array)

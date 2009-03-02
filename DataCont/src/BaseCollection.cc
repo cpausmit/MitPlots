@@ -1,4 +1,4 @@
-// $Id: BaseCollection.cc,v 1.1 2008/07/29 10:36:21 loizides Exp $
+// $Id: BaseCollection.cc,v 1.2 2008/12/10 11:25:30 loizides Exp $
 
 #include "MitAna/DataCont/interface/BaseCollection.h"
 #include <TClass.h>
@@ -15,5 +15,5 @@ namespace {
           cls->IgnoreTObjectStreamer();
       }
   };
-  //DataCollectionIgnoreTObject dummy; //TODO enable for MIT_008 production
+  BaseCollectionIgnoreTObject dummy;
 }

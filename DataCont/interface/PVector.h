@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: PVector.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
 //
 // PVector
 //
@@ -31,7 +31,7 @@ namespace mithep
 
     protected:
 
-    ClassDefT(PVector, 1) // Wrapper around std::vector class
+    ClassDef(PVector, 1) // Wrapper around std::vector class
   };
 }
 

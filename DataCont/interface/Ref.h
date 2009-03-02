@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.1 2009/02/17 14:57:29 bendavid Exp $
+// $Id: Ref.h,v 1.2 2009/02/17 21:54:35 bendavid Exp $
 //
 // Ref
 //
-// Templated reimplimentation of TRef
+// Templated reimplimentation of our own TRef.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 #include <TRefTable.h>
 #include <TProcessID.h>
 #include <TError.h>
-#include "MitAna/TAM/interface/TAMSelector.h"
+#include "MitAna/DataCont/interface/RefResolver.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
  
 namespace mithep 
@@ -24,9 +24,9 @@ namespace mithep
   class Ref
   {
     public:
-      Ref() : fPID(0), fUID(0) {}
+      Ref() : fPID(0), fUID(0)    {}
       Ref(const ArrayElement *ae) { SetObject(ae); }
-      virtual ~Ref() {}
+      virtual ~Ref()              {}
 
       Bool_t                       IsNull()        const { return fUID==0 ? kTRUE : kFALSE; }
       Bool_t                       IsValid()       const { return !IsNull(); }
@@ -40,12 +40,11 @@ namespace mithep
 
     protected:
       TObject                     *GetObject()     const;
-    
-      static Bool_t                fOptimizedLoading;
-      ProcIDRef                    fPID;//||
-      UInt_t                       fUID;
 
-    ClassDef(Ref, 1) // Base class of all our collections
+      ProcIDRef                    fPID;     //||process id corresponding to referenced object
+      UInt_t                       fUID;     //unique id of the referenced object
+
+    ClassDef(Ref, 1) // Templated implementation of our own TRef
   };
 }
 
@@ -53,13 +52,12 @@ namespace mithep
 template<class ArrayElement>
 TObject *mithep::Ref<ArrayElement>::GetObject() const
 {
-  // Return entry at given index. Code adapted from TRef::GetObject().
+  // Return pointer to object. Code adapted from TRef::GetObject().
 
   if (IsNull())
     return 0;
   
-  TProcessID *pid= fPID.Pid(); 
-  
+  TProcessID *pid = fPID.Pid(); 
   if (!pid) {
     Fatal("GetObject","Process id pointer is null!");
     return 0;
@@ -70,23 +68,7 @@ TObject *mithep::Ref<ArrayElement>::GetObject() const
     return 0;
   }
 
-  //try to autoload from TAM
-  TAMSelector *tSel = TAMSelector::GetEvtSelector();
-  if (tSel) {
-    return tSel->GetObjectWithID(fUID,pid);
-  }
-  
-  //no TAM proxy present, fall back to standard Root calls
-  
-  //the reference may be in the TRefTable
-  TRefTable *table = TRefTable::GetRefTable();
-  if (table) {
-    table->SetUID(fUID, pid);
-    table->Notify();
-  }
-
-  return pid->GetObjectWithID(fUID);
-  
+  return RefResolver::GetObjectWithID(fUID,pid);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,7 +108,6 @@ Bool_t mithep::Ref<ArrayElement>::RefsObject(const ArrayElement *ae) const
     return kTRUE;
   else
     return kFALSE;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,7 +129,5 @@ void mithep::Ref<ArrayElement>::SetObject(const ArrayElement *ae)
     fPID.SetPid(TProcessID::GetSessionProcessID());
     fUID = TProcessID::AssignID(const_cast<ArrayElement*>(ae));
   }
-
 }
-
 #endif

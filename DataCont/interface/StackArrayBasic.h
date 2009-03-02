@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.3 2008/12/10 11:26:52 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.4 2008/12/18 13:34:16 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -27,7 +27,6 @@ namespace mithep
     public:
       StackArrayBasic();
       StackArrayBasic(const StackArrayBasic &a);
-      ~StackArrayBasic() {}
 
       void                      Add(const ArrayElement &ae);
       ArrayElement              At(UInt_t idx);

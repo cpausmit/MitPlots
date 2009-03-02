@@ -1,16 +1,19 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.1 2009/02/26 17:05:18 bendavid Exp $
+// $Id: FastArrayBasic.h,v 1.2 2009/02/27 09:16:30 bendavid Exp $
 //
 // FastArrayBasic
 //
-// Implementation of an array on the heap.  Memory is dynamically allocated, 
+// Implementation of a "fast" array on the heap: Memory is dynamically allocated, 
 // but there is an optimization in the read streamer similar to the TClonesArray
-// where the heap memory of an existing object is reused.  This class is meant to be used
-// as a datamember for objects which are contained inside a TClonesArray. 
-// For various reasons, the array can not be written in split 
-// mode. Array is meant to 
-// store basic data types as opposed to StackArray which can hold 
-// classes.
+// where the heap memory of an existing object is reused.  
+// This class is meant to be used as a datamember for objects which are contained 
+// inside a TClonesArray. 
+// For various reasons, the array can not be written in split mode. 
+// Array is meant to store basic data types as opposed to FastArray 
+// which can hold arbitrary (non-heap using) classes.
+// Since it stores basic types it can not derive from the Collection<ArrayElement>
+// interface, or else the At() member functions would have to return pointers to
+// basic elements. Something we did not want to do.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -36,9 +39,9 @@ namespace mithep
       void                      Add(const ArrayElement &ae);
       ArrayElement              At(UInt_t idx);
       const ArrayElement        At(UInt_t idx)                     const;
-      void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0); }
-      UInt_t                    Entries()                          const { return GetEntries(); }
-      UInt_t                    GetEntries()                       const { return fSize;        }
+      void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0);    }
+      UInt_t                    Entries()                          const { return fSize;        }
+      UInt_t                    GetEntries()                       const { return Entries();    }
       UInt_t                    GetSize()                          const { return fCapacity;    }
       Bool_t                    IsOwner()                          const { return kTRUE;        }
       TObject                  *ObjAt(UInt_t idx)                        { return 0;            }
@@ -58,7 +61,7 @@ namespace mithep
       UShort_t                  fCapacity; //!size of heap allocated
       ArrayElement             *fArray;    //!heap storage for objects
 
-    ClassDef(FastArrayBasic,1) // Array on stack for arbitrary classes
+    ClassDef(FastArrayBasic,1) // Fast array for basic types
   };
 }
 
@@ -80,8 +83,8 @@ inline mithep::FastArrayBasic<ArrayElement>::FastArrayBasic(const FastArrayBasic
   fArray(0)
 {
    // Copy constructor. Copy only elements which are used.
+
    Init(a.fSize);
-   
    for (UInt_t i=0; i<a.fSize; ++i)
      Add(a.fArray[i]);
 }
@@ -97,7 +100,6 @@ void mithep::FastArrayBasic<ArrayElement>::Add(const ArrayElement &ae)
    
   ++fSize; 
   fArray[fSize-1] = ae;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ template<class ArrayElement>
 inline void mithep::FastArrayBasic<ArrayElement>::Expand(UShort_t s)
 {
 
-  // Expand or shrink the array to s elements.
+  // Expand or shrink the array to given number of elements.
   
   if (s < fSize) {
     TObject::Fatal("Expand", "Cannot shrink FastArrayBasic to less than fSize");
@@ -153,7 +155,6 @@ inline void mithep::FastArrayBasic<ArrayElement>::Expand(UShort_t s)
   fArray = static_cast<ArrayElement*>(TStorage::ReAlloc(fArray, s * sizeof(ArrayElement),
                                         fCapacity * sizeof(ArrayElement)));
   fCapacity = s;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -161,7 +162,7 @@ template<class ArrayElement>
 inline void mithep::FastArrayBasic<ArrayElement>::Init(UShort_t s)
 {
 
-  // Initialize heap array
+  // Initialize the array the heap.
   
   if (fArray && fCapacity != s) {
     TStorage::Dealloc(fArray);
@@ -170,10 +171,8 @@ inline void mithep::FastArrayBasic<ArrayElement>::Init(UShort_t s)
   
   fCapacity = s;
   
-  if ( !fArray && fCapacity > 0 )
-    fArray = static_cast<ArrayElement*>(TStorage::Alloc(fCapacity*sizeof(ArrayElement))); //new TObject* [fSize];
-  //memset(fCont, 0, fSize*sizeof(TObject*));
-
+  if (!fArray && fCapacity > 0)
+    fArray = static_cast<ArrayElement*>(TStorage::Alloc(fCapacity*sizeof(ArrayElement)));
 }
 
 //-------------------------------------------------------------------------------------------------

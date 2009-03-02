@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.7 2008/12/10 11:26:52 loizides Exp $
+// $Id: StackArray.h,v 1.8 2008/12/18 13:34:16 loizides Exp $
 //
 // StackArray
 //
@@ -27,7 +27,6 @@ namespace mithep
     public:
       StackArray();
       StackArray(const StackArray &a);
-      ~StackArray() {}
 
       void                      AddCopy(const ArrayElement &ae);
       ArrayElement             *AddNew();

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.4 2008/12/01 17:17:20 bendavid Exp $
+// $Id: Vector.h,v 1.5 2008/12/10 11:26:52 loizides Exp $
 //
 // Vector
 //
@@ -28,7 +28,6 @@ namespace mithep
     public:
       Vector(UInt_t rsv=0) : fV(0) { fV.reserve(rsv); }
       Vector(std::vector<ArrayElement> &v) : fV(v) {}
-      ~Vector() {}
 
       void                             AddCopy(const ArrayElement &ae)     { fV.push_back(ae); }
       void                             AddCopy(const ArrayElement *ae)     { fV.push_back(*ae); }
@@ -59,7 +58,7 @@ namespace mithep
     private:
       Vector(const Vector &v);
 
-    ClassDefT(Vector, 1) // Wrapper around std::vector class
+    ClassDef(Vector, 1) // Wrapper around std::vector class
   };
 }
 

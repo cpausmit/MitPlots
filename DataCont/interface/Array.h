@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.9 2008/12/18 13:34:16 loizides Exp $
+// $Id: Array.h,v 1.10 2009/02/26 17:05:18 bendavid Exp $
 //
 // Array
 //
@@ -21,7 +21,6 @@ namespace mithep
   {
     public:
       Array(UInt_t size=0, const char *name=0);
-      ~Array() {}
 
       ArrayElement        *AddNew();
       ArrayElement        *Allocate();
@@ -61,7 +60,7 @@ namespace mithep
     private:
       Array(const Array &a);
 
-    ClassDefT(Array, 1) // Wrapper around TClonesArray class
+    ClassDef(Array, 1) // Wrapper around TClonesArray class
   };
 }
 
