@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.21 2008/12/01 17:38:21 loizides Exp $
+// $Id: Types.h,v 1.22 2009/03/02 12:36:04 loizides Exp $
 //
 // Types
 //
@@ -13,8 +13,8 @@
  
 #include <Rtypes.h>
 #include "MitCommon/DataFormats/interface/Types.h"
+#include "MitAna/DataCont/interface/Types.h"
 #include "MitAna/DataTree/interface/BitMask.h"
-#include "MitAna/DataCont/interface/Vector.h"
 
 namespace mithep
 {
