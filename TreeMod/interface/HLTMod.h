@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.3 2008/12/04 13:49:14 loizides Exp $
+// $Id: HLTMod.h,v 1.4 2008/12/10 14:20:27 loizides Exp $
 //
 // HLTMod
 //
@@ -60,7 +60,7 @@ namespace mithep
       Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun.
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
-      Vector<std::string>         fTrigNames;     //trigger names requested for test mask
+      std::vector<std::string>    fTrigNames;     //trigger names requested for test mask
       const BitMask256           *fBits;          //!trigger bits branch
       Vector<BitMask256>          fTrigBitsAnd;   //!trigger bits used in mask
       Vector<BitMask256>          fTrigBitsCmp;   //!trigger bits used for comparison

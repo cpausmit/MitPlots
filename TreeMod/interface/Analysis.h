@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.20 2009/02/17 21:54:28 bendavid Exp $
+// $Id: Analysis.h,v 1.21 2009/03/02 12:35:29 loizides Exp $
 //
 // Analysis
 //
@@ -71,6 +71,7 @@ namespace mithep
       void                      SetCompressionLevel(Int_t level)    { fCompLevel     = level;     }
       void                      SetConfigName(const char* name)     { fConfig        = name;      }
       void                      SetDoObjTabClean(Bool_t b)          { fDoObjTabClean = b;         }
+      void                      SetDoProxy(Bool_t b)                { fDoProxy       = b;         }
       void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
       void                      SetMasterName(const char* name)     { fMaster        = name;      }
       void                      SetOutputName(const char *name)     { fAnaOutput     = name;      }

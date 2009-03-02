@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.3 2008/12/04 13:48:57 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.4 2008/12/10 14:20:26 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -58,8 +58,8 @@ namespace mithep
       const TriggerObjectRelArr  *fRels;          //!trigger to objects relation branch
       Bool_t                      fReload;        //!=true then reload/rebuild tables
       TTree                      *fHLTTree;       //!HLT tree in current file
-      Vector<std::string>        *fHLTTab;        //!HLT trigger names
-      Vector<std::string>        *fHLTLab;        //!HLT module labels
+      std::vector<std::string>   *fHLTTab;        //!HLT trigger names
+      std::vector<std::string>   *fHLTLab;        //!HLT module labels
       Int_t                       fCurEnt;        //!current entry in HLT tree (-2 for unset)
       TriggerTable               *fTriggers;      //!exported published HLT trigger table
       TriggerTable               *fLabels;        //!exported published HLT module label table

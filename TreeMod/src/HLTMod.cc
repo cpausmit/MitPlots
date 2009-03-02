@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.3 2008/10/23 18:25:27 loizides Exp $
+// $Id: HLTMod.cc,v 1.4 2008/11/25 14:29:41 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -43,7 +43,7 @@ void HLTMod::AddTrigger(const char *expr)
   // "A", "!A", "A&B", "A&!B" or "A&B&C"  
 
   string tname(expr);
-  fTrigNames.AddCopy(tname);
+  fTrigNames.push_back(tname);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,10 +78,10 @@ void HLTMod::BeginRun()
   if (fPrintTable) 
     fTriggers->Print();
 
-  for (UInt_t i=0; i<fTrigNames.Entries(); ++i) {
+  for (UInt_t i=0; i<fTrigNames.size(); ++i) {
     BitMask256 tmask; //trigger mask
     BitMask256 amask; //bitand mask
-    TString names(fTrigNames.At(i)->c_str());
+    TString names(fTrigNames.at(i).c_str());
     TObjArray *arr = names.Tokenize("&");
     if (arr) {
       for(Int_t j=0; j<arr->GetEntries(); j++){

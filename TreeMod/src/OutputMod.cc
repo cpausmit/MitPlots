@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.4 2008/12/04 13:55:06 loizides Exp $
+// $Id: OutputMod.cc,v 1.5 2008/12/09 10:14:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -75,9 +75,9 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
     return;
 
   // populate regular expression list if this was not yet done
-  if (fCmdReList.size() != fCmdList.Entries()) {
-    for (UInt_t i=0; i<fCmdList.Entries(); ++i) {
-      const char *ptr = fCmdList.At(i)->c_str();
+  if (fCmdReList.size() != fCmdList.size()) {
+    for (UInt_t i=0; i<fCmdList.size(); ++i) {
+      const char *ptr = fCmdList.at(i).c_str();
       fCmdReList.push_back(TRegexp(ptr+5,kTRUE));
       if (ptr[0]=='k') 
         fCmdDeList.push_back(kTRUE);
@@ -91,7 +91,7 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
   Bool_t decision       = kFALSE;
   Bool_t decision_found = kFALSE;
 
-  for (UInt_t i=0; i<fCmdList.Entries(); ++i) {
+  for (UInt_t i=0; i<fCmdList.size(); ++i) {
     TRegexp &re(fCmdReList.at(i));
     if (brname.Index(re) == kNPOS)
       continue;
@@ -114,8 +114,8 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
   // add branch to accepted branch list
   Info("CheckAndAddBranch", "Kept branch with name %s and class %s.", bname, cname);
 
-  fBrNameList.AddCopy(string(bname));
-  fBrClassList.AddCopy(string(cname));
+  fBrNameList.push_back(string(bname));
+  fBrClassList.push_back(string(cname));
 
   // request branch
   RequestBranch(bname);
@@ -157,8 +157,8 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
       Info("CheckAndResolveDep", "Resolving dependency for loaded branch %s and class %s",
            bname,cname);
 
-      fBrNameList.AddCopy(string(bname));
-      fBrClassList.AddCopy(string(cname));
+      fBrNameList.push_back(string(bname));
+      fBrClassList.push_back(string(cname));
       fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
 
     } else {
@@ -225,7 +225,7 @@ Bool_t OutputMod::IsAcceptedBranch(const char *bname)
 
   // search in branch list
   for (UInt_t i=0; i<GetNBranches(); ++i) {
-    if (fBrNameList.At(i)->compare(bname) == 0) 
+    if (fBrNameList.at(i).compare(bname) == 0) 
       return kTRUE;
   }
 
@@ -281,7 +281,7 @@ void OutputMod::LoadBranches()
   // Loop over requested branches and load them.
 
   for (UInt_t i=0; i<GetNBranches(); ++i) {
-    LoadBranch(fBrNameList.At(i)->c_str());
+    LoadBranch(fBrNameList.at(i).c_str());
   }
 }
 
@@ -412,8 +412,8 @@ void OutputMod::SetupBranches()
   // Setup branches in tree writer.
 
   for (UInt_t i=0; i<GetNBranches(); ++i) {
-    const char *bname = fBrNameList.At(i)->c_str();
-    const char *cname = fBrClassList.At(i)->c_str();
+    const char *bname = fBrNameList.at(i).c_str();
+    const char *cname = fBrClassList.at(i).c_str();
     if (!fBranches[i]) {
       Error("SetupBranches", "Pointer for branch with name %s and class %s is NULL.",
             bname, cname);

@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.3 2008/11/25 15:12:33 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.4 2009/02/13 14:45:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -156,22 +156,22 @@ Bool_t HLTFwkMod::LoadTriggerTable()
   }
 
   // check size of trigger table
-  if (fHLTTab->Entries()>fNMaxTriggers) {
+  if (fHLTTab->size()>fNMaxTriggers) {
     SendError(kAbortAnalysis, "LoadTriggerTable", 
               "Size of trigger table (%d) larger than maximum (%d)", 
-              fHLTTab->Entries(), fNMaxTriggers);
+              fHLTTab->size(), fNMaxTriggers);
     return kFALSE;
   }
 
   // add trigger names
-  for (UInt_t i=0; i<fHLTTab->Entries(); ++i) {
-    TriggerName *tname = new TriggerName(*fHLTTab->At(i),i);
+  for (UInt_t i=0; i<fHLTTab->size(); ++i) {
+    TriggerName *tname = new TriggerName(fHLTTab->at(i),i);
     fTriggers->Add(tname);
   } 
 
   // add module labels
-  for (UInt_t i=0; i<fHLTLab->Entries(); ++i) {
-    TriggerName *tname = new TriggerName(*fHLTLab->At(i),i);
+  for (UInt_t i=0; i<fHLTLab->size(); ++i) {
+    TriggerName *tname = new TriggerName(fHLTLab->at(i),i);
     fLabels->Add(tname);
   } 
 
@@ -207,9 +207,9 @@ void HLTFwkMod::Process()
     TriggerObject *obj = new TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
                                            ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
 
-    obj->SetTrigName(fHLTTab->Ref(rel->TrgId()).c_str());
-    obj->SetModuleName(fHLTLab->Ref(rel->ModInd()).c_str());
-    obj->SetFilterName(fHLTLab->Ref(rel->FilterInd()).c_str());
+    obj->SetTrigName(fHLTTab->at(rel->TrgId()).c_str());
+    obj->SetModuleName(fHLTLab->at(rel->ModInd()).c_str());
+    obj->SetFilterName(fHLTLab->at(rel->FilterInd()).c_str());
     fTrigObjs->Add(obj);
   }
 }

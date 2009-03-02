@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.5 2008/12/10 14:20:27 loizides Exp $
+// $Id: OutputMod.h,v 1.6 2009/03/02 12:35:29 loizides Exp $
 //
 // OutputMod
 //
@@ -62,7 +62,7 @@ namespace mithep
       Bool_t                   fDoReset;        //=true then reset pointers
       Bool_t                   fCheckTamBr;     //=true then check TAM loaded branches
       Bool_t                   fKeepTamBr;      //=true then keep TAM loaded branches
-      StringVec                   fCmdList;        //list of keep/drop statements
+      std::vector<std::string> fCmdList;        //list of keep/drop statements
 
     private:
       void                     CheckAndAddBranch(const char *bname, const char *cname);
@@ -71,7 +71,7 @@ namespace mithep
       void                     FillAllEventHeader(Bool_t isremoved);
       void                     FillL1Info();
       void                     FillHltInfo();
-      UInt_t                   GetNBranches() const          { return fBrNameList.Entries(); }
+      UInt_t                   GetNBranches() const          { return fBrNameList.size(); }
       void                     LoadBranches();
       void                     RequestBranch(const char *bname);
       void                     SetupBranches();
@@ -83,8 +83,8 @@ namespace mithep
       LAHeader                *fLaHeader;        //!my look ahead header
       std::vector<TRegexp>     fCmdReList;       //!branch list from fCmdList
       std::vector<Bool_t>      fCmdDeList;       //!keep/drop list from fCmdList
-      StringVec                fBrNameList;      //!branch list to be kept
-      StringVec                fBrClassList;     //!corresponding class list
+      std::vector<std::string> fBrNameList;      //!branch list to be kept
+      std::vector<std::string> fBrClassList;     //!corresponding class list
       TObject**                fBranches;        //!branches to be written
       const UInt_t             fNBranchesMax;    //!maximum number of supported top-level branches
       TTree                   *fRunTree;         //!runinfo tree
@@ -115,7 +115,7 @@ inline void mithep::OutputMod::Drop(const char *bname)
 { 
   // Add branch name to be dropped (can be regular expression)
 
-//  fCmdList.push_back(std::string(Form("drop %s", bname))); 
+  fCmdList.push_back(std::string(Form("drop %s", bname))); 
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,6 +123,6 @@ inline void mithep::OutputMod::Keep(const char *bname)
 { 
   // Add branch name to be kept (can be regular expression)
 
-//  fCmdList.push_back(std::string(Form("keep %s", bname))); 
+  fCmdList.push_back(std::string(Form("keep %s", bname))); 
 }
 #endif

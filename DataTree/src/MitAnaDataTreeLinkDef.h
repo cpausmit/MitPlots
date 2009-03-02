@@ -1,10 +1,10 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.54 2009/02/26 17:06:25 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.55 2009/03/02 12:36:04 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/ObjTypes.h"
@@ -57,12 +57,6 @@
 #pragma link C++ namespace mithep;
 
 #pragma link C++ class mithep::Names+;
-
-//#pragma link C++ class mithep::Collection<TRef>+;        //todo  remvoe for Mit_008
-//#pragma link C++ class mithep::Collection<std::string>+; //todo  remove for Mit_008
-//#pragma link C++ typedef mithep::StringCol;              //todo  remove for Mit_008
-//#pragma link C++ class mithep::Vector<std::string>+;     //todo  remove for Mit_008
-//#pragma link C++ typedef mithep::StringVec;              //todo  remove for Mit_008
 
 #pragma link C++ class mithep::Collection<TObject>+;
 #pragma link C++ class mithep::ObjArray<TObject>+;
