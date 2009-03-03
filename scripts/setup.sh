@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.16 2008/11/13 14:29:22 sixie Exp $
+# $Id: setup.sh,v 1.17 2008/11/21 17:40:50 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -26,35 +26,23 @@ if test $version -lt 2001008; then
 fi
 
 case $version in
-       (2001008 | 2001009 | 2001010 | 2001011 | 2001012)
- 
-       cvs co -r V01-06-05 CondFormats/JetMETObjects;
-       cvs co -r V01-08-10 JetMETCorrections/Configuration;
-       cvs co -r V02-09-00 JetMETCorrections/Modules;
-
-       #things related to JetsPlusTrack
-       cvs co -r V01-07-11 JetMETCorrections/Algorithms
-       cvs co -r V03-02-04 JetMETCorrections/JetPlusTrack
-       #this is needed to do JetPlusTrack on AOD. we will not use this 
-       #for now since we run on RECO for now
-       #cvs co -r V01-04-03 RecoJets/JetAssociationAlgorithms       
+       (2002004 | 2002005) 
 
        #to remove annoying warning messages for the jet to vertex associator.
-       cvs co JetMETCorrections/JetVertexAssociation;
+       cvs co -r $CMSSW_VERSION JetMETCorrections/JetVertexAssociation;
        TMP=`mktemp`;
        cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
        sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
        mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
 
-       if test $version -eq 2001011; then
-           #for jurassic isolation veto FIX.
-           cvs co -rV01-01-06 PhysicsTools/IsolationAlgos
-           #comment out unused function to remove dependencies on additional tags
-           patch -N -u -r MitAna/scripts/patch-reject.rej -i MitAna/scripts/IsoDepositVetoFactory.cc.patch PhysicsTools/IsolationAlgos/src/IsoDepositVetoFactory.cc
-           
-           #for sigmaietaeta
-           cvs co -rV00-05-19 RecoEcal/EgammaCoreTools
-       fi
+       #Tags required for Summer08 redigi-rereco and Winter09 FastSim JetMetCorrections
+       cvs co -r V01-07-02 CondFormats/JetMETObjects
+       cvs co -r V01-08-13 JetMETCorrections/Configuration
+       cvs co -r V02-09-02 JetMETCorrections/Modules
+       cvs co -r V01-08-00 JetMETCorrections/Algorithms
+       
+       #needed for JetPlusTracks and associated corrections
+       cvs co -r V01-04-03 RecoJets/JetAssociationAlgorithms
 
        ;;
     *) 
