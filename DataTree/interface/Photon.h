@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.21 2009/02/18 15:38:54 loizides Exp $
+// $Id: Photon.h,v 1.22 2009/02/26 17:06:24 bendavid Exp $
 //
 // Photon
 //
@@ -21,18 +21,17 @@ namespace mithep
   class Photon : public Particle
   {
     public:
-    Photon() : fR9(0),fR19(0),fE5x5(0),fHadOverEm(0),fHasPixelSeed(0),fEcalRecHitIso(0),
+    Photon() : fR9(0),fHadOverEm(0),fHasPixelSeed(0),fEcalRecHitIso(0),
                fHcalRecHitIso(0),fSolidConeTrkIso(0),fHollowConeTrkIso(0),fSolidConeNTrk(0),
                fHollowConeNTrk(0),fIsEBGap(0),fIsEEGap(0),fIsEBEEGap(0),fIsLooseEM(0),
                fIsLoosePhoton(0),fIsTightPhoton(0),fIsConverted(0) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
-        fMom(FourVector(px,py,pz,e)), fR9(0),fR19(0),fE5x5(0),fHadOverEm(0),fHasPixelSeed(0),
+        fMom(FourVector(px,py,pz,e)), fR9(0),fHadOverEm(0),fHasPixelSeed(0),
         fEcalRecHitIso(0),fHcalRecHitIso(0),fSolidConeTrkIso(0),fHollowConeTrkIso(0),
         fSolidConeNTrk(0),fHollowConeNTrk(0),fIsEBGap(0),fIsEEGap(0),fIsEBEEGap(0),fIsLooseEM(0),
         fIsLoosePhoton(0),fIsTightPhoton(0),fIsConverted(0) {}
 
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
-      Double_t                  E5x5()                  const { return fE5x5;              }
       Double_t                  EcalRecHitIso()         const { return fEcalRecHitIso;     }
       Double_t                  HadOverEm()             const { return fHadOverEm;         }
       Double_t                  HasPixelSeed()          const { return fHasPixelSeed;      }
@@ -49,7 +48,6 @@ namespace mithep
       UInt_t                    NConversions()          const { return fConversions.Entries();   }
       EObjType                  ObjType()               const { return kPhoton;                  }
       Double_t                  R9()                    const { return fR9;                      }
-      Double_t                  R19()                   const { return fR19;                     }
       const SuperCluster       *SCluster()              const { return fSuperClusterRef.Obj();   }
       Double_t                  SolidConeTrkIso()       const { return fSolidConeTrkIso;         }
       Int_t                     SolidConeNTrk()         const { return fSolidConeNTrk;           }
@@ -58,8 +56,6 @@ namespace mithep
       void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                      SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
       void                      SetR9(Double_t x)                 { fR9 = x;               }
-      void                      SetR19(Double_t x)                { fR19 = x;              }
-      void                      SetE5x5(Double_t x)               { fE5x5 = x;             }
       void                      SetHadOverEm(Double_t x)          { fHadOverEm = x;        }
       void                      SetHasPixelSeed(Double_t x)       { fHasPixelSeed = x;     }
       void                      SetEcalRecHitIso(Double_t x)      { fEcalRecHitIso = x;    }
@@ -80,8 +76,6 @@ namespace mithep
 
       FourVectorM32             fMom;               //four momentum vector
       Double32_t                fR9;
-      Double32_t                fR19;
-      Double32_t                fE5x5;
       Double32_t                fHadOverEm;
       Double32_t                fHasPixelSeed;
       Double32_t                fEcalRecHitIso;
