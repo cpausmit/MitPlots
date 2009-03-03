@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.5 2008/12/10 11:26:52 loizides Exp $
+// $Id: Vector.h,v 1.6 2009/03/02 12:34:00 loizides Exp $
 //
 // Vector
 //
@@ -39,8 +39,8 @@ namespace mithep
       UInt_t                           GetSize()                     const { return fV.capacity(); }
       Bool_t                           HasObject(const ArrayElement *obj) const;
       Bool_t                           IsOwner()                     const { return kTRUE; }
-      TObject                         *ObjAt(UInt_t idx)                   { return 0; } //TODO_008
-      const TObject                   *ObjAt(UInt_t idx)             const { return 0; } //TODO_008
+      TObject                         *ObjAt(UInt_t idx)                   { return &fV.at(idx); }
+      const TObject                   *ObjAt(UInt_t idx)             const { return &fV.at(idx); }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
       void                             Reset()                             { fV.clear(); }
@@ -76,18 +76,14 @@ inline void mithep::Vector<ArrayElement>::Clear(Option_t */*opt*/)
 template<class ArrayElement>
 inline Bool_t mithep::Vector<ArrayElement>::HasObject(const ArrayElement *obj) const
 {
-  // Check whether object is in array. If ArrayElement inherits from TObject, use the
-  // isEqual function for the comparison, otherwise use the default pointer comparison.
+  // Check whether object is in array, using the isEqual function for the comparison.
 
   const TObject *tobj = 0;
   if (TClass::GetClass(typeid(ArrayElement))->IsTObject())
     tobj = reinterpret_cast<const TObject*>(obj);
 
   for (UInt_t i=0; i<fV.size(); ++i) {
-    if (tobj)
-      if (reinterpret_cast<const TObject*>(&fV.at(i))->IsEqual(tobj))
-        return kTRUE;
-    else if (&fV.at(i) == obj)
+    if ( fV.at(i).IsEqual(obj) )
       return kTRUE;
   }
   
