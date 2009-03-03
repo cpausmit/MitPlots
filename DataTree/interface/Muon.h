@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.25 2009/02/18 15:38:54 loizides Exp $
+// $Id: Muon.h,v 1.26 2009/02/26 17:06:24 bendavid Exp $
 //
 // Muon
 //
@@ -99,6 +99,10 @@ namespace mithep {
       Double_t       HoEnergy()                      const { return fHoEnergy;                 }
       Double_t       HoS9Energy()                    const { return fHoS9Energy;               }
       EClassType     Is()                            const;
+      Bool_t         IsGlobalMuon()                  const { return fIsGlobalMuon;             }
+      Bool_t         IsTrackerMuon()                 const { return fIsTrackerMuon;            }
+      Bool_t         IsStandaloneMuon()              const { return fIsStandaloneMuon;         }
+      Bool_t         IsCaloMuon()                    const { return fIsCaloMuon;               }
       Double_t       IsoR03SumPt()                   const { return fIsoR03SumPt;              }
       Double_t       IsoR03EmEt()                    const { return fIsoR03EmEt;               }
       Double_t       IsoR03HadEt()                   const { return fIsoR03HadEt;              }
@@ -134,6 +138,10 @@ namespace mithep {
       void           SetHadS9Energy(Double_t HadS9Energy)  { fHadS9Energy = HadS9Energy;       }
       void           SetHoEnergy(Double_t HoEnergy)        { fHoEnergy = HoEnergy;             }
       void           SetHoS9Energy(Double_t HoS9Energy)    { fHoS9Energy = HoS9Energy;         }
+      void           SetIsGlobalMuon(Bool_t b)             { fIsGlobalMuon = b;                }
+      void           SetIsTrackerMuon(Bool_t b)            { fIsTrackerMuon = b;               }
+      void           SetIsStandaloneMuon(Bool_t b)         { fIsStandaloneMuon = b;            }
+      void           SetIsCaloMuon(Bool_t b)               { fIsCaloMuon = b;                  }
       void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;       }
       void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;         }
       void           SetIsoR03HadEt(Double_t isoR03HadEt)  { fIsoR03HadEt = isoR03HadEt;       }
@@ -187,6 +195,10 @@ namespace mithep {
       Double32_t     fTrackDist[8];        //dist. to track in trans. plane in given muon chamber
       Double32_t     fTrackDistErr[8];     //error of dist. to track in trans. plane in chamber
       Int_t          fNSegments[8];        //number of segments in given muon chamber
+      Bool_t         fIsGlobalMuon;         //GlobalMuon algo flag
+      Bool_t         fIsTrackerMuon;        //TrackerMuon algo flag
+      Bool_t         fIsStandaloneMuon;     //Standalone muon algo flag
+      Bool_t         fIsCaloMuon;           //CaloMuon algo flag
 
     ClassDef(Muon, 1) // Muon class
   };
