@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.3 2009/03/02 12:34:00 loizides Exp $
+// $Id: FastArrayBasic.h,v 1.4 2009/03/02 14:56:41 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -28,7 +28,7 @@
 
 namespace mithep 
 {
-  template<class ArrayElement, class DE=Float_t>
+  template<class ArrayElement, Bool_t IsDouble32 = kFALSE>
   class FastArrayBasic : public BaseCollection
   {
     public:
@@ -44,8 +44,8 @@ namespace mithep
       UInt_t                    GetEntries()                       const { return Entries();    }
       UInt_t                    GetSize()                          const { return fCapacity;    }
       Bool_t                    IsOwner()                          const { return kTRUE;        }
-      TObject                  *ObjAt(UInt_t idx)                        { return 0;            }
-      const TObject            *ObjAt(UInt_t idx)                 const  { return 0;            }
+      TObject                  *ObjAt(UInt_t /*idx*/)                    { return 0;            }
+      const TObject            *ObjAt(UInt_t /*idx*/)              const { return 0;            }
       void                      Reset()                                  { fSize = 0;           }
       void                      Trim()                                   { Expand(fSize);       }
       ArrayElement              UncheckedAt(UInt_t idx);                 
@@ -66,8 +66,8 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(UShort_t icap) : 
+template<class ArrayElement, Bool_t IsDouble32>
+inline mithep::FastArrayBasic<ArrayElement, IsDouble32>::FastArrayBasic(UShort_t icap) : 
   fSize(0),
   fCapacity(0),
   fArray(0)
@@ -79,8 +79,8 @@ inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(UShort_t icap) :
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(const FastArrayBasic &a) : 
+template<class ArrayElement, Bool_t IsDouble32>
+inline mithep::FastArrayBasic<ArrayElement, IsDouble32>::FastArrayBasic(const FastArrayBasic &a) : 
   fSize(0),
   fCapacity(0),
   fArray(0)
@@ -93,8 +93,8 @@ inline mithep::FastArrayBasic<ArrayElement, DE>::FastArrayBasic(const FastArrayB
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-void mithep::FastArrayBasic<ArrayElement, DE>::Add(const ArrayElement &ae)
+template<class ArrayElement, Bool_t IsDouble32>
+void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &ae)
 {
   // Add a copy of an existing object.
   
@@ -106,8 +106,8 @@ void mithep::FastArrayBasic<ArrayElement, DE>::Add(const ArrayElement &ae)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t idx)
+template<class ArrayElement, Bool_t IsDouble32>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx)
 {
   // Return entry at given index. 
 
@@ -121,8 +121,8 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t idx)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t idx) const
+template<class ArrayElement, Bool_t IsDouble32>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -136,8 +136,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::At(UInt_t id
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline void mithep::FastArrayBasic<ArrayElement, DE>::Expand(UShort_t s)
+template<class ArrayElement, Bool_t IsDouble32>
+inline void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Expand(UShort_t s)
 {
 
   // Expand or shrink the array to given number of elements.
@@ -161,8 +161,8 @@ inline void mithep::FastArrayBasic<ArrayElement, DE>::Expand(UShort_t s)
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline void mithep::FastArrayBasic<ArrayElement, DE>::Init(UShort_t s)
+template<class ArrayElement, Bool_t IsDouble32>
+inline void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Init(UShort_t s)
 {
 
   // Initialize the array the heap.
@@ -179,10 +179,11 @@ inline void mithep::FastArrayBasic<ArrayElement, DE>::Init(UShort_t s)
 }
 
 //-------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-void mithep::FastArrayBasic<ArrayElement, DE>::Streamer(TBuffer &b)
+template<class ArrayElement, Bool_t IsDouble32>
+void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Streamer(TBuffer &b)
 {
    // Stream all objects in the array to or from the I/O buffer.
+   // Ugly special case handling for Double32
 
   if (b.IsReading()) {
     b >> fSize;
@@ -190,19 +191,25 @@ void mithep::FastArrayBasic<ArrayElement, DE>::Streamer(TBuffer &b)
       if (fSize > fCapacity)
         Expand(TMath::Max(static_cast<Int_t>(fSize),2*fCapacity));
         
-      b.ReadFastArray(fArray,fSize);
+      if (IsDouble32)
+        b.ReadFastArrayDouble32(reinterpret_cast<Double_t*>(fArray),fSize);
+      else
+        b.ReadFastArray(fArray,fSize);
     }
   } else { /*writing*/
     b << fSize;
     if (fSize) {
-      b.WriteFastArray(fArray,fSize);
+      if (IsDouble32)
+        b.WriteFastArrayDouble32(reinterpret_cast<Double_t*>(fArray),fSize);
+      else
+        b.WriteFastArray(fArray,fSize);
     }
   }
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(UInt_t idx)
+template<class ArrayElement, Bool_t IsDouble32>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::UncheckedAt(UInt_t idx)
 {
   // Return entry at given index.
 
@@ -210,8 +217,8 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(UInt_t
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(UInt_t idx) const
+template<class ArrayElement, Bool_t IsDouble32>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -219,8 +226,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::UncheckedAt(
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::operator[](UInt_t idx) const
+template<class ArrayElement, Bool_t IsDouble32>
+inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -228,8 +235,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::operator[](U
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class ArrayElement, class DE>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement, DE>::operator[](UInt_t idx)
+template<class ArrayElement, Bool_t IsDouble32>
+inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::operator[](UInt_t idx)
 {
   // Return entry at given index.
 

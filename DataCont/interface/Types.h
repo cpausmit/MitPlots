@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.22 2009/03/02 12:36:04 loizides Exp $
+// $Id: Types.h,v 1.1 2009/03/02 14:56:42 loizides Exp $
 //
 // Types
 //
@@ -18,7 +18,7 @@
 namespace mithep
 {
   typedef FastArrayBasic<Double_t>    FArrDouble;
-  typedef FastArrayBasic<Double32_t>  FArrDouble32;
+  typedef FastArrayBasic<Double32_t,kTRUE> FArrDouble32;
   typedef FastArrayBasic<Int_t>       FArrInt;
   typedef FastArrayBasic<UInt_t>      FArrUInt;
 }

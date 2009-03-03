@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.5 2009/03/02 12:34:00 loizides Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.6 2009/03/02 14:56:42 loizides Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -25,8 +25,8 @@
 #pragma link C++ class mithep::Collection<mithep::ProcIDRef>+;
 #pragma link C++ class mithep::FastArray<mithep::ProcIDRef>-;
 
-#pragma link C++ class mithep::FastArrayBasic<Double_t, Double_t>-;
-#pragma link C++ class mithep::FastArrayBasic<Double32_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Double_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Double32_t,kTRUE>-;
 #pragma link C++ class mithep::FastArrayBasic<Int_t>-;
 #pragma link C++ class mithep::FastArrayBasic<UInt_t>-;
 
