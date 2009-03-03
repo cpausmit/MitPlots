@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.6 2008/12/11 17:04:50 loizides Exp $
+// $Id: BasicCluster.h,v 1.7 2009/02/18 15:38:54 loizides Exp $
 //
 // BasicCluster
 //
@@ -19,12 +19,10 @@ namespace mithep
   class BasicCluster : public DataObject
   {
     public:
-      BasicCluster() : fEnergy(0), fAlgoId(0), fChiSq(0) {}
+      BasicCluster() : fEnergy(0) {}
       BasicCluster(Double_t e, const ThreeVector &p) : 
-        fEnergy(e), fPoint(p), fAlgoId(0), fChiSq(0) {}
+        fEnergy(e), fPoint(p) {}
      
-      Int_t	       AlgoId()                 const { return fAlgoId;       }
-      Double_t	       ChiSq()                  const { return fChiSq;        }       
       Double_t         Energy()                 const { return fEnergy;       }       
       Double_t         Eta()                    const { return fPoint.Eta();  }
       EObjType         ObjType()                const { return kBasicCluster; }       
@@ -33,18 +31,13 @@ namespace mithep
       Double_t         Y()                      const { return fPoint.Y();    }
       Double_t         Z()                      const { return fPoint.Z();    }        
       void             Print(Option_t *opt="")  const;
-      void	       SetAlgoId(Int_t algoId)                    { fAlgoId = algoId;     }
-      void	       SetChiSq(Double_t chiSq)                   { fChiSq  = chiSq;      }
       void	       SetEnergy(Double_t energy)                 { fEnergy = energy;     }      
       void	       SetXYZ(Double_t x, Double_t y, Double_t z) { fPoint.SetXYZ(x,y,z); } 
 
     protected:
-      
+        
       Double32_t       fEnergy;  //assigned energy      
       ThreeVector32    fPoint;   //centroid Position
-      Int_t            fAlgoId;  //algorithm ID: island = 0, hybrid = 1, fixedMatrix = 2, 
-                                 //              dynamicHybrid = 3, multi5x5 = 4
-      Double32_t       fChiSq;   //chi-squared (obsolete since it is always put to zero in CMSSW)
       
       ClassDef(BasicCluster, 1)  // Basic cluster class
   };
