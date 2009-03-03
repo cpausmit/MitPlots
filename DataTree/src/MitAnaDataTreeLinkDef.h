@@ -1,24 +1,24 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.55 2009/03/02 12:36:04 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.56 2009/03/02 13:26:44 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
 
-//#include <string>
-//#include <vector>
-
-#include "MitAna/DataTree/interface/Types.h"
-#include "MitAna/DataTree/interface/ObjTypes.h"
-#include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/Names.h"
+#include "MitAna/DataTree/interface/ObjTypes.h"
 #include "MitAna/DataCont/interface/Ref.h"
+#include "MitAna/DataTree/interface/Types.h"
 
 #include "MitAna/DataTree/interface/DataBase.h"
 #include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
-#include "MitAna/DataTree/interface/TriggerName.h"
-#include "MitAna/DataTree/interface/RunInfo.h"
 #include "MitAna/DataTree/interface/MCEventInfo.h"
+#include "MitAna/DataTree/interface/RunInfo.h"
+#include "MitAna/DataTree/interface/TriggerName.h"
+#include "MitAna/DataTree/interface/Vect3.h"
+#include "MitAna/DataTree/interface/Vect3C.h"
+#include "MitAna/DataTree/interface/Vect4M.h"
 
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
@@ -117,9 +117,12 @@
 
 #pragma link C++ class mithep::EventHeader+;
 #pragma link C++ class mithep::LAHeader+;
-#pragma link C++ class mithep::TriggerName+;
-#pragma link C++ class mithep::RunInfo+;
 #pragma link C++ class mithep::MCEventInfo+;
+#pragma link C++ class mithep::RunInfo+;
+#pragma link C++ class mithep::TriggerName+;
+#pragma link C++ class mithep::Vect3+;
+#pragma link C++ class mithep::Vect3C+;
+#pragma link C++ class mithep::Vect4M+;
 
 #pragma link C++ class mithep::DataObject+;
 #pragma link C++ class mithep::Collection<mithep::DataObject>+;
