@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.26 2009/02/26 17:06:24 bendavid Exp $
+// $Id: Electron.h,v 1.27 2009/03/03 17:04:09 loizides Exp $
 //
 // Electron
 //
@@ -36,7 +36,7 @@ namespace mithep
       const Track         *Trk()                   const { return BestTrk();                   }
       Double_t             CaloIsolation()         const { return fCaloIsolation;              }
       Double_t             CaloTowerIsolation()    const { return fCaloTowerIsolation;         }
-      Double_t             Classification()        const { return fClassification;             }
+      Int_t                Classification()        const { return fClassification;             }
       Double_t             CovEtaEta()             const { return fCovEtaEta;                  }
       Double_t             CovEtaPhi()             const { return fCovEtaPhi;                  }
       Double_t             CovPhiPhi()             const { return fCovPhiPhi;                  }
@@ -78,7 +78,7 @@ namespace mithep
                              { fSuperClusterRef = sc; ClearMom(); }
       void                 SetCaloIsolation(Double_t caloiso)    { fCaloIsolation = caloiso;   }
       void                 SetCaloTowerIsolation(Double_t tiso)  { fCaloTowerIsolation = tiso; }
-      void                 SetClassification(Double_t x)         { fClassification = x;        }
+      void                 SetClassification(Int_t x)            { fClassification = x;        }
       void                 SetCovEtaEta(Double_t CovEtaEta)      { fCovEtaEta = CovEtaEta;     }
       void                 SetCovEtaPhi(Double_t CovEtaPhi)      { fCovEtaPhi = CovEtaPhi;     }
       void                 SetCovPhiPhi(Double_t CovPhiPhi)      { fCovPhiPhi = CovPhiPhi;     }
@@ -125,7 +125,7 @@ namespace mithep
       Double32_t           fIsEnergyScaleCorrected;    //
       Double32_t           fIsMomentumCorrected;       //
       Double32_t           fNumberOfClusters;          //
-      Double32_t           fClassification;            //
+      Int_t                fClassification;            //
       Double32_t           fE33;                       //
       Double32_t           fE55;                       //
       Double32_t           fCovEtaEta;                 //
