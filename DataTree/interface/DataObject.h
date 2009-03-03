@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.18 2008/12/11 17:04:29 loizides Exp $
+// $Id: DataObject.h,v 1.19 2009/02/18 15:38:54 loizides Exp $
 //
 // DataObject
 //
@@ -38,10 +38,10 @@ namespace mithep
       const Col           *ParentCol()    const;
 
     protected:
-      void                 ResetCacheBit()      { SetBit(23,0); }
-      void                 SetCacheBit()        { SetBit(23);   }
-      void                 SetClearBit()        { SetBit(14);   }
-      void                 SetDeleteBit()       { SetBit(15);   }
+      void                 ResetCacheBit()      { SetBit(23,0);          }
+      void                 SetCacheBit()        { SetBit(23);            }
+      void                 SetClearBit()        { SetBit(14);            }
+      void                 SetDeleteBit()       { SetBit(15);            }
 
     ClassDef(DataObject, 1) // Common base for objects that do get referenced
   };

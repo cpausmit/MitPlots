@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.7 2009/02/18 15:38:54 loizides Exp $
+// $Id: DecayData.h,v 1.8 2009/02/26 17:06:24 bendavid Exp $
 //
 // DecayData
 //
@@ -36,13 +36,13 @@ namespace mithep
       const ThreeVector32  RelativePosition() const;
       void                 SetDxy(Double_t dxy)             { fDxy = dxy;             }
       void                 SetDxyError(Double_t dxyError)   { fDxyError = dxyError;   }
-      void                 SetLxy(Double_t lxy)             { fLxy = lxy;}
+      void                 SetLxy(Double_t lxy)             { fLxy = lxy;             }
       void                 SetLxyError(Double_t lxyError)   { fLxyError = lxyError;   }
-      void                 SetLz(Double_t lz)               { fLz = lz;}
+      void                 SetLz(Double_t lz)               { fLz = lz;               }
       void                 SetLzError(Double_t lzError)     { fLzError = lzError;     }      
       void                 SetMom(Double_t px, Double_t y, Double_t z, Double_t e);
       void                 SetMom(const FourVector &mom)    { fMomAtVertex = mom; ClearMom(); }
-      void                 SetMassError(Double_t massError) { fMassError = massError; }
+      void                 SetMassError(Double_t massError) { fMassError = massError;         }
 
     protected:
       void                 GetMom()    const;

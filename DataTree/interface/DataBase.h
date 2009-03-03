@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataBase.h,v 1.3 2008/12/11 17:04:29 loizides Exp $
+// $Id: DataBase.h,v 1.4 2009/02/18 15:38:54 loizides Exp $
 //
 // DataBase
 //
@@ -29,10 +29,10 @@ namespace mithep
       virtual EObjType     ObjType()      const { return kDataBase;      }
 
     protected:
-      void                 ResetCacheBit()      { SetBit(23,0); }
-      void                 SetCacheBit()        { SetBit(23);   }
-      void                 SetClearBit()        { SetBit(14);   }
-      void                 SetDeleteBit()       { SetBit(15);   }
+      void                 ResetCacheBit()      { SetBit(23,0);          }
+      void                 SetCacheBit()        { SetBit(23);            }
+      void                 SetClearBit()        { SetBit(14);            }
+      void                 SetDeleteBit()       { SetBit(15);            }
 
     ClassDef(DataBase, 1) // Common base for objects that do not get referenced
   };

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenJet.h,v 1.3 2008/12/09 17:47:00 loizides Exp $
+// $Id: GenJet.h,v 1.4 2009/02/18 15:38:54 loizides Exp $
 //
 // GenJet
 //
@@ -21,7 +21,8 @@ namespace mithep
       GenJet() : fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0), 
                  fAuxiliaryEnergy(0), fMatchedMCFlavor(0) {}
       GenJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-        fMom(px,py,pz,e), fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0),
+        fMom(FourVector(px,py,pz,e)), 
+        fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0),
         fAuxiliaryEnergy(0), fMatchedMCFlavor(0)  {}
 
       Double_t          AuxiliaryEnergy()             const { return fAuxiliaryEnergy;           }
@@ -40,12 +41,12 @@ namespace mithep
     protected:
       void              GetMom()                      const;
 
-      FourVector        fMom;                    //four momentum of jet
-      Double_t          fHadEnergy; 	         //hadronic energy
-      Double_t          fEmEnergy; 	         //electromagnetic
-      Double_t          fInvisibleEnergy; 	 //invisible energy (mu, nu)
-      Double_t          fAuxiliaryEnergy; 	 //anything else (eg. undecayed sigmas)
-      Int_t             fMatchedMCFlavor;        //pdg ID of the quark flavor that the jet matched to
+      FourVectorM32     fMom;                    //four momentum of jet
+      Double32_t        fHadEnergy; 	         //hadronic energy
+      Double32_t        fEmEnergy; 	         //electromagnetic
+      Double32_t        fInvisibleEnergy; 	 //invisible energy (mu, nu)
+      Double32_t        fAuxiliaryEnergy; 	 //anything else (eg. undecayed sigmas)
+      Int_t             fMatchedMCFlavor;        //pdg of the quark flavor that the jet matched to
 
     ClassDef(GenJet, 1) // Jet class at generation level
   };

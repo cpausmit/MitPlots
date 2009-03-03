@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.32 2009/01/22 14:21:32 loizides Exp $
+// $Id: Track.h,v 1.33 2009/02/17 15:09:45 bendavid Exp $
 //
 // Track
 //
@@ -144,97 +144,124 @@ namespace mithep
                 fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
-      Int_t               Charge()         const { return (fQOverP>0) ? 1 : -1; }
-      Double_t            Chi2()           const { return fChi2; }
-      Double_t            RChi2()          const { return fChi2/(Double_t)fNdof; }
-      void                ClearHit(EHitLayer l)  { fHits.ClearBit(l); } 
-      Double_t	          D0()             const { return -fDxy; }
-      Double_t            D0Corrected(const BaseVertex *iVertex) const;
-      Double_t	          D0Err()          const { return fDxyErr; }
-      Double_t            Dsz()            const { return fDsz; }
-      Double_t            DszErr()         const { return fDszErr; }
-      Double_t            Dxy()            const { return fDxy; }
-      Double_t            DxyErr()         const { return fDxyErr; }
-      Double_t            E(Double_t m)    const { return TMath::Sqrt(E2(m)); }
-      Double_t            E2(Double_t m)   const { return P2()+m*m; }
-      Double_t            Eta()            const { return Mom().Eta(); }
-      Double_t            EtaEcal()        const { return fEtaEcal; }
-      Bool_t              Hit(EHitLayer l) const { return fHits.TestBit(l); }
-      const BitMask48    &Hits()           const { return fHits; }
-      Double_t            Lambda()         const { return fLambda; }
-      Double_t            LambdaErr()      const { return fLambdaErr; }
-      const MCParticle   *MCPart()         const { return fMCParticleRef.Obj(); }
-      ThreeVector         Mom()            const { return ThreeVector(Px(),Py(),Pz()); }
-      FourVector          Mom4(Double_t m) const { return FourVector(Px(),Py(),Pz(),E(m)); }
-      UInt_t              Ndof()           const { return fNdof; }
-      UInt_t              NHits()          const { return fHits.NBitsSet(); }
-      UInt_t              NStereoHits()    const { return StereoHits().NBitsSet(); }
-      EObjType            ObjType()        const { return kTrack; }      
-      Double_t            P2()             const { return P()*P(); }
-      Double_t            P()              const { return TMath::Abs(1./fQOverP); }
-      Double_t            Phi()            const { return fPhi0; }
-      Double_t	          Phi0()           const { return fPhi0; }
-      Double_t	          Phi0Err()        const { return fPhi0Err; }
-      Double_t            PhiEcal()        const { return fPhiEcal; }
-      Double_t            Prob()           const { return TMath::Prob(fChi2,fNdof); }
-      Double_t	          Pt()             const { return TMath::Abs(TMath::Cos(fLambda)/fQOverP); }
-      Double_t            Px()             const { return Pt()*TMath::Cos(fPhi0); }      
-      Double_t            Py()             const { return Pt()*TMath::Sin(fPhi0); }
-      Double_t            Pz()             const { return P()*TMath::Sin(fLambda); }
-      Double_t            QOverP()         const { return fQOverP; }
-      Double_t            QOverPErr()      const { return fQOverPErr; }
-      Double_t            Theta()          const { return (TMath::PiOver2() - fLambda); }
-      Double_t            Z0()             const { return fDsz/TMath::Cos(fLambda); }
-      const SuperCluster *SCluster()       const { return fSuperClusterRef.Obj();   }
-      const BitMask48     StereoHits()     const { return (fHits & StereoLayers()); }
-      void                SetChi2(Double_t chi2)   { fChi2 = chi2; }
-      void	          SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
-                                    Double_t dXyErr, Double_t dSzErr);
-      void                SetEtaEcal(Double_t eta) { fEtaEcal = eta; }
-      void                SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
-                                    Double_t dXy, Double_t dSz);
-      void                SetHit(EHitLayer l)      { fHits.SetBit(l); }
-      void                SetHits(const BitMask48 &hits) { fHits = hits; }
-      void                SetNdof(UInt_t dof)      { fNdof = dof; }
-      void	          SetMCPart(const MCParticle *p) { fMCParticleRef = p; }
-      void                SetPhiEcal(Double_t phi) { fPhiEcal = phi; }
-      void	          SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
+      Int_t                Charge()         const { return (fQOverP>0) ? 1 : -1;  }
+      Double_t             Chi2()           const { return fChi2;                 }
+      Double_t             RChi2()          const { return fChi2/(Double_t)fNdof; }
+      void                 ClearHit(EHitLayer l)  { fHits.ClearBit(l);            } 
+      Double_t	           D0()             const { return -fDxy;                 }
+      Double_t             D0Corrected(const BaseVertex &iVertex) const;
+      Double_t	           D0Err()          const { return fDxyErr;               }
+      Double_t             Dsz()            const { return fDsz;                  }
+      Double_t             DszErr()         const { return fDszErr;               }
+      Double_t             Dxy()            const { return fDxy;                  }
+      Double_t             DxyErr()         const { return fDxyErr;               }
+      Double_t             E(Double_t m)    const { return TMath::Sqrt(E2(m));    }
+      Double_t             E2(Double_t m)   const { return P2()+m*m;              }
+      Double_t             Eta()            const { return Mom().Eta();           }
+      Double_t             EtaEcal()        const { return fEtaEcal;              }
+      Bool_t               Hit(EHitLayer l) const { return fHits.TestBit(l);      }
+      const BitMask48     &Hits()           const { return fHits;                 }
+      Double_t             Lambda()         const { return fLambda;               }
+      Double_t             LambdaErr()      const { return fLambdaErr;            }
+      const MCParticle    *MCPart()         const { return fMCParticleRef.Obj();  }
+      const ThreeVectorC  &Mom()            const;
+      FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),E(m)); }
+      UInt_t               Ndof()           const { return fNdof;                              }
+      UInt_t               NHits()          const { return fHits.NBitsSet();                   }
+      UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
+      EObjType             ObjType()        const { return kTrack;                             }    
+      Double_t             P2()             const { return 1./fQOverP/fQOverP;                 }
+      Double_t             P()              const { return TMath::Abs(1./fQOverP);             }
+      Double_t             Phi()            const { return fPhi0;                              }
+      Double_t	           Phi0()           const { return fPhi0;                              }
+      Double_t	           Phi0Err()        const { return fPhi0Err;                           }
+      Double_t             PhiEcal()        const { return fPhiEcal;                           }
+      Double_t             Prob()           const { return TMath::Prob(fChi2,fNdof);           }
+      Double_t	           Pt()             const { return Mom().Rho();                        }
+      Double_t             Px()             const { return Mom().X();                          } 
+      Double_t             Py()             const { return Mom().Y();                          }
+      Double_t             Pz()             const { return Mom().Z();                          }
+      Double_t             QOverP()         const { return fQOverP;                            }
+      Double_t             QOverPErr()      const { return fQOverPErr;                         }
+      Double_t             Theta()          const { return (TMath::PiOver2() - fLambda);       }
+      Double_t             Z0()             const { return fDsz/TMath::Cos(fLambda);           }
+      const SuperCluster  *SCluster()       const { return fSuperClusterRef.Obj();             }
+      const BitMask48      StereoHits()     const { return (fHits & StereoLayers());           }
+      void                 SetChi2(Double_t chi2)              { fChi2 = chi2;                 }
+      void	           SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
+                                     Double_t dXyErr, Double_t dSzErr);
+      void                 SetEtaEcal(Double_t eta)            { fEtaEcal = eta;               }
+      void                 SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
+                                     Double_t dXy, Double_t dSz);
+      void                 SetHit(EHitLayer l)                 { fHits.SetBit(l);              }
+      void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
+      void                 SetNdof(UInt_t dof)                 { fNdof = dof;                  }
+      void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
+      void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
+      void	           SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc;        }
 
       static 
-      const BitMask48    StereoLayers();
+      const BitMask48      StereoLayers();
 
     protected:
-      BitMask48           fHits;                //storage for mostly hit information
-      Double_t            fQOverP;              //signed inverse of momentum [1/GeV]
-      Double_t            fQOverPErr;           //error of q/p
-      Double_t            fLambda;              //pi/2 - polar angle at the reference point
-      Double_t            fLambdaErr;           //error of lambda
-      Double_t            fPhi0;                //azimuth angle at the given point
-      Double_t            fPhi0Err;             //error of azimuthal angle
-      Double_t            fDxy;                 //transverse distance to reference point [cm]
-      Double_t            fDxyErr;              //error of transverse distance
-      Double_t            fDsz;                 //longitudinal distance to reference point [cm]
-      Double_t            fDszErr;              //error of longitudinal distance
-      Double_t            fChi2;                //chi squared of track fit
-      UInt_t              fNdof;                //degree-of-freedom of track fit
-      Double32_t          fEtaEcal;             //eta of track at Ecal front face
-      Double32_t          fPhiEcal;             //phi of track at Ecal front face
-      Ref<SuperCluster>   fSuperClusterRef;     //superCluster crossed by track
-      Ref<MCParticle>     fMCParticleRef;       //reference to sim particle (for monte carlo)
+      void                 ClearMom()    const { fCacheMomFlag.ClearCache(); }
+      void                 GetMom()      const;
+
+      BitMask48            fHits;                //storage for mostly hit information
+      Double32_t           fQOverP;              //signed inverse of momentum [1/GeV]
+      Double32_t           fQOverPErr;           //error of q/p
+      Double32_t           fLambda;              //pi/2 - polar angle at the reference point
+      Double32_t           fLambdaErr;           //error of lambda
+      Double32_t           fPhi0;                //azimuth angle at the given point
+      Double32_t           fPhi0Err;             //error of azimuthal angle
+      Double32_t           fDxy;                 //transverse distance to reference point [cm]
+      Double32_t           fDxyErr;              //error of transverse distance
+      Double32_t           fDsz;                 //longitudinal distance to reference point [cm]
+      Double32_t           fDszErr;              //error of longitudinal distance
+      Double32_t           fChi2;                //chi squared of track fit
+      UInt_t               fNdof;                //degree-of-freedom of track fit
+      Double32_t           fEtaEcal;             //eta of track at Ecal front face
+      Double32_t           fPhiEcal;             //phi of track at Ecal front face
+      Ref<SuperCluster>    fSuperClusterRef;     //superCluster crossed by track
+      Ref<MCParticle>      fMCParticleRef;       //reference to sim particle (for monte carlo)
+      mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
+      mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 2) // Track class
+    ClassDef(Track, 1) // Track class
   };
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Track::D0Corrected(const BaseVertex *iVertex) const
+inline void mithep::Track::GetMom() const
+{
+  // Compute three momentum.
+
+  Double_t pt = TMath::Abs(TMath::Cos(fLambda)/fQOverP);
+  Double_t eta = - TMath::Log(TMath::Tan(Theta()/2.));
+  fCachedMom.SetCoordinates(pt,eta,Phi());
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::ThreeVectorC &mithep::Track::Mom() const
+{
+  // Return cached momentum value.
+
+  if (!fCacheMomFlag.IsValid()) {
+    GetMom();
+    fCacheMomFlag.SetValid();
+  }
+  return fCachedMom;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Track::D0Corrected(const BaseVertex &iVertex) const
 {
   // Return corrected d0 with respect to primary vertex or beamspot.
 
   Double_t lXM =  -TMath::Sin(Phi()) * D0();
   Double_t lYM =   TMath::Cos(Phi()) * D0();
-  Double_t lDX = (lXM + iVertex->X());
-  Double_t lDY = (lYM + iVertex->Y());
+  Double_t lDX = (lXM + iVertex.X());
+  Double_t lDY = (lYM + iVertex.Y());
   Double_t d0Corr = (Px()*lDY - Py()*lDX)/Pt();
   
   return d0Corr;
@@ -252,6 +279,7 @@ void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0,
   fPhi0   = phi0;
   fDxy    = dxy;
   fDsz    = dsz;
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------

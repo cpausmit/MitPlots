@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.14 2009/02/18 15:38:54 loizides Exp $
+// $Id: MCParticle.h,v 1.15 2009/02/26 17:06:24 bendavid Exp $
 //
 // MCParticle
 //
@@ -15,50 +15,51 @@
 #include <TParticlePDG.h> 
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
+#include "MitAna/DataTree/interface/Vect3.h"
+#include "MitAna/DataTree/interface/Vect4M.h"
 
 namespace mithep 
 {
   class MCParticle : public CompositeParticle
   {
     public:
-      MCParticle() : fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
+      MCParticle() : fPdgId(0), fStatus(0), fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
-        fPdgId(id), fStatus(s), fFourVector(FourVector(px,py,pz,e)), fDecayVertex(0,0,0),
+        fPdgId(id), fStatus(s), fMom(FourVector(px,py,pz,e)), 
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
 
-      Int_t               AbsPdgId()               const { return (fPdgId<0 ? -fPdgId:fPdgId); }
-      void		  AddDaughter(const MCParticle *p) { fDaughters.Add(p); }
-      const ThreeVector  &DecayVertex()            const { return fDecayVertex; }
+      Int_t               AbsPdgId()               const   { return (fPdgId<0 ? -fPdgId:fPdgId); }
+      void		  AddDaughter(const MCParticle *p) { fDaughters.Add(p);                  }
+      const ThreeVector   DecayVertex()            const   { return fDecayVertex.V();            }
       const MCParticle   *Daughter(UInt_t i)       const;
       const MCParticle   *DistinctMother()         const;
       using CompositeParticle::HasDaughter;
       const MCParticle   *FindDaughter(Int_t pid, 
                                        Bool_t checkCharge=kFALSE, const MCParticle *start=0) const;
-      const MCParticle   *FindMother(Int_t pid, Bool_t checkCharge=kFALSE) const;
+      const MCParticle   *FindMother(Int_t pid, Bool_t checkCharge=kFALSE)  const;
       Bool_t              HasDaughter(Int_t pid, Bool_t checkCharge=kFALSE) const;
       Bool_t              HasMother()              const { return fMother.IsValid(); }
       Bool_t              HasMother(const MCParticle *m)                    const;
       Bool_t              HasMother(Int_t pid, Bool_t checkCharge=kFALSE)   const;
       Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
       Bool_t              IsNot(Int_t pid, Bool_t checkCharge=kFALSE)       const;
-      Bool_t              IsGenerated()            const { return fIsGenerated; }
-      Bool_t              IsGluon()                const { return fPdgId == kGlu; }
+      Bool_t              IsGenerated()            const { return fIsGenerated;      }
+      Bool_t              IsGluon()                const { return fPdgId == kGlu;    }
       Bool_t              IsNeutrino()             const;
-      Bool_t              IsParton()               const { return (IsGluon() || IsQuark()); }
+      Bool_t              IsParton()               const { return (IsGluon() || IsQuark());       }
       Bool_t              IsQuark()                const { return (AbsPdgId()>0 && AbsPdgId()<7); }
-      Bool_t              IsSimulated()            const { return fIsSimulated; }
+      Bool_t              IsSimulated()            const { return fIsSimulated;  }
       const MCParticle   *Mother()                 const { return fMother.Obj(); }
-      FourVector	  Mom()                    const { return FourVector(fFourVector); }
-      EObjType            ObjType()                const { return kMCParticle;             }      
-      void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t; }
-      void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t; }
+      EObjType            ObjType()                const { return kMCParticle;   }      
+      void                SetIsGenerated(Bool_t t=kTRUE) { fIsGenerated = t;     }
+      void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t;     }
       TParticlePDG       *PdgEntry()               const;
-      Int_t               PdgId()                  const { return fPdgId; }
+      Int_t               PdgId()                  const { return fPdgId;  }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void		  SetMother(const MCParticle *p) { fMother = p; }
-      void                SetStatus(Int_t s)             { fStatus = s; }
+      void		  SetMother(const MCParticle *p) { fMother = p;    }
+      void                SetStatus(Int_t s)             { fStatus = s;    }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
-      void                SetPdgId(Int_t s)              {  fPdgId = s; }
+      void                SetPdgId(Int_t s)              {  fPdgId = s;    }
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
 
@@ -77,9 +78,9 @@ namespace mithep
       void                GetMom()                 const;
 
       Int_t               fPdgId;        //pdg identifier
-      Int_t               fStatus;       //status flag of generator or simulation
-      FourVectorM32       fFourVector;   //four momentum vector
-      ThreeVector32       fDecayVertex;  //gen decay vertex
+      Short_t             fStatus;       //status flag of generator or simulation
+      Vect4M              fMom;          //four momentum vector
+      Vect3               fDecayVertex;  //gen decay vertex
       Ref<MCParticle>     fMother;       //reference to mother
       Bool_t              fIsGenerated;  //=true if generated particle
       Bool_t              fIsSimulated;  //=true if simulated particle
@@ -132,7 +133,7 @@ inline void mithep::MCParticle::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom = fFourVector; 
+  fCachedMom.SetCoordinates(fMom.Pt(), fMom.Eta(), fMom.Phi(), fMom.M());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -245,7 +246,7 @@ inline void mithep::MCParticle::SetMom(Double_t px, Double_t py, Double_t pz, Do
 { 
   // Set four vector.
 
-  fFourVector.SetXYZT(px, py, pz, e);
+  fMom.SetXYZT(px, py, pz, e);
   ClearMom();
 }
 

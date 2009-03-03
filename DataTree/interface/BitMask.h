@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.12 2008/12/09 17:46:59 loizides Exp $
+// $Id: BitMask.h,v 1.13 2009/02/18 15:38:54 loizides Exp $
 //
 // BitMask
 //
@@ -21,21 +21,21 @@ namespace mithep
   class BitMask : public DataBase
   {
     public:
-      BitMask()                                             { Clear();              }
-      BitMask(const char *bits)                             { SetBits(bits);        }
-      BitMask(const BitMask<N> &copy) : DataBase(copy)      { SetBits(copy.Bits()); }
-      BitMask(Long64_t bits)                                { SetBits(bits);        }
+      BitMask()                                             { Clear();                 }
+      BitMask(const char *bits)                             { SetBits(bits);           }
+      BitMask(const BitMask<N> &copy) : DataBase(copy)      { SetBits(copy.Bits());    }
+      BitMask(Long64_t bits)                                { SetBits(bits);           }
 
-      const char             *Bits()                  const { return fBitMask;      }
-      void                    Clear(Option_t */*opt*/="")   { memset(fBitMask,0,N); }
-      void                    ClearBit(UInt_t n)            { SetBit(n,0);          }
+      const char             *Bits()                  const { return fBitMask;         }
+      void                    Clear(Option_t */*opt*/="")   { memset(fBitMask,0,N);    }
+      void                    ClearBit(UInt_t n)            { SetBit(n,0);             }
       UInt_t                  NBitsSet(UInt_t first=0, UInt_t last=N*8) const;
       EObjType                ObjType()               const { return mithep::kBitMask; }
       void                    Print(Option_t *opt="") const;
       void                    SetBit(UInt_t n, Bool_t b=1);
       void                    SetBits(const Char_t *bits)   { memcpy(fBitMask,bits,N); }
       void                    SetBits(Long64_t bits);
-      UInt_t                  Size()                  const { return N*8; }
+      UInt_t                  Size()                  const { return N*8;              }
       Bool_t                  TestBit(UInt_t n)       const;
 
       BitMask                &operator&=(const BitMask<N> &rhs) 
