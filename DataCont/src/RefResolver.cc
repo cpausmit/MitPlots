@@ -1,4 +1,4 @@
-// $Id: Ref.cc,v 1.1 2009/02/17 14:57:29 bendavid Exp $
+// $Id: RefResolver.cc,v 1.1 2009/03/02 12:33:37 loizides Exp $
 
 #include "MitAna/DataCont/interface/RefResolver.h"
 
@@ -19,7 +19,6 @@ TObject *RefResolver::GetObjectWithID(UInt_t uid, TProcessID *pid)
 
   static TAMSelector *sel = 0;
 
-#if 0
   if (!sel) {
     TObject *optr = gROOT->GetListOfSpecials()->FindObject("mithep::Selector");
     if (optr)
@@ -31,7 +30,7 @@ TObject *RefResolver::GetObjectWithID(UInt_t uid, TProcessID *pid)
 
   if (sel)
     return sel->GetObjectWithID(uid,pid);
-#endif
+
   // no explicit TAM proxy present, fall back to standard Root calls and check if
   // the reference can be found in the TRefTable
   TRefTable *table = TRefTable::GetRefTable();
