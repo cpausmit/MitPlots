@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.17 2009/02/26 20:28:59 bendavid Exp $
+// $Id: Jet.h,v 1.18 2009/03/03 17:04:09 loizides Exp $
 //
 // Jet
 //
@@ -43,7 +43,8 @@ namespace mithep
         fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
         fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
         fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
-        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0) {}
+        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fCustomCorrectionScale(0) {}
       Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
         fRawMom(FourVector(px,py,pz,e)),
         fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0), fEnergyFractionEm(0),
@@ -57,7 +58,8 @@ namespace mithep
         fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
         fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
         fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
-        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0) {}
+        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fCustomCorrectionScale(0) {}
 
       Double_t   Alpha()                       const { return fAlpha;                        }
       Double_t   Beta()                        const { return fBeta;                         }
