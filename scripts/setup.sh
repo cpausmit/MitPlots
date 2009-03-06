@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.18 2009/03/03 21:33:23 bendavid Exp $
+# $Id: setup.sh,v 1.19 2009/03/06 09:24:52 loizides Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -50,6 +50,12 @@ case $version in
        
        #needed for JetPlusTracks and associated corrections
        cvs co -r V01-04-03 RecoJets/JetAssociationAlgorithms
+       
+       #Tags for tcMet in 2_2_X
+       cvs co -r V02-05-00-20 RecoMET/METAlgorithms
+       cvs co -r V02-08-02-16 RecoMET/METProducers
+       cvs co -r V00-04-02-16 RecoMET/Configuration
+       cvs co -r V00-06-02-09 DataFormats/METReco 
 
        ;;
     *) 
