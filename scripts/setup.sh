@@ -1,12 +1,19 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.17 2008/11/21 17:40:50 bendavid Exp $
+# $Id: setup.sh,v 1.18 2009/03/03 21:33:23 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
     exit 1;
 fi
 
-export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
+if test -z "$CVSROOT"; then
+    export CVSROOT=:pserver:anonymous@cmscvs.cern.ch:/cvs_server/repositories/CMSSW
+    if test -z "`grep anonymous@cmscvs.cern.ch ~/.cvspass`"; then
+        echo "You must have a valid cvs password for user anonymous@cmscvs.cern.ch"
+        echo "The password (taken from the workbook) to be used in the next line is 98passwd"
+        cvs login 
+    fi
+fi
 
 majver=`echo $CMSSW_VERSION | cut -d_ -f 2`;
 minver=`echo $CMSSW_VERSION | cut -d_ -f 3`;
