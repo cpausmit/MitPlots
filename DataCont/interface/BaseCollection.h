@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.2 2008/09/10 03:33:26 loizides Exp $
+// $Id: BaseCollection.h,v 1.3 2008/12/10 11:25:00 loizides Exp $
 //
 // BaseCollection
 //
@@ -18,9 +18,10 @@ namespace mithep
   class BaseCollection : public TObject 
   {
     public:
-      BaseCollection() {}
-      ~BaseCollection() {}
+      BaseCollection() : fEntries(-1) {}
 
+      void                         Clear(Option_t */*opt*/="")           { fEntries = -1; }
+      UInt_t                       Entries()                      const;
       virtual UInt_t               GetEntries()                   const = 0;
       virtual TObject             *ObjAt(UInt_t idx)                    = 0;
       virtual const TObject       *ObjAt(UInt_t idx)              const = 0;
@@ -28,7 +29,20 @@ namespace mithep
       virtual void                 Reset()                              = 0;
       virtual void                 Trim()                               = 0;
 
+    protected:
+      mutable Int_t                fEntries; //!cached number of entries
+
     ClassDef(BaseCollection, 1) // Base class of all our collections
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline UInt_t mithep::BaseCollection::Entries() const
+{
+  // Return cached number of entries
+
+  if (fEntries<0)
+    fEntries = GetEntries();
+  return fEntries;
 }
 #endif

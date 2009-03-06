@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.9 2009/03/02 12:34:00 loizides Exp $
+// $Id: StackArray.h,v 1.10 2009/03/02 14:56:41 loizides Exp $
 //
 // StackArray
 //
@@ -34,14 +34,14 @@ namespace mithep
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)                     const;
       void                      Clear(Option_t */*opt*/="")              {}
-      UInt_t                    Entries()                          const { return GetEntries(); }
-      UInt_t                    GetEntries()                       const { return fSize;        }
-      UInt_t                    GetSize()                          const { return N;            }
+      UInt_t                    Entries()                          const { return fSize; }
+      UInt_t                    GetEntries()                       const { return fSize; }
+      UInt_t                    GetSize()                          const { return N;     }
       Bool_t                    HasObject(const ArrayElement *obj) const;
-      Bool_t                    IsOwner()                          const { return kTRUE;        }
+      Bool_t                    IsOwner()                          const { return kTRUE; }
       TObject                  *ObjAt(UInt_t idx);
       const TObject            *ObjAt(UInt_t idx)                  const;
-      void                      Reset()                                  { fSize = 0;           }
+      void                      Reset()                                  { fSize = 0;    }
       void                      Trim()                                   {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)            const;

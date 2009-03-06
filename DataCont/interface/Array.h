@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.10 2009/02/26 17:05:18 bendavid Exp $
+// $Id: Array.h,v 1.11 2009/03/02 12:34:00 loizides Exp $
 //
 // Array
 //
@@ -155,10 +155,10 @@ void mithep::Array<ArrayElement>::Print(Option_t *opt) const
   // Print out elements of array.
 
   printf("%s: Contains %d (out of %d) objs of name %s\n",
-         GetName(), GetEntries(), GetSize(), ArrayElement::Class_Name());
+         GetName(), Entries(), GetSize(), ArrayElement::Class_Name());
 
   if (opt && opt[0]=='l') {
-    const UInt_t N = GetEntries();
+    const UInt_t N = Entries();
     for (UInt_t i=0; i<N; ++i) {
       printf("%4d: ",i);
       At(i)->Print(opt);

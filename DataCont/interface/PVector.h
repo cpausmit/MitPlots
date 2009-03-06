@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.3 2008/11/20 17:49:15 loizides Exp $
+// $Id: PVector.h,v 1.4 2009/03/02 12:34:00 loizides Exp $
 //
 // PVector
 //
@@ -51,7 +51,7 @@ inline void mithep::PVector<ArrayElement>::Reset()
 {
   // Reset container.
 
-  for (UInt_t i=0; i<Vector<ArrayElement>::GetEntries(); ++i) {
+  for (UInt_t i=0; i<Vector<ArrayElement>::Entries(); ++i) {
     delete Vector<ArrayElement>::fV[i];
   }
   Vector<ArrayElement>::fV.clear();

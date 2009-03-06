@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.16 2009/03/02 12:34:00 loizides Exp $
+// $Id: RefArray.h,v 1.17 2009/03/02 14:56:41 loizides Exp $
 //
 // RefArray
 //
@@ -37,7 +37,7 @@ namespace mithep
       ArrayElement             *At(UInt_t idx);
       const ArrayElement       *At(UInt_t idx)               const;
       void                      Clear(Option_t */*opt*/="")        { fPIDs.Clear(); fUIDs.Clear(); }
-      UInt_t                    Entries()                    const { return GetEntries();          }
+      UInt_t                    Entries()                    const { return fUIDs.Entries();       }
       UInt_t                    GetEntries()                 const { return fUIDs.GetEntries();    }
       UInt_t                    GetSize()                    const { return fUIDs.GetSize();       }
       Bool_t                    HasObject(const ArrayElement *obj) const;
@@ -95,9 +95,9 @@ void mithep::RefArray<ArrayElement>::Add(const ArrayElement *ae)
   // If RefArray contains one and only one PID reference, then only add another if the added object
   // has a different PID.  When this occurs all of the extra spaces which had been left empty get
   // filled in with the original PID
-  if (fPIDs.GetEntries()==1) {
+  if (fPIDs.Entries()==1) {
     if (pid != fPIDs.At(0)->Pid() ) {
-      while (fPIDs.GetEntries()<GetEntries())
+      while (fPIDs.Entries()<Entries())
         fPIDs.GetNew()->SetPid(fPIDs.At(0)->Pid());
         
       fPIDs.GetNew()->SetPid(pid);
@@ -115,10 +115,10 @@ inline ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx)
 {
   // Return entry at given index.
 
-  if (idx<GetEntries())  
+  if (idx<Entries())  
      return static_cast<ArrayElement*>(GetObject(idx));
 
-  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
+  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, Entries());
   return 0;
 }
 
@@ -128,10 +128,10 @@ inline const ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
-  if (idx<GetEntries())  
+  if (idx<Entries())  
      return static_cast<const ArrayElement*>(GetObject(idx));
 
-  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
+  Fatal("At", "Given index (%u) is larger than array size (%u)", idx, Entries());
   return 0;
 }
 
@@ -164,7 +164,7 @@ inline TProcessID *mithep::RefArray<ArrayElement>::GetPID(UInt_t idx) const
   // Return pid corresponding to idx.
 
   TProcessID *pid = 0;
-  if (fPIDs.GetEntries()>1)
+  if (fPIDs.Entries()>1)
     pid = fPIDs.UncheckedAt(idx)->Pid();
   else
     pid = fPIDs.UncheckedAt(0)->Pid();
@@ -193,7 +193,7 @@ Bool_t mithep::RefArray<ArrayElement>::HasObject(const ArrayElement *obj) const
   UInt_t oUid = obj->GetUniqueID();
   TProcessID *oPid = TProcessID::GetProcessWithUID(oUid, const_cast<ArrayElement*>(obj));
   
-  for (UInt_t i=0; i<GetEntries(); ++i) {
+  for (UInt_t i=0; i<Entries(); ++i) {
     if ( (GetUID(i)&0xffffff)==(oUid&0xffffff) && GetPID(i)->GetUniqueID()==oPid->GetUniqueID())
       return kTRUE;
   }
@@ -207,10 +207,10 @@ TObject *mithep::RefArray<ArrayElement>::ObjAt(UInt_t idx)
 {
   // Return object at given index.
 
-  if (idx<GetEntries())  
+  if (idx<Entries())  
      return GetObject(idx);
 
-  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
+  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, Entries());
   return 0;
 }
 
@@ -220,10 +220,10 @@ const TObject *mithep::RefArray<ArrayElement>::ObjAt(UInt_t idx) const
 {
   // Return object at given index.
 
-  if (idx<GetEntries())  
+  if (idx<Entries())  
     return static_cast<const TObject*>(GetObject(idx));
 
-  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, GetEntries());
+  Fatal("ObjAt", "Given index (%u) is larger than array size (%u)", idx, Entries());
   return 0;
 }
 

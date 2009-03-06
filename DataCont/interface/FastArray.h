@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.3 2009/03/02 12:34:00 loizides Exp $
+// $Id: FastArray.h,v 1.4 2009/03/02 14:56:41 loizides Exp $
 //
 // FastArray
 //
@@ -41,7 +41,7 @@ namespace mithep
       const ArrayElement       *At(UInt_t idx)                     const;
       void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0);    }
       UInt_t                    Entries()                          const { return fSize;        }
-      UInt_t                    GetEntries()                       const { return Entries();    }
+      UInt_t                    GetEntries()                       const { return fSize;        } 
       ArrayElement             *GetNew();
       UInt_t                    GetSize()                          const { return fCapacity;    }
       Bool_t                    HasObject(const ArrayElement *obj) const;

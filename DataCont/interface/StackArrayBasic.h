@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.5 2009/03/02 12:34:00 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.6 2009/03/02 14:56:41 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -31,7 +31,7 @@ namespace mithep
       void                      Add(const ArrayElement &ae);
       ArrayElement              At(UInt_t idx);
       const ArrayElement        At(UInt_t idx)                    const;
-      UInt_t                    Entries()                         const { return GetEntries(); }
+      UInt_t                    Entries()                         const { return fSize;        }
       UInt_t                    GetEntries()                      const { return fSize;        }
       UInt_t                    GetSize()                         const { return N;            }
       Bool_t                    IsOwner()                         const { return kTRUE;        }
