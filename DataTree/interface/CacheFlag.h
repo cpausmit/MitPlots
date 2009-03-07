@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CacheFlag.h,v 1.1 2009/02/17 15:52:51 bendavid Exp $
+// $Id: CacheFlag.h,v 1.2 2009/02/18 15:38:54 loizides Exp $
 //
 // CacheFlag
 //
@@ -9,8 +9,8 @@
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
-#ifndef MITANA_DATATREE_CACHEFLAG
-#define MITANA_DATATREE_CACHEFLAG
+#ifndef MITANA_DATATREE_CACHEFLAG_H
+#define MITANA_DATATREE_CACHEFLAG_H
 
 #include <TObject.h>
 #include "MitAna/DataTree/interface/Types.h"

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.33 2009/02/17 15:09:45 bendavid Exp $
+// $Id: Track.h,v 1.34 2009/03/03 17:04:10 loizides Exp $
 //
 // Track
 //
@@ -77,11 +77,11 @@
 #ifndef MITANA_DATATREE_TRACK_H
 #define MITANA_DATATREE_TRACK_H
  
-#include "MitAna/DataTree/interface/DataObject.h"
-#include "MitAna/DataTree/interface/SuperCluster.h"
-#include "MitAna/DataTree/interface/MCParticle.h"
-#include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
+#include "MitAna/DataTree/interface/BitMask.h"
+#include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/MCParticle.h"
+#include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
@@ -300,7 +300,7 @@ void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t p
 inline
 const mithep::BitMask48 mithep::Track::StereoLayers()
 { 
-  // Build and return BitMask of stereo layers
+  // Build and return BitMask of stereo layers.
 
   mithep::BitMask48 stereoLayers;
   stereoLayers.SetBit(mithep::Track::TIB1S);
