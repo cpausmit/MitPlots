@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.5 2008/12/09 10:14:29 loizides Exp $
+// $Id: OutputMod.cc,v 1.6 2009/03/02 13:26:45 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -21,7 +21,7 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fMaxSize(1024),
   fCompLevel(9),
   fSplitLevel(99),
-  fBranchSize(32*1024),
+  fBranchSize(64*1024),
   fDoReset(kFALSE),
   fCheckTamBr(kTRUE),
   fKeepTamBr(kTRUE),
@@ -59,8 +59,12 @@ void OutputMod::BeginRun()
 
   if (!fHltTree) {
     HLTFwkMod *hm = const_cast<HLTFwkMod*>(GetHltFwkMod());
-    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTTabName(), &(hm->fHLTTab), 32000, 0);
-    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTLabName(), &(hm->fHLTLab), 32000, 0);
+    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTTabName(), 
+                                 TClass::GetClass(typeid(*hm->fHLTTab))->GetName(), 
+                                 &(hm->fHLTTab), 32000, 0);
+    fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTLabName(), 
+                                 TClass::GetClass(typeid(*hm->fHLTLab))->GetName(), 
+                                 &(hm->fHLTLab), 32000, 0);
     fTreeWriter->SetAutoFill(hm->HLTTreeName(), 0);
     fHltTree = fTreeWriter->GetTree(hm->HLTTreeName());
   }
