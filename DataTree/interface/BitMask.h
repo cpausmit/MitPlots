@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.13 2009/02/18 15:38:54 loizides Exp $
+// $Id: BitMask.h,v 1.14 2009/03/03 17:04:09 loizides Exp $
 //
 // BitMask
 //
@@ -97,7 +97,7 @@ void mithep::BitMask<N>::Print(Option_t */*opt*/) const
   // Print bitmask.
 
   for (UInt_t i=0;i<N;++i) 
-    printf("%X",i);
+    printf("%X",fBitMask[i]);
   printf("\n");
 }
 
