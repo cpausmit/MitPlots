@@ -1,9 +1,11 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.6 2009/03/02 14:56:42 loizides Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.7 2009/03/03 18:01:35 bendavid Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
 
 #include "MitAna/DataCont/interface/BaseCollection.h"
+#include "MitAna/DataCont/interface/BitMask.h"
+#include "MitAna/DataCont/interface/CacheFlag.h"
 #include "MitAna/DataCont/interface/FastArray.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
@@ -20,16 +22,32 @@
 #pragma link C++ namespace mithep;
 
 #pragma link C++ class mithep::BaseCollection+;
+
+#pragma link C++ class mithep::BitMaskT<UChar_t>+;
+#pragma link C++ class mithep::BitMaskT<UShort_t>+;
+#pragma link C++ class mithep::BitMaskT<UInt_t>+;
+#pragma link C++ class mithep::BitMask<6>+;
+#pragma link C++ class mithep::BitMaskT<ULong64_t>+;
+#pragma link C++ class mithep::BitMask<16>+;
+#pragma link C++ class mithep::BitMask<32>+;
+#pragma link C++ typedef mithep::BitMask8;
+#pragma link C++ typedef mithep::BitMask16;
+#pragma link C++ typedef mithep::BitMask32;
+#pragma link C++ typedef mithep::BitMask48;
+#pragma link C++ typedef mithep::BitMask64;
+#pragma link C++ typedef mithep::BitMask128;
+#pragma link C++ typedef mithep::BitMask256;
+
+#pragma link C++ class mithep::CacheFlag-;
 #pragma link C++ class mithep::RefResolver+;
 #pragma link C++ class mithep::ProcIDRef-;
+
 #pragma link C++ class mithep::Collection<mithep::ProcIDRef>+;
 #pragma link C++ class mithep::FastArray<mithep::ProcIDRef>-;
-
 #pragma link C++ class mithep::FastArrayBasic<Double_t>-;
 #pragma link C++ class mithep::FastArrayBasic<Double32_t,kTRUE>-;
 #pragma link C++ class mithep::FastArrayBasic<Int_t>-;
 #pragma link C++ class mithep::FastArrayBasic<UInt_t>-;
-
 #pragma link C++ typedef mithep::FArrDouble;
 #pragma link C++ typedef mithep::FArrDouble32;
 #pragma link C++ typedef mithep::FArrInt;

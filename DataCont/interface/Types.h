@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.2 2009/03/03 18:01:34 bendavid Exp $
+// $Id: Types.h,v 1.3 2009/03/06 13:52:54 loizides Exp $
 //
 // Types
 //
@@ -13,10 +13,21 @@
  
 #include <Rtypes.h>
 #include "MitCommon/DataFormats/interface/Types.h"
+#include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
 
 namespace mithep
 {
+  typedef BitMaskT<UChar_t>                BitMask8;
+  typedef BitMaskT<UShort_t>               BitMask16;
+  typedef BitMaskT<UInt_t>                 BitMask32;
+  typedef BitMask<5>                       BitMask40;
+  typedef BitMask<6>                       BitMask48;
+  typedef BitMask<7>                       BitMask56;
+  typedef BitMaskT<ULong64_t>              BitMask64;
+  typedef BitMask<16>                      BitMask128;
+  typedef BitMask<32>                      BitMask256;
+
   typedef FastArrayBasic<Double_t>         FArrDouble;
   typedef FastArrayBasic<Double32_t,kTRUE> FArrDouble32;
   typedef FastArrayBasic<Int_t>            FArrInt;
