@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.4 2008/12/10 14:20:27 loizides Exp $
+// $Id: HLTMod.h,v 1.5 2009/03/02 13:26:45 loizides Exp $
 //
 // HLTMod
 //
@@ -34,6 +34,7 @@ namespace mithep
 {
   class TriggerTable;
   class TriggerObjectsTable;
+  class TriggerMask;
 
   class HLTMod : public BaseMod {
     public:
@@ -61,9 +62,9 @@ namespace mithep
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
       std::vector<std::string>    fTrigNames;     //trigger names requested for test mask
-      const BitMask256           *fBits;          //!trigger bits branch
-      Vector<BitMask256>          fTrigBitsAnd;   //!trigger bits used in mask
-      Vector<BitMask256>          fTrigBitsCmp;   //!trigger bits used for comparison
+      const TriggerMask          *fBits;          //!trigger bits branch
+      std::vector<BitMask256>     fTrigBitsAnd;   //!trigger bits used in mask
+      std::vector<BitMask256>     fTrigBitsCmp;   //!trigger bits used for comparison
       BitMask256                  fBitsDone;      //!bits for which trigger objects are copied
       TriggerObjectOArr          *fMyTrgObjs;     //!exported published trigger object array
       const TriggerTable         *fTriggers;      //!inported published HLT trigger table

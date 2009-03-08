@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.4 2008/11/25 14:29:41 loizides Exp $
+// $Id: HLTMod.cc,v 1.5 2009/03/02 13:26:45 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -51,8 +51,8 @@ void HLTMod::AddTrigObjs(UInt_t tid)
 {
   // Add trigger objects corresponding to trigger id.
 
-  const BitMask256 &ba = fTrigBitsAnd.Ref(tid);
-  const BitMask256 &bm = fTrigBitsCmp.Ref(tid);
+  const BitMask256 &ba = fTrigBitsAnd.at(tid);
+  const BitMask256 &bm = fTrigBitsCmp.at(tid);
   for (UInt_t i=0; i<bm.Size(); ++i) {
     if (ba.TestBit(i)==0)
       continue; // not an active trigger bit
@@ -72,8 +72,8 @@ void HLTMod::BeginRun()
 {
   // Get HLT tree and set branches. Compute bitmasks to be used when comparing to the HLT bits.
 
-  fTrigBitsAnd.Reset();
-  fTrigBitsCmp.Reset();
+  fTrigBitsAnd.clear();
+  fTrigBitsCmp.clear();
 
   if (fPrintTable) 
     fTriggers->Print();
@@ -106,8 +106,8 @@ void HLTMod::BeginRun()
       }
       delete arr;
     }
-    fTrigBitsAnd.AddCopy(amask);
-    fTrigBitsCmp.AddCopy(tmask);
+    fTrigBitsAnd.push_back(amask);
+    fTrigBitsCmp.push_back(tmask);
   }
 }
 
@@ -126,10 +126,10 @@ void HLTMod::Process()
   fMyTrgObjs->SetOwner(kFALSE); // the objects are owned by the object table
   fBitsDone.Clear();
   Bool_t accept = kFALSE;
-  for (UInt_t i = 0; i<fTrigBitsAnd.Entries(); ++i) {
-    BitMask256 bitmask(*fBits);
-    bitmask &= fTrigBitsAnd.Ref(i);
-    if (bitmask==fTrigBitsCmp.Ref(i)) {
+  for (UInt_t i = 0; i<fTrigBitsAnd.size(); ++i) {
+    BitMask256 bitmask(fBits->Get());
+    bitmask &= fTrigBitsAnd.at(i);
+    if (bitmask==fTrigBitsCmp.at(i)) {
       accept = kTRUE;
       AddTrigObjs(i);
     }
