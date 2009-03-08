@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.34 2009/03/03 17:04:10 loizides Exp $
+// $Id: Track.h,v 1.35 2009/03/07 08:31:36 loizides Exp $
 //
 // Track
 //
@@ -77,8 +77,8 @@
 #ifndef MITANA_DATATREE_TRACK_H
 #define MITANA_DATATREE_TRACK_H
  
+#include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
-#include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.37 2009/03/02 14:58:17 loizides Exp $
+// $Id: Collections.h,v 1.38 2009/03/03 17:04:09 loizides Exp $
 //
 // Collections
 //
@@ -32,6 +32,7 @@
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
+#include "MitAna/DataTree/interface/TriggerMask.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/StableData.h"
@@ -45,23 +46,6 @@ namespace mithep
 {
   typedef Collection<TObject>           ObjectCol;
   typedef Collection<DataBase>          DataBaseCol;
-
-  typedef Collection<BitMask<1> >       BitMask8Col;
-  typedef Collection<BitMask<2> >       BitMask16Col;
-  typedef Collection<BitMask<4> >       BitMask32Col;
-  typedef Collection<BitMask<6> >       BitMask48Col;
-  typedef Collection<BitMask<8> >       BitMask64Col;
-  typedef Collection<BitMask<16> >      BitMask128Col;
-  typedef Collection<BitMask<32> >      BitMask256Col;
-
-  typedef Vector<BitMask<1> >           BitMask8Vec;
-  typedef Vector<BitMask<2> >           BitMask16Vec;
-  typedef Vector<BitMask<4> >           BitMask32Vec;
-  typedef Vector<BitMask<6> >           BitMask48Vec;
-  typedef Vector<BitMask<8> >           BitMask64Vec;
-  typedef Vector<BitMask<16> >          BitMask128Vec;
-  typedef Vector<BitMask<32> >          BitMask256Vec;
-
   typedef Collection<DataObject>        DataObjectCol;
   typedef Collection<Track>             TrackCol;
   typedef Collection<BasicCluster>      BasicClusterCol;
@@ -77,6 +61,7 @@ namespace mithep
   typedef Collection<TriggerObjectRel>  TriggerObjectRelCol;
   typedef Collection<TriggerObjectBase> TriggerObjectBaseCol;
   typedef Collection<TriggerObject>     TriggerObjectCol;
+  typedef Collection<TriggerMask>       TriggerMaskCol;
   typedef Collection<CompositeParticle> CompositeParticleCol;
   typedef Collection<MCParticle>        MCParticleCol;
   typedef Collection<StableData>        StableDataCol;
@@ -107,6 +92,7 @@ namespace mithep
   typedef Array<TriggerObjectRel>       TriggerObjectRelArr;
   typedef Array<TriggerObjectBase>      TriggerObjectBaseArr;
   typedef Array<TriggerObject>          TriggerObjectArr;
+  typedef Array<TriggerMask>            TriggerMaskArr;
   typedef Array<MCParticle>             MCParticleArr;
   typedef Array<CompositeParticle>      CompositeParticleArr;
   typedef Array<StableData>             StableDataArr;
@@ -136,6 +122,7 @@ namespace mithep
   typedef ObjArray<TriggerObjectRel>    TriggerObjectRelOArr;
   typedef ObjArray<TriggerObjectBase>   TriggerObjectBaseOArr;
   typedef ObjArray<TriggerObject>       TriggerObjectOArr;
+  typedef ObjArray<TriggerMask>         TriggerMaskOArr;
   typedef ObjArray<MCParticle>          MCParticleOArr;
   typedef ObjArray<CompositeParticle>   CompositeParticleOArr;
   typedef ObjArray<DecayParticle>       DecayParticleOArr;

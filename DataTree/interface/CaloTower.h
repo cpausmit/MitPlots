@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.9 2009/02/26 17:06:24 bendavid Exp $
+// $Id: CaloTower.h,v 1.10 2009/03/03 17:04:09 loizides Exp $
 //
 // CaloTower
 //
@@ -12,9 +12,9 @@
 #define MITANA_DATATREE_CALOTOWER_H
  
 #include <TMath.h>
-#include "MitAna/DataTree/interface/CacheFlag.h"
+#include "MitCommon/DataFormats/interface/Vect3C.h"
+#include "MitAna/DataCont/interface/CacheFlag.h"
 #include "MitAna/DataTree/interface/DataObject.h"
-#include "MitAna/DataTree/interface/Vect3C.h"
 
 namespace mithep 
 {

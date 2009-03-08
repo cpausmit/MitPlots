@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.21 2008/12/01 17:38:21 loizides Exp $
+// $Id: ObjTypes.h,v 1.1 2008/12/09 17:40:36 loizides Exp $
 //
 // ObjTypes
 //
@@ -18,7 +18,6 @@ namespace mithep
     kBaseVertex,
     kBasicCluster,
     kBeamSpot,
-    kBitMask,
     kCaloTower,
     kChargedParticle,
     kCompositeParticle,
@@ -45,6 +44,7 @@ namespace mithep
     kStableParticle,
     kSuperCluster,
     kTrack,
+    kTriggerMask,
     kTriggerName,
     kTriggerObject,
     kTriggerObjectBase,

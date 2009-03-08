@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableData.h,v 1.6 2009/02/18 15:38:54 loizides Exp $
+// $Id: StableData.h,v 1.7 2009/02/26 17:06:25 bendavid Exp $
 //
 // StableData
 //
@@ -12,10 +12,10 @@
 #ifndef MITANA_DATATREE_STABLEDATA_H
 #define MITANA_DATATREE_STABLEDATA_H
  
+#include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/Track.h"
-#include "MitAna/DataTree/interface/BitMask.h"
 #include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.15 2009/02/26 17:06:24 bendavid Exp $
+// $Id: MCParticle.h,v 1.16 2009/03/03 17:04:10 loizides Exp $
 //
 // MCParticle
 //
@@ -13,10 +13,10 @@
 
 #include <TDatabasePDG.h>
 #include <TParticlePDG.h> 
+#include "MitCommon/DataFormats/interface/Vect3.h"
+#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
-#include "MitAna/DataTree/interface/Vect3.h"
-#include "MitAna/DataTree/interface/Vect4M.h"
 
 namespace mithep 
 {
