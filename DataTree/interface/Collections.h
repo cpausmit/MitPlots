@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.38 2009/03/03 17:04:09 loizides Exp $
+// $Id: Collections.h,v 1.39 2009/03/08 12:09:58 loizides Exp $
 //
 // Collections
 //
@@ -17,6 +17,7 @@
 #include "MitAna/DataCont/interface/Vector.h"
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/EventHeader.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataTree/interface/BeamSpot.h"
@@ -47,6 +48,10 @@ namespace mithep
   typedef Collection<TObject>           ObjectCol;
   typedef Collection<DataBase>          DataBaseCol;
   typedef Collection<DataObject>        DataObjectCol;
+  typedef Collection<BaseVertex>        BaseVertexCol;
+  typedef Collection<Vertex>            VertexCol;
+  typedef Collection<BeamSpot>          BeamSpotCol;
+  typedef Collection<EventHeader>       EventHeaderCol;
   typedef Collection<Track>             TrackCol;
   typedef Collection<BasicCluster>      BasicClusterCol;
   typedef Collection<SuperCluster>      SuperClusterCol;
@@ -70,15 +75,13 @@ namespace mithep
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
-  typedef Collection<BaseVertex>        BaseVertexCol;
-  typedef Collection<Vertex>            VertexCol;
-  typedef Collection<BeamSpot>          BeamSpotCol;
 
   typedef Array<DataBase>               DataBaseArr;
   typedef Array<DataObject>             DataObjectArr;
   typedef Array<BaseVertex>             BaseVertexArr;
   typedef Array<Vertex>                 VertexArr;
   typedef Array<BeamSpot>               BeamSpotArr;
+  typedef Array<EventHeader>            EventHeaderArr;
   typedef Array<Track>                  TrackArr;
   typedef Array<BasicCluster>           BasicClusterArr;
   typedef Array<SuperCluster>           SuperClusterArr;
@@ -108,6 +111,7 @@ namespace mithep
   typedef ObjArray<BaseVertex>          BaseVertexOArr;
   typedef ObjArray<Vertex>              VertexOArr;
   typedef ObjArray<BeamSpot>            BeamSpotOArr;
+  typedef ObjArray<EventHeader>         EventHeaderOArr;
   typedef ObjArray<Track>               TrackOArr;
   typedef ObjArray<BasicCluster>        BasicClusterOArr;
   typedef ObjArray<SuperCluster>        SuperClusterOArr;

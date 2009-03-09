@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.57 2009/03/03 17:03:54 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.58 2009/03/08 12:09:59 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -68,6 +68,13 @@
 #pragma link C++ enum mithep::EObjType;
 
 #pragma link C++ class mithep::EventHeader+;
+#pragma link C++ class mithep::Collection<mithep::EventHeader>+;
+#pragma link C++ class mithep::Array<mithep::EventHeader>+;
+#pragma link C++ class mithep::ObjArray<mithep::EventHeader>+;
+#pragma link C++ typedef mithep::EventHeaderCol;
+#pragma link C++ typedef mithep::EventHeaderArr;
+#pragma link C++ typedef mithep::EventHeaderOArr;
+
 #pragma link C++ class mithep::LAHeader+;
 #pragma link C++ class mithep::MCEventInfo+;
 #pragma link C++ class mithep::RunInfo+;
