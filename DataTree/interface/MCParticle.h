@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.16 2009/03/03 17:04:10 loizides Exp $
+// $Id: MCParticle.h,v 1.17 2009/03/08 12:09:59 loizides Exp $
 //
 // MCParticle
 //
@@ -25,7 +25,7 @@ namespace mithep
     public:
       MCParticle() : fPdgId(0), fStatus(0), fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
-        fPdgId(id), fStatus(s), fMom(FourVector(px,py,pz,e)), 
+        fPdgId(id), fStatus(s), fMom(FourVector(px,py,pz,e)),
         fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
 
       Int_t               AbsPdgId()               const   { return (fPdgId<0 ? -fPdgId:fPdgId); }
@@ -55,6 +55,7 @@ namespace mithep
       void                SetIsSimulated(Bool_t t=kTRUE) { fIsSimulated = t;     }
       TParticlePDG       *PdgEntry()               const;
       Int_t               PdgId()                  const { return fPdgId;  }
+      Double_t            PdgMass()                const;
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(const MCParticle *p) { fMother = p;    }
       void                SetStatus(Int_t s)             { fStatus = s;    }
@@ -239,6 +240,17 @@ inline TParticlePDG *mithep::MCParticle::PdgEntry() const
   // Return entry to pdg database.
 
   return TDatabasePDG::Instance()->GetParticle(fPdgId); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::MCParticle::PdgMass() const 
+{ 
+  // Return mass obtained from pdg database.
+
+  TParticlePDG *pdg = PdgEntry();
+  if (pdg)
+    return pdg->Mass();
+  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
