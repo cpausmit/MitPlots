@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.4 2008/12/10 17:25:16 loizides Exp $
+// $Id: PublisherMod.h,v 1.5 2008/12/12 16:03:34 loizides Exp $
 //
 // PublisherMod
 //
@@ -18,7 +18,7 @@
 
 namespace mithep 
 {
-  template<class T>
+  template<class TIn, class TOut=TIn>
   class PublisherMod : public BaseMod 
   {
     public:
@@ -41,8 +41,8 @@ namespace mithep
       TString                  fBranchName;    //name of collection
       TString                  fPublicName;    //name of collection
       Bool_t                   fPubPerEvent;   //=true then publish per event (def=1)
-      const Collection<T>     *fColIn;         //!pointer to collection (in) 
-      ObjArray<T>             *fColOut;        //!pointer to collection (out)
+      const Collection<TIn>   *fColIn;         //!pointer to collection (in) 
+      ObjArray<TOut>          *fColOut;        //!pointer to collection (out)
 
       void                     Process();
       void                     SlaveBegin();
@@ -53,8 +53,8 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class T>
-mithep::PublisherMod<T>::PublisherMod(const char *name, const char *title) : 
+template<class TIn, class TOut>
+mithep::PublisherMod<TIn, TOut>::PublisherMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fBranchName("SetMe"),
   fPublicName(""),
@@ -66,14 +66,14 @@ mithep::PublisherMod<T>::PublisherMod(const char *name, const char *title) :
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class T>
-void mithep::PublisherMod<T>::Process()
+template<class TIn, class TOut>
+void mithep::PublisherMod<TIn, TOut>::Process()
 {
   // Load the branch, add pointers to the object array. Publish object array if needed.
 
   LoadBranch(GetBranchName());
   if (fPubPerEvent)
-    fColOut = new mithep::ObjArray<T>(0, GetPublicName());
+    fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());
   else
     fColOut->Reset();
 
@@ -86,8 +86,8 @@ void mithep::PublisherMod<T>::Process()
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class T>
-void mithep::PublisherMod<T>::SlaveBegin()
+template<class TIn, class TOut>
+void mithep::PublisherMod<TIn, TOut>::SlaveBegin()
 {
   // Request the branch to be published. Depending on the user's decision publish the array.
 
@@ -97,14 +97,14 @@ void mithep::PublisherMod<T>::SlaveBegin()
     fPublicName = fBranchName;
 
   if (!GetPubPerEvent()) {
-    fColOut = new mithep::ObjArray<T>(0, GetPublicName());
+    fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());
     PublishObj(fColOut);
   }
 }
 
 //--------------------------------------------------------------------------------------------------
-template<class T>
-void mithep::PublisherMod<T>::SlaveTerminate()
+template<class TIn, class TOut>
+void mithep::PublisherMod<TIn, TOut>::SlaveTerminate()
 {
   // Cleanup in case objects are published only once.
 

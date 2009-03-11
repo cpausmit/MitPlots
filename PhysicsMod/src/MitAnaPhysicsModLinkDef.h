@@ -1,4 +1,4 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.8 2008/12/10 16:29:37 loizides Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.9 2009/02/18 15:24:07 bendavid Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
@@ -40,6 +40,7 @@
 #pragma link C++ class mithep::PublisherMod<mithep::Electron>+;
 #pragma link C++ class mithep::PublisherMod<mithep::GenJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Jet>+;
+#pragma link C++ class mithep::PublisherMod<mithep::CaloJet,mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::MCParticle>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Met>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Muon>+;
