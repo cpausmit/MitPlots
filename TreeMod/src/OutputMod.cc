@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.6 2009/03/02 13:26:45 loizides Exp $
+// $Id: OutputMod.cc,v 1.7 2009/03/07 08:32:40 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -111,12 +111,14 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
   }
 
   if (!decision) { // drop branch according to request
-    Info("CheckAndAddBranch", "Dropped branch with name %s and class %s.", bname, cname);
+    SendError(kWarning, "CheckAndAddBranch", 
+              "Dropped branch with name %s and class %s.", bname, cname);
     return;
   }
 
   // add branch to accepted branch list
-  Info("CheckAndAddBranch", "Kept branch with name %s and class %s.", bname, cname);
+  SendError(kWarning, "CheckAndAddBranch", 
+            "Kept branch with name %s and class %s.", bname, cname);
 
   fBrNameList.push_back(string(bname));
   fBrClassList.push_back(string(cname));
@@ -158,8 +160,8 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
     const char *cname = br->GetClassName();
 
     if (solve) {
-      Info("CheckAndResolveDep", "Resolving dependency for loaded branch %s and class %s",
-           bname,cname);
+      SendError(kWarning, "CheckAndResolveDep", 
+                "Resolving dependency for loaded branch %s and class %s", bname,cname);
 
       fBrNameList.push_back(string(bname));
       fBrClassList.push_back(string(cname));
@@ -191,7 +193,7 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
     fAllEventHeader->SetRunEntry(-1);
   else 
     fAllEventHeader->SetRunEntry(eh->RunEntry());
-  fAllEventHeader->SetIsRemoved(isremoved);
+  fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
 
   fAllTree->Fill();
 }
@@ -309,7 +311,10 @@ void OutputMod::Process()
   ++fCounter;
 
   // prepare for tree filling
-  fTreeWriter->BeginEvent(fDoReset);
+  if (!fTreeWriter->BeginEvent(fDoReset)) {
+    SendError(kAbortAnalysis, "Process", "Begin event failed!");
+    return;
+  }
 
   if (GetNEventsProcessed() == 0 && fCheckTamBr) {
     CheckAndResolveDep(fKeepTamBr);    
@@ -379,7 +384,11 @@ void OutputMod::Process()
   fRunTree->Fill();
   
   IncNEventsProcessed();
-  fTreeWriter->EndEvent(fDoReset);
+
+  if (!fTreeWriter->EndEvent(fDoReset)) {
+    SendError(kAbortAnalysis, "Process", "End event failed!");
+    return;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,8 +398,15 @@ void OutputMod::ProcessAll()
 
   if (GetSel()->GetCurEvt() == fLastSeenEvt)
     return;
+
   fLastSeenEvt = GetSel()->GetCurEvt();
   ++fCounter;
+
+  // prepare for tree filling
+  if (!fTreeWriter->BeginEvent(kFALSE)) {
+    SendError(kAbortAnalysis, "ProcessAll", "Begin event failed!");
+    return;
+  }
 
   FillAllEventHeader(kTRUE);
 }
@@ -401,8 +417,8 @@ void OutputMod::RequestBranch(const char *bname)
   // Request given branch from TAM.
 
   if (GetNBranches()>=fNBranchesMax) {
-    Error("RequestBranch", "Can not request branch for %bname"
-          "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
+    SendError(kAbortAnalysis, "RequestBranch", "Can not request branch for %bname"
+              "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
     return;
   }
   
@@ -419,8 +435,8 @@ void OutputMod::SetupBranches()
     const char *bname = fBrNameList.at(i).c_str();
     const char *cname = fBrClassList.at(i).c_str();
     if (!fBranches[i]) {
-      Error("SetupBranches", "Pointer for branch with name %s and class %s is NULL.",
-            bname, cname);
+      SendError(kWarning, "SetupBranches", 
+                "Pointer for branch with name %s and class %s is NULL.", bname, cname);
       continue;
     }
     fTreeWriter->AddBranch(bname, cname, &fBranches[i]);
@@ -493,6 +509,6 @@ void OutputMod::SlaveTerminate()
   delete[] fBranches; 
 
   Double_t frac =  100.*GetNEventsProcessed()/fCounter;
-  Info("SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
-       frac, GetNEventsProcessed(), fCounter);
+  SendError(kWarning, "SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
+            frac, GetNEventsProcessed(), fCounter);
 }
