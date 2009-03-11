@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.26 2009/02/17 21:54:29 bendavid Exp $
+// $Id: Analysis.cc,v 1.27 2009/03/02 12:35:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -45,10 +45,10 @@ Analysis::Analysis(Bool_t useproof) :
   fSet(0), 
   fDeleteList(new TList),
   fTreeName(Names::gkEvtTreeName),
-  fCompLevel(2), 
+  fCompLevel(7), 
   fProof(0),
   fDoNEvents(TChain::kBigNumber),
-  fCacheSize(134217728)
+  fCacheSize(64*1024*1024)
 {
   // Default constructor.
 
@@ -268,6 +268,17 @@ void Analysis::AddSuperModule(TAModule *mod)
   // Add a top-level module to list of top-level (super) modules.
 
   fSuperMods->Add(mod);       
+}
+
+//--------------------------------------------------------------------------------------------------
+void Analysis::EventLoop()
+{ 
+  // TODO
+
+  //if (fTreeName==fAllTreeName)
+  fChain->Process(fSelector,"",fDoNEvents);
+
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -540,7 +551,7 @@ void Analysis::Run()
     MDB(kAnalysis, 1)
       Info("Run", "Start processing (no PROOF)...");
 
-    fChain->Process(fSelector,"",fDoNEvents);
+    EventLoop();
   }
 
   MDB(kAnalysis, 1)

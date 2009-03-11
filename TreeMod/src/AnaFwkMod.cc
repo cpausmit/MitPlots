@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.3 2008/11/25 15:57:49 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.4 2009/03/09 17:07:05 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -77,13 +77,13 @@ void AnaFwkMod::CopyAllEventHeaders()
 
   if (fAllHeadTree) {
     fAllHeadTree->GetEntry(fCurEnt++);
-    while(fAllEventHeader->IsRemoved()) {
+    while(fAllEventHeader->Skimmed()) {
       EventHeader *eh = fAllHeaders.AddNew();
       eh->SetRunNum(fAllEventHeader->RunNum());
       eh->SetEvtNum(fAllEventHeader->EvtNum());
       eh->SetLumiSec(fAllEventHeader->LumiSec());
-      eh->SetIsRemoved(fAllEventHeader->RunEntry());
-      eh->SetRunEntry(fAllEventHeader->IsRemoved());
+      eh->SetRunEntry(fAllEventHeader->RunEntry());
+      eh->SetSkimmed(fAllEventHeader->Skimmed());
       fAllHeadTree->GetEntry(fCurEnt++);
     }
     if ((fAllEventHeader->RunNum()!=curev->RunNum())   ||

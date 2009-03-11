@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.21 2009/03/02 12:35:29 loizides Exp $
+// $Id: Analysis.h,v 1.22 2009/03/02 13:26:45 loizides Exp $
 //
 // Analysis
 //
@@ -88,6 +88,7 @@ namespace mithep
       void                      FileInputFromEnv();
       Bool_t                    IsValidName(const char */*name*/) { return kTRUE; }
       Bool_t                    InitProof();
+      void                      EventLoop();
       Bool_t                    UploadPackages(TList *packages);
 
       enum EState {  kPristine,  //after constructor
@@ -116,7 +117,7 @@ namespace mithep
       TString                   fAnaOutput;       //path name of output file
       TString                   fMaster;          //hostname of PROOF master
       TString                   fConfig;          //config file name for PROOF
-      Int_t                     fCompLevel;       //compression level for output file (def=2)
+      Int_t                     fCompLevel;       //compression level for output file (def=7)
       TProof                   *fProof;           //pointer to the PROOF session
       Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
       Int_t                     fCacheSize;       //size of read cache for events tree
