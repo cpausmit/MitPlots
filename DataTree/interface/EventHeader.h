@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.11 2009/01/22 14:21:32 loizides Exp $
+// $Id: EventHeader.h,v 1.12 2009/02/18 15:38:54 loizides Exp $
 //
 // EventHeader
 //
@@ -21,18 +21,18 @@ namespace mithep
   class EventHeader : public DataBase
   {
     public:
-      EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0), fRunEntry(-1), fIsRemoved(0) {}
+      EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0), fRunEntry(-1), fSkimmed(0) {}
       EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : 
-        fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1), fIsRemoved(0)        {}
+        fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1), fSkimmed(0)        {}
 
       UInt_t              EvtNum()          const { return fEvtNum;      }
-      Bool_t              IsRemoved()       const { return fIsRemoved;   }
+      UChar_t             Skimmed()         const { return fSkimmed;     }
       UInt_t              LumiSec()         const { return fLumiSec;     }
       EObjType            ObjType()         const { return kEventHeader; }
       Int_t               RunEntry()        const { return fRunEntry;    }
       UInt_t              RunNum()          const { return fRunNum;      }
       void                SetEvtNum(UInt_t i)     { fEvtNum=i;           }
-      void                SetIsRemoved(Bool_t b)  { fIsRemoved = b;      }
+      void                SetSkimmed(UChar_t s)   { fSkimmed = s;        }
       void                SetLumiSec(UInt_t i)    { fLumiSec=i;          }
       void                SetRunEntry(Int_t i)    { fRunEntry=i;         }
       void                SetRunNum(UInt_t i)     { fRunNum=i;           }
@@ -42,7 +42,7 @@ namespace mithep
       UInt_t              fEvtNum;          //event number
       UInt_t              fLumiSec;         //luminosity block number
       Int_t               fRunEntry;        //entry for run block
-      Bool_t              fIsRemoved;       //=true if event content was removed (skimming) 
+      UChar_t             fSkimmed;         //level of skimming (0 == non-skimmed)
 
     ClassDef(EventHeader, 1) // Event header class
   };
