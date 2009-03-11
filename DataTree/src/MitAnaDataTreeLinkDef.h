@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.58 2009/03/08 12:09:59 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.59 2009/03/09 19:14:59 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -31,6 +31,7 @@
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
+#include "MitAna/DataTree/interface/CaloJet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
@@ -43,6 +44,7 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 #endif
 
 #ifdef __CINT__
@@ -197,33 +199,6 @@
 #pragma link C++ typedef mithep::ElectronArr;
 #pragma link C++ typedef mithep::ElectronOArr;
 
-#pragma link C++ class mithep::Jet+;
-#pragma link C++ class mithep::Collection<mithep::Jet>+;
-#pragma link C++ class mithep::Array<mithep::Jet>+;
-#pragma link C++ class mithep::ObjArray<mithep::Jet>+;
-#pragma link C++ class mithep::Ref<mithep::Jet>+;
-#pragma link C++ typedef mithep::JetCol;
-#pragma link C++ typedef mithep::JetArr;
-#pragma link C++ typedef mithep::JetOArr;
-
-#pragma link C++ class mithep::GenJet+;
-#pragma link C++ class mithep::Collection<mithep::GenJet>+;
-#pragma link C++ class mithep::Array<mithep::GenJet>+;
-#pragma link C++ class mithep::ObjArray<mithep::GenJet>+;
-#pragma link C++ class mithep::Ref<mithep::GenJet>+;
-#pragma link C++ typedef mithep::GenJetCol;
-#pragma link C++ typedef mithep::GenJetArr;
-#pragma link C++ typedef mithep::GenJetOArr;
-
-#pragma link C++ class mithep::Met+;
-#pragma link C++ class mithep::Collection<mithep::Met>+;
-#pragma link C++ class mithep::Array<mithep::Met>+;
-#pragma link C++ class mithep::ObjArray<mithep::Met>+;
-#pragma link C++ class mithep::Ref<mithep::Met>+;
-#pragma link C++ typedef mithep::MetCol;
-#pragma link C++ typedef mithep::MetArr;
-#pragma link C++ typedef mithep::MetOArr;
-
 #pragma link C++ class mithep::TriggerObjectRel+;
 #pragma link C++ class mithep::Collection<mithep::TriggerObjectRel>+;
 #pragma link C++ class mithep::Array<mithep::TriggerObjectRel>+;
@@ -315,5 +290,58 @@
 #pragma link C++ typedef mithep::StableParticleCol;
 #pragma link C++ typedef mithep::StableParticleArr;
 #pragma link C++ typedef mithep::StableParticleOArr;
+
+#pragma link C++ class mithep::Ref<mithep::PFCandidate>+;
+#pragma link C++ class mithep::PFCandidate+;
+#pragma link C++ class mithep::Collection<mithep::PFCandidate>+;
+#pragma link C++ class mithep::Array<mithep::PFCandidate>+;
+#pragma link C++ class mithep::ObjArray<mithep::PFCandidate>+;
+#pragma link C++ class mithep::RefArray<mithep::PFCandidate>+;
+#pragma link C++ typedef mithep::PFCandidateCol;
+#pragma link C++ typedef mithep::PFCandidateArr;
+#pragma link C++ typedef mithep::PFCandidateOArr;
+
+#pragma link C++ class mithep::Jet+;
+#pragma link C++ class mithep::Collection<mithep::Jet>+;
+#pragma link C++ class mithep::ObjArray<mithep::Jet>+;
+#pragma link C++ class mithep::Ref<mithep::Jet>+;
+#pragma link C++ typedef mithep::JetCol;
+#pragma link C++ typedef mithep::JetOArr;
+
+#pragma link C++ class mithep::CaloJet+;
+#pragma link C++ class mithep::Collection<mithep::CaloJet>+;
+#pragma link C++ class mithep::Array<mithep::CaloJet>+;
+#pragma link C++ class mithep::ObjArray<mithep::CaloJet>+;
+#pragma link C++ class mithep::Ref<mithep::CaloJet>+;
+#pragma link C++ typedef mithep::CaloJetCol;
+#pragma link C++ typedef mithep::CaloJetArr;
+#pragma link C++ typedef mithep::CaloJetOArr;
+
+#pragma link C++ class mithep::PFJet+;
+#pragma link C++ class mithep::Collection<mithep::PFJet>+;
+#pragma link C++ class mithep::Array<mithep::PFJet>+;
+#pragma link C++ class mithep::ObjArray<mithep::PFJet>+;
+#pragma link C++ class mithep::Ref<mithep::PFJet>+;
+#pragma link C++ typedef mithep::PFJetCol;
+#pragma link C++ typedef mithep::PFJetArr;
+#pragma link C++ typedef mithep::PFJetOArr;
+
+#pragma link C++ class mithep::GenJet+;
+#pragma link C++ class mithep::Collection<mithep::GenJet>+;
+#pragma link C++ class mithep::Array<mithep::GenJet>+;
+#pragma link C++ class mithep::ObjArray<mithep::GenJet>+;
+#pragma link C++ class mithep::Ref<mithep::GenJet>+;
+#pragma link C++ typedef mithep::GenJetCol;
+#pragma link C++ typedef mithep::GenJetArr;
+#pragma link C++ typedef mithep::GenJetOArr;
+
+#pragma link C++ class mithep::Met+;
+#pragma link C++ class mithep::Collection<mithep::Met>+;
+#pragma link C++ class mithep::Array<mithep::Met>+;
+#pragma link C++ class mithep::ObjArray<mithep::Met>+;
+#pragma link C++ class mithep::Ref<mithep::Met>+;
+#pragma link C++ typedef mithep::MetCol;
+#pragma link C++ typedef mithep::MetArr;
+#pragma link C++ typedef mithep::MetOArr;
 
 #endif

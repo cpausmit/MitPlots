@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.39 2009/03/08 12:09:58 loizides Exp $
+// $Id: Collections.h,v 1.40 2009/03/09 19:14:59 loizides Exp $
 //
 // Collections
 //
@@ -30,6 +30,8 @@
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
+#include "MitAna/DataTree/interface/CaloJet.h"
+#include "MitAna/DataTree/interface/PFJet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
@@ -42,6 +44,7 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 
 namespace mithep 
 {
@@ -60,7 +63,9 @@ namespace mithep
   typedef Collection<ChargedParticle>   ChargedParticleCol;
   typedef Collection<Muon>              MuonCol;
   typedef Collection<Electron>          ElectronCol;
-  typedef Collection<Jet>               JetCol;
+  typedef Collection<Jet>           JetCol;
+  typedef Collection<CaloJet>           CaloJetCol;
+  typedef Collection<PFJet>             PFJetCol;
   typedef Collection<GenJet>            GenJetCol;
   typedef Collection<Met>               MetCol;
   typedef Collection<TriggerObjectRel>  TriggerObjectRelCol;
@@ -75,6 +80,7 @@ namespace mithep
   typedef Collection<Conversion>        ConversionCol;
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
+  typedef Collection<PFCandidate>       PFCandidateCol;
 
   typedef Array<DataBase>               DataBaseArr;
   typedef Array<DataObject>             DataObjectArr;
@@ -89,7 +95,8 @@ namespace mithep
   typedef Array<ChargedParticle>        ChargedParticleArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
-  typedef Array<Jet>                    JetArr;
+  typedef Array<CaloJet>                CaloJetArr;
+  typedef Array<PFJet>                  PFJetArr;
   typedef Array<GenJet>                 GenJetArr;
   typedef Array<Met>                    MetArr;
   typedef Array<TriggerObjectRel>       TriggerObjectRelArr;
@@ -104,6 +111,7 @@ namespace mithep
   typedef Array<Conversion>             ConversionArr;
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
+  typedef Array<PFCandidate>            PFCandidateArr;
 
   typedef ObjArray<TObject>             ObjectOArr;
   typedef ObjArray<DataBase>            DataBaseOArr;
@@ -121,6 +129,8 @@ namespace mithep
   typedef ObjArray<Muon>                MuonOArr;
   typedef ObjArray<Electron>            ElectronOArr;
   typedef ObjArray<Jet>                 JetOArr;
+  typedef ObjArray<CaloJet>             CaloJetOArr;
+  typedef ObjArray<PFJet>               PFJetOArr;
   typedef ObjArray<GenJet>              GenJetOArr;
   typedef ObjArray<Met>                 MetOArr;
   typedef ObjArray<TriggerObjectRel>    TriggerObjectRelOArr;
@@ -133,5 +143,6 @@ namespace mithep
   typedef ObjArray<Conversion>          ConversionOArr;
   typedef ObjArray<Photon>              PhotonOArr;
   typedef ObjArray<StableParticle>      StableParticleOArr;
+  typedef ObjArray<PFCandidate>         PFCandidateOArr;
 }
 #endif
