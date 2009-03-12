@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.59 2009/03/09 19:14:59 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.60 2009/03/11 18:12:16 bendavid Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -34,6 +34,8 @@
 #include "MitAna/DataTree/interface/CaloJet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
+#include "MitAna/DataTree/interface/CaloMet.h"
+#include "MitAna/DataTree/interface/PFMet.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
@@ -303,9 +305,11 @@
 
 #pragma link C++ class mithep::Jet+;
 #pragma link C++ class mithep::Collection<mithep::Jet>+;
+#pragma link C++ class mithep::Array<mithep::Jet>+;
 #pragma link C++ class mithep::ObjArray<mithep::Jet>+;
 #pragma link C++ class mithep::Ref<mithep::Jet>+;
 #pragma link C++ typedef mithep::JetCol;
+#pragma link C++ typedef mithep::JetArr;
 #pragma link C++ typedef mithep::JetOArr;
 
 #pragma link C++ class mithep::CaloJet+;
@@ -343,5 +347,23 @@
 #pragma link C++ typedef mithep::MetCol;
 #pragma link C++ typedef mithep::MetArr;
 #pragma link C++ typedef mithep::MetOArr;
+
+#pragma link C++ class mithep::CaloMet+;
+#pragma link C++ class mithep::Collection<mithep::CaloMet>+;
+#pragma link C++ class mithep::Array<mithep::CaloMet>+;
+#pragma link C++ class mithep::ObjArray<mithep::CaloMet>+;
+#pragma link C++ class mithep::Ref<mithep::CaloMet>+;
+#pragma link C++ typedef mithep::CaloMetCol;
+#pragma link C++ typedef mithep::CaloMetArr;
+#pragma link C++ typedef mithep::CaloMetOArr;
+
+#pragma link C++ class mithep::PFMet+;
+#pragma link C++ class mithep::Collection<mithep::PFMet>+;
+#pragma link C++ class mithep::Array<mithep::PFMet>+;
+#pragma link C++ class mithep::ObjArray<mithep::PFMet>+;
+#pragma link C++ class mithep::Ref<mithep::PFMet>+;
+#pragma link C++ typedef mithep::PFMetCol;
+#pragma link C++ typedef mithep::PFMetArr;
+#pragma link C++ typedef mithep::PFMetOArr;
 
 #endif

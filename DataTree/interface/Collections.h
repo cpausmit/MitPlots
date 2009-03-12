@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.40 2009/03/09 19:14:59 loizides Exp $
+// $Id: Collections.h,v 1.41 2009/03/11 18:12:16 bendavid Exp $
 //
 // Collections
 //
@@ -34,6 +34,8 @@
 #include "MitAna/DataTree/interface/PFJet.h"
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/Met.h"
+#include "MitAna/DataTree/interface/CaloMet.h"
+#include "MitAna/DataTree/interface/PFMet.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/TriggerMask.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
@@ -68,6 +70,8 @@ namespace mithep
   typedef Collection<PFJet>             PFJetCol;
   typedef Collection<GenJet>            GenJetCol;
   typedef Collection<Met>               MetCol;
+  typedef Collection<CaloMet>           CaloMetCol;
+  typedef Collection<PFMet>             PFMetCol;
   typedef Collection<TriggerObjectRel>  TriggerObjectRelCol;
   typedef Collection<TriggerObjectBase> TriggerObjectBaseCol;
   typedef Collection<TriggerObject>     TriggerObjectCol;
@@ -95,10 +99,13 @@ namespace mithep
   typedef Array<ChargedParticle>        ChargedParticleArr;
   typedef Array<Muon>                   MuonArr;
   typedef Array<Electron>               ElectronArr;
+  typedef Array<Jet>                    JetArr;
   typedef Array<CaloJet>                CaloJetArr;
   typedef Array<PFJet>                  PFJetArr;
   typedef Array<GenJet>                 GenJetArr;
   typedef Array<Met>                    MetArr;
+  typedef Array<CaloMet>                CaloMetArr;
+  typedef Array<PFMet>                  PFMetArr;
   typedef Array<TriggerObjectRel>       TriggerObjectRelArr;
   typedef Array<TriggerObjectBase>      TriggerObjectBaseArr;
   typedef Array<TriggerObject>          TriggerObjectArr;
@@ -133,6 +140,8 @@ namespace mithep
   typedef ObjArray<PFJet>               PFJetOArr;
   typedef ObjArray<GenJet>              GenJetOArr;
   typedef ObjArray<Met>                 MetOArr;
+  typedef ObjArray<CaloMet>             CaloMetOArr;
+  typedef ObjArray<PFMet>               PFMetOArr;
   typedef ObjArray<TriggerObjectRel>    TriggerObjectRelOArr;
   typedef ObjArray<TriggerObjectBase>   TriggerObjectBaseOArr;
   typedef ObjArray<TriggerObject>       TriggerObjectOArr;
