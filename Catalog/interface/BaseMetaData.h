@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMetaData.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
+// $Id: BaseMetaData.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
 //
 // BaseMetaData
 //
@@ -13,7 +13,7 @@
 #ifndef MITANA_CATALOG_BASEMETADATA_H
 #define MITANA_CATALOG_BASEMETADATA_H
 
-#include "MitAna/DataTree/interface/Types.h"
+#include <Rtypes.h>
 
 namespace mithep 
 {

@@ -1,6 +1,7 @@
-// $Id: FileMetaData.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: FileMetaData.cc,v 1.2 2008/07/08 05:50:57 loizides Exp $
 
 #include "MitAna/Catalog/interface/FileMetaData.h"
+#include <Riostream.h>
 
 ClassImp(mithep::FileMetaData)
 
