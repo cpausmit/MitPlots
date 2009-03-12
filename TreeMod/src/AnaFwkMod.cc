@@ -1,7 +1,8 @@
-// $Id: AnaFwkMod.cc,v 1.4 2009/03/09 17:07:05 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.5 2009/03/11 10:07:40 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
+#include "MitAna/DataTree/interface/Names.h"
 #include <TFile.h>
 #include <TH1D.h>
 #include <TStopwatch.h>
@@ -14,13 +15,16 @@ ClassImp(mithep::AnaFwkMod)
 //--------------------------------------------------------------------------------------------------
 AnaFwkMod::AnaFwkMod(const char *name, const char *title) : 
   BaseMod(name,title),
+  fAllHeadTreeName(Names::gkAllEvtTreeName),
+  fAllHeadBrName(Names::gkAllEvtHeaderBrn),
   fSWtotal(0),
   fSWevent(0),
-  fAllHeaders(0,"AllEventHeaders"),
+  fAllHeaders(0,Names::gkSkimmedHeaders),
   fAllHeadTree(0),
   fAllEventHeader(0),
   fReload(kFALSE),
-  fCurEnt(-2)
+  fCurEnt(-2),
+  fNEventsSkimmed(0)
 {
   // Constructor.
 }
@@ -47,6 +51,9 @@ void AnaFwkMod::BeginRun()
     // get HLT tree
     fAllHeadTree = dynamic_cast<TTree*>(file->Get(fAllHeadTreeName));
     if (!fAllHeadTree) {
+      SendError(kWarning, "BeginRun",
+                "Can not find tree '%s' in file '%s'", 
+                fAllHeadTreeName.Data(),file->GetName());
       return;
     }
   }
@@ -56,7 +63,7 @@ void AnaFwkMod::BeginRun()
     fAllHeadTree->SetBranchAddress(fAllHeadBrName, &fAllEventHeader);
   } else {
     SendError(kWarning, "BeginRun",
-              "Can not find branch with name %s in tree %s", 
+              "Can not find branch '%s' in tree '%s'", 
               fAllHeadBrName.Data(), fAllHeadTreeName.Data());
     return;
   }
@@ -76,8 +83,14 @@ void AnaFwkMod::CopyAllEventHeaders()
   }
 
   if (fAllHeadTree) {
+    const Int_t nemax = fAllHeadTree->GetEntries();
+    if (fCurEnt == nemax) {
+      SendError(kAbortEvent, "CopyAllEventHeaders", 
+                "End of all events tree reached (%d=%d)", fCurEnt, nemax);
+      return;
+    }
     fAllHeadTree->GetEntry(fCurEnt++);
-    while(fAllEventHeader->Skimmed()) {
+    while(fAllEventHeader->Skimmed() && fCurEnt<nemax) {
       EventHeader *eh = fAllHeaders.AddNew();
       eh->SetRunNum(fAllEventHeader->RunNum());
       eh->SetEvtNum(fAllEventHeader->EvtNum());
@@ -91,12 +104,39 @@ void AnaFwkMod::CopyAllEventHeaders()
         (fAllEventHeader->LumiSec()!=curev->LumiSec()) ||
         (fAllEventHeader->RunEntry()!=curev->RunEntry())) {
       SendError(kWarning, "CopyAllEventHeaders", 
-                "Event header information inconsistent: %d==%d, %d==%d, %d==%d, %d==%d",
+                "Event header information for entry %d inconsistent: "
+                "%d==%d, %d==%d, %d==%d, %d==%d",
+                fCurEnt,
                 fAllEventHeader->RunNum(),   curev->RunNum(), 
                 fAllEventHeader->EvtNum(),   curev->EvtNum(),
                 fAllEventHeader->LumiSec(),  curev->LumiSec(),
                 fAllEventHeader->RunEntry(), curev->RunEntry());
       return;
+    }
+
+    // read-ahead to check if more events are coming
+    if (fCurEnt<nemax) { 
+      Int_t testEnt = fCurEnt;
+      fAllHeadTree->GetEntry(testEnt++);
+      while(fAllEventHeader->Skimmed() && testEnt<nemax)
+        fAllHeadTree->GetEntry(testEnt++);
+      if (testEnt==nemax) { // need to add remaining skimmed events
+        fAllHeadTree->GetEntry(fCurEnt++);
+        while(fAllEventHeader->Skimmed() && fCurEnt<nemax) {
+          EventHeader *eh = fAllHeaders.AddNew();
+          eh->SetRunNum(fAllEventHeader->RunNum());
+          eh->SetEvtNum(fAllEventHeader->EvtNum());
+          eh->SetLumiSec(fAllEventHeader->LumiSec());
+          eh->SetRunEntry(fAllEventHeader->RunEntry());
+          eh->SetSkimmed(fAllEventHeader->Skimmed());
+          fAllHeadTree->GetEntry(fCurEnt++);
+        }
+        if (fCurEnt != nemax) {
+          SendError(kAbortEvent, "CopyAllEventHeaders", 
+                    "End of all events tree unexpectedly not reached (%d!=%d)", fCurEnt, nemax);
+          return;
+        }
+      }
     }
   }
 }
@@ -116,6 +156,9 @@ void AnaFwkMod::Process()
   // Do event counting and print out timing information.
 
   
+  // get skimmed event headers
+  CopyAllEventHeaders();
+  fNEventsSkimmed += fAllHeaders.GetEntries();
 
   // counting events
   IncNEventsProcessed();
@@ -175,6 +218,10 @@ void AnaFwkMod::SlaveTerminate()
   RetractObj(fAllHeaders.GetName());
 
   SaveNEventsProcessed();
+  TH1D *hDAllEvents = new TH1D("hDAllEvents","Sum of processed and skimmed events",1,-0.5,0.5);
+  hDAllEvents->Fill(0.0,fNEventsSkimmed+GetNEventsProcessed());
+  hDAllEvents->SetEntries(fNEventsSkimmed+GetNEventsProcessed());
+  AddOutput(hDAllEvents);
 
   fSWtotal->Stop();
   fSWevent->Stop();
@@ -187,4 +234,3 @@ void AnaFwkMod::SlaveTerminate()
   delete fSWtotal;
   delete fSWevent;
 }
-

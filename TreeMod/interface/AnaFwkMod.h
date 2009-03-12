@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.3 2008/12/10 14:20:26 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.4 2009/03/09 17:07:05 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -28,15 +28,16 @@ namespace mithep
                 const char *title="Analysis framework module");
 
     protected:
-      TString          fAllHeadTreeName;   //
-      TString          fAllHeadBrName;     //
+      TString          fAllHeadTreeName;   //all events tree name
+      TString          fAllHeadBrName;     //all event headers branch name
       TStopwatch      *fSWtotal;           //!stop watch for overall timing
       TStopwatch      *fSWevent;           //!stop watch per n events
       EventHeaderArr   fAllHeaders;        //!pointer to array of all event headers
       TTree           *fAllHeadTree;       //!all event headers tree in current file
       EventHeader     *fAllEventHeader;    //!all event header
       Bool_t           fReload;            //!reload tree after file changed
-      Int_t            fCurEnt;            //!
+      Int_t            fCurEnt;            //!curent entry in AllEvents tree
+      Int_t            fNEventsSkimmed;    //!number of skimmed events
 
       void             BeginRun();
       Bool_t           Notify();
