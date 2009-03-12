@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PVector.h,v 1.4 2009/03/02 12:34:00 loizides Exp $
+// $Id: PVector.h,v 1.5 2009/03/06 13:52:54 loizides Exp $
 //
 // PVector
 //
@@ -39,7 +39,7 @@ namespace mithep
 template<class ArrayElement>
 inline void mithep::PVector<ArrayElement>::Clear(Option_t *opt)
 {
-  // Destruct container.
+  // Clear container.
 
   Reset();
   Vector<ArrayElement>::Clear(opt);
@@ -55,5 +55,6 @@ inline void mithep::PVector<ArrayElement>::Reset()
     delete Vector<ArrayElement>::fV[i];
   }
   Vector<ArrayElement>::fV.clear();
+  BaseCollection::Clear();
 }
 #endif

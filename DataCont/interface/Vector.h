@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.6 2009/03/02 12:34:00 loizides Exp $
+// $Id: Vector.h,v 1.7 2009/03/03 18:01:17 bendavid Exp $
 //
 // Vector
 //
@@ -43,7 +43,7 @@ namespace mithep
       const TObject                   *ObjAt(UInt_t idx)             const { return &fV.at(idx); }
       ArrayElement                    &Ref(UInt_t idx)                     { return fV.at(idx); }
       const ArrayElement              &Ref(UInt_t idx)               const { return fV.at(idx); }
-      void                             Reset()                             { fV.clear(); }
+      void                             Reset();
       void                             Trim();
       ArrayElement                    *UncheckedAt(UInt_t idx)             { return &fV[idx]; }
       const ArrayElement              *UncheckedAt(UInt_t idx)       const { return &fV[idx]; }
@@ -88,6 +88,17 @@ inline Bool_t mithep::Vector<ArrayElement>::HasObject(const ArrayElement *obj) c
   }
   
   return kFALSE;
+}
+
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::Vector<ArrayElement>::Reset()
+{
+  // Reset container.
+
+  fV.clear();
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------

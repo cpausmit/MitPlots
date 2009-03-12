@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.10 2009/03/02 14:56:41 loizides Exp $
+// $Id: StackArray.h,v 1.11 2009/03/06 13:52:54 loizides Exp $
 //
 // StackArray
 //
@@ -41,7 +41,7 @@ namespace mithep
       Bool_t                    IsOwner()                          const { return kTRUE; }
       TObject                  *ObjAt(UInt_t idx);
       const TObject            *ObjAt(UInt_t idx)                  const;
-      void                      Reset()                                  { fSize = 0;    }
+      void                      Reset();
       void                      Trim()                                   {}
       ArrayElement             *UncheckedAt(UInt_t idx);                 
       const ArrayElement       *UncheckedAt(UInt_t idx)            const;
@@ -179,6 +179,16 @@ inline const TObject *mithep::StackArray<ArrayElement, N>::ObjAt(UInt_t idx) con
   // Return object at given index.
 
   return static_cast<const TObject*>(At(idx));
+}
+
+//-------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+void mithep::StackArray<ArrayElement, N>::Reset()
+{
+  // Reset this array.
+
+  fSize = 0;
+  BaseCollection::Clear();
 }
 
 //-------------------------------------------------------------------------------------------------

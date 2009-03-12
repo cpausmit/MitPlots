@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.6 2009/03/02 14:56:41 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.7 2009/03/06 13:52:54 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -37,7 +37,7 @@ namespace mithep
       Bool_t                    IsOwner()                         const { return kTRUE;        }
       TObject                  *ObjAt(UInt_t idx)                       { return 0;            }
       const TObject            *ObjAt(UInt_t idx)                 const { return 0;            }
-      void                      Reset()                                 { fSize = 0;           }
+      void                      Reset();
       void                      Trim()                                  {}
       ArrayElement              UncheckedAt(UInt_t idx);                 
       const ArrayElement        UncheckedAt(UInt_t idx)           const;
@@ -115,6 +115,16 @@ inline const ArrayElement  mithep::StackArrayBasic<ArrayElement, N>::At(UInt_t i
   TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
                  idx, fSize, GetName(), typeid(tmp).name()); 
   return 0;
+}
+
+//-------------------------------------------------------------------------------------------------
+template<class ArrayElement, UInt_t N>
+void mithep::StackArrayBasic<ArrayElement, N>::Reset()
+{
+  // Reset this array.
+
+  fSize = 0;
+  BaseCollection::Clear();
 }
 
 //-------------------------------------------------------------------------------------------------

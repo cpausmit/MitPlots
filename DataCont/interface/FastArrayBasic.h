@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.5 2009/03/03 18:01:34 bendavid Exp $
+// $Id: FastArrayBasic.h,v 1.6 2009/03/06 13:52:54 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -46,7 +46,7 @@ namespace mithep
       Bool_t                    IsOwner()                          const { return kTRUE;        }
       TObject                  *ObjAt(UInt_t /*idx*/)                    { return 0;            }
       const TObject            *ObjAt(UInt_t /*idx*/)              const { return 0;            }
-      void                      Reset()                                  { fSize = 0;           }
+      void                      Reset();
       void                      Trim()                                   { Expand(fSize);       }
       ArrayElement              UncheckedAt(UInt_t idx);                 
       const ArrayElement        UncheckedAt(UInt_t idx)            const;
@@ -180,6 +180,16 @@ inline void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Init(UShort_t s)
 
 //-------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
+void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Reset()
+{
+  // Reset this array.
+
+  fSize = 0;
+  BaseCollection::Clear();
+}
+
+//-------------------------------------------------------------------------------------------------
+template<class ArrayElement, Bool_t IsDouble32>
 void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Streamer(TBuffer &b)
 {
    // Stream all objects in the array to or from the I/O buffer.
@@ -218,7 +228,8 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::UncheckedA
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::UncheckedAt(UInt_t idx) const
+inline const ArrayElement 
+mithep::FastArrayBasic<ArrayElement, IsDouble32>::UncheckedAt(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -227,7 +238,8 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::Unch
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::operator[](UInt_t idx) const
+inline const ArrayElement 
+mithep::FastArrayBasic<ArrayElement, IsDouble32>::operator[](UInt_t idx) const
 {
   // Return entry at given index.
 

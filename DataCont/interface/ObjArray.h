@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.12 2008/12/18 13:34:16 loizides Exp $
+// $Id: ObjArray.h,v 1.13 2009/03/02 12:34:00 loizides Exp $
 //
 // ObjArray
 //
@@ -296,6 +296,7 @@ inline void mithep::ObjArray<ArrayElement>::Reset()
   fArray.Clear(); //will delete objects if owner
 
   fNumEntries = 0;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------

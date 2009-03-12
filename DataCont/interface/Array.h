@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.11 2009/03/02 12:34:00 loizides Exp $
+// $Id: Array.h,v 1.12 2009/03/06 13:52:54 loizides Exp $
 //
 // Array
 //
@@ -198,7 +198,7 @@ const TObject *mithep::Array<ArrayElement>::ObjAt(UInt_t idx) const
 template<class ArrayElement>
 inline void mithep::Array<ArrayElement>::Reset()
 {
-  // ROOT implementation for clearing the array.
+  // ROOT-like implementation for clearing the array.
 
   if (MustDelete())
     fArray.Delete();   //will call destructor for every element
@@ -208,6 +208,7 @@ inline void mithep::Array<ArrayElement>::Reset()
     fArray.Clear();
 
   fNumEntries = 0;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,8 +218,8 @@ inline void mithep::Array<ArrayElement>::Delete()
   // ROOT implementation for clearing the array, deleting all objects inside
 
   fArray.Delete();   //will call destructor for every element
-
   fNumEntries = 0;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------
