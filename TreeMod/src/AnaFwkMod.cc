@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.5 2009/03/11 10:07:40 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.6 2009/03/12 15:37:53 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -36,7 +36,6 @@ void AnaFwkMod::BeginRun()
   // depending on entry in RunInfo.
 
   if (fReload) {
-
     // reset to be (re-)loaded variables
     fReload         = 0;
     fAllHeadTree    = 0;
@@ -90,7 +89,7 @@ void AnaFwkMod::CopyAllEventHeaders()
       return;
     }
     fAllHeadTree->GetEntry(fCurEnt++);
-    while(fAllEventHeader->Skimmed() && fCurEnt<nemax) {
+    while(fCurEnt<=nemax && fAllEventHeader->Skimmed()) {
       EventHeader *eh = fAllHeaders.AddNew();
       eh->SetRunNum(fAllEventHeader->RunNum());
       eh->SetEvtNum(fAllEventHeader->EvtNum());
@@ -118,11 +117,11 @@ void AnaFwkMod::CopyAllEventHeaders()
     if (fCurEnt<nemax) { 
       Int_t testEnt = fCurEnt;
       fAllHeadTree->GetEntry(testEnt++);
-      while(fAllEventHeader->Skimmed() && testEnt<nemax)
+      while(testEnt<=nemax && fAllEventHeader->Skimmed())
         fAllHeadTree->GetEntry(testEnt++);
-      if (testEnt==nemax) { // need to add remaining skimmed events
+      if (testEnt==nemax+1) { // need to add remaining skimmed events
         fAllHeadTree->GetEntry(fCurEnt++);
-        while(fAllEventHeader->Skimmed() && fCurEnt<nemax) {
+        while(fCurEnt<=nemax) {
           EventHeader *eh = fAllHeaders.AddNew();
           eh->SetRunNum(fAllEventHeader->RunNum());
           eh->SetEvtNum(fAllEventHeader->EvtNum());
@@ -131,7 +130,7 @@ void AnaFwkMod::CopyAllEventHeaders()
           eh->SetSkimmed(fAllEventHeader->Skimmed());
           fAllHeadTree->GetEntry(fCurEnt++);
         }
-        if (fCurEnt != nemax) {
+        if (fCurEnt != nemax+1) {
           SendError(kAbortEvent, "CopyAllEventHeaders", 
                     "End of all events tree unexpectedly not reached (%d!=%d)", fCurEnt, nemax);
           return;
