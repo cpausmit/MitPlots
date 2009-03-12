@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.13 2008/12/01 17:39:20 loizides Exp $
+// $Id: TreeWriter.cc,v 1.14 2009/03/03 08:37:12 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -55,7 +55,6 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
   TBranch *b = t->Bronch(name, cname, obj, bsize, level);
   b->SetCompressionLevel(GetCompressLevel());
 }
-
 
 //--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level)
