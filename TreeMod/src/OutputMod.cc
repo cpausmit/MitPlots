@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.7 2009/03/07 08:32:40 loizides Exp $
+// $Id: OutputMod.cc,v 1.8 2009/03/11 10:07:12 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -30,10 +30,12 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fAllEventHeader(0),
   fRunInfo(0),
   fLaHeader(0),
+  fBranches(0),
   fNBranchesMax(1024),
   fRunTree(0),
   fLATree(0),
   fAllTree(0),
+  fSkimmedIn(0),
   fL1Tree(0),
   fHltTree(0),
   fRunEntries(0),
@@ -105,20 +107,20 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 
   if (!decision_found) { // no decision found: still drop branch
     Warning("CheckAndAddBranch", 
-            "No decision found for branch with name %s and class %s. Branch therefore dropped!",
+            "No decision found for branch '%s' and class '%s'. Branch therefore dropped!",
             bname, cname);
     return;
   }
 
   if (!decision) { // drop branch according to request
     SendError(kWarning, "CheckAndAddBranch", 
-              "Dropped branch with name %s and class %s.", bname, cname);
+              "Dropped branch '%s' and class '%s'.", bname, cname);
     return;
   }
 
   // add branch to accepted branch list
   SendError(kWarning, "CheckAndAddBranch", 
-            "Kept branch with name %s and class %s.", bname, cname);
+            "Kept branch '%s' and class '%s'.", bname, cname);
 
   fBrNameList.push_back(string(bname));
   fBrClassList.push_back(string(cname));
@@ -177,7 +179,7 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
 //--------------------------------------------------------------------------------------------------
 void OutputMod::EndRun()
 {
-  // Todo
+  // Nothing to be done at this point.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,15 +187,34 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
 {
   // Fill event header into the all-event-header tree.
 
+  if (!fTreeWriter->BeginEvent(kFALSE)) {
+    SendError(kAbortAnalysis, "FillAllEventHeader", "Begin event failed!");
+    return;
+  }
+
+  if (fSkimmedIn) { // copy alread skimmed headers if any there
+    for(UInt_t i=0; i<fSkimmedIn->Entries(); ++i) {
+      const EventHeader *eh = fSkimmedIn->At(i);
+      fAllEventHeader->SetEvtNum(eh->EvtNum());
+      fAllEventHeader->SetLumiSec(eh->LumiSec());
+      fAllEventHeader->SetRunNum(eh->RunNum());
+      fAllEventHeader->SetRunEntry(eh->RunEntry());
+      fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
+      fAllTree->Fill();
+    }
+  }
+
   const EventHeader *eh = GetEventHeader();
   fAllEventHeader->SetEvtNum(eh->EvtNum());
   fAllEventHeader->SetLumiSec(eh->LumiSec());
   fAllEventHeader->SetRunNum(eh->RunNum());
-  if (isremoved) 
+  if (isremoved) {
     fAllEventHeader->SetRunEntry(-1);
-  else 
+    fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
+  } else {
     fAllEventHeader->SetRunEntry(eh->RunEntry());
-  fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
+    fAllEventHeader->SetSkimmed(eh->Skimmed());
+  }
 
   fAllTree->Fill();
 }
@@ -351,8 +372,6 @@ void OutputMod::Process()
   fEventHeader->SetRunNum(runnum);
 
   // fill all event header
-  //  *** note that we need to read an existing tree in 
-  //      the future to make sure we can do skims of skims ***
   FillAllEventHeader(kFALSE);
 
   // look-up if entry is in map
@@ -403,11 +422,6 @@ void OutputMod::ProcessAll()
   ++fCounter;
 
   // prepare for tree filling
-  if (!fTreeWriter->BeginEvent(kFALSE)) {
-    SendError(kAbortAnalysis, "ProcessAll", "Begin event failed!");
-    return;
-  }
-
   FillAllEventHeader(kTRUE);
 }
 
@@ -436,7 +450,7 @@ void OutputMod::SetupBranches()
     const char *cname = fBrClassList.at(i).c_str();
     if (!fBranches[i]) {
       SendError(kWarning, "SetupBranches", 
-                "Pointer for branch with name %s and class %s is NULL.", bname, cname);
+                "Pointer for branch '%s' and class '%s' is NULL.", bname, cname);
       continue;
     }
     fTreeWriter->AddBranch(bname, cname, &fBranches[i]);
@@ -473,15 +487,17 @@ void OutputMod::SlaveBegin()
   fLaHeader = new LAHeader;
   tname = GetSel()->GetLATreeName();
   fTreeWriter->AddBranchToTree(tname, GetSel()->GetLAHdrName(), &fLaHeader);
-  fTreeWriter->SetAutoFill(tname,0);
+  fTreeWriter->SetAutoFill(tname, 0);
   fLATree = fTreeWriter->GetTree(tname);
   fAllEventHeader = new EventHeader;
   tname = GetSel()->GetAllEvtTreeName();
   fTreeWriter->AddBranchToTree(tname, GetSel()->GetAllEvtHdrBrn(), &fAllEventHeader);
   fAllTree = fTreeWriter->GetTree(tname);
+  fTreeWriter->SetAutoFill(tname, 0);
 
-  // get pointer to fAllTreeIn todo
-  // todo
+  // get pointer to all event headers
+  fSkimmedIn = GetPublicObj<EventHeaderCol>(Names::gkSkimmedHeaders);
+
   // deal here with published objects
   // todo
 
@@ -497,6 +513,8 @@ void OutputMod::SlaveBegin()
 void OutputMod::SlaveTerminate()
 {
   // Terminate tree writing and do cleanup.
+
+  RetractObj(Names::gkSkimmedHeaders);
 
   delete fTreeWriter;
   fTreeWriter = 0;

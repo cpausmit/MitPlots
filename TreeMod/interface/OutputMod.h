@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.6 2009/03/02 12:35:29 loizides Exp $
+// $Id: OutputMod.h,v 1.7 2009/03/02 13:26:45 loizides Exp $
 //
 // OutputMod
 //
@@ -29,7 +29,6 @@ namespace mithep
   {
     public:
       OutputMod(const char *name  = "OutputMod", const char *title = "Output module");
-      ~OutputMod() {}
 
       void                     Drop(const char *bname);
       void                     Keep(const char *bname);
@@ -90,7 +89,7 @@ namespace mithep
       TTree                   *fRunTree;         //!runinfo tree
       TTree                   *fLATree;          //!look-ahead tree
       TTree                   *fAllTree;         //!all-event-header tree
-      TTree                   *fAllTreeIn;       //!all-event-header tree (input)
+      const EventHeaderCol    *fSkimmedIn;       //!skimmed event headers (input)
       TTree                   *fL1Tree;          //!L1 trigger tree (not owned)
       TTree                   *fHltTree;         //!HLT trigger tree (not owned)
       Int_t                    fRunEntries;      //!number of run info entries
