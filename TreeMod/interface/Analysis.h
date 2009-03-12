@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.22 2009/03/02 13:26:45 loizides Exp $
+// $Id: Analysis.h,v 1.23 2009/03/11 10:07:40 loizides Exp $
 //
 // Analysis
 //
@@ -88,14 +88,14 @@ namespace mithep
       void                      FileInputFromEnv();
       Bool_t                    IsValidName(const char */*name*/) { return kTRUE; }
       Bool_t                    InitProof();
-      void                      EventLoop();
       Bool_t                    UploadPackages(TList *packages);
 
-      enum EState {  kPristine,  //after constructor
-                     kInit,      //after init
-                     kRun,       //after run
-                     kTerminate  //after terminate
-                  };
+      enum EState {  
+        kPristine,  //after constructor
+        kInit,      //after init
+        kRun,       //after run
+        kTerminate  //after terminate
+      };
 
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
       Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)

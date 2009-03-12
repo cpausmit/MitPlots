@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.27 2009/03/02 12:35:29 loizides Exp $
+// $Id: Analysis.cc,v 1.28 2009/03/11 10:07:40 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -271,17 +271,6 @@ void Analysis::AddSuperModule(TAModule *mod)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Analysis::EventLoop()
-{ 
-  // TODO
-
-  //if (fTreeName==fAllTreeName)
-  fChain->Process(fSelector,"",fDoNEvents);
-
-
-}
-
-//--------------------------------------------------------------------------------------------------
 void Analysis::FileInputFromEnv()
 {
   // Attempt to get list of filesets/files from environment.
@@ -551,7 +540,7 @@ void Analysis::Run()
     MDB(kAnalysis, 1)
       Info("Run", "Start processing (no PROOF)...");
 
-    EventLoop();
+    fChain->Process(fSelector,"",fDoNEvents);
   }
 
   MDB(kAnalysis, 1)
