@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenJet.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
+// $Id: CaloJet.h,v 1.1 2009/03/11 18:11:18 bendavid Exp $
 //
 // CaloJet
 //
@@ -37,6 +37,7 @@ namespace mithep
       const CaloTower  *Tower(UInt_t i)               const { return fTowers.At(i);              }
       UInt_t            NConstituents()               const { return NTowers();                  }
 
+      EObjType   ObjType()                            const { return kCaloJet;                   }  
       Double_t   EmEnergyInEB()                       const { return fEmEnergyInEB;              } 
       Double_t   EmEnergyInEE()                       const { return fEmEnergyInEE;              } 
       Double_t   EmEnergyInHF()                       const { return fEmEnergyInHF;              } 

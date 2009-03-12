@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.2 2009/03/08 12:09:59 loizides Exp $
+// $Id: ObjTypes.h,v 1.3 2009/03/11 18:12:16 bendavid Exp $
 //
 // ObjTypes
 //
@@ -31,10 +31,14 @@ namespace mithep
     kEventHeader,
     kGenJet,
     kJet,
+    kCaloJet,
+    kPFJet,
     kLAHeader,
     kMCEventInfo,
     kMCParticle,
     kMet,
+    kCaloMet,
+    kPFMet,
     kMuon,
     kParticle,
     kPFCandidate,

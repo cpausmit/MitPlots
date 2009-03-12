@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenJet.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
+// $Id: PFJet.h,v 1.1 2009/03/11 18:11:38 bendavid Exp $
 //
 // PFJet
 //
@@ -35,6 +35,7 @@ namespace mithep
       const PFCandidate *PFCand(UInt_t i)              const { return fPFCands.At(i);            }
       UInt_t            NConstituents()               const { return NPFCands();                 }
 
+      EObjType          ObjType()                     const { return kPFJet;                     } 
       Double_t          ChargedHadronEnergy()         const { return fChargedHadronEnergy;       }
       Double_t          NeutralHadronEnergy()         const { return fNeutralHadronEnergy;       }
       Double_t          ChargedEmEnergy()             const { return fChargedEmEnergy;           }
