@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.3 2009/03/11 18:12:16 bendavid Exp $
+// $Id: ObjTypes.h,v 1.4 2009/03/12 15:55:25 bendavid Exp $
 //
 // ObjTypes
 //
@@ -18,6 +18,7 @@ namespace mithep
     kBaseVertex,
     kBasicCluster,
     kBeamSpot,
+    kBranchName,
     kCaloTower,
     kChargedParticle,
     kCompositeParticle,

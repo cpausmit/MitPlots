@@ -1,4 +1,4 @@
-// $Id: TriggerName.cc,v 1.4 2008/12/08 16:42:53 loizides Exp $
+// $Id: BranchName.cc,v 1.1 2009/03/13 08:40:01 loizides Exp $
 
 #include "MitAna/DataTree/interface/BranchName.h"
 
@@ -9,22 +9,7 @@ using namespace mithep;
 //--------------------------------------------------------------------------------------------------
 void BranchName::Print(Option_t *opt) const
 {
-  // Print trigger id and name.
+  // Print branch names.
 
-//  printf("%03d: %s\n", fId, fName.Data());
+  printf("%s -> %s\n", fBrName.Data(), fBrDep.Data());
 }
-
-#if 0
-//--------------------------------------------------------------------------------------------------
-void TriggerTable::Print(Option_t *opt) const
-{
-  // Print trigger table content (not ordered!)
-
-  TIter iter(MakeIterator());
-  const TriggerName *tn = dynamic_cast<const TriggerName*>(iter.Next());
-  while (tn) {
-    tn->Print();
-    tn = dynamic_cast<const TriggerName*>(iter.Next());
-  }
-}
-#endif

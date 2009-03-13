@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.24 2009/03/11 18:12:17 bendavid Exp $
+// $Id: Names.cc,v 1.25 2009/03/12 16:14:04 loizides Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -46,3 +46,5 @@ const char *Names::gkL1TableBrn             = "L1TriggerTable";
 const char *Names::gkAllEvtTreeName         = "AllEvents";
 const char *Names::gkAllEvtHeaderBrn        = "EventHeader";
 const char *Names::gkSkimmedHeaders         = "SkimmedHeaders";
+
+const char *Names::gkBranchTable            = "BranchTable";
