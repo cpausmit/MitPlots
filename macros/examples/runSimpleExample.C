@@ -1,4 +1,4 @@
-// $Id: runSimpleExample.C,v 1.7 2008/11/25 14:00:25 loizides Exp $
+// $Id: runSimpleExample.C,v 1.8 2008/11/25 14:31:19 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -20,6 +20,7 @@ void runSimpleExample(const char *files = "mit-gen_000.root")
   Analysis *ana = new Analysis;
   ana->SetSuperModule(smod);
   ana->AddFile(files);
+  ana->SetUseHLT(0); 
   if (gROOT->IsBatch()) 
     ana->SetOutputName("mit-example-hist.root");
   
