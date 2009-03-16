@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.2 2009/02/17 21:54:35 bendavid Exp $
+// $Id: Ref.h,v 1.3 2009/03/02 12:34:00 loizides Exp $
 //
 // Ref
 //
-// Templated reimplimentation of our own TRef.
+// Templated implimentation of our own TRef.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -29,13 +29,13 @@ namespace mithep
       virtual ~Ref()              {}
 
       Bool_t                       IsNull()        const { return fUID==0 ? kTRUE : kFALSE; }
-      Bool_t                       IsValid()       const { return !IsNull(); }
+      Bool_t                       IsValid()       const { return !IsNull();                }
       const ArrayElement          *Obj()           const;
       ArrayElement                *Obj();
       Bool_t                       RefsObject(const ArrayElement *ae) const;
       void                         SetObject(const ArrayElement *ae);
       
-      void                         operator= (const ArrayElement *ae) { SetObject(ae); }
+      void                         operator= (const ArrayElement *ae) { SetObject(ae);         }
       Bool_t                       operator==(const ArrayElement *ae) { return RefsObject(ae); }
 
     protected:
@@ -93,7 +93,7 @@ ArrayElement *mithep::Ref<ArrayElement>::Obj()
 template<class ArrayElement>
 Bool_t mithep::Ref<ArrayElement>::RefsObject(const ArrayElement *ae) const
 {
-  // check whether RefArray contains a given object
+  // Check whether Ref points to given object.
 
   if (IsNull())
     return kFALSE;
@@ -103,18 +103,22 @@ Bool_t mithep::Ref<ArrayElement>::RefsObject(const ArrayElement *ae) const
 
   UInt_t oUid = ae->GetUniqueID();
   TProcessID *oPid = TProcessID::GetProcessWithUID(oUid, const_cast<ArrayElement*>(ae));
-
-  if ( (fUID&0xffffff)==(oUid&0xffffff) && fPID.Pid()->GetUniqueID()==oPid->GetUniqueID())
-    return kTRUE;
-  else
+  if (!oPid)
     return kFALSE;
+
+  if ( (fUID&0xffffff)!=(oUid&0xffffff) || fPID.Pid()->GetUniqueID()!=oPid->GetUniqueID())
+    return kFALSE;
+  return kTRUE;
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
 void mithep::Ref<ArrayElement>::SetObject(const ArrayElement *ae)
 {
-  // Add new reference to object.
+  // Set reference to object.
+
+  if (!ae)
+    return;
 
   // check if the object can belong here and assign or get its uid
   if (ae->TestBit(kHasUUID)) {
