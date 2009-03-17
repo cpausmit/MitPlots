@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.3 2008/12/04 13:52:27 loizides Exp $
+// $Id: SimpleExampleMod.h,v 1.4 2008/12/10 17:25:17 loizides Exp $
 //
-// SimpleExampleAnaMod
+// SimpleExampleMod
 //
 // This TAM module shows how to use TAM. It takes the MCParticle branch
 // and produces the pt and eta distribution of the contained particles.
