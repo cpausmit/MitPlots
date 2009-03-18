@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BeamSpot.h,v 1.2 2008/12/09 17:46:59 loizides Exp $
+// $Id: BeamSpot.h,v 1.3 2009/02/18 15:38:54 loizides Exp $
 //
 // BeamSpot
 //
@@ -50,14 +50,14 @@ namespace mithep
       void                SetSigmaZErr(Double_t sigmaZErr)             { fSigmaZErr = sigmaZErr;   }
             
     protected:
-      Double32_t          fSigmaZ;        //z width of beamspot
-      Double32_t          fBeamWidth;     //transverse width of beamspot
-      Double32_t          fDxDz;          //x-z slope of beamline
-      Double32_t          fDyDz;          //y-z slope of beamline
-      Double32_t          fSigmaZErr;     //error of z width
-      Double32_t          fBeamWidthErr;  //error of transverse width
-      Double32_t          fDxDzErr;       //error of x-z slope
-      Double32_t          fDyDzErr;       //error of y-z slope
+      Double32_t          fSigmaZ;        //[0,0,14]z width of beamspot
+      Double32_t          fBeamWidth;     //[0,0,14]transverse width of beamspot
+      Double32_t          fDxDz;          //[0,0,14]x-z slope of beamline
+      Double32_t          fDyDz;          //[0,0,14]y-z slope of beamline
+      Double32_t          fSigmaZErr;     //[0,0,14]error of z width
+      Double32_t          fBeamWidthErr;  //[0,0,14]error of transverse width
+      Double32_t          fDxDzErr;       //[0,0,14]error of x-z slope
+      Double32_t          fDyDzErr;       //[0,0,14]error of y-z slope
 	
     ClassDef(BeamSpot, 1) // Beam spot class
   };

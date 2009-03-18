@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.10 2009/03/02 14:58:17 loizides Exp $
+// $Id: CaloMet.h,v 1.3 2009/03/12 15:56:50 bendavid Exp $
 //
 // CaloMet
 //
-// Class to hold CaloMet specific information
+// Class to hold CaloMet specific information based on caloremetric information.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -70,24 +70,24 @@ namespace mithep
       
     protected:
 
-      Double32_t                   fCaloMetSig;          //CaloMet Significance
-      Double32_t                   fMaxEtInEmTowers;     //max ET deposited in ECAL towers
-      Double32_t                   fMaxEtInHadTowers;    //max ET deposited in HCAL towers
-      Double32_t                   fEtFractionHadronic;  //event hadronic scaler ET fraction
-      Double32_t                   fEmEtFraction;        //event em scalar ET fraction
-      Double32_t                   fHadEtInHB;           //event hadronic scalar ET in HB
-      Double32_t                   fHadEtInHO;           //event hadronic scalar ET in HO
-      Double32_t                   fHadEtInHE;           //event hadronic scalar ET in HE
-      Double32_t                   fHadEtInHF;           //event hadronic scalar ET in HF
-      Double32_t                   fEmEtInEB;            //event electromagnetic scalar ET in EB
-      Double32_t                   fEmEtInEE;            //event electromagnetic scalar ET in EE
-      Double32_t                   fEmEtInHF;            //event electromagnetic scalar ET from HF
-      Double32_t                   fCaloSumEtInpHF;      //SumET in HF+
-      Double32_t                   fCaloSumEtInmHF;      //SumET in HF-
-      Double32_t                   fCaloMetInpHF;        //MET in HF+
-      Double32_t                   fCaloMetInmHF;        //MET in HF-
-      Double32_t                   fCaloMetPhiInpHF;     //MET-phi in HF+
-      Double32_t                   fCaloMetPhiInmHF;     //MET-phi in HF-
+      Double32_t                   fCaloMetSig;          //[0,0,14]calo met significance
+      Double32_t                   fMaxEtInEmTowers;     //[0,0,14]max ET deposited in ECAL towers
+      Double32_t                   fMaxEtInHadTowers;    //[0,0,14]max ET deposited in HCAL towers
+      Double32_t                   fEtFractionHadronic;  //[0,0,14]event hadronic scaler ET fraction
+      Double32_t                   fEmEtFraction;        //[0,0,14]event em scalar ET fraction
+      Double32_t                   fHadEtInHB;           //[0,0,14]event hadronic scalar ET in HB
+      Double32_t                   fHadEtInHO;           //[0,0,14]event hadronic scalar ET in HO
+      Double32_t                   fHadEtInHE;           //[0,0,14]event hadronic scalar ET in HE
+      Double32_t                   fHadEtInHF;           //[0,0,14]event hadronic scalar ET in HF
+      Double32_t                   fEmEtInEB;            //[0,0,14]event em scalar ET in EB
+      Double32_t                   fEmEtInEE;            //[0,0,14]event em scalar ET in EE
+      Double32_t                   fEmEtInHF;            //[0,0,14]event em scalar ET from HF
+      Double32_t                   fCaloSumEtInpHF;      //[0,0,14]SumET in HF+
+      Double32_t                   fCaloSumEtInmHF;      //[0,0,14]SumET in HF-
+      Double32_t                   fCaloMetInpHF;        //[0,0,14]MET in HF+
+      Double32_t                   fCaloMetInmHF;        //[0,0,14]MET in HF-
+      Double32_t                   fCaloMetPhiInpHF;     //[0,0,14]MET-phi in HF+
+      Double32_t                   fCaloMetPhiInmHF;     //[0,0,14]MET-phi in HF-
     
     ClassDef(CaloMet, 1) // Missing transverse energy class
   };

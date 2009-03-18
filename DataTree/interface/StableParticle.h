@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.9 2009/02/18 15:38:55 loizides Exp $
+// $Id: StableParticle.h,v 1.10 2009/02/26 17:06:25 bendavid Exp $
 //
 // StableParticle
 //
@@ -26,15 +26,15 @@ namespace mithep
       const Track         *Trk()              const { return fTrackRef.Obj(); }
       const Track         *TrackerTrk()       const { return Trk();           }
       EObjType             ObjType()          const { return kStableParticle; }      
-      TParticlePDG        *ParticlePdgEntry() const;
-      void                 SetAbsPdgId(UInt_t absPdgId) { fAbsPdgId=absPdgId; ClearMom(); }
-      void	           SetTrk(const Track *t) { fTrackRef = t; ClearMom(); ClearCharge(); }
+      TParticlePDG        *PdgEntry()         const;
+      void                 SetAbsPdgId(UInt_t apdg) { fAbsPdgId=apdg; ClearMom();               }
+      void	           SetTrk(const Track *t)   { fTrackRef = t; ClearMom(); ClearCharge(); }
       
     protected:
       Double_t             GetMass()          const;
 
-      UInt_t               fAbsPdgId; //pdg identifier (absolute value)
-      Ref<Track>           fTrackRef; //tracker track reference
+      UInt_t               fAbsPdgId;    //pdg identifier (absolute value)
+      Ref<Track>           fTrackRef;    //tracker track reference
       
     ClassDef(StableParticle, 1) // Stable particle class
   };
@@ -43,9 +43,9 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 inline Double_t mithep::StableParticle::GetMass() const
 {
-  // Get Mass from Pdg Lookup
+  // Get mass from pdg lookup.
 
-  TParticlePDG* pdgEntry = ParticlePdgEntry();
+  TParticlePDG *pdgEntry = PdgEntry();
   if (pdgEntry)
     return pdgEntry->Mass();
   else {
@@ -56,9 +56,9 @@ inline Double_t mithep::StableParticle::GetMass() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline TParticlePDG *mithep::StableParticle::ParticlePdgEntry() const 
+inline TParticlePDG *mithep::StableParticle::PdgEntry() const 
 { 
-  // Return entry to pdg database for the PARTICLE.
+  // Return entry to pdg database for the particle.
 
   return TDatabasePDG::Instance()->GetParticle(fAbsPdgId); 
 }

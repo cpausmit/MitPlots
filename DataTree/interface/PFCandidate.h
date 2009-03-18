@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.16 2009/03/03 17:04:10 loizides Exp $
+// $Id: PFCandidate.h,v 1.1 2009/03/11 18:10:34 bendavid Exp $
 //
 // PFCandidate
 //
-// For now mostly mirroring PFCandidate from CMSSW
+// Particle-flow candidate class, for now mostly mirroring the PFCandidate from CMSSW.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -11,11 +11,11 @@
 #ifndef MITANA_DATATREE_PFCandidate_H
 #define MITANA_DATATREE_PFCandidate_H
 
+#include "MitCommon/DataFormats/interface/Vect3.h"
+#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
-#include "MitCommon/DataFormats/interface/Vect3.h"
-#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Conversion.h"
@@ -26,14 +26,14 @@ namespace mithep
   {
     public:
       enum EPFType { 
-        eX = 0,    //unidentified
-        eHadron,   //charged hadron
-        eElectron, //electron
-        eMuon,     //muon
-        eGamma,    //photon
+        eX = 0,          //unidentified
+        eHadron,         //charged hadron
+        eElectron,       //electron
+        eMuon,           //muon
+        eGamma,          //photon
         eNeutralHadron,  //neutral hadron
-        eHadronHF,  //hadron in HF
-        eEGammaHF   //EM object in HF
+        eHadronHF,       //hadron in HF
+        eEGammaHF        //EM object in HF
       };
 
       enum EPFFlags { 
@@ -56,7 +56,6 @@ namespace mithep
         eToConversion
       };
 
-
       PFCandidate() : fCharge(0), fEECal(0), fEHCal(0), fEECalRaw(0), fEHCalRaw(0),
                       fEPS1(0), fEPS2(0), fPError(0),fMvaEPi(0), fMvaEMu(0),
                       fMvaPiMu(0), fMvaGamma(0), fMvaNeutralH(0), fMvaGammaNeutralH(0),
@@ -68,101 +67,101 @@ namespace mithep
                       fMvaPiMu(0), fMvaGamma(0), fMvaNeutralH(0), fMvaGammaNeutralH(0),
                       fEtaECal(0), fPhiECal(0), fPFType(eX) {}
 
-      void		  AddDaughter(const PFCandidate *p) { fDaughters.Add(p);                 }
-      void                ClearFlag(EPFFlags f)             { fPFFlags.ClearBit(f);              }
-      void                ClearFlags()                      { fPFFlags.Clear();                  }
-      const Conversion   *Conv()                   const    { return fConversion.Obj();          }
+      void		  AddDaughter(const PFCandidate *p) { fDaughters.Add(p);                  }
+      void                ClearFlag(EPFFlags f)             { fPFFlags.ClearBit(f);               }
+      void                ClearFlags()                      { fPFFlags.Clear();                   }
+      const Conversion   *Conv()                   const    { return fConversion.Obj();           }
       const PFCandidate  *Daughter(UInt_t i)       const;
-      Double_t            EECal()                  const    { return fEECal;                     }
-      Double_t            EHCal()                  const    { return fEHCal;                     }
-      Double_t            EECalRaw()               const    { return fEECalRaw;                  }
-      Double_t            EHCalRaw()               const    { return fEHCalRaw;                  }
-      Double_t            EPS1()                   const    { return fEPS1;                      }
-      Double_t            EPS2()                   const    { return fEPS2;                      }
-      Double_t            PError()                 const    { return fPError;                    }
-      Double_t            MvaEPi()                 const    { return fMvaEPi;                    }
-      Double_t            MvaEMu()                 const    { return fMvaEMu;                    }
-      Double_t            MvaPiMu()                const    { return fMvaPiMu;                   }
-      Double_t            MvaGamma()               const    { return fMvaGamma;                  }
-      Double_t            MvaNeutralH()            const    { return fMvaNeutralH;               }
-      Double_t            MvaGammaNeutralH()       const    { return fMvaGammaNeutralH;          }
-      Double_t            EtaECal()                const    { return fEtaECal;                   }
-      Double_t            PhiECal()                const    { return fPhiECal;                   }
-      Bool_t              Flag(EPFFlags f)         const    { return fPFFlags.TestBit(f);        }
-      Bool_t              HasConversion()          const    { return fConversion.IsValid();      }
-      Bool_t              HasMother()              const { return fMother.IsValid();             }
-      Bool_t              HasMother(const PFCandidate *m)                   const;
-      Bool_t              HasTrackerTrk()          const { return fTrackerTrack.IsValid();       }
-      Bool_t              HasGsfTrk()              const { return fGsfTrack.IsValid();           }
-      Bool_t              HasTrk()                 const { return (HasTrackerTrk() || HasGsfTrk()); }
-      const PFCandidate  *Mother()                 const { return fMother.Obj();                 }
-      const Muon         *Mu()                     const { return fMuon.Obj();                   }
-      EObjType            ObjType()                const { return kPFCandidate;                  }
-      EPFType             PFType()                 const { return fPFType;                       }
-      void                SetCharge(Short_t c)           { fCharge = c; ClearCharge();           }
-      void                SetEECal(Double_t e)           { fEECal = e;                           }
-      void                SetEHCal(Double_t e)           { fEHCal = e;                           }
-      void                SetEECalRaw(Double_t e)        { fEECalRaw = e;                        }
-      void                SetEHCalRaw(Double_t e)        { fEHCalRaw = e;                        }
-      void                SetEPS1(Double_t e)            { fEPS1 = e;                            }
-      void                SetEPS2(Double_t e)            { fEPS2 = e;                            }
-      void                SetPError(Double_t err)        { fPError = err;                        }
-      void                SetMvaEPi(Double_t d)          { fMvaEPi = d;                          }
-      void                SetMvaEMu(Double_t d)          { fMvaEMu = d;                          }
-      void                SetMvaPiMu(Double_t d)         { fMvaPiMu = d;                         }
-      void                SetMvaGamma(Double_t d)        { fMvaGamma = d;                        }
-      void                SetMvaNeutralH(Double_t d)     { fMvaNeutralH = d;                     }
-      void                SetMvaGammaNeutralH(Double_t d) { fMvaGammaNeutralH = d;               }
-      void                SetEtaECal(Double_t eta)       { fEtaECal = eta;                       }
-      void                SetPhiECal(Double_t phi)       { fPhiECal = phi;                       }
-      void                SetPFType(EPFType t)           { fPFType = t;                          }
-      void                SetFlag(EPFFlags f, Bool_t b=1) { fPFFlags.SetBit(f,b);                }
+      Double_t            EECal()                  const    { return fEECal;                      }
+      Double_t            EHCal()                  const    { return fEHCal;                      }
+      Double_t            EECalRaw()               const    { return fEECalRaw;                   }
+      Double_t            EHCalRaw()               const    { return fEHCalRaw;                   }
+      Double_t            EPS1()                   const    { return fEPS1;                       }
+      Double_t            EPS2()                   const    { return fEPS2;                       }
+      Double_t            PError()                 const    { return fPError;                     }
+      Double_t            MvaEPi()                 const    { return fMvaEPi;                     }
+      Double_t            MvaEMu()                 const    { return fMvaEMu;                     }
+      Double_t            MvaPiMu()                const    { return fMvaPiMu;                    }
+      Double_t            MvaGamma()               const    { return fMvaGamma;                   }
+      Double_t            MvaNeutralH()            const    { return fMvaNeutralH;                }
+      Double_t            MvaGammaNeutralH()       const    { return fMvaGammaNeutralH;           }
+      Double_t            EtaECal()                const    { return fEtaECal;                    }
+      Double_t            PhiECal()                const    { return fPhiECal;                    }
+      Bool_t              Flag(EPFFlags f)         const    { return fPFFlags.TestBit(f);         }
+      Bool_t              HasConversion()          const    { return fConversion.IsValid();       }
+      Bool_t              HasMother()              const    { return fMother.IsValid();           }
+      Bool_t              HasMother(const PFCandidate *m) const;
+      Bool_t              HasTrackerTrk()          const    { return fTrackerTrack.IsValid();     }
+      Bool_t              HasGsfTrk()              const    { return fGsfTrack.IsValid();         }
+      Bool_t              HasTrk()                 const 
+                            { return (HasTrackerTrk() || HasGsfTrk()); }
+      const PFCandidate  *Mother()                 const    { return fMother.Obj();               }
+      const Muon         *Mu()                     const    { return fMuon.Obj();                 }
+      EObjType            ObjType()                const    { return kPFCandidate;                }
+      EPFType             PFType()                 const    { return fPFType;                     }
+      void                SetCharge(Double_t c)             { fCharge = c; ClearCharge();         }
+      void                SetEECal(Double_t e)              { fEECal = e;                         }
+      void                SetEHCal(Double_t e)              { fEHCal = e;                         }
+      void                SetEECalRaw(Double_t e)           { fEECalRaw = e;                      }
+      void                SetEHCalRaw(Double_t e)           { fEHCalRaw = e;                      }
+      void                SetEPS1(Double_t e)               { fEPS1 = e;                          }
+      void                SetEPS2(Double_t e)               { fEPS2 = e;                          }
+      void                SetPError(Double_t err)           { fPError = err;                      }
+      void                SetMvaEPi(Double_t d)             { fMvaEPi = d;                        }
+      void                SetMvaEMu(Double_t d)             { fMvaEMu = d;                        }
+      void                SetMvaPiMu(Double_t d)            { fMvaPiMu = d;                       }
+      void                SetMvaGamma(Double_t d)           { fMvaGamma = d;                      }
+      void                SetMvaNeutralH(Double_t d)        { fMvaNeutralH = d;                   }
+      void                SetMvaGammaNeutralH(Double_t d)   { fMvaGammaNeutralH = d;              }
+      void                SetEtaECal(Double_t eta)          { fEtaECal = eta;                     }
+      void                SetPhiECal(Double_t phi)          { fPhiECal = phi;                     }
+      void                SetPFType(EPFType t)              { fPFType = t;                        }
+      void                SetFlag(EPFFlags f, Bool_t b=1)   { fPFFlags.SetBit(f,b);               }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void		  SetMother(const PFCandidate *p) { fMother = p;    }
-      void                SetTrackerTrk(const Track *t)   { fTrackerTrack = t;                   }
-      void                SetGsfTrk(const Track *t)       { fGsfTrack = t;                       }
-      void                SetMuon(const Muon *m)          { fMuon = m;                           }
-      void                SetConversion(const Conversion *c) { fConversion = c;                  }
+      void		  SetMother(const PFCandidate *p)   { fMother = p;                        }
+      void                SetTrackerTrk(const Track *t)     { fTrackerTrack = t;                  }
+      void                SetGsfTrk(const Track *t)         { fGsfTrack = t;                      }
+      void                SetMuon(const Muon *m)            { fMuon = m;                          }
+      void                SetConversion(const Conversion *c) 
+                            { fConversion = c; }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
-      const ThreeVector   SourceVertex()           const    { return fSourceVertex.V();          }
-      const Track        *TrackerTrk()             const    { return fTrackerTrack.Obj();        }
-      const Track        *GsfTrk()                 const    { return fGsfTrack.Obj();            }
+      const ThreeVector   SourceVertex()           const    { return fSourceVertex.V();           }
+      const Track        *TrackerTrk()             const    { return fTrackerTrack.Obj();         }
+      const Track        *GsfTrk()                 const    { return fGsfTrack.Obj();             }
       const Track        *BestTrk()                const;
-      const Track        *Trk()                    const    { return BestTrk();                  }
+      const Track        *Trk()                    const    { return BestTrk();                   }
       
     protected:
       Double_t            GetCharge()              const;
       void                GetMom()                 const;
 
-      FourVectorM32       fMom;          //four momentum vector
-      Vect3               fSourceVertex; //pflow source vertex
-      Short_t             fCharge;       //charge
-      Double32_t          fEECal;        //corrected Ecal energy
-      Double32_t          fEHCal;        //corrected Hcal energy
-      Double32_t          fEECalRaw;     //uncorrected Ecal energy
-      Double32_t          fEHCalRaw;     //uncorrected Hcal energy
-      Double32_t          fEPS1;         //corrected PS1 energy
-      Double32_t          fEPS2;         //corrected PS2 energy
-      Double32_t          fPError;       //uncertainty on P (three-mom magnitude)
-      Double32_t          fMvaEPi;       //electron-pion discriminant
-      Double32_t          fMvaEMu;       //electron-muon discriminant
-      Double32_t          fMvaPiMu;      //pion-muon discriminant
-      Double32_t          fMvaGamma;     //photon id discriminant
-      Double32_t          fMvaNeutralH;  //neutral hadron id discriminant
-      Double32_t          fMvaGammaNeutralH; //photon-neutralhadron discriminant
-      Double32_t          fEtaECal;      //eta at ecal front face
-      Double32_t          fPhiECal;      //phi at ecal front face
+      Vect4M              fMom;              //four momentum vector
+      Vect3               fSourceVertex;     //pflow source vertex
+      Double32_t          fCharge;           //[-1,1,2]charge
+      Double32_t          fEECal;            //[0,0,14]corrected Ecal energy
+      Double32_t          fEHCal;            //[0,0,14]corrected Hcal energy
+      Double32_t          fEECalRaw;         //[0,0,14]uncorrected Ecal energy
+      Double32_t          fEHCalRaw;         //[0,0,14]uncorrected Hcal energy
+      Double32_t          fEPS1;             //[0,0,14]corrected PS1 energy
+      Double32_t          fEPS2;             //[0,0,14]corrected PS2 energy
+      Double32_t          fPError;           //[0,0,14]uncertainty on P (three-mom magnitude)
+      Double32_t          fMvaEPi;           //[0,0,14]electron-pion discriminant
+      Double32_t          fMvaEMu;           //[0,0,14]electron-muon discriminant
+      Double32_t          fMvaPiMu;          //[0,0,14]pion-muon discriminant
+      Double32_t          fMvaGamma;         //[0,0,14]photon id discriminant
+      Double32_t          fMvaNeutralH;      //[0,0,14]neutral hadron id discriminant
+      Double32_t          fMvaGammaNeutralH; //[0,0,14]photon-neutralhadron discriminant
+      Double32_t          fEtaECal;          //[0,0,10]eta at ecal front face
+      Double32_t          fPhiECal;          //[0,0,10]phi at ecal front face
+      EPFType             fPFType;           //particle flow type
+      BitMask32           fPFFlags;          //various PF flags
+      Ref<PFCandidate>    fMother;           //reference to mother
+      Ref<Track>          fTrackerTrack;     //reference to (standard) track
+      Ref<Track>          fGsfTrack;         //reference to gsf track (for electrons only)
+      Ref<Muon>           fMuon;             //reference to corresponding reco muon
+      Ref<Conversion>     fConversion;       //reference to corresponding reco conversion
 
-      EPFType             fPFType;       //particle flow type
-      BitMask32           fPFFlags;      //various PF flags
-      
-      Ref<PFCandidate>    fMother;       //reference to mother
-      Ref<Track>          fTrackerTrack; //reference to (standard) track
-      Ref<Track>          fGsfTrack;     //reference to gsf track (for electrons only)
-      Ref<Muon>           fMuon;         //reference to corresponding reco muon
-      Ref<Conversion>     fConversion;   //reference to corresponding reco conversion
-
-    ClassDef(PFCandidate,1) // Generated particle class
+    ClassDef(PFCandidate,1) // Particle-flow candidate class
   };
 }
 
@@ -195,7 +194,6 @@ inline Double_t mithep::PFCandidate::GetCharge() const
   // Get stored charge
 
   return fCharge;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,7 +201,7 @@ inline void mithep::PFCandidate::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom = fMom;
+  fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
 }
 
 //--------------------------------------------------------------------------------------------------

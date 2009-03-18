@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseVertex.h,v 1.4 2009/02/18 15:38:54 loizides Exp $
+// $Id: BaseVertex.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
 //
 // BaseVertex
 //
@@ -11,6 +11,7 @@
 #ifndef MITANA_DATATREE_BASEVERTEX_H
 #define MITANA_DATATREE_BASEVERTEX_H
 
+#include "MitCommon/DataFormats/interface/Vect3.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 
 namespace mithep 
@@ -28,9 +29,9 @@ namespace mithep
         fPosition(pos), fXErr(0), fYErr(0), fZErr(0)            {}
       
       EObjType            ObjType()   const { return kBaseVertex;      }
-      Double_t            Phi()       const { return fPosition.Phi();  }
-      const ThreeVector  &Position()  const { return fPosition;        }
-      Double_t            Rho()       const { return fPosition.Rho();  }
+//      Double_t            Phi()       const { return Position().Phi(); }
+      const ThreeVector   Position()  const { return fPosition.V();    }
+//      Double_t            Rho()       const { return fPosition.Rho();  }
       Double_t            X()         const { return fPosition.X();    }
       Double_t            XErr()      const { return fXErr;            }
       Double_t            Y()         const { return fPosition.Y();    }
@@ -42,10 +43,10 @@ namespace mithep
       void                SetPosition(Double_t x, Double_t y, Double_t z); 
             
     protected:
-      ThreeVector32	  fPosition; //point in space
-      Double32_t          fXErr;     //error in x
-      Double32_t          fYErr;     //error in y
-      Double32_t          fZErr;     //error in z
+      Vect3	          fPosition; //point in space
+      Double32_t          fXErr;     //[0,0,14]error in x
+      Double32_t          fYErr;     //[0,0,14]error in y
+      Double32_t          fZErr;     //[0,0,14]error in z
 	
     ClassDef(BaseVertex, 1) // Base vertex class
   };

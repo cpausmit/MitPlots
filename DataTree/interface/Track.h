@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.36 2009/03/08 12:09:59 loizides Exp $
+// $Id: Track.h,v 1.37 2009/03/18 15:10:31 loizides Exp $
 //
 // Track
 //
@@ -165,7 +165,7 @@ namespace mithep
       const MCParticle    *MCPart()         const { return fMCParticleRef.Obj();  }
       const ThreeVectorC  &Mom()            const;
       FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),E(m)); }
-      UInt_t               Ndof()           const { return fNdof;                              }
+      UShort_t             Ndof()           const { return fNdof;                              }
       UInt_t               NHits()          const { return fHits.NBitsSet();                   }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
       EObjType             ObjType()        const { return kTrack;                             }    
@@ -194,7 +194,7 @@ namespace mithep
                                      Double_t dXy, Double_t dSz);
       void                 SetHit(EHitLayer l)                 { fHits.SetBit(l);              }
       void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
-      void                 SetNdof(UInt_t dof)                 { fNdof = dof;                  }
+      void                 SetNdof(UShort_t dof)               { fNdof = dof;                  }
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
       void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
       void	           SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc;        }
@@ -208,20 +208,20 @@ namespace mithep
       void                 GetMom()      const;
 
       BitMask48            fHits;                //storage for mostly hit information
-      Double32_t           fQOverP;              //signed inverse of momentum [1/GeV]
-      Double32_t           fQOverPErr;           //error of q/p
-      Double32_t           fLambda;              //pi/2 - polar angle at the reference point
-      Double32_t           fLambdaErr;           //error of lambda
-      Double32_t           fPhi0;                //azimuth angle at the given point
-      Double32_t           fPhi0Err;             //error of azimuthal angle
-      Double32_t           fDxy;                 //transverse distance to reference point [cm]
-      Double32_t           fDxyErr;              //error of transverse distance
-      Double32_t           fDsz;                 //longitudinal distance to reference point [cm]
-      Double32_t           fDszErr;              //error of longitudinal distance
-      Double32_t           fChi2;                //chi squared of track fit
-      UInt_t               fNdof;                //degree-of-freedom of track fit
-      Double32_t           fEtaEcal;             //eta of track at Ecal front face
-      Double32_t           fPhiEcal;             //phi of track at Ecal front face
+      Double32_t           fQOverP;              //[0,0,14]signed inverse of momentum [1/GeV]
+      Double32_t           fQOverPErr;           //[0,0,14]error of q/p
+      Double32_t           fLambda;              //[0,0,14]pi/2 - polar angle at the reference point
+      Double32_t           fLambdaErr;           //[0,0,14]error of lambda
+      Double32_t           fPhi0;                //[0,0,14]azimuth angle at the given point
+      Double32_t           fPhi0Err;             //[0,0,14]error of azimuthal angle
+      Double32_t           fDxy;                 //[0,0,14]trans. distance to reference point [cm]
+      Double32_t           fDxyErr;              //[0,0,14]error of transverse distance
+      Double32_t           fDsz;                 //[0,0,14]long. distance to reference point [cm]
+      Double32_t           fDszErr;              //[0,0,14]error of longitudinal distance
+      Double32_t           fChi2;                //[0,0,12]chi squared of track fit
+      UShort_t             fNdof;                //degree-of-freedom of track fit
+      Double32_t           fEtaEcal;             //[0,0,10]eta of track at Ecal front face
+      Double32_t           fPhiEcal;             //[0,0,10]phi of track at Ecal front face
       Ref<SuperCluster>    fSuperClusterRef;     //superCluster crossed by track
       Ref<MCParticle>      fMCParticleRef;       //reference to sim particle (for monte carlo)
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum

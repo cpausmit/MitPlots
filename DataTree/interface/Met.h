@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.10 2009/03/02 14:58:17 loizides Exp $
+// $Id: Met.h,v 1.11 2009/03/12 15:56:50 bendavid Exp $
 //
 // Met
 //
@@ -43,10 +43,10 @@ namespace mithep
       void                         Clear(Option_t * /*option*/ ="");
       void	                   GetMom()             const;
 
-      Double32_t                   fMex;                 //x-component
-      Double32_t                   fMey;                 //y-component              
-      Double32_t                   fSumEt;               //scalar sum of ET over all objects
-      Double32_t                   fElongit;             //z-comp. of vector E sum over all inputs
+      Double32_t                   fMex;                 //[0,0,14]x-component
+      Double32_t                   fMey;                 //[0,0,14]y-component              
+      Double32_t                   fSumEt;               //[0,0,14]scalar sum of ET over all objects
+      Double32_t                   fElongit;             //[0,0,14]z-comp. of vector E sum
       FArrDouble32                 fDmex;                //array of all corr. applied to MEx
       FArrDouble32                 fDmey;                //array of all corr. applied to MEy
       FArrDouble32                 fDSumEt;              //array of all corr. applied to SumET

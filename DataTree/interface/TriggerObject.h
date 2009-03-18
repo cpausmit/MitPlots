@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.5 2008/12/09 17:47:00 loizides Exp $
+// $Id: TriggerObject.h,v 1.6 2009/02/18 15:38:55 loizides Exp $
 //
 // TriggerObject
 //
@@ -15,6 +15,7 @@
 #define MITANA_DATATREE_TRIGGEROBJECT_H
 
 #include <THashTable.h>
+#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
 
@@ -35,7 +36,7 @@ namespace mithep
       void                  GetMom()  const;
 
       Int_t                 fId;          //id or physics type (similar to pdgId)
-      FourVectorM32         fMom;         //object momentum
+      Vect4M                fMom;         //object momentum
 
     ClassDef(TriggerObjectBase, 1) // Trigger object base class
   };
@@ -151,7 +152,7 @@ namespace mithep
       void                 Print(Option_t *opt="")   const;
  
     protected:
-      const TriggerTable *fTriggers; //trigger table
+      const TriggerTable  *fTriggers; //trigger table
   };
  
 }

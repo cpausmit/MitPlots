@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenJet.h,v 1.4 2009/02/18 15:38:54 loizides Exp $
+// $Id: GenJet.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
 //
 // GenJet
 //
@@ -11,6 +11,7 @@
 #ifndef MITANA_DATATREE_GENJET_H
 #define MITANA_DATATREE_GENJET_H
  
+#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Particle.h"
 
 namespace mithep 
@@ -41,12 +42,12 @@ namespace mithep
     protected:
       void              GetMom()                      const;
 
-      FourVectorM32     fMom;                    //four momentum of jet
-      Double32_t        fHadEnergy; 	         //hadronic energy
-      Double32_t        fEmEnergy; 	         //electromagnetic
-      Double32_t        fInvisibleEnergy; 	 //invisible energy (mu, nu)
-      Double32_t        fAuxiliaryEnergy; 	 //anything else (eg. undecayed sigmas)
-      Int_t             fMatchedMCFlavor;        //pdg of the quark flavor that the jet matched to
+      Vect4M            fMom;                    //four momentum of jet
+      Double32_t        fHadEnergy; 	         //[0,0,14]hadronic energy
+      Double32_t        fEmEnergy; 	         //[0,0,14]electromagnetic
+      Double32_t        fInvisibleEnergy; 	 //[0,0,14]invisible energy (mu, nu)
+      Double32_t        fAuxiliaryEnergy; 	 //[0,0,14]anything else (eg. undecayed sigmas)
+      Int_t             fMatchedMCFlavor;        //pdg of the matched quark flavor
 
     ClassDef(GenJet, 1) // Jet class at generation level
   };

@@ -1,11 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableData.h,v 1.7 2009/02/26 17:06:25 bendavid Exp $
+// $Id: StableData.h,v 1.8 2009/03/08 12:09:59 loizides Exp $
 //
 // StableData
 //
-// Additional information on a stable daughter which is specific to a particular decay
+// Additional information on a stable daughter which is specific to a particular decay.
 // 
-//
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
 
@@ -17,6 +16,7 @@
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Types.h"
+#include "MitCommon/DataFormats/interface/Vect3C.h"
 
 namespace mithep 
 {
@@ -24,22 +24,24 @@ namespace mithep
   {
     public:
       StableData() {}
-      StableData(Particle* p, const ThreeVector &mom) :
+      StableData(const Particle *p, const ThreeVector &mom) :
         DaughterData(p), fMomAtVertex(mom) {}
-      StableData(Particle* p, Double_t px, Double_t py, Double_t pz) :
-        DaughterData(p), fMomAtVertex(px,py,pz) {}
+      StableData(const Particle *p, const ThreeVectorC &mom) :
+        DaughterData(p), fMomAtVertex(mom) {}
+      StableData(const Particle *p, Double_t px, Double_t py, Double_t pz) :
+        DaughterData(p), fMomAtVertex(ThreeVector(px,py,pz)) {}
 
-      Bool_t               BadLayer(Track::EHitLayer l) const { return fBadLayers.TestBit(l); }
-      const BitMask48     &BadLayers()   const { return fBadLayers; }
+      Bool_t               BadLayer(Track::EHitLayer l) const { return fBadLayers.TestBit(l);      }
+      const BitMask48     &BadLayers()   const { return fBadLayers;                                }
       const BitMask48      MissedHits()  const;
-      UInt_t               NMissedHits() const { return MissedHits().NBitsSet(); }
-      UInt_t               NWrongHits()  const { return WrongHits().NBitsSet(); }
-      UInt_t               NWrongOrMissingHits() const { return fBadLayers.NBitsSet(); }
-      EObjType             ObjType()     const { return kStableData; }      
-      const ThreeVector   &ThreeMom()    const { return fMomAtVertex; }
+      UInt_t               NMissedHits() const { return MissedHits().NBitsSet();                   }
+      UInt_t               NWrongHits()  const { return WrongHits().NBitsSet();                    }
+      UInt_t               NWrongOrMissingHits() const { return fBadLayers.NBitsSet();             }
+      EObjType             ObjType()     const { return kStableData;                               } 
+      ThreeVectorC         ThreeMom()    const { return fMomAtVertex.V();                          }
       const BitMask48      WrongHits()   const;
-      void                 SetBadLayer(Track::EHitLayer l)       { fBadLayers.SetBit(l); }
-      void                 SetBadLayers(const BitMask48 &layers) { fBadLayers = layers; }
+      void                 SetBadLayer(Track::EHitLayer l)       { fBadLayers.SetBit(l);           }
+      void                 SetBadLayers(const BitMask48 &layers) { fBadLayers = layers;            }
       void                 SetThreeMom(Double_t px, Double_t y, Double_t z);
       void                 SetThreeMom(const ThreeVector &mom)   { fMomAtVertex = mom; ClearMom(); }
 
@@ -47,12 +49,12 @@ namespace mithep
       Double_t             GetMass()     const { return Original()->Mass(); }
       void                 GetMom()      const;
 
-      ThreeVector32        fMomAtVertex;      //fitted momentum at vertex
+      Vect3C               fMomAtVertex;      //fitted momentum at vertex
       BitMask48            fBadLayers;        //layer mask for incorrect or missing hits from
                                               //before or after the decay vertex
                                               //using same bit-layer mapping as mithep::Track
 
-    ClassDef(StableData, 1) // Stable daughter class
+    ClassDef(StableData, 1) // Stable data class
   };
 }
 
@@ -61,8 +63,7 @@ inline void mithep::StableData::GetMom() const
 {
   // Get momentum values from stored values.
 
-  Double_t pt = TMath::Sqrt(fMomAtVertex.X()*fMomAtVertex.X()+fMomAtVertex.Y()*fMomAtVertex.Y());
-  fCachedMom.SetCoordinates(pt,fMomAtVertex.Eta(),fMomAtVertex.Phi(),GetMass()); 
+  fCachedMom.SetCoordinates(fMomAtVertex.Rho(),fMomAtVertex.Eta(),fMomAtVertex.Phi(),GetMass()); 
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.24 2009/02/26 17:06:24 bendavid Exp $
+// $Id: DecayParticle.h,v 1.25 2009/03/03 17:04:09 loizides Exp $
 //
 // DecayParticle
 //
@@ -15,13 +15,14 @@
 #ifndef MITANA_DATATREE_DECAYPARTICLE_H
 #define MITANA_DATATREE_DECAYPARTICLE_H
  
+#include <TDatabasePDG.h>
+#include <TParticlePDG.h> 
+#include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataCont/interface/RefArray.h"
-#include <TDatabasePDG.h>
-#include <TParticlePDG.h> 
 
 namespace mithep 
 {
@@ -35,6 +36,8 @@ namespace mithep
         fAbsPdgId(absPdgId), fChi2(0), fNdof(0), fMassError(0), 
         fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
 
+      void                      AddDaughterData(const DaughterData *dd) 
+                                  { fDaughterData.Add(dd); ClearCharge(); }
       UInt_t                    AbsPdgId()            const { return fAbsPdgId;                    }
       Double_t                  Chi2()                const { return fChi2;                        }
       const Particle           *Daughter(UInt_t i)    const { return DaughterDat(i)->Original();   }
@@ -43,39 +46,37 @@ namespace mithep
       Double_t                  DxyError()            const { return fDxyError;                    }
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
-      Bool_t                    HasSameDaughters(const DecayParticle *p)  const;
       Bool_t                    HasPriVertex()        const { return fPriVtx.IsValid();            }
       Bool_t                    HasPriVertex(const Vertex *v) 
                                                       const { return fPriVtx.RefsObject(v);        }
+      Bool_t                    HasSameDaughters(const DecayParticle *p)  const;
       Double_t                  Lxy()                 const { return fLxy;                         }
       Double_t                  LxyError()            const { return fLxyError;                    }
-      Double_t                  MassError()           const { return fMassError;                   }
-      UInt_t                    Ndof()                const { return fNdof;                        }
       Double_t                  Lz()                  const { return fLz;                          }
       Double_t                  LzError()             const { return fLzError;                     }
+      Double_t                  MassError()           const { return fMassError;                   }
+      UShort_t                  Ndof()                const { return fNdof;                        }
       UInt_t                    NDaughters()          const { return fDaughterData.Entries();      }
       EObjType                  ObjType()             const { return kDecayParticle;               }
       TParticlePDG             *ParticlePdgEntry()    const;
       Double_t                  PdgMass()             const;
+      const Vertex             *PriVertex()           const { return fPriVtx.Obj();                }
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);     }
       const ThreeVector        &Position()            const;
       const ThreeVector         RelativePosition()    const;
-      const Vertex             *PriVertex()           const { return fPriVtx.Obj();                }
-      void                      AddDaughterData(const DaughterData *dd) 
-                                  { fDaughterData.Add(dd); ClearCharge(); }
       void                      SetAbsPdgId(UInt_t apid)                { fAbsPdgId=apid;          }
       void                      SetChi2(Double_t chi2)                  { fChi2 = chi2;            }
-      void                      SetMassError(Double_t massError)        { fMassError = massError;  }
-      void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void                      SetMom(const FourVector &p)             
-                                  { fMomentum = p; ClearMom(); ClearPos(); }
-      void                      SetNdof(UInt_t   ndof)                  { fNdof = ndof;            }
       void                      SetDxy(Double_t dxy)                    { fDxy = dxy; ClearPos();  }
       void                      SetDxyError(Double_t dxyError)          { fDxyError = dxyError;    }
       void                      SetLxy(Double_t lxy)                    { fLxy = lxy; ClearPos();  }
       void                      SetLxyError(Double_t lxyError)          { fLxyError = lxyError;    }
       void                      SetLz(Double_t lz)                      { fLz = lz; ClearPos();    }
       void                      SetLzError(Double_t lzError)            { fLzError = lzError;      }
+      void                      SetMassError(Double_t massError)        { fMassError = massError;  }
+      void                      SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                      SetMom(const FourVector &p)             
+                                  { fMomentum = p; ClearMom(); ClearPos(); }
+      void                      SetNdof(UShort_t ndof)                  { fNdof = ndof;            }
       void                      SetPriVertex(const Vertex *v)           { fPriVtx = v; ClearPos(); }
       using TObject::Error;
 
@@ -86,16 +87,16 @@ namespace mithep
       void                      GetPos()              const;
 
       UInt_t                    fAbsPdgId;     //absolute value of pid code
-      Double32_t                fChi2;         //chi-squared of fit
-      UInt_t                    fNdof;         //degrees of freedom for fit
-      Double32_t                fMassError;    //fitted mass error
-      Double32_t                fLxy;          //fitted lxy (decay length)
-      Double32_t                fLxyError;     //fitted lxy error
-      Double32_t                fDxy;          //fitted impact parameter
-      Double32_t                fDxyError;     //fitted impact parameter error
-      Double32_t                fLz;           //fitted lz (decay length)
-      Double32_t                fLzError;      //fitted lz error
-      FourVectorM32             fMomentum;     //momentum fourvector
+      Double32_t                fChi2;         //[0,0,12]chi-squared of fit
+      UShort_t                  fNdof;         //degrees of freedom for fit
+      Double32_t                fMassError;    //[0,0,14]fitted mass error
+      Double32_t                fLxy;          //[0,0,14]fitted lxy (decay length)
+      Double32_t                fLxyError;     //[0,0,14]fitted lxy error
+      Double32_t                fDxy;          //[0,0,14]fitted impact parameter
+      Double32_t                fDxyError;     //[0,0,14]fitted impact parameter error
+      Double32_t                fLz;           //[0,0,14]fitted lz (decay length)
+      Double32_t                fLzError;      //[0,0,14]fitted lz error
+      Vect4M                    fMomentum;     //momentum fourvector
       RefArray<DaughterData>    fDaughterData; //momentum of daughters at vertex
       Ref<Vertex>               fPriVtx;       //reference to primary vertex
       mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
@@ -122,7 +123,7 @@ inline void mithep::DecayParticle::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom = fMomentum;
+  fCachedMom.SetCoordinates(fMomentum.Pt(), fMomentum.Eta(), fMomentum.Phi(), fMomentum.M());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,8 +175,8 @@ inline const mithep::ThreeVector mithep::DecayParticle::RelativePosition() const
 {
   // Compute the position vector of the decay vertex relative to the primary vertex.
 
-  mithep::ThreeVector dz(0,0,fLz*TMath::Abs(fMomentum.Pz())/fMomentum.Pz());
-  mithep::ThreeVector momPerp(fMomentum.Px(),fMomentum.Py(),0);
+  mithep::ThreeVector dz(0,0,fLz*TMath::Abs(Pz())/Pz());
+  mithep::ThreeVector momPerp(Px(),Py(),0);
   mithep::ThreeVector zHat(0,0,1.0);
   mithep::ThreeVector dxy   = -momPerp.Cross(zHat)*fDxy/momPerp.R();
   mithep::ThreeVector dlxy  =  momPerp*fLxy/momPerp.R();

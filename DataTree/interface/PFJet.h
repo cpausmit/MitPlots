@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFJet.h,v 1.1 2009/03/11 18:11:38 bendavid Exp $
+// $Id: PFJet.h,v 1.2 2009/03/12 15:55:56 bendavid Exp $
 //
 // PFJet
 //
-// This class holds information about reconstructed jet based on pf candidates
+// This class holds information about reconstructed jet based on pf candidates.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
@@ -21,48 +21,47 @@ namespace mithep
   {
     public:
       PFJet() : fChargedHadronEnergy(0), fNeutralHadronEnergy(0), fChargedEmEnergy(0),
-                fChargedMuEnergy(0), fNeutralEmEnergy(0), fChargedMultiplicity(0),
+                fNeutralEmEnergy(0), fMuonEnergy(0), fChargedMultiplicity(0),
                 fNeutralMultiplicity(0), fMuonMultiplicity(0) {}
       PFJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
                 Jet(px,py,pz,e),
                 fChargedHadronEnergy(0), fNeutralHadronEnergy(0), fChargedEmEnergy(0),
-                fChargedMuEnergy(0), fNeutralEmEnergy(0), fChargedMultiplicity(0),
+                fNeutralEmEnergy(0), fMuonEnergy(0), fChargedMultiplicity(0),
                 fNeutralMultiplicity(0), fMuonMultiplicity(0) {}
 
-      void              AddPFCand(const PFCandidate *p)     { fPFCands.Add(p);                   }
-      Bool_t            HasPFCand(const PFCandidate *p) const { return fPFCands.HasObject(p);    }
-      UInt_t            NPFCands()                    const { return fPFCands.GetEntries();      }
-      const PFCandidate *PFCand(UInt_t i)              const { return fPFCands.At(i);            }
-      UInt_t            NConstituents()               const { return NPFCands();                 }
-
-      EObjType          ObjType()                     const { return kPFJet;                     } 
-      Double_t          ChargedHadronEnergy()         const { return fChargedHadronEnergy;       }
-      Double_t          NeutralHadronEnergy()         const { return fNeutralHadronEnergy;       }
-      Double_t          ChargedEmEnergy()             const { return fChargedEmEnergy;           }
-      Double_t          ChargedMuEnergy()             const { return fChargedMuEnergy;           }
-      Double_t          NeutralEmEnergy()             const { return fNeutralEmEnergy;           }
-      UInt_t            ChargedMultiplicity()         const { return fChargedMultiplicity;       }
-      UInt_t            NeutralMultiplicity()         const { return fNeutralMultiplicity;       }
-      UInt_t            MuonMultiplicity()            const { return fMuonMultiplicity;          }
-      void              SetChargedHadronEnergy(Double_t e)  { fChargedHadronEnergy = e;          }
-      void              SetNeutralHadronEnergy(Double_t e)  { fNeutralHadronEnergy = e;          }
-      void              SetChargedEmEnergy(Double_t e)      { fChargedEmEnergy = e;              }
-      void              SetChargedMuEnergy(Double_t e)      { fChargedMuEnergy = e;              }
-      void              SetNeutralEmEnergy(Double_t e)      { fNeutralEmEnergy = e;              }
-      void              SetChargedMultiplicity(UInt_t n)    { fChargedMultiplicity = n;          }
-      void              SetNeutralMultiplicity(UInt_t n)    { fNeutralMultiplicity = n;          }
-      void              SetMuonMultiplicity(UInt_t n)       { fMuonMultiplicity = n;             }
+      void                  AddPFCand(const PFCandidate *p)       { fPFCands.Add(p);               }
+      Double_t              ChargedEmEnergy()               const { return fChargedEmEnergy;       }
+      Double_t              ChargedHadronEnergy()           const { return fChargedHadronEnergy;   }
+      Double_t              MuonEnergy()                    const { return fMuonEnergy;            }
+      UInt_t                ChargedMultiplicity()           const { return fChargedMultiplicity;   }
+      Bool_t                HasPFCand(const PFCandidate *p) const { return fPFCands.HasObject(p);  }
+      UInt_t                NConstituents()                 const { return NPFCands();             }
+      Double_t              NeutralEmEnergy()               const { return fNeutralEmEnergy;       }
+      Double_t              NeutralHadronEnergy()           const { return fNeutralHadronEnergy;   }
+      UInt_t                NeutralMultiplicity()           const { return fNeutralMultiplicity;   }
+      UInt_t                NPFCands()                      const { return fPFCands.GetEntries();  }
+      UInt_t                MuonMultiplicity()              const { return fMuonMultiplicity;      }
+      EObjType              ObjType()                       const { return kPFJet;                 } 
+      const PFCandidate    *PFCand(UInt_t i)                const { return fPFCands.At(i);         }
+      void                  SetChargedEmEnergy(Double_t e)        { fChargedEmEnergy     = e;      }
+      void                  SetChargedHadronEnergy(Double_t e)    { fChargedHadronEnergy = e;      }
+      void                  SetChargedMuEnergy(Double_t e)        { fMuonEnergy          = e;      }
+      void                  SetChargedMultiplicity(UInt_t n)      { fChargedMultiplicity = n;      }
+      void                  SetMuonMultiplicity(UInt_t n)         { fMuonMultiplicity    = n;      }
+      void                  SetNeutralEmEnergy(Double_t e)        { fNeutralEmEnergy     = e;      }
+      void                  SetNeutralHadronEnergy(Double_t e)    { fNeutralHadronEnergy = e;      }
+      void                  SetNeutralMultiplicity(UInt_t n)      { fNeutralMultiplicity = n;      }
 
     protected:
 
-      Double32_t            fChargedHadronEnergy;
-      Double32_t            fNeutralHadronEnergy;
-      Double32_t            fChargedEmEnergy;
-      Double32_t            fChargedMuEnergy;
-      Double32_t            fNeutralEmEnergy;
-      UInt_t                fChargedMultiplicity;
-      UInt_t                fNeutralMultiplicity;
-      UInt_t                fMuonMultiplicity;
+      Double32_t            fChargedHadronEnergy;  //[0,0,14]charged hadron energy
+      Double32_t            fNeutralHadronEnergy;  //[0,0,14]neutral hadron energy
+      Double32_t            fChargedEmEnergy;      //[0,0,14]charged em energy
+      Double32_t            fNeutralEmEnergy;      //[0,0,14]neutral em energy
+      Double32_t            fMuonEnergy;           //[0,0,14]muon energy
+      UInt_t                fChargedMultiplicity;  //number of charged constituents
+      UInt_t                fNeutralMultiplicity;  //number of neutral constituents
+      UInt_t                fMuonMultiplicity;     //number of muon constituents
       RefArray<PFCandidate> fPFCands;              //pf candidates in the jet
 
     ClassDef(PFJet, 1) // PFJet class
