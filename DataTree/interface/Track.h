@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.35 2009/03/07 08:31:36 loizides Exp $
+// $Id: Track.h,v 1.36 2009/03/08 12:09:59 loizides Exp $
 //
 // Track
 //
@@ -146,7 +146,6 @@ namespace mithep
 
       Int_t                Charge()         const { return (fQOverP>0) ? 1 : -1;  }
       Double_t             Chi2()           const { return fChi2;                 }
-      Double_t             RChi2()          const { return fChi2/(Double_t)fNdof; }
       void                 ClearHit(EHitLayer l)  { fHits.ClearBit(l);            } 
       Double_t	           D0()             const { return -fDxy;                 }
       Double_t             D0Corrected(const BaseVertex &iVertex) const;
@@ -183,8 +182,8 @@ namespace mithep
       Double_t             Pz()             const { return Mom().Z();                          }
       Double_t             QOverP()         const { return fQOverP;                            }
       Double_t             QOverPErr()      const { return fQOverPErr;                         }
+      Double_t             RChi2()          const { return fChi2/(Double_t)fNdof; }
       Double_t             Theta()          const { return (TMath::PiOver2() - fLambda);       }
-      Double_t             Z0()             const { return fDsz/TMath::Cos(fLambda);           }
       const SuperCluster  *SCluster()       const { return fSuperClusterRef.Obj();             }
       const BitMask48      StereoHits()     const { return (fHits & StereoLayers());           }
       void                 SetChi2(Double_t chi2)              { fChi2 = chi2;                 }
@@ -199,6 +198,7 @@ namespace mithep
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
       void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
       void	           SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc;        }
+      Double_t             Z0()             const { return fDsz/TMath::Cos(fLambda);           }
 
       static 
       const BitMask48      StereoLayers();
