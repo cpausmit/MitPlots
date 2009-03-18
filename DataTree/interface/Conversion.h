@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.12 2009/02/18 15:38:54 loizides Exp $
+// $Id: Conversion.h,v 1.13 2009/02/26 17:06:24 bendavid Exp $
 //
 // Conversion
 //
@@ -25,6 +25,8 @@ namespace mithep
         fVertex(x,y,z), fDCotTheta(0), fEOverP(0), fPairMass(0) {}
       Conversion(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) : 
         fVertex(x,y,z,xErr,yErr,zErr) ,fDCotTheta(0), fEOverP(0), fPairMass(0) {}
+      Conversion(const Vertex &v) : 
+        fVertex(v), fDCotTheta(0), fEOverP(0), fPairMass(0) {}
       
       const Electron           *Daughter(UInt_t i)         const;
       Double_t                  DCotTheta()                const { return fDCotTheta;    }
