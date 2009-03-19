@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.41 2009/03/11 18:12:16 bendavid Exp $
+// $Id: Collections.h,v 1.42 2009/03/12 15:56:50 bendavid Exp $
 //
 // Collections
 //
@@ -47,6 +47,9 @@
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/PFCandidate.h"
+#include "MitAna/DataTree/interface/Tau.h"
+#include "MitAna/DataTree/interface/CaloTau.h"
+#include "MitAna/DataTree/interface/PFTau.h"
 
 namespace mithep 
 {
@@ -85,6 +88,9 @@ namespace mithep
   typedef Collection<Photon>            PhotonCol;
   typedef Collection<StableParticle>    StableParticleCol;
   typedef Collection<PFCandidate>       PFCandidateCol;
+  typedef Collection<Tau>               TauCol;
+  typedef Collection<CaloTau>           CaloTauCol;
+  typedef Collection<PFTau>             PFTauCol;
 
   typedef Array<DataBase>               DataBaseArr;
   typedef Array<DataObject>             DataObjectArr;
@@ -119,6 +125,9 @@ namespace mithep
   typedef Array<Photon>                 PhotonArr;
   typedef Array<StableParticle>         StableParticleArr;
   typedef Array<PFCandidate>            PFCandidateArr;
+  typedef Array<Tau>                    TauArr;
+  typedef Array<CaloTau>                CaloTauArr;
+  typedef Array<PFTau>                  PFTauArr;
 
   typedef ObjArray<TObject>             ObjectOArr;
   typedef ObjArray<DataBase>            DataBaseOArr;
@@ -153,5 +162,8 @@ namespace mithep
   typedef ObjArray<Photon>              PhotonOArr;
   typedef ObjArray<StableParticle>      StableParticleOArr;
   typedef ObjArray<PFCandidate>         PFCandidateOArr;
+  typedef ObjArray<Tau>                 TauOArr;
+  typedef ObjArray<CaloTau>             CaloTauOArr;
+  typedef ObjArray<PFTau>               PFTauOArr;
 }
 #endif

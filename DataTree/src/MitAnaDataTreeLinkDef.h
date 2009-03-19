@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.62 2009/03/13 08:40:01 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.63 2009/03/13 20:24:51 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -49,6 +49,9 @@
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/StableParticle.h"
 #include "MitAna/DataTree/interface/PFCandidate.h"
+#include "MitAna/DataTree/interface/Tau.h"
+#include "MitAna/DataTree/interface/CaloTau.h"
+#include "MitAna/DataTree/interface/PFTau.h"
 #endif
 
 #ifdef __CINT__
@@ -155,6 +158,7 @@
 #pragma link C++ class mithep::Array<mithep::Track>+;
 #pragma link C++ class mithep::ObjArray<mithep::Track>+;
 #pragma link C++ class mithep::Ref<mithep::Track>+;
+#pragma link C++ class mithep::RefArray<mithep::Track>+;
 #pragma link C++ typedef mithep::TrackCol;
 #pragma link C++ typedef mithep::TrackArr;
 #pragma link C++ typedef mithep::TrackOArr;
@@ -369,5 +373,32 @@
 #pragma link C++ typedef mithep::PFMetCol;
 #pragma link C++ typedef mithep::PFMetArr;
 #pragma link C++ typedef mithep::PFMetOArr;
+
+#pragma link C++ class mithep::Tau+;
+#pragma link C++ class mithep::Collection<mithep::Tau>+;
+#pragma link C++ class mithep::Array<mithep::Tau>+;
+#pragma link C++ class mithep::ObjArray<mithep::Tau>+;
+#pragma link C++ class mithep::Ref<mithep::Tau>+;
+#pragma link C++ typedef mithep::TauCol;
+#pragma link C++ typedef mithep::TauArr;
+#pragma link C++ typedef mithep::TauOArr;
+
+#pragma link C++ class mithep::CaloTau+;
+#pragma link C++ class mithep::Collection<mithep::CaloTau>+;
+#pragma link C++ class mithep::Array<mithep::CaloTau>+;
+#pragma link C++ class mithep::ObjArray<mithep::CaloTau>+;
+#pragma link C++ class mithep::Ref<mithep::CaloTau>+;
+#pragma link C++ typedef mithep::CaloTauCol;
+#pragma link C++ typedef mithep::CaloTauArr;
+#pragma link C++ typedef mithep::CaloTauOArr;
+
+#pragma link C++ class mithep::PFTau+;
+#pragma link C++ class mithep::Collection<mithep::PFTau>+;
+#pragma link C++ class mithep::Array<mithep::PFTau>+;
+#pragma link C++ class mithep::ObjArray<mithep::PFTau>+;
+#pragma link C++ class mithep::Ref<mithep::PFTau>+;
+#pragma link C++ typedef mithep::PFTauCol;
+#pragma link C++ typedef mithep::PFTauArr;
+#pragma link C++ typedef mithep::PFTauOArr;
 
 #endif
