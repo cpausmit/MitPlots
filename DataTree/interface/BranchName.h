@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BranchName.h,v 1.1 2009/03/13 08:40:01 loizides Exp $
+// $Id: BranchName.h,v 1.2 2009/03/13 20:24:51 loizides Exp $
 //
 // BranchName
 //
@@ -24,8 +24,9 @@ namespace mithep
         fBrName(brname), fBrDep(brdep) {}
 
       const char           *Dep()     const { return fBrDep;         }
-      const char           *Name()    const { return fBrName;        }
+      const char           *GetName() const { return fBrName;        }
       ULong_t               Hash()    const { return fBrName.Hash(); }
+      const char           *Name()    const { return fBrName;        }
       EObjType              ObjType() const { return kBranchName;    }      
       void                  Print(Option_t *opt="") const;
 
