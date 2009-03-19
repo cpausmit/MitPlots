@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BranchTable.h,v 1.1 2009/03/13 20:24:51 loizides Exp $
+// $Id: BranchTable.h,v 1.2 2009/03/16 19:31:14 loizides Exp $
 //
 // BranchTable
 //
@@ -23,6 +23,7 @@ namespace mithep
         THashTable(capacity,rehash) {}
 
       TList             *GetBranches()                               const;
+      TList             *GetDepBranches(const char *brname)          const;
       const BranchName  *Get(const char *name)                       const;
       Bool_t             Find(const char *brname, const char *brdep) const;
       Bool_t             Find(const BranchName &bn)                  const;

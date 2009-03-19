@@ -1,4 +1,4 @@
-// $Id: BranchTable.cc,v 1.1 2009/03/13 20:24:51 loizides Exp $
+// $Id: BranchTable.cc,v 1.2 2009/03/16 19:31:14 loizides Exp $
 
 #include "MitAna/DataTree/interface/BranchTable.h"
 #include <TObjString.h>
@@ -41,14 +41,42 @@ TList *BranchTable::GetBranches() const
 {
   // Get list of branches. This list has to be deleted by the user of this function.
 
-  TList *l = new TList;
-  l->SetOwner(1);
-
+  TList *l = 0;
   TIter iter(MakeIterator());
   const BranchName *bn = dynamic_cast<const BranchName*>(iter.Next());
+  if (bn) {
+    l = new TList;
+    l->SetOwner(1);
+  }
   while (bn) {
     if (!l->FindObject(bn->Name())) {
       l->Add(new TObjString(bn->Name()));
+    }
+    bn = dynamic_cast<const BranchName*>(iter.Next());
+  }
+  return l;
+}
+
+//--------------------------------------------------------------------------------------------------
+TList *BranchTable::GetDepBranches(const char *brname) const
+{
+  // Get list of dependent branches for given branch name. 
+  // This list has to be deleted by the user of this function.
+
+  TList *bl = GetListForObject(brname);
+  if (!bl)
+    return 0;
+
+  TList *l = 0;
+  TIter iter(bl->MakeIterator());
+  const BranchName *bn = dynamic_cast<const BranchName*>(iter.Next());
+  if (bn) {
+    l = new TList;
+    l->SetOwner(1);
+  }
+  while (bn) {
+    if ((strcmp(brname,bn->Name())==0) && (!l->FindObject(bn->Dep()))) {
+      l->Add(new TObjString(bn->Dep()));
     }
     bn = dynamic_cast<const BranchName*>(iter.Next());
   }
@@ -67,16 +95,17 @@ void BranchTable::Print(Option_t *opt) const
   TIter iter(br->MakeIterator());
   const TObjString *n = dynamic_cast<const TObjString*>(iter.Next());
   while (n) {
-    TList *bl = GetListForObject(n->GetName());
+    TList *bl = GetDepBranches(n->GetName());
     if (bl) {
       TIter iter2(bl->MakeIterator());
-      const BranchName *bn = dynamic_cast<const BranchName*>(iter2.Next());
+      const TObjString *d = dynamic_cast<const TObjString*>(iter2.Next());
       printf("%s -> ", n->GetName());
-      while (bn) {
-        printf("%s ", bn->Dep());
-        bn = dynamic_cast<const BranchName*>(iter2.Next());
+      while (d) {
+        printf("%s ", d->GetName());
+        d = dynamic_cast<const TObjString*>(iter2.Next());
       }
       printf("\n");
+      delete bl;
     }
     n = dynamic_cast<const TObjString*>(iter.Next());
   }
