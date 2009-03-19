@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.13 2009/03/11 10:00:51 loizides Exp $
+// $Id: EventHeader.h,v 1.14 2009/03/15 11:16:36 loizides Exp $
 //
 // EventHeader
 //
@@ -28,7 +28,7 @@ namespace mithep
         fWeight(1), fSkimmed(0), fIsMC(kTRUE) {}
 
       UInt_t              EvtNum()          const { return fEvtNum;      }
-      Bool_t              IsMC()              const { return fIsMC;      }
+      Bool_t              IsMC()            const { return fIsMC;        }
       UInt_t              LumiSec()         const { return fLumiSec;     }
       EObjType            ObjType()         const { return kEventHeader; }
       Int_t               RunEntry()        const { return fRunEntry;    }
