@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.29 2009/03/18 15:44:32 loizides Exp $
+// $Id: Electron.h,v 1.30 2009/03/20 18:23:27 loizides Exp $
 //
 // Electron
 //
@@ -88,7 +88,7 @@ namespace mithep
       void                 SetESuperClusterOverP(Double_t x)      { fESuperClusterOverP = x;       }
       void                 SetEcalJurassicIso(Double_t iso )      { fEcalJurassicIsolation = iso;  }
       void	           SetGsfTrk(const Track* t)                     
-                             { fGsfTrackRef = t; ClearMom(); ClearCharge(); }
+                             { fGsfTrackRef = t; ClearCharge(); }
       void                 SetHadronicOverEm(Double_t x)          { fHadronicOverEm = x;           }
       void                 SetHcalIsolation(Double_t iso )        { fHcalJurassicIsolation = iso;  }
       void                 SetIDLikelihood(Double_t likelihood)   { fIDLikelihood = likelihood;    }
@@ -99,10 +99,11 @@ namespace mithep
       void                 SetPOut(Double_t POut)                 { fPOut = POut;                  }
       void                 SetPassLooseID(Double_t passLooseID)   { fPassLooseID = passLooseID;    }
       void                 SetPassTightID(Double_t passTightID)   { fPassTightID = passTightID;    }
-      void	           SetSuperCluster(const SuperCluster* sc)       
-                             { fSuperClusterRef = sc; ClearMom(); }
+      void                 SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
+      void	           SetSuperCluster(const SuperCluster* sc) 
+                             { fSuperClusterRef = sc; }
       void	           SetTrackerTrk(const Track* t)                 
-                             { fTrackerTrackRef = t; ClearMom(); ClearCharge(); }
+                             { fTrackerTrackRef = t; ClearCharge(); }
       void                 SetTrackIsolation(Double_t trkiso)     { fTrackIsolation = trkiso;      }
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();          }
       Double_t             TrackIsolation()        const { return fTrackIsolation;                 }
@@ -112,6 +113,7 @@ namespace mithep
       Double_t             GetMass()               const          { return 0.51099892e-3;          }
       void                 GetMom()                const;
 
+      Vect3C               fMom;                       //stored three-momentum
       Ref<Track>           fGsfTrackRef;               //gsf track reference
       Ref<Track>           fTrackerTrackRef;           //tracker track reference
       Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster
@@ -163,27 +165,10 @@ inline const mithep::Track *mithep::Electron::BestTrk() const
 //--------------------------------------------------------------------------------------------------
 inline void mithep::Electron::GetMom() const
 {
-  // Get momentum of the electron. We use the direction of the
-  // track and the energy of the SuperCluster.
+  // Get momentum of the electron. We use an explicitly stored three vector, with the pdg mass,
+  // since the momentum vector may be computed non-trivially in cmssw
 
-  const mithep::Track *trk = Trk();
-
-  if (!trk) {
-    fCachedMom.SetCoordinates(0,0,0,0);
-    return;
-  }
-
-  Double_t p = 0;
-  Double_t mass = GetMass();
-
-  const mithep::SuperCluster *sc = SCluster();
-  if (sc)
-    p = TMath::Sqrt(sc->Energy()*sc->Energy() - mass*mass);
-  else
-    p = trk->P();
-
-  Double_t pt = TMath::Abs(p*TMath::Cos(trk->Lambda()));
-  fCachedMom.SetCoordinates(pt,trk->Eta(),trk->Phi(),mass);
+  fCachedMom.SetCoordinates(fMom.Rho(),fMom.Eta(),fMom.Phi(),GetMass());
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -193,5 +178,14 @@ inline Double_t mithep::Electron::ESeedClusterOverPIn() const
   // of the track momentum at the vertex.
   
   return SCluster()->Seed()->Energy() / PIn();
+}
+
+//-------------------------------------------------------------------------------------------------
+inline void mithep::Electron::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
+{
+  // Set three-vector
+  
+  fMom.Set(pt,eta,phi);
+  ClearMom();
 }
 #endif
