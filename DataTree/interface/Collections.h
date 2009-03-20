@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.42 2009/03/12 15:56:50 bendavid Exp $
+// $Id: Collections.h,v 1.43 2009/03/19 23:09:36 bendavid Exp $
 //
 // Collections
 //
@@ -68,7 +68,7 @@ namespace mithep
   typedef Collection<ChargedParticle>   ChargedParticleCol;
   typedef Collection<Muon>              MuonCol;
   typedef Collection<Electron>          ElectronCol;
-  typedef Collection<Jet>           JetCol;
+  typedef Collection<Jet>               JetCol;
   typedef Collection<CaloJet>           CaloJetCol;
   typedef Collection<PFJet>             PFJetCol;
   typedef Collection<GenJet>            GenJetCol;

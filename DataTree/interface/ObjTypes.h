@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.5 2009/03/13 20:24:51 loizides Exp $
+// $Id: ObjTypes.h,v 1.6 2009/03/19 23:09:36 bendavid Exp $
 //
 // ObjTypes
 //
@@ -19,6 +19,9 @@ namespace mithep
     kBasicCluster,
     kBeamSpot,
     kBranchName,
+    kCaloJet,
+    kCaloMet,
+    kCaloTau,
     kCaloTower,
     kChargedParticle,
     kCompositeParticle,
@@ -32,17 +35,16 @@ namespace mithep
     kEventHeader,
     kGenJet,
     kJet,
-    kCaloJet,
-    kPFJet,
     kLAHeader,
     kMCEventInfo,
     kMCParticle,
     kMet,
-    kCaloMet,
-    kPFMet,
     kMuon,
-    kParticle,
     kPFCandidate,
+    kPFJet,
+    kPFMet,
+    kPFTau,
+    kParticle,
     kPhoton,
     kRunInfo,
     kStableData,
@@ -50,8 +52,6 @@ namespace mithep
     kStableParticle,
     kSuperCluster,
     kTau,
-    kCaloTau,
-    kPFTau,
     kTrack,
     kTriggerMask,
     kTriggerName,

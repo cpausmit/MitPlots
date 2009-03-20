@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloJet.h,v 1.2 2009/03/12 15:55:38 bendavid Exp $
+// $Id: CaloJet.h,v 1.3 2009/03/18 15:44:31 loizides Exp $
 //
 // CaloJet
 //
@@ -33,7 +33,7 @@ namespace mithep
 
       void                AddTower(const CaloTower *t)        { fTowers.Add(t);                  }
       Bool_t              HasTower(const CaloTower *t)  const { return fTowers.HasObject(t);     }
-      UInt_t              NTowers()                     const { return fTowers.GetEntries();     }
+      UInt_t              NTowers()                     const { return fTowers.Entries();        }
       const CaloTower    *Tower(UInt_t i)               const { return fTowers.At(i);            }
       UInt_t              NConstituents()               const { return NTowers();                }
       EObjType            ObjType()                     const { return kCaloJet;                 }  

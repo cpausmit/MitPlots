@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.27 2009/03/19 18:03:13 loizides Exp $
+// $Id: Names.cc,v 1.28 2009/03/19 23:09:36 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -11,6 +11,7 @@ const char *Names::gkBarrelBasicClusterBrn  = "BarrelBasicClusters";
 const char *Names::gkBarrelSuperClusterBrn  = "BarrelSuperClusters";
 const char *Names::gkCaloJetBrn             = "ItrCone5Jets";
 const char *Names::gkCaloMetBrn             = "ItrCone5Met";
+const char *Names::gkCaloTauBrn             = "CaloTaus";
 const char *Names::gkCaloTowerBrn           = "CaloTowers";
 const char *Names::gkElectronBrn            = "Electrons";
 const char *Names::gkEndcapBasicClusterBrn  = "EndcapBasicClusters";
@@ -25,12 +26,11 @@ const char *Names::gkMCEvtInfoBrn           = "MCEventInfo";
 const char *Names::gkMCPartBrn              = "MCParticles";
 const char *Names::gkMuonBrn                = "Muons";
 const char *Names::gkPFCandidatesBrn        = "PFCandidates";
+const char *Names::gkPFTauBrn               = "PFTaus";
 const char *Names::gkPhotonBrn              = "Photons";
 const char *Names::gkSC5GenJetBrn           = "SC5GenJets";
 const char *Names::gkSC5JetBrn              = "SisCone5Jets";
 const char *Names::gkTrackBrn               = "Tracks";
-const char *Names::gkCaloTauBrn             = "CaloTaus";
-const char *Names::gkPFTauBrn               = "PFTaus";
 
 const char *Names::gkRunTreeName            = "Runs";
 const char *Names::gkRunInfoBrn             = "RunInfo";
