@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseVertex.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
+// $Id: BaseVertex.h,v 1.6 2009/03/18 15:44:31 loizides Exp $
 //
 // BaseVertex
 //
@@ -29,9 +29,7 @@ namespace mithep
         fPosition(pos), fXErr(0), fYErr(0), fZErr(0)            {}
       
       EObjType            ObjType()   const { return kBaseVertex;      }
-//      Double_t            Phi()       const { return Position().Phi(); }
       const ThreeVector   Position()  const { return fPosition.V();    }
-//      Double_t            Rho()       const { return fPosition.Rho();  }
       Double_t            X()         const { return fPosition.X();    }
       Double_t            XErr()      const { return fXErr;            }
       Double_t            Y()         const { return fPosition.Y();    }

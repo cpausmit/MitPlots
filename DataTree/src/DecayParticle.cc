@@ -1,4 +1,4 @@
-// $Id: DecayParticle.cc,v 1.5 2008/10/29 17:02:55 bendavid Exp $
+// $Id: DecayParticle.cc,v 1.6 2009/02/18 15:38:55 loizides Exp $
 
 #include "MitAna/DataTree/interface/DecayParticle.h"
 
@@ -7,7 +7,7 @@ ClassImp(mithep::DecayParticle)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Bool_t DecayParticle::HasDaughter(const Particle* p) const 
+Bool_t DecayParticle::HasDaughter(const Particle *p) const 
 {
   // Return true if given particle is among daughters.
 
@@ -38,7 +38,7 @@ Bool_t DecayParticle::HasCommonDaughter(const DecayParticle *p) const
 }
 
 //--------------------------------------------------------------------------------------------------
-Bool_t DecayParticle::HasSameDaughters(const DecayParticle* p) const 
+Bool_t DecayParticle::HasSameDaughters(const DecayParticle *p) const 
 {
   // Return true if daughters are the same.
 
@@ -59,7 +59,7 @@ Double_t DecayParticle::PdgMass() const
 {
   // Get mass from pdg lookup.
 
-  TParticlePDG* pdgEntry = ParticlePdgEntry();
+  TParticlePDG *pdgEntry = ParticlePdgEntry();
   if (pdgEntry)
     return pdgEntry->Mass();
   else {

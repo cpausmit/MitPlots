@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableData.h,v 1.8 2009/03/08 12:09:59 loizides Exp $
+// $Id: StableData.h,v 1.9 2009/03/18 15:44:32 loizides Exp $
 //
 // StableData
 //
@@ -37,7 +37,7 @@ namespace mithep
       UInt_t               NMissedHits() const { return MissedHits().NBitsSet();                   }
       UInt_t               NWrongHits()  const { return WrongHits().NBitsSet();                    }
       UInt_t               NWrongOrMissingHits() const { return fBadLayers.NBitsSet();             }
-      EObjType             ObjType()     const { return kStableData;                               } 
+      EObjType             ObjType()     const { return kStableData;                               }
       ThreeVectorC         ThreeMom()    const { return fMomAtVertex.V();                          }
       const BitMask48      WrongHits()   const;
       void                 SetBadLayer(Track::EHitLayer l)       { fBadLayers.SetBit(l);           }

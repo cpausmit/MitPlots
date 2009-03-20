@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.37 2009/03/18 15:10:31 loizides Exp $
+// $Id: Track.h,v 1.38 2009/03/18 15:44:32 loizides Exp $
 //
 // Track
 //
@@ -270,7 +270,7 @@ inline Double_t mithep::Track::D0Corrected(const BaseVertex &iVertex) const
 //--------------------------------------------------------------------------------------------------
 inline
 void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0, 
-                                   Double_t dxy, Double_t dsz)
+                             Double_t dxy, Double_t dsz)
 {
   // Set helix parameters.
 
@@ -285,7 +285,7 @@ void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0,
 //--------------------------------------------------------------------------------------------------
 inline
 void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
-                                   Double_t dxyErr, Double_t dszErr)
+                              Double_t dxyErr, Double_t dszErr)
 {
   // Set helix errors.
 

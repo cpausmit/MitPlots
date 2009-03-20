@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.8 2009/03/03 18:02:48 bendavid Exp $
+// $Id: BasicCluster.h,v 1.9 2009/03/18 15:44:31 loizides Exp $
 //
 // BasicCluster
 //
@@ -28,9 +28,6 @@ namespace mithep
       Double_t         Eta()                    const { return fPoint.Eta();  }
       EObjType         ObjType()                const { return kBasicCluster; }       
       Double_t         Phi()                    const { return fPoint.Phi();  }
-//      Double_t         X()                      const { return fPoint.X();    }
-//      Double_t         Y()                      const { return fPoint.Y();    }
-//      Double_t         Z()                      const { return fPoint.Z();    }        
       void             Print(Option_t *opt="")  const;
       void	       SetEnergy(Double_t energy)                 { fEnergy = energy;     }      
       void	       SetXYZ(Double_t x, Double_t y, Double_t z) { fPoint.SetXYZ(x,y,z); } 

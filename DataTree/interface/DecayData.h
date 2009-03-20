@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.9 2009/03/03 17:04:09 loizides Exp $
+// $Id: DecayData.h,v 1.10 2009/03/18 15:44:32 loizides Exp $
 //
 // DecayData
 //
@@ -41,9 +41,7 @@ namespace mithep
       void                 SetLz(Double_t lz)               { fLz = lz;               }
       void                 SetLzError(Double_t lzError)     { fLzError = lzError;     }      
       void                 SetMom(Double_t px, Double_t y, Double_t z, Double_t e);
-//      void                 SetMom(const FourVector &mom)    { fMomAtVertex = mom; ClearMom(); }
-//      void                 SetMom(const FourVector &mom)    { fMomAtVertex = mom; ClearMom(); }
-      void                 SetMassError(Double_t massError) { fMassError = massError;         }
+      void                 SetMassError(Double_t massError) { fMassError = massError; }
 
     protected:
       void                 GetMom()    const;

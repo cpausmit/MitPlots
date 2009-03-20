@@ -1,4 +1,4 @@
-// $Id: CompositeParticle.cc,v 1.6 2009/02/18 08:18:36 bendavid Exp $
+// $Id: CompositeParticle.cc,v 1.7 2009/02/18 15:38:55 loizides Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
@@ -7,7 +7,7 @@ ClassImp(mithep::CompositeParticle)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Bool_t CompositeParticle::HasDaughter(const Particle* p) const 
+Bool_t CompositeParticle::HasDaughter(const Particle *p) const 
 {
   // Return true if given particle is among daughters.
 
@@ -31,7 +31,7 @@ Bool_t CompositeParticle::HasCommonDaughter(const CompositeParticle *p) const
 }
 
 //--------------------------------------------------------------------------------------------------
-Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle* p) const 
+Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle *p) const 
 {
   // Return true if daughters are the same.
 
