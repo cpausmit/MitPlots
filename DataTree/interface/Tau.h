@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Tau.h,v 1.1 2009/03/19 23:09:36 bendavid Exp $
+// $Id: Tau.h,v 1.2 2009/03/20 09:37:17 loizides Exp $
 //
 // Tau
 //
@@ -48,7 +48,7 @@ inline void mithep::Tau::GetMom() const
 {
   // Get momentum values from stored values.
 
-  fCachedMom.SetXYZT(fMom.Pt(), fMom.Eta(), fMom.Phi(), fMom.M()); 
+  fCachedMom.SetCoordinates(fMom.Pt(), fMom.Eta(), fMom.Phi(), fMom.M()); 
 }
 
 //--------------------------------------------------------------------------------------------------
