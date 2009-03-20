@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.18 2009/03/06 13:52:54 loizides Exp $
+// $Id: RefArray.h,v 1.19 2009/03/12 18:19:48 loizides Exp $
 //
 // RefArray
 //
@@ -74,7 +74,10 @@ inline mithep::RefArray<ArrayElement>::RefArray()
 template<class ArrayElement>
 void mithep::RefArray<ArrayElement>::Add(const ArrayElement *ae)
 {
-  // Add new reference to object.
+  // Add reference to object.
+
+  if (!ae)
+    return;
 
   // check if the object can belong here and assign or get its uid
   if (ae->TestBit(kHasUUID)) {
@@ -161,7 +164,7 @@ TObject *mithep::RefArray<ArrayElement>::GetObject(UInt_t idx) const
 template<class ArrayElement>
 inline TProcessID *mithep::RefArray<ArrayElement>::GetPID(UInt_t idx) const
 {
-  // Return pid corresponding to idx.
+  // Return pid corresponding to given idx.
 
   TProcessID *pid = 0;
   if (fPIDs.Entries()>1)
@@ -176,7 +179,7 @@ inline TProcessID *mithep::RefArray<ArrayElement>::GetPID(UInt_t idx) const
 template<class ArrayElement>
 inline UInt_t mithep::RefArray<ArrayElement>::GetUID(UInt_t idx) const
 {
-  // Return uid corresponding to idx.
+  // Return uid corresponding to given idx.
 
   return fUIDs.UncheckedAt(idx);
 }
@@ -185,7 +188,7 @@ inline UInt_t mithep::RefArray<ArrayElement>::GetUID(UInt_t idx) const
 template<class ArrayElement>
 Bool_t mithep::RefArray<ArrayElement>::HasObject(const ArrayElement *obj) const
 {
-  // check whether RefArray contains a given object
+  // Check whether array contains a given object.
 
   if (!obj->TestBit(kIsReferenced))
     return kFALSE;
