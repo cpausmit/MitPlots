@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.7 2009/03/03 18:01:35 bendavid Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.8 2009/03/08 12:08:31 loizides Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -48,6 +48,10 @@
 #pragma link C++ class mithep::FastArrayBasic<Double32_t,kTRUE>-;
 #pragma link C++ class mithep::FastArrayBasic<Int_t>-;
 #pragma link C++ class mithep::FastArrayBasic<UInt_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Short_t>-;
+#pragma link C++ class mithep::FastArrayBasic<UShort_t>-;
+#pragma link C++ class mithep::FastArrayBasic<Char_t>-;
+#pragma link C++ class mithep::FastArrayBasic<UChar_t>-;
 #pragma link C++ typedef mithep::FArrDouble;
 #pragma link C++ typedef mithep::FArrDouble32;
 #pragma link C++ typedef mithep::FArrInt;
