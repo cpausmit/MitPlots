@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.13 2008/12/10 11:30:32 loizides Exp $
+// $Id: TreeWriter.h,v 1.14 2009/03/15 11:17:04 loizides Exp $
 //
 // TreeWriter
 //
@@ -105,6 +105,8 @@ namespace mithep
       const char          *GetBaseURL()                 const
                              { return fBaseURL.IsNull()?".":fBaseURL; }  
       Int_t                GetCompressLevel()           const { return fCompressLevel;  }
+      Int_t                GetDefaultBrSize()           const { return fDefBrSize;      }
+      Int_t                GetDefaultSL()               const { return fDefSL;          }
       Bool_t               GetDoObjNumReset()           const { return fDoObjNumReset;  }
       Bool_t               GetDoBranchRef()             const { return fDoBranchRef;    }
       Long64_t             GetEntries(const char *tn=0) const;
