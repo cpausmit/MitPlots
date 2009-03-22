@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.1 2009/03/19 23:09:36 bendavid Exp $
+// $Id: PFTau.h,v 1.2 2009/03/20 09:37:17 loizides Exp $
 //
 // PFTau
 //
@@ -39,55 +39,55 @@ namespace mithep
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
                   fMuonDecision(kFALSE) {}
 
-      void               AddIsoPFCand(const PFCandidate *p)         { fIsoPFCands.Add(p);           }
-      void               AddSignalPFCand(const PFCandidate *p)      { fSignalPFCands.Add(p);        }
-      Double_t           BremRecoveryEOverP()           const { return fBremRecoveryEOverP;         }
-      Double_t           CaloCompatibility()            const { return fCaloCompatibility;          }
-      Double_t           ECalStripSumEOverP()           const { return fECalStripSumEOverP;         }
-      Double_t           EMFraction()                   const { return fEMFraction;                 }
-      const Track       *ElectronTrack()                const { return fElectronTrack.Obj();        }
-      Bool_t             ElectronPreIDDecision()        const { return fElectronPreIDDecision;      }
-      Double_t           ElectronPreIDOutput()          const { return fElectronPreIDOutput;        }
-      Double_t           HCal3x3EOverP()                const { return fHCal3x3EOverP;              }
-      Double_t           HCalMaxEOverP()                const { return fHCalMaxEOverP;              }
-      Double_t           HCalTotalEOverP()              const { return fHCalTotalEOverP;            }
-      Double_t           IsoChargedHadronPtSum()        const { return fIsoChargedHadronPtSum;      }
-      Double_t           IsoGammaEtSum()                const { return fIsoGammaEtSum;              }
-      const PFCandidate *IsoPFCand(UInt_t i)            const { return fIsoPFCands.At(i);           }
-      const PFCandidate *LeadChargedHadronPFCand()      const { return fLeadChargedHadPFCand.Obj(); }
-      const PFCandidate *LeadNeutralHadronPFCand()      const { return fLeadNeutralPFCand.Obj();    }
-      const PFCandidate *LeadPFCand()                   const { return fLeadPFCand.Obj();           }
-      Double_t           LeadPFCandSignD0Sig()          const { return fLeadPFCandSignD0Sig;        }
-      Double_t           MaxHCalPFClusterEt()           const { return fMaxHCalPFClusterEt;         }
-      Bool_t             MuonDecision()                 const { return fMuonDecision;               }
-      UInt_t             NIsoPFCandS()                  const { return fIsoPFCands.Entries();       }
-      UInt_t             NSignalPFCands()               const { return fSignalPFCands.GetEntries(); }
-      EObjType           ObjType()                      const { return kPFTau;                      }
-      Double_t           SegmentCompatibility()         const { return fSegmentCompatibility;       }
-      void               SetBremRecoveryEOverP(Double_t x)    { fBremRecoveryEOverP = x;          }
-      void               SetCaloCompatibility(Double_t x)     { fCaloCompatibility = x;           }
-      void               SetECalStripSumEOverP(Double_t x)    { fECalStripSumEOverP = x;          }
-      void               SetEMFraction(Double_t x)            { fEMFraction = x;                  }
-      void               SetElectronPreIDDecision(Bool_t b)   { fElectronPreIDDecision = b;       }
-      void               SetElectronPreIDOutput(Double_t x)   { fElectronPreIDOutput = x;         }
-      void               SetElectronTrack(const Track *t)     { fElectronTrack = t;               }
-      void               SetHCal3x3EOverP(Double_t x)         { fHCal3x3EOverP = x;               }
-      void               SetHCalMaxEOverP(Double_t x)         { fHCalMaxEOverP = x;               }
-      void               SetHCalTotalEOverP(Double_t x)       { fHCalTotalEOverP = x;             }
-      void               SetIsoChargedHadronPtSum(Double_t x) { fIsoChargedHadronPtSum = x;       }
-      void               SetIsoGammaEtSum(Double_t x)         { fIsoGammaEtSum = x;               }
+      void               AddIsoPFCand(const PFCandidate *p)         { fIsoPFCands.Add(p);          }
+      void               AddSignalPFCand(const PFCandidate *p)      { fSignalPFCands.Add(p);       }
+      Double_t           BremRecoveryEOverP()          const { return fBremRecoveryEOverP;         }
+      Double_t           CaloCompatibility()           const { return fCaloCompatibility;          }
+      Double_t           ECalStripSumEOverP()          const { return fECalStripSumEOverP;         }
+      Double_t           EMFraction()                  const { return fEMFraction;                 }
+      const Track       *ElectronTrack()               const { return fElectronTrack.Obj();        }
+      Bool_t             ElectronPreIDDecision()       const { return fElectronPreIDDecision;      }
+      Double_t           ElectronPreIDOutput()         const { return fElectronPreIDOutput;        }
+      Double_t           HCal3x3EOverP()               const { return fHCal3x3EOverP;              }
+      Double_t           HCalMaxEOverP()               const { return fHCalMaxEOverP;              }
+      Double_t           HCalTotalEOverP()             const { return fHCalTotalEOverP;            }
+      Double_t           IsoChargedHadronPtSum()       const { return fIsoChargedHadronPtSum;      }
+      Double_t           IsoGammaEtSum()               const { return fIsoGammaEtSum;              }
+      const PFCandidate *IsoPFCand(UInt_t i)           const { return fIsoPFCands.At(i);           }
+      const PFCandidate *LeadChargedHadronPFCand()     const { return fLeadChargedHadPFCand.Obj(); }
+      const PFCandidate *LeadNeutralHadronPFCand()     const { return fLeadNeutralPFCand.Obj();    }
+      const PFCandidate *LeadPFCand()                  const { return fLeadPFCand.Obj();           }
+      Double_t           LeadPFCandSignD0Sig()         const { return fLeadPFCandSignD0Sig;        }
+      Double_t           MaxHCalPFClusterEt()          const { return fMaxHCalPFClusterEt;         }
+      Bool_t             MuonDecision()                const { return fMuonDecision;               }
+      UInt_t             NIsoPFCandS()                 const { return fIsoPFCands.Entries();       }
+      UInt_t             NSignalPFCands()              const { return fSignalPFCands.GetEntries(); }
+      EObjType           ObjType()                     const { return kPFTau;                      }
+      Double_t           SegmentCompatibility()        const { return fSegmentCompatibility;       }
+      void               SetBremRecoveryEOverP(Double_t x)   { fBremRecoveryEOverP = x;            }
+      void               SetCaloCompatibility(Double_t x)    { fCaloCompatibility = x;             }
+      void               SetECalStripSumEOverP(Double_t x)   { fECalStripSumEOverP = x;            }
+      void               SetEMFraction(Double_t x)           { fEMFraction = x;                    }
+      void               SetElectronPreIDDecision(Bool_t b)  { fElectronPreIDDecision = b;         }
+      void               SetElectronPreIDOutput(Double_t x)  { fElectronPreIDOutput = x;           }
+      void               SetElectronTrack(const Track *t)    { fElectronTrack = t;                 }
+      void               SetHCal3x3EOverP(Double_t x)        { fHCal3x3EOverP = x;                 }
+      void               SetHCalMaxEOverP(Double_t x)        { fHCalMaxEOverP = x;                 }
+      void               SetHCalTotalEOverP(Double_t x)      { fHCalTotalEOverP = x;               }
+      void               SetIsoChargedHadronPtSum(Double_t x){ fIsoChargedHadronPtSum = x;         }
+      void               SetIsoGammaEtSum(Double_t x)        { fIsoGammaEtSum = x;                 }
       void               SetLeadChargedHadronPFCand(const PFCandidate *p) 
-                                                                    { fLeadChargedHadPFCand = p;  }
-      void               SetLeadNeutralPFCand(const PFCandidate *p) { fLeadNeutralPFCand = p;     }
-      void               SetLeadPFCand(const PFCandidate *p)        { fLeadPFCand = p;            }
-      void               SetLeadPFCandSignD0Sig(Double_t x)         { fLeadPFCandSignD0Sig = x;   }
-      void               SetMaxHCalPFClusterEt(Double_t x)          { fMaxHCalPFClusterEt = x;    }
-      void               SetMuonDecision(Bool_t b)                  { fMuonDecision = b;          }
-      void               SetPFJet(const PFJet *j)                   { fPFJet = j;                 }
-      void               SetSegmentCompatibility(Double_t x)        { fSegmentCompatibility = x;  }
-      const PFCandidate *SignalPFCand(UInt_t i)         const { return fSignalPFCands.At(i);      }
-      const PFJet       *SourcePFJet()                  const { return fPFJet.Obj();              }
-      const Jet         *SourceJet()                    const { return SourcePFJet();             }
+                                                                    { fLeadChargedHadPFCand = p;   }
+      void               SetLeadNeutralPFCand(const PFCandidate *p) { fLeadNeutralPFCand = p;      }
+      void               SetLeadPFCand(const PFCandidate *p)        { fLeadPFCand = p;             }
+      void               SetLeadPFCandSignD0Sig(Double_t x)         { fLeadPFCandSignD0Sig = x;    }
+      void               SetMaxHCalPFClusterEt(Double_t x)          { fMaxHCalPFClusterEt = x;     }
+      void               SetMuonDecision(Bool_t b)                  { fMuonDecision = b;           }
+      void               SetPFJet(const PFJet *j)                   { fPFJet = j;                  }
+      void               SetSegmentCompatibility(Double_t x)        { fSegmentCompatibility = x;   }
+      const PFCandidate *SignalPFCand(UInt_t i)         const { return fSignalPFCands.At(i);       }
+      const PFJet       *SourcePFJet()                  const { return fPFJet.Obj();               }
+      const Jet         *SourceJet()                    const { return SourcePFJet();              }
 
     protected:
       Double32_t         fLeadPFCandSignD0Sig;   //[0,0,14]signed lead track D0 significance
