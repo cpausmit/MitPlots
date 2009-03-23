@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeBranchLoader.h,v 1.3 2008/12/01 17:40:57 loizides Exp $
+// $Id: TreeBranchLoader.h,v 1.4 2008/12/10 14:20:27 loizides Exp $
 //
 // TreeBranchLoader
 //
@@ -24,7 +24,6 @@ namespace mithep {
 
     public:
       TreeBranchLoader(TAMBranchInfo *binfo);
-      ~TreeBranchLoader() {};
 
       void                 Clear(Option_t *option="");
       TBranch             *GetBranch()                 { return fBranch; }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.14 2008/12/09 10:16:24 loizides Exp $
+// $Id: BaseSelMod.h,v 1.1 2008/12/10 14:20:10 loizides Exp $
 //
 // BaseSelMod
 //
@@ -18,7 +18,6 @@ namespace mithep
   class BaseSelMod : public BaseMod {
     public:
       BaseSelMod(const char *name="BaseSelMod", const char *title="Base selection module");
-      ~BaseSelMod() {}
 
     ClassDef(BaseSelMod, 1) // Base TAM module
   };

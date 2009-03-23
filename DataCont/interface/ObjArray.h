@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.14 2009/03/12 18:19:48 loizides Exp $
+// $Id: ObjArray.h,v 1.15 2009/03/23 13:07:17 loizides Exp $
 //
 // ObjArray
 //
@@ -93,7 +93,7 @@ inline void mithep::ObjArray<ArrayElement>::Add(const TCollection *col)
     return;
 
   if (IsOwner()) {
-    TObject::Error("Add", "Can not add collection since IsOwner() returns kTRUE.");
+    TObject::Error("Add", "Cannot add collection since IsOwner() returns kTRUE.");
     return;
   }
 
@@ -118,7 +118,7 @@ inline void mithep::ObjArray<ArrayElement>::Add(const BaseCollection *col)
     return;
 
   if (IsOwner()) {
-    TObject::Error("Add", "Can not add collection since IsOwner() returns kTRUE.");
+    TObject::Error("Add", "Cannot add collection since IsOwner() returns kTRUE.");
     return;
   }
 
@@ -137,7 +137,7 @@ inline void mithep::ObjArray<ArrayElement>::Add(const ArrayElement *ae)
   // Add object to array. This function should be used in cases the array does not own the objects.
 
   if (IsOwner()) {
-    TObject::Error("Add", "Can not add object since IsOwner() returns kTRUE.");
+    TObject::Error("Add", "Cannot add object since IsOwner() returns kTRUE.");
     return;
   }
 
@@ -162,7 +162,7 @@ inline void mithep::ObjArray<ArrayElement>::AddOwned(ArrayElement *ae)
   // Add object to array. This function should be used in cases the array owns the objects.
 
   if (!IsOwner()) {
-    TObject::Error("AddOwned","Can not add object since IsOwner() returns kFALSE.");
+    TObject::Error("AddOwned","Cannot add object since IsOwner() returns kFALSE.");
     return;
   }
   

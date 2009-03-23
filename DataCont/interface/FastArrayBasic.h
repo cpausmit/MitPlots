@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.7 2009/03/12 18:19:47 loizides Exp $
+// $Id: FastArrayBasic.h,v 1.8 2009/03/23 13:07:17 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -8,7 +8,7 @@
 // where the heap memory of an existing object is reused.  
 // This class is meant to be used as a datamember for objects which are contained 
 // inside a TClonesArray. 
-// For various reasons, the array can not be written in split mode. 
+// For various reasons, the array cannot be written in split mode. 
 // Array is meant to store basic data types as opposed to FastArray 
 // which can hold arbitrary (non-heap using) classes.
 // Since it stores basic types it can not derive from the Collection<ArrayElement>

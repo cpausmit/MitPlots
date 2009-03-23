@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CatalogingMod.h,v 1.3 2008/09/10 03:33:28 loizides Exp $
+// $Id: CatalogingMod.h,v 1.4 2008/12/10 14:20:26 loizides Exp $
 //
 // CatalogingMod
 //
@@ -25,7 +25,6 @@ namespace mithep
     public:
       CatalogingMod(const char *name  = "CatalogingMod",
                     const char *title = "Cataloging module producing a fileset catalog");
-      ~CatalogingMod() {}
 
       Int_t                    NFileSet()       const                 { return fNFileSet; }
       const char              *MetaDataString()                 const { return fMetaDataString; }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.20 2009/03/20 09:29:24 loizides Exp $
+// $Id: RefArray.h,v 1.21 2009/03/23 13:07:17 loizides Exp $
 //
 // RefArray
 //
@@ -81,7 +81,7 @@ void mithep::RefArray<ArrayElement>::Add(const ArrayElement *ae)
 
   // check if the object can belong here and assign or get its uid
   if (ae->TestBit(kHasUUID)) {
-    Fatal("Add", "Object can not be added as it has not UUID!");
+    Fatal("Add", "Object cannot be added as it has not UUID!");
     return;
   }
 

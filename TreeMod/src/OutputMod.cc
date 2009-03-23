@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.9 2009/03/12 18:24:33 loizides Exp $
+// $Id: OutputMod.cc,v 1.10 2009/03/23 14:39:52 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -113,14 +113,14 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
   }
 
   if (!decision) { // drop branch according to request
-    SendError(kWarning, "CheckAndAddBranch", 
-              "Dropped branch '%s' and class '%s'.", bname, cname);
+    Info("CheckAndAddBranch", 
+         "Dropped branch '%s' and class '%s'.", bname, cname);
     return;
   }
 
   // add branch to accepted branch list
-  SendError(kWarning, "CheckAndAddBranch", 
-            "Kept branch '%s' and class '%s'.", bname, cname);
+  Info("CheckAndAddBranch", 
+       "Kept branch '%s' and class '%s'.", bname, cname);
 
   fBrNameList.push_back(string(bname));
   fBrClassList.push_back(string(cname));
@@ -162,15 +162,15 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
     const char *cname = br->GetClassName();
 
     if (solve) {
-      SendError(kWarning, "CheckAndResolveDep", 
-                "Resolving dependency for loaded branch %s and class %s", bname,cname);
+      Info("CheckAndResolveDep", 
+           "Resolving dependency for loaded branch '%s' and class '%s'", bname,cname);
 
       fBrNameList.push_back(string(bname));
       fBrClassList.push_back(string(cname));
       fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
 
     } else {
-      Warning("CheckAndResolveDep", "Unresolved dependency for loaded branch %s and class %s",
+      Warning("CheckAndResolveDep", "Unresolved dependency for loaded branch '%s' and class '%s'",
               bname,cname);
     }
   }
@@ -291,7 +291,7 @@ Bool_t OutputMod::Notify()
       continue;
 
     if (!cls->InheritsFrom("TObject")) {
-      Warning("Notify", "Found branch %s where class %s does not derive from TObject.", 
+      Warning("Notify", "Found branch '%s' where class '%s' does not derive from TObject.", 
               br->GetName(), br->GetClassName());
       continue;
     } 
@@ -431,7 +431,7 @@ void OutputMod::RequestBranch(const char *bname)
   // Request given branch from TAM.
 
   if (GetNBranches()>=fNBranchesMax) {
-    SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch for %bname"
+    SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch '%s' "
               "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
     return;
   }
@@ -527,6 +527,6 @@ void OutputMod::SlaveTerminate()
   delete[] fBranches; 
 
   Double_t frac =  100.*GetNEventsProcessed()/fCounter;
-  SendError(kWarning, "SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
-            frac, GetNEventsProcessed(), fCounter);
+  Info("SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
+       frac, GetNEventsProcessed(), fCounter);
 }

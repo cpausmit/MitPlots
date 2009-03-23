@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.14 2008/12/09 10:16:24 loizides Exp $
+// $Id: BaseMod.h,v 1.15 2008/12/10 14:20:26 loizides Exp $
 //
 // BaseMod
 //
@@ -27,7 +27,6 @@ namespace mithep
   class BaseMod : public TAModule {
     public:
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
-      ~BaseMod() {}
 
     protected:
       template <class T> void     AddTH1(T *&ptr, const char *name, const char *title, 

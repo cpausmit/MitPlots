@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.30 2009/03/23 08:31:30 loizides Exp $
+// $Id: Analysis.cc,v 1.31 2009/03/23 14:39:52 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -386,7 +386,7 @@ Bool_t Analysis::Init()
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         fChain->Add(obj->GetName());
         fSet->Add(obj->GetName());
-        if (fCacheSize<0 && obj->GetString().BeginsWith("/castor/cern.ch"))
+        if (fCacheSize<0 && obj->GetString().Contains("/castor/"))
           fCacheSize = 64*1024*1024;
       }
     } else {
@@ -397,7 +397,7 @@ Bool_t Analysis::Init()
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         chain->Add(obj->GetName());
         set->Add(obj->GetName());
-        if (fCacheSize<0 && obj->GetString().BeginsWith("/castor/cern.ch"))
+        if (fCacheSize<0 && obj->GetString().Contains("/castor/"))
           fCacheSize = 64*1024*1024;
       }
 

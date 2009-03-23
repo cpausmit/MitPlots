@@ -1,4 +1,4 @@
-// $Id: GenRelValMod.cc,v 1.4 2008/07/25 12:41:41 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.5 2008/11/21 20:12:26 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -32,7 +32,7 @@ void GenRelValMod::SlaveBegin()
   if (fWrite) {
     ofile = new std::ofstream(fFileName);
     if (ofile->bad()) {
-      SendError(kAbortAnalysis, "SlaveBegin", "Can not open output file.");
+      SendError(kAbortAnalysis, "SlaveBegin", "Cannot open output file.");
     }
   }
 }

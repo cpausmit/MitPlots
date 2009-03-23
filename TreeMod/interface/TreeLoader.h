@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeLoader.h,v 1.3 2008/09/17 04:23:17 loizides Exp $
+// $Id: TreeLoader.h,v 1.4 2008/12/10 14:20:27 loizides Exp $
 //
 // TreeLoader
 //
@@ -22,7 +22,6 @@ namespace mithep {
   {
     public:
       TreeLoader();
-      ~TreeLoader() {};
 
       TAMVirtualBranchLoader *CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo);
 

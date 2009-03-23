@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.7 2009/03/12 18:25:35 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.8 2009/03/23 08:30:59 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -53,7 +53,7 @@ void AnaFwkMod::BeginRun()
     fAllHeadTree = dynamic_cast<TTree*>(file->Get(fAllHeadTreeName));
     if (!fAllHeadTree) {
       SendError(kWarning, "BeginRun",
-                "Can not find tree '%s' in file '%s'", 
+                "Cannot find tree '%s' in file '%s'", 
                 fAllHeadTreeName.Data(),file->GetName());
       return;
     }
@@ -64,7 +64,7 @@ void AnaFwkMod::BeginRun()
     fAllHeadTree->SetBranchAddress(fAllHeadBrName, &fAllEventHeader);
   } else {
     SendError(kWarning, "BeginRun",
-              "Can not find branch '%s' in tree '%s'", 
+              "Cannot find branch '%s' in tree '%s'", 
               fAllHeadBrName.Data(), fAllHeadTreeName.Data());
     return;
   }
@@ -79,7 +79,7 @@ void AnaFwkMod::CopyAllEventHeaders()
 
   const EventHeader *curev = GetEventHeader();
   if (!curev) {
-    SendError(kWarning, "CopyAllEventHeaders", "Can not obtain current event");
+    SendError(kWarning, "CopyAllEventHeaders", "Cannot obtain current event");
     return;
   }
 
@@ -167,8 +167,8 @@ void AnaFwkMod::Process()
   if (fNEventsSkipped<fSkipNEvents) {
     ++fNEventsSkipped;
     MDB(kAnalysis, 3) {
-      SendError(kWarning, "Process", "Skipping (aborting) %d out of %d first events.",
-                fNEventsSkipped, fSkipNEvents);
+      Info("Process", "Skipping (aborting) %d out of %d first events.",
+           fNEventsSkipped, fSkipNEvents);
     }
     AbortEvent();
     return;
@@ -199,11 +199,11 @@ void AnaFwkMod::Process()
 
   if (doPrint) {
     fSWevent->Stop();
-    SendError(kWarning, "Process", 
-              "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
-              GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
-              fSWevent->RealTime()/GetNEventsProcessed(), 
-              fSWevent->CpuTime()/GetNEventsProcessed());
+    Info("Process", 
+         "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
+         GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
+         fSWevent->RealTime()/GetNEventsProcessed(), 
+         fSWevent->CpuTime()/GetNEventsProcessed());
     fSWevent->Start();
   }  
 }
@@ -245,11 +245,11 @@ void AnaFwkMod::SlaveTerminate()
   fSWevent->Stop();
 
   MDB(kAnalysis, 1)
-    SendError(kWarning, "SlaveTerminate", 
-              "Events %d -> %.2gs real, %.2gs cpu (%.2gs real, %.2gs cpu per event)",
-              GetNEventsProcessed(), fSWtotal->RealTime(), fSWtotal->CpuTime(),
-              fSWtotal->RealTime()/GetNEventsProcessed(), 
-              fSWtotal->CpuTime()/GetNEventsProcessed());
+    Info("SlaveTerminate", 
+         "Events %d -> %.2gs real, %.2gs cpu (%.2gs real, %.2gs cpu per event)",
+         GetNEventsProcessed(), fSWtotal->RealTime(), fSWtotal->CpuTime(),
+         fSWtotal->RealTime()/GetNEventsProcessed(), 
+         fSWtotal->CpuTime()/GetNEventsProcessed());
 
   delete fSWtotal;
   delete fSWevent;

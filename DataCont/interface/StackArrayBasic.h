@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.8 2009/03/12 18:19:48 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.9 2009/03/23 13:07:18 loizides Exp $
 //
 // StackArrayBasic
 //
 // Implementation of an array on the stack as opposed to on the heap 
-// memory. For various reasons, the array can not be written in split 
+// memory. For various reasons, the array cannot be written in split 
 // mode. Maximum size is set by template parameter. Array is meant to 
 // store basic data types as opposed to StackArray which can hold 
 // classes. Note that this array as opposed to the others does not

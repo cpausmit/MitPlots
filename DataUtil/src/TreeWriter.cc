@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.14 2009/03/03 08:37:12 loizides Exp $
+// $Id: TreeWriter.cc,v 1.15 2009/03/12 18:26:08 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -262,7 +262,7 @@ const char *TreeWriter::CName(void *obj) const
   TObject **sobj = static_cast<TObject**>(obj);
   TObject *tobj = dynamic_cast<TObject*>(*sobj);
   if (tobj==0) {
-    Fatal("CName", "Given void* ptr can not be dereferenced into TObject*");
+    Fatal("CName", "Given void* ptr cannot be dereferenced into TObject*");
   }
   return tobj->ClassName();
 }
