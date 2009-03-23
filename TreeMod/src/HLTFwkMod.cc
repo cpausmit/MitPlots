@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.5 2009/03/02 13:26:45 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.6 2009/03/23 14:39:52 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -118,7 +118,7 @@ void HLTFwkMod::BeginRun()
 
   // load trigger table
   if (runinfo->HltEntry()!=fCurEnt) {
-    MDB(kFramework, 1)
+    MDB(kAnalysis, 1)
       Info("BeginRun", "Loading trigger table for run %ld", runinfo->RunNum());
     
     fCurEnt = runinfo->HltEntry();
@@ -129,7 +129,7 @@ void HLTFwkMod::BeginRun()
       return;
     }
 
-    MDB(kFramework, 2) {
+    MDB(kAnalysis, 2) {
       Info("BeginRun", "Printing tables for run %ld", runinfo->RunNum());
       cout << " --- Trigger table ---" << endl;
       fTriggers->Print();
@@ -171,7 +171,7 @@ Bool_t HLTFwkMod::LoadTriggerTable()
   if (fHLTTab->size()>fNMaxTriggers) {
     SendError(kAbortAnalysis, "LoadTriggerTable", 
               "Size of trigger table (%ld) larger than maximum (%ld).", 
-              fHLTTab->Entries(), fNMaxTriggers);
+              fHLTTab->size(), fNMaxTriggers);
     return kFALSE;
   }
 
