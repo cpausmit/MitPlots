@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.3 2008/06/24 14:03:45 loizides Exp $
+// $Id: TAModule.h,v 1.4 2008/12/04 13:50:56 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -43,7 +43,8 @@ public:
 private:
    TAMSelector        *fSelector; //!the selector for the tree this mod processes
    TAMOutput          *fOutput;   //the list of output objects for this mod
-   Bool_t              fDefActv;  //!copy of fActive so that TAMSelector can temporarily change this mod's active-ness to abort the mod or the event
+   Bool_t              fDefActv;  //!copy of fActive so that TAMSelector can temporarily change
+                                  // this mod's active-ness to abort the module or the event
    UInt_t              fVerbose;  //verbosity level
    Bool_t              fStopped;  //!indicate if module (and its submodules) are aborted for the rest of the analysis
 
@@ -55,9 +56,6 @@ private:
    static const Char_t kExecSlaveTerminate;  //!key to mark SlaveTerminate
    static const Char_t kExecTerminate;       //!key to mark Terminate
    
-   void                AbortAnalysis();
-   void                AbortEvent();
-   void                AbortModule();
    void                DeactivateAll();
    void                NewOutputList(TList* list); 
    Bool_t              NotifyAll();
@@ -68,6 +66,9 @@ private:
 
 protected:
    
+   void                AbortAnalysis();
+   void                AbortEvent();
+   void                AbortModule();
    // utility functions to be used by derived classes
    virtual Bool_t      AddObjThisEvt(TObject* obj);
    virtual Bool_t      AddObjThisEvt(TObject* obj, const char *name);
@@ -79,14 +80,14 @@ protected:
    void                ls(Option_t *option)  const;
    void                LoadBranch(const Char_t* bname);
    virtual TObject    *FindObjThisEvt(const Char_t* name) const;
-   virtual Bool_t      Notify()                  { return kTRUE; }
+   virtual Bool_t      Notify()                    { return kTRUE; }
    virtual TObject    *RemoveObjThisEvt(const Char_t* name);
    void                RemoveOutput(TObject* obj);
    template <typename T>
    void                ReqBranch(const Char_t* bname, T*& address);
    void                SendError(const EModResult errLevel,
-                               const Char_t* location,
-                               const Char_t* formattedMsg, ...);
+                                 const Char_t* location,
+                                 const Char_t* formattedMsg, ...);
    void                SkipEvent();
 
    // functions to be overloaded by specific TAModule
