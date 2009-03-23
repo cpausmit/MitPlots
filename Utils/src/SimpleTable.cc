@@ -1,4 +1,4 @@
-// $Id: SimpleTable.cc,v 1.1 2009/01/23 07:34:34 loizides Exp $
+// $Id: SimpleTable.cc,v 1.2 2009/01/23 08:46:48 loizides Exp $
 
 #include "MitAna/Utils/interface/SimpleTable.h"
 #include <Riostream.h>
@@ -47,6 +47,10 @@ SimpleTable::SimpleTable(const char *input)
     in >> value;
     in.getline(dummy,1024);
 
+    if (value.IsNull()) {
+      Error("SimpleTable", "Value corresponding to name %s is null.", name.Data());
+      continue;
+    }
     TFormula fval("formula",value);
     MyParameter *par = new MyParameter(name,fval.Eval(0));
     fTable.Add(par);
