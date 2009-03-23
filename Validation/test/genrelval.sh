@@ -1,9 +1,9 @@
 #!/bin/bash
-# $Id: genrelval.sh,v 1.5 2008/07/31 12:06:02 loizides Exp $
+# $Id: genrelval.sh,v 1.6 2008/11/21 20:12:26 loizides Exp $
 #
 # genrelval.sh: Release validation script for generated particles
 #
-# $Id: genrelval.sh,v 1.5 2008/07/31 12:06:02 loizides Exp $
+# $Id: genrelval.sh,v 1.6 2008/11/21 20:12:26 loizides Exp $
 #_____________________________________________________________________________________________
 #
 # Variables to configure:
@@ -23,70 +23,72 @@ export MY_BASE_DIR=/tmp/relval.`date +%s`
 ##############################################################################################
 
 function write_cfg {
-    echo '
-process Gen =
-{
-    # request 2 events for validation purpose
-    untracked PSet maxEvents = { untracked int32 input = 5 }
+cat <<EOF
+import FWCore.ParameterSet.Config as cms
 
-    include "FWCore/MessageService/data/MessageLogger.cfi"
-    include "Configuration/StandardSequences/data/SimulationRandomNumberGeneratorSeeds.cff"
-    include "SimGeneral/HepPDTESSource/data/pythiapdt.cfi"
+process = cms.Process('HLT')
 
-    # verbose parameter set for pythia
-    source = PythiaSource
-    {
-        untracked int32  pythiaPylistVerbosity = 1
-        untracked bool   pythiaHepMCVerbosity  = false
-        untracked int32  maxEventsToPrint      = 5
-        untracked double filterEfficiency      = 1.
+process.load('Configuration.StandardSequences.SimulationRandomNumberGeneratorSeeds_cff')
+process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 
-        PSet PythiaParameters = {
-            vstring parameterSets = {
-            }
-        }
-    }
+   
+process.maxEvents = cms.untracked.PSet(
+    input = cms.untracked.int32(25)
+)
 
-    # load generator sequence (VtxSmeared is needed inside, missing dependence)
-    include "Configuration/StandardSequences/data/VtxSmearedBetafuncEarlyCollision.cff"
-    include "Configuration/StandardSequences/data/Generator.cff"
+process.source = cms.Source("PythiaSource",
+    pythiaPylistVerbosity = cms.untracked.int32(1),
+    filterEfficiency      = cms.untracked.double(1.0),
+    pythiaHepMCVerbosity  = cms.untracked.bool(False),
+    comEnergy             = cms.untracked.double(10000.0),    
+    maxEventsToPrint      = cms.untracked.int32(-1),
 
-    # define the object service
-    service = ObjectService { }
+    PythiaParameters = cms.PSet(
+        parameterSets = cms.vstring()
+    )
+)                           
+    
+# load generator sequence (VtxSmeared is needed inside, missing dependence)
+process.load('Configuration.StandardSequences.VtxSmearedBetafuncEarlyCollision_cff')
+process.load('Configuration.StandardSequences.Generator_cff')
 
-    # define the tree service
-    service = TreeService {
-        untracked vstring fileNames   = { "mit-gen" }
-    }
+# include the MIT services and standard filler
+process.ObjectService = cms.Service("ObjectService")
 
-    # customize the MIT filler
-    module MitTreeFiller = FillMitTree {
-        untracked bool defactive = false
-        untracked PSet MCParticles = {
-            untracked bool active = true
-            untracked bool simActive = false
-        }
-    }
+process.TreeService = cms.Service("TreeService",
+    fileNames = cms.untracked.vstring("mit-gen")
+)
 
-    # standard path of action of the module
-    path p0 = { pgen, MitTreeFiller }
+process.MitTreeFiller = cms.EDAnalyzer("FillMitTree",
+    fillers = cms.untracked.vstring('MetaInfos',
+                                    'MCParticles',
+                                    'MCEventInfo'), 
 
-    # also make Edm output for the events we generate
-    include "Configuration/EventContent/data/EventContent.cff"
-    module FEVT = PoolOutputModule
-    {
-        using FEVTSIMEventContent
-        untracked string fileName = "edm-gen.root"
-    }
+    MetaInfos = cms.untracked.PSet(
+        hltActive  = cms.untracked.bool(False),
+        fillerType = cms.untracked.string('FillerMetaInfos')
+    ),
 
-    # output path for the Edm file
-    endpath outpath = { FEVT }
+    MCParticles = cms.untracked.PSet(
+        simActive  = cms.untracked.bool(False),
+        fillerType = cms.untracked.string('FillerMCParticles')
+    )
+)
+ 
+process.p0 = cms.Path( process.pgen * process.MitTreeFiller)
 
-    # schedule the various path
-    schedule = { p0, outpath }
+# also make Edm output for the events we generate
+process.load('Configuration.EventContent.EventContent_cff')
+
+process.FEVT = cms.OutputModule("PoolOutputModule",
+    process.FEVTSIMEventContent,
+    fileName = cms.untracked.string('edm-gen.root'),        
+)
+   
+process.end = cms.EndPath( process.FEVT )
+EOF
 }
-'
-}
+
 
 function write_macro {
     echo '
@@ -108,6 +110,7 @@ void runGenRelVal(const char *files = "mit-gen_000.root")
   // set up analysis
   Analysis *ana = new Analysis;
   ana->SetSuperModule(mod);
+  ana->SetUseHLT(0);
   ana->AddFile(files);
 
   // run the analysis after successful initialisation
@@ -122,8 +125,8 @@ void runGenRelVal(const char *files = "mit-gen_000.root")
 # Generate sample and fill tree
 mkdir -p $MY_BASE_DIR/prod
 cd $MY_BASE_DIR/prod
-write_cfg > relval.cfg
-cmsRun relval.cfg >pythia_raw.txt 2>/dev/null
+write_cfg > relval.py
+cmsRun relval.py >pythia_raw.txt 2>/dev/null
 if (( $? )) ; then 
     echo "Problem generating sample:" >&2
     echo '' >&2

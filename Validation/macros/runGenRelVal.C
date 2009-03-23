@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: runGenRelVal.C,v 1.1 2008/11/25 13:58:52 loizides Exp $
 
 void runGenRelVal(const char *files = "mit-gen_000.root")
 {
@@ -17,6 +17,7 @@ void runGenRelVal(const char *files = "mit-gen_000.root")
   // set up analysis
   Analysis *ana = new Analysis;
   ana->SetSuperModule(mod);
+  ana->SetUseHLT(0);
   ana->AddFile(files);
 
   // run the analysis after successful initialisation
