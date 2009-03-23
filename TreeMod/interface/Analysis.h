@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.23 2009/03/11 10:07:40 loizides Exp $
+// $Id: Analysis.h,v 1.24 2009/03/12 18:24:10 loizides Exp $
 //
 // Analysis
 //
@@ -66,7 +66,6 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate;  }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents     = n;         }
       void                      SetCacheSize(Int_t cache)           { fCacheSize     = cache;     }
       void                      SetCompressionLevel(Int_t level)    { fCompLevel     = level;     }
       void                      SetConfigName(const char* name)     { fConfig        = name;      }
@@ -75,6 +74,8 @@ namespace mithep
       void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
       void                      SetMasterName(const char* name)     { fMaster        = name;      }
       void                      SetOutputName(const char *name)     { fAnaOutput     = name;      }
+      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents     = n;         }
+      void                      SetSkipFirstNEvents(Long64_t n)     { fSkipNEvents   = n;         }
       void                      SetSuperModule(TAModule *mod);
       void                      SetTreeName(const char *name)       { fTreeName      = name;      }
       void                      SetUseHLT(Bool_t hlt)               { fUseHLT        = hlt;       }
@@ -120,6 +121,7 @@ namespace mithep
       Int_t                     fCompLevel;       //compression level for output file (def=7)
       TProof                   *fProof;           //pointer to the PROOF session
       Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
+      Long64_t                  fSkipNEvents;     //number of events to skip from beginning (def=0)
       Int_t                     fCacheSize;       //size of read cache for events tree
 
     ClassDef(Analysis, 0) // Top-level analysis class 

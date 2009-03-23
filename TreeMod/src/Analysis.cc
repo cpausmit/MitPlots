@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.28 2009/03/11 10:07:40 loizides Exp $
+// $Id: Analysis.cc,v 1.29 2009/03/12 18:24:10 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -48,7 +48,8 @@ Analysis::Analysis(Bool_t useproof) :
   fCompLevel(7), 
   fProof(0),
   fDoNEvents(TChain::kBigNumber),
-  fCacheSize(64*1024*1024)
+  fSkipNEvents(0),
+  fCacheSize(-1)
 {
   // Default constructor.
 
@@ -372,11 +373,8 @@ Bool_t Analysis::Init()
 
   fChain = new TChain(fTreeName); 
   fSet   = new TDSet("TTree",fTreeName);
-  
-  fChain->SetCacheSize(fCacheSize);
 
   for (Int_t i=0; i<fNFriends; ++i) {
-
     TList *l = dynamic_cast<TList*>(fList->At(i));
     if (!l) {
       Fatal("Init", "List %d not found!", i);
@@ -388,10 +386,10 @@ Bool_t Analysis::Init()
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         fChain->Add(obj->GetName());
         fSet->Add(obj->GetName());
+        if (fCacheSize<0 && obj->GetString().BeginsWith("/castor/cern.ch"))
+          fCacheSize = 64*1024*1024;
       }
-
     } else {
-
       TChain *chain = new TChain(fTreeName); 
       TDSet *set    = new TDSet("TTree",fTreeName);
 
@@ -399,6 +397,8 @@ Bool_t Analysis::Init()
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         chain->Add(obj->GetName());
         set->Add(obj->GetName());
+        if (fCacheSize<0 && obj->GetString().BeginsWith("/castor/cern.ch"))
+          fCacheSize = 64*1024*1024;
       }
 
       TString alias("TAMTREE_"); // aliases currently not used
@@ -410,8 +410,10 @@ Bool_t Analysis::Init()
       fDeleteList->Add(chain);
       fDeleteList->Add(set);
     }
-
   }
+
+  if (fCacheSize>=0)
+    fChain->SetCacheSize(fCacheSize);
 
   // create our customized loader plugin for TAM
   TreeLoader *bl = new TreeLoader;
@@ -420,6 +422,7 @@ Bool_t Analysis::Init()
 
   // create our ana framework module
   AnaFwkMod *anamod = new AnaFwkMod;
+  anamod->SetSkipNEvents(fSkipNEvents);
   fDeleteList->Add(anamod);
 
   // create our HLT framework module
