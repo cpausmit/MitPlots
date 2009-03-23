@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.8 2009/03/11 10:07:12 loizides Exp $
+// $Id: OutputMod.cc,v 1.9 2009/03/12 18:24:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -431,7 +431,7 @@ void OutputMod::RequestBranch(const char *bname)
   // Request given branch from TAM.
 
   if (GetNBranches()>=fNBranchesMax) {
-    SendError(kAbortAnalysis, "RequestBranch", "Can not request branch for %bname"
+    SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch for %bname"
               "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
     return;
   }

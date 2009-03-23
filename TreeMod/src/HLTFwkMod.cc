@@ -1,8 +1,9 @@
-// $Id: HLTFwkMod.cc,v 1.4 2009/02/13 14:45:29 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.5 2009/03/02 13:26:45 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
 #include <TTree.h>
+#include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
@@ -87,7 +88,7 @@ void HLTFwkMod::BeginRun()
     fHLTTree = dynamic_cast<TTree*>(file->Get(fHLTTreeName));
     if (!fHLTTree) {
       SendError(kAbortAnalysis, "BeginRun",
-                "Can not find HLT tree with name %s", fHLTTreeName.Data());
+                "Cannot find HLT tree with name %s.", fHLTTreeName.Data());
     }
 
     // get HLT trigger name branch
@@ -95,7 +96,7 @@ void HLTFwkMod::BeginRun()
       fHLTTree->SetBranchAddress(fHLTTabName, &fHLTTab);
     } else {
       SendError(kAbortAnalysis, "BeginRun",
-                "Can not find HLT tree branch with name %s", fHLTTabName.Data());
+                "Cannot find HLT tree branch with name %s.", fHLTTabName.Data());
     }
 
     // get HLT module labels branch
@@ -103,7 +104,7 @@ void HLTFwkMod::BeginRun()
       fHLTTree->SetBranchAddress(fHLTLabName, &fHLTLab);
     } else {
       SendError(kAbortAnalysis, "BeginRun",
-                "Can not find HLT tree branch with name %s", fHLTLabName.Data());
+                "Cannot find HLT tree branch with name %s.", fHLTLabName.Data());
     }
   }
 
@@ -111,18 +112,29 @@ void HLTFwkMod::BeginRun()
   const RunInfo *runinfo = GetRunInfo();
   if (!runinfo) {
     SendError(kAbortAnalysis, "BeginRun",
-              "Can not obtain run info object from selector");
+              "Cannot obtain run info object from selector.");
     return;
   }
 
   // load trigger table
   if (runinfo->HltEntry()!=fCurEnt) {
+    MDB(kFramework, 1)
+      Info("BeginRun", "Loading trigger table for run %ld", runinfo->RunNum());
+    
     fCurEnt = runinfo->HltEntry();
     Bool_t load = LoadTriggerTable();
     if (!load) {
       SendError(kAbortAnalysis, "BeginRun",
-                "Can not obtain load trigger table info");
+                "Cannot load trigger table for next entry (%ld).", fCurEnt);
       return;
+    }
+
+    MDB(kFramework, 2) {
+      Info("BeginRun", "Printing tables for run %ld", runinfo->RunNum());
+      cout << " --- Trigger table ---" << endl;
+      fTriggers->Print();
+      cout << " --- Module lables ---" << endl;
+      fLabels->Print();
     }
   }
 }
@@ -151,15 +163,15 @@ Bool_t HLTFwkMod::LoadTriggerTable()
   fHLTLab = 0;
   Int_t ret = fHLTTree->GetEvent(fCurEnt);
   if (ret<0 || fHLTTab==0 || fHLTTab==0 ) {
-    ::Error("LoadTriggerTable", "Could not get entries for next event %ud", fCurEnt);
+    ::Error("LoadTriggerTable", "Could not get trigger data for next entry (%ld).", fCurEnt);
     return kFALSE;
   }
 
   // check size of trigger table
   if (fHLTTab->size()>fNMaxTriggers) {
     SendError(kAbortAnalysis, "LoadTriggerTable", 
-              "Size of trigger table (%d) larger than maximum (%d)", 
-              fHLTTab->size(), fNMaxTriggers);
+              "Size of trigger table (%ld) larger than maximum (%ld).", 
+              fHLTTab->Entries(), fNMaxTriggers);
     return kFALSE;
   }
 

@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.9 2008/12/12 16:57:42 bendavid Exp $
+// $Id: Selector.cc,v 1.10 2009/03/02 12:35:29 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -13,7 +13,7 @@ using namespace mithep;
 ClassImp(mithep::Selector)
 
 //--------------------------------------------------------------------------------------------------
-Selector::Selector() :
+Selector::Selector() : 
   fDoRunInfo(kTRUE),
   fEvtHdrName(Names::gkEvtHeaderBrn),
   fRunTreeName(Names::gkRunTreeName),
@@ -207,26 +207,26 @@ void Selector::UpdateRunInfoTree()
   // run info tree
   fRunTree = dynamic_cast<TTree*>(f->Get(fRunTreeName));
   if (!fRunTree) {
-    Fatal("UpdateRunInfoTree", "Can not find run info tree with name %s", fRunTreeName.Data());
+    Fatal("UpdateRunInfoTree", "Cannot find run info tree with name %s", fRunTreeName.Data());
   }
 
   // set branches 
   if (fRunTree->GetBranch(fRunInfoName)) {
     fRunTree->SetBranchAddress(fRunInfoName, &fRunInfo);
   } else {
-    Fatal("UpdateRunInfoTree", "Can not find run info branch with name %s", fRunInfoName.Data());
+    Fatal("UpdateRunInfoTree", "Cannot find run info branch with name %s", fRunInfoName.Data());
   }
 
   // look-ahead tree
   fLATree = dynamic_cast<TTree*>(f->Get(fLATreeName));
   if (!fLATree) {
-    Fatal("UpdateRunInfoTree", "Can not find look-ahead tree with name %s", fLATreeName.Data());
+    Fatal("UpdateRunInfoTree", "Cannot find look-ahead tree with name %s", fLATreeName.Data());
   }
 
   // set branches 
   if (fLATree->GetBranch(fLAHdrName)) {
     fLATree->SetBranchAddress(fLAHdrName, &fLAHeader);
   } else {
-    Fatal("UpdateRunInfoTree", "Can not find look-ahead branch with name %s", fLAHdrName.Data());
+    Fatal("UpdateRunInfoTree", "Cannot find look-ahead branch with name %s", fLAHdrName.Data());
   }
 }

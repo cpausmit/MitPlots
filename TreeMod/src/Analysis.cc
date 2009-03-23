@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.29 2009/03/12 18:24:10 loizides Exp $
+// $Id: Analysis.cc,v 1.30 2009/03/23 08:31:30 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -191,7 +191,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
   ifstream in;
   in.open(pname);
   if (!in) {
-    Error("AddFiles", "Can not open file with name %s", pname);
+    Error("AddFiles", "Cannot open file with name %s", pname);
     return kFALSE;
   }
 
