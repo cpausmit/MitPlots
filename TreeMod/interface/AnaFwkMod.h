@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.4 2009/03/09 17:07:05 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.5 2009/03/12 15:37:52 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -27,9 +27,20 @@ namespace mithep
       AnaFwkMod(const char *name="AnaFwkMod", 
                 const char *title="Analysis framework module");
 
+      Long64_t         GetSkipNEvents()           const { return fSkipNEvents; }
+      void             SetSkipNEvents(Long64_t n)       { fSkipNEvents = n;    }
+
     protected:
+      void             BeginRun();
+      Bool_t           Notify();
+      void             CopyAllEventHeaders();
+      void             Process();
+      void             SlaveBegin();
+      void             SlaveTerminate();
+
       TString          fAllHeadTreeName;   //all events tree name
       TString          fAllHeadBrName;     //all event headers branch name
+      Long64_t         fSkipNEvents;       //number of events to skip from beginning (def=0)
       TStopwatch      *fSWtotal;           //!stop watch for overall timing
       TStopwatch      *fSWevent;           //!stop watch per n events
       EventHeaderArr   fAllHeaders;        //!pointer to array of all event headers
@@ -38,14 +49,8 @@ namespace mithep
       Bool_t           fReload;            //!reload tree after file changed
       Int_t            fCurEnt;            //!curent entry in AllEvents tree
       Int_t            fNEventsSkimmed;    //!number of skimmed events
-
-      void             BeginRun();
-      Bool_t           Notify();
-      void             CopyAllEventHeaders();
-      void             Process();
-      void             SlaveBegin();
-      void             SlaveTerminate();
-    
+      Int_t            fNEventsSkipped;    //!number of skippeded events
+      
     ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
 }

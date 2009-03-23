@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.6 2009/03/12 15:37:53 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.7 2009/03/12 18:25:35 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -17,6 +17,7 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   BaseMod(name,title),
   fAllHeadTreeName(Names::gkAllEvtTreeName),
   fAllHeadBrName(Names::gkAllEvtHeaderBrn),
+  fSkipNEvents(0),
   fSWtotal(0),
   fSWevent(0),
   fAllHeaders(0,Names::gkSkimmedHeaders),
@@ -24,7 +25,8 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fAllEventHeader(0),
   fReload(kFALSE),
   fCurEnt(-2),
-  fNEventsSkimmed(0)
+  fNEventsSkimmed(0),
+  fNEventsSkipped(0)
 {
   // Constructor.
 }
@@ -152,33 +154,43 @@ Bool_t AnaFwkMod::Notify()
 //--------------------------------------------------------------------------------------------------
 void AnaFwkMod::Process()
 {
-  // Do event counting and print out timing information.
+  // Do event skipping and counting and print out timing information.
 
+  // counting processed events
+  IncNEventsProcessed();
   
   // get skimmed event headers
   CopyAllEventHeaders();
   fNEventsSkimmed += fAllHeaders.GetEntries();
 
-  // counting events
-  IncNEventsProcessed();
+  // check if events should be skipped
+  if (fNEventsSkipped<fSkipNEvents) {
+    ++fNEventsSkipped;
+    MDB(kAnalysis, 3) {
+      SendError(kWarning, "Process", "Skipping (aborting) %d out of %d first events.",
+                fNEventsSkipped, fSkipNEvents);
+    }
+    AbortEvent();
+    return;
+  }
 
   // check if printout should be done
   Bool_t doPrint = 0;
 
   MDB(kAnalysis, 4) {
-    if (GetNEventsProcessed() % 1000  == 0) 
+    if (GetNEventsProcessed() % 250  == 0) 
       doPrint = 1;
   } else {
     MDB(kAnalysis, 3) {
-      if (GetNEventsProcessed() % 10000  == 0) 
+      if (GetNEventsProcessed() % 2500  == 0) 
         doPrint = 1;
     } else {
       MDB(kAnalysis, 2) {
-        if (GetNEventsProcessed() % 50000  == 0) 
+        if (GetNEventsProcessed() % 10000  == 0) 
           doPrint = 1;
       } else {
         MDB(kAnalysis, 1) {
-          if (GetNEventsProcessed() % 250000 == 0) 
+          if (GetNEventsProcessed() % 50000 == 0) 
             doPrint = 1;
         } 
       }
@@ -187,9 +199,11 @@ void AnaFwkMod::Process()
 
   if (doPrint) {
     fSWevent->Stop();
-    Info("Process", "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
-         GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
-         fSWevent->RealTime()/GetNEventsProcessed(), fSWevent->CpuTime()/GetNEventsProcessed());
+    SendError(kWarning, "Process", 
+              "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
+              GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
+              fSWevent->RealTime()/GetNEventsProcessed(), 
+              fSWevent->CpuTime()/GetNEventsProcessed());
     fSWevent->Start();
   }  
 }
@@ -222,13 +236,20 @@ void AnaFwkMod::SlaveTerminate()
   hDAllEvents->SetEntries(fNEventsSkimmed+GetNEventsProcessed());
   AddOutput(hDAllEvents);
 
+  TH1D *hDSkippedEvents = new TH1D("hDSkippedEvents","Number of skipped events",1,-0.5,0.5);
+  hDSkippedEvents->Fill(0.0,fNEventsSkipped);
+  hDSkippedEvents->SetEntries(fNEventsSkipped);
+  AddOutput(hDSkippedEvents);
+
   fSWtotal->Stop();
   fSWevent->Stop();
 
   MDB(kAnalysis, 1)
-    Info("SlaveTerminate", "Events %d -> %.2gs real, %.2gs cpu (%.2gs real, %.2gs cpu per event)", 
-         GetNEventsProcessed(), fSWtotal->RealTime(), fSWtotal->CpuTime(),
-         fSWtotal->RealTime()/GetNEventsProcessed(), fSWtotal->CpuTime()/GetNEventsProcessed());
+    SendError(kWarning, "SlaveTerminate", 
+              "Events %d -> %.2gs real, %.2gs cpu (%.2gs real, %.2gs cpu per event)",
+              GetNEventsProcessed(), fSWtotal->RealTime(), fSWtotal->CpuTime(),
+              fSWtotal->RealTime()/GetNEventsProcessed(), 
+              fSWtotal->CpuTime()/GetNEventsProcessed());
 
   delete fSWtotal;
   delete fSWevent;
