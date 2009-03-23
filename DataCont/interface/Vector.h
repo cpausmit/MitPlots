@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vector.h,v 1.7 2009/03/03 18:01:17 bendavid Exp $
+// $Id: Vector.h,v 1.8 2009/03/12 18:19:48 loizides Exp $
 //
 // Vector
 //
@@ -29,8 +29,10 @@ namespace mithep
       Vector(UInt_t rsv=0) : fV(0) { fV.reserve(rsv); }
       Vector(std::vector<ArrayElement> &v) : fV(v) {}
 
-      void                             AddCopy(const ArrayElement &ae)     { fV.push_back(ae); }
-      void                             AddCopy(const ArrayElement *ae)     { fV.push_back(*ae); }
+      void                             AddCopy(const ArrayElement &ae)     
+                                         { BaseCollection::Clear(); fV.push_back(ae);  }
+      void                             AddCopy(const ArrayElement *ae)     
+                                         { BaseCollection::Clear(); fV.push_back(*ae); }
       ArrayElement                    *At(UInt_t idx)                      { return &fV.at(idx); }
       const ArrayElement              *At(UInt_t idx)                const { return &fV.at(idx); }
       void                             Clear(Option_t *opt="");

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.13 2009/03/02 12:34:00 loizides Exp $
+// $Id: ObjArray.h,v 1.14 2009/03/12 18:19:48 loizides Exp $
 //
 // ObjArray
 //
@@ -152,6 +152,7 @@ inline void mithep::ObjArray<ArrayElement>::AddLast(const ArrayElement *ae)
 
   fArray.AddLast(const_cast<ArrayElement*>(ae)); 
   fNumEntries++; 
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------

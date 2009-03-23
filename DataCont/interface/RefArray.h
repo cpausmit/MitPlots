@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.19 2009/03/12 18:19:48 loizides Exp $
+// $Id: RefArray.h,v 1.20 2009/03/20 09:29:24 loizides Exp $
 //
 // RefArray
 //
@@ -110,6 +110,7 @@ void mithep::RefArray<ArrayElement>::Add(const ArrayElement *ae)
     fPIDs.GetNew()->SetPid(pid);
   
   fUIDs.Add(uid);
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------

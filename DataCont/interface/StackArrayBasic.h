@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArrayBasic.h,v 1.7 2009/03/06 13:52:54 loizides Exp $
+// $Id: StackArrayBasic.h,v 1.8 2009/03/12 18:19:48 loizides Exp $
 //
 // StackArrayBasic
 //
@@ -85,6 +85,7 @@ void mithep::StackArrayBasic<ArrayElement, N>::Add(const ArrayElement &ae)
 
   fArray[fSize] = ae;
   ++fSize;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------

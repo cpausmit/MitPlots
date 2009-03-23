@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.6 2009/03/06 13:52:54 loizides Exp $
+// $Id: FastArrayBasic.h,v 1.7 2009/03/12 18:19:47 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -103,6 +103,7 @@ void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &a
    
   ++fSize; 
   fArray[fSize-1] = ae;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,6 +206,7 @@ void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Streamer(TBuffer &b)
         b.ReadFastArrayDouble32(reinterpret_cast<Double_t*>(fArray),fSize);
       else
         b.ReadFastArray(fArray,fSize);
+      BaseCollection::Clear();
     }
   } else { /*writing*/
     b << fSize;

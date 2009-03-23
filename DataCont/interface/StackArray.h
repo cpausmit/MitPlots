@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StackArray.h,v 1.11 2009/03/06 13:52:54 loizides Exp $
+// $Id: StackArray.h,v 1.12 2009/03/12 18:19:48 loizides Exp $
 //
 // StackArray
 //
@@ -92,6 +92,7 @@ void mithep::StackArray<ArrayElement, N>::AddCopy(const ArrayElement &ae)
 
   fArray[fSize] = ae;
   ++fSize;
+  BaseCollection::Clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,6 +117,7 @@ ArrayElement* mithep::StackArray<ArrayElement, N>::Allocate()
   }
 
   ++fSize;
+  BaseCollection::Clear();
   return &fArray[fSize-1];
 }
 

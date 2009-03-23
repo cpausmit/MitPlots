@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.5 2009/03/06 13:52:54 loizides Exp $
+// $Id: FastArray.h,v 1.6 2009/03/12 18:19:47 loizides Exp $
 //
 // FastArray
 //
@@ -120,6 +120,7 @@ void mithep::FastArray<ArrayElement>::AddCopy(const ArrayElement &ae)
   if (fSize<fNObjects) {
     fArray[fSize] = ae;
     ++fSize;
+    BaseCollection::Clear();
   }
   else
     new(Allocate()) ArrayElement(ae);
@@ -144,6 +145,7 @@ ArrayElement* mithep::FastArray<ArrayElement>::Allocate()
     Expand(TMath::Max(16,2*fCapacity));
   
   ++fSize;
+  BaseCollection::Clear();
   fNObjects = TMath::Max(fNObjects,fSize);
   return &fArray[fSize-1];
 }

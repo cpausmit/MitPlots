@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.12 2009/03/06 13:52:54 loizides Exp $
+// $Id: Array.h,v 1.13 2009/03/12 18:19:47 loizides Exp $
 //
 // Array
 //
@@ -99,7 +99,8 @@ inline ArrayElement *mithep::Array<ArrayElement>::Allocate()
 {
    // Allocate a slot in the array, *only* to be used in placement new operator.
    
-   return static_cast<ArrayElement*>(fArray[fNumEntries++]);
+  BaseCollection::Clear();
+  return static_cast<ArrayElement*>(fArray[fNumEntries++]);
 }
 
 //--------------------------------------------------------------------------------------------------
