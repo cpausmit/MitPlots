@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.6 2009/03/12 18:19:47 loizides Exp $
+// $Id: FastArray.h,v 1.7 2009/03/23 13:07:17 loizides Exp $
 //
 // FastArray
 //
@@ -201,7 +201,7 @@ inline void mithep::FastArray<ArrayElement>::Expand(UShort_t s)
     return;
     
   fArray = static_cast<ArrayElement*>(TStorage::ReAlloc(fArray, s * sizeof(ArrayElement),
-                                        fCapacity * sizeof(ArrayElement)));
+                                                        fCapacity * sizeof(ArrayElement)));
   fCapacity = s;
   fNObjects = TMath::Min(fCapacity,fNObjects);
 }
@@ -212,7 +212,7 @@ ArrayElement* mithep::FastArray<ArrayElement>::GetNew()
 {
   // Return next slot in the array, *only* to be used in placement new operator.
 
-  if (fSize < fCapacity)
+  if (fSize < fNObjects)
     return Allocate();
   else
     return AddNew();
@@ -236,14 +236,13 @@ inline Bool_t mithep::FastArray<ArrayElement>::HasObject(const ArrayElement *obj
 template<class ArrayElement>
 inline void mithep::FastArray<ArrayElement>::Init(UShort_t s)
 {
-
-  // Initialize heap array
+  // Initialize heap array.
       
   if (fArray && fCapacity != s) {
     for (UInt_t i=0; i<fNObjects; ++i)
       fArray[i].~ArrayElement();
     TStorage::Dealloc(fArray);
-    fArray = 0;
+    fArray    = 0;
     fNObjects = 0;
   }
   
