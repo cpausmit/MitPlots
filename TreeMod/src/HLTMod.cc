@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.5 2009/03/02 13:26:45 loizides Exp $
+// $Id: HLTMod.cc,v 1.6 2009/03/08 12:11:49 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -82,6 +82,7 @@ void HLTMod::BeginRun()
     BitMask256 tmask; //trigger mask
     BitMask256 amask; //bitand mask
     TString names(fTrigNames.at(i).c_str());
+
     TObjArray *arr = names.Tokenize("&");
     if (arr) {
       for(Int_t j=0; j<arr->GetEntries(); j++){
@@ -96,7 +97,7 @@ void HLTMod::BeginRun()
         }
         const TriggerName *tn = fTriggers->Get(sptr);
         if (!tn) {
-          Warning("BeginRun", "Trigger %s not found.", tn->Name());
+          Warning("BeginRun", "Trigger %s not found.", sptr);
           continue;
         }
         UShort_t bit = tn->Id();
