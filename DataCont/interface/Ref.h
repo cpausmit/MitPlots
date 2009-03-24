@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.4 2009/03/16 19:58:40 loizides Exp $
+// $Id: Ref.h,v 1.5 2009/03/23 22:15:10 loizides Exp $
 //
 // Ref
 //
-// Templated implimentation of our own TRef.
+// Templated implementation of our own TRef.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
