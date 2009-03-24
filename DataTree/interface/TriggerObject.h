@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.6 2009/02/18 15:38:55 loizides Exp $
+// $Id: TriggerObject.h,v 1.7 2009/03/18 15:44:32 loizides Exp $
 //
 // TriggerObject
 //
@@ -18,6 +18,7 @@
 #include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
+#include "MitAna/DataTree/interface/TriggerTable.h"
 
 namespace mithep 
 {
@@ -154,7 +155,6 @@ namespace mithep
     protected:
       const TriggerTable  *fTriggers; //trigger table
   };
- 
 }
 
 //--------------------------------------------------------------------------------------------------
