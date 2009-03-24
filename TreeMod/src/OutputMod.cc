@@ -1,8 +1,9 @@
-// $Id: OutputMod.cc,v 1.10 2009/03/23 14:39:52 loizides Exp $
+// $Id: OutputMod.cc,v 1.11 2009/03/23 22:15:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
+#include "MitAna/DataTree/interface/BranchTable.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
@@ -21,15 +22,17 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fMaxSize(1024),
   fCompLevel(9),
   fSplitLevel(99),
-  fBranchSize(64*1024),
+  fBranchSize(16*1024),
   fDoReset(kFALSE),
+  fUseBrDep(kTRUE),
   fCheckTamBr(kTRUE),
-  fKeepTamBr(kTRUE),
+  fKeepTamBr(kFALSE),
   fTreeWriter(0),
   fEventHeader(0),
   fAllEventHeader(0),
   fRunInfo(0),
   fLaHeader(0),
+  fBranchTable(0),
   fBranches(0),
   fNBranchesMax(1024),
   fRunTree(0),
@@ -38,12 +41,12 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fSkimmedIn(0),
   fL1Tree(0),
   fHltTree(0),
+  fHLTTab(new vector<string>),
+  fHLTLab(new vector<string>),
   fRunEntries(0),
-  fOrigL1Entry(-1),
   fL1Entries(0),
-  fOrigHltEntry(-1),
   fHltEntries(0),
-  fFileNum(0),
+  fFileNum(-1),
   fLastWrittenEvt(-1),
   fLastSeenEvt(-1),
   fCounter(0)
@@ -62,11 +65,11 @@ void OutputMod::BeginRun()
   if (!fHltTree) {
     HLTFwkMod *hm = const_cast<HLTFwkMod*>(GetHltFwkMod());
     fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTTabName(), 
-                                 TClass::GetClass(typeid(*hm->fHLTTab))->GetName(), 
-                                 &(hm->fHLTTab), 32000, 0);
+                                 TClass::GetClass(typeid(*fHLTTab))->GetName(), 
+                                 &fHLTTab, 32000, 0);
     fTreeWriter->AddBranchToTree(hm->HLTTreeName(), hm->HLTLabName(), 
-                                 TClass::GetClass(typeid(*hm->fHLTLab))->GetName(), 
-                                 &(hm->fHLTLab), 32000, 0);
+                                 TClass::GetClass(typeid(*fHLTLab))->GetName(), 
+                                 &fHLTLab, 32000, 0);
     fTreeWriter->SetAutoFill(hm->HLTTreeName(), 0);
     fHltTree = fTreeWriter->GetTree(hm->HLTTreeName());
   }
@@ -114,23 +117,93 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 
   if (!decision) { // drop branch according to request
     Info("CheckAndAddBranch", 
-         "Dropped branch '%s' and class '%s'.", bname, cname);
+         "Dropped branch '%s' and class '%s'", bname, cname);
     return;
   }
 
   // add branch to accepted branch list
   Info("CheckAndAddBranch", 
-       "Kept branch '%s' and class '%s'.", bname, cname);
+       "Kept branch '%s' and class '%s'", bname, cname);
 
   fBrNameList.push_back(string(bname));
   fBrClassList.push_back(string(cname));
-
-  // request branch
-  RequestBranch(bname);
 }
 
 //--------------------------------------------------------------------------------------------------
-void OutputMod::CheckAndResolveDep(Bool_t solve) 
+Bool_t OutputMod::CheckAndResolveBranchDep()
+{
+  // Checks dependency in BranchTable. Resolve dependency automatically if fUserBrDep is kTRUE.
+
+  TFile *cfile = const_cast<TFile*>(GetSel()->GetCurrentFile());
+  if (!cfile)
+    return kFALSE;
+
+  BranchTable *br = dynamic_cast<BranchTable*>(cfile->Get(Names::gkBranchTable));
+  if (!br)
+    return kFALSE;
+
+  TList *blist = br->GetBranches();
+  if (!blist)
+    return kFALSE;
+
+  fBranchTable = new BranchTable;
+  fBranchTable->SetName(Names::gkBranchTable);
+  fBranchTable->SetOwner();
+
+  TList sht;
+  sht.SetOwner(kTRUE);
+  for (UInt_t i=0; i<fBrNameList.size(); ++i) {
+    sht.Add(new TObjString(fBrNameList.at(i).c_str()));
+  }
+
+  for (UInt_t i=0; i<fBrNameList.size(); ++i) {
+    TString brname(fBrNameList.at(i).c_str());
+    if (!blist->FindObject(brname))
+      continue;
+    TList *bdeps = br->GetDepBranches(brname);
+    if (!bdeps)
+      continue;
+
+    // check dependency
+    TIter iter(bdeps->MakeIterator());
+    const TObjString *n = dynamic_cast<const TObjString*>(iter.Next());
+    while (n) {
+      if (sht.FindObject(n->GetName())) {
+        // dependent branch is already accepted
+        fBranchTable->Add(new BranchName(brname,n->GetName()));
+      } else {
+        if (fUseBrDep) {
+          const TObjArray *arr = GetSel()->GetTree()->GetTree()->GetListOfBranches();
+          TBranch *br = dynamic_cast<TBranch*>(arr->FindObject(n->GetName()));
+          if (!br) {
+            Error("CheckAndResolveBranchDep", 
+                  "Could not get branch '%s' to resolve dependency for branch '%s'", 
+               n->GetName(), brname.Data());
+          } else {
+            Info("CheckAndResolveBranchDep", 
+                 "Adding branch '%s' to resolve dependency for branch '%s'", 
+                 n->GetName(), brname.Data());
+            fBrNameList.push_back(string(n->GetName()));
+            fBrClassList.push_back(br->GetClassName());
+            sht.Add(new TObjString(n->GetName()));
+            fBranchTable->Add(new BranchName(brname,n->GetName()));
+          } 
+        } else {
+          Warning("CheckAndResolveBranchDep", 
+                  "Unresolved dependency of branch '%s' and '%s' ",
+                  n->GetName(), brname.Data());
+        }
+      } 
+      n = dynamic_cast<const TObjString*>(iter.Next());
+    }
+    delete bdeps;
+  }
+  delete blist;
+  return kTRUE;
+}
+
+//--------------------------------------------------------------------------------------------------
+void OutputMod::CheckAndResolveTAMDep(Bool_t solve) 
 {
   // Check if TAM has loaded additional branches. If requested try to solve the the dependency
   // by adding the branch to the list of branches.
@@ -162,7 +235,7 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
     const char *cname = br->GetClassName();
 
     if (solve) {
-      Info("CheckAndResolveDep", 
+      Info("CheckAndResolveTAMDep", 
            "Resolving dependency for loaded branch '%s' and class '%s'", bname,cname);
 
       fBrNameList.push_back(string(bname));
@@ -170,7 +243,8 @@ void OutputMod::CheckAndResolveDep(Bool_t solve)
       fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
 
     } else {
-      Warning("CheckAndResolveDep", "Unresolved dependency for loaded branch '%s' and class '%s'",
+      Warning("CheckAndResolveTAMDep", 
+              "Unresolved dependency for loaded branch '%s' and class '%s'",
               bname,cname);
     }
   }
@@ -236,12 +310,50 @@ void OutputMod::FillHltInfo()
   if (!fHltTree) 
     return;
 
-  if (fOrigHltEntry == GetHltFwkMod()->fCurEnt)
+  HLTFwkMod *hm = const_cast<HLTFwkMod*>(GetHltFwkMod());
+  vector<string> *trigtable = hm->fHLTTab;
+  vector<string> *labels = hm->fHLTLab;
+
+  Bool_t doCopy = kFALSE;
+  if (fHLTTab->size()==0) {
+    doCopy = kTRUE;
+  } else {
+    // check if existing table contains all necessary paths: 
+    // if so keep it, otherwise store the new one  
+
+    if ((fHLTTab->size() != trigtable->size()) || 
+        (fHLTLab->size() != labels->size())) {
+      doCopy = kTRUE;
+    } else {
+      // need to check more thoroughly
+
+      for (UInt_t i=0; i<trigtable->size(); ++i) {
+        if (trigtable->at(i) != fHLTTab->at(i)) {
+          doCopy = kTRUE;
+          break;
+        }
+      }
+      if (!doCopy) {
+        for (UInt_t i=0; i<labels->size(); ++i) {
+        if (labels->at(i) != fHLTLab->at(i)) {
+            doCopy = kTRUE;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  if (!doCopy)
     return;
 
-  fHltTree->Fill();
-  fOrigHltEntry = GetHltFwkMod()->fCurEnt;
+  fHLTTab->resize(trigtable->size());
+  copy(trigtable->begin(),trigtable->end(), fHLTTab->begin());
+  fHLTLab->resize(labels->size());
+  copy(labels->begin(),labels->end(), fHLTLab->begin());
+
   ++fHltEntries;
+  fHltTree->Fill();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,11 +385,11 @@ Bool_t OutputMod::Notify()
   if (GetNEventsProcessed() != 0) 
     return kTRUE;
 
-  TTree *tree=const_cast<TTree*>(GetSel()->GetTree());
+  const TTree *tree=GetSel()->GetTree();
   if (!tree) 
     return kFALSE;
 
-  TObjArray *arr = tree->GetTree()->GetListOfBranches();
+  const TObjArray *arr = tree->GetTree()->GetListOfBranches();
   if (!arr)
     return kFALSE;
 
@@ -291,7 +403,7 @@ Bool_t OutputMod::Notify()
       continue;
 
     if (!cls->InheritsFrom("TObject")) {
-      Warning("Notify", "Found branch '%s' where class '%s' does not derive from TObject.", 
+      Warning("Notify", "Found branch '%s' where class '%s' does not derive from TObject", 
               br->GetName(), br->GetClassName());
       continue;
     } 
@@ -299,6 +411,10 @@ Bool_t OutputMod::Notify()
     CheckAndAddBranch(br->GetName(), br->GetClassName());
   }
 
+  if (!CheckAndResolveBranchDep())
+    return kFALSE;
+
+  RequestBranches();
   return kTRUE;
 }
 
@@ -338,7 +454,7 @@ void OutputMod::Process()
   }
 
   if (GetNEventsProcessed() == 0 && fCheckTamBr) {
-    CheckAndResolveDep(fKeepTamBr);    
+    CheckAndResolveTAMDep(fKeepTamBr);    
   }
 
   // load all our branches
@@ -353,9 +469,10 @@ void OutputMod::Process()
   if (fTreeWriter->GetFileNumber()!=fFileNum) {
     fRunmap.clear();
     fRunEntries = 0;
-    fL1Entries  = -1;
-    fHltEntries = -1;
+    fL1Entries  = 0;
+    fHltEntries = 0;
     fFileNum = fTreeWriter->GetFileNumber();
+    fTreeWriter->StoreObject(fBranchTable);
   }
 
   UInt_t runnum = GetEventHeader()->RunNum();
@@ -398,10 +515,13 @@ void OutputMod::Process()
 
   Int_t hltentry = fHltEntries;
   FillHltInfo();
-  fRunInfo->SetHltEntry(hltentry);
+  if (hltentry < fHltEntries)
+    fRunInfo->SetHltEntry(hltentry);
+  else
+    fRunInfo->SetHltEntry(hltentry-1);
   
   fRunTree->Fill();
-  
+ 
   IncNEventsProcessed();
 
   if (!fTreeWriter->EndEvent(fDoReset)) {
@@ -426,18 +546,20 @@ void OutputMod::ProcessAll()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OutputMod::RequestBranch(const char *bname) 
+void OutputMod::RequestBranches() 
 {
-  // Request given branch from TAM.
+  // Loop over requested branches and request them.
 
-  if (GetNBranches()>=fNBranchesMax) {
-    SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch '%s' "
-              "since maximum number of branches [%d] is reached", bname, fNBranchesMax);
-    return;
+  for (UInt_t i=0; i<GetNBranches(); ++i) {
+    if (i>=fNBranchesMax) {
+      SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch '%s' "
+                "since maximum number of branches [%d] is reached", 
+                fBrNameList.at(i).c_str(), fNBranchesMax);
+      return;
+    }
+    fBranches[i] = 0;
+    TAModule::ReqBranch(fBrNameList.at(i).c_str(), fBranches[i]);
   }
-  
-  fBranches[GetNBranches()-1] = 0;
-  TAModule::ReqBranch(bname, fBranches[GetNBranches()-1]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -450,10 +572,18 @@ void OutputMod::SetupBranches()
     const char *cname = fBrClassList.at(i).c_str();
     if (!fBranches[i]) {
       SendError(kWarning, "SetupBranches", 
-                "Pointer for branch '%s' and class '%s' is NULL.", bname, cname);
+                "Pointer for branch '%s' and class '%s' is NULL", bname, cname);
       continue;
     }
-    fTreeWriter->AddBranch(bname, cname, &fBranches[i]);
+    Int_t bsize = fBranchSize;
+    TString cnamestr(cname);
+    if ((bsize<128*1024) && (cnamestr.Contains("mithep::MCParticle"))) {
+      bsize=128*1024;
+    } else if ((bsize<32*1024) && (cnamestr.Contains("mithep::CaloTower"))) {
+      bsize=32*1024;
+    }
+
+    fTreeWriter->AddBranch(bname, cname, &fBranches[i], bsize);
   }
 }
 
@@ -498,8 +628,7 @@ void OutputMod::SlaveBegin()
   // get pointer to all event headers
   fSkimmedIn = GetPublicObj<EventHeaderCol>(Names::gkSkimmedHeaders);
 
-  // deal here with published objects
-  // todo
+  // deal here with published objects (not yet implemented)
 
   // create TObject space for TAM
   fBranches = new TObject*[fNBranchesMax];       
@@ -527,6 +656,6 @@ void OutputMod::SlaveTerminate()
   delete[] fBranches; 
 
   Double_t frac =  100.*GetNEventsProcessed()/fCounter;
-  Info("SlaveTerminate", "Stored %.2g%% events (%ld out of %ld)", 
+  Info("SlaveTerminate", "Stored %.2f%% events (%ld out of %ld)", 
        frac, GetNEventsProcessed(), fCounter);
 }
