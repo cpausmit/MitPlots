@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.38 2009/03/18 15:44:32 loizides Exp $
+// $Id: Track.h,v 1.39 2009/03/20 18:23:27 loizides Exp $
 //
 // Track
 //
@@ -220,8 +220,8 @@ namespace mithep
       Double32_t           fDszErr;              //[0,0,14]error of longitudinal distance
       Double32_t           fChi2;                //[0,0,12]chi squared of track fit
       UShort_t             fNdof;                //degree-of-freedom of track fit
-      Double32_t           fEtaEcal;             //[0,0,10]eta of track at Ecal front face
-      Double32_t           fPhiEcal;             //[0,0,10]phi of track at Ecal front face
+      Double32_t           fEtaEcal;             //[0,0,12]eta of track at Ecal front face
+      Double32_t           fPhiEcal;             //[0,0,12]phi of track at Ecal front face
       Ref<SuperCluster>    fSuperClusterRef;     //superCluster crossed by track
       Ref<MCParticle>      fMCParticleRef;       //reference to sim particle (for monte carlo)
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum

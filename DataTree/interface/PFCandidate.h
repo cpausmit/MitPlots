@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.1 2009/03/11 18:10:34 bendavid Exp $
+// $Id: PFCandidate.h,v 1.2 2009/03/18 15:44:32 loizides Exp $
 //
 // PFCandidate
 //
@@ -151,8 +151,8 @@ namespace mithep
       Double32_t          fMvaGamma;         //[0,0,14]photon id discriminant
       Double32_t          fMvaNeutralH;      //[0,0,14]neutral hadron id discriminant
       Double32_t          fMvaGammaNeutralH; //[0,0,14]photon-neutralhadron discriminant
-      Double32_t          fEtaECal;          //[0,0,10]eta at ecal front face
-      Double32_t          fPhiECal;          //[0,0,10]phi at ecal front face
+      Double32_t          fEtaECal;          //[0,0,12]eta at ecal front face
+      Double32_t          fPhiECal;          //[0,0,12]phi at ecal front face
       EPFType             fPFType;           //particle flow type
       BitMask32           fPFFlags;          //various PF flags
       Ref<PFCandidate>    fMother;           //reference to mother
