@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.8 2009/03/23 08:30:59 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.9 2009/03/23 22:15:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -49,7 +49,7 @@ void AnaFwkMod::BeginRun()
     if (!file) 
       return;
 
-    // get HLT tree
+    // get all event header tree
     fAllHeadTree = dynamic_cast<TTree*>(file->Get(fAllHeadTreeName));
     if (!fAllHeadTree) {
       SendError(kWarning, "BeginRun",
@@ -57,16 +57,16 @@ void AnaFwkMod::BeginRun()
                 fAllHeadTreeName.Data(),file->GetName());
       return;
     }
-  }
 
-  // get HLT trigger name branch
-  if (fAllHeadTree->GetBranch(fAllHeadBrName)) {
-    fAllHeadTree->SetBranchAddress(fAllHeadBrName, &fAllEventHeader);
-  } else {
-    SendError(kWarning, "BeginRun",
-              "Cannot find branch '%s' in tree '%s'", 
-              fAllHeadBrName.Data(), fAllHeadTreeName.Data());
-    return;
+    // get all event header branch
+    if (fAllHeadTree->GetBranch(fAllHeadBrName)) {
+      fAllHeadTree->SetBranchAddress(fAllHeadBrName, &fAllEventHeader);
+    } else {
+      SendError(kWarning, "BeginRun",
+                "Cannot find branch '%s' in tree '%s'", 
+                fAllHeadBrName.Data(), fAllHeadTreeName.Data());
+      return;
+    }
   }
 }
 
