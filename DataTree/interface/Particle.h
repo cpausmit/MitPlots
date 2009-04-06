@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.29 2009/03/07 08:31:36 loizides Exp $
+// $Id: Particle.h,v 1.30 2009/03/08 12:09:59 loizides Exp $
 //
 // Particle
 //
@@ -41,6 +41,7 @@ namespace mithep
       Double_t		        Py()                      const { return Mom().Py();               }
       Double_t		        Pz()                      const { return Mom().Pz();               }
       Double_t		        P()                       const { return Mom().P();                }
+      Double_t		        Rapidity()                const { return Mom().Rapidity();         }
       Double_t                  Theta()                   const { return Mom().Theta();            }
       Double_t		        TMass()                   const;
       void                      Print(Option_t *opt="")   const;
