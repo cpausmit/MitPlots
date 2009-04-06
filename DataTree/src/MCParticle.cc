@@ -1,4 +1,4 @@
-// $Id: MCParticle.cc,v 1.5 2009/02/18 15:38:55 loizides Exp $
+// $Id: MCParticle.cc,v 1.6 2009/03/17 17:36:53 loizides Exp $
 
 #include "MitAna/DataTree/interface/MCParticle.h"
 
@@ -61,15 +61,15 @@ void MCParticle::Print(Option_t *opt) const
 {
   // Print particle kinematics. In case option "l" is given then also print info about daughters.
 
-  printf("id=%5d st=%2d nd=%3d gen=%d sim=%d px=%.3f py=%.3f pz=%.3f e=%.3f\n", 
-         PdgId(), Status(), NDaughters(), IsGenerated(), IsSimulated(), Px(), Py(), Pz(), E());
+  printf("id=%5d st=%2d nd=%3d gen=%d sim=%d pt=%.3f eta=%.3f phi=%.3f\n", 
+         PdgId(), Status(), NDaughters(), IsGenerated(), IsSimulated(), Pt(), Eta(), Phi());
 
   if (opt && opt[0]=='l') {
     for (UInt_t i=0; i<NDaughters(); ++i) {
-      printf("  %2d -> id=%5d st=%2d gen=%d sim=%d px=%.3f py=%.3f pz=%.3f e=%.3f\n", 
-             i, Daughter(i)->PdgId(), Daughter(i)->Status(), 
+      printf("  %2d -> id=%5d st=%2d nd=%3d gen=%d sim=%d pt=%.3f eta=%.3f phi=%.3f\n", 
+             i, Daughter(i)->PdgId(), Daughter(i)->Status(), Daughter(i)->NDaughters(),
              Daughter(i)->IsGenerated(), Daughter(i)->IsSimulated(),
-             Daughter(i)->Px(), Daughter(i)->Py(), Daughter(i)->Pz(), Daughter(i)->E());
+             Daughter(i)->Pt(), Daughter(i)->Eta(), Daughter(i)->Phi());
     }
   }
 }

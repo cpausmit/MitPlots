@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.17 2009/03/08 12:09:59 loizides Exp $
+// $Id: MCParticle.h,v 1.18 2009/03/11 10:08:09 loizides Exp $
 //
 // MCParticle
 //
@@ -45,6 +45,7 @@ namespace mithep
       Bool_t              IsNot(Int_t pid, Bool_t checkCharge=kFALSE)       const;
       Bool_t              IsGenerated()            const { return fIsGenerated;      }
       Bool_t              IsGluon()                const { return fPdgId == kGlu;    }
+      Bool_t              IsLepton()               const;
       Bool_t              IsNeutrino()             const;
       Bool_t              IsParton()               const { return (IsGluon() || IsQuark());       }
       Bool_t              IsQuark()                const { return (AbsPdgId()>0 && AbsPdgId()<7); }
@@ -221,9 +222,23 @@ inline Bool_t mithep::MCParticle::IsNot(Int_t pid, Bool_t checkCharge) const
 }
 
 //--------------------------------------------------------------------------------------------------
+inline Bool_t mithep::MCParticle::IsLepton() const 
+{ 
+  // Return true if particle is a lepton.
+
+  Int_t ap = AbsPdgId();
+  if ((ap==kEl) ||
+      (ap==kMu) ||
+      (ap==kTau)) 
+    return kTRUE;
+
+  return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
 inline Bool_t mithep::MCParticle::IsNeutrino() const 
 { 
-  // Return true if particle is neutrino.
+  // Return true if particle is a neutrino.
 
   Int_t ap = AbsPdgId();
   if ((ap==kElNu) ||
