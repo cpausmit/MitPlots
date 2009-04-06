@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.8 2009/03/23 13:07:17 loizides Exp $
+// $Id: FastArrayBasic.h,v 1.9 2009/03/23 22:15:09 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -7,8 +7,9 @@
 // but there is an optimization in the read streamer similar to the TClonesArray
 // where the heap memory of an existing object is reused.  
 // This class is meant to be used as a datamember for objects which are contained 
-// inside a TClonesArray. 
-// For various reasons, the array cannot be written in split mode. 
+// inside a TClonesArray. For various reasons, the array cannot be written in split mode. 
+// This means you have to make sure that you declare it using "||" if you write out with
+// high split level.
 // Array is meant to store basic data types as opposed to FastArray 
 // which can hold arbitrary (non-heap using) classes.
 // Since it stores basic types it can not derive from the Collection<ArrayElement>
@@ -157,7 +158,7 @@ inline void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Expand(UShort_t s)
     return;
     
   fArray = static_cast<ArrayElement*>(TStorage::ReAlloc(fArray, s * sizeof(ArrayElement),
-                                        fCapacity * sizeof(ArrayElement)));
+                                                        fCapacity * sizeof(ArrayElement)));
   fCapacity = s;
 }
 
