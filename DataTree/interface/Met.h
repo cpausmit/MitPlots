@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.11 2009/03/12 15:56:50 bendavid Exp $
+// $Id: Met.h,v 1.12 2009/03/18 15:44:32 loizides Exp $
 //
 // Met
 //
@@ -31,6 +31,8 @@ namespace mithep
       const FArrDouble32          &DSumEt()             const { return fDSumEt;                 }
       Double_t                     Elongitudinal()      const { return fElongit;                }
       Double_t                     MetSig()             const;
+      Double_t                     Mex()                const { return fMex;                    }
+      Double_t                     Mey()                const { return fMey;                    }
       EObjType                     ObjType()            const { return kMet;                    }
       Double_t                     SumEt()              const { return fSumEt;                  }
       void                         PushCorrectionX(Double_t x)       { fDmex.Add(x);            }
@@ -47,9 +49,9 @@ namespace mithep
       Double32_t                   fMey;                 //[0,0,14]y-component              
       Double32_t                   fSumEt;               //[0,0,14]scalar sum of ET over all objects
       Double32_t                   fElongit;             //[0,0,14]z-comp. of vector E sum
-      FArrDouble32                 fDmex;                //array of all corr. applied to MEx
-      FArrDouble32                 fDmey;                //array of all corr. applied to MEy
-      FArrDouble32                 fDSumEt;              //array of all corr. applied to SumET
+      FArrDouble32                 fDmex;                //||array of all corr. applied to MEx
+      FArrDouble32                 fDmey;                //||array of all corr. applied to MEy
+      FArrDouble32                 fDSumEt;              //||array of all corr. applied to SumET
     
     ClassDef(Met, 1) // Missing transverse energy class
   };
