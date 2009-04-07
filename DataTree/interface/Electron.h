@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.30 2009/03/20 18:23:27 loizides Exp $
+// $Id: Electron.h,v 1.31 2009/03/20 18:44:17 bendavid Exp $
 //
 // Electron
 //
@@ -51,6 +51,7 @@ namespace mithep
       Double_t             ESuperClusterOverP()     const { return fESuperClusterOverP;            }
       Double_t             ESeedClusterOverPout()   const { return fESeedClusterOverPout;          }
       Double_t             ESeedClusterOverPIn()    const;
+      Double_t             FBrem()                  const { return (PIn() - POut())/PIn();   }
       const Track         *GsfTrk()                 const { return fGsfTrackRef.Obj();             }
       Double_t             HadronicOverEm()         const { return fHadronicOverEm;                }
       Bool_t               HasGsfTrk()              const { return fGsfTrackRef.IsValid();         }
