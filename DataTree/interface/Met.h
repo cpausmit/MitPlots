@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.12 2009/03/18 15:44:32 loizides Exp $
+// $Id: Met.h,v 1.13 2009/04/06 13:44:52 loizides Exp $
 //
 // Met
 //
@@ -53,7 +53,7 @@ namespace mithep
       FArrDouble32                 fDmey;                //||array of all corr. applied to MEy
       FArrDouble32                 fDSumEt;              //||array of all corr. applied to SumET
     
-    ClassDef(Met, 1) // Missing transverse energy class
+    ClassDef(Met, 2) // Missing transverse energy class
   };
 }
 
