@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.13 2009/04/06 13:44:52 loizides Exp $
+// $Id: Met.h,v 1.14 2009/04/07 12:16:56 loizides Exp $
 //
 // Met
 //
@@ -30,6 +30,7 @@ namespace mithep
       const FArrDouble32          &Dmey()               const { return fDmey;                   }
       const FArrDouble32          &DSumEt()             const { return fDSumEt;                 }
       Double_t                     Elongitudinal()      const { return fElongit;                }
+      Bool_t                       HasCorrections()     const;
       Double_t                     MetSig()             const;
       Double_t                     Mex()                const { return fMex;                    }
       Double_t                     Mey()                const { return fMey;                    }
