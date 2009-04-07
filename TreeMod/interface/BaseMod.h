@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.15 2008/12/10 14:20:26 loizides Exp $
+// $Id: BaseMod.h,v 1.16 2009/03/23 22:15:13 loizides Exp $
 //
 // BaseMod
 //
@@ -34,6 +34,10 @@ namespace mithep
       template <class T> void     AddTH2(T *&ptr, const char *name, const char *title, 
                                          Int_t nbinsx, Double_t xmin, Double_t xmax,
                                          Int_t nbinsy, Double_t ymin, Double_t ymax);
+      template <class T> void     AddTH3(T *&ptr, const char *name, const char *title, 
+                                         Int_t nbinsx, Double_t xmin, Double_t xmax,
+                                         Int_t nbinsy, Double_t ymin, Double_t ymax,
+                                         Int_t nbinsz, Double_t zmin, Double_t zmax);
       void                        IncNEventsProcessed()       { ++fNEventsProc; }
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
       Bool_t                      GetFillHist()         const { return fFillHist; }
@@ -85,6 +89,20 @@ inline void mithep::BaseMod::AddTH2(T *&ptr, const char *name, const char *title
   // Create ROOT histogram and add it to the output list.
 
   ptr = new T(name, title, nbinsx, xmin, xmax, nbinsy, ymin, ymax);
+  ptr->Sumw2();
+  AddOutput(ptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+inline void mithep::BaseMod::AddTH3(T *&ptr, const char *name, const char *title, 
+                                    Int_t nbinsx, Double_t xmin, Double_t xmax,
+                                    Int_t nbinsy, Double_t ymin, Double_t ymax,
+                                    Int_t nbinsz, Double_t zmin, Double_t zmax)
+{
+  // Create ROOT histogram and add it to the output list.
+
+  ptr = new T(name, title, nbinsx, xmin, xmax, nbinsy, ymin, ymax, nbinsz, zmin, zmax);
   ptr->Sumw2();
   AddOutput(ptr);
 }
