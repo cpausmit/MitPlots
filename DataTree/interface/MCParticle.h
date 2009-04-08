@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.19 2009/04/06 13:38:47 loizides Exp $
+// $Id: MCParticle.h,v 1.20 2009/04/07 15:56:02 phedex Exp $
 //
 // MCParticle
 //
@@ -42,12 +42,13 @@ namespace mithep
       Bool_t              HasMother(const MCParticle *m)                    const;
       Bool_t              HasMother(Int_t pid, Bool_t checkCharge=kFALSE)   const;
       Bool_t              Is(Int_t pid, Bool_t checkCharge=kFALSE)          const;
-      Bool_t              IsNot(Int_t pid, Bool_t checkCharge=kFALSE)       const;
+      Bool_t              IsCharged()              const { return !IsNeutral();      }
       Bool_t              IsGenerated()            const { return fIsGenerated;      }
       Bool_t              IsGluon()                const { return fPdgId == kGlu;    }
       Bool_t              IsLepton()               const;
       Bool_t              IsNeutral()              const;
       Bool_t              IsNeutrino()             const;
+      Bool_t              IsNot(Int_t pid, Bool_t checkCharge=kFALSE)       const;
       Bool_t              IsParton()               const { return (IsGluon() || IsQuark());       }
       Bool_t              IsQuark()                const { return (AbsPdgId()>0 && AbsPdgId()<7); }
       Bool_t              IsSimulated()            const { return fIsSimulated;  }
@@ -244,23 +245,7 @@ inline Bool_t mithep::MCParticle::IsNeutral() const
 { 
   // Return true if particle is a neutral.
 
-  Int_t ap = AbsPdgId();
-  if ((ap==kElNu) || (ap==kMuNu) || (ap==kTauNu) ||
-      (ap==kGamma) || (ap==kPi0) || (ap==kEta) || (ap==331) || (ap==223) || (ap==333) || 
-      (ap==225) || (ap==113) || (ap==113) || (ap==115) || (ap==117) || (ap==119) || 
-      (ap==kKLong) || (ap==kKShort) || (ap==kK0) || (ap==313) || (ap==315) || (ap==317) || 
-      (ap==319) || (ap==kD0) || (ap==423) || (ap==425) || (ap==kB0) || (ap==kB0Bar) ||  
-      (ap==515) || (ap==531) ||  (ap==533) || (ap==535) ||  (ap==441) || (ap==kJPsi) || 
-      (ap==445) || (ap==551) || (ap==kUpsilon) || (ap==555) || (ap==557) || (ap==kNeutron) ||
-      (ap==kDelta0) || (ap==3122) || (ap==3212) || (ap==3214) || (ap==3322) || (ap==3324) || 
-      (ap==4112) || (ap==4114) || (ap==4132) || (ap==4312) || (ap==4314) || (ap==4332) || 
-      (ap==4334) || (ap==5122) || (ap==5212) || (ap==5214) || (ap==5232) || (ap==5322) || 
-      (ap==5324) || (ap==5142) || (ap==5412) || (ap==5414) || (ap==5342) || (ap==5432) || 
-      (ap==5434) || (ap==5522) || (ap==5524) || (ap==5542) || (ap==5544)      
-    ) 
-    return kTRUE;
-
-  return kFALSE;
+  return (Charge()!=0);
 }
 
 //--------------------------------------------------------------------------------------------------
