@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.10 2009/03/18 15:44:32 loizides Exp $
+// $Id: DecayData.h,v 1.11 2009/03/20 18:23:27 loizides Exp $
 //
 // DecayData
 //
@@ -33,7 +33,7 @@ namespace mithep
       Double_t             LzError()   const { return fLzError;                 }
       Double_t             MassError() const { return fMassError;               }
       EObjType             ObjType()   const { return kDecayData;               }
-      const ThreeVector32  RelativePosition() const;
+      const ThreeVector    RelativePosition() const;
       void                 SetDxy(Double_t dxy)             { fDxy = dxy;             }
       void                 SetDxyError(Double_t dxyError)   { fDxyError = dxyError;   }
       void                 SetLxy(Double_t lxy)             { fLxy = lxy;             }
@@ -78,15 +78,15 @@ inline void mithep::DecayData::SetMom(Double32_t px, Double32_t py, Double32_t p
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::ThreeVector32 mithep::DecayData::RelativePosition() const
+inline const mithep::ThreeVector mithep::DecayData::RelativePosition() const
 {
   // Compute the position vector of the decay vertex relative to the parent decay vertex.
 
-  mithep::ThreeVector32 dz(0,0,fLz*TMath::Abs(Pz())/Pz());
-  mithep::ThreeVector32 momPerp(Px(),Py(),0);
-  mithep::ThreeVector32 zHat(0,0,1.0);
-  mithep::ThreeVector32 dxy = -momPerp.Cross(zHat)*fDxy/momPerp.R();
-  mithep::ThreeVector32 dlxy  = momPerp*fLxy/momPerp.R();
+  mithep::ThreeVector dz(0,0,fLz*TMath::Abs(Pz())/Pz());
+  mithep::ThreeVector momPerp(Px(),Py(),0);
+  mithep::ThreeVector zHat(0,0,1.0);
+  mithep::ThreeVector dxy = -momPerp.Cross(zHat)*fDxy/momPerp.R();
+  mithep::ThreeVector dlxy  = momPerp*fLxy/momPerp.R();
   return (dxy+dlxy+dz);
 }
 #endif
