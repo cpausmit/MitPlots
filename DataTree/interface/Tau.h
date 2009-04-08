@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Tau.h,v 1.2 2009/03/20 09:37:17 loizides Exp $
+// $Id: Tau.h,v 1.3 2009/03/20 11:19:10 bendavid Exp $
 //
 // Tau
 //
@@ -25,7 +25,7 @@ namespace mithep
       Tau(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)) {}
 
-      const FourVectorM   MomAlt()                const { return fMomAlt.V(); }
+      FourVectorM         MomAlt()                const { return fMomAlt.V(); }
       EObjType            ObjType()               const { return kTau;        }  
       void                SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                SetMomAlt(Double_t px, Double_t py, Double_t pz, Double_t e);
