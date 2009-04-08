@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.2 2009/03/20 09:37:17 loizides Exp $
+// $Id: PFTau.h,v 1.3 2009/03/22 19:55:45 loizides Exp $
 //
 // PFTau
 //
@@ -39,8 +39,9 @@ namespace mithep
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
                   fMuonDecision(kFALSE) {}
 
-      void               AddIsoPFCand(const PFCandidate *p)         { fIsoPFCands.Add(p);          }
-      void               AddSignalPFCand(const PFCandidate *p)      { fSignalPFCands.Add(p);       }
+      void               AddIsoPFCand(const PFCandidate *p)  { fIsoPFCands.Add(p);                 }
+      void               AddSignalPFCand(const PFCandidate *p)      
+                            { ClearCharge(); fSignalPFCands.Add(p); }
       Double_t           BremRecoveryEOverP()          const { return fBremRecoveryEOverP;         }
       Double_t           CaloCompatibility()           const { return fCaloCompatibility;          }
       Double_t           ECalStripSumEOverP()          const { return fECalStripSumEOverP;         }
@@ -61,7 +62,7 @@ namespace mithep
       Double_t           MaxHCalPFClusterEt()          const { return fMaxHCalPFClusterEt;         }
       Bool_t             MuonDecision()                const { return fMuonDecision;               }
       UInt_t             NIsoPFCandS()                 const { return fIsoPFCands.Entries();       }
-      UInt_t             NSignalPFCands()              const { return fSignalPFCands.GetEntries(); }
+      UInt_t             NSignalPFCands()              const { return fSignalPFCands.Entries();    }
       EObjType           ObjType()                     const { return kPFTau;                      }
       Double_t           SegmentCompatibility()        const { return fSegmentCompatibility;       }
       void               SetBremRecoveryEOverP(Double_t x)   { fBremRecoveryEOverP = x;            }
@@ -90,6 +91,8 @@ namespace mithep
       const Jet         *SourceJet()                    const { return SourcePFJet();              }
 
     protected:
+      Double_t           GetCharge()                    const;
+
       Double32_t         fLeadPFCandSignD0Sig;   //[0,0,14]signed lead track D0 significance
       Double32_t         fHCalTotalEOverP;       //[0,0,14]total hcal e / lead ch had pfcand mom
       Double32_t         fHCalMaxEOverP;         //[0,0,14]max hcal e / lead ch had pfcand. mom
@@ -115,5 +118,17 @@ namespace mithep
 
     ClassDef(PFTau, 1) // PFTau class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::PFTau::GetCharge() const
+{
+  // Get charge from signal candidates.
+
+  Double_t sumq = 0;
+  for (UInt_t i=0; i<fSignalPFCands.Entries(); ++i) {
+    sumq += fSignalPFCands.At(i)->Charge();
+  }
+  return sumq;
 }
 #endif
