@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.64 2009/03/19 23:09:36 bendavid Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.65 2009/03/24 16:10:16 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -29,6 +29,7 @@
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
 
+#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
@@ -175,6 +176,14 @@
 #pragma link C++ typedef mithep::CaloTowerCol;
 #pragma link C++ typedef mithep::CaloTowerArr;
 #pragma link C++ typedef mithep::CaloTowerOArr;
+
+#pragma link C++ class mithep::GenericParticle+;
+#pragma link C++ class mithep::Collection<mithep::GenericParticle>+;
+#pragma link C++ class mithep::RefArray<mithep::GenericParticle>+;
+#pragma link C++ class mithep::ObjArray<mithep::GenericParticle>+;
+#pragma link C++ class mithep::Ref<mithep::GenericParticle>+;
+#pragma link C++ typedef mithep::GenericParticleCol;
+#pragma link C++ typedef mithep::GenericParticleOArr;
 
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;

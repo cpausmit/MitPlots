@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.6 2009/03/19 23:09:36 bendavid Exp $
+// $Id: ObjTypes.h,v 1.7 2009/03/20 09:37:17 loizides Exp $
 //
 // ObjTypes
 //
@@ -45,6 +45,7 @@ namespace mithep
     kPFMet,
     kPFTau,
     kParticle,
+    kGenericParticle,
     kPhoton,
     kRunInfo,
     kStableData,

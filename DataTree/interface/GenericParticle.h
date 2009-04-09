@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.31 2009/04/06 09:50:49 loizides Exp $
+// $Id: GenericParticle.h,v 1.1 2009/04/09 10:26:18 ceballos Exp $
 //
 // GenericParticle
 //
@@ -23,7 +23,10 @@ namespace mithep
       GenericParticle(): fQ(0), fObjType(kGenericParticle) {}
       GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c) : 
         fMom(FourVector(px,py,pz,e)), fQ(c), fObjType(kGenericParticle) {}
+      GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e) : 
+        fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(kGenericParticle) {}
       GenericParticle(FourVector &m, Double_t c) : fMom(m), fQ(c), fObjType(kGenericParticle) {}
+      GenericParticle(FourVector &m) : fMom(m), fQ(0), fObjType(kGenericParticle) {}
      
       EObjType           ObjType()		   const { return fObjType;	   }
       void               Print(Option_t *opt="")   const;
