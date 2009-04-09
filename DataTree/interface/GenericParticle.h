@@ -1,12 +1,12 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.1 2009/04/09 10:26:18 ceballos Exp $
+// $Id: GenericParticle.h,v 1.2 2009/04/09 10:28:51 ceballos Exp $
 //
 // GenericParticle
 //
-// General GenericParticle class. It provides an abstract interface to kinematical quantities
-// computed by derived classes.
+// General particle class to be filled and used at analysis time.
+// It provides an abstract interface to kinematical quantities computed by derived classes.
 //
-// Authors: C.Loizides
+// Authors: G.Ceballos, C.Loizides
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_GENERICPARTICLE_H
@@ -26,14 +26,13 @@ namespace mithep
       GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e) : 
         fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(kGenericParticle) {}
       GenericParticle(FourVector &m, Double_t c) : fMom(m), fQ(c), fObjType(kGenericParticle) {}
-      GenericParticle(FourVector &m) : fMom(m), fQ(0), fObjType(kGenericParticle) {}
+      GenericParticle(FourVectorM &m, Double_t c) : fMom(m), fQ(c), fObjType(kGenericParticle) {}
      
-      EObjType           ObjType()		   const { return fObjType;	   }
       void               Print(Option_t *opt="")   const;
-
-      void		 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      EObjType           RecoObjType()		   const { return fObjType;	   }
       void		 SetCharge(Double_t c)  	 { fQ = c;		   }
-      void               SetObjType(EObjType t)          { fObjType = t;           }
+      void		 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void               SetRecoObjType(EObjType t)      { fObjType = t;           }
      
     protected:
       Double_t 		 GetCharge()		   const { return fQ;		   }
@@ -44,7 +43,7 @@ namespace mithep
       Double_t           fQ;	   //charge value
       EObjType           fObjType; //object type
 
-    ClassDef(GenericParticle, 1) // Generic GenericParticle class
+    ClassDef(GenericParticle, 1) // Generic particle class
   };
 }
 
@@ -59,7 +58,7 @@ inline void mithep::GenericParticle::SetMom(Double_t px, Double_t py, Double_t p
 //--------------------------------------------------------------------------------------------------
 inline void mithep::GenericParticle::GetMom() const
 {
-  // Get momentum values
+  // Get momentum values.
 
   fCachedMom = fMom;
 }

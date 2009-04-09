@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.65 2009/03/24 16:10:16 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.66 2009/04/09 10:26:18 ceballos Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -29,9 +29,9 @@
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
 
-#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
+#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
@@ -177,14 +177,6 @@
 #pragma link C++ typedef mithep::CaloTowerArr;
 #pragma link C++ typedef mithep::CaloTowerOArr;
 
-#pragma link C++ class mithep::GenericParticle+;
-#pragma link C++ class mithep::Collection<mithep::GenericParticle>+;
-#pragma link C++ class mithep::RefArray<mithep::GenericParticle>+;
-#pragma link C++ class mithep::ObjArray<mithep::GenericParticle>+;
-#pragma link C++ class mithep::Ref<mithep::GenericParticle>+;
-#pragma link C++ typedef mithep::GenericParticleCol;
-#pragma link C++ typedef mithep::GenericParticleOArr;
-
 #pragma link C++ class mithep::Particle+;
 #pragma link C++ class mithep::Collection<mithep::Particle>+;
 #pragma link C++ class mithep::RefArray<mithep::Particle>+;
@@ -200,6 +192,14 @@
 #pragma link C++ typedef mithep::ChargedParticleCol;
 #pragma link C++ typedef mithep::ChargedParticleArr;
 #pragma link C++ typedef mithep::ChargedParticleOArr;
+
+#pragma link C++ class mithep::GenericParticle+;
+#pragma link C++ class mithep::Collection<mithep::GenericParticle>+;
+#pragma link C++ class mithep::RefArray<mithep::GenericParticle>+;
+#pragma link C++ class mithep::ObjArray<mithep::GenericParticle>+;
+#pragma link C++ class mithep::Ref<mithep::GenericParticle>+;
+#pragma link C++ typedef mithep::GenericParticleCol;
+#pragma link C++ typedef mithep::GenericParticleOArr;
 
 #pragma link C++ class mithep::Muon+;
 #pragma link C++ enum mithep::Muon::EClassType;

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.44 2009/03/20 09:37:17 loizides Exp $
+// $Id: Collections.h,v 1.45 2009/04/09 10:26:18 ceballos Exp $
 //
 // Collections
 //
@@ -25,9 +25,9 @@
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
-#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
+#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
 #include "MitAna/DataTree/interface/Jet.h"
@@ -65,9 +65,9 @@ namespace mithep
   typedef Collection<BasicCluster>      BasicClusterCol;
   typedef Collection<SuperCluster>      SuperClusterCol;
   typedef Collection<CaloTower>         CaloTowerCol;
-  typedef Collection<GenericParticle>   GenericParticleCol;
   typedef Collection<Particle>          ParticleCol;
   typedef Collection<ChargedParticle>   ChargedParticleCol;
+  typedef Collection<GenericParticle>   GenericParticleCol;
   typedef Collection<Muon>              MuonCol;
   typedef Collection<Electron>          ElectronCol;
   typedef Collection<Jet>               JetCol;
@@ -145,6 +145,7 @@ namespace mithep
   typedef ObjArray<GenericParticle>     GenericParticleOArr;
   typedef ObjArray<Particle>            ParticleOArr;
   typedef ObjArray<ChargedParticle>     ChargedParticleOArr;
+  typedef ObjArray<GenericParticle>     GenericParticleOArr;
   typedef ObjArray<Muon>                MuonOArr;
   typedef ObjArray<Electron>            ElectronOArr;
   typedef ObjArray<Jet>                 JetOArr;
