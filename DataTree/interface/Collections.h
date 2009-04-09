@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.43 2009/03/19 23:09:36 bendavid Exp $
+// $Id: Collections.h,v 1.44 2009/03/20 09:37:17 loizides Exp $
 //
 // Collections
 //
@@ -25,6 +25,7 @@
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
+#include "MitAna/DataTree/interface/GenericParticle.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
@@ -64,6 +65,7 @@ namespace mithep
   typedef Collection<BasicCluster>      BasicClusterCol;
   typedef Collection<SuperCluster>      SuperClusterCol;
   typedef Collection<CaloTower>         CaloTowerCol;
+  typedef Collection<GenericParticle>   GenericParticleCol;
   typedef Collection<Particle>          ParticleCol;
   typedef Collection<ChargedParticle>   ChargedParticleCol;
   typedef Collection<Muon>              MuonCol;
@@ -140,6 +142,7 @@ namespace mithep
   typedef ObjArray<BasicCluster>        BasicClusterOArr;
   typedef ObjArray<SuperCluster>        SuperClusterOArr;
   typedef ObjArray<CaloTower>           CaloTowerOArr; 
+  typedef ObjArray<GenericParticle>     GenericParticleOArr;
   typedef ObjArray<Particle>            ParticleOArr;
   typedef ObjArray<ChargedParticle>     ChargedParticleOArr;
   typedef ObjArray<Muon>                MuonOArr;
