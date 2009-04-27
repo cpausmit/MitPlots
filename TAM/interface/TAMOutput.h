@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h 3024 2006-07-13 22:51:14Z loizides $
+// $Id: TAMOutput.h 5527 2009-04-27 07:02:25Z loizides $
 //
 
 #ifndef ROOT_TAMOutput
@@ -111,8 +111,8 @@ public:
    TList            *GetOutputList()       { return &fOutput; }
    virtual void      Merge(TCollection* list);
    virtual void      ls(Option_t* option="") const;
+   using             TCollection::Print;
    virtual void      Print(Option_t* wildcard="") const;
-   virtual void      Print(Option_t* wildcard, Option_t* option) const;
    void              RemoveOutput(TObject* obj);
    void              SetAllOutputMembers(const Bool_t setAddresses);
    void              SetMod(TAModule* mod) { fMod = mod; }

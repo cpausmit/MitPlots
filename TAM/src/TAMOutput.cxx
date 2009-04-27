@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx,v 1.2 2008/09/27 06:03:36 loizides Exp $
+// $Id: TAMOutput.cxx 5527 2009-04-27 07:02:25Z loizides $
 //
 
 #include "TAMOutput.h"
@@ -597,8 +597,6 @@ void TAMOutput::NullObjInAddOutput() const
          "(%s): Can not add null object to output.", GetName());
 }
 
-
-//______________________________________________________________________________
 void TAMOutput::Print(Option_t *wildcard) const 
 {
    // Print the output objects inside this module and its submodules.
@@ -612,24 +610,6 @@ void TAMOutput::Print(Option_t *wildcard) const
    TList::Print(wildcard);
    TROOT::DecreaseDirLevel();
 }
-
-
-//______________________________________________________________________________
-void TAMOutput::Print(Option_t* wildcard, Option_t* option) const 
-{
-   // Print the output objects inside this module and its submodules.
-
-#if ROOT_VERSION_CODE > ROOT_VERSION(4,0,8)
-   cout << "Output of " << GetName() << ":" << endl;
-   fOutput.Print(wildcard,option);
-   TList::Print(wildcard,option);
-#else
-   // backward compatible
-   Warning("Print","This version of Root does not handle wildcards.");
-   Print(option);
-#endif
-}
-
 
 //______________________________________________________________________________
 void TAMOutput::RemoveOutput(TObject* obj) 
