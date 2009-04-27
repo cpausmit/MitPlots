@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.13 2009/02/18 16:37:48 bendavid Exp $
+// $Id: TAMSelector.cxx 5526 2009-04-27 06:59:19Z loizides $
 //
 
 #include "TAMSelector.h"
@@ -96,13 +96,13 @@ ClassImp(TAMSelector)
 TAMSelector::BranchProxy::BranchProxy(TAMSelector *sel, Bool_t e) : 
    fSel(sel),
    fOrig(0), 
-   fFake(0),
+   fFake(new TRefTable(this, 10)),
    fCurEntry(-1)
 { 
    // Default constructor.
 
-   fFake = new TRefTable(this, 10);
    memset(fBrRead, 0, 1024*sizeof(Bool_t));
+
    if (e) 
      Enable(); 
 }
@@ -268,6 +268,9 @@ Bool_t TAMSelector::BranchProxy::Notify()
    // Notification received from TRefTable::Notify. Originally this would
    // have been address to the TBranchRef owner of the TRefTable, but
    // we intercept this call.
+
+   if (!fOrig)
+      return kFALSE;
 
    TBranchRef *br = dynamic_cast<TBranchRef*>(fOrig->GetOwner());
    if (!br) 
