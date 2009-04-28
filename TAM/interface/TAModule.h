@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.4 2008/12/04 13:50:56 loizides Exp $
+// $Id: TAModule.h,v 1.5 2009/03/23 08:36:30 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -56,6 +56,8 @@ private:
    static const Char_t kExecSlaveTerminate;  //!key to mark SlaveTerminate
    static const Char_t kExecTerminate;       //!key to mark Terminate
    
+   void                AbortAnalysis();
+   void                AbortModule();
    void                DeactivateAll();
    void                NewOutputList(TList* list); 
    Bool_t              NotifyAll();
@@ -65,11 +67,9 @@ private:
    void                StopModule();
 
 protected:
-   
-   void                AbortAnalysis();
-   void                AbortEvent();
-   void                AbortModule();
+  
    // utility functions to be used by derived classes
+   void                AbortEvent();
    virtual Bool_t      AddObjThisEvt(TObject* obj);
    virtual Bool_t      AddObjThisEvt(TObject* obj, const char *name);
    template <class OC>
