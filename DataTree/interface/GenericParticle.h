@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.2 2009/04/09 10:28:51 ceballos Exp $
+// $Id: GenericParticle.h,v 1.3 2009/04/09 11:24:45 loizides Exp $
 //
 // GenericParticle
 //
@@ -21,16 +21,20 @@ namespace mithep
   {
     public:
       GenericParticle(): fQ(0), fObjType(kGenericParticle) {}
-      GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c) : 
-        fMom(FourVector(px,py,pz,e)), fQ(c), fObjType(kGenericParticle) {}
-      GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-        fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(kGenericParticle) {}
-      GenericParticle(FourVector &m, Double_t c) : fMom(m), fQ(c), fObjType(kGenericParticle) {}
-      GenericParticle(FourVectorM &m, Double_t c) : fMom(m), fQ(c), fObjType(kGenericParticle) {}
+    GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c, 
+                    EObjType type=kGenericParticle) : 
+        fMom(FourVector(px,py,pz,e)), fQ(c), fObjType(type) {}
+    GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e,                     
+                    EObjType type=kGenericParticle) : 
+      fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(type) {}
+    GenericParticle(const FourVector &m, Double_t c, EObjType type=kGenericParticle) : 
+        fMom(m), fQ(c), fObjType(type) {}
+    GenericParticle(const FourVectorM &m, Double_t c, EObjType type=kGenericParticle) : 
+        fMom(m), fQ(c), fObjType(type) {}
      
       void               Print(Option_t *opt="")   const;
       EObjType           RecoObjType()		   const { return fObjType;	   }
-      void		 SetCharge(Double_t c)  	 { fQ = c;		   }
+      void		 SetCharge(Double_t c)  	 { fQ = c; ClearCharge();  }
       void		 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void               SetRecoObjType(EObjType t)      { fObjType = t;           }
      
@@ -53,6 +57,7 @@ inline void mithep::GenericParticle::SetMom(Double_t px, Double_t py, Double_t p
   // Set four vector.
 
   fMom.SetXYZT(px, py, pz, e);
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------
