@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.39 2009/03/20 18:23:27 loizides Exp $
+// $Id: Track.h,v 1.40 2009/03/25 05:16:13 loizides Exp $
 //
 // Track
 //
@@ -164,7 +164,7 @@ namespace mithep
       Double_t             LambdaErr()      const { return fLambdaErr;            }
       const MCParticle    *MCPart()         const { return fMCParticleRef.Obj();  }
       const ThreeVectorC  &Mom()            const;
-      FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),E(m)); }
+      FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),m); }
       UShort_t             Ndof()           const { return fNdof;                              }
       UInt_t               NHits()          const { return fHits.NBitsSet();                   }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
