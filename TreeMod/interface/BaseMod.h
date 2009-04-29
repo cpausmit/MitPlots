@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.16 2009/03/23 22:15:13 loizides Exp $
+// $Id: BaseMod.h,v 1.17 2009/04/07 15:56:37 phedex Exp $
 //
 // BaseMod
 //
@@ -46,10 +46,10 @@ namespace mithep
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
       Int_t                       GetNEventsProcessed()           const { return fNEventsProc; }
-      template <class T> const T *GetObjThisEvt(const char *name) const;
-      template <class T> T       *GetObjThisEvt(const char *name);
-      template <class T> const T *GetPublicObj(const char *name)  const;
-      template <class T> T       *GetPublicObj(const char *name);
+      template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
+      template <class T> T       *GetObjThisEvt(const char *name, Bool_t warn=1);
+      template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
+      template <class T> T       *GetPublicObj(const char *name, Bool_t warn=1);
       const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo(); }
       const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo()          const;
@@ -117,12 +117,12 @@ inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char
 
 //--------------------------------------------------------------------------------------------------
 template <class T> 
-inline const T *mithep::BaseMod::GetObjThisEvt(const char *name) const
+inline const T *mithep::BaseMod::GetObjThisEvt(const char *name, Bool_t warn) const
 {
   // Get published object for the current event.
 
   T *ret = dynamic_cast<T*>(FindObjThisEvt(name));
-  if (!ret) {
+  if (!ret && warn) {
     SendError(kWarning, "GetObjThisEvent", 
               "Could not obtain object with name %s and type %s for current event!",
               name, T::Class_Name());
@@ -132,12 +132,12 @@ inline const T *mithep::BaseMod::GetObjThisEvt(const char *name) const
 
 //--------------------------------------------------------------------------------------------------
 template <class T> 
-inline T *mithep::BaseMod::GetObjThisEvt(const char *name)
+inline T *mithep::BaseMod::GetObjThisEvt(const char *name, Bool_t warn)
 {
   // Get published object for the current event.
 
   T *ret = dynamic_cast<T*>(FindObjThisEvt(name));
-  if (!ret) {
+  if (!ret && warn) {
     SendError(kWarning, "GetObjThisEvent", 
               "Could not obtain object with name %s and type %s for current event!",
               name, T::Class_Name());
@@ -147,13 +147,13 @@ inline T *mithep::BaseMod::GetObjThisEvt(const char *name)
 
 //--------------------------------------------------------------------------------------------------
 template <class T> 
-inline const T *mithep::BaseMod::GetPublicObj(const char *name) const
+inline const T *mithep::BaseMod::GetPublicObj(const char *name, Bool_t warn) const
 {
   // Get public object.
 
 
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
-  if (!ret) {
+  if (!ret && warn) {
     SendError(kWarning, "GetPublicObject", 
               "Could not obtain public object with name %s and type %s!",
               name, T::Class_Name());
@@ -163,13 +163,13 @@ inline const T *mithep::BaseMod::GetPublicObj(const char *name) const
 
 //--------------------------------------------------------------------------------------------------
 template <class T> 
-inline T *mithep::BaseMod::GetPublicObj(const char *name)
+inline T *mithep::BaseMod::GetPublicObj(const char *name, Bool_t warn)
 {
   // Get public object.
 
 
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
-  if (!ret) {
+  if (!ret && warn) {
     SendError(kWarning, "GetPublicObject", 
               "Could not obtain public object with name %s and type %s!",
               name, T::Class_Name());
