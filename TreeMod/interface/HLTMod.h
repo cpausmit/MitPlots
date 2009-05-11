@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.5 2009/03/02 13:26:45 loizides Exp $
+// $Id: HLTMod.h,v 1.6 2009/03/08 12:11:49 loizides Exp $
 //
 // HLTMod
 //
@@ -42,11 +42,12 @@ namespace mithep
       ~HLTMod();
 
       void                        AddTrigger(const char *expr);
-      Int_t                       GetNEvents()   const { return fNEvents; }
-      Int_t                       GetNAccepted() const { return fNAcceped; }
-      Int_t                       GetNFailed()   const { return fNFailed; }
-      void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort = b; }
-      void                        SetPrintTable(Bool_t b)           { fPrintTable = b; }
+      Int_t                       GetNEvents()      const { return fNEvents;       }
+      Int_t                       GetNAccepted()    const { return fNAcceped;      }
+      Int_t                       GetNFailed()      const { return fNFailed;       }
+      const char                 *GetTrigObjsName() const { return fMyObjsNamePub; }
+      void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort = b;         }
+      void                        SetPrintTable(Bool_t b)           { fPrintTable = b;    }
       void                        SetTrigObjsName(const char *n)    { fMyObjsNamePub = n; }
 
     protected:
