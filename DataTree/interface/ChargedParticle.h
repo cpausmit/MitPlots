@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.8 2009/02/18 15:38:54 loizides Exp $
+// $Id: ChargedParticle.h,v 1.9 2009/03/03 17:04:09 loizides Exp $
 //
 // ChargedParticle
 //
@@ -54,6 +54,6 @@ inline void mithep::ChargedParticle::GetMom() const
   if (trk)
     fCachedMom.SetCoordinates(trk->Pt(),trk->Eta(),trk->Phi(),GetMass());
   else 
-    fCachedMom.SetCoordinates(0,0,0,0);
+    fCachedMom.SetCoordinates(0,0,0,GetMass());
 }
 #endif
