@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.3 2009/04/09 11:24:45 loizides Exp $
+// $Id: GenericParticle.h,v 1.4 2009/04/28 11:00:05 loizides Exp $
 //
 // GenericParticle
 //
@@ -21,15 +21,15 @@ namespace mithep
   {
     public:
       GenericParticle(): fQ(0), fObjType(kGenericParticle) {}
-    GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c, 
-                    EObjType type=kGenericParticle) : 
+      GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c, 
+                      EObjType type=kGenericParticle) : 
         fMom(FourVector(px,py,pz,e)), fQ(c), fObjType(type) {}
-    GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e,                     
-                    EObjType type=kGenericParticle) : 
-      fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(type) {}
-    GenericParticle(const FourVector &m, Double_t c, EObjType type=kGenericParticle) : 
+      GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e,                     
+                      EObjType type=kGenericParticle) : 
+        fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(type) {}
+      GenericParticle(const FourVector &m, Double_t c, EObjType type=kGenericParticle) : 
         fMom(m), fQ(c), fObjType(type) {}
-    GenericParticle(const FourVectorM &m, Double_t c, EObjType type=kGenericParticle) : 
+      GenericParticle(const FourVectorM &m, Double_t c, EObjType type=kGenericParticle) : 
         fMom(m), fQ(c), fObjType(type) {}
      
       void               Print(Option_t *opt="")   const;

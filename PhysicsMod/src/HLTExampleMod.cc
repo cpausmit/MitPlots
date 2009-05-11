@@ -1,4 +1,4 @@
-// $Id: HLTExampleMod.cc,v 1.1 2008/09/28 02:41:21 loizides Exp $
+// $Id: HLTExampleMod.cc,v 1.1 2008/11/25 14:30:54 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #include <TH1D.h>
@@ -23,14 +23,12 @@ void HLTExampleMod::Process()
   // the branch and fill the histograms.
 
   const TriggerObjectCol *objs = GetHLTObjects(fObjsName);
-
-  
   if (!objs) // this can only happen if HLTMod::SetAbortIfNotAccepted(kFALSE) was called
     return;
 
   Int_t ents=objs->GetEntries();
   for(Int_t i=0;i<ents;++i) {
-     const TriggerObject* to = objs->At(i);
+     const TriggerObject *to = objs->At(i);
      fPtHist->Fill(to->Pt());
      fEtaHist->Fill(to->Eta());
   }
