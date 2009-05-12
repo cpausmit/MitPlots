@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.6 2008/12/10 17:25:16 loizides Exp $
+// $Id: PlotKineMod.h,v 1.7 2008/12/12 16:03:12 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -23,7 +23,6 @@ namespace mithep
     public:
       PlotKineMod(const char *name="PlotKineMod", 
                   const char *title="Plot kinematics module");
-      ~PlotKineMod() {}
 
       const char              *GetColName()              const { return fColName;     }
       Double_t                 GetEtaMin()               const { return fEtaMin;      }

@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.7 2009/03/24 16:11:16 loizides Exp $
+// $Id: HLTMod.cc,v 1.8 2009/05/12 14:21:13 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -150,6 +150,7 @@ void HLTMod::Process()
 
   // take action if accepted
   ++fNAcceped;
+  IncNEventsProcessed();
   OnAccepted();
   if (!AddObjThisEvt(fMyTrgObjs)) {
     SendError(kAbortAnalysis, "Process", 
@@ -177,4 +178,12 @@ void HLTMod::SlaveBegin()
     SendError(kAbortAnalysis, "SlaveBegin", "Could not get HLT trigger objects table.");
     return;
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+void HLTMod::SlaveTerminate()
+{
+  // Save number of accepted events.
+
+  SaveNEventsProcessed();
 }

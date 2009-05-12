@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.7 2009/05/11 08:00:57 loizides Exp $
+// $Id: HLTMod.h,v 1.8 2009/05/12 14:21:13 loizides Exp $
 //
 // HLTMod
 //
@@ -57,6 +57,7 @@ namespace mithep
       virtual void                OnFailed()    {/*could be implemented in derived classes*/}
       void                        Process();
       void                        SlaveBegin();
+      void                        SlaveTerminate();
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
       Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun

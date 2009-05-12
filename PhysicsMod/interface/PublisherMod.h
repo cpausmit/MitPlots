@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.5 2008/12/12 16:03:34 loizides Exp $
+// $Id: PublisherMod.h,v 1.6 2009/03/11 18:13:10 bendavid Exp $
 //
 // PublisherMod
 //
@@ -24,7 +24,6 @@ namespace mithep
     public:
       PublisherMod(const char *name="PublisherMod", 
                    const char *title="Publisher module");
-      ~PublisherMod() {}
 
       const char              *GetBranchName()              const { return fBranchName;     }
       const char              *GetInputName()               const { return GetBranchName(); }

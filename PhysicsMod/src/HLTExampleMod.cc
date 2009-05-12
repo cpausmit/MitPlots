@@ -1,4 +1,4 @@
-// $Id: HLTExampleMod.cc,v 1.1 2008/11/25 14:30:54 loizides Exp $
+// $Id: HLTExampleMod.cc,v 1.2 2009/05/11 08:00:35 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #include <TH1D.h>
@@ -26,6 +26,8 @@ void HLTExampleMod::Process()
   if (!objs) // this can only happen if HLTMod::SetAbortIfNotAccepted(kFALSE) was called
     return;
 
+  IncNEventsProcessed();
+
   Int_t ents=objs->GetEntries();
   for(Int_t i=0;i<ents;++i) {
      const TriggerObject *to = objs->At(i);
@@ -46,4 +48,12 @@ void HLTExampleMod::SlaveBegin()
   AddOutput(fPtHist);
   fEtaHist = new TH1D("hEtaHist",";#eta;#",160,-8.,8.);
   AddOutput(fEtaHist);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HLTExampleMod::SlaveTerminate()
+{
+  // Save number of accepted events.
+
+  SaveNEventsProcessed();
 }

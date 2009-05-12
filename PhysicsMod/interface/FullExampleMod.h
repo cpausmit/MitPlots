@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.2 2008/12/04 13:52:27 loizides Exp $
+// $Id: FullExampleMod.h,v 1.3 2008/12/10 17:25:16 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -27,7 +27,6 @@ namespace mithep
     public:
       FullExampleMod(const char *name="FullExampleMod", 
                      const char *title="Example analysis module with all branches");
-      ~FullExampleMod() {}
 
     protected:
       void                     Begin();

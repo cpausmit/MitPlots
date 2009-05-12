@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTExampleMod.h,v 1.1 2008/11/25 14:30:53 loizides Exp $
+// $Id: HLTExampleMod.h,v 1.2 2008/12/10 17:25:16 loizides Exp $
 //
 // HLTExampleAnaMod
 //
@@ -25,17 +25,17 @@ namespace mithep
     public:
       HLTExampleMod(const char *name="HLTExampleMod", 
                     const char *title="HLT example module");
-      ~HLTExampleMod() {}
 
       void         SetTrigObjsName(const char *n) { fObjsName=n; }
 
     protected:
+      void         Process();
+      void         SlaveBegin();
+      void         SlaveTerminate();
+
       TString      fObjsName;   //name of trigger objects
       TH1D        *fPtHist;     //!pt histogram
       TH1D        *fEtaHist;    //!eta histogram
-
-      void         Process();
-      void         SlaveBegin();
 
       ClassDef(HLTExampleMod, 1) // HLT example analysis module
   };

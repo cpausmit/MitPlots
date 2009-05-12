@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.4 2008/12/10 17:25:17 loizides Exp $
+// $Id: SimpleExampleMod.h,v 1.5 2009/03/17 17:36:24 loizides Exp $
 //
 // SimpleExampleMod
 //
@@ -31,7 +31,6 @@ namespace mithep
     public:
       SimpleExampleMod(const char *name="SimpleExampleMod", 
                        const char *title="Simple example analysis module");
-      ~SimpleExampleMod() {}
 
       const char              *GetPartName()              const { return fPartName; }
       void                     SetPartName(const char *n)       { fPartName=n; }
