@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.6 2009/03/08 12:11:49 loizides Exp $
+// $Id: HLTMod.cc,v 1.7 2009/03/24 16:11:16 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -15,8 +15,9 @@ ClassImp(mithep::HLTMod)
 HLTMod::HLTMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fAbort(kTRUE),
+  fPrintTable(kFALSE),
   fBitsName(Names::gkHltBitBrn),
-  fMyObjsNamePub(Form("%sObjsadafafa", name)),
+  fMyObjsNamePub(Form("%sTrigObjs", name)),
   fBits(0),
   fMyTrgObjs(0),
   fTriggers(0),

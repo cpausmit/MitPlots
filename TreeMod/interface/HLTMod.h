@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.6 2009/03/08 12:11:49 loizides Exp $
+// $Id: HLTMod.h,v 1.7 2009/05/11 08:00:57 loizides Exp $
 //
 // HLTMod
 //
@@ -59,7 +59,7 @@ namespace mithep
       void                        SlaveBegin();
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
-      Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun.
+      Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
       std::vector<std::string>    fTrigNames;     //trigger names requested for test mask
