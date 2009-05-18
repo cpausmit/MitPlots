@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.10 2009/03/03 17:04:09 loizides Exp $
+// $Id: CaloTower.h,v 1.11 2009/03/08 12:09:58 loizides Exp $
 //
 // CaloTower
 //
@@ -34,6 +34,7 @@ namespace mithep
       Double_t             HadEt()       const { return fHadEnergy*TMath::Sin(Theta());          }
       const FourVectorM   &Mom()         const;
       Double_t             Phi()         const { return fPosition.Phi();                         }
+      Double_t             Pt()          const { return Et();                                    }
       EObjType             ObjType()     const { return kCaloTower;                              }
       Double_t             OuterEnergy() const { return fOuterEnergy;                            }
       Double_t             OuterEt()     const { return fOuterEnergy*TMath::Sin(Theta());        }
