@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.7 2009/03/18 15:44:32 loizides Exp $
+// $Id: TriggerObject.h,v 1.8 2009/03/24 16:10:15 loizides Exp $
 //
 // TriggerObject
 //
@@ -30,7 +30,7 @@ namespace mithep
       TriggerObjectBase(Int_t id, Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
         fId(id), fMom(pt,eta,phi,mass) {}
 
-      Int_t                 Id()      const { return fId;  }
+      Int_t                 Id()      const { return fId;                }
       EObjType              ObjType() const { return kTriggerObjectBase; }      
 
     protected:
@@ -49,12 +49,12 @@ namespace mithep
       TriggerObjectRel(UChar_t id, UChar_t type, Short_t obj, Short_t mod, Short_t fil) : 
         fTrgId(id), fType(type), fObjInd(obj), fModInd(mod), fFilterInd(fil) {}
 
-      UShort_t              FilterInd() const { return fFilterInd; }
-      UShort_t              ModInd()    const { return fModInd; }
-      UShort_t              ObjInd()    const { return fObjInd; }
+      UShort_t              FilterInd() const { return fFilterInd;        }
+      UShort_t              ModInd()    const { return fModInd;           }
+      UShort_t              ObjInd()    const { return fObjInd;           }
       EObjType              ObjType()   const { return kTriggerObjectRef; }      
-      UChar_t               TrgId()     const { return fTrgId; }
-      UChar_t               Type()      const { return fType; }
+      UChar_t               TrgId()     const { return fTrgId;            }
+      UChar_t               Type()      const { return fType;             }
 
     protected:
       UChar_t               fTrgId;       //trigger id
@@ -101,17 +101,17 @@ namespace mithep
         TriggerObjectBase(id,pt,eta,phi,mass), fTrgId(tid), 
         fType(static_cast<ETriggerObject>(type)) {}
 
-      ULong_t               Hash()                  const { return fTrgId; }
-      const char           *FilterName()            const { return fFilName; }
-      const char           *ModuleName()            const { return fModName; }
+      ULong_t               Hash()                  const { return fTrgId;         }
+      const char           *FilterName()            const { return fFilName;       }
+      const char           *ModuleName()            const { return fModName;       }
       EObjType              ObjType()               const { return kTriggerObject; }      
       void                  Print(Option_t *opt="") const;
-      const char           *TrigName()              const { return fTrigName; }
-      UShort_t              TrgId()                 const { return fTrgId; }
-      ETriggerObject        Type()                  const { return fType; }
+      const char           *TrigName()              const { return fTrigName;      }
+      UShort_t              TrgId()                 const { return fTrgId;         }
+      ETriggerObject        Type()                  const { return fType;          }
       void                  SetTrigName(const char *n)    { fTrigName = n; }
-      void                  SetModuleName(const char *n)  { fModName = n; }
-      void                  SetFilterName(const char *n)  { fFilName = n; }
+      void                  SetModuleName(const char *n)  { fModName  = n; }
+      void                  SetFilterName(const char *n)  { fFilName  = n; }
 
     protected:
       UChar_t               fTrgId;       //trigger id
