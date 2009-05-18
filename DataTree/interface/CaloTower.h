@@ -1,9 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.11 2009/03/08 12:09:58 loizides Exp $
+// $Id: CaloTower.h,v 1.12 2009/05/18 06:29:57 loizides Exp $
 //
 // CaloTower
 //
-// This class holds calo tower information.
+// This class holds calo tower information. Note that the energy of the tower does not 
+// necessarily have to be greater 0, and as such E(), Et() (or Pt()) can return negative
+// values.
 //
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ namespace mithep
       Double_t             HadEt()       const { return fHadEnergy*TMath::Sin(Theta());          }
       const FourVectorM   &Mom()         const;
       Double_t             Phi()         const { return fPosition.Phi();                         }
-      Double_t             Pt()          const { return Et();                                    }
+      Double_t             Pt()          const { return Et(); /*careful can become negative*/    }
       EObjType             ObjType()     const { return kCaloTower;                              }
       Double_t             OuterEnergy() const { return fOuterEnergy;                            }
       Double_t             OuterEt()     const { return fOuterEnergy*TMath::Sin(Theta());        }
