@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.30 2009/03/08 12:09:59 loizides Exp $
+// $Id: Particle.h,v 1.31 2009/04/06 09:50:49 loizides Exp $
 //
 // Particle
 //
@@ -36,6 +36,7 @@ namespace mithep
       EObjType                  ObjType()                 const { return kParticle;                }
       Double_t		        Phi()                     const { return Mom().Phi();              }
       Double_t                  PhiDeg()                  const { return Phi() * 180 /TMath::Pi(); }
+      void                      Print(Option_t *opt="")   const;
       Double_t		        Pt()                      const { return Mom().Pt();               }
       Double_t		        Px()                      const { return Mom().Px();               }
       Double_t		        Py()                      const { return Mom().Py();               }
@@ -44,7 +45,6 @@ namespace mithep
       Double_t		        Rapidity()                const { return Mom().Rapidity();         }
       Double_t                  Theta()                   const { return Mom().Theta();            }
       Double_t		        TMass()                   const;
-      void                      Print(Option_t *opt="")   const;
      
     protected:
       void                      ClearCharge()             const { fCacheQFlag.ClearCache();   }
