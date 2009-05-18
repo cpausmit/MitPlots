@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.7 2008/12/12 16:03:12 loizides Exp $
+// $Id: PlotKineMod.h,v 1.8 2009/05/12 18:41:40 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -32,6 +32,7 @@ namespace mithep
       Double_t                 GetPtMax()                const { return fPtMax;       }
       Bool_t                   GetLoadBranch()           const { return fLoadBr;      }
       void                     SetColName(const char *n)       { fColName=n;          }
+      void                     SetEntriesMax(Int_t e)          { fEntriesMax = e;     }
       void                     SetEtaMin(Double_t e)           { fEtaMin = e;         }
       void                     SetEtaMax(Double_t e)           { fEtaMax = e;         }
       void                     SetInputName(const char *n)     { SetColName(n);       }
@@ -45,14 +46,16 @@ namespace mithep
       void                     SlaveBegin();
 
       TString                  fColName;    //name of collection
+      Bool_t                   fLoadBr;     //=true then load branch (def=1)
       Double_t                 fPtMin;      //minimum pt
       Double_t                 fPtMax;      //maximum pt
       Double_t                 fEtaMin;     //minimum eta
       Double_t                 fEtaMax;     //maximum eta 
-      Bool_t                   fLoadBr;     //=true then load branch (def=1)
+      Int_t                    fEntriesMax;  //maximum number of entries
       const Collection<T>     *fCol;        //!pointer to collection 
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
+      TH1D                    *fEntHist;    //!entries histogram
 
       ClassDefT(PlotKineMod, 1) // Plot kinematics module
   };
@@ -63,18 +66,20 @@ template<class T>
 mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fColName("SetMe"),
+  fLoadBr(kTRUE),
   fPtMin(1),
   fPtMax(5000),
   fEtaMin(-10),
   fEtaMax(10),
-  fLoadBr(kTRUE),
+  fEntriesMax(250),
   fCol(0),
   fPtHist(0),
-  fEtaHist(0)
+  fEtaHist(0),
+  fEntHist(0)
 {
   // Constructor.
 
-  SetFillHist(1);
+  SetFillHist(kTRUE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,6 +111,7 @@ void mithep::PlotKineMod<T>::Process()
     return;
     
   UInt_t ents=fCol->GetEntries();
+  fEntHist->Fill(ents);
   for(UInt_t i=0;i<ents;++i) {
      const T *p = fCol->At(i);
      Double_t pt = p->Pt();
@@ -137,6 +143,7 @@ void mithep::PlotKineMod<T>::SlaveBegin()
     AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",ptbins,fPtMin,fPtMax);
     Int_t etabins = (Int_t)((fEtaMax-fEtaMin)/0.1);
     AddTH1(fEtaHist,"hEtaHist",";#eta;#",etabins,fEtaMin,fEtaMax);
+    AddTH1(fEntHist,"hEntriesHist",";#entries;#",fEntriesMax,-0.5,fEntriesMax-0.5);
   }
 }
 #endif

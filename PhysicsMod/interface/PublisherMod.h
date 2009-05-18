@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.6 2009/03/11 18:13:10 bendavid Exp $
+// $Id: PublisherMod.h,v 1.7 2009/05/12 18:41:40 loizides Exp $
 //
 // PublisherMod
 //
@@ -93,7 +93,7 @@ void mithep::PublisherMod<TIn, TOut>::SlaveBegin()
   ReqBranch(GetBranchName(), fColIn);
 
   if (fPublicName.IsNull())
-    fPublicName = fBranchName;
+    fPublicName = GetBranchName();
 
   if (!GetPubPerEvent()) {
     fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());

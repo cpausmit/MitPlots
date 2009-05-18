@@ -1,13 +1,14 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.10 2009/03/11 18:13:11 bendavid Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.11 2009/03/23 14:20:05 loizides Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
 #include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/PhysicsMod/interface/FilterMod.h"
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
-#include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/PhysicsMod/interface/PlotKineMod.h"
 #include "MitAna/PhysicsMod/interface/PublisherMod.h"
+#include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #endif
 
 #ifdef __CINT__
@@ -21,6 +22,23 @@
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::HLTExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
+
+#pragma link C++ class mithep::FilterMod<mithep::CaloJet,mithep::Jet>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloJet>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloMet,mithep::Met>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloMet>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloTower>+;
+#pragma link C++ class mithep::FilterMod<mithep::CompositeParticle>+;
+#pragma link C++ class mithep::FilterMod<mithep::Conversion>+;
+#pragma link C++ class mithep::FilterMod<mithep::Electron>+;
+#pragma link C++ class mithep::FilterMod<mithep::GenJet>+;
+#pragma link C++ class mithep::FilterMod<mithep::Jet>+;
+#pragma link C++ class mithep::FilterMod<mithep::MCParticle>+;
+#pragma link C++ class mithep::FilterMod<mithep::Met>+;
+#pragma link C++ class mithep::FilterMod<mithep::Muon>+;
+#pragma link C++ class mithep::FilterMod<mithep::Photon>+;
+#pragma link C++ class mithep::FilterMod<mithep::Track>+;
+#pragma link C++ class mithep::FilterMod<mithep::TriggerObject>+;
 
 #pragma link C++ class mithep::PlotKineMod<mithep::CaloJet>+;
 #pragma link C++ class mithep::PlotKineMod<mithep::CaloMet>+;
