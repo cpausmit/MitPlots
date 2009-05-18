@@ -1,4 +1,4 @@
-// $Id: Muon.cc,v 1.2 2008/12/01 17:32:34 loizides Exp $
+// $Id: Muon.cc,v 1.3 2009/03/03 18:02:17 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Muon.h"
 
@@ -24,4 +24,20 @@ Muon::Muon() :
   memset(fTrackDist,0,sizeof(Double32_t)*8); 
   memset(fTrackDistErr,0,sizeof(Double32_t)*8); 
   memset(fNSegments,0,sizeof(Int_t)*8); 
+}
+
+//--------------------------------------------------------------------------------------------------
+void Muon::Print(Option_t */*opt*/) const
+{
+  // Print particle kinematics.
+
+  TString type("GlM");
+  if (IsTrackerMuon()) 
+    type = "TrM";
+  else if (IsStandaloneMuon()) 
+    type = "SaM";
+  else if (IsCaloMuon()) 
+    type = "CaM";
+
+  printf("%s: pt=%.3f eta=%.3f phi=%.3f\n", type.Data(), Pt(), Eta(), Phi());
 }

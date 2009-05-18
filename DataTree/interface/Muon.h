@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.27 2009/03/03 18:02:16 bendavid Exp $
+// $Id: Muon.h,v 1.28 2009/03/18 15:44:32 loizides Exp $
 //
 // Muon
 //
@@ -121,6 +121,7 @@ namespace mithep {
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)                                 const;
       EObjType       ObjType()                       const { return kMuon;                     }
+      void           Print(Option_t *opt="")         const;
       Bool_t         PromptTight(EClassType type)                              const;
       Bool_t         StationBit(Int_t bit)           const { return fStationMask.TestBit(bit); }
       Bool_t         TMLastStation(Double_t iDYMin = 3, Double_t iPYMin = 3,
