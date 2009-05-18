@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.15 2009/03/23 13:07:17 loizides Exp $
+// $Id: ObjArray.h,v 1.16 2009/03/23 22:15:09 loizides Exp $
 //
 // ObjArray
 //
@@ -32,9 +32,9 @@ namespace mithep
       TObjArray           &Arr()                                       { return fArray; }
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                        const;
-      void                 Clear(Option_t */*opt*/="")                 { fArray.~TObjArray(); }
-      UInt_t               Entries()                             const { return fNumEntries; }
-      UInt_t               GetEntries()                          const { return fNumEntries; }
+      void                 Clear(Option_t */*opt*/="")                 { fArray.~TObjArray();     }
+      UInt_t               Entries()                             const { return fNumEntries;      }
+      UInt_t               GetEntries()                          const { return fNumEntries;      }
       const char*          GetName()                             const { return fArray.GetName(); }
       UInt_t               GetSize()                             const { return fArray.GetSize(); }
       Bool_t               HasObject(const ArrayElement *obj)    const;
@@ -45,14 +45,14 @@ namespace mithep
       const TObject       *ObjAt(UInt_t idx)                     const;
       void                 Remove(UInt_t idx);
       void                 Remove(const char *name);
-      void                 Remove(ArrayElement *ae);
+      void                 Remove(const ArrayElement *ae);
       Bool_t               IsOwner()                             const { return fArray.IsOwner(); }
       TIterator           *Iterator(Bool_t dir = kIterForward)   const;
       void                 Reset();
-      void                 SetName(const char *name)                   { fArray.SetName(name); }
+      void                 SetName(const char *name)                   { fArray.SetName(name);    }
       void                 SetOwner(Bool_t o);
-      void                 Sort()                                      { fArray.Sort(); }
-      void                 Trim()                                      { fArray.Compress();}
+      void                 Sort()                                      { fArray.Sort();           }
+    void                   Trim();
       ArrayElement        *UncheckedAt(UInt_t idx);                 
       const ArrayElement  *UncheckedAt(UInt_t idx)               const;
       ArrayElement        *operator[](UInt_t idx);
@@ -67,7 +67,7 @@ namespace mithep
     private:
       ObjArray(const ObjArray &a);
 
-    ClassDef(ObjArray, 1) // Wrapper around TClonesArray class
+    ClassDef(ObjArray, 1) // Wrapper around TObjArray class
   };
 }
 
@@ -278,14 +278,14 @@ inline void mithep::ObjArray<ArrayElement>::Remove(const char *name)
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::ObjArray<ArrayElement>::Remove(ArrayElement *ae)
+inline void mithep::ObjArray<ArrayElement>::Remove(const ArrayElement *ae)
 {
   // Remove object from array. You probably want to call Trim() as well.
 
   if (!ae)
     return;
 
-  fArray.Remove(ae);
+  fArray.Remove(const_cast<ArrayElement*>(ae));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,8 +336,24 @@ void mithep::ObjArray<ArrayElement>::Print(Option_t *opt) const
     const UInt_t N = GetEntries();
     for (UInt_t i=0; i<N; ++i) {
       printf("%4d: ",i);
-      At(i)->Print(opt);
+      if (At(i))
+        At(i)->Print(opt);
+      else 
+        printf("Removed\n");
     }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+inline void mithep::ObjArray<ArrayElement>::Trim()
+{
+  // Trim array.
+
+  if (static_cast<Int_t>(fNumEntries) != fArray.GetEntries()) {
+    fArray.Compress();
+    fNumEntries = fArray.GetEntriesFast();
+    BaseCollection::Clear();
   }
 }
 
