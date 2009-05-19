@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.5 2008/12/03 17:38:17 loizides Exp $
+// $Id: BaseMod.cc,v 1.6 2008/12/09 10:16:24 loizides Exp $
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -12,11 +12,14 @@ ClassImp(mithep::BaseMod)
 BaseMod::BaseMod(const char *name, const char *title) : 
   TAModule(name,title),
   fFillHist(kFALSE),
+  fEvtObjBrNames(0),
   fHltFwkMod(0),
   fHltFwkModName("HLTFwkMod"),
   fNEventsProc(0)
 {
   // Constructor.
+
+  fEvtObjBrNames.SetOwner(kTRUE);
 }
 
 //--------------------------------------------------------------------------------------------------

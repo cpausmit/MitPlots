@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.17 2009/04/07 15:56:37 phedex Exp $
+// $Id: BaseMod.h,v 1.18 2009/04/29 08:43:33 loizides Exp $
 //
 // BaseMod
 //
@@ -13,6 +13,7 @@
 #ifndef MITANA_TREEMOD_BASEMOD_H
 #define MITANA_TREEMOD_BASEMOD_H
 
+#include <TObjString.h>
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Collections.h"  
@@ -28,7 +29,18 @@ namespace mithep
     public:
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
 
+    private:
+      class ObjType : public TObjString {
+        public:
+          ObjType(const char *name="", Bool_t br=kTRUE) : TObjString(name), fBr(br) {}
+          ~ObjType() {}
+          Bool_t  IsBranch() const { return fBr; }
+        protected:
+          Bool_t  fBr; //=true then object is from branch
+      };
+
     protected:
+      void                        AddEventObject(const char *name, Bool_t fromBr=kTRUE);
       template <class T> void     AddTH1(T *&ptr, const char *name, const char *title, 
                                          Int_t nbins, Double_t xmin, Double_t xmax);
       template <class T> void     AddTH2(T *&ptr, const char *name, const char *title, 
@@ -38,34 +50,54 @@ namespace mithep
                                          Int_t nbinsx, Double_t xmin, Double_t xmax,
                                          Int_t nbinsy, Double_t ymin, Double_t ymax,
                                          Int_t nbinsz, Double_t zmin, Double_t zmax);
-      void                        IncNEventsProcessed()       { ++fNEventsProc; }
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
-      Bool_t                      GetFillHist()         const { return fFillHist; }
-      const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod; }
+      Bool_t                      GetFillHist()         const { return fFillHist;                  }
+      const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod;                 }
       const TriggerObjectCol     *GetHLTObjects(const char *name) const;
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
-      Int_t                       GetNEventsProcessed()           const { return fNEventsProc; }
+      Int_t                       GetNEventsProcessed()           const { return fNEventsProc;     }
       template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
       template <class T> T       *GetObjThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
       template <class T> T       *GetPublicObj(const char *name, Bool_t warn=1);
-      const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo(); }
+      const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo();     }
       const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo()          const;
-      template <class T> void     ReqBranch(const char *bname, const T *&address);
-      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo(); } 
+      void                        IncNEventsProcessed()       { ++fNEventsProc;                    }
+      template <class T> Bool_t   LoadEventObject(const char *name, const T *&addr, Bool_t warn=1);
+      template <class T> void     ReqBranch(const char *bname, const T *&addr);
+      template <class T> void     ReqEventObject(const char *name, const T *&addr);
+      template <class T> void     ReqEventObject(const char *name, const T *&addr, Bool_t fromBr);
       void                        SaveNEventsProcessed(const char *name="hDEvents");
-      void                        SetFillHist(Bool_t b)       { fFillHist = b; }
+      void                        SetFillHist(Bool_t b)       { fFillHist = b;                     }
+      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   } 
 
     private:
       Bool_t                      fFillHist;            //=true then fill histos (def=0)
+      THashTable                  fEvtObjBrNames;       //names of per-event objects
       mutable const HLTFwkMod    *fHltFwkMod;           //!pointer to HLTFwdMod
       const TString               fHltFwkModName;       //!name of HLTFwkMod
       Int_t                       fNEventsProc;         //!number of events
 
     ClassDef(BaseMod, 1) // Base TAM module
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::BaseMod::AddEventObject(const char *name, Bool_t fromBr)
+{
+  // Add event object to list of objects that should be retrieved from a branch rather
+  // than from a pointer given by the event.
+
+  if (fEvtObjBrNames.FindObject(name)) {
+    SendError(kWarning, "AddEventObject", 
+              "Can not add event object with name %s and type %d",
+              name, fromBr);
+    return;
+  }
+
+  fEvtObjBrNames.Add(new ObjType(name,fromBr));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,7 +199,6 @@ inline T *mithep::BaseMod::GetPublicObj(const char *name, Bool_t warn)
 {
   // Get public object.
 
-
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
   if (!ret && warn) {
     SendError(kWarning, "GetPublicObject", 
@@ -187,11 +218,68 @@ inline const mithep::Selector *mithep::BaseMod::GetSel() const
 
 //--------------------------------------------------------------------------------------------------
 template <class T>
-inline void mithep::BaseMod::ReqBranch(const char *bname, const T *&address)
+inline Bool_t mithep::BaseMod::LoadEventObject(const char *name, const T *&addr, Bool_t warn)
 {
-  // Requests that the branch with the specified name be made available
+  // Obtain the object with the specified name that has been requested during processing. 
+  // In case name is found in fEvtObjBrNames it will be read from a branch to the 
+  // address specified in ReqEventObject.
+
+  TString type("event");
+  ObjType *o = static_cast<ObjType*>(fEvtObjBrNames.FindObject(name));
+  if (o && o->IsBranch()) {
+    type = "branch";
+    LoadBranch(name);
+  } else {
+    addr = GetObjThisEvt<T>(name);
+  }
+
+  Bool_t ret = (addr!=0); 
+  if (!ret && warn) {
+    SendError(kWarning, "LoadEventObject", 
+              "Could not obtain object with name %s and type %s from %s!",
+              name, T::Class_Name(), type.Data());
+  }
+
+  return ret;
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T>
+inline void mithep::BaseMod::ReqBranch(const char *bname, const T *&addr)
+{
+  // Requests that the branch with the specified name is made available
   // during processing and that it be read in to the address specified.
 
-  TAModule::ReqBranch(bname, const_cast<T*&>(address));
+  TAModule::ReqBranch(bname, const_cast<T*&>(addr));
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T>
+inline void mithep::BaseMod::ReqEventObject(const char *name, const T *&addr)
+{
+  // Requests that the object with the specified name is made available
+  // during processing. In case name is found in fEvtObjBrNames it 
+  // will be read from a branch to the address specified.
+
+  ObjType *o = static_cast<ObjType*>(fEvtObjBrNames.FindObject(name));
+  if (!o || !o->IsBranch())
+    return;
+
+  ReqBranch(name, addr);
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T>
+inline void mithep::BaseMod::ReqEventObject(const char *name, const T *&addr, Bool_t fromBr)
+{
+  // Requests that the object with the specified name is made available
+  // during processing. In case name is found in fEvtObjBrNames it 
+  // will be read from a branch to the address specified.
+
+  ObjType *o = static_cast<ObjType*>(fEvtObjBrNames.FindObject(name));
+  if (!o && fromBr)
+    AddEventObject(name, fromBr);
+
+  ReqEventObject(name, addr);
 }
 #endif
