@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilterMod.h,v 1.7 2009/05/12 18:41:40 loizides Exp $
+// $Id: FilterMod.h,v 1.1 2009/05/18 06:30:38 loizides Exp $
 //
 // FilterMod
 //
@@ -31,7 +31,6 @@ namespace mithep
       Double_t                 GetEtaMin()               const { return fEtaMin;         }
       Double_t                 GetEtaMax()               const { return fEtaMax;         }
       const char              *GetInputName()            const { return GetColName();    }
-      Bool_t                   GetLoadBranch()           const { return fLoadBr;         }
       const char              *GetOutputName()           const { return GetPublicName(); }
       const char              *GetPublicName()           const { return fPublicName;     }
       Bool_t                   GetPubPerEvent()          const { return fPubPerEvent;    }
@@ -43,14 +42,12 @@ namespace mithep
       void                     SetEtaMax(Double_t e)           { fEtaMax = e;            }
       void                     SetEtaMin(Double_t e)           { fEtaMin = e;            }
       void                     SetInputName(const char *n)     { SetColName(n);          }
-      void                     SetLoadBranch(Bool_t b)         { fLoadBr = b;            }
       void                     SetOutputName(const char *n)    { SetPublicName(n);       }
       void                     SetPtMax(Double_t pt)           { fPtMax = pt;            }
       void                     SetPtMin(Double_t pt)           { fPtMin = pt;            }
       void                     SetPublicName(const char *n)    { fPublicName=n;          }
 
     protected:
-      Bool_t                   Load();
       void                     Process();
       void                     SlaveBegin();
       void                     SlaveTerminate();
@@ -58,7 +55,6 @@ namespace mithep
       TString                  fColName;     //name of collection
       TString                  fPublicName;  //name of collection
       Bool_t                   fPubPerEvent; //=true then publish per event (def=1)
-      Bool_t                   fLoadBr;      //=true then load branch (def=1)
       Double_t                 fPtMin;       //minimum pt
       Double_t                 fPtMax;       //maximum pt
       Double_t                 fEtaMin;      //minimum eta
@@ -82,7 +78,6 @@ mithep::FilterMod<TIn, TOut>::FilterMod(const char *name, const char *title) :
   fColName("SetMe"),
   fPublicName(""),
   fPubPerEvent(kTRUE),
-  fLoadBr(kTRUE),
   fPtMin(1),
   fPtMax(1000),
   fEtaMin(-10),
@@ -102,25 +97,11 @@ mithep::FilterMod<TIn, TOut>::FilterMod(const char *name, const char *title) :
 
 //--------------------------------------------------------------------------------------------------
 template<class TIn, class TOut>
-Bool_t mithep::FilterMod<TIn,TOut>::Load()
-{
-  // Load data from branch or get pointer from event.
-
-  if (GetLoadBranch())
-    LoadBranch(GetColName());
-  else
-    fColIn = GetObjThisEvt<Collection<TIn> >(GetColName());
-
-  return (fColIn!=0);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class TIn, class TOut>
 void mithep::FilterMod<TIn, TOut>::Process()
 {
   // Load the branch, add pointers to the object array. Publish object array if needed.
 
-  if (!Load()) {
+  if (!LoadEventObject(GetColName(), fColIn)) {
     SendError(kAbortModule, "Process", "Could not load data!");
     return;
   }
@@ -166,8 +147,7 @@ void mithep::FilterMod<TIn, TOut>::SlaveBegin()
 {
   // Request the branch to be published. Depending on the user's decision publish the array.
 
-  if (GetLoadBranch()) 
-    ReqBranch(GetColName(), fColIn);
+  ReqEventObject(GetColName(), fColIn, kTRUE);
 
   if (fPublicName.IsNull())
     fPublicName = GetColName();

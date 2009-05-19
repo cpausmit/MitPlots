@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.8 2009/05/12 18:41:40 loizides Exp $
+// $Id: PlotKineMod.h,v 1.9 2009/05/18 06:30:38 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -30,13 +30,11 @@ namespace mithep
       const char              *GetInputName()            const { return GetColName(); }
       Double_t                 GetPtMin()                const { return fPtMin;       }
       Double_t                 GetPtMax()                const { return fPtMax;       }
-      Bool_t                   GetLoadBranch()           const { return fLoadBr;      }
       void                     SetColName(const char *n)       { fColName=n;          }
       void                     SetEntriesMax(Int_t e)          { fEntriesMax = e;     }
       void                     SetEtaMin(Double_t e)           { fEtaMin = e;         }
       void                     SetEtaMax(Double_t e)           { fEtaMax = e;         }
       void                     SetInputName(const char *n)     { SetColName(n);       }
-      void                     SetLoadBranch(Bool_t b)         { fLoadBr = b;         }
       void                     SetPtMin(Double_t pt)           { fPtMin = pt;         }
       void                     SetPtMax(Double_t pt)           { fPtMax = pt;         }
 
@@ -46,7 +44,6 @@ namespace mithep
       void                     SlaveBegin();
 
       TString                  fColName;    //name of collection
-      Bool_t                   fLoadBr;     //=true then load branch (def=1)
       Double_t                 fPtMin;      //minimum pt
       Double_t                 fPtMax;      //maximum pt
       Double_t                 fEtaMin;     //minimum eta
@@ -66,7 +63,6 @@ template<class T>
 mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fColName("SetMe"),
-  fLoadBr(kTRUE),
   fPtMin(1),
   fPtMax(5000),
   fEtaMin(-10),
@@ -84,25 +80,11 @@ mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) :
 
 //--------------------------------------------------------------------------------------------------
 template<class T>
-Bool_t mithep::PlotKineMod<T>::Load()
-{
-  // Load data from branch or get pointer from event.
-
-  if (GetLoadBranch())
-    LoadBranch(GetColName());
-  else
-    fCol = GetObjThisEvt<Collection<T> >(GetColName());
-
-  return (fCol!=0);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class T>
 void mithep::PlotKineMod<T>::Process()
 {
   // Process entries of the tree: Just load the branch and fill the histograms.
 
-  if (!Load()) {
+  if (!LoadEventObject(GetColName(), fCol)) {
     SendError(kAbortModule, "Process", "Could not load data!");
     return;
   }
@@ -135,8 +117,7 @@ void mithep::PlotKineMod<T>::SlaveBegin()
 {
   // Request a branch and create the histograms.
   
-  if (GetLoadBranch()) 
-    ReqBranch(GetColName(), fCol);
+  ReqEventObject(GetColName(), fCol);
 
   if (GetFillHist()) {
     Int_t ptbins = (Int_t)((fPtMax-fPtMin)/2.5);
