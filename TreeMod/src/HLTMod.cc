@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.8 2009/05/12 14:21:13 loizides Exp $
+// $Id: HLTMod.cc,v 1.9 2009/05/12 18:41:43 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -185,5 +185,5 @@ void HLTMod::SlaveTerminate()
 {
   // Save number of accepted events.
 
-  SaveNEventsProcessed();
+  SaveNEventsProcessed("hDHLTEvents");
 }
