@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.20 2009/04/07 15:56:02 phedex Exp $
+// $Id: MCParticle.h,v 1.21 2009/04/08 08:52:14 loizides Exp $
 //
 // MCParticle
 //
@@ -115,7 +115,7 @@ inline const mithep::MCParticle *mithep::MCParticle::DistinctMother() const
   if (!mother) 
     return 0;
   
-  while (mother->PdgId()==fPdgId)
+  while (mother && mother->PdgId()==fPdgId)
     mother = mother->Mother();
     
   return mother;
