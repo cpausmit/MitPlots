@@ -1,4 +1,4 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.66 2009/04/09 10:26:18 ceballos Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.67 2009/04/09 11:24:46 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
@@ -43,6 +43,7 @@
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
+#include "MitAna/DataTree/interface/CompoundParticle.h"
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/StableData.h"
 #include "MitAna/DataTree/interface/DecayData.h"
@@ -259,6 +260,8 @@
 #pragma link C++ typedef mithep::CompositeParticleCol;
 #pragma link C++ typedef mithep::CompositeParticleArr;
 #pragma link C++ typedef mithep::CompositeParticleOArr;
+
+#pragma link C++ class mithep::CompoundParticle+;
 
 #pragma link C++ class mithep::DaughterData+;
 #pragma link C++ class mithep::Collection<mithep::DaughterData>+;

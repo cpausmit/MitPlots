@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.7 2009/03/20 09:37:17 loizides Exp $
+// $Id: ObjTypes.h,v 1.8 2009/04/09 10:26:18 ceballos Exp $
 //
 // ObjTypes
 //
@@ -25,6 +25,7 @@ namespace mithep
     kCaloTower,
     kChargedParticle,
     kCompositeParticle,
+    kCompoundParticle,
     kConversion,
     kDataBase,
     kDataObject,
@@ -34,6 +35,7 @@ namespace mithep
     kElectron,
     kEventHeader,
     kGenJet,
+    kGenericParticle,
     kJet,
     kLAHeader,
     kMCEventInfo,
@@ -45,7 +47,6 @@ namespace mithep
     kPFMet,
     kPFTau,
     kParticle,
-    kGenericParticle,
     kPhoton,
     kRunInfo,
     kStableData,
