@@ -1,4 +1,4 @@
-// $Id: CompositeParticle.cc,v 1.7 2009/02/18 15:38:55 loizides Exp $
+// $Id: CompositeParticle.cc,v 1.8 2009/03/20 18:23:27 loizides Exp $
 
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
@@ -11,7 +11,8 @@ Bool_t CompositeParticle::HasDaughter(const Particle *p) const
 {
   // Return true if given particle is among daughters.
 
-  if(!p) return kFALSE;
+  if(!p) 
+    return kFALSE;
 
   return fDaughters.HasObject(p);
 }
@@ -21,7 +22,8 @@ Bool_t CompositeParticle::HasCommonDaughter(const CompositeParticle *p) const
 {
   // Return true if a common daughter exists.
 
-  if(!p) return kFALSE;
+  if(!p) 
+    return kFALSE;
 
   for (UInt_t i=0; i<p->NDaughters(); ++i)
     if (HasDaughter(p->Daughter(i)))
@@ -35,7 +37,8 @@ Bool_t CompositeParticle::HasSameDaughters(const CompositeParticle *p) const
 {
   // Return true if daughters are the same.
 
-  if(!p) return kFALSE;
+  if(!p) 
+    return kFALSE;
 
   if (NDaughters()!= p->NDaughters())
     return kFALSE;

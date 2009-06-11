@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.19 2009/02/26 17:06:24 bendavid Exp $
+// $Id: CompositeParticle.h,v 1.20 2009/03/03 17:04:09 loizides Exp $
 //
-// Composite Particle
+// CompositeParticle
 //
 // A composite particle class that holds other (daughter) particles.
 //
