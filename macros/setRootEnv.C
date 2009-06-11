@@ -1,4 +1,4 @@
-// $Id: setRootEnv.C,v 1.4 2008/07/03 10:27:52 paus Exp $
+// $Id: setRootEnv.C,v 1.5 2008/11/18 16:55:49 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
@@ -34,6 +34,7 @@ void setRootEnv()
   // customizing the MIT analysis framework things
   setIncludes();
   loadLibraries();
+  loadmylib("libMitCommonMathTools.so");
 
   // have a friendly welcome message
   if (gClassTable->GetID("mithep::Particle") >= 0) {
