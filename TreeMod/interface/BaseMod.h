@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.18 2009/04/29 08:43:33 loizides Exp $
+// $Id: BaseMod.h,v 1.19 2009/05/19 09:57:09 loizides Exp $
 //
 // BaseMod
 //
@@ -50,6 +50,7 @@ namespace mithep
                                          Int_t nbinsx, Double_t xmin, Double_t xmax,
                                          Int_t nbinsy, Double_t ymin, Double_t ymax,
                                          Int_t nbinsz, Double_t zmin, Double_t zmax);
+      void                        AddToTrash(TObject *obj);
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
       Bool_t                      GetFillHist()         const { return fFillHist;                  }
       const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod;                 }
@@ -137,6 +138,15 @@ inline void mithep::BaseMod::AddTH3(T *&ptr, const char *name, const char *title
   ptr = new T(name, title, nbinsx, xmin, xmax, nbinsy, ymin, ymax, nbinsz, zmin, zmax);
   ptr->Sumw2();
   AddOutput(ptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::BaseMod::AddToTrash(TObject *obj)
+{
+  // Add object to trash. Trash will be emptied after an entry of the tree was processed.
+
+  Selector *sel = const_cast<Selector*>(GetSel()); 
+  sel->AddToTrash(obj);
 }
 
 //--------------------------------------------------------------------------------------------------

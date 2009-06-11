@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.10 2009/03/02 12:35:29 loizides Exp $
+// $Id: Selector.cc,v 1.11 2009/03/23 14:39:52 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -27,11 +27,13 @@ Selector::Selector() :
   fRunInfo(0),
   fLATree(0),
   fLAHeader(0),
-  fCurRunNum(UInt_t(-1))
+  fCurRunNum(UInt_t(-1)),
+  fTrash(0)
 {
   // Constructor.
 
   fOutputMods.SetOwner(kFALSE);
+  fTrash.SetOwner(kTRUE);
   gROOT->GetListOfSpecials()->Add(this);
 }
 
@@ -118,6 +120,16 @@ Bool_t Selector::Notify()
   fTree->GetTree()->SetCacheSize(fTree->GetCacheSize());
     
   return TAMSelector::Notify();
+}
+
+//--------------------------------------------------------------------------------------------------
+Bool_t Selector::Process(Long64_t entry)
+{
+  // Process an element of the tree.
+
+  Bool_t ret = TAMSelector::Process(entry);
+  fTrash.Delete();
+  return ret;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.10 2008/12/10 14:20:27 loizides Exp $
+// $Id: Selector.h,v 1.11 2009/03/12 18:25:10 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -27,16 +27,17 @@ namespace mithep {
       Selector();
       ~Selector();
 
-      const char          *GetAllEvtTreeName()      const { return fAllEvtTreeName; }
-      const char          *GetAllEvtHdrBrn()        const { return fAllEvtHdrBrn;   }
-      const THashTable    &GetBranchTable()         const { return fBranchTable; }
-      const char          *GetEvtHdrName()          const { return fEvtHdrName;     }
-      const EventHeader   *GetEventHeader()         const { return fEventHeader; }
-      const char          *GetLATreeName()          const { return fLATreeName;     }
-      const char          *GetLAHdrName()           const { return fLAHdrName;      }
-      const char          *GetRunTreeName()         const { return fRunTreeName;    }
-      const char          *GetRunInfoName()         const { return fRunInfoName;    }
-      const RunInfo       *GetRunInfo()             const { return fRunInfo;     }
+      void                 AddToTrash(TObject *obj)       { fTrash.AddLast(obj);           }
+      const char          *GetAllEvtTreeName()      const { return fAllEvtTreeName;        }
+      const char          *GetAllEvtHdrBrn()        const { return fAllEvtHdrBrn;          }
+      const THashTable    &GetBranchTable()         const { return fBranchTable;           }
+      const char          *GetEvtHdrName()          const { return fEvtHdrName;            }
+      const EventHeader   *GetEventHeader()         const { return fEventHeader;           }
+      const char          *GetLATreeName()          const { return fLATreeName;            }
+      const char          *GetLAHdrName()           const { return fLAHdrName;             }
+      const char          *GetRunTreeName()         const { return fRunTreeName;           }
+      const char          *GetRunInfoName()         const { return fRunInfoName;           }
+      const RunInfo       *GetRunInfo()             const { return fRunInfo;               }
       Bool_t               ValidRunInfo()           const;
       Bool_t               ValidRunNum()            const { return fCurRunNum!=UInt_t(-1); }
 
@@ -45,6 +46,7 @@ namespace mithep {
       Bool_t               ConsistentRunNum()       const;
       Bool_t               EndRun();
       Bool_t               Notify();
+      Bool_t               Process(Long64_t entry);
       void                 SlaveBegin(TTree* tree);
       void                 UpdateRunInfo();
       void                 UpdateRunInfoTree();
@@ -63,7 +65,9 @@ namespace mithep {
       TTree               *fLATree;         //!look-ahead tree in current file
       LAHeader            *fLAHeader;       //!event header for next event
       UInt_t               fCurRunNum;      //!current run number
-      TList                fOutputMods;     //!pointer to output modules
+      TList                fOutputMods;     //!pointer(s) to output modules
+      TObjArray            fTrash;          //!pointers to trashed objects
+
     private:
       void                 SearchOutputMods(const TAModule *mod);
 
