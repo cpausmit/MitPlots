@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.3 2008/12/10 17:25:16 loizides Exp $
+// $Id: FullExampleMod.h,v 1.4 2009/05/12 18:41:39 loizides Exp $
 //
 // FullExampleAnaMod
 //
@@ -16,7 +16,7 @@
 #define MITANA_PHYSICSMOD_FULLEXAMPLEMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/CollectionsFwd.h"
 
 class TH1D;
 

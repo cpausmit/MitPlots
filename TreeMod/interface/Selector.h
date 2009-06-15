@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.11 2009/03/12 18:25:10 loizides Exp $
+// $Id: Selector.h,v 1.12 2009/06/11 08:59:32 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -13,7 +13,6 @@
 
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TAM/interface/TAMSelector.h" 
-#include "MitAna/DataTree/interface/Collections.h" 
 #include "MitAna/DataTree/interface/EventHeader.h" 
 #include "MitAna/DataTree/interface/LAHeader.h" 
 #include "MitAna/DataTree/interface/RunInfo.h" 

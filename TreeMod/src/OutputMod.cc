@@ -1,9 +1,10 @@
-// $Id: OutputMod.cc,v 1.11 2009/03/23 22:15:15 loizides Exp $
+// $Id: OutputMod.cc,v 1.12 2009/03/24 16:12:26 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/BranchTable.h"
+#include "MitAna/DataTree/interface/EventHeaderCol.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
@@ -49,7 +50,8 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fFileNum(-1),
   fLastWrittenEvt(-1),
   fLastSeenEvt(-1),
-  fCounter(0)
+  fCounter(0),
+  fAddBrList(0)
 {
   // Constructor.
 }
@@ -629,7 +631,8 @@ void OutputMod::SlaveBegin()
   fSkimmedIn = GetPublicObj<EventHeaderCol>(Names::gkSkimmedHeaders);
 
   // deal here with published objects (not yet implemented)
-
+  fAddBrList = 0;
+ 
   // create TObject space for TAM
   fBranches = new TObject*[fNBranchesMax];       
 

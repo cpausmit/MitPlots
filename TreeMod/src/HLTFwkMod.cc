@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.7 2009/03/23 14:56:07 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.8 2009/03/23 22:15:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -7,6 +7,7 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
+#include "MitAna/DataTree/interface/TriggerObjectCol.h"
 
 using namespace mithep;
 

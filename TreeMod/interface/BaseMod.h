@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.19 2009/05/19 09:57:09 loizides Exp $
+// $Id: BaseMod.h,v 1.20 2009/06/11 08:59:32 loizides Exp $
 //
 // BaseMod
 //
@@ -16,14 +16,13 @@
 #include <TObjString.h>
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TreeMod/interface/Selector.h"
-#include "MitAna/DataTree/interface/Collections.h"  
-#include "MitAna/DataTree/interface/TriggerName.h" 
-#include "MitAna/DataTree/interface/TriggerObject.h" 
+#include "MitAna/DataTree/interface/TriggerObjectFwd.h" 
 
 namespace mithep 
 {
-  class Selector;
   class HLTFwkMod;
+  class TriggerObjectsTable;
+  class TriggerTable;
 
   class BaseMod : public TAModule {
     public:

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTExampleMod.h,v 1.2 2008/12/10 17:25:16 loizides Exp $
+// $Id: HLTExampleMod.h,v 1.3 2009/05/12 18:41:39 loizides Exp $
 //
 // HLTExampleAnaMod
 //
@@ -14,7 +14,6 @@
 #define MITANA_PHYSICSMOD_HLTEXAMPLEMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
 
 class TH1D;
 

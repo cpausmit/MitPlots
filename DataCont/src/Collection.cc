@@ -1,5 +1,5 @@
-// $Id: Collection.cc,v 1.2 2008/06/05 10:07:06 loizides Exp $
+// $Id: Collection.cc,v 1.1 2008/07/29 10:36:21 loizides Exp $
 
 #include "MitAna/DataCont/interface/Collection.h"
 
-ClassImpT(mithep::Collection, ArrayElement)
+templateClassImp(mithep::Collection)

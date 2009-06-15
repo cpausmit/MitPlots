@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.8 2009/03/08 12:08:31 loizides Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.9 2009/03/20 09:35:16 loizides Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -8,6 +8,7 @@
 #include "MitAna/DataCont/interface/CacheFlag.h"
 #include "MitAna/DataCont/interface/FastArray.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
 #include "MitAna/DataCont/interface/RefResolver.h"
 #include "MitAna/DataCont/interface/Types.h"
@@ -56,4 +57,7 @@
 #pragma link C++ typedef mithep::FArrDouble32;
 #pragma link C++ typedef mithep::FArrInt;
 #pragma link C++ typedef mithep::FArrUInt;
+
+#pragma link C++ class mithep::Collection<TObject>+;
+#pragma link C++ class mithep::ObjArray<TObject>+;
 #endif

@@ -1,6 +1,7 @@
-// $Id: GenRelValMod.cc,v 1.5 2008/11/21 20:12:26 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.6 2009/03/23 22:15:16 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
+#include "MitAna/DataTree/interface/MCParticleCol.h"
 #include "MitAna/DataTree/interface/Names.h"
 
 using namespace mithep;
@@ -15,7 +16,7 @@ GenRelValMod::GenRelValMod(const char *name, const char *title) :
   fPrint(1),
   fWrite(0),
   fParticles(0),
-  ofile(0)
+  fOFile(0)
 {
   // Constructor.
 }
@@ -30,8 +31,8 @@ void GenRelValMod::SlaveBegin()
   ReqBranch(fMCPartName,fParticles);
 
   if (fWrite) {
-    ofile = new std::ofstream(fFileName);
-    if (ofile->bad()) {
+    fOFile = new std::ofstream(fFileName);
+    if (fOFile->bad()) {
       SendError(kAbortAnalysis, "SlaveBegin", "Cannot open output file.");
     }
   }
@@ -75,7 +76,7 @@ void GenRelValMod::Process()
       std::cout << buf;
     }
     if (fWrite) 
-      *ofile<<buf;
+      *fOFile<<buf;
   }
 }
 
@@ -86,8 +87,8 @@ void GenRelValMod::SlaveTerminate()
   // the text file.
 
   if (fWrite) {
-    ofile->close();
-    delete ofile; 
-    ofile=0;
+    fOFile->close();
+    delete fOFile; 
+    fOFile=0;
   }
 }

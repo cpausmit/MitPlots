@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.7 2009/05/12 18:41:40 loizides Exp $
+// $Id: PublisherMod.h,v 1.8 2009/05/18 06:30:38 loizides Exp $
 //
 // PublisherMod
 //
@@ -13,8 +13,9 @@
 #ifndef MITANA_PHYSICSMOD_PUBLISHERMOD_H
 #define MITANA_PHYSICSMOD_PUBLISHERMOD_H
 
+#include "MitAna/DataCont/interface/Collection.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
 
 namespace mithep 
 {

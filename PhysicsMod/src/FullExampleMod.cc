@@ -1,8 +1,12 @@
-// $Id: FullExampleMod.cc,v 1.2 2008/12/04 13:52:27 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.3 2008/12/09 10:18:33 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include <TH1D.h>
 #include "MitAna/DataTree/interface/Names.h"
+#include "MitAna/DataTree/interface/ElectronCol.h"
+#include "MitAna/DataTree/interface/MCParticleCol.h"
+#include "MitAna/DataTree/interface/MuonCol.h"
+#include "MitAna/DataTree/interface/TrackCol.h"
 
 using namespace mithep;
 

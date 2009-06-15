@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.8 2009/03/12 18:24:33 loizides Exp $
+// $Id: OutputMod.h,v 1.9 2009/03/24 16:12:26 loizides Exp $
 //
 // OutputMod
 //
@@ -12,7 +12,7 @@
 #define MITANA_TREEMOD_OUTPUTMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/EventHeaderFwd.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -108,6 +108,7 @@ namespace mithep
       Long64_t                    fLastWrittenEvt;  //!entry of last written event
       Long64_t                    fLastSeenEvt;     //!entry of last seen event
       Long64_t                    fCounter;         //!count number of events
+      TList                      *fAddBrList;       //!list of additional branches
 
       friend class Selector;
 

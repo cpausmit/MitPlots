@@ -1,7 +1,7 @@
-// $Id: BaseMod.cc,v 1.6 2008/12/09 10:16:24 loizides Exp $
+// $Id: BaseMod.cc,v 1.7 2009/05/19 09:57:09 loizides Exp $
 
-#include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
+#include "MitAna/DataTree/interface/TriggerObjectCol.h"
 #include <TH1D.h>
 
 using namespace mithep;

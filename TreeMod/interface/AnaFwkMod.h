@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.5 2009/03/12 15:37:52 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.6 2009/03/23 08:30:58 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -13,7 +13,7 @@
 #define MITANA_TREEEMOD_ANAFWKMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/EventHeaderCol.h"
 
 class TTree;
 class TH1D;

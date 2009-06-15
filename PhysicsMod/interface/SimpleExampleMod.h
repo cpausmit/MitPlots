@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.5 2009/03/17 17:36:24 loizides Exp $
+// $Id: SimpleExampleMod.h,v 1.6 2009/05/12 18:41:41 loizides Exp $
 //
 // SimpleExampleMod
 //
@@ -20,7 +20,7 @@
 #define MITANA_PHYSICSMOD_SIMPLEEXAMPLEMOD_H
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/MCParticleFwd.h"
 
 class TH1D;
 

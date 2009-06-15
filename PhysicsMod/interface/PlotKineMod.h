@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.9 2009/05/18 06:30:38 loizides Exp $
+// $Id: PlotKineMod.h,v 1.10 2009/05/19 10:27:21 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -11,8 +11,8 @@
 #ifndef MITANA_PHYSICSMOD_PLOTKINEMOD_H
 #define MITANA_PHYSICSMOD_PLOTKINEMOD_H
 
+#include "MitAna/DataCont/interface/Collection.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
 #include <TH1D.h>
 
 namespace mithep 

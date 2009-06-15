@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompoundParticle.h,v 1.2 2009/06/10 06:27:50 loizides Exp $
+// $Id: CompoundParticle.h,v 1.1 2009/06/11 12:21:26 loizides Exp $
 //
 // CompoundParticle
 //
 // A compound particle class that holds other (daughter) particles. The class provides
 // the same features as the CompositeParticle but allows to transfer ownership of daughters.
-// This class is cannot be stored in a tree.
+// This class is not supposed and can not be stored in a tree.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 #define MITANA_DATATREE_COMPOUNDPARTICLE_H
  
 #include "MitAna/DataTree/interface/Types.h"
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/ParticleCol.h"
 
 namespace mithep 
 {

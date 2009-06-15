@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenRelValMod.h,v 1.5 2008/12/04 13:52:38 loizides Exp $
+// $Id: GenRelValMod.h,v 1.6 2008/12/10 11:30:32 loizides Exp $
 //
 // GenRelValMod
 //
@@ -13,7 +13,7 @@
 
 #include <Riostream.h>
 #include "MitAna/TreeMod/interface/BaseMod.h"
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/MCParticleFwd.h"
 
 namespace mithep
 {
@@ -22,7 +22,6 @@ namespace mithep
     public:
       GenRelValMod(const char *name  = "GenRelValMod",
                    const char *title = "Analysis Module for GenParticles validation");
-      ~GenRelValMod() {}
 
       void                   Process();
       void                   SetPrint(Bool_t b) { fPrint = b; }
@@ -36,7 +35,7 @@ namespace mithep
       Bool_t                 fPrint;        //=true then print to screen (def=1)
       Bool_t                 fWrite;        //=true then write to file (def=0)
       const MCParticleCol   *fParticles;    //!particle branch
-      std::ofstream         *ofile;         //!output text file
+      std::ofstream         *fOFile;        //!output text file
 
       ClassDef(GenRelValMod, 1) // GenParticle validation module
   };

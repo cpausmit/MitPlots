@@ -1,8 +1,9 @@
-// $Id: SimpleExampleMod.cc,v 1.3 2008/12/04 13:52:27 loizides Exp $
+// $Id: SimpleExampleMod.cc,v 1.4 2008/12/09 10:18:34 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
-#include <TH1D.h>
 #include "MitAna/DataTree/interface/Names.h"
+#include "MitAna/DataTree/interface/MCParticleCol.h"
+#include <TH1D.h>
 
 using namespace mithep;
 

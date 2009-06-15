@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.8 2009/04/09 10:26:18 ceballos Exp $
+// $Id: ObjTypes.h,v 1.9 2009/06/11 12:21:26 loizides Exp $
 //
 // ObjTypes
 //
@@ -42,6 +42,7 @@ namespace mithep
     kMCParticle,
     kMet,
     kMuon,
+    kPair,
     kPFCandidate,
     kPFJet,
     kPFMet,

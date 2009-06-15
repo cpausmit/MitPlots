@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilterMod.h,v 1.1 2009/05/18 06:30:38 loizides Exp $
+// $Id: FilterMod.h,v 1.2 2009/05/19 10:27:21 loizides Exp $
 //
 // FilterMod
 //
@@ -14,8 +14,9 @@
 #ifndef MITANA_PHYSICSMOD_FILTERMOD_H
 #define MITANA_PHYSICSMOD_FILTERMOD_H
 
+#include "MitAna/DataCont/interface/Collection.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
 #include <TH1D.h>
 
 namespace mithep 

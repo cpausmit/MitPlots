@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.8 2009/05/12 14:21:13 loizides Exp $
+// $Id: HLTMod.h,v 1.9 2009/05/12 18:41:43 loizides Exp $
 //
 // HLTMod
 //
@@ -28,7 +28,7 @@
 #include <string>
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/Collections.h"
+#include "MitAna/DataTree/interface/TriggerObjectFwd.h"
 
 namespace mithep 
 {
