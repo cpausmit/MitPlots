@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Pair.h,v 1.9 2009/03/18 15:44:32 loizides Exp $
+// $Id: Pair.h,v 1.1 2009/06/16 15:56:21 loizides Exp $
 //
 // Pair
 //
@@ -20,15 +20,22 @@ namespace mithep
   class Pair : public DataBase
   {
     public:
-    Pair(const A *p1, const B *p2) : fP1(const_cast<A*>(p1)), fP2(const_cast<B*>(p2)), 
-                                     fOwn1(0), fOwn2(0) {}
-//      Pair(cA *p1, const B *p2) : fPart1(p1), fPart2(p2), fOwn1(0), fOwn2(0) {}
+      Pair() : fP1(0), fP2(0), fOwn1(0), fOwn2(0) {}
+      Pair(const A *p1, const B *p2) : fP1(const_cast<A*>(p1)), fP2(const_cast<B*>(p2)), 
+                                       fOwn1(0), fOwn2(0) {}
+      Pair(A *p1, Bool_t o, const B *p2) : fP1(p1), fP2(const_cast<B*>(p2)), 
+                                           fOwn1(o), fOwn2(0) {}
+      Pair(const A *p1, B *p2, Bool_t o) : fP1(const_cast<A*>(p1)), fP2(p2), 
+                                                 fOwn1(0), fOwn2(o) {}
+      Pair(A *p1, B *p2, Bool_t o1, Bool_t o2) : fP1(p1), fP2(p2), 
+                                                 fOwn1(o1), fOwn2(o2) {}
       ~Pair() { if (fOwn1) delete fP1; if (fOwn2) delete fP2; } 
 
-      const A    *First()   const { return fP1; }
-      const B    *Second()  const { return fP2; }
-
-      EObjType    ObjType() const { return kPair;  }      
+      const A    *First()    const { return fP1;   }
+      const B    *Second()   const { return fP2;   }
+      EObjType    ObjType()  const { return kPair; }      
+      const A    *P1()       const { return fP1;   }
+      const B    *P2()       const { return fP2;   }
              
     protected:
       A          *fP1;      //first object 
