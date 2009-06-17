@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.20 2009/06/11 08:59:32 loizides Exp $
+// $Id: BaseMod.h,v 1.21 2009/06/15 15:00:17 loizides Exp $
 //
 // BaseMod
 //
@@ -71,7 +71,7 @@ namespace mithep
       template <class T> void     ReqEventObject(const char *name, const T *&addr, Bool_t fromBr);
       void                        SaveNEventsProcessed(const char *name="hDEvents");
       void                        SetFillHist(Bool_t b)       { fFillHist = b;                     }
-      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   } 
+      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   }
 
     private:
       Bool_t                      fFillHist;            //=true then fill histos (def=0)
