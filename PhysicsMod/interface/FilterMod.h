@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilterMod.h,v 1.2 2009/05/19 10:27:21 loizides Exp $
+// $Id: FilterMod.h,v 1.3 2009/06/15 15:00:16 loizides Exp $
 //
 // FilterMod
 //
@@ -68,7 +68,7 @@ namespace mithep
       TH1D                    *fEntHist1;    //!entries histogram
       TH1D                    *fEntHist2;    //!entries histogram
 
-      ClassDefT(FilterMod, 1) // Filter module
+      ClassDef(FilterMod, 1) // Filter module
   };
 }
 

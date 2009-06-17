@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.10 2009/05/19 10:27:21 loizides Exp $
+// $Id: PlotKineMod.h,v 1.11 2009/06/15 15:00:16 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -54,7 +54,7 @@ namespace mithep
       TH1D                    *fEtaHist;    //!eta histogram
       TH1D                    *fEntHist;    //!entries histogram
 
-      ClassDefT(PlotKineMod, 1) // Plot kinematics module
+      ClassDef(PlotKineMod, 1) // Plot kinematics module
   };
 }
 

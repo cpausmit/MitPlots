@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.8 2009/05/18 06:30:38 loizides Exp $
+// $Id: PublisherMod.h,v 1.9 2009/06/15 15:00:16 loizides Exp $
 //
 // PublisherMod
 //
@@ -48,7 +48,7 @@ namespace mithep
       void                     SlaveBegin();
       void                     SlaveTerminate();
 
-      ClassDefT(PublisherMod, 1) // Publisher module
+      ClassDef(PublisherMod, 1) // Publisher module
   };
 }
 
