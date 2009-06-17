@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.9 2009/03/23 22:15:15 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.10 2009/03/28 14:39:56 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -178,11 +178,11 @@ void AnaFwkMod::Process()
   Bool_t doPrint = 0;
 
   MDB(kAnalysis, 4) {
-    if (GetNEventsProcessed() % 250  == 0) 
+    if (GetNEventsProcessed() % 100  == 0) 
       doPrint = 1;
   } else {
     MDB(kAnalysis, 3) {
-      if (GetNEventsProcessed() % 2500  == 0) 
+      if (GetNEventsProcessed() % 1000  == 0) 
         doPrint = 1;
     } else {
       MDB(kAnalysis, 2) {
@@ -190,7 +190,7 @@ void AnaFwkMod::Process()
           doPrint = 1;
       } else {
         MDB(kAnalysis, 1) {
-          if (GetNEventsProcessed() % 50000 == 0) 
+          if (GetNEventsProcessed() % 100000 == 0) 
             doPrint = 1;
         } 
       }
