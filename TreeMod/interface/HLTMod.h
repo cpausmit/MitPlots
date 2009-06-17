@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.9 2009/05/12 18:41:43 loizides Exp $
+// $Id: HLTMod.h,v 1.10 2009/06/15 15:00:17 loizides Exp $
 //
 // HLTMod
 //
@@ -45,11 +45,12 @@ namespace mithep
       Int_t                       GetNEvents()      const { return fNEvents;       }
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
       Int_t                       GetNFailed()      const { return fNFailed;       }
+      const char                 *GetOutputName()   const { return fMyObjsNamePub; }
       const char                 *GetTrigObjsName() const { return fMyObjsNamePub; }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort = b;         }
       void                        SetPrintTable(Bool_t b)           { fPrintTable = b;    }
       void                        SetTrigObjsName(const char *n)    { fMyObjsNamePub = n; }
-
+      void                        SetInputName(const char *n)       { fMyObjsNamePub = n; }
     protected:
       void                        AddTrigObjs(UInt_t tid);
       void                        BeginRun();
