@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.21 2009/06/15 15:00:17 loizides Exp $
+// $Id: BaseMod.h,v 1.22 2009/06/17 10:38:28 loizides Exp $
 //
 // BaseMod
 //
@@ -91,8 +91,8 @@ inline void mithep::BaseMod::AddEventObject(const char *name, Bool_t fromBr)
   // than from a pointer given by the event.
 
   if (fEvtObjBrNames.FindObject(name)) {
-    SendError(kWarning, "AddEventObject", 
-              "Can not add event object with name %s and type %d",
+    SendError(kWarning, Form("AddEventObject (\"%s\")",GetName()), 
+              "Can not add event object with name \"\"%s\"\" and type %d",
               name, fromBr);
     return;
   }
@@ -164,8 +164,8 @@ inline const T *mithep::BaseMod::GetObjThisEvt(const char *name, Bool_t warn) co
 
   T *ret = dynamic_cast<T*>(FindObjThisEvt(name));
   if (!ret && warn) {
-    SendError(kWarning, "GetObjThisEvent", 
-              "Could not obtain object with name %s and type %s for current event!",
+    SendError(kWarning, Form("GetObjThisEvt (\"%s\")",GetName()), 
+              "Could not obtain object with name \"%s\" and type \"%s\" for current event!",
               name, T::Class_Name());
   }
   return ret;
@@ -179,8 +179,8 @@ inline T *mithep::BaseMod::GetObjThisEvt(const char *name, Bool_t warn)
 
   T *ret = dynamic_cast<T*>(FindObjThisEvt(name));
   if (!ret && warn) {
-    SendError(kWarning, "GetObjThisEvent", 
-              "Could not obtain object with name %s and type %s for current event!",
+    SendError(kWarning, Form("GetObjThisEvt (\"%s\")",GetName()), 
+              "Could not obtain object with name \"%s\" and type \"%s\" for current event!",
               name, T::Class_Name());
   }
   return ret;
@@ -195,8 +195,8 @@ inline const T *mithep::BaseMod::GetPublicObj(const char *name, Bool_t warn) con
 
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
   if (!ret && warn) {
-    SendError(kWarning, "GetPublicObject", 
-              "Could not obtain public object with name %s and type %s!",
+    SendError(kWarning, Form("GetPublicObject (\"%s\")",GetName()),  
+              "Could not obtain public object with name \"%s\" and type \"%s\"!",
               name, T::Class_Name());
   }
   return ret;
@@ -210,8 +210,8 @@ inline T *mithep::BaseMod::GetPublicObj(const char *name, Bool_t warn)
 
   T *ret = dynamic_cast<T*>(FindPublicObj(name));
   if (!ret && warn) {
-    SendError(kWarning, "GetPublicObject", 
-              "Could not obtain public object with name %s and type %s!",
+    SendError(kWarning, Form("GetPublicObject (\"%s\")",GetName()),
+              "Could not obtain public object with name \"%s\" and type \"%s\"!",
               name, T::Class_Name());
   }
   return ret;
@@ -244,8 +244,8 @@ inline Bool_t mithep::BaseMod::LoadEventObject(const char *name, const T *&addr,
 
   Bool_t ret = (addr!=0); 
   if (!ret && warn) {
-    SendError(kWarning, "LoadEventObject", 
-              "Could not obtain object with name %s and type %s from %s!",
+    SendError(kWarning, Form("LoadEventObject (\"%s\")",GetName()), 
+              "Could not obtain object with name \"%s\" and type \"%s\" from \"%s\"!",
               name, T::Class_Name(), type.Data());
   }
 
