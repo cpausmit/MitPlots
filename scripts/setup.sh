@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.24 2009/03/28 15:23:03 loizides Exp $
+# $Id: setup.sh,v 1.25 2009/06/14 19:42:33 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -33,29 +33,14 @@ if test $version -lt 2002006; then
 fi
 
 case $version in
-    (2002006 | 2002007 | 2002008 | 2002009 | 2002010 | 2002011 | 2002012 | 2002013) 
+    (3001000) 
         #Remove annoying warning messages for the jet to vertex associator.
-        cvs co -r $CMSSW_VERSION JetMETCorrections/JetVertexAssociation;
+        addpkg JetMETCorrections/JetVertexAssociation;
         TMP=`mktemp`;
         cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
         sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
         mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
        
-        #Tags required for Summer08 redigi-rereco and Winter09 FastSim JetMetCorrections
-        cvs co -r V01-07-02 CondFormats/JetMETObjects
-        cvs co -r V01-08-13 JetMETCorrections/Configuration
-        cvs co -r V02-09-02 JetMETCorrections/Modules
-        cvs co -r V01-08-00 JetMETCorrections/Algorithms
-       
-        #Tag needed for JetPlusTracks and associated corrections
-        cvs co -r V01-04-03 RecoJets/JetAssociationAlgorithms
-       
-        #Tags for tcMet in 2_2_X
-        cvs co -r V02-05-00-20 RecoMET/METAlgorithms
-        cvs co -r V02-08-02-16 RecoMET/METProducers
-        cvs co -r V00-04-02-16 RecoMET/Configuration
-        cvs co -r V00-06-02-09 DataFormats/METReco 
-
         ;;
     *) 
         echo "Nothing known about this version, exiting";
