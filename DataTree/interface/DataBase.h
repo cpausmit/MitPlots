@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataBase.h,v 1.4 2009/02/18 15:38:54 loizides Exp $
+// $Id: DataBase.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
 //
 // DataBase
 //
@@ -26,6 +26,7 @@ namespace mithep
       Bool_t               IsCached()     const { return TestBit(23);    }
       Bool_t               MustClear()    const { return TestBit(14);    }
       Bool_t               MustDelete()   const { return TestBit(15);    }
+      virtual Int_t        ObjId()        const { return ObjType()*1000; }
       virtual EObjType     ObjType()      const { return kDataBase;      }
 
     protected:

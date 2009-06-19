@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.4 2009/04/28 11:00:05 loizides Exp $
+// $Id: GenericParticle.h,v 1.5 2009/05/11 07:59:47 loizides Exp $
 //
 // GenericParticle
 //
@@ -20,34 +20,41 @@ namespace mithep
   class GenericParticle : public Particle
   {
     public:
-      GenericParticle(): fQ(0), fObjType(kGenericParticle) {}
+      GenericParticle(): fQ(0), fObjId(kGenericParticle), fObjType(kGenericParticle) {} 
       GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Double_t c, 
-                      EObjType type=kGenericParticle) : 
-        fMom(FourVector(px,py,pz,e)), fQ(c), fObjType(type) {}
+                      Int_t id=kGenericParticle, EObjType type=kGenericParticle) : 
+        fMom(FourVector(px,py,pz,e)), fQ(c), fObjId(id), fObjType(type) {}
       GenericParticle(Double_t px, Double_t py, Double_t pz, Double_t e,                     
-                      EObjType type=kGenericParticle) : 
-        fMom(FourVector(px,py,pz,e)), fQ(0), fObjType(type) {}
-      GenericParticle(const FourVector &m, Double_t c, EObjType type=kGenericParticle) : 
-        fMom(m), fQ(c), fObjType(type) {}
-      GenericParticle(const FourVectorM &m, Double_t c, EObjType type=kGenericParticle) : 
-        fMom(m), fQ(c), fObjType(type) {}
+                      Int_t id=kGenericParticle, EObjType type=kGenericParticle) : 
+        fMom(FourVector(px,py,pz,e)), fQ(0), fObjId(id), fObjType(type) {}
+      GenericParticle(const FourVector &m, Double_t c, 
+                      Int_t id=kGenericParticle, EObjType type=kGenericParticle) : 
+        fMom(m), fQ(c), fObjId(id), fObjType(type) {}
+      GenericParticle(const FourVectorM &m, Double_t c, 
+                      Int_t id=kGenericParticle, EObjType type=kGenericParticle) : 
+        fMom(m), fQ(c), fObjId(id), fObjType(type) {}
+      GenericParticle(const Particle &p) :
+        fMom(p.Mom()), fQ(p.Charge()), fObjId(p.ObjId()), fObjType(p.ObjType()) {}
      
       void               Print(Option_t *opt="")   const;
-      EObjType           RecoObjType()		   const { return fObjType;	   }
-      void		 SetCharge(Double_t c)  	 { fQ = c; ClearCharge();  }
+      Int_t              ObjId()                   const { return fObjId;           }
+      EObjType           ObjType()		   const { return fObjType;	    }
+      void		 SetCharge(Double_t c)           { fQ = c; ClearCharge();   }
       void		 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
-      void               SetRecoObjType(EObjType t)      { fObjType = t;           }
+      void               SetObjId(Int_t id)              { fObjId = id;             }
+      void               SetObjType(EObjType t)          { fObjType = t;            }
      
     protected:
-      Double_t 		 GetCharge()		   const { return fQ;		   }
-      Double_t           GetMass()                 const { return fMom.M();        }
+      Double_t 		 GetCharge()               const { return fQ;		    }
+      Double_t           GetMass()                 const { return fMom.M();         }
       void               GetMom()                  const;
 
       FourVectorM        fMom;     //momentum vector
       Double_t           fQ;	   //charge value
+      Int_t              fObjId;   //object id
       EObjType           fObjType; //object type
 
-    ClassDef(GenericParticle, 1) // Generic particle class
+    ClassDef(GenericParticle, 2) // Generic particle class
   };
 }
 

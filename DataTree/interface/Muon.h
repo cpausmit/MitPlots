@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.28 2009/03/18 15:44:32 loizides Exp $
+// $Id: Muon.h,v 1.29 2009/05/18 06:28:24 loizides Exp $
 //
 // Muon
 //
@@ -76,12 +76,12 @@ namespace mithep {
       };
       
       const Track   *BestTrk()                       const;
-      const Track   *GlobalTrk()                     const { return fGlobalTrkRef.Obj(); }
-      const Track   *StandaloneTrk()                 const { return fStaTrkRef.Obj();    }
-      const Track   *TrackerTrk()                    const { return fTrkTrkRef.Obj();    }
-      const Track   *Trk()                           const { return BestTrk();           }
-      Double_t       EmEnergy()                      const { return fEmEnergy;           }
-      Double_t       EmS9Energy()                    const { return fEmS9Energy;         }
+      const Track   *GlobalTrk()                     const { return fGlobalTrkRef.Obj();       }
+      const Track   *StandaloneTrk()                 const { return fStaTrkRef.Obj();          }
+      const Track   *TrackerTrk()                    const { return fTrkTrkRef.Obj();          }
+      const Track   *Trk()                           const { return BestTrk();                 }
+      Double_t       EmEnergy()                      const { return fEmEnergy;                 }
+      Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
       Double_t       GetDX(Int_t iStation)           const;
       Double_t       GetDY(Int_t iStation)           const;
       Double_t       GetPullX(Int_t iStation)        const;
@@ -120,6 +120,7 @@ namespace mithep {
       Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)                                 const;
+      Int_t          ObjId()                         const { return ObjType()*1000+Is();       }
       EObjType       ObjType()                       const { return kMuon;                     }
       void           Print(Option_t *opt="")         const;
       Bool_t         PromptTight(EClassType type)                              const;

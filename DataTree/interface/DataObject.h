@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.19 2009/02/18 15:38:54 loizides Exp $
+// $Id: DataObject.h,v 1.20 2009/03/03 17:04:09 loizides Exp $
 //
 // DataObject
 //
@@ -33,6 +33,7 @@ namespace mithep
       Bool_t               IsCached()     const { return TestBit(23);    }
       Bool_t               MustClear()    const { return TestBit(14);    }
       Bool_t               MustDelete()   const { return TestBit(15);    }
+      virtual Int_t        ObjId()        const { return ObjType()*1000; }
       virtual EObjType     ObjType()      const { return kDataObject;    }
       template <class Col> 
       const Col           *ParentCol()    const;
