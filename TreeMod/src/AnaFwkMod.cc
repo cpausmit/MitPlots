@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.10 2009/03/28 14:39:56 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.11 2009/06/17 16:58:44 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -18,6 +18,7 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fAllHeadTreeName(Names::gkAllEvtTreeName),
   fAllHeadBrName(Names::gkAllEvtHeaderBrn),
   fSkipNEvents(0),
+  fPrintScale(100),
   fSWtotal(0),
   fSWevent(0),
   fAllHeaders(0,Names::gkSkimmedHeaders),
@@ -178,19 +179,19 @@ void AnaFwkMod::Process()
   Bool_t doPrint = 0;
 
   MDB(kAnalysis, 4) {
-    if (GetNEventsProcessed() % 100  == 0) 
+    if (GetNEventsProcessed() % (fPrintScale)  == 0) 
       doPrint = 1;
   } else {
     MDB(kAnalysis, 3) {
-      if (GetNEventsProcessed() % 1000  == 0) 
+      if (GetNEventsProcessed() % (fPrintScale*10)  == 0) 
         doPrint = 1;
     } else {
       MDB(kAnalysis, 2) {
-        if (GetNEventsProcessed() % 10000  == 0) 
+        if (GetNEventsProcessed() % (fPrintScale*100)  == 0) 
           doPrint = 1;
       } else {
         MDB(kAnalysis, 1) {
-          if (GetNEventsProcessed() % 100000 == 0) 
+          if (GetNEventsProcessed() % (fPrintScale*1000) == 0) 
             doPrint = 1;
         } 
       }
@@ -215,6 +216,7 @@ void AnaFwkMod::SlaveBegin()
 
   fSWtotal = new TStopwatch;
   fSWevent = new TStopwatch;
+  cout << fSkipNEvents << endl;
 
   if (!PublishObj(&fAllHeaders)) {
     SendError(kAbortAnalysis, "SlaveBegin", 

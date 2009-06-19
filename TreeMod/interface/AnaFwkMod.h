@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.6 2009/03/23 08:30:58 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.7 2009/06/15 15:00:17 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -27,7 +27,9 @@ namespace mithep
       AnaFwkMod(const char *name="AnaFwkMod", 
                 const char *title="Analysis framework module");
 
+      Long64_t         GetPrintScale()            const { return fPrintScale;  }
       Long64_t         GetSkipNEvents()           const { return fSkipNEvents; }
+      void             SetPrintScale(UInt_t n)          { fPrintScale  = n;    }
       void             SetSkipNEvents(Long64_t n)       { fSkipNEvents = n;    }
 
     protected:
@@ -41,6 +43,7 @@ namespace mithep
       TString          fAllHeadTreeName;   //all events tree name
       TString          fAllHeadBrName;     //all event headers branch name
       Long64_t         fSkipNEvents;       //number of events to skip from beginning (def=0)
+      UInt_t           fPrintScale;        //scale of when to print event number/timings (def=100)
       TStopwatch      *fSWtotal;           //!stop watch for overall timing
       TStopwatch      *fSWevent;           //!stop watch per n events
       EventHeaderArr   fAllHeaders;        //!pointer to array of all event headers

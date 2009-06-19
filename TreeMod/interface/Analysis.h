@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.24 2009/03/12 18:24:10 loizides Exp $
+// $Id: Analysis.h,v 1.25 2009/03/23 08:31:30 loizides Exp $
 //
 // Analysis
 //
@@ -74,6 +74,7 @@ namespace mithep
       void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
       void                      SetMasterName(const char* name)     { fMaster        = name;      }
       void                      SetOutputName(const char *name)     { fAnaOutput     = name;      }
+      void                      SetPrintScale(UInt_t n)             { fPrintScale    = n;         }
       void                      SetProcessNEvents(Long64_t n)       { fDoNEvents     = n;         }
       void                      SetSkipFirstNEvents(Long64_t n)     { fSkipNEvents   = n;         }
       void                      SetSuperModule(TAModule *mod);
@@ -122,6 +123,7 @@ namespace mithep
       TProof                   *fProof;           //pointer to the PROOF session
       Long64_t                  fDoNEvents;       //events to process (def=TChain::kBigNumber)
       Long64_t                  fSkipNEvents;     //number of events to skip from beginning (def=0)
+      UInt_t                    fPrintScale;      //scale for evt number/timings printouts (def=100)
       Int_t                     fCacheSize;       //size of read cache for events tree
 
     ClassDef(Analysis, 0) // Top-level analysis class 

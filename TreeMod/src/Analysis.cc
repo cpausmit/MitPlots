@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.31 2009/03/23 14:39:52 loizides Exp $
+// $Id: Analysis.cc,v 1.32 2009/03/23 22:15:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -49,6 +49,7 @@ Analysis::Analysis(Bool_t useproof) :
   fProof(0),
   fDoNEvents(TChain::kBigNumber),
   fSkipNEvents(0),
+  fPrintScale(100),
   fCacheSize(-1)
 {
   // Default constructor.
@@ -423,6 +424,7 @@ Bool_t Analysis::Init()
   // create our ana framework module
   AnaFwkMod *anamod = new AnaFwkMod;
   anamod->SetSkipNEvents(fSkipNEvents);
+  anamod->SetPrintScale(fPrintScale);
   fDeleteList->Add(anamod);
 
   // create our HLT framework module
