@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.11 2009/06/17 16:58:44 ceballos Exp $
+// $Id: AnaFwkMod.cc,v 1.12 2009/06/19 07:39:01 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -18,7 +18,7 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fAllHeadTreeName(Names::gkAllEvtTreeName),
   fAllHeadBrName(Names::gkAllEvtHeaderBrn),
   fSkipNEvents(0),
-  fPrintScale(100),
+  fPrintScale(1),
   fSWtotal(0),
   fSWevent(0),
   fAllHeaders(0,Names::gkSkimmedHeaders),
@@ -216,7 +216,6 @@ void AnaFwkMod::SlaveBegin()
 
   fSWtotal = new TStopwatch;
   fSWevent = new TStopwatch;
-  cout << fSkipNEvents << endl;
 
   if (!PublishObj(&fAllHeaders)) {
     SendError(kAbortAnalysis, "SlaveBegin", 
