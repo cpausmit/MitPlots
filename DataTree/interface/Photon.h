@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.24 2009/03/18 15:44:32 loizides Exp $
+// $Id: Photon.h,v 1.25 2009/06/25 17:04:45 bendavid Exp $
 //
 // Photon
 //
@@ -27,8 +27,9 @@ namespace mithep
                  fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
                  fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
                  fSolidConeTrkIsoDr03(0), fHollowConeTrkIsoDr03(0),fSolidConeNTrkDr03(0),
-                 fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEBGap(0),fIsEEGap(0),fIsEBEEGap(0),
-                 fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),fIsConverted(0) {}
+                 fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
+                 fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
+                 fIsConverted(0) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
         fR9(0),fHadOverEm(0),fEcalRecHitIso(0),fHcalRecHitIso(0), fHcalTowerSumEtDr04(0),
@@ -36,8 +37,9 @@ namespace mithep
         fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
         fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
         fSolidConeTrkIsoDr03(0), fHollowConeTrkIsoDr03(0),fSolidConeNTrkDr03(0),
-        fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEBGap(0),fIsEEGap(0),fIsEBEEGap(0),
-        fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),fIsConverted(0) {}
+        fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
+        fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
+        fIsConverted(0) {}
 
       const Conversion         *ConvCand(UInt_t i)      const { return fConversions.At(i); }
       Double_t                  EcalRecHitIso()         const { return EcalRecHitIsoDr04();} //*DEPRECATED*
