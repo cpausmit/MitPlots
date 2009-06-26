@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.11 2009/06/15 15:00:16 loizides Exp $
+// $Id: PlotKineMod.h,v 1.12 2009/06/17 11:50:27 loizides Exp $
 //
 // PlotKineMod
 // 
@@ -92,7 +92,7 @@ void mithep::PlotKineMod<T>::Process()
   if (!GetFillHist())
     return;
     
-  UInt_t ents=fCol->GetEntries();
+  const UInt_t ents=fCol->GetEntries();
   fEntHist->Fill(ents);
   for(UInt_t i=0;i<ents;++i) {
      const T *p = fCol->At(i);

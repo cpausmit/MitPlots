@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.9 2009/06/15 15:00:16 loizides Exp $
+// $Id: PublisherMod.h,v 1.10 2009/06/17 11:50:27 loizides Exp $
 //
 // PublisherMod
 //
@@ -72,12 +72,14 @@ void mithep::PublisherMod<TIn, TOut>::Process()
   // Load the branch, add pointers to the object array. Publish object array if needed.
 
   LoadBranch(GetBranchName());
+
+  const UInt_t entries = fColIn->GetEntries();
+
   if (fPubPerEvent)
-    fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());
+    fColOut = new mithep::ObjArray<TOut>(entries, GetPublicName());
   else
     fColOut->Reset();
 
-  UInt_t entries = fColIn->GetEntries();
   for(UInt_t i=0; i<entries; ++i)
     fColOut->Add(fColIn->At(i));
 

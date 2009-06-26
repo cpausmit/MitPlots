@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilterMod.h,v 1.3 2009/06/15 15:00:16 loizides Exp $
+// $Id: FilterMod.h,v 1.4 2009/06/17 11:50:27 loizides Exp $
 //
 // FilterMod
 //
@@ -107,12 +107,13 @@ void mithep::FilterMod<TIn, TOut>::Process()
     return;
   }
 
+  const UInt_t ents=fColIn->GetEntries();
+
   if (fPubPerEvent)
-    fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());
+    fColOut = new mithep::ObjArray<TOut>(ents, GetPublicName());
   else
     fColOut->Reset();
 
-  UInt_t ents=fColIn->GetEntries();
   for(UInt_t i=0;i<ents;++i) {
      const TIn *p = fColIn->At(i);
      Double_t pt = p->Pt();
