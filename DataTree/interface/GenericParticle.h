@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: GenericParticle.h,v 1.5 2009/05/11 07:59:47 loizides Exp $
+// $Id: GenericParticle.h,v 1.6 2009/06/19 07:41:34 loizides Exp $
 //
 // GenericParticle
 //
@@ -14,6 +14,7 @@
  
 #include <TMath.h>
 #include "MitAna/DataTree/interface/Particle.h"
+#include "MitAna/DataTree/interface/Track.h"
 
 namespace mithep 
 {
@@ -35,6 +36,8 @@ namespace mithep
         fMom(m), fQ(c), fObjId(id), fObjType(type) {}
       GenericParticle(const Particle &p) :
         fMom(p.Mom()), fQ(p.Charge()), fObjId(p.ObjId()), fObjType(p.ObjType()) {}
+      GenericParticle(const Track &t, Double_t mass=0) :
+        fMom(t.Mom4(mass)), fQ(t.Charge()), fObjId(t.ObjId()), fObjType(t.ObjType()) {}
      
       void               Print(Option_t *opt="")   const;
       Int_t              ObjId()                   const { return fObjId;           }
