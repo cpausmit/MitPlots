@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.12 2009/06/19 07:39:01 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.13 2009/06/22 15:36:47 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -176,7 +176,8 @@ void AnaFwkMod::Process()
   }
 
   // check if printout should be done
-  Bool_t doPrint = 0;
+  Bool_t doPrint    = 0;
+  UInt_t nProcessed = fPrintScale;
 
   MDB(kAnalysis, 4) {
     if (GetNEventsProcessed() % (fPrintScale)  == 0) 
@@ -185,14 +186,17 @@ void AnaFwkMod::Process()
     MDB(kAnalysis, 3) {
       if (GetNEventsProcessed() % (fPrintScale*10)  == 0) 
         doPrint = 1;
+      nProcessed = fPrintScale*10;
     } else {
       MDB(kAnalysis, 2) {
         if (GetNEventsProcessed() % (fPrintScale*100)  == 0) 
           doPrint = 1;
+        nProcessed = fPrintScale*100;
       } else {
         MDB(kAnalysis, 1) {
           if (GetNEventsProcessed() % (fPrintScale*1000) == 0) 
             doPrint = 1;
+          nProcessed = fPrintScale*1000;
         } 
       }
     }
@@ -203,8 +207,8 @@ void AnaFwkMod::Process()
     Info("Process", 
          "Events %d -> %.2gs real, %.2gs cpu (%.2g real, %.2g cpu per event)", 
          GetNEventsProcessed(), fSWevent->RealTime(), fSWevent->CpuTime(),
-         fSWevent->RealTime()/GetNEventsProcessed(), 
-         fSWevent->CpuTime()/GetNEventsProcessed());
+         fSWevent->RealTime()/nProcessed, 
+         fSWevent->CpuTime()/nProcessed);
     fSWevent->Start();
   }  
 }
