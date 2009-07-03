@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.25 2009/06/14 19:42:33 bendavid Exp $
+# $Id: setup.sh,v 1.26 2009/06/18 22:55:31 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -40,7 +40,7 @@ case $version in
         cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
         sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
         mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
-       
+        cvs co -rV10-00-02 PhysicsTools/HepMCCandAlgos
         ;;
     *) 
         echo "Nothing known about this version, exiting";
