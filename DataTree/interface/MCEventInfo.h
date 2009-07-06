@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCEventInfo.h,v 1.8 2009/03/19 16:10:37 loizides Exp $
+// $Id: MCEventInfo.h,v 1.9 2009/07/03 06:13:36 phedex Exp $
 //
 // MCEventInfo
 //
@@ -59,7 +59,7 @@ namespace mithep
       Double32_t    fPdf2;                //pdf2/x2
       Int_t         fFlavorHistoryPath;   //Number indicating flavor history
 
-    ClassDef(MCEventInfo, 1) // Monte-Carlo event info class
+    ClassDef(MCEventInfo, 2) // Monte-Carlo event info class
   };
 }
 #endif
