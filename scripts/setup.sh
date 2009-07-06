@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.26 2009/06/18 22:55:31 bendavid Exp $
+# $Id: setup.sh,v 1.27 2009/07/03 06:18:02 phedex Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -23,12 +23,19 @@ minver=`expr $minver \* 1000`;
 version=`expr $majver + $minver`;
 version=`expr $version + $patver`;
 
+echo
 echo "Setup called for $CMSSW_VERSION ($version)";
+echo
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 2002006; then
-    echo "Nothing to be done, exiting";
+if test $version -lt 2002014; then
+    echo "Version not supported, exiting";
+    exit 1;
+fi
+
+if ! test -d MitProd; then
+    echo "MitProd does not exists. Nothing to be done, exiting";
     exit 1;
 fi
 
