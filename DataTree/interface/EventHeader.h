@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.14 2009/03/15 11:16:36 loizides Exp $
+// $Id: EventHeader.h,v 1.15 2009/03/19 16:10:46 loizides Exp $
 //
 // EventHeader
 //
@@ -21,40 +21,54 @@ namespace mithep
   class EventHeader : public DataBase
   {
     public:
-      EventHeader() : fRunNum(0), fEvtNum(0), fLumiSec(0), fRunEntry(-1), 
-                      fWeight(1), fSkimmed(0), fIsMC(kTRUE) {}
-      EventHeader(UInt_t run, UInt_t evt, UInt_t lumi) : 
-        fRunNum(run), fEvtNum(evt), fLumiSec(lumi), fRunEntry(-1),
-        fWeight(1), fSkimmed(0), fIsMC(kTRUE) {}
+      EventHeader();
+      EventHeader(UInt_t run, UInt_t evt, UInt_t lumi);
 
-      UInt_t              EvtNum()          const { return fEvtNum;      }
-      Bool_t              IsMC()            const { return fIsMC;        }
-      UInt_t              LumiSec()         const { return fLumiSec;     }
-      EObjType            ObjType()         const { return kEventHeader; }
-      Int_t               RunEntry()        const { return fRunEntry;    }
-      UInt_t              RunNum()          const { return fRunNum;      }
-      UChar_t             Skimmed()         const { return fSkimmed;     }
-      Double_t            Weight()          const { return fWeight;      }
-      void                SetEvtNum(UInt_t i)     { fEvtNum=i;           }
-      void                SetIsMC(Bool_t b)       {  fIsMC=b;            }
-      void                SetLumiSec(UInt_t i)    { fLumiSec=i;          }
-      void                SetRunEntry(Int_t i)    { fRunEntry=i;         }
-      void                SetRunNum(UInt_t i)     { fRunNum=i;           }
-      void                SetSkimmed(UChar_t s)   { fSkimmed = s;        }
-      void                SetWeight(Double_t w)   { fWeight=w;           }
+      Int_t               BunchCrossing()     const { return fBunchCrossing; }
+      Int_t               ExpType()           const { return fExpType;       }
+      UInt_t              EvtNum()            const { return fEvtNum;        }
+      Bool_t              IsMC()              const { return fIsMC;          }
+      UInt_t              LumiSec()           const { return fLumiSec;       }
+      EObjType            ObjType()           const { return kEventHeader;   }
+      Int_t               OrbitNumber()       const { return fOrbitNumber;   }
+      Int_t               RunEntry()          const { return fRunEntry;      }
+      UInt_t              RunNum()            const { return fRunNum;        }
+      UChar_t             Skimmed()           const { return fSkimmed;       }
+      Int_t               StoreNumber()       const { return fStoreNumber;   }
+      ULong64_t           TimeStamp()         const { return fTimeStamp;     }
+      Double_t            Weight()            const { return fWeight;        }
+      void                SetBunchCrossing(Int_t b) { fBunchCrossing = b;    }
+      void                SetEvtNum(UInt_t i)       { fEvtNum        = i;    }
+      void                SetExpType(Int_t e)       { fExpType       = e;    }
+      void                SetIsMC(Bool_t b)         { fIsMC          = b;    }
+      void                SetLumiSec(UInt_t i)      { fLumiSec       = i;    }
+      void                SetOrbitNumber(Int_t o)   { fOrbitNumber   = o;    }
+      void                SetRunEntry(Int_t i)      { fRunEntry      = i;    }
+      void                SetRunNum(UInt_t i)       { fRunNum        = i;    }
+      void                SetSkimmed(UChar_t s)     { fSkimmed       = s;    }
+      void                SetStoreNumber(Int_t s)   { fStoreNumber   = s;    } 
+      void                SetTimeStamp(ULong64_t t) { fTimeStamp     = t;    }
+      void                SetWeight(Double_t w)     { fWeight        = w;    }
+
       Bool_t              operator!=(const EventHeader &other) const;
       Bool_t              operator==(const EventHeader &other) const;    
     
     protected:
+
+      ULong64_t           fTimeStamp;       //time stamp of event (h32 -> sec, l32 -> musec)
+      Int_t               fBunchCrossing;   //bunch crossing
+      Int_t               fOrbitNumber;     //orbit number
+      Int_t               fStoreNumber;     //store number
       UInt_t              fRunNum;          //run number
       UInt_t              fEvtNum;          //event number
       UInt_t              fLumiSec;         //luminosity block number
       Int_t               fRunEntry;        //entry for run block
       Double32_t          fWeight;          //event weight
+      UChar_t             fExpType;         //experiment type (as assigned in EventAuxiliary)
       UChar_t             fSkimmed;         //level of skimming (0 == non-skimmed)
       Bool_t              fIsMC;            //==true for MC data 
 
-    ClassDef(EventHeader, 1) // Event header class
+    ClassDef(EventHeader, 2) // Event header class
   };
 }
 
