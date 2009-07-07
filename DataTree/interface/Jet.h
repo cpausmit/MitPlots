@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.20 2009/03/11 18:11:18 bendavid Exp $
+// $Id: Jet.h,v 1.21 2009/03/18 15:44:32 loizides Exp $
 //
 // Jet
 //
@@ -34,24 +34,24 @@ namespace mithep
         fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
         fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
         fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
-        fCombinedSecondaryVertexMVABJetTagsDisc(0), fImpactParameterMVABJetTagsDisc(0),
-        fTrackCountingHighEffBJetTagsDisc(0), fTrackCountingHighPurBJetTagsDisc(0),
-        fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
-        fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
-        fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
-        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fCombinedSecondaryVertexMVABJetTagsDisc(0), fTrackCountingHighEffBJetTagsDisc(0),
+        fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
+        fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
+        fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
+        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
         fCustomCorrectionScale(0) {}
       Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
         fRawMom(FourVector(px,py,pz,e)),
         fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
         fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
         fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
-        fCombinedSecondaryVertexMVABJetTagsDisc(0), fImpactParameterMVABJetTagsDisc(0),
-        fTrackCountingHighEffBJetTagsDisc(0), fTrackCountingHighPurBJetTagsDisc(0),
-        fSoftMuonBJetTagsDisc(0), fSoftMuonNoIPBJetTagsDisc(0),
-        fSoftElectronBJetTagsDisc(0), fL2RelativeCorrectionScale(0),
-        fL3AbsoluteCorrectionScale(0), fL4EMFCorrectionScale(0),
-        fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fCombinedSecondaryVertexMVABJetTagsDisc(0), fTrackCountingHighEffBJetTagsDisc(0),
+        fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
+        fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
+        fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
+        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
         fCustomCorrectionScale(0) {}
 
       Double_t      Alpha()                       const { return fAlpha;                        }
@@ -65,8 +65,6 @@ namespace mithep
       void          DisableCorrections()                { fCorrections.Clear(); ClearMom();     }
       void          EnableCorrection(ECorr c)           { fCorrections.SetBit(c); ClearMom();   }
       Bool_t        CorrectionActive(ECorr c)     const { return fCorrections.TestBit(c);       }
-      Double_t      ImpactParameterMVABJetTagsDisc()               const 
-                      { return fImpactParameterMVABJetTagsDisc; }
       Double_t      JetProbabilityBJetTagsDisc()                   const 
                       { return fJetProbabilityBJetTagsDisc;     }
       Double_t      JetBProbabilityBJetTagsDisc()                  const 
@@ -85,10 +83,14 @@ namespace mithep
                       { return fSimpleSecondaryVertexBJetTagsDisc; }
       Double_t      SoftMuonBJetTagsDisc()                         const 
                       { return fSoftMuonBJetTagsDisc;              }
-      Double_t      SoftMuonNoIPBJetTagsDisc()                     const 
-                      { return fSoftMuonNoIPBJetTagsDisc;          }
-      Double_t      SoftElectronBJetTagsDisc()                     const 
-                      { return fSoftElectronBJetTagsDisc;          }
+      Double_t      SoftMuonByIP3dBJetTagsDisc()                     const 
+                      { return fSoftMuonByIP3dBJetTagsDisc;          }
+      Double_t      SoftMuonByPtBJetTagsDisc()                     const 
+                      { return fSoftMuonByPtBJetTagsDisc;          }
+      Double_t      SoftElectronByIP3dBJetTagsDisc()                     const 
+                      { return fSoftElectronByIP3dBJetTagsDisc;          }
+      Double_t      SoftElectronByPtBJetTagsDisc()                     const 
+                      { return fSoftElectronByPtBJetTagsDisc;          }
       Double_t      TrackCountingHighEffBJetTagsDisc()             const 
                       { return fTrackCountingHighEffBJetTagsDisc;  }
       Double_t      TrackCountingHighPurBJetTagsDisc()             const 
@@ -100,8 +102,6 @@ namespace mithep
                       { fCombinedSecondaryVertexBJetTagsDisc = d;    }
       void          SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) 
                       { fCombinedSecondaryVertexMVABJetTagsDisc = d; }
-      void          SetImpactParameterMVABJetTagsDisc (Double_t d) 
-                      { fImpactParameterMVABJetTagsDisc = d; }
       void          SetJetProbabilityBJetTagsDisc(Double_t d)  
                       { fJetProbabilityBJetTagsDisc = d;     }
       void          SetJetBProbabilityBJetTagsDisc(Double_t d) 
@@ -123,8 +123,10 @@ namespace mithep
       void          SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) 
                       { fSimpleSecondaryVertexBJetTagsDisc = d;     }
       void          SetSoftMuonBJetTagsDisc(Double_t d)     { fSoftMuonBJetTagsDisc = d;     }
-      void          SetSoftMuonNoIPBJetTagsDisc(Double_t d) { fSoftMuonNoIPBJetTagsDisc = d; }
-      void          SetSoftElectronBJetTagsDisc(Double_t d) { fSoftElectronBJetTagsDisc = d; }
+      void          SetSoftMuonByIP3dBJetTagsDisc(Double_t d) { fSoftMuonByIP3dBJetTagsDisc = d; }
+      void          SetSoftMuonByPtBJetTagsDisc(Double_t d) { fSoftMuonByPtBJetTagsDisc = d; }
+      void          SetSoftElectronByIP3dBJetTagsDisc(Double_t d) { fSoftElectronByIP3dBJetTagsDisc = d; }
+      void          SetSoftElectronByPtBJetTagsDisc(Double_t d) { fSoftElectronByPtBJetTagsDisc = d; }
       void          SetTrackCountingHighEffBJetTagsDisc(Double_t d) 
                       { fTrackCountingHighEffBJetTagsDisc = d;      }
       void          SetTrackCountingHighPurBJetTagsDisc(Double_t d) 
@@ -142,12 +144,13 @@ namespace mithep
       Double32_t    fSimpleSecondaryVertexBJetTagsDisc;      //[0,0,14]discriminants b-tagging algos
       Double32_t    fCombinedSecondaryVertexBJetTagsDisc;    //[0,0,14]discriminants b-tagging algos
       Double32_t    fCombinedSecondaryVertexMVABJetTagsDisc; //[0,0,14]discriminants b-tagging algos
-      Double32_t    fImpactParameterMVABJetTagsDisc;         //[0,0,14]discriminants b-tagging algos
       Double32_t    fTrackCountingHighEffBJetTagsDisc;       //[0,0,14]discriminants b-tagging algos
       Double32_t    fTrackCountingHighPurBJetTagsDisc;       //[0,0,14]discriminants b-tagging algos
       Double32_t    fSoftMuonBJetTagsDisc;                   //[0,0,14]discriminants b-tagging algos
-      Double32_t    fSoftMuonNoIPBJetTagsDisc;               //[0,0,14]discriminants b-tagging algos
-      Double32_t    fSoftElectronBJetTagsDisc;               //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSoftMuonByIP3dBJetTagsDisc;             //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSoftMuonByPtBJetTagsDisc;               //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSoftElectronByIP3dBJetTagsDisc;         //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSoftElectronByPtBJetTagsDisc;           //[0,0,14]discriminants b-tagging algos
       Double32_t    fL2RelativeCorrectionScale;              //[0,0,14]L2 correction scale
       Double32_t    fL3AbsoluteCorrectionScale;              //[0,0,14]L3 correction scale
       Double32_t    fL4EMFCorrectionScale;                   //[0,0,14]L4 correction scale
@@ -156,7 +159,7 @@ namespace mithep
       Double32_t    fCustomCorrectionScale;                  //[0,0,14]custom correction scale
       BitMask8      fCorrections;                            //mask of corrections to be applied
 
-    ClassDef(Jet, 1) // Jet class
+    ClassDef(Jet, 2) // Jet class
   };
 }
 
