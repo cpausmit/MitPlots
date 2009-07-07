@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.25 2009/06/25 17:04:45 bendavid Exp $
+// $Id: Photon.h,v 1.26 2009/06/25 17:15:05 bendavid Exp $
 //
 // Photon
 //
@@ -117,15 +117,15 @@ namespace mithep
       Vect4M                    fMom;               //four momentum vector
       Double32_t                fR9;                //[0,0,14]r9=e3x3/etotal variable
       Double32_t                fHadOverEm;         //[0,0,14]hadronic over em fraction
-      Double32_t                fEcalRecHitIso;     //[0,0,14]ecal rechit based isolation dR 0.4
+      Double32_t                fEcalRecHitIso;     //[0,0,14]ecal rechit based isolation dR 0.4 *RENAMING*
       Double32_t                fHcalRecHitIso;     //[0,0,14] hcal rechit based isolation dR 0.4 - *DEPRECATED*
       Double32_t                fHcalTowerSumEtDr04;//[0,0,14] hcal tower based isolation dR 0.4
       Double32_t                fHcalDepth1TowerSumEtDr04; //[0,0,14]hcal depth1 tower based isolation dR 0.4
       Double32_t                fHcalDepth2TowerSumEtDr04; //[0,0,14]hcal depth2 tower based isolation dR 0.4
-      Double32_t                fSolidConeTrkIso;   //[0,0,14]sum track pT in cone of dR 0.4
-      Double32_t                fHollowConeTrkIso;  //[0,0,14]as above excluding the core, dR 0.4
-      UShort_t                  fSolidConeNTrk;     //number of tracks in a cone of dR 0.4
-      UShort_t                  fHollowConeNTrk;    //as above excluding the core, dR 0.4
+      Double32_t                fSolidConeTrkIso;   //[0,0,14]sum track pT in cone of dR 0.4 *RENAMING*
+      Double32_t                fHollowConeTrkIso;  //[0,0,14]as above excluding the core, dR 0.4 *RENAMING*
+      UShort_t                  fSolidConeNTrk;     //number of tracks in a cone of dR 0.4 *RENAMING*
+      UShort_t                  fHollowConeNTrk;    //as above excluding the core, dR 0.4 *RENAMING*
       Double32_t                fEcalRecHitIsoDr03; //[0,0,14]ecal rechit based isolation dR 0.3
       Double32_t                fHcalTowerSumEtDr03;//[0,0,14] hcal tower based isolation dR 0.3
       Double32_t                fHcalDepth1TowerSumEtDr03; //[0,0,14]hcal depth1 tower based isolation dR 0.3
