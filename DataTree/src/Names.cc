@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.31 2009/04/05 18:36:25 loizides Exp $
+// $Id: Names.cc,v 1.32 2009/06/30 13:57:11 loizides Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -21,8 +21,6 @@ const char *Names::gkGsfTrackBrn            = "GsfTracks";
 const char *Names::gkHltBitBrn              = "HLTBits";
 const char *Names::gkHltObjBrn              = "HLTObjects";
 const char *Names::gkIC5GenJetBrn           = "IC5GenJets";
-const char *Names::gkL1BitBrn               = "L1Bits";
-const char *Names::gkL1ObjBrn               = "L1Objects";
 const char *Names::gkMCEvtInfoBrn           = "MCEventInfo";
 const char *Names::gkMCPartBrn              = "MCParticles";
 const char *Names::gkMuonBrn                = "Muons";
@@ -44,9 +42,6 @@ const char *Names::gkLAHeaderBrn            = "LAHeader";
 const char *Names::gkHltTreeName            = "HLT";
 const char *Names::gkHltTableBrn            = "HLTTriggerTable";
 const char *Names::gkHltLabelBrn            = "HLTLabels";
-
-const char *Names::gkL1TreeName             = "L1";
-const char *Names::gkL1TableBrn             = "L1TriggerTable";
 
 const char *Names::gkAllEvtTreeName         = "AllEvents";
 const char *Names::gkAllEvtHeaderBrn        = "EventHeader";

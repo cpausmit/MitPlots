@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.33 2009/04/05 18:36:25 loizides Exp $
+// $Id: Names.h,v 1.34 2009/06/30 13:57:11 loizides Exp $
 //
 // Names
 //
@@ -32,8 +32,6 @@ namespace mithep
       static const char *gkHltBitBrn;
       static const char *gkHltObjBrn;
       static const char *gkIC5GenJetBrn;
-      static const char *gkL1BitBrn;
-      static const char *gkL1ObjBrn;
       static const char *gkMCEvtInfoBrn;
       static const char *gkMCPartBrn;
       static const char *gkMuonBrn;
@@ -55,9 +53,6 @@ namespace mithep
       static const char *gkHltTreeName;
       static const char *gkHltTableBrn;
       static const char *gkHltLabelBrn;
-
-      static const char *gkL1TreeName;
-      static const char *gkL1TableBrn;
 
       static const char *gkAllEvtTreeName;
       static const char *gkAllEvtHeaderBrn;

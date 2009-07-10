@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.8 2009/03/24 16:10:15 loizides Exp $
+// $Id: TriggerObject.h,v 1.9 2009/05/18 06:29:14 loizides Exp $
 //
 // TriggerObject
 //
@@ -70,27 +70,39 @@ namespace mithep
   {
     public:
       enum ETriggerObject { // see DataFormats/HLTReco/interface/TriggerTypeDefs.h
-        None               =  0,
-        TriggerL1Mu        =  81,
-        TriggerL1NoIsoEG   =  82,
-        TriggerL1IsoEG     =  83,
-        TriggerL1CenJet    =  84,
-        TriggerL1ForJet    =  85,
-        TriggerL1TauJet    =  86,
-        TriggerL1ETM       =  87,
-        TriggerL1ETT       =  88,
-        TriggerL1HTT       =  89,
-        TriggerL1JetCounts =  90,
-        TriggerPhoton      =  91,
-        TriggerElectron    =  92,
-        TriggerMuon        =  93,
-        TriggerTau         =  94,
-        TriggerJet         =  95,
-        TriggerBJet        =  96,
-        TriggerMET         =  97,
-        TriggerHT          =  98,
-        TriggerTrack       =  99,
-        TriggerCluster     = 100
+        None                  =  0,
+        TriggerL1Mu           = -81,
+        TriggerL1NoIsoEG      = -82,
+        TriggerL1IsoEG        = -83,
+        TriggerL1CenJet       = -84,
+        TriggerL1ForJet       = -85,
+        TriggerL1TauJet       = -86,
+        TriggerL1ETM          = -87,
+        TriggerL1ETT          = -88,
+        TriggerL1HTT          = -89,
+        TriggerL1HTM          = -90,
+        TriggerL1JetCounts    = -91,
+        TriggerL1HfBitCounts  = -92,
+        TriggerL1HfRingEtSums = -93,
+        TriggerL1TechTrig     = -94,
+        TriggerL1Castor       = -95,
+        TriggerL1BPTX         = -96,
+        TriggerPhoton         = +81,
+        TriggerElectron       = +82,
+        TriggerMuon           = +83,
+        TriggerTau            = +84,
+        TriggerJet            = +85,
+        TriggerBJet           = +86,
+        TriggerMET            = +87,
+        TriggerTET            = +88,
+        TriggerTHT            = +89,
+        TriggerMHT            = +90,
+        TriggerTrack          = +91,
+        TriggerCluster        = +92,
+        TriggerMETSig         = +93,
+        TriggerELongit        = +94,
+        TriggerMHTSig         = +95,
+        TriggerHLongit        = +96
       };
 
       TriggerObject() : fTrgId(0), fType(None), fTrigName(0), fModName(0), fFilName(0) {}
@@ -101,8 +113,10 @@ namespace mithep
         TriggerObjectBase(id,pt,eta,phi,mass), fTrgId(tid), 
         fType(static_cast<ETriggerObject>(type)) {}
 
-      ULong_t               Hash()                  const { return fTrgId;         }
       const char           *FilterName()            const { return fFilName;       }
+      ULong_t               Hash()                  const { return fTrgId;         }
+      Bool_t                IsHLT()                 const { return fType>0;        }
+      Bool_t                IsL1()                  const { return fType<0;        }
       const char           *ModuleName()            const { return fModName;       }
       EObjType              ObjType()               const { return kTriggerObject; }      
       void                  Print(Option_t *opt="") const;
@@ -120,7 +134,7 @@ namespace mithep
       const char           *fModName;     //!L3 module name
       const char           *fFilName;     //!L3 filter name
 
-    ClassDef(TriggerObject, 1) // Trigger object class
+    ClassDef(TriggerObject, 2) // Trigger object class
   };
 
 //--------------------------------------------------------------------------------------------------
