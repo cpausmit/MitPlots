@@ -1,4 +1,4 @@
-// $Id: SimpleExampleMod.cc,v 1.4 2008/12/09 10:18:34 loizides Exp $
+// $Id: SimpleExampleMod.cc,v 1.5 2009/06/15 15:00:16 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -68,7 +68,7 @@ void SimpleExampleMod::SlaveBegin()
 
   ReqBranch(GetPartName(), fParticles);
 
-  AddTH1(fPtHist,"hPtHist",";p_{t};#",100,0.,25.);
+  AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",100,0.,25.);
   AddTH1(fEtaHist,"hEtaHist",";#eta;#",160,-8.,8.);
 }
 

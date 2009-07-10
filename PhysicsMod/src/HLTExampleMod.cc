@@ -1,4 +1,4 @@
-// $Id: HLTExampleMod.cc,v 1.3 2009/05/12 18:41:42 loizides Exp $
+// $Id: HLTExampleMod.cc,v 1.4 2009/06/15 15:00:16 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
@@ -45,7 +45,7 @@ void HLTExampleMod::SlaveBegin()
   // other analysis objects and request branches. For this module,
   // we request a branch of the MitTree.
 
-  fPtHist  = new TH1D("hPtHist",";p_{t};#",250,0.,500.);
+  fPtHist  = new TH1D("hPtHist",";p_{t} [GeV];#",250,0.,500.);
   AddOutput(fPtHist);
   fEtaHist = new TH1D("hEtaHist",";#eta;#",160,-8.,8.);
   AddOutput(fEtaHist);

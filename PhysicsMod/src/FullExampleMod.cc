@@ -1,4 +1,4 @@
-// $Id: FullExampleMod.cc,v 1.3 2008/12/09 10:18:33 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.4 2009/06/15 15:00:16 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -89,13 +89,13 @@ void FullExampleMod::SlaveBegin()
   ReqBranch(fMuonName,     fMuons);
   ReqBranch(fElectronName, fElectrons);
 
-  AddTH1(fMCPtHist,"hMCPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fMCPtHist,"hMCPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fMCEtaHist,"hMCEtaHist",";#eta;#",160,-8.,8.);
-  AddTH1(fTrackPtHist,"hTrackPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fTrackPtHist,"hTrackPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fTrackEtaHist,"hTrackEtaHist",";#eta;#",160,-8.,8.);
-  AddTH1(fMuonPtHist,"hMuonPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fMuonPtHist,"hMuonPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fMuonEtaHist,"hMuonEtaHist",";#eta;#",160,-8.,8.);
-  AddTH1(fElectronPtHist,"hElectronPtHist",";p_{t};#",100,0.,250.);
+  AddTH1(fElectronPtHist,"hElectronPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fElectronEtaHist,"hElectronEtaHist",";#eta;#",160,-8.,8.);
 }
 
