@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.27 2009/07/03 06:18:02 phedex Exp $
+# $Id: setup.sh,v 1.28 2009/07/06 13:22:42 loizides Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -40,7 +40,7 @@ if ! test -d MitProd; then
 fi
 
 case $version in
-    (3001000) 
+    (3001001) 
         #Remove annoying warning messages for the jet to vertex associator.
         addpkg JetMETCorrections/JetVertexAssociation;
         TMP=`mktemp`;
