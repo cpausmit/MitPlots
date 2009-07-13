@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.5 2009/03/23 08:36:30 loizides Exp $
+// $Id: TAModule.h,v 1.6 2009/04/28 14:50:19 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -33,20 +33,25 @@ class TStopwatch;
 class TAModule : public TTask {
 public:
    enum EModResult {
-      kWarning,      //a problem requiring no action but just printing of a warning
+      kWarning,      //a problem requiring no action, just printing of a warning
       kAbortModule,  //a problem requiring this mod (and its submods) to stop
       kAbortEvent,   //a problem requiring the processing of this event to stop
-      kStopModule,   //a problem requiring this mod (and its submods) to stop for the rest of the analysis
-      kAbortAnalysis //a problem requiring the processing of the analysis to stop
+      kStopModule,   //a problem requiring this module (and its submodules) 
+                     // to stop for the rest of the analysis
+      kAbortAnalysis //a problem requiring the analysis to stop
    };
 
 private:
-   TAMSelector        *fSelector; //!the selector for the tree this mod processes
+   TAMSelector        *fSelector; //!the selector processing the tree
    TAMOutput          *fOutput;   //the list of output objects for this mod
-   Bool_t              fDefActv;  //!copy of fActive so that TAMSelector can temporarily change
-                                  // this mod's active-ness to abort the module or the event
+   Bool_t              fDefActv;  //!copy of fActive so that TAMSelector can 
+                                  // temporarily change this mod's active-ness 
+                                  // to abort the module or the event
    UInt_t              fVerbose;  //verbosity level
-   Bool_t              fStopped;  //!indicate if module (and its submodules) are aborted for the rest of the analysis
+   Bool_t              fStopped;  //!indicate if module (and its submodules) are
+                                  // aborted for the rest of the analysis
+   Bool_t              fUseName;  //if true use this module's name when 
+                                  // writing the output in the flattening mode
 
    static const Char_t kExecBegin;           //!key to mark Begin
    static const Char_t kExecSlaveBegin;      //!key to mark SlaveBegin
@@ -75,8 +80,8 @@ protected:
    template <class OC>
    void                AddOutput(OC* const & obj);
    const TAMSelector  *GetSelector()         const { return fSelector; }
-   Bool_t              IsEventAborted()      const { return (fSelector==0) ? kFALSE : fSelector->IsEventAborted(); }
-   Bool_t              IsAnalysisAborted()   const { return (fSelector==0) ? kFALSE : fSelector->IsAnalysisAborted(); }
+   Bool_t              IsEventAborted()      const;
+   Bool_t              IsAnalysisAborted()   const;
    void                ls(Option_t *option)  const;
    void                LoadBranch(const Char_t* bname);
    virtual TObject    *FindObjThisEvt(const Char_t* name) const;
@@ -105,6 +110,7 @@ public:
    TAModule(const Char_t* name, const Char_t* title);
    virtual ~TAModule();
    
+   void                SetActive(Bool_t act = kTRUE) { SetDefActive(act); }
    virtual void        Browse(TBrowser* b);
    // intentionally have no GetSelector as modules should never directly
    // interact with the selector, the input list or the output list
@@ -118,22 +124,23 @@ public:
    void                Exec(Option_t* option);
    TObject            *FindPublicObj(const Char_t* name) const;
    TFile              *GetCurrentFile() const;
-   const TAMOutput    *GetModOutput()   const { return fOutput; }
-   TAMOutput          *GetModOutput()         { return fOutput; }
+   const TAMOutput    *GetModOutput()   const { return fOutput;          }
+   TAMOutput          *GetModOutput()         { return fOutput;          }
    TList*              GetSubModules()        { return GetListOfTasks(); }
    const TList        *GetSubModules()  const { return GetListOfTasks(); }
-   UInt_t              GetVerbosity()   const { return fVerbose; }
+   Bool_t              GetUseName()     const { return fUseName;         }   
+   UInt_t              GetVerbosity()   const { return fVerbose;         }
    virtual void        Print(Option_t *option="") const;
    Bool_t              PublishObj(TObject* obj);
    TObject            *RetractObj(const Char_t* name);
    void                SetDefActive(Bool_t active);
    void                SetSelector(TAMSelector* sel);
-   void                SetVerbosity(UInt_t vb)          { fVerbose = vb; }
-   void                SetActive(Bool_t active = kTRUE) { SetDefActive(active); }
+   void                SetUseName(Bool_t b)          { fUseName = b;     }
+   void                SetVerbosity(UInt_t vb)       { fVerbose = vb;    }
 
    static const char  *Version();
 
-   ClassDef(TAModule,3) // Abstract base class for modular processing a tree
+   ClassDef(TAModule,4) // Base class for modular processing a tree
 };
 
 
@@ -159,6 +166,23 @@ inline void TAModule::AddOutput(OC* const & obj)
    }
 }
 
+
+//______________________________________________________________________________
+inline Bool_t TAModule::IsEventAborted() const 
+{ 
+   // Return kTRUE if event has been aborted.
+
+   return (fSelector==0) ? kFALSE : fSelector->IsEventAborted(); 
+}
+
+
+//______________________________________________________________________________
+inline Bool_t TAModule::IsAnalysisAborted() const 
+{ 
+   // Return kTRUE if analysis has been aborted.
+
+   return (fSelector==0) ? kFALSE : fSelector->IsAnalysisAborted(); 
+}
 
 //______________________________________________________________________________
 template <typename T>
