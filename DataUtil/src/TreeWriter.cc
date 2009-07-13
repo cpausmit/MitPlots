@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.15 2009/03/12 18:26:08 loizides Exp $
+// $Id: TreeWriter.cc,v 1.16 2009/03/23 22:15:11 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -231,6 +231,7 @@ void TreeWriter::CloseFile()
 
   for (Int_t i=0;i<fTrees.GetEntries();++i) {
     MyTree *mt = static_cast<MyTree*>(fTrees.At(i));
+    mt->FlushBaskets();
     mt->Write(mt->GetName(),TObject::kOverwrite);
 
     // backup and restore list of branch pointers from TRefTable (needed for autoloading)
