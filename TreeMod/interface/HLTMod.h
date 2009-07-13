@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.10 2009/06/15 15:00:17 loizides Exp $
+// $Id: HLTMod.h,v 1.11 2009/06/17 10:38:20 loizides Exp $
 //
 // HLTMod
 //
@@ -70,8 +70,8 @@ namespace mithep
       std::vector<BitMask256>     fTrigBitsCmp;   //!trigger bits used for comparison
       BitMask256                  fBitsDone;      //!bits for which trigger objects are copied
       TriggerObjectOArr          *fMyTrgObjs;     //!exported published trigger object array
-      const TriggerTable         *fTriggers;      //!inported published HLT trigger table
-      const TriggerObjectsTable  *fTrigObjs;      //!inported published HLT trigger objects table
+      const TriggerTable         *fTriggers;      //!imported published HLT trigger table
+      const TriggerObjectsTable  *fTrigObjs;      //!imported published HLT trigger objects table
       Int_t                       fNEvents;       //!number of processed events
       Int_t                       fNAcceped;      //!number of accepted events
       Int_t                       fNFailed;       //!number of failed events

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.5 2009/03/02 13:26:45 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.6 2009/06/15 15:00:17 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -17,7 +17,8 @@
 #include <string>
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
-#include "MitAna/DataTree/interface/TriggerObjectFwd.h"
+#include "MitAna/DataTree/interface/TriggerObjectBaseFwd.h"
+#include "MitAna/DataTree/interface/TriggerObjectRelFwd.h"
 
 namespace mithep 
 {

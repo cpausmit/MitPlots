@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.10 2009/05/24 19:10:43 ceballos Exp $
+// $Id: HLTMod.cc,v 1.11 2009/06/15 15:00:17 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -8,6 +8,7 @@
 #include "MitAna/DataTree/interface/TriggerMask.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
+#include "MitAna/DataTree/interface/TriggerObjectsTable.h"
 
 using namespace mithep;
 
