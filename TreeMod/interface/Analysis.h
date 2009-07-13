@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.25 2009/03/23 08:31:30 loizides Exp $
+// $Id: Analysis.h,v 1.26 2009/06/19 07:39:01 loizides Exp $
 //
 // Analysis
 //
@@ -70,6 +70,7 @@ namespace mithep
       void                      SetCompressionLevel(Int_t level)    { fCompLevel     = level;     }
       void                      SetConfigName(const char* name)     { fConfig        = name;      }
       void                      SetDoObjTabClean(Bool_t b)          { fDoObjTabClean = b;         }
+      void                      SetDoParallel(Bool_t b)             { fParallel      = b;         }
       void                      SetDoProxy(Bool_t b)                { fDoProxy       = b;         }
       void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
       void                      SetMasterName(const char* name)     { fMaster        = name;      }
@@ -104,6 +105,7 @@ namespace mithep
       Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
       Bool_t                    fDoProxy;         //=true if TRef branch autoload is used (def=0)
       Bool_t                    fDoObjTabClean;   //=true if object table cleaning is used (def=1)
+      Bool_t                    fParallel;        //=true if parellel tree unzipping is used (def=0)
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names

@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.33 2009/06/19 07:39:01 loizides Exp $
+// $Id: Analysis.cc,v 1.34 2009/06/22 15:36:47 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -11,6 +11,7 @@
 #include <TProof.h>
 #include <TROOT.h>
 #include <TBrowser.h>
+#include <TTreeCacheUnzip.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
@@ -33,6 +34,7 @@ Analysis::Analysis(Bool_t useproof) :
   fHierarchy(kTRUE), 
   fDoProxy(kFALSE), 
   fDoObjTabClean(kTRUE),
+  fParallel(kFALSE),
   fState(kPristine), 
   fNFriends(0), 
   fList(new TList), 
@@ -413,7 +415,10 @@ Bool_t Analysis::Init()
     }
   }
 
-  if (fCacheSize>=0)
+  if (fParallel)
+    TTreeCacheUnzip::SetParallelUnzip(TTreeCacheUnzip::kEnable);
+
+  if (fCacheSize>=0) 
     fChain->SetCacheSize(fCacheSize);
 
   // create our customized loader plugin for TAM
