@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeLoader.cxx 5120 2008-05-07 18:17:33Z loizides $
+// $Id: TAMTreeLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "TAMTreeLoader.h"
@@ -35,7 +35,8 @@ TAMTreeLoader::TAMTreeLoader()
 
 
 //______________________________________________________________________________
-TAMVirtualBranchLoader *TAMTreeLoader::CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo)
+TAMVirtualBranchLoader *TAMTreeLoader::CreateBranchLoader(TTree *tree, 
+                                                          TAMBranchInfo* brInfo)
 {
    // Create branch loader if the requested branch name is found in the tree.
    
@@ -45,8 +46,10 @@ TAMVirtualBranchLoader *TAMTreeLoader::CreateBranchLoader(TTree *tree, TAMBranch
    }
    
    if(tree->GetBranch(brname.Data()) == 0) {
-      Warning("CreateBranchLoader","Could not find branch with name [%s] in tree [%s].",
-              (brInfo->GetName()!=0) ? (brInfo->GetName()) : "null", tree->GetName());
+      Warning("CreateBranchLoader",
+              "Could not find branch with name [%s] in tree [%s].",
+              (brInfo->GetName()!=0) ? (brInfo->GetName()) : 
+              "null", tree->GetName());
 
       return 0;
    }

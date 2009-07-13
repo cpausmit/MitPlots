@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeLoader.h 5160 2008-05-20 19:52:53Z loizides $
+// $Id: TAMTreeLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMTreeLoader
@@ -20,7 +20,8 @@ public:
    TAMTreeLoader();
    virtual ~TAMTreeLoader() {}
 
-   TAMVirtualBranchLoader *CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo);
+   TAMVirtualBranchLoader *CreateBranchLoader(TTree *tree, 
+                                              TAMBranchInfo* brInfo);
    
    ClassDef(TAMTreeLoader,1)  // Tree branch plugin loader for TAM 
 };

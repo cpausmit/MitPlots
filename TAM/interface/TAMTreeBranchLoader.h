@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.h 5120 2008-05-07 18:17:33Z loizides $
+// $Id: TAMTreeBranchLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMTreeBranchLoader
@@ -22,13 +22,16 @@ class TTree;
 class TAMTreeBranchLoader : public TAMVirtualBranchLoader {
 protected:
    BranchAddr_t         fBAddr;         //branch address for the data
-   Bool_t               fIsClass;       //if the branch stores a class (as opposed to a struct)
-   Bool_t               fLeafSizeConst; //if the size of leaves in this branch is constant
+   Bool_t               fIsClass;       //if the branch stores a class 
+                                        // (as opposed to a struct)
+   Bool_t               fLeafSizeConst; //if size of leaves in branch is const
    TBranch             *fBranch;        //the branch itself (not owned)
-   TClass              *fClass;         //class information from dictionary (not owned)
+   TClass              *fClass;         //class information from dictionary 
+                                        // (not owned)
 
    void                 AllocateMemory();
-   Bool_t               CheckBrClass(const type_info& ptrtype, const TClass& cls);
+   Bool_t               CheckBrClass(const type_info& ptrtype, 
+                                     const TClass& cls);
    Bool_t               CheckBrStruct(TClass& cls);
    Bool_t               CheckBrType(const type_info& ptrtype);
    Bool_t               CheckBrTypeAllModules();
@@ -46,7 +49,7 @@ public:
    using       TObject::Notify;
    Bool_t               Notify(TTree *tree);
    
-   ClassDef(TAMTreeBranchLoader,0)  // TAM plugin to load data from a single branch
+   ClassDef(TAMTreeBranchLoader,0)  // TAM plugin to load data from a branch
 };
 
 

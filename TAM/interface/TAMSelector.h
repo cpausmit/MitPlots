@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.10 2009/02/17 21:54:17 bendavid Exp $
+// $Id: TAMSelector.h,v 1.11 2009/03/02 12:34:51 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -53,11 +53,11 @@ protected:
 
    class BranchProxy : public TObject {
       // Class that acts as a proxy between the TRefTable, TAM and TBranchRef.
-      // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done via
-      // TAM loaders.
+      // If SetDoProxy(kTRUE) is called TRef branch auto-loading will be done 
+      // via TAM loaders.
    public:
        BranchProxy(TAMSelector *sel, Bool_t e=kFALSE);
-       virtual       ~BranchProxy();
+       virtual      ~BranchProxy();
        void          Disable();
        void          Enable();
        TObject      *GetObjectWithID(UInt_t uid, TProcessID *pid);
@@ -75,21 +75,31 @@ protected:
 
    TTree            *fTree;            //!the tree or chain
    THashTable        fBranchTable;     //!table of requested branches
-   THashTable        fEventObjs;       //!table of objects available to any module while the current event is processed
-   TAModule         *fAModules;        //!the top-most TAModule. nothing but a container for more modules
+   THashTable        fEventObjs;       //!table of objects available to any mod
+                                       // while the current event is processed
+   TAModule         *fAModules;        //!the top-most TAModule. Nothing but a 
+                                       //  container for more modules
    Long64_t          fCurEvt;          //!the current event
-   TList            *fOwnInput;        //!keep pointer to own input list in case it was created by us 
-   Bool_t            fAnalysisAborted; //!true if the analysis should be aborted
-   Bool_t            fModAborted;      //!true if one or more modules(s) have been aborted
-   Bool_t            fEventAborted;    //!true if the current event should be aborted
-   Bool_t            fActNotify;       //!true if notify is active (avoiding recursive calls of Notify())
-   UInt_t            fObjCounter;      //!keep object counter for resetting it in the process loop
-   UInt_t            fObjCounterRun;   //!keep object counter for resetting it in the process loop when end of run is reached
-   UInt_t            fVerbosity;       //true if one wants to print debug info
-   BranchProxy       fProxy;           //proxy for reference resolving branch loading via TAM
-   Bool_t            fDoProxy;         //true if TAMSelector should be proxy for TRef branch autoloads
-   Bool_t            fDoObjTabClean;   //true if TAMSelector should clean the object tables of process id's
-   Bool_t            fObjTabClean;     //bool to track whether object tables of process id's are currently clean
+   TList            *fOwnInput;        //!keep pointer to own input list 
+                                       // in case it was created by us 
+   Bool_t            fAnalysisAborted; //!if the analysis should be aborted
+   Bool_t            fModAborted;      //!if >=1 modules(s) are aborted
+   Bool_t            fEventAborted;    //!if the current event should be aborted
+   Bool_t            fActNotify;       //!if notify is active 
+                                       // (avoiding recursive calls of Notify())
+   UInt_t            fObjCounter;      //!keep object counter for resetting it 
+                                       // in the process loop
+   UInt_t            fObjCounterRun;   //!keep object counter for resetting it 
+                                       // in process when end of run is reached
+   UInt_t            fVerbosity;       //if one wants to print debug info
+   BranchProxy       fProxy;           //proxy for reference resolving branch 
+                                       // loading via TAM
+   Bool_t            fDoProxy;         //if TAMSelector should be proxy for 
+                                       // TRef branch autoloads
+   Bool_t            fDoObjTabClean;   //true if TAMSelector should clean the 
+                                       // object tables of process id's
+   Bool_t            fObjTabClean;     //bool to track whether object tables of
+                                       // process id's are currently clean
    TList             fLoaders;         //list of data loaders
 
    void              AddNewOutputLists();
@@ -110,12 +120,13 @@ public:
    void              AbortEvent();
    void              AbortModule(TAModule* mod);
    virtual void      AddInput(TAModule* mod);
-   void              AddLoader(TAMVirtualLoader *loader) { fLoaders.AddLast(loader); }
+   void              AddLoader(TAMVirtualLoader *loader) 
+                       { fLoaders.AddLast(loader); }
    virtual Bool_t    AddObjThisEvt(TObject* obj);
    virtual Bool_t    AddObjThisEvt(TObject* obj, const char *name);
    void              Begin(TTree* tree);
-   virtual Bool_t    BeginRun()                { return kFALSE; }
-   virtual Bool_t    EndRun()                  { return kFALSE; }
+   virtual Bool_t    BeginRun()                { return kFALSE;  }
+   virtual Bool_t    EndRun()                  { return kFALSE;  }
    TAMOutput        *FindModOutput(const TAModule* mod);
    virtual TObject  *FindObjThisEvt(const Char_t* name) const;
    virtual TObject  *FindPublicObj(const Char_t* name)  const;
@@ -136,7 +147,8 @@ public:
    Bool_t            IsAnalysisAborted() const { return fAnalysisAborted; }
    void              LoadBranch(const Char_t* bname);
    Bool_t            Notify();
-   Bool_t            Process(Int_t entry) { return Process(static_cast<Long64_t>(entry)); }
+   Bool_t            Process(Int_t entry) 
+                       { return Process(static_cast<Long64_t>(entry));    }
    Bool_t            Process(Long64_t entry);
    virtual Bool_t    PublishObj(TObject* obj);
    template <typename T>

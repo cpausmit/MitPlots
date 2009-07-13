@@ -1,5 +1,5 @@
 //
-// $Id: TAMVirtualBranchLoader.h 3191 2006-08-17 14:52:57Z loizides $
+// $Id: TAMVirtualBranchLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMVirtualBranchLoader
@@ -18,7 +18,7 @@ class TTree;
 
 
 class TAMVirtualBranchLoader : public TObject {
-   TAMBranchInfo       *fBInfo;         //corresponding TAMBranchInfo (not owned)
+   TAMBranchInfo       *fBInfo; //corresponding TAMBranchInfo (not owned)
 
 public:
    TAMVirtualBranchLoader(TAMBranchInfo *binfo);
@@ -31,7 +31,7 @@ public:
    using       TObject::Notify;
    virtual Bool_t       Notify(TTree *tree);
    
-   ClassDef(TAMVirtualBranchLoader,1)  // Abstract base class for data loader plugins in TAM
+   ClassDef(TAMVirtualBranchLoader,1)  // Base class for data loader plugins
 };
 
 #endif //ROOT_TAMVirtualBranchLoader

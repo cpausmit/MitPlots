@@ -1,5 +1,5 @@
 //
-// $Id: TAMVirtualLoader.h 2775 2006-04-29 18:01:04Z loizides $
+// $Id: TAMVirtualLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMVirtualLoader
@@ -18,13 +18,16 @@ class TAMVirtualBranchLoader;
 
 class TAMVirtualLoader : public TObject {
 
+//______________________________________________________________________________
 public:
    TAMVirtualLoader();
    virtual ~TAMVirtualLoader() {}
 
-   virtual TAMVirtualBranchLoader  *CreateBranchLoader(TTree *tree, TAMBranchInfo* brInfo) = 0;
+   virtual 
+   TAMVirtualBranchLoader *CreateBranchLoader(TTree *tree, 
+                                              TAMBranchInfo* brInfo) = 0;
    
-   ClassDef(TAMVirtualLoader,1)  // Abstract base class for loading plugins into TAM
+   ClassDef(TAMVirtualLoader,1)  // Base class for loading plugins into TAM
 };
 
 #endif //ROOT_TAMVirtualLoader

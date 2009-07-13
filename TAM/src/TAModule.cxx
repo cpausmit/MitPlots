@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx,v 1.3 2008/11/23 19:52:13 loizides Exp $
+// $Id: TAModule.cxx,v 1.4 2008/12/04 13:50:56 loizides Exp $
 //
 
 #include "TAModule.h"
@@ -78,8 +78,8 @@
 //        - Terminate()                                                 //
 //           - In Proof, this function is called by the client at the   //
 //             end of the analysis.                                     //
-//             Here, a module can save results to a file or present them//
-//             graphically.                                             //
+//             Here, a module can save results to a file or present     //
+//             them graphically.                                        //
 //                                                                      //
 // A module may be active or inactive (controlled by TTask::SetActive). //
 // When a module is not active, its sub modules are not executed.       //
@@ -112,7 +112,8 @@ TAModule::TAModule() :
    fOutput(0),
    fDefActv(IsActive()), // in principal, no need to initialze fDefActv   
    fVerbose(0),
-   fStopped(kFALSE)
+   fStopped(kFALSE),
+   fUseName(kFALSE)
 {
    // Default constructor.
 }
@@ -125,7 +126,8 @@ TAModule::TAModule(const Char_t* name, const Char_t* title) :
    fOutput(0),
    fDefActv(IsActive()), // in principal, no need to initialze fDefActv   
    fVerbose(0),
-   fStopped(kFALSE)
+   fStopped(kFALSE),
+   fUseName(kFALSE)
 {
    // Normal constructor:
    // Use SetSelector on the top-most module to recursively set
@@ -221,7 +223,8 @@ void TAModule::Browse(TBrowser* b)
 
 
 //______________________________________________________________________________
-Bool_t TAModule::CheckSelectors(const TAMSelector* sel, const Bool_t warn/*=kTRUE*/) const 
+Bool_t TAModule::CheckSelectors(const TAMSelector* sel, 
+                                const Bool_t warn/*=kTRUE*/) const 
 {
    // Checks the tree of TAModules to be sure that each module has the
    // specified selector.
@@ -322,11 +325,11 @@ TObject* TAModule::FindObjThisEvt(const Char_t* name) const
 
 
 //______________________________________________________________________________
-TObject* TAModule::FindPublicObj(const Char_t* name) const {
+TObject* TAModule::FindPublicObj(const Char_t* name) const 
+{
    // Looks for the public object with the specified name. If not found,
-   // returns 0.
-   // Note: TAModules are not public objects and will not be found by this
-   // function.
+   // returns 0. Note: TAModules are not public objects and will not be 
+   // found by this function.
 
    if (fSelector!=0) {
       return fSelector->FindPublicObj(name);

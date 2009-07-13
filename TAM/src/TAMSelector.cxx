@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx 5526 2009-04-27 06:59:19Z loizides $
+// $Id: TAMSelector.cxx,v 1.15 2009/04/27 08:11:08 loizides Exp $
 //
 
 #include "TAMSelector.h"
@@ -935,8 +935,10 @@ Bool_t TAMSelector::Process(Long64_t entry)
 
    // restore object counter
    TProcessID::SetObjectCount(fObjCounter);
-   // Clean object table for current process id: This guarantees that objects which 
-   // are not yet loaded in the current event have null pointers in the object table.
+
+   // Clean object table for current process id: 
+   // This guarantees that objects which are not yet loaded in the 
+   // current event have null pointers in the object table.
    if (fDoObjTabClean) {
     CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
     
@@ -953,15 +955,17 @@ Bool_t TAMSelector::Process(Long64_t entry)
     }
    }
 
-   // Clean object table for current process id. This guarantees that objects which are 
-   // not yet loaded in the current event have null pointers in the object table.
+   // Clean object table for current process id. 
+   // This guarantees that objects which are not yet loaded in the 
+   // current event have null pointers in the object table.
    if (fDoObjTabClean) {
      CleanObjTable(TProcessID::GetSessionProcessID(), fObjCounter);
     
      //clean object tables for process ids being read from the file
      for (Int_t i=0; i<pids->GetEntriesFast(); ++i) {
        TProcessID *pid = static_cast<TProcessID*>(pids->At(i));
-       std::map<TProcessID*, UInt_t>::const_iterator lastUID = lastUIDs.find(pid);
+       std::map<TProcessID*, UInt_t>::const_iterator lastUID = 
+         lastUIDs.find(pid);
        if (lastUID != lastUIDs.end()) 
          CleanObjTable(pid, lastUID->second);
        else

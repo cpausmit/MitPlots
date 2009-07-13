@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMTreeBranchLoader.cxx,v 1.2 2008/10/06 16:42:50 loizides Exp $
 //
 
 #include "TAMTreeBranchLoader.h"
@@ -93,7 +93,8 @@ void TAMTreeBranchLoader::AllocateMemory()
    R__ASSERT(fClass != 0);
 
    if(fBAddr!=0) {
-      Fatal("AllocateMemory", "Address already allocated! Must call DeleteMemory() first!");
+      Fatal("AllocateMemory", 
+            "Address already allocated! Must call DeleteMemory() first!");
       return;
    }
 
@@ -102,7 +103,8 @@ void TAMTreeBranchLoader::AllocateMemory()
 
 
 //______________________________________________________________________________
-Bool_t TAMTreeBranchLoader::CheckBrClass(const type_info& ptrtype, const TClass& cls) 
+Bool_t TAMTreeBranchLoader::CheckBrClass(const type_info& ptrtype, 
+                                         const TClass& cls) 
 {
    // Check if the tree stores a class of the specified type
    // ptrtype is user type and cls is type found in branch.
@@ -263,7 +265,7 @@ void TAMTreeBranchLoader::Clear(Option_t */*option*/)
       if (ca!=0) { 	 
          ca->Clear("C"); 	 
       } else { 	 
-         Error("Clear", "Could not clear the clones array for branch %s", 	 
+         Error("Clear", "Could not clear the clones array for branch %s",
                fBranch->GetName()); 	 
       } 	 
    }

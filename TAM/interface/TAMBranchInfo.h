@@ -1,5 +1,5 @@
 //
-// $Id: TAMBranchInfo.h,v 1.2 2008/12/04 13:50:56 loizides Exp $
+// $Id: TAMBranchInfo.h,v 1.3 2009/01/20 12:21:48 loizides Exp $
 //
 
 #ifndef ROOT_TAMBranchInfo
@@ -40,7 +40,8 @@ struct TAMBranchInfo : TNamed {
       // this allows the minimum number of functions & classes to be
       // templated.
 
-      BranchAddr_t                *fPtr;           // pointer to the TAModule's pointer to the branch object
+      BranchAddr_t                *fPtr; //pointer to the TAModule's 
+                                         // pointer to the branch object
       BranchPtr_t(BranchAddr_t* ptr) : fPtr(ptr) {}
       virtual ~BranchPtr_t()                     { (*fPtr) = 0; }
       virtual const type_info& GetType() const=0;
@@ -53,24 +54,26 @@ struct TAMBranchInfo : TNamed {
       virtual const type_info& GetType() const   { return typeid(T); }
    };
 
-   Bool_t                          fIsLoaded;      //=true if the branch is loaded for current event
-   TAMVirtualBranchLoader         *fLoader;        //our data (tree) loader
-   vector<BranchPtr_t*>            fUsrAddresses;  //list of pointers to each TAModule's pointer to branch object
+   Bool_t                          fIsLoaded;     //if branch is loaded 
+                                                  // for current event
+   TAMVirtualBranchLoader         *fLoader;       //our data (tree) loader
+   vector<BranchPtr_t*>            fUsrAddresses; //list of pointers to each 
+                                                  // mod's ptr to branch object
 
    TAMBranchInfo(const Char_t* branchName=0);
    virtual ~TAMBranchInfo();
 
    template <typename T> Bool_t    AddPtr(T*& address);
    Int_t                           GetEntry(Long64_t entry);
-   TAMVirtualBranchLoader         *GetLoader()     const { return fLoader; }
-   const type_info&                GetType()       const { return fUsrAddresses.empty() ? 
-                                                           typeid(void) : fUsrAddresses[0]->GetType(); }
+   TAMVirtualBranchLoader         *GetLoader()   const { return fLoader;   }
+   const type_info&                GetType()     const;
    void                            Init();
-   Bool_t                          IsLoaded()      const { return fIsLoaded; } 
+   Bool_t                          IsLoaded()    const { return fIsLoaded; } 
    using                  TObject::Notify;
    Bool_t                          Notify(TTree* tree);
    void                            SetUsrAddrs();
-   void                            SetLoader(TAMVirtualBranchLoader *loader) { fLoader = loader; }
+   void                            SetLoader(TAMVirtualBranchLoader *loader) 
+                                     { fLoader = loader; }
    void                            ZeroUsrAddrs();
 
    ClassDef(TAMBranchInfo,0)  // General per branch information
@@ -89,5 +92,12 @@ inline Bool_t TAMBranchInfo::AddPtr(T*& address)
    return kTRUE;
 }
 
+//______________________________________________________________________________
+inline const type_info &TAMBranchInfo::GetType() const 
+{ 
+  // Return type of user address.
+
+  return fUsrAddresses.empty() ? typeid(void) : fUsrAddresses[0]->GetType(); 
+}
 
 #endif //ROOT_TAMBranchInfo
