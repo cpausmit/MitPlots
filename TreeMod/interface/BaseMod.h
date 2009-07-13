@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.22 2009/06/17 10:38:28 loizides Exp $
+// $Id: BaseMod.h,v 1.23 2009/06/18 15:26:12 loizides Exp $
 //
 // BaseMod
 //
@@ -16,7 +16,7 @@
 #include <TObjString.h>
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TreeMod/interface/Selector.h"
-#include "MitAna/DataTree/interface/TriggerObjectFwd.h" 
+#include "MitAna/DataTree/interface/TriggerObjectCol.h" 
 
 namespace mithep 
 {
