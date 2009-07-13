@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.46 2009/04/09 11:24:45 loizides Exp $
+// $Id: Collections.h,v 1.47 2009/06/15 15:00:11 loizides Exp $
 //
 // Collections
 //
@@ -50,5 +50,7 @@
 #include "MitAna/DataTree/interface/TrackCol.h"
 #include "MitAna/DataTree/interface/TriggerMaskCol.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
+#include "MitAna/DataTree/interface/TriggerObjectBaseCol.h"
+#include "MitAna/DataTree/interface/TriggerObjectRelCol.h"
 #include "MitAna/DataTree/interface/VertexCol.h"
 #endif
