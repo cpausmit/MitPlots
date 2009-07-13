@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.9 2009/06/11 12:21:26 loizides Exp $
+// $Id: ObjTypes.h,v 1.10 2009/06/15 15:00:13 loizides Exp $
 //
 // ObjTypes
 //
@@ -60,7 +60,7 @@ namespace mithep
     kTriggerName,
     kTriggerObject,
     kTriggerObjectBase,
-    kTriggerObjectRef,
+    kTriggerObjectRel,
     kVertex,
     kUnknown
   };
