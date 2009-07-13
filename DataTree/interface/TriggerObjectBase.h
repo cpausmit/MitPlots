@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.11 2009/07/13 06:37:34 loizides Exp $
+// $Id: TriggerObjectBase.h,v 1.1 2009/07/13 09:42:15 loizides Exp $
 //
 // TriggerObjectBase
 //
@@ -20,21 +20,22 @@ namespace mithep
   class TriggerObjectBase : public Particle
   {
     public:
-      TriggerObjectBase() : fId(0), fType(0), fNameInd(-1) {}
+      TriggerObjectBase() : fId(0), fType(0), fTagInd(-1) {}
       TriggerObjectBase(Int_t id, Char_t type, const FourVectorM32 &mom) : 
-        fId(id), fMom(mom), fType(type), fNameInd(-1) {}
+        fId(id), fMom(mom), fType(type), fTagInd(-1) {}
       TriggerObjectBase(Int_t id, Char_t type, 
                         Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
-        fId(id), fMom(pt,eta,phi,mass), fType(type), fNameInd(-1) {}
+        fId(id), fMom(pt,eta,phi,mass), fType(type), fTagInd(-1) {}
 
-      Int_t                 Id()            const { return fId;                }
-      Bool_t                IsHLT()               { return fType>0;            }
-      Bool_t                IsL1()                { return fType<0;            }
-      EObjType              ObjType()       const { return kTriggerObjectBase; }      
-      Short_t               NameInd()       const { return fNameInd;           }
-      Int_t                 Type()          const { return fType;              }
-      void                  SetType(Char_t t)     { fType = t;                 }
-      void                  SetNameInd(Short_t i) { fNameInd = i;              }
+      Bool_t                HasType()                 { return fType!=0;           }
+      Int_t                 Id()                const { return fId;                }
+      Bool_t                IsHLT()                   { return fType>0;            }
+      Bool_t                IsL1()                    { return fType<0;            }
+      EObjType              ObjType()           const { return kTriggerObjectBase; }      
+      Short_t               TagInd()            const { return fTagInd;            }
+      Int_t                 Type()              const { return fType;              }
+      void                  SetTagInd(Short_t i)      { fTagInd = i;               }
+      void                  SetType(Char_t t)         { fType = t;                 }
    
     protected:
       void                  GetMom()        const;
@@ -42,7 +43,7 @@ namespace mithep
       Int_t                 fId;          //id or physics type (similar to pdgId)
       Vect4M                fMom;         //object momentum
       Char_t                fType;        //trigger type
-      Short_t               fNameInd;     //name index of original input tag
+      Short_t               fTagInd;      //tag name index of original input tag
 
     ClassDef(TriggerObjectBase, 2) // Trigger object base class
   };
