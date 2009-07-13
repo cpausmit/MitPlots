@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.11 2009/06/17 10:38:20 loizides Exp $
+// $Id: HLTMod.h,v 1.12 2009/07/13 10:39:20 loizides Exp $
 //
 // HLTMod
 //
@@ -38,6 +38,12 @@ namespace mithep
 
   class HLTMod : public BaseMod {
     public:
+      enum EObjMode { // which objects to get
+        kAll =  0,
+        kL1,
+        kHlt
+      };
+
       HLTMod(const char *name="HLTMod", const char *title="High-level trigger module");
       ~HLTMod();
 
@@ -47,10 +53,13 @@ namespace mithep
       Int_t                       GetNFailed()      const { return fNFailed;       }
       const char                 *GetOutputName()   const { return fMyObjsNamePub; }
       const char                 *GetTrigObjsName() const { return fMyObjsNamePub; }
-      void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort = b;         }
-      void                        SetPrintTable(Bool_t b)           { fPrintTable = b;    }
+      void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort         = b; }
+      void                        SetPrintTable(Bool_t b)           { fPrintTable    = b; }
       void                        SetTrigObjsName(const char *n)    { fMyObjsNamePub = n; }
       void                        SetInputName(const char *n)       { fMyObjsNamePub = n; }
+      void                        SetIgnoreBits(Bool_t b)           { fIgnoreBits    = b; }
+      void                        SetObjMode(EObjMode m )           { fObjMode       = m; }
+
     protected:
       void                        AddTrigObjs(UInt_t tid);
       void                        BeginRun();
@@ -62,6 +71,8 @@ namespace mithep
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
       Bool_t                      fPrintTable;    //=true then print HLT trigger table in BeginRun
+      Bool_t                      fIgnoreBits;    //=true then try to get trigger objects (def=0)
+      EObjMode                    fObjMode;       //defines which objects to get (def=kHlt)
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
       std::vector<std::string>    fTrigNames;     //trigger names requested for test mask

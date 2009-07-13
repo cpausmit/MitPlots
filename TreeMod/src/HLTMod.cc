@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.11 2009/06/15 15:00:17 loizides Exp $
+// $Id: HLTMod.cc,v 1.12 2009/07/13 10:39:20 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -19,6 +19,8 @@ HLTMod::HLTMod(const char *name, const char *title) :
   BaseMod(name,title),
   fAbort(kTRUE),
   fPrintTable(kFALSE),
+  fIgnoreBits(kFALSE),
+  fObjMode(kHlt),
   fBitsName(Names::gkHltBitBrn),
   fMyObjsNamePub(Form("%sTrigObjs", name)),
   fBits(0),
@@ -58,7 +60,7 @@ void HLTMod::AddTrigObjs(UInt_t tid)
   const BitMask256 &ba = fTrigBitsAnd.at(tid);
   const BitMask256 &bm = fTrigBitsCmp.at(tid);
   for (UInt_t i=0; i<bm.Size(); ++i) {
-    if (ba.TestBit(i)==0)
+    if (ba.TestBit(i)==0 && !fIgnoreBits)
       continue; // not an active trigger bit
     if (fBitsDone.TestBit(i))
       continue; // objects for this bit are already obtained
@@ -66,7 +68,16 @@ void HLTMod::AddTrigObjs(UInt_t tid)
       continue; // excluded trigger bit (ie a !trgname)
 
     const TList *list = fTrigObjs->GetList(i);
-    fMyTrgObjs->Add(list);    
+
+    TIter iter(list->MakeIterator());
+    const TriggerObject *to = dynamic_cast<const TriggerObject*>(iter.Next());
+    while (to) {
+      if ( (fObjMode == kAll) ||
+           ((fObjMode==kHlt) && (to->IsHLT())) ||
+           ((fObjMode==kL1) && (to->IsL1())) )
+        fMyTrgObjs->Add(to);    
+      to = dynamic_cast<const TriggerObject*>(iter.Next());
+    }
     fBitsDone.SetBit(i);
   }
 }

@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.9 2009/06/15 15:00:17 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.10 2009/07/13 10:39:20 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -220,6 +220,11 @@ void HLTFwkMod::Process()
     obj->SetTrigName(fHLTTab->at(rel->TrgId()).c_str());
     obj->SetModuleName(fHLTLab->at(rel->ModInd()).c_str());
     obj->SetFilterName(fHLTLab->at(rel->FilterInd()).c_str());
+    if (obj->TagInd()>=0) 
+      obj->SetTagName(fHLTLab->at(obj->TagInd()).c_str());
+    else
+      obj->SetTagName("Unknown");
+
     fTrigObjs->Add(obj);
   }
 }
