@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Tau.h,v 1.3 2009/03/20 11:19:10 bendavid Exp $
+// $Id: Tau.h,v 1.4 2009/04/08 10:24:33 loizides Exp $
 //
 // Tau
 //
@@ -12,12 +12,12 @@
 #define MITANA_DATATREE_TAU_H
  
 #include "MitCommon/DataFormats/interface/Vect4M.h"
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Jet.h"
 
 namespace mithep 
 {
+  class Jet;
+
   class Tau : public Particle
   {
     public:

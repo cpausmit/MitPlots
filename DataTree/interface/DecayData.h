@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.11 2009/03/20 18:23:27 loizides Exp $
+// $Id: DecayData.h,v 1.12 2009/04/08 10:24:22 loizides Exp $
 //
 // DecayData
 //
@@ -11,9 +11,8 @@
 #ifndef MITANA_DATATREE_DECAYDATA_H
 #define MITANA_DATATREE_DECAYDATA_H
  
-#include "MitAna/DataTree/interface/DaughterData.h"
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitCommon/DataFormats/interface/Vect4M.h"
+#include "MitAna/DataTree/interface/DaughterData.h"
 
 namespace mithep 
 {

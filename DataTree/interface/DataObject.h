@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.20 2009/03/03 17:04:09 loizides Exp $
+// $Id: DataObject.h,v 1.21 2009/06/19 07:41:34 loizides Exp $
 //
 // DataObject
 //
@@ -13,7 +13,6 @@
 #ifndef MITANA_DATATREE_DATAOBJECT_H
 #define MITANA_DATATREE_DATAOBJECT_H
  
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/ObjTypes.h"
 #include <TObject.h>
 #include <TROOT.h>

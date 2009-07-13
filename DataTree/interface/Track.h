@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.40 2009/03/25 05:16:13 loizides Exp $
+// $Id: Track.h,v 1.41 2009/04/28 10:05:57 pharris Exp $
 //
 // Track
 //
@@ -82,7 +82,6 @@
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
-#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {

@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.15 2009/04/07 14:59:08 loizides Exp $
+// $Id: Met.h,v 1.16 2009/07/10 14:17:08 loizides Exp $
 //
 // Met
 //
 // Class to store missing transverse energy information.
-// This is the base class for various specific kinds of met (CaloMet, PFMet, etc.),
+// This is the base class for various specific kinds of missing energy (CaloMet, PFMet, etc.),
 // but can also be used directly.
 //
 // Authors: C.Loizides
@@ -14,7 +14,6 @@
 #define MITANA_DATATREE_MET_H
  
 #include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {

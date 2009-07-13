@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.6 2009/02/17 15:09:45 bendavid Exp $
+// $Id: DaughterData.h,v 1.7 2009/02/18 15:38:54 loizides Exp $
 //
 // DaughterData
 //
@@ -12,7 +12,6 @@
 #define MITANA_DATATREE_DAUGHTERDATA_H
  
 #include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataCont/interface/Ref.h"
 
 namespace mithep 

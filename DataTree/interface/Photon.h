@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.26 2009/06/25 17:15:05 bendavid Exp $
+// $Id: Photon.h,v 1.27 2009/07/07 08:29:56 bendavid Exp $
 //
 // Photon
 //
@@ -12,7 +12,6 @@
 #define MITANA_DATATREE_PHOTON_H
  
 #include "MitCommon/DataFormats/interface/Vect4M.h"
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataCont/interface/RefArray.h"

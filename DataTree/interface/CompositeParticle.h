@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.20 2009/03/03 17:04:09 loizides Exp $
+// $Id: CompositeParticle.h,v 1.21 2009/06/11 04:44:46 loizides Exp $
 //
 // CompositeParticle
 //
@@ -11,7 +11,6 @@
 #ifndef MITANA_DATATREE_COMPOSITEPARTICLE_H
 #define MITANA_DATATREE_COMPOSITEPARTICLE_H
  
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 

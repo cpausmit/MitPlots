@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompoundParticle.h,v 1.1 2009/06/11 12:21:26 loizides Exp $
+// $Id: CompoundParticle.h,v 1.2 2009/06/15 15:00:11 loizides Exp $
 //
 // CompoundParticle
 //
@@ -13,7 +13,6 @@
 #ifndef MITANA_DATATREE_COMPOUNDPARTICLE_H
 #define MITANA_DATATREE_COMPOUNDPARTICLE_H
  
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/ParticleCol.h"
 
 namespace mithep 

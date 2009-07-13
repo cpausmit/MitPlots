@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.25 2009/03/03 17:04:09 loizides Exp $
+// $Id: DecayParticle.h,v 1.26 2009/03/18 15:44:32 loizides Exp $
 //
 // DecayParticle
 //
@@ -18,8 +18,6 @@
 #include <TDatabasePDG.h>
 #include <TParticlePDG.h> 
 #include "MitCommon/DataFormats/interface/Vect4M.h"
-#include "MitAna/DataTree/interface/Types.h"
-#include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataCont/interface/RefArray.h"

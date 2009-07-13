@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.31 2009/04/06 09:50:49 loizides Exp $
+// $Id: Particle.h,v 1.32 2009/05/18 06:28:49 loizides Exp $
 //
 // Particle
 //
@@ -15,6 +15,7 @@
 #include <TMath.h>
 #include "MitAna/DataCont/interface/CacheFlag.h"
 #include "MitAna/DataTree/interface/DataObject.h"
+#include "MitAna/DataTree/interface/Types.h"
 
 namespace mithep 
 {

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.15 2009/03/19 16:10:46 loizides Exp $
+// $Id: EventHeader.h,v 1.16 2009/07/06 13:37:39 loizides Exp $
 //
 // EventHeader
 //
@@ -13,7 +13,6 @@
 #ifndef MITANA_DATATREE_EVENTHEADER_H
 #define MITANA_DATATREE_EVENTHEADER_H
  
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataTree/interface/DataBase.h"
 
 namespace mithep 

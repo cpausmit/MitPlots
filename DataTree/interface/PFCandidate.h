@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.2 2009/03/18 15:44:32 loizides Exp $
+// $Id: PFCandidate.h,v 1.3 2009/03/25 05:16:13 loizides Exp $
 //
 // PFCandidate
 //
@@ -13,7 +13,6 @@
 
 #include "MitCommon/DataFormats/interface/Vect3.h"
 #include "MitCommon/DataFormats/interface/Vect4M.h"
-#include "MitAna/DataTree/interface/Types.h"
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/Track.h"
