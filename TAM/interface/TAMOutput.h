@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h 5527 2009-04-27 07:02:25Z loizides $
+// $Id: TAMOutput.h,v 1.2 2009/04/27 08:11:27 loizides Exp $
 //
 
 #ifndef ROOT_TAMOutput
@@ -60,7 +60,8 @@ public:
          ClassDef(TAMModMember,1)
       };
       
-      THashTable  fOutputMembers; // stores the members pointing to output objects
+      THashTable     fOutputMembers; //stores the members 
+                                     //pointing to output objects
       
       TAMModInspector();
       virtual ~TAMModInspector();
@@ -77,9 +78,10 @@ public:
    };
    
 private:
-   TAMModInspector   fInspector; //stores info about the module's output members
-   TList             fOutput;    //list of this module's output objects (NOT owner)
-   mutable TList     fCurOutput; //list of this module's output objects moved to fOutput after Merge (NOT owner)
+   TAMModInspector   fInspector; //stores info about module's output members
+   TList             fOutput;    //list of this module's output (NOT owner)
+   mutable TList     fCurOutput; //list of this module's output objects 
+                                 // moved to fOutput after Merge (NOT owner)
    TAModule         *fMod;       //!pointer to the module whose output this is
 
    void              CallMerge(TObject* obj, TList& list);
@@ -119,9 +121,12 @@ public:
    void              SetOutputMembers(const Bool_t setAddresses);
    void              StoreAllOutputObjs();
    void              StoreOutputObjs();
-   virtual Int_t     Write(const char* name="0", Int_t option=0, Int_t bsize=0);
-   virtual Int_t     Write(const char* name="0", Int_t option=0, 
+   virtual Int_t     Write(const char* name=0, Int_t option=0, Int_t bsize=0);
+   virtual Int_t     Write(const char* name=0, Int_t option=0, 
                            Int_t bsize=0) const;
+   Int_t             WriteCol(const TCollection *col, const char* name=0, 
+                              Int_t option=0, Int_t bsize=0) const;
+
    ClassDef(TAMOutput, 2)
 };
 

@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx 5527 2009-04-27 07:02:25Z loizides $
+// $Id: TAMOutput.cxx,v 1.4 2009/04/27 08:11:27 loizides Exp $
 //
 
 #include "TAMOutput.h"
@@ -747,11 +747,21 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
    // will be used instead of TAMOutput objects.
 
    if (option == -99) {
-      Int_t nbytes = fOutput.Write(name, 0, bsize);
+      Int_t nbytes = 0;
+      nbytes += WriteCol(&fOutput, name, 0, bsize);
       TIter nextMod(MakeIterator());
-      TObject* obj=0;
+      TObject* obj = 0;
       while ( (obj = nextMod()) ) {
-         TDirectory *newdir = gDirectory->mkdir(obj->GetName());
+         TDirectory* newdir = 0;
+         Int_t counter = 0;
+         TString dirname(obj->GetName());
+         while (gDirectory->GetListOfKeys()->FindObject(dirname)) {
+            if (counter>0) {
+               dirname=Form("%s_%d",obj->GetName(),counter);
+            }
+            ++counter;
+         }
+         newdir = gDirectory->mkdir(dirname);
          TDirectory::TContext context(newdir);
          nbytes += obj->Write(name, option, bsize);
       }
@@ -763,7 +773,7 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
       return TList::Write(name, option, bsize);
    } else {
       // flatten the module hierarchy and dump all output objects to the file
-      Int_t nbytes = fOutput.Write(name, option, bsize);
+      Int_t nbytes = WriteCol(&fOutput, name, option, bsize);
       TIter nextMod(MakeIterator());
       TObject* obj=0;
       while ( (obj = nextMod()) ) {
@@ -771,4 +781,47 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
       }
       return nbytes;
    }
+}
+
+
+//______________________________________________________________________________
+Int_t TAMOutput::WriteCol(const TCollection *col, const char* name, 
+                          Int_t option, Int_t bsize) const
+{
+   // Write elements of collection. Check and solve name collisions.
+  
+   Int_t nbytes = 0;
+   TObject *obj = 0;
+   TIter next(col);
+   while ((obj = next())) {
+      TCollection *col2 = dynamic_cast<TCollection*>(obj);
+      if (col2) {
+         nbytes += WriteCol(col2, name, option, bsize);
+         continue;
+      }
+      TString tmpname(obj->GetName());
+      if (name)
+        tmpname = name;
+      TString oname(tmpname);
+      Int_t counter = 0;
+      if (GetMod()->GetUseName()) { //if true always append module name
+        oname=Form("%s_%s",GetMod()->GetName(), tmpname.Data());
+        counter = 1;
+      }
+      while (gDirectory->GetListOfKeys()->FindObject(oname)) {
+         if (counter==0) {
+            oname=Form("%s_%s",GetMod()->GetName(), tmpname.Data());
+         } else {
+            oname=Form("%s_%s_%d",GetMod()->GetName(), tmpname.Data(), counter);
+         }
+         ++counter;
+      }
+      if (counter>0) {
+         Warning("Write", "Renamed output object from \"%s\" to \"%s\"",
+                 tmpname.Data(), oname.Data());
+      }
+
+      nbytes += obj->Write(oname, option, bsize);
+   }
+   return nbytes;
 }
