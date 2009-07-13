@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObjectBase.h,v 1.1 2009/07/13 09:42:15 loizides Exp $
+// $Id: TriggerObjectBase.h,v 1.2 2009/07/13 10:38:46 loizides Exp $
 //
 // TriggerObjectBase
 //
@@ -27,10 +27,10 @@ namespace mithep
                         Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
         fId(id), fMom(pt,eta,phi,mass), fType(type), fTagInd(-1) {}
 
-      Bool_t                HasType()                 { return fType!=0;           }
+      Bool_t                HasType()           const { return fType!=0;           }
       Int_t                 Id()                const { return fId;                }
-      Bool_t                IsHLT()                   { return fType>0;            }
-      Bool_t                IsL1()                    { return fType<0;            }
+      Bool_t                IsHLT()             const { return fType>0;            }
+      Bool_t                IsL1()              const { return fType<0;            }
       EObjType              ObjType()           const { return kTriggerObjectBase; }      
       Short_t               TagInd()            const { return fTagInd;            }
       Int_t                 Type()              const { return fType;              }

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.11 2009/07/13 06:37:34 loizides Exp $
+// $Id: TriggerObject.h,v 1.12 2009/07/13 09:42:15 loizides Exp $
 //
 // TriggerObject
 //
@@ -55,33 +55,36 @@ namespace mithep
         TriggerHLongit        = +96
       };
 
-      TriggerObject() : fTrgId(0), fTrigName(0), fModName(0), fFilName(0) {}
+      TriggerObject() : fTrgId(0), fTrigName(0), fModName(0), fFilName(0), fTagName(0) {}
       TriggerObject(UChar_t tid, Char_t type, Int_t id, const FourVectorM32 &mom) : 
         TriggerObjectBase(id,type,mom), fTrgId(tid), 
-        fTrigName(0), fModName(0), fFilName(0) {}
+        fTrigName(0), fModName(0), fFilName(0), fTagName(0) {}
       TriggerObject(UChar_t tid, Char_t type, Int_t id, 
                     Double_t pt, Double_t eta, Double_t phi, Double_t mass) : 
         TriggerObjectBase(id,type,pt,eta,phi,mass), 
-        fTrgId(tid), fTrigName(0), fModName(0), fFilName(0) {}
+        fTrgId(tid), fTrigName(0), fModName(0), fFilName(0), fTagName(0) {}
 
       const char           *FilterName()            const { return fFilName;       }
       ULong_t               Hash()                  const { return fTrgId;         }
       const char           *ModuleName()            const { return fModName;       }
       EObjType              ObjType()               const { return kTriggerObject; }      
       void                  Print(Option_t *opt="") const;
-      const char           *TrigName()              const { return fTrigName;      }
+      const char           *TagName()               const { return fTagName;       }
       UChar_t               TrgId()                 const { return fTrgId;         }
+      const char           *TrigName()              const { return fTrigName;      }
       ETriggerObject        TriggerType()           const 
-                              { return static_cast<ETriggerObject>(Type());         }
-      void                  SetTrigName(const char *n)    { fTrigName = n; }
-      void                  SetModuleName(const char *n)  { fModName  = n; }
+                              { return static_cast<ETriggerObject>(Type());        }
       void                  SetFilterName(const char *n)  { fFilName  = n; }
+      void                  SetModuleName(const char *n)  { fModName  = n; }
+      void                  SetTagName(const char *n)     { fTagName = n;  }
+      void                  SetTrigName(const char *n)    { fTrigName = n; }
 
     protected:
       UChar_t               fTrgId;       //trigger id
       const char           *fTrigName;    //!trigger name
       const char           *fModName;     //!L3 module name
       const char           *fFilName;     //!L3 filter name
+      const char           *fTagName;     //!input tag name
 
     ClassDef(TriggerObject, 2) // Trigger object class
   };
