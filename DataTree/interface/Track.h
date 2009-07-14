@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.41 2009/04/28 10:05:57 pharris Exp $
+// $Id: Track.h,v 1.42 2009/07/13 11:00:32 loizides Exp $
 //
 // Track
 //
@@ -134,15 +134,52 @@ namespace mithep
         TEC9S
       };
 
-      Track() : fQOverP(0), fQOverPErr(0), fLambda(0), fLambdaErr(0),
-                fPhi0(0), fPhi0Err(0), fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0),
-                fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
+      enum ETrackAlgorithm {
+        undefAlgorithm=0,
+        ctf=1,
+        rs=2,
+        cosmics=3,
+        iter0=4,
+        iter1=5,
+        iter2=6,
+        iter3=7,
+        iter4=8,
+        iter5=9,
+        iter6=10,
+        iter7=11,
+        iter8=12,
+        iter9=13,
+        iter10=14,
+        outInEcalSeededConv=15,
+        inOutEcalSeededConv=16, 
+        nuclInter=17,
+        standAloneMuon=18,
+        globalMuon=19,
+        cosmicStandAloneMuon=20,
+        cosmicGlobalMuon=21,
+        iter1LargeD0=22,
+        iter2LargeD0=23,
+        iter3LargeD0=24,
+        iter4LargeD0=25,
+        iter5LargeD0=26,
+        bTagGhostTracks=27,
+        beamhalo=28, 
+        algoSize=29
+      };
+
+
+      Track() : fAlgo(undefAlgorithm), fIsGsf(0), fQOverP(0), fQOverPErr(0),
+                fLambda(0), fLambdaErr(0), fPhi0(0), fPhi0Err(0),
+                fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
+                fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       Track(Double_t qOverP, Double_t lambda, Double_t phi0, Double_t dxy, Double_t dsz) :
-	        fQOverP(qOverP), fQOverPErr(0), fLambda(lambda), fLambdaErr(0),
-                fPhi0(phi0), fPhi0Err(0), fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0),
-                fChi2(0), fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
+	        fAlgo(undefAlgorithm), fIsGsf(0), fQOverP(qOverP), fQOverPErr(0),
+                fLambda(lambda), fLambdaErr(0), fPhi0(phi0), fPhi0Err(0),
+                fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0), fChi2(0),
+                fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
+      ETrackAlgorithm      Algo()           const { return fAlgo;                 }
       Int_t                Charge()         const { return (fQOverP>0) ? 1 : -1;  }
       Double_t             Chi2()           const { return fChi2;                 }
       void                 ClearHit(EHitLayer l)  { fHits.ClearBit(l);            } 
@@ -159,6 +196,7 @@ namespace mithep
       Double_t             EtaEcal()        const { return fEtaEcal;              }
       Bool_t               Hit(EHitLayer l) const { return fHits.TestBit(l);      }
       const BitMask48     &Hits()           const { return fHits;                 }
+      Bool_t               IsGsf()          const { return fIsGsf;                }
       Double_t             Lambda()         const { return fLambda;               }
       Double_t             LambdaErr()      const { return fLambdaErr;            }
       const MCParticle    *MCPart()         const { return fMCParticleRef.Obj();  }
@@ -185,6 +223,7 @@ namespace mithep
       Double_t             Theta()          const { return (TMath::PiOver2() - fLambda);       }
       const SuperCluster  *SCluster()       const { return fSuperClusterRef.Obj();             }
       const BitMask48      StereoHits()     const { return (fHits & StereoLayers());           }
+      void                 SetAlgo(ETrackAlgorithm e)          { fAlgo = e;                    }
       void                 SetChi2(Double_t chi2)              { fChi2 = chi2;                 }
       void	           SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
                                      Double_t dXyErr, Double_t dSzErr);
@@ -193,6 +232,7 @@ namespace mithep
                                      Double_t dXy, Double_t dSz);
       void                 SetHit(EHitLayer l)                 { fHits.SetBit(l);              }
       void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
+      void                 SetIsGsf(Bool_t b)                  { fIsGsf = b;                   }
       void                 SetNdof(UShort_t dof)               { fNdof = dof;                  }
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
       void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
@@ -207,6 +247,8 @@ namespace mithep
       void                 GetMom()      const;
 
       BitMask48            fHits;                //storage for mostly hit information
+      ETrackAlgorithm      fAlgo;                //track algorithm
+      Bool_t               fIsGsf;               //flag to identify gsf tracks
       Double32_t           fQOverP;              //[0,0,14]signed inverse of momentum [1/GeV]
       Double32_t           fQOverPErr;           //[0,0,14]error of q/p
       Double32_t           fLambda;              //[0,0,14]pi/2 - polar angle at the reference point
@@ -226,7 +268,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 1) // Track class
+    ClassDef(Track, 2) // Track class
   };
 }
 
