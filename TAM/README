@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2009/04/27 08:11:26 loizides Exp $
+$Id: README,v 1.5 2009/04/28 14:56:45 loizides Exp $
 
 The Tree-Analysis-Module (TAM) framework is an independent package 
 developed with three main goals in mind:
@@ -8,7 +8,7 @@ developed with three main goals in mind:
     * Third, to hide, as much as possible, all direct interaction with the tree itself from the user. 
 
 Its main twiki page is at http://www.cmsaf.mit.edu/twiki/bin/view/Software/TAM.
-The current revision from which we branched of is: Revision 5532.
+The current revision from which we branched of is: Revision 5584.
 
 If you think you found a bug, please send an email to loizides@mit.edu.
 Please note that the coding conventions used for TAM do not necessarily

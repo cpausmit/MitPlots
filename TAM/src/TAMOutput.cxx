@@ -1,8 +1,8 @@
 //
-// $Id: TAMOutput.cxx,v 1.4 2009/04/27 08:11:27 loizides Exp $
+// $Id: TAMOutput.cxx,v 1.5 2009/07/13 19:19:44 loizides Exp $
 //
 
-#include "TAMOutput.h"
+#include "MitAna/TAM/interface/TAMOutput.h"
 
 
 #ifndef G__API_H
@@ -32,11 +32,11 @@
 #ifndef ROOT_TDataMember
 #include "TDataMember.h"
 #endif
-#ifndef TAM_TAModule
-#include "TAModule.h"
-#endif
-#ifndef TAM_TDirectory
+#ifndef ROOT_TDirectory
 #include "TDirectory.h"
+#endif
+#ifndef TAM_TAModule
+#include "MitAna/TAM/interface/TAModule.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////////

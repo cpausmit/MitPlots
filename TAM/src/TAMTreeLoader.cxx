@@ -1,15 +1,15 @@
 //
-// $Id: TAMTreeLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMTreeLoader.cxx,v 1.2 2009/07/13 19:20:25 loizides Exp $
 //
 
-#include "TAMTreeLoader.h"
+#include "MitAna/TAM/interface/TAMTreeLoader.h"
 
 
 #ifndef ROOT_TTree
 #include "TTree.h"
 #endif
 #ifndef ROOT_TAMTreeBranchLoader
-#include "TAMTreeBranchLoader.h"
+#include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 #endif
 
 

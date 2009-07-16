@@ -1,8 +1,8 @@
 //
-// $Id: TAModule.cxx,v 1.5 2009/07/13 19:20:25 loizides Exp $
+// $Id: TAModule.cxx,v 1.6 2009/07/16 15:06:56 loizides Exp $
 //
 
-#include "TAModule.h"
+#include "MitAna/TAM/interface/TAModule.h"
 
 
 #ifndef ROOT_RVersion
@@ -14,14 +14,14 @@
 #ifndef ROOT_TIterator
 #include "TIterator.h"
 #endif
-#ifndef ROOT_TAMOutput
-#include "TAMOutput.h"
-#endif
 #ifndef ROOT_TROOT
 #include "TROOT.h"
 #endif
 #ifndef ROOT_TRegexp
 #include "TRegexp.h"
+#endif
+#ifndef ROOT_TAMOutput
+#include "MitAna/TAM/interface/TAMOutput.h"
 #endif
 
 

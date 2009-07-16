@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.11 2009/03/02 12:34:51 loizides Exp $
+// $Id: TAMSelector.h,v 1.12 2009/07/13 19:20:24 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -9,6 +9,9 @@
 #define TAM_TAMSelector
 
 
+#ifndef ROOT_Riostream
+#include <Riostream.h>
+#endif
 #ifndef ROOT_TSelector
 #include "TSelector.h"
 #endif
@@ -19,14 +22,11 @@
 #include "TList.h"
 #endif
 #ifndef ROOT_TAMBranchInfo
-#include "TAMBranchInfo.h"
+#include "MitAna/TAM/interface/TAMBranchInfo.h"
 #endif   
 #ifndef ROOT_TAMVirtualLoader
-#include "TAMVirtualLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #endif   
-#ifndef ROOT_Riostream
-#include <Riostream.h>
-#endif
 
 
 class TBranch;

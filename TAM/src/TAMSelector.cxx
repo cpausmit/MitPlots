@@ -1,8 +1,8 @@
 //
-// $Id: TAMSelector.cxx,v 1.15 2009/04/27 08:11:08 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.16 2009/07/13 19:20:25 loizides Exp $
 //
 
-#include "TAMSelector.h"
+#include "MitAna/TAM/interface/TAMSelector.h"
 
 
 #ifndef ROOT_RVersion
@@ -45,19 +45,19 @@
 #include "TFriendElement.h"
 #endif
 #ifndef TAM_TAModule
-#include "TAModule.h"
+#include "MitAna/TAM/interface/TAModule.h"
 #endif
 #ifndef TAM_TAMOutput
-#include "TAMOutput.h"
+#include "MitAna/TAM/interface/TAMOutput.h"
 #endif
 #ifndef TAM_TAMVirtualLoader
-#include "TAMVirtualLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #endif
 #ifndef TAM_TAMVirtualBranchLoader
-#include "TAMVirtualBranchLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
 #endif
 #ifndef TAM_TAMTreeLoader
-#include "TAMTreeLoader.h"
+#include "MitAna/TAM/interface/TAMTreeLoader.h"
 #endif
 #include <map>
 

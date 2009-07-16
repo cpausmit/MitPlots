@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h,v 1.6 2009/04/28 14:50:19 loizides Exp $
+// $Id: TAModule.h,v 1.7 2009/07/13 19:18:38 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -20,10 +20,10 @@
 #include "Varargs.h"
 #endif
 #ifndef ROOT_TAMSelector
-#include "TAMSelector.h"
+#include "MitAna/TAM/interface/TAMSelector.h"
 #endif
 #ifndef ROOT_TAMOutput
-#include "TAMOutput.h"
+#include "MitAna/TAM/interface/TAMOutput.h"
 #endif
 
 class TFile;

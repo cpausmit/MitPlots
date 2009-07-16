@@ -1,8 +1,8 @@
 //
-// $Id: TAMTreeBranchLoader.cxx,v 1.2 2008/10/06 16:42:50 loizides Exp $
+// $Id: TAMTreeBranchLoader.cxx,v 1.3 2009/07/13 19:20:25 loizides Exp $
 //
 
-#include "TAMTreeBranchLoader.h"
+#include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 
 
 #ifndef ROOT_RVersion

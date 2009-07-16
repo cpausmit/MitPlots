@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMTreeBranchLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
 //
 
 #ifndef ROOT_TAMTreeBranchLoader
@@ -10,7 +10,7 @@
 
 
 #ifndef ROOT_TAMVirtualBranchLoader
-#include "TAMVirtualBranchLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
 #endif
 
 
