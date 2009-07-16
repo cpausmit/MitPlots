@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx,v 1.4 2008/12/04 13:50:56 loizides Exp $
+// $Id: TAModule.cxx,v 1.5 2009/07/13 19:20:25 loizides Exp $
 //
 
 #include "TAModule.h"
@@ -30,7 +30,7 @@
 //                                                                      //
 // TAModule                                                             //
 //                                                                      //
-// Abstract base class for processing trees. This class allows the trees//
+// Abstract base class for processing trees. This class allows trees    //
 // to be processed in a modular fashion. All iteraction with the tree   //
 // itself is taken care of by TAMSelector.                              //
 //                                                                      //
