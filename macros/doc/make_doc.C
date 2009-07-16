@@ -1,4 +1,4 @@
-// $Id: make_doc.C 2634 2006-03-06 22:26:15Z loizides $
+// $Id: make_doc.C,v 1.1 2009/07/16 13:13:55 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -48,16 +48,13 @@ void load_libs(const char *ln)
 
 void make_doc()
 {
-//   gEnv->SetValue("Root.Html.HomePage", get_config_var("HOMEURL"));
-//   gEnv->SetValue("Root.Html.ViewCVS", get_config_var("VIEWCVSURL"));
-
   MyHtml h;
   h.SetProductName("MitRoot");
 
   // load our libraries
-  //load_libs("MitCommon");
+  load_libs("MitCommon");
   load_libs("MitAna");
-  //load_libs("MitPhysics");
+  load_libs("MitPhysics");
 
   h.SetInputDir("$CMSSW_BASE/src") ;
   h.SetIncludePath(Form("%s/src/",gSystem->ExpandPathName("$CMSSW_BASE")));
