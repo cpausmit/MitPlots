@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.1 2009/07/16 13:13:55 loizides Exp $
+// $Id: make_doc.C,v 1.2 2009/07/16 13:39:12 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -56,10 +56,13 @@ void make_doc()
   load_libs("MitAna");
   load_libs("MitPhysics");
 
-  h.SetInputDir("$CMSSW_BASE/src") ;
-  h.SetIncludePath(Form("%s/src/",gSystem->ExpandPathName("$CMSSW_BASE")));
+  TString cb(gSystem->ExpandPathName("$CMSSW_BASE"));
+  h.SetInputDir("$CMSSW_BASE/src:$CMSSW_BASE/src/MitAna/TAM/interface:$ROOTSYS/include");
+  h.SetIncludePath(Form("%s/src/:%s/src/MitAna/TAM/interface/",cb.Data(),cb.Data()));
   h.SetClassDocTag("//------------------------------------------------------------");
   h.SetViewCVS("http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/");
-  h.MakeAll(1,"mithep::Particle");
+  h.SetLibURL(gSystem->ExpandPathName("$ROOTSYS/lib"),"http://root.cern.ch/root/html522");
+  h.MakeAll(0,"*");
+  //h.MakeClass("TAM*",0);
+  //h.MakeIndex();
 }
-
