@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.2 2009/07/16 13:39:12 loizides Exp $
+// $Id: make_doc.C,v 1.3 2009/07/16 15:41:03 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -61,8 +61,6 @@ void make_doc()
   h.SetIncludePath(Form("%s/src/:%s/src/MitAna/TAM/interface/",cb.Data(),cb.Data()));
   h.SetClassDocTag("//------------------------------------------------------------");
   h.SetViewCVS("http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/");
-  h.SetLibURL(gSystem->ExpandPathName("$ROOTSYS/lib"),"http://root.cern.ch/root/html522");
-  h.MakeAll(0,"*");
-  //h.MakeClass("TAM*",0);
-  //h.MakeIndex();
+  h.SetLibURL("$ROOTSYS/lib","http://root.cern.ch/root/html522");
+  h.MakeAll(0,"^(mithep::|TAM)");
 }
