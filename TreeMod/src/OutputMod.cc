@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.12 2009/03/24 16:12:26 loizides Exp $
+// $Id: OutputMod.cc,v 1.13 2009/06/15 15:00:17 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -40,18 +40,15 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fLATree(0),
   fAllTree(0),
   fSkimmedIn(0),
-  fL1Tree(0),
   fHltTree(0),
   fHLTTab(new vector<string>),
   fHLTLab(new vector<string>),
   fRunEntries(0),
-  fL1Entries(0),
   fHltEntries(0),
   fFileNum(-1),
   fLastWrittenEvt(-1),
   fLastSeenEvt(-1),
-  fCounter(0),
-  fAddBrList(0)
+  fCounter(0)
 {
   // Constructor.
 }
@@ -159,7 +156,7 @@ Bool_t OutputMod::CheckAndResolveBranchDep()
   }
 
   for (UInt_t i=0; i<fBrNameList.size(); ++i) {
-    TString brname(fBrNameList.at(i).c_str());
+    TString brname(fBrNameList.at(i));
     if (!blist->FindObject(brname))
       continue;
     TList *bdeps = br->GetDepBranches(brname);
@@ -296,15 +293,6 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
 }
 
 //--------------------------------------------------------------------------------------------------
-void OutputMod::FillL1Info()
-{
-  // Not doing anything here until the production writes out L1 information.
-
-  if (!fL1Tree) 
-    return;
-}
-
-//--------------------------------------------------------------------------------------------------
 void OutputMod::FillHltInfo()
 {
   // Write HLT trigger table if needed.
@@ -383,7 +371,7 @@ Bool_t OutputMod::IsAcceptedBranch(const char *bname)
 Bool_t OutputMod::Notify()
 {
   // On first notify, loop over list of branches to determine the list of kept branches.
-
+  cout << "NOOOOOOOOOOOOOTIIIFYYYYYYYYYYYY" <<endl;
   if (GetNEventsProcessed() != 0) 
     return kTRUE;
 
@@ -426,6 +414,7 @@ void OutputMod::LoadBranches()
   // Loop over requested branches and load them.
 
   for (UInt_t i=0; i<GetNBranches(); ++i) {
+    cout << i << " " << fBrNameList.at(i)<< endl;
     LoadBranch(fBrNameList.at(i).c_str());
   }
 }
@@ -471,7 +460,6 @@ void OutputMod::Process()
   if (fTreeWriter->GetFileNumber()!=fFileNum) {
     fRunmap.clear();
     fRunEntries = 0;
-    fL1Entries  = 0;
     fHltEntries = 0;
     fFileNum = fTreeWriter->GetFileNumber();
     fTreeWriter->StoreObject(fBranchTable);
@@ -511,10 +499,6 @@ void OutputMod::Process()
   fRunmap.insert(pair<UInt_t,Int_t>(runnum,runentry));
   fRunInfo->SetRunNum(runnum);
 
-  Int_t l1entry = fL1Entries;
-  FillL1Info();
-  fRunInfo->SetL1Entry(l1entry);
-
   Int_t hltentry = fHltEntries;
   FillHltInfo();
   if (hltentry < fHltEntries)
@@ -552,14 +536,17 @@ void OutputMod::RequestBranches()
 {
   // Loop over requested branches and request them.
 
+  cout << "Requestbbbbbbbbbbbbbbrrrrrrrrrrrrrrrrrrrrrrr " << endl;
+
   for (UInt_t i=0; i<GetNBranches(); ++i) {
     if (i>=fNBranchesMax) {
-      SendError(kAbortAnalysis, "RequestBranch", "Cannot request branch '%s' "
+      SendError(kAbortAnalysis, "RequestBranches", "Cannot request branch '%s' "
                 "since maximum number of branches [%d] is reached", 
                 fBrNameList.at(i).c_str(), fNBranchesMax);
       return;
     }
     fBranches[i] = 0;
+    cout << "Request " << i << " " << fBrNameList.at(i) << endl;
     TAModule::ReqBranch(fBrNameList.at(i).c_str(), fBranches[i]);
   }
 }
@@ -630,11 +617,22 @@ void OutputMod::SlaveBegin()
   // get pointer to all event headers
   fSkimmedIn = GetPublicObj<EventHeaderCol>(Names::gkSkimmedHeaders);
 
-  // deal here with published objects (not yet implemented)
-  fAddBrList = 0;
- 
   // create TObject space for TAM
-  fBranches = new TObject*[fNBranchesMax];       
+  fBranches = new TObject*[fNBranchesMax + fAddList.size()];       
+
+  // deal here with additional published objects
+  for (UInt_t i=0; i<fAddList.size(); ++i) {
+    TString objname(fAddList.at(i));
+    TObject *obj = FindPublicObj(objname);
+    if (obj) {
+      fBranches[fNBranchesMax+i] = obj;
+      fTreeWriter->AddBranch(objname, &fBranches[fNBranchesMax+i]);
+      Info("SlaveBegin", "Adding additional branch named '%s' as requested", objname.Data());
+    } else {
+      SendError(kAbortAnalysis, "SlaveBegin", 
+                "Object named '%s' for additional branch is NULL", objname.Data());
+    }
+  }
 
   // adjust checks for TAM branches
   if (fKeepTamBr)
