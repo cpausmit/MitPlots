@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: make_doc.sh,v 1.1 2009/07/16 15:41:03 loizides Exp $
+# $Id: make_doc.sh,v 1.2 2009/07/17 04:45:21 loizides Exp $
 
 
 XPATH="./MitAna//macros/doc"
@@ -10,7 +10,7 @@ for i in MitCommon MitAna MitPhysics; do
 done
 
 cd $CMSSW_BASE/src/MitAna/macros/doc
-root -b -q make_doc.C+
+root -n -b -q make_doc.C+
 
 cd $CMSSW_BASE/src
 for i in MitCommon MitAna MitPhysics; do

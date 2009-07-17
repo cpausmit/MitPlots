@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.3 2009/07/16 15:41:03 loizides Exp $
+// $Id: make_doc.C,v 1.4 2009/07/17 07:31:56 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -23,8 +23,38 @@
 class MyHtml : public THtml
 {
   public:
-    MyHtml() {} 
+    class MyModDef: public TModuleDefinition {
+    public:
+      bool GetModule(TClass* cl, TString& out_modulename) const {
+        TString cn(cl->GetName());
+        if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM"))
+          return TModuleDefinition::GetModule(cl, out_modulename);
+
+        TString tmp(cl->GetDeclFileName());
+        Ssiz_t fst = tmp.Index("/Mit")+1;
+        Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
+        out_modulename = tmp(fst,snd-fst);
+        return 1;
+      }
+      ClassDef(MyModDef, 0);
+   };
+
+    MyHtml() 
+    {
+      MyModDef m;
+      SetModuleDefinition(m);
+    }
     void SetIncludePath(const char *p) { fPathInfo.fIncludePath=p; }
+    void GetModuleNameForClass(TString& module, TClass* cl) const
+    {
+      TString cn(cl->GetName());
+      if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM"))
+        return THtml::GetModuleNameForClass(module, cl);
+      TString tmp(cl->GetDeclFileName());
+      Ssiz_t fst = tmp.Index("/Mit")+1;
+      Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
+      module = tmp(fst,snd-fst);
+    }
 
   ClassDef(MyHtml, 0);
 };
@@ -57,10 +87,10 @@ void make_doc()
   load_libs("MitPhysics");
 
   TString cb(gSystem->ExpandPathName("$CMSSW_BASE"));
-  h.SetInputDir("$CMSSW_BASE/src:$CMSSW_BASE/src/MitAna/TAM/interface:$ROOTSYS/include");
-  h.SetIncludePath(Form("%s/src/:%s/src/MitAna/TAM/interface/",cb.Data(),cb.Data()));
+  h.SetInputDir("$CMSSW_BASE/src:$ROOTSYS/include");
+  h.SetIncludePath(Form("%s/src/",cb.Data()));
   h.SetClassDocTag("//------------------------------------------------------------");
   h.SetViewCVS("http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/");
   h.SetLibURL("$ROOTSYS/lib","http://root.cern.ch/root/html522");
-  h.MakeAll(0,"^(mithep::|TAM)");
+  h.MakeAll(0,"(mithep::|TAM)");
 }
