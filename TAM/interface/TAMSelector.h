@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.12 2009/07/13 19:20:24 loizides Exp $
+// $Id: TAMSelector.h,v 1.13 2009/07/16 21:02:04 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -67,8 +67,10 @@ protected:
        Bool_t        Load(UInt_t uid, TProcessID *pid, TBranchRef *br, TRefTable *table);       
 
        TAMSelector  *fSel;          //ptr to TAMSelector (we are a friend)
-       TRefTable    *fOrig;         //ptr to original TRefTable filled by I/O (owner is TBranchRef)
-       TRefTable    *fFake;         //ptr to our fake TRefTable of which we are owner
+       TRefTable    *fOrig;         //ptr to original TRefTable filled by I/O 
+                                    // (owner is TBranchRef)
+       TRefTable    *fFake;         //ptr to our fake TRefTable 
+                                    // of which we are owner
        Long64_t      fCurEntry;     //cache of current entry
        Bool_t        fBrRead[1024]; //flag which TBranchRef branch was read
    };
@@ -163,7 +165,7 @@ public:
    void              Terminate();
    Int_t             Version()           const { return 1; }
    
-   ClassDef(TAMSelector,8)
+    ClassDef(TAMSelector,8) // Tree analysis module selector
 };
 
 

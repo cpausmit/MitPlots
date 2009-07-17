@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h,v 1.2 2009/04/27 08:11:27 loizides Exp $
+// $Id: TAMOutput.h,v 1.3 2009/07/13 19:19:44 loizides Exp $
 //
 
 #ifndef ROOT_TAMOutput
@@ -57,11 +57,10 @@ public:
             fAddr(addr),
             fMClass(cl) {}
          virtual ~TAMModMember() {}
-         ClassDef(TAMModMember,1)
+         ClassDef(TAMModMember,1) // TAM module member class
       };
       
-      THashTable     fOutputMembers; //stores the members 
-                                     //pointing to output objects
+      THashTable     fOutputMembers; //stores members pointing to output objects
       
       TAMModInspector();
       virtual ~TAMModInspector();
@@ -74,7 +73,7 @@ public:
       void           RemoveOutput(TObject* obj);
       void           SetMemberAddrFor(TObject* obj, const UInt_t verbose);
 
-      ClassDef(TAMModInspector,1)
+      ClassDef(TAMModInspector,1) // TAM inspector class
    };
    
 private:
@@ -127,7 +126,7 @@ public:
    Int_t             WriteCol(const TCollection *col, const char* name=0, 
                               Int_t option=0, Int_t bsize=0) const;
 
-   ClassDef(TAMOutput, 2)
+   ClassDef(TAMOutput, 2) // Tree analysis module output class
 };
 
 
