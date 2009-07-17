@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.10 2009/06/15 15:00:17 loizides Exp $
+// $Id: OutputMod.h,v 1.11 2009/07/17 19:18:34 loizides Exp $
 //
 // OutputMod
 //
@@ -36,15 +36,15 @@ namespace mithep
       void                        AddNewBranch(const char *bname);
       void                        Drop(const char *bname);
       void                        Keep(const char *bname);
-      void                        CheckTamBranches(Bool_t b)    { fCheckTamBr = b; }
-      void                        KeepTamBranches(Bool_t b)     { fKeepTamBr  = b; }
-      void                        SetTreeName(const char *n)    { fTreeName   = n; }
-      void                        SetFileName(const char *n)    { fPrefix     = n; }
-      void                        SetPathName(const char *n)    { fPathName   = n; }
-      void                        SetMaxFileSize(UInt_t m)      { fMaxSize    = m; }
+      void                        SetCheckBrDep(Bool_t b)       { fCheckBrDep = b; }
+      void                        SetDefBranchSize(UInt_t s)    { fBranchSize = s; }
       void                        SetDefCompression(UInt_t l)   { fCompLevel  = l; }
       void                        SetDefSplitLevel(UInt_t l)    { fSplitLevel = l; }
-      void                        SetDefBranchSize(UInt_t s)    { fBranchSize = s; }
+      void                        SetFileName(const char *n)    { fPrefix     = n; }
+      void                        SetMaxFileSize(UInt_t m)      { fMaxSize    = m; }
+      void                        SetPathName(const char *n)    { fPathName   = n; }
+      void                        SetTreeName(const char *n)    { fTreeName   = n; }
+      void                        SetUseBrDep(Bool_t b)         { fUseBrDep   = b; }
 
     protected:
       void                        BeginRun();
@@ -63,6 +63,7 @@ namespace mithep
       UInt_t                      fSplitLevel;     //default split levels
       UInt_t                      fBranchSize;     //default branch sizes [Byte]
       Bool_t                      fDoReset;        //=true then reset pointers
+      Bool_t                      fCheckBrDep;     //=true then check branch dependencies
       Bool_t                      fUseBrDep;       //=true then resolve branch dependencies
       Bool_t                      fCheckTamBr;     //=true then check TAM loaded branches
       Bool_t                      fKeepTamBr;      //=true then keep TAM loaded branches

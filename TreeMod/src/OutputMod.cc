@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.13 2009/06/15 15:00:17 loizides Exp $
+// $Id: OutputMod.cc,v 1.14 2009/07/17 19:18:34 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -25,6 +25,7 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fSplitLevel(99),
   fBranchSize(16*1024),
   fDoReset(kFALSE),
+  fCheckBrDep(kTRUE),
   fUseBrDep(kTRUE),
   fCheckTamBr(kTRUE),
   fKeepTamBr(kFALSE),
@@ -134,16 +135,22 @@ Bool_t OutputMod::CheckAndResolveBranchDep()
   // Checks dependency in BranchTable. Resolve dependency automatically if fUserBrDep is kTRUE.
 
   TFile *cfile = const_cast<TFile*>(GetSel()->GetCurrentFile());
-  if (!cfile)
+  if (!cfile) {
+    SendError(kAbortAnalysis, "CheckAndResolveBranchDep", "Could not get pointer to current file!");
     return kFALSE;
+  }
 
   BranchTable *br = dynamic_cast<BranchTable*>(cfile->Get(Names::gkBranchTable));
-  if (!br)
+  if (!br) {
+    SendError(kAbortAnalysis, "CheckAndResolveBranchDep", "Could not get pointer to branch table!");
     return kFALSE;
+  }
 
   TList *blist = br->GetBranches();
-  if (!blist)
+  if (!blist) {
+    SendError(kAbortAnalysis, "CheckAndResolveBranchDep", "Could not get list of branches!");
     return kFALSE;
+  }
 
   fBranchTable = new BranchTable;
   fBranchTable->SetName(Names::gkBranchTable);
@@ -371,7 +378,7 @@ Bool_t OutputMod::IsAcceptedBranch(const char *bname)
 Bool_t OutputMod::Notify()
 {
   // On first notify, loop over list of branches to determine the list of kept branches.
-  cout << "NOOOOOOOOOOOOOTIIIFYYYYYYYYYYYY" <<endl;
+
   if (GetNEventsProcessed() != 0) 
     return kTRUE;
 
@@ -401,7 +408,7 @@ Bool_t OutputMod::Notify()
     CheckAndAddBranch(br->GetName(), br->GetClassName());
   }
 
-  if (!CheckAndResolveBranchDep())
+  if (fCheckBrDep && !CheckAndResolveBranchDep())
     return kFALSE;
 
   RequestBranches();
@@ -414,7 +421,6 @@ void OutputMod::LoadBranches()
   // Loop over requested branches and load them.
 
   for (UInt_t i=0; i<GetNBranches(); ++i) {
-    cout << i << " " << fBrNameList.at(i)<< endl;
     LoadBranch(fBrNameList.at(i).c_str());
   }
 }
@@ -445,7 +451,7 @@ void OutputMod::Process()
   }
 
   if (GetNEventsProcessed() == 0 && fCheckTamBr) {
-    CheckAndResolveTAMDep(fKeepTamBr);    
+    CheckAndResolveTAMDep(fKeepTamBr);
   }
 
   // load all our branches
@@ -462,7 +468,8 @@ void OutputMod::Process()
     fRunEntries = 0;
     fHltEntries = 0;
     fFileNum = fTreeWriter->GetFileNumber();
-    fTreeWriter->StoreObject(fBranchTable);
+    if (fBranchTable)
+      fTreeWriter->StoreObject(fBranchTable);
   }
 
   UInt_t runnum = GetEventHeader()->RunNum();
@@ -536,8 +543,6 @@ void OutputMod::RequestBranches()
 {
   // Loop over requested branches and request them.
 
-  cout << "Requestbbbbbbbbbbbbbbrrrrrrrrrrrrrrrrrrrrrrr " << endl;
-
   for (UInt_t i=0; i<GetNBranches(); ++i) {
     if (i>=fNBranchesMax) {
       SendError(kAbortAnalysis, "RequestBranches", "Cannot request branch '%s' "
@@ -546,7 +551,6 @@ void OutputMod::RequestBranches()
       return;
     }
     fBranches[i] = 0;
-    cout << "Request " << i << " " << fBrNameList.at(i) << endl;
     TAModule::ReqBranch(fBrNameList.at(i).c_str(), fBranches[i]);
   }
 }
