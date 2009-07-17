@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: rmDesc.sh,v 1.1 2009/07/16 13:39:12 loizides Exp $
+# $Id: rmDesc.sh,v 1.2 2009/07/16 15:41:03 loizides Exp $
 
 hf=$1
 
@@ -17,4 +17,8 @@ fi
 
 if test -e ${sf}.keep; then
     mv ${sf}.keep ${sf}
+fi
+
+if test -e ${hf}.keep; then
+    mv ${hf}.keep ${hf}
 fi

@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: addDesc.sh,v 1.2 2009/07/16 13:39:12 loizides Exp $
+# $Id: addDesc.sh,v 1.3 2009/07/16 15:41:03 loizides Exp $
 
 hf=$1
 
@@ -29,6 +29,11 @@ if test -z "`echo $hf | grep TAM/`"; then
     cat $sf | grep -v "// \$Id" >> ${sf}.tmp
     mv ${sf} ${sf}.keep
     mv ${sf}.tmp $sf
+
+    cat $hf | grep -v "//------" > ${hf}.tmp
+    mv ${hf} ${hf}.keep
+    mv ${hf}.tmp $hf
+
 else
     sf=`dirname $hf`/`basename $hf .h`.cxx
     sf=`echo $sf | replace interface src`
