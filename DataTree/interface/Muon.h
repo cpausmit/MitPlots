@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.29 2009/05/18 06:28:24 loizides Exp $
+// $Id: Muon.h,v 1.30 2009/06/19 07:41:34 loizides Exp $
 //
 // Muon
 //
@@ -70,7 +70,7 @@ namespace mithep {
       enum EClassType {
         kNone,              //no track assigned
         kGlobal,            //"Global"
-        kTrackerOnly,       //"TrackerOnly"
+        kTracker,           //"Tracker"
         kSta,               //"Standalone"
         kAny                //any "best" of the above
       };
@@ -302,7 +302,7 @@ inline Bool_t mithep::Muon::Has(EClassType type) const
       if (HasGlobalTrk()) 
         return kTRUE;
       break;
-    case kTrackerOnly:
+    case kTracker:
       if (HasTrackerTrk()) 
         return kTRUE;
       break;
@@ -337,7 +337,7 @@ inline mithep::Muon::EClassType mithep::Muon::Is() const
   if (HasGlobalTrk())
     return kGlobal;
   else if (HasTrackerTrk())
-    return kTrackerOnly;
+    return kTracker;
   else if (HasStandaloneTrk())
     return kSta;
 
@@ -401,7 +401,7 @@ inline Bool_t mithep::Muon::PromptTight(EClassType type) const
     case kGlobal:
       lTrack = GlobalTrk();
       break;
-    case kTrackerOnly:
+    case kTracker:
       lTrack = TrackerTrk();
       break;
     case kSta:
