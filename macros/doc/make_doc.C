@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.4 2009/07/17 07:31:56 loizides Exp $
+// $Id: make_doc.C,v 1.5 2009/07/17 10:47:04 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -18,6 +18,7 @@
 #include <TObjString.h>
 #include <TEnv.h>
 #include <THtml.h>
+#include <TDocInfo.h>
 #endif
 
 class MyHtml : public THtml
@@ -27,17 +28,18 @@ class MyHtml : public THtml
     public:
       bool GetModule(TClass* cl, TString& out_modulename) const {
         TString cn(cl->GetName());
-        if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM"))
+        if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM")) {
           return TModuleDefinition::GetModule(cl, out_modulename);
-
+        }
         TString tmp(cl->GetDeclFileName());
         Ssiz_t fst = tmp.Index("/Mit")+1;
         Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
         out_modulename = tmp(fst,snd-fst);
         return 1;
       }
-      ClassDef(MyModDef, 0);
-   };
+
+      ClassDef(MyModDef, 0) // MyModDef class for BAMBU module definition
+    };
 
     MyHtml() 
     {
@@ -55,8 +57,17 @@ class MyHtml : public THtml
       Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
       module = tmp(fst,snd-fst);
     }
+    void Print() 
+    {
+      GetListOfModules()->Print();
+      //hack for MitCommon
+      //  TModuleDocInfo* module = 
+      //    dynamic_cast<TModuleDocInfo*>(GetOwner()->GetListOfModules()->FindObject("MitCommon"));
+      //  if (module)
+      //    module->SetSelected();
+    }
 
-  ClassDef(MyHtml, 0);
+  ClassDef(MyHtml, 0) // MyHtml class for BAMBU docu;
 };
 
 void load_libs(const char *ln)
@@ -91,6 +102,6 @@ void make_doc()
   h.SetIncludePath(Form("%s/src/",cb.Data()));
   h.SetClassDocTag("//------------------------------------------------------------");
   h.SetViewCVS("http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/");
-  h.SetLibURL("$ROOTSYS/lib","http://root.cern.ch/root/html522");
+  h.SetRootURL("http://root.cern.ch/root/html522");
   h.MakeAll(0,"(mithep::|TAM)");
 }
