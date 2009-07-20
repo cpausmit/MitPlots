@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: TrackColLinkDef.h,v 1.1 2009/06/15 15:00:16 loizides Exp $
 
 #ifndef MITANA_DATATREE_TRACKCOLLINKDEF_H
 #define MITANA_DATATREE_TRACKCOLLINKDEF_H
@@ -26,4 +26,5 @@
 #pragma link C++ typedef mithep::TrackArr;
 #pragma link C++ typedef mithep::TrackOArr;
 #pragma link C++ enum mithep::Track::EHitLayer;
+#pragma link C++ enum mithep::Track::ETrackAlgorithm;
 #endif

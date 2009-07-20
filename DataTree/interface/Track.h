@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.42 2009/07/13 11:00:32 loizides Exp $
+// $Id: Track.h,v 1.43 2009/07/14 13:44:12 bendavid Exp $
 //
 // Track
 //
@@ -134,7 +134,7 @@ namespace mithep
         TEC9S
       };
 
-      enum ETrackAlgorithm {
+      enum ETrackAlgorithm { //taken from DataFormats/TrackReco/interface/TrackBase.h
         undefAlgorithm=0,
         ctf=1,
         rs=2,
@@ -309,9 +309,8 @@ inline Double_t mithep::Track::D0Corrected(const BaseVertex &iVertex) const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline
-void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0, 
-                             Double_t dxy, Double_t dsz)
+inline void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0, 
+                                    Double_t dxy, Double_t dsz)
 {
   // Set helix parameters.
 
@@ -324,9 +323,8 @@ void mithep::Track::SetHelix(Double_t qOverP, Double_t lambda, Double_t phi0,
 }
 
 //--------------------------------------------------------------------------------------------------
-inline
-void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
-                              Double_t dxyErr, Double_t dszErr)
+inline void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t phi0Err, 
+                                     Double_t dxyErr, Double_t dszErr)
 {
   // Set helix errors.
 
@@ -338,8 +336,7 @@ void mithep::Track::SetErrors(Double_t qOverPErr, Double_t lambdaErr, Double_t p
 }
 
 //--------------------------------------------------------------------------------------------------
-inline
-const mithep::BitMask48 mithep::Track::StereoLayers()
+inline const mithep::BitMask48 mithep::Track::StereoLayers()
 { 
   // Build and return BitMask of stereo layers.
 

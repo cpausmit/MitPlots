@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.32 2009/04/07 15:55:36 phedex Exp $
+// $Id: Electron.h,v 1.33 2009/07/07 08:31:45 bendavid Exp $
 //
 // Electron
 //
@@ -20,30 +20,31 @@ namespace mithep
   class Electron : public ChargedParticle
   {
     public:
-      Electron() : fESuperClusterOverP(0), fESeedClusterOverPout(0), fDeltaEtaSuperClTrkAtVtx(0),
-                   fDeltaEtaSeedClTrkAtCalo(0), fDeltaPhiSuperClTrkAtVtx(0), 
-                   fDeltaPhiSeedClTrkAtCalo(0), fFBrem(0), fHadronicOverEm(0), fHcalDepth1OverEcal(0),
-                   fHcalDepth2OverEcal(0), fNumberOfClusters(0), fE15(0), fE25Max(0), fE33(0),
-                   fE55(0), fCovEtaEta(0), fCoviEtaiEta(0), fCovEtaPhi(0), fCovPhiPhi(0),
-                   fCaloIsolation(0), fHcalJurassicIsolation(0),
-                   fHcalDepth1TowerSumEtDr04(0), fHcalDepth2TowerSumEtDr04(0),
-                   fEcalJurassicIsolation(0), fTrackIsolationDr04(0), fCaloTowerIsolation(0),
-                   fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
-                   fEcalRecHitSumEtDr03(0), fTrackIsolation(0), fPassLooseID(0),
-                   fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0), fFracSharedHits(0),
-                   fMva(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
-                   fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
-                   fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
-                   fIsEcalDriven(0), fIsTrackerDriven(0) {}
+      Electron() : 
+        fESuperClusterOverP(0), fESeedClusterOverPout(0), fDeltaEtaSuperClTrkAtVtx(0),
+        fDeltaEtaSeedClTrkAtCalo(0), fDeltaPhiSuperClTrkAtVtx(0), 
+        fDeltaPhiSeedClTrkAtCalo(0), fFBrem(0), fHadronicOverEm(0), fHcalDepth1OverEcal(0),
+        fHcalDepth2OverEcal(0), fNumberOfClusters(0), fE15(0), fE25Max(0), fE33(0),
+        fE55(0), fCovEtaEta(0), fCoviEtaiEta(0), fCovEtaPhi(0), fCovPhiPhi(0),
+        fCaloIsolation(0), fHcalJurassicIsolation(0),
+        fHcalDepth1TowerSumEtDr04(0), fHcalDepth2TowerSumEtDr04(0),
+        fEcalJurassicIsolation(0), fTrackIsolationDr04(0), fCaloTowerIsolation(0),
+        fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
+        fEcalRecHitSumEtDr03(0), fTrackIsolation(0), fPassLooseID(0),
+        fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0), fFracSharedHits(0),
+        fMva(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
+        fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
+        fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
+        fIsEcalDriven(0), fIsTrackerDriven(0) {}
 
       const Track         *BestTrk()                const;
-      Double_t             CaloIsolation()          const { return fCaloIsolation; } //*DEPRECATED*
+      Double_t             CaloIsolation()          const { return fCaloIsolation;       } //*DEPRECATED*
       Double_t             CaloTowerIsolation()     const { return HcalTowerSumEtDr03(); } //*DEPRECATED*
-      Int_t                Classification()         const { return fClassification;                }
-      Double_t             CovEtaEta()              const { return fCovEtaEta;                     }
+      Int_t                Classification()         const { return fClassification;      }
+      Double_t             CovEtaEta()              const { return fCovEtaEta;           }
       Double_t             CovEtaPhi()              const { return fCovEtaPhi;           } //*DEPRECATED*
       Double_t             CovPhiPhi()              const { return fCovPhiPhi;           } //*DEPRECATED*
-      Double_t             CoviEtaiEta()            const { return fCoviEtaiEta;                   }
+      Double_t             CoviEtaiEta()            const { return fCoviEtaiEta;         }
       Double_t             DeltaEtaSuperClusterTrackAtVtx() const 
                              { return fDeltaEtaSuperClTrkAtVtx; }
       Double_t             DeltaEtaSeedClusterTrackAtCalo() const 
@@ -52,10 +53,10 @@ namespace mithep
                              { return fDeltaPhiSuperClTrkAtVtx; }
       Double_t             DeltaPhiSeedClusterTrackAtCalo() const 
                              { return fDeltaPhiSeedClTrkAtCalo; }
-      Double_t             E15()                    const { return fE15;                           }
-      Double_t             E25Max()                 const { return fE25Max;                        }
+      Double_t             E15()                    const { return fE15;                }
+      Double_t             E25Max()                 const { return fE25Max;             }
       Double_t             E33()                    const { return fE33;                } //*DEPRECATED*
-      Double_t             E55()                    const { return fE55;                           }
+      Double_t             E55()                    const { return fE55;                }
       Double_t             EcalJurassicIsolation()  const { return EcalRecHitIsoDr04(); } //*DEPRECATED*
       Double_t             ESuperClusterOverP()     const { return fESuperClusterOverP;            }
       Double_t             ESeedClusterOverPout()   const { return fESeedClusterOverPout;          }
@@ -70,7 +71,7 @@ namespace mithep
       Bool_t               HasGsfTrk()              const { return fGsfTrackRef.IsValid();         }
       Bool_t               HasTrackerTrk()          const { return fTrackerTrackRef.IsValid();     }
       Bool_t               HasSuperCluster()        const { return fSuperClusterRef.IsValid();     }
-      Double_t             HcalIsolation()          const { return fHcalJurassicIsolation; } //*DEPRECATED*
+      Double_t             HcalIsolation()          const { return fHcalJurassicIsolation;         } //*DEPRECATED*
       Double_t             IDLikelihood()           const { return fIDLikelihood;                  }
       Bool_t               IsEnergyScaleCorrected() const { return fIsEnergyScaleCorrected;        }
       Bool_t               IsMomentumCorrected()    const { return fIsMomentumCorrected;           }
@@ -145,29 +146,29 @@ namespace mithep
       void                 SetHcalDepth1TowerSumEtDr04(Double_t x) { fHcalDepth1TowerSumEtDr04 = x; }
       void                 SetHcalDepth2TowerSumEtDr04(Double_t x) { fHcalDepth2TowerSumEtDr04 = x; }
       void                 SetTrackIsolationDr04(Double_t x)       { fTrackIsolationDr04 = x;       }
-      void                 SetEcalRecHitIsoDr03(Double_t x)        { fEcalRecHitSumEtDr03 = x;    }
+      void                 SetEcalRecHitIsoDr03(Double_t x)        { fEcalRecHitSumEtDr03 = x;      }
       void                 SetHcalTowerSumEtDr03(Double_t x)       { fCaloTowerIsolation = x;       }
       void                 SetHcalDepth1TowerSumEtDr03(Double_t x) { fHcalDepth1TowerSumEtDr03 = x; }
       void                 SetHcalDepth2TowerSumEtDr03(Double_t x) { fHcalDepth2TowerSumEtDr03 = x; }
-      void                 SetTrackIsolationDr03(Double_t x)       { fTrackIsolation = x;          }
-      void                 SetMva(Double_t x)                      { fMva = x;                     }
-      void                 SetIsEB(Bool_t b)                       { fIsEB = b;                    }
-      void                 SetIsEE(Bool_t b)                       { fIsEE = b;                    }
-      void                 SetIsEBEEGap(Bool_t b)                  { fIsEBEEGap = b;               }
-      void                 SetIsEBEtaGap(Bool_t b)                 { fIsEBEtaGap = b;              }
-      void                 SetIsEBPhiGap(Bool_t b)                 { fIsEBPhiGap = b;              }
-      void                 SetIsEEDeeGap(Bool_t b)                 { fIsEEDeeGap = b;              }
-      void                 SetIsEERingGap(Bool_t b)                { fIsEERingGap = b;             }
-      void                 SetIsEcalDriven(Bool_t b)               { fIsEcalDriven = b;            }
-      void                 SetIsTrackerDriven(Bool_t b)            { fIsTrackerDriven = b;         }
+      void                 SetTrackIsolationDr03(Double_t x)       { fTrackIsolation = x;   }
+      void                 SetMva(Double_t x)                      { fMva = x;              }
+      void                 SetIsEB(Bool_t b)                       { fIsEB = b;             }
+      void                 SetIsEE(Bool_t b)                       { fIsEE = b;             }
+      void                 SetIsEBEEGap(Bool_t b)                  { fIsEBEEGap = b;        }
+      void                 SetIsEBEtaGap(Bool_t b)                 { fIsEBEtaGap = b;       }
+      void                 SetIsEBPhiGap(Bool_t b)                 { fIsEBPhiGap = b;       }
+      void                 SetIsEEDeeGap(Bool_t b)                 { fIsEEDeeGap = b;       }
+      void                 SetIsEERingGap(Bool_t b)                { fIsEERingGap = b;      }
+      void                 SetIsEcalDriven(Bool_t b)               { fIsEcalDriven = b;     }
+      void                 SetIsTrackerDriven(Bool_t b)            { fIsTrackerDriven = b;  }
       
      
-      const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();          }
-      Double_t             TrackIsolation()        const { return TrackIsolationDr03(); } //*DEPRECATED*
-      const Track         *Trk()                   const { return BestTrk();                       }
+      const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
+      Double_t             TrackIsolation()        const { return TrackIsolationDr03();     } //*DEPRECATED*
+      const Track         *Trk()                   const { return BestTrk();                }
 
     protected:
-      Double_t             GetMass()               const          { return 0.51099892e-3;          }
+      Double_t             GetMass()               const { return 0.51099892e-3;            }
       void                 GetMom()                const;
 
       Vect3C               fMom;                       //stored three-momentum
