@@ -1,4 +1,4 @@
-// $Id: runObjectCleaner.C,v 1.1 2008/08/08 11:23:17 sixie Exp $
+// $Id: treeSizeVal.C,v 1.1 2008/09/17 12:48:38 bendavid Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -17,94 +17,60 @@
 extern "C" void R__zip (Int_t cxlevel, Int_t *nin, char *bufin, Int_t *lout, char *bufout, Int_t *nout);
 
 //--------------------------------------------------------------------------------------------------
-Long64_t RawBytes(TBranch* branch, UInt_t recursion=0) {
-
-  //Long64_t rawCurrentBasketSize = 0;
- // if (recursion==0)
-//    rawCurrentBasketSize = branch->GetTotalSize() - branch->GetTotBytes();
-    
-  //TBasket* currentBasket = branch->GetBasket(branch->GetReadBasket());
-  //currentBasket->SetWriteMode();
-  //rawCurrentBasketSize = currentBasket->WriteBuffer();
-
-  //branch->WriteBasket(currentBasket);
-
-  //branch->Print();
-  
-
-
-//branch->Print();
- // if (currentBasket->GetNevBuf())
-    //rawCurrentBasketSize = currentBasket->GetBufferRef()->Length();
-   // rawCurrentBasketSize = currentBasket->GetObjlen();
-  //Long64_t altRawBasketSize = currentBasket->GetBufferRef()->Length();
-
+Long64_t RawBytes(TBranch* branch, UInt_t recursion=0) 
+{
   Long64_t totBytes = branch->GetTotBytes();
   //Long64_t totBytes = branch->GetTotBytes() + altRawBasketSize;
   TObjArray *subBranches = branch->GetListOfBranches();
-  for (UInt_t i = 0; i<subBranches->GetEntries(); ++i) {
+  for (Int_t i = 0; i<subBranches->GetEntries(); ++i) {
     TBranch *subBranch = (TBranch*)subBranches->At(i);
     totBytes += RawBytes(subBranch, recursion+1);
   }
   return totBytes;
 }
 
-Long64_t ZipBytes(TBranch* branch, Double_t ratio, UInt_t recursion=0) {
-
-  Long64_t zipBytes = branch->GetZipBytes();
-
-
-  
+Long64_t ZipBytes(TBranch* branch, Double_t ratio, UInt_t recursion=0) 
+{
   TBasket* currentBasket = branch->GetBasket(branch->GetReadBasket());
   currentBasket->SetWriteMode();
-  branch->WriteBasket(currentBasket);
-  //Long64_t zipBasketSize = currentBasket->GetNbytes();
-  
-  //printf("Simple basket raw size = %i\n", rawCurrentBasketSize);
-  //printf("objlen basket raw size = %i\n", altRawBasketSize);
-  
- // Int_t basketSize = branch->GetBasketSize();
-  
-  //Long64_t basketZipEstimate = TMath::Min(((Double_t)rawCurrentBasketSize)/ratio, (Double_t)basketSize);
-  //printf("basket zip estimate = %i\n",basketZipEstimate);
+  branch->WriteBasket(currentBasket,0);
 
   Long64_t totBytes = branch->GetZipBytes();
   //Long64_t totBytes = branch->GetZipBytes() + altRawBasketSize;
   TObjArray *subBranches = branch->GetListOfBranches();
-  for (UInt_t i = 0; i<subBranches->GetEntries(); ++i) {
+  for (Int_t i = 0; i<subBranches->GetEntries(); ++i) {
     TBranch *subBranch = (TBranch*)subBranches->At(i);
     totBytes += ZipBytes(subBranch, ratio, recursion+1);
   }
   return totBytes;
 }
 
-Long64_t TotSize(TBranch* branch) {
+Long64_t TotSize(TBranch* branch) 
+{
   Long64_t totBytes = branch->GetTotalSize();
   TObjArray *subBranches = branch->GetListOfBranches();
-  for (UInt_t i = 0; i<subBranches->GetEntries(); ++i) {
-    TBranch *subBranch = (TBranch*)subBranches->At(i);
-    //totBytes += TotSize(subBranch);
+  if (0) {
+    for (Int_t i = 0; i<subBranches->GetEntries(); ++i) {
+      TBranch *subBranch = (TBranch*)subBranches->At(i);
+      totBytes += TotSize(subBranch);
+    }
   }
   return totBytes;
 }
 
 
-void AppendPrefix(TBranch* branch, std::string prefix) {
-  //branch->GetTree()->SetBranchStatus(branch->GetName(),1);
-  //branch->ResetBit(kDoNotProcess);
+void AppendPrefix(TBranch* branch, std::string prefix) 
+{
   std::string name = prefix + branch->GetName();
   branch->SetName(name.c_str());
   TObjArray *subBranches = branch->GetListOfBranches();
-  for (UInt_t i = 0; i<subBranches->GetEntries(); ++i) {
+  for (Int_t i = 0; i<subBranches->GetEntries(); ++i) {
     TBranch *subBranch = (TBranch*)subBranches->At(i);
     AppendPrefix(subBranch, prefix);
   }
-  
-  return;
-
 }
 
-void treeSizeVal(const char *file = "/server/02a/bendavid/OAK/XX-MITDATASET-XX_000.root")
+void treeSizeVal(const char *file)
 {
   using namespace mithep;
   gDebugMask  = Debug::kAnalysis;
@@ -118,7 +84,6 @@ void treeSizeVal(const char *file = "/server/02a/bendavid/OAK/XX-MITDATASET-XX_0
   TTree *fwMetaData = (TTree*)infile->Get("FWMetaData");
 
   //TPie fileRaw, fileZip;
-  
   const char **treeLabels = new const char*[3];
   treeLabels[0] = "Events";
   treeLabels[1] = "Runs";
@@ -158,13 +123,6 @@ void treeSizeVal(const char *file = "/server/02a/bendavid/OAK/XX-MITDATASET-XX_0
 
   Double_t *rawDataBranchSizes = new Double_t[nBranches];
   Double_t *zipDataBranchSizes = new Double_t[nBranches];
-
-  
-  
-
-  
-
-  
   
   Long64_t rawTotal = 0;
   Long64_t zipTotal = 0;
@@ -172,87 +130,41 @@ void treeSizeVal(const char *file = "/server/02a/bendavid/OAK/XX-MITDATASET-XX_0
   Long64_t zipDataTotal=0;
   
   for (UInt_t i=0; i<nBranches; ++i) {
-  
     
     TBranch* branch = (TBranch*)evtBranches->At(i);
-//     events->SetBranchStatus("*",0);
-//     const char* branchName = branch->GetName();
-//     std::string prefix = branchName;
-//     prefix += "-SpaceVal-";
-//     AppendPrefix(branch,prefix);
-//     
-//     std::string branchSearch = prefix + "*";
-//     events->SetBranchStatus(branchSearch.c_str(),1);
     
-    //TFile *tmpFile = new TFile("tmpFile.root","RECREATE");
-
-    //branch->SetFile(tmpFile);
-
-    //TBasket* basket = branch->GetBasket(branch->GetReadBasket());
-
-    //basket->SetWriteMode();
-   // basket->WriteBuffer();
-
-    //basket->WriteFile(1, tmpFile);
-
-  //  branch->Print();
-
-//    tmpFile->Close();
-
-    //TTree *eventSubset = events->CloneTree();
-    //TTree *eventSubset = events;
-    
-    //tmpFile->Write();
-    //tmpFile->Close();
-   // eventSubset->Write();
-   // eventSubset->Print();
-    
-    //Long64_t branchSizeRaw = eventSubset->GetTotBytes();
-   // Long64_t branchSizeZip = eventSubset->GetTotBytes();
-    
-
-    
-     //Long64_t branchSizeTotal = TotSize(branch);
-    
-     Long64_t branchSizeZip = ZipBytes(branch, eventsCompression);
-     Long64_t branchSizeRaw = RawBytes(branch);
+    Long64_t branchSizeZip = ZipBytes(branch, eventsCompression);
+    Long64_t branchSizeRaw = RawBytes(branch);
 
     rawTotal += branchSizeRaw;
     zipTotal += branchSizeZip;
     
-    
-     printf("%s BranchSizeRaw = %i\n",branch->GetName(),branchSizeRaw);
-     printf("%s BranchSizeZip = %i\n",branch->GetName(),branchSizeZip);
-//     //printf("%s BranchSizeZipSimple = %i\n",branch->GetName(),branchSizeZipSimple);
-//     printf("%s BranchSizeTotal = %i\n",branch->GetName(),branchSizeTotal);
+    printf("%s BranchSizeRaw = %lld\n",branch->GetName(),branchSizeRaw);
+    printf("%s BranchSizeZip = %lld\n",branch->GetName(),branchSizeZip);
+//  printf("%s BranchSizeZipSimple = %i\n",branch->GetName(),branchSizeZipSimple);
+//  printf("%s BranchSizeTotal = %i\n",branch->GetName(),branchSizeTotal);
     rawBranchSizes[i] = (Double_t)branchSizeRaw/nEvents/1024.0;
     zipBranchSizes[i] = (Double_t)branchSizeZip/nEvents/1024.0;
     branchLabels[i] = branch->GetName();
 
     if (i!=1) {
-     rawDataBranchSizes[i] = (Double_t)branchSizeRaw/nEvents/1024.0;
-     zipDataBranchSizes[i] = (Double_t)branchSizeZip/nEvents/1024.0;
-     zipDataTotal+=branchSizeZip;
-
+      rawDataBranchSizes[i] = (Double_t)branchSizeRaw/nEvents/1024.0;
+      zipDataBranchSizes[i] = (Double_t)branchSizeZip/nEvents/1024.0;
+      zipDataTotal+=branchSizeZip;
     }
-    
-    
-    //tmpFile->Close();
-
   }
   
-  printf("Event Size Raw = %i\n" , eventsRawSize);
-  printf("Total Raw Size = %i\n", rawTotal);
+  printf("Event Size Raw = %lld\n", eventsRawSize);
+  printf("Total Raw Size = %lld\n", rawTotal);
   
-  printf("Event Size Zip = %i\n" , eventsZipSize);
-  printf("Total Zip Size = %i\n", zipTotal);
+  printf("Event Size Zip = %lld\n", eventsZipSize);
+  printf("Total Zip Size = %lld\n", zipTotal);
   
   Double_t avgEvent = (Double_t)zipTotal/nEvents/1024.0;
   printf("Average Event Size = %f kBytes\n",avgEvent);
   
   Double_t avgDataEvent = (Double_t)zipDataTotal/nEvents/1024.0;
   printf("Average Event Size (data) = %f kBytes\n",avgDataEvent);
-
 
   TPie *branchRaw = new TPie("branchRaw", "Event Branch Sizes  - Raw", nBranches, rawBranchSizes);
   branchRaw->SetLabels(branchLabels);
@@ -279,7 +191,4 @@ void treeSizeVal(const char *file = "/server/02a/bendavid/OAK/XX-MITDATASET-XX_0
 
   new TCanvas();
   branchDataZip->Draw("3dr");
-
-    //tmpfile->Close();
-
 }
