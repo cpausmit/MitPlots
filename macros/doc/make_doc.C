@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.5 2009/07/17 10:47:04 loizides Exp $
+// $Id: make_doc.C,v 1.6 2009/07/20 04:57:02 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -29,7 +29,8 @@ class MyHtml : public THtml
       bool GetModule(TClass* cl, TString& out_modulename) const {
         TString cn(cl->GetName());
         if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM")) {
-          return TModuleDefinition::GetModule(cl, out_modulename);
+          return 0;
+          //return TModuleDefinition::GetModule(cl, out_modulename);
         }
         TString tmp(cl->GetDeclFileName());
         Ssiz_t fst = tmp.Index("/Mit")+1;
@@ -47,27 +48,32 @@ class MyHtml : public THtml
       SetModuleDefinition(m);
     }
     void SetIncludePath(const char *p) { fPathInfo.fIncludePath=p; }
-    void GetModuleNameForClass(TString& module, TClass* cl) const
+    void GetModuleNameForClass(TString& module, TClass* /*cl*/) const
     {
-      TString cn(cl->GetName());
-      if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM"))
-        return THtml::GetModuleNameForClass(module, cl);
-      TString tmp(cl->GetDeclFileName());
-      Ssiz_t fst = tmp.Index("/Mit")+1;
-      Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
-      module = tmp(fst,snd-fst);
+      module = "NOTUSED";
+      return;
     }
-    void Print() 
+    void Debug() const
     {
-      GetListOfModules()->Print();
-      //hack for MitCommon
-      //  TModuleDocInfo* module = 
-      //    dynamic_cast<TModuleDocInfo*>(GetOwner()->GetListOfModules()->FindObject("MitCommon"));
-      //  if (module)
-      //    module->SetSelected();
+      TModuleDocInfo* module = 0;
+      TIter iterModule(GetListOfModules());
+      
+      while ((module = (TModuleDocInfo*)iterModule())) {
+        cout << module->GetName() << " " << module->IsSelected() << endl;
+      }
     }
 
-  ClassDef(MyHtml, 0) // MyHtml class for BAMBU docu;
+    void RunAll(Bool_t force, const char *filter) 
+    {
+      CreateListOfClasses(filter);
+      TModuleDocInfo* module = 
+        dynamic_cast<TModuleDocInfo*>(GetListOfModules()->FindObject("MitCommon"));
+      if (module)
+        module->SetSelected();
+      THtml::MakeAll(force,filter);
+    }
+
+  ClassDef(MyHtml, 0) // MyHtml class for BAMBU docu
 };
 
 void load_libs(const char *ln)
@@ -103,5 +109,5 @@ void make_doc()
   h.SetClassDocTag("//------------------------------------------------------------");
   h.SetViewCVS("http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/");
   h.SetRootURL("http://root.cern.ch/root/html522");
-  h.MakeAll(0,"(mithep::|TAM)");
+  h.RunAll(0,"(mithep::|TAM)");
 }
