@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.33 2009/07/07 08:31:45 bendavid Exp $
+// $Id: Electron.h,v 1.34 2009/07/20 04:57:27 loizides Exp $
 //
 // Electron
 //
@@ -24,8 +24,8 @@ namespace mithep
         fESuperClusterOverP(0), fESeedClusterOverPout(0), fDeltaEtaSuperClTrkAtVtx(0),
         fDeltaEtaSeedClTrkAtCalo(0), fDeltaPhiSuperClTrkAtVtx(0), 
         fDeltaPhiSeedClTrkAtCalo(0), fFBrem(0), fHadronicOverEm(0), fHcalDepth1OverEcal(0),
-        fHcalDepth2OverEcal(0), fNumberOfClusters(0), fE15(0), fE25Max(0), fE33(0),
-        fE55(0), fCovEtaEta(0), fCoviEtaiEta(0), fCovEtaPhi(0), fCovPhiPhi(0),
+        fHcalDepth2OverEcal(0), fNumberOfClusters(0), fE15(0), fE25Max(0),
+        fE55(0), fCovEtaEta(0), fCoviEtaiEta(0),
         fCaloIsolation(0), fHcalJurassicIsolation(0),
         fHcalDepth1TowerSumEtDr04(0), fHcalDepth2TowerSumEtDr04(0),
         fEcalJurassicIsolation(0), fTrackIsolationDr04(0), fCaloTowerIsolation(0),
@@ -39,11 +39,8 @@ namespace mithep
 
       const Track         *BestTrk()                const;
       Double_t             CaloIsolation()          const { return fCaloIsolation;       } //*DEPRECATED*
-      Double_t             CaloTowerIsolation()     const { return HcalTowerSumEtDr03(); } //*DEPRECATED*
       Int_t                Classification()         const { return fClassification;      }
       Double_t             CovEtaEta()              const { return fCovEtaEta;           }
-      Double_t             CovEtaPhi()              const { return fCovEtaPhi;           } //*DEPRECATED*
-      Double_t             CovPhiPhi()              const { return fCovPhiPhi;           } //*DEPRECATED*
       Double_t             CoviEtaiEta()            const { return fCoviEtaiEta;         }
       Double_t             DeltaEtaSuperClusterTrackAtVtx() const 
                              { return fDeltaEtaSuperClTrkAtVtx; }
@@ -55,9 +52,7 @@ namespace mithep
                              { return fDeltaPhiSeedClTrkAtCalo; }
       Double_t             E15()                    const { return fE15;                }
       Double_t             E25Max()                 const { return fE25Max;             }
-      Double_t             E33()                    const { return fE33;                } //*DEPRECATED*
       Double_t             E55()                    const { return fE55;                }
-      Double_t             EcalJurassicIsolation()  const { return EcalRecHitIsoDr04(); } //*DEPRECATED*
       Double_t             ESuperClusterOverP()     const { return fESuperClusterOverP;            }
       Double_t             ESeedClusterOverPout()   const { return fESeedClusterOverPout;          }
       Double_t             ESeedClusterOverPIn()    const;
@@ -164,7 +159,6 @@ namespace mithep
       
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
-      Double_t             TrackIsolation()        const { return TrackIsolationDr03();     } //*DEPRECATED*
       const Track         *Trk()                   const { return BestTrk();                }
 
     protected:
@@ -188,12 +182,9 @@ namespace mithep
       Double32_t           fNumberOfClusters;          //[0,0,14]number of associated clusters
       Double32_t           fE15;                       //[0,0,14]1x5 crystal energy
       Double32_t           fE25Max;                    //[0,0,14]2x5 crystal energy (max of two possible sums)
-      Double32_t           fE33;                       //[0,0,14]3x3 crystal energy *DEPRECATED*
       Double32_t           fE55;                       //[0,0,14]5x5 crystal energy
       Double32_t           fCovEtaEta;                 //[0,0,14]variance eta-eta
       Double32_t           fCoviEtaiEta;               //[0,0,14]covariance eta-eta (in crystals)
-      Double32_t           fCovEtaPhi;                 //[0,0,14]covariance eta-phi *DEPRECATED*
-      Double32_t           fCovPhiPhi;                 //[0,0,14]covariance phi-phi *DEPRECATED*
       Double32_t           fCaloIsolation;             //[0,0,14](non-jura) ecal isolation based on rechits dR 0.3 *DEPRECATED*
       Double32_t           fHcalJurassicIsolation;     //[0,0,14]hcal jura iso dR 0.4 *DEPRECATED*
       Double32_t           fHcalDepth1TowerSumEtDr04;  //[0,0,14]hcal depth1 tower based isolation dR 0.4

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.28 2009/07/13 11:00:31 loizides Exp $
+// $Id: Photon.h,v 1.29 2009/07/20 04:57:27 loizides Exp $
 //
 // Photon
 //
@@ -42,7 +42,6 @@ namespace mithep
         fIsConverted(0) {}
 
       const Conversion    *ConvCand(UInt_t i)      const { return fConversions.At(i);  }
-      Double_t             EcalRecHitIso()         const { return EcalRecHitIsoDr04(); } //*DEPRECATED*
       Double_t             EcalRecHitIsoDr03()     const { return fEcalRecHitIsoDr03;  }
       Double_t             EcalRecHitIsoDr04()     const { return fEcalRecHitIso;      }
       Double_t             HadOverEm()             const { return fHadOverEm;          }
@@ -54,10 +53,8 @@ namespace mithep
       Double_t             HcalRecHitIso()         const { return fHcalRecHitIso;         } //*DEPRECATED*
       Double_t             HcalTowerSumEtDr03()    const { return fHcalTowerSumEtDr03;    }
       Double_t             HcalTowerSumEtDr04()    const { return fHcalTowerSumEtDr03;    }
-      UShort_t             HollowConeNTrk()        const { return HollowConeNTrkDr04();   } //*DEPRECATED*
       UShort_t             HollowConeNTrkDr03()    const { return fHollowConeNTrkDr03;    }
       UShort_t             HollowConeNTrkDr04()    const { return fHollowConeNTrk;        }
-      Double_t             HollowConeTrkIso()      const { return HollowConeTrkIsoDr04(); } //*DEPRECATED*
       Double_t             HollowConeTrkIsoDr03()  const { return fHollowConeTrkIsoDr03;  }
       Double_t             HollowConeTrkIsoDr04()  const { return fHollowConeTrkIso;  }
       Bool_t               IsEB()                  const { return fIsEB;              }
@@ -73,10 +70,8 @@ namespace mithep
       EObjType             ObjType()               const { return kPhoton;                  }
       Double_t             R9()                    const { return fR9;                      }
       const SuperCluster  *SCluster()              const { return fSuperClusterRef.Obj();   }
-      Double_t             SolidConeTrkIso()       const { return SolidConeTrkIsoDr04();    } //*DEPRECATED*
       Double_t             SolidConeTrkIsoDr03()   const { return fSolidConeTrkIsoDr03;     }
       Double_t             SolidConeTrkIsoDr04()   const { return fSolidConeTrkIso;         }
-      UShort_t             SolidConeNTrk()         const { return SolidConeNTrkDr04();      } //*DEPRECATED*
       UShort_t             SolidConeNTrkDr03()     const { return fSolidConeNTrkDr03;       }
       UShort_t             SolidConeNTrkDr04()     const { return fSolidConeNTrk;           }
       void                 AddConversion(const Conversion *c)      { fConversions.Add(c);   }  
