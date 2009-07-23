@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.6 2009/07/20 04:57:02 loizides Exp $
+// $Id: make_doc.C,v 1.7 2009/07/20 13:49:27 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -48,19 +48,18 @@ class MyHtml : public THtml
       SetModuleDefinition(m);
     }
     void SetIncludePath(const char *p) { fPathInfo.fIncludePath=p; }
-    void GetModuleNameForClass(TString& module, TClass* /*cl*/) const
+    void GetModuleNameForClass(TString& module, TClass* cl) const
     {
       module = "NOTUSED";
-      return;
-    }
-    void Debug() const
-    {
-      TModuleDocInfo* module = 0;
-      TIter iterModule(GetListOfModules());
-      
-      while ((module = (TModuleDocInfo*)iterModule())) {
-        cout << module->GetName() << " " << module->IsSelected() << endl;
+        TString cn(cl->GetName());
+      if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM")) {
+        return;
       }
+      TString tmp(cl->GetDeclFileName());
+      Ssiz_t fst = tmp.Index("/Mit")+1;
+      Ssiz_t snd = tmp.Index("/",tmp.Index("/",fst)+1);
+      module = tmp(fst,snd-fst);
+      return;
     }
 
     void RunAll(Bool_t force, const char *filter) 
