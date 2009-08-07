@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.34 2009/07/20 04:57:27 loizides Exp $
+// $Id: Electron.h,v 1.35 2009/07/21 16:34:46 bendavid Exp $
 //
 // Electron
 //
@@ -38,7 +38,7 @@ namespace mithep
         fIsEcalDriven(0), fIsTrackerDriven(0) {}
 
       const Track         *BestTrk()                const;
-      Double_t             CaloIsolation()          const { return fCaloIsolation;       } //*DEPRECATED*
+      Double_t             CaloIsolation()          const { return fCaloIsolation;       } // *DEPRECATED*
       Int_t                Classification()         const { return fClassification;      }
       Double_t             CovEtaEta()              const { return fCovEtaEta;           }
       Double_t             CoviEtaiEta()            const { return fCoviEtaiEta;         }
@@ -66,7 +66,7 @@ namespace mithep
       Bool_t               HasGsfTrk()              const { return fGsfTrackRef.IsValid();         }
       Bool_t               HasTrackerTrk()          const { return fTrackerTrackRef.IsValid();     }
       Bool_t               HasSuperCluster()        const { return fSuperClusterRef.IsValid();     }
-      Double_t             HcalIsolation()          const { return fHcalJurassicIsolation;         } //*DEPRECATED*
+      Double_t             HcalIsolation()          const { return fHcalJurassicIsolation;         } // *DEPRECATED*
       Double_t             IDLikelihood()           const { return fIDLikelihood;                  }
       Bool_t               IsEnergyScaleCorrected() const { return fIsEnergyScaleCorrected;        }
       Bool_t               IsMomentumCorrected()    const { return fIsMomentumCorrected;           }
