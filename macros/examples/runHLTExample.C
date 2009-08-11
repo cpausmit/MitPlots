@@ -1,4 +1,4 @@
-// $Id: runHLTExample.C,v 1.2 2008/10/23 17:03:06 loizides Exp $
+// $Id: runHLTExample.C,v 1.3 2008/11/25 14:31:19 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -26,6 +26,12 @@ void runHLTExample(const char *trigger="HLT_Jet80", const char *files = "mit-ful
   
   // set up analysis
   Analysis *ana = new Analysis;
+  if (0) {
+    hltmod->SetBitsName("HLTBits_E29");
+    ana->SetHLTTreeName("HLT_E29");
+    ana->SetHLTObjsName("HLTObjects_E29");
+  }
+
   ana->SetSuperModule(hltmod);
   ana->AddFile(files);
   if (gROOT->IsBatch())
