@@ -1,4 +1,4 @@
-// $Id: make_doc.C,v 1.7 2009/07/20 13:49:27 loizides Exp $
+// $Id: make_doc.C,v 1.8 2009/07/23 11:13:49 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <iostream>
@@ -17,8 +17,8 @@
 #include <TObjArray.h>
 #include <TObjString.h>
 #include <TEnv.h>
-#include <THtml.h>
-#include <TDocInfo.h>
+#include "MitAna/Utils/interface/THtml.h"
+#include "MitAna/Utils/interface/TDocInfo.h"
 #endif
 
 class MyHtml : public THtml
@@ -96,11 +96,6 @@ void make_doc()
 {
   MyHtml h;
   h.SetProductName("MitRoot");
-
-  // load our libraries
-  load_libs("MitCommon");
-  load_libs("MitAna");
-  load_libs("MitPhysics");
 
   TString cb(gSystem->ExpandPathName("$CMSSW_BASE"));
   h.SetInputDir("$CMSSW_BASE/src:$ROOTSYS/include");

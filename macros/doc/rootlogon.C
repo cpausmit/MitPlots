@@ -1,5 +1,5 @@
-// $Id: rootlogon.C,v 1.1 2008/05/27 19:59:54 loizides Exp $
+// $Id: rootlogon.C,v 1.1 2009/07/16 13:13:55 loizides Exp $
 
 { 
-   gROOT->Macro("$CMSSW_BASE/src/MitAna/macros/setRootEnv.C+");
+  gROOT->Macro("$CMSSW_BASE/src/MitAna/macros/setRootEnv.C+");
 }
