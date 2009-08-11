@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.34 2009/06/22 15:36:47 loizides Exp $
+// $Id: Analysis.cc,v 1.35 2009/07/13 20:05:31 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -46,13 +46,22 @@ Analysis::Analysis(Bool_t useproof) :
   fChain(0), 
   fSet(0), 
   fDeleteList(new TList),
-  fTreeName(Names::gkEvtTreeName),
   fCompLevel(7), 
   fProof(0),
   fDoNEvents(TChain::kBigNumber),
   fSkipNEvents(0),
   fPrintScale(1),
-  fCacheSize(-1)
+  fCacheSize(-1),
+  fTreeName(Names::gkEvtTreeName),
+  fEvtHdrName(Names::gkEvtHeaderBrn),
+  fRunTreeName(Names::gkRunTreeName),
+  fRunInfoName(Names::gkRunInfoBrn),
+  fAllEvtHdrBrn(Names::gkAllEvtHeaderBrn),
+  fLATreeName(Names::gkLATreeName),
+  fLAHdrName(Names::gkLAHeaderBrn),
+  fHLTTreeName(Names::gkHltTreeName),
+  fAllEvtTreeName(Names::gkAllEvtTreeName),
+  fHLTObjsName(Names::gkHltObjBrn)
 {
   // Default constructor.
 
@@ -78,7 +87,7 @@ Analysis::~Analysis()
   delete fDeleteList;
   delete fSelector;
   delete fSuperMods;
-  fOutput    = 0;   // owned by TAM
+  fOutput = 0;   // owned by TAM
 
   delete fProof;
 }
@@ -436,6 +445,8 @@ Bool_t Analysis::Init()
   HLTFwkMod *hltmod = 0;
   if (fUseHLT) {
     hltmod = new HLTFwkMod;
+    hltmod->SetHLTObjsName(GetHLTObjsName());
+    hltmod->SetHLTTreeName(GetHLTTreeName());
     fDeleteList->Add(hltmod);
   }
 
@@ -458,11 +469,19 @@ Bool_t Analysis::Init()
   } else {
 
     // when not running Proof, we must make a selector
-    fSelector = new Selector; 
-    fSelector->SetDoProxy(fDoProxy);
-    fSelector->SetDoObjTabClean(fDoObjTabClean);
-
-    fSelector->AddInput(anamod);
+    Selector *sel = new Selector; 
+    sel->SetDoProxy(fDoProxy);
+    sel->SetDoObjTabClean(fDoObjTabClean);
+    sel->SetDoRunInfo(kTRUE);
+    sel->SetAllEvtHdrBrn(GetAllEvtHdrBrn());
+    sel->SetAllEvtTreeName(GetAllEvtTreeName());
+    sel->SetEvtHdrName(GetEvtHdrName());
+    sel->SetLAHdrName(GetLAHdrName());
+    sel->SetLATreeName(GetLATreeName());
+    sel->SetRunInfoName(GetRunInfoName());
+    sel->SetRunTreeName(GetRunTreeName());
+    sel->AddInput(anamod);
+    fSelector = sel;
 
     if (hltmod) 
       fSelector->AddInput(hltmod);

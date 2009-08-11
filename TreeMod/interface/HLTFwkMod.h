@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.6 2009/06/15 15:00:17 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.7 2009/07/13 10:39:20 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -30,13 +30,20 @@ namespace mithep
       HLTFwkMod(const char *name="HLTFwkMod", const char *title="HLT framework module");
       ~HLTFwkMod();
 
-      const char                 *HLTTreeName()    const { return fHLTTreeName; }
-      const char                 *HLTTabName()     const { return fHLTTabName; }
-      const char                 *HLTLabName()     const { return fHLTLabName; }
-      const char                 *HLTObjsName()    const { return fObjsName; }
-      const char                 *HLTTabNamePub()  const { return fHLTTabNamePub; }
+      const char                 *HLTLabName()     const { return fHLTLabName;    }
       const char                 *HLTLabNamePub()  const { return fHLTLabNamePub; }
-      const char                 *HLTObjsNamePub() const { return fObjsNamePub; }
+      const char                 *HLTObjsName()    const { return fObjsName;      }
+      const char                 *HLTObjsNamePub() const { return fObjsNamePub;   }
+      const char                 *HLTTabName()     const { return fHLTTabName;    }
+      const char                 *HLTTabNamePub()  const { return fHLTTabNamePub; }
+      const char                 *HLTTreeName()    const { return fHLTTreeName;   }
+      void                        SetHLTLabName(const char *n)     { fHLTLabName    = n; }
+      void                        SetHLTLabNamePub(const char *n)  { fHLTLabNamePub = n; }
+      void                        SetHLTObjsName(const char *n)    { fObjsName      = n; }
+      void                        SetHLTObjsNamePub(const char *n) { fObjsNamePub   = n; }
+      void                        SetHLTTabName(const char *n)     { fHLTTabName    = n; }
+      void                        SetHLTTabNamePub(const char *n)  { fHLTTabNamePub = n; }
+      void                        SetHLTTreeName(const char *n)    { fHLTTreeName   = n; }
 
     protected:
       void                        BeginRun();

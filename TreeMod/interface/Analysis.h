@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.26 2009/06/19 07:39:01 loizides Exp $
+// $Id: Analysis.h,v 1.27 2009/07/13 20:05:31 loizides Exp $
 //
 // Analysis
 //
@@ -57,7 +57,16 @@ namespace mithep
       void                      AddPackage(const char *name);
       void                      AddPackages(TList *list);
       void                      AddSuperModule(TAModule *mod);
+      const char               *GetAllEvtTreeName()           const { return fAllEvtTreeName;     }
+      const char               *GetAllEvtHdrBrn()             const { return fAllEvtHdrBrn;       }
       const char               *GetAnaOutputName()            const { return fAnaOutput;          }
+      const char               *GetEvtHdrName()               const { return fEvtHdrName;         }
+      const char               *GetHLTObjsName()              const { return fHLTObjsName;        }
+      const char               *GetHLTTreeName()              const { return fHLTTreeName;        }
+      const char               *GetLATreeName()               const { return fLATreeName;         }
+      const char               *GetLAHdrName()                const { return fLAHdrName;          }
+      const char               *GetRunTreeName()              const { return fRunTreeName;        }
+      const char               *GetRunInfoName()              const { return fRunInfoName;        }
       const TList              *GetOutput()                   const { return fOutput;             }
       Bool_t                    GetUseProof()                 const { return fUseProof;           }
       Bool_t                    Init();
@@ -66,22 +75,31 @@ namespace mithep
       Bool_t                    IsTerminated()                const { return fState==kTerminate;  }
       void                      Run();
       Bool_t                    Run(Bool_t browse);
-      void                      SetCacheSize(Int_t cache)           { fCacheSize     = cache;     }
-      void                      SetCompressionLevel(Int_t level)    { fCompLevel     = level;     }
-      void                      SetConfigName(const char* name)     { fConfig        = name;      }
-      void                      SetDoObjTabClean(Bool_t b)          { fDoObjTabClean = b;         }
-      void                      SetDoParallel(Bool_t b)             { fParallel      = b;         }
-      void                      SetDoProxy(Bool_t b)                { fDoProxy       = b;         }
-      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy     = b;         }
-      void                      SetMasterName(const char* name)     { fMaster        = name;      }
-      void                      SetOutputName(const char *name)     { fAnaOutput     = name;      }
-      void                      SetPrintScale(UInt_t n)             { fPrintScale    = n;         }
-      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents     = n;         }
-      void                      SetSkipFirstNEvents(Long64_t n)     { fSkipNEvents   = n;         }
+      void                      SetAllEvtHdrBrn(const char *n)      { fAllEvtHdrBrn   = n;        }
+      void                      SetAllEvtTreeName(const char *n)    { fAllEvtTreeName = n;        }
+      void                      SetCacheSize(Int_t cache)           { fCacheSize      = cache;    }
+      void                      SetCompressionLevel(Int_t level)    { fCompLevel      = level;    }
+      void                      SetConfigName(const char* name)     { fConfig         = name;     }
+      void                      SetDoObjTabClean(Bool_t b)          { fDoObjTabClean  = b;        }
+      void                      SetDoParallel(Bool_t b)             { fParallel       = b;        }
+      void                      SetDoProxy(Bool_t b)                { fDoProxy        = b;        }
+      void                      SetEvtHdrName(const char *n)        { fEvtHdrName     = n;        }
+      void                      SetHLTObjsName(const char *n)       { fHLTObjsName    = n;        }
+      void                      SetHLTTreeName(const char *n)       { fHLTTreeName    = n;        }
+      void                      SetKeepHierarchy(Bool_t b)          { fHierarchy      = b;        }
+      void                      SetLAHdrName(const char *n)         { fLAHdrName      = n;        }
+      void                      SetLATreeName(const char *n)        { fLATreeName     = n;        }
+      void                      SetMasterName(const char* name)     { fMaster         = name;     }
+      void                      SetOutputName(const char *name)     { fAnaOutput      = name;     }
+      void                      SetPrintScale(UInt_t n)             { fPrintScale     = n;        }
+      void                      SetProcessNEvents(Long64_t n)       { fDoNEvents      = n;        }
+      void                      SetRunInfoName(const char *n)       { fRunInfoName    = n;        }
+      void                      SetRunTreeName(const char *n)       { fRunTreeName    = n;        }
+      void                      SetSkipFirstNEvents(Long64_t n)     { fSkipNEvents    = n;        }
       void                      SetSuperModule(TAModule *mod);
-      void                      SetTreeName(const char *name)       { fTreeName      = name;      }
-      void                      SetUseHLT(Bool_t hlt)               { fUseHLT        = hlt;       }
-      void                      SetUseProof(Bool_t up)              { fUseProof      = up;        }
+      void                      SetTreeName(const char *name)       { fTreeName       = name;     }
+      void                      SetUseHLT(Bool_t hlt)               { fUseHLT         = hlt;      }
+      void                      SetUseProof(Bool_t up)              { fUseProof       = up;       }
       void                      Terminate();
 
     protected:
@@ -117,7 +135,6 @@ namespace mithep
       TChain                   *fChain;           //trees or friend trees for non-PROOF usage
       TDSet                    *fSet;             //set of trees or friend trees for PROOF usage
       TList                    *fDeleteList;      //list of objects to be deleted on Terminate()
-      TString                   fTreeName;        //name of trees or friend trees
       TString                   fAnaOutput;       //path name of output file
       TString                   fMaster;          //hostname of PROOF master
       TString                   fConfig;          //config file name for PROOF
@@ -127,6 +144,16 @@ namespace mithep
       Long64_t                  fSkipNEvents;     //number of events to skip from beginning (def=0)
       UInt_t                    fPrintScale;      //scale for evt number/timings printouts (def=100)
       Int_t                     fCacheSize;       //size of read cache for events tree
+      TString                   fTreeName;        //name of trees or friend trees
+      TString                   fEvtHdrName;      //name of event header branch
+      TString                   fRunTreeName;     //name of run info tree
+      TString                   fRunInfoName;     //name of run info branch
+      TString                   fAllEvtHdrBrn;    //name of all-event header branch
+      TString                   fLATreeName;      //name of look-ahead tree
+      TString                   fLAHdrName;       //name of look-ahead event header branch
+      TString                   fHLTTreeName;     //name of HLT tree
+      TString                   fAllEvtTreeName;  //name of all-event tree
+      TString                   fHLTObjsName;     //trigger objects branch name
 
     ClassDef(Analysis, 0) // Top-level analysis class 
   };

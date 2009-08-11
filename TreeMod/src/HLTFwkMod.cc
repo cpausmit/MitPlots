@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.10 2009/07/13 10:39:20 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.11 2009/07/13 13:45:30 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -233,6 +233,9 @@ void HLTFwkMod::Process()
 void HLTFwkMod::SlaveBegin()
 {
   // Request branches for trigger objects and relation, and publish our tables.
+
+  if (fObjsName != Names::gkHltObjBrn)
+    fRelsName = Form("%sRelation",fObjsName.Data());
 
   ReqBranch(fObjsName, fObjs);
   ReqBranch(fRelsName, fRels);

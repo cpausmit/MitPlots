@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.12 2009/07/13 10:39:20 loizides Exp $
+// $Id: HLTMod.h,v 1.13 2009/07/13 13:45:30 loizides Exp $
 //
 // HLTMod
 //
@@ -48,17 +48,19 @@ namespace mithep
       ~HLTMod();
 
       void                        AddTrigger(const char *expr);
+      const char                 *GetBitsName()     const { return fBitsName;      }
       Int_t                       GetNEvents()      const { return fNEvents;       }
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
       Int_t                       GetNFailed()      const { return fNFailed;       }
       const char                 *GetOutputName()   const { return fMyObjsNamePub; }
       const char                 *GetTrigObjsName() const { return fMyObjsNamePub; }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort         = b; }
+      void                        SetBitsName(const char *n)        { fBitsName      = n; }
+      void                        SetIgnoreBits(Bool_t b)           { fIgnoreBits    = b; }
+      void                        SetInputName(const char *n)       { fMyObjsNamePub = n; }
+      void                        SetObjMode(EObjMode m )           { fObjMode       = m; }
       void                        SetPrintTable(Bool_t b)           { fPrintTable    = b; }
       void                        SetTrigObjsName(const char *n)    { fMyObjsNamePub = n; }
-      void                        SetInputName(const char *n)       { fMyObjsNamePub = n; }
-      void                        SetIgnoreBits(Bool_t b)           { fIgnoreBits    = b; }
-      void                        SetObjMode(EObjMode m )           { fObjMode       = m; }
 
     protected:
       void                        AddTrigObjs(UInt_t tid);

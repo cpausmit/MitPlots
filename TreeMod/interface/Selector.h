@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Selector.h,v 1.12 2009/06/11 08:59:32 loizides Exp $
+// $Id: Selector.h,v 1.13 2009/06/15 15:00:17 loizides Exp $
 //
 // Our selector class for modular processing of a tree (or chain). In addition to the generic
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
@@ -26,23 +26,31 @@ namespace mithep {
       Selector();
       ~Selector();
 
-      void                 AddToTrash(TObject *obj)       { fTrash.AddLast(obj);           }
-      const char          *GetAllEvtTreeName()      const { return fAllEvtTreeName;        }
-      const char          *GetAllEvtHdrBrn()        const { return fAllEvtHdrBrn;          }
-      const THashTable    &GetBranchTable()         const { return fBranchTable;           }
-      const char          *GetEvtHdrName()          const { return fEvtHdrName;            }
-      const EventHeader   *GetEventHeader()         const { return fEventHeader;           }
-      const char          *GetLATreeName()          const { return fLATreeName;            }
-      const char          *GetLAHdrName()           const { return fLAHdrName;             }
-      const char          *GetRunTreeName()         const { return fRunTreeName;           }
-      const char          *GetRunInfoName()         const { return fRunInfoName;           }
-      const RunInfo       *GetRunInfo()             const { return fRunInfo;               }
-      Bool_t               ValidRunInfo()           const;
-      Bool_t               ValidRunNum()            const { return fCurRunNum!=UInt_t(-1); }
+      void                 AddToTrash(TObject *obj)         { fTrash.AddLast(obj);           }
+      const char          *GetAllEvtTreeName()        const { return fAllEvtTreeName;        }
+      const char          *GetAllEvtHdrBrn()          const { return fAllEvtHdrBrn;          }
+      const THashTable    &GetBranchTable()           const { return fBranchTable;           }
+      const char          *GetEvtHdrName()            const { return fEvtHdrName;            }
+      const EventHeader   *GetEventHeader()           const { return fEventHeader;           }
+      const char          *GetLATreeName()            const { return fLATreeName;            }
+      const char          *GetLAHdrName()             const { return fLAHdrName;             }
+      const char          *GetRunTreeName()           const { return fRunTreeName;           }
+      const char          *GetRunInfoName()           const { return fRunInfoName;           }
+      const RunInfo       *GetRunInfo()               const { return fRunInfo;               }
+      Bool_t               ValidRunInfo()             const;
+      Bool_t               ValidRunNum()              const { return fCurRunNum!=UInt_t(-1); }
+      void                 SetAllEvtHdrBrn(const char *n)   { fAllEvtHdrBrn   = n; }
+      void                 SetAllEvtTreeName(const char *n) { fAllEvtTreeName = n; }
+      void                 SetDoRunInfo(Bool_t b)           { fDoRunInfo      = b; }
+      void                 SetEvtHdrName(const char *n)     { fEvtHdrName     = n; }
+      void                 SetLAHdrName(const char *n)      { fLAHdrName      = n; }
+      void                 SetLATreeName(const char *n)     { fLATreeName     = n; }
+      void                 SetRunInfoName(const char *n)    { fRunInfoName    = n; }
+      void                 SetRunTreeName(const char *n)    { fRunTreeName    = n; }
 
     protected:
       Bool_t               BeginRun();
-      Bool_t               ConsistentRunNum()       const;
+      Bool_t               ConsistentRunNum()         const;
       Bool_t               EndRun();
       Bool_t               Notify();
       Bool_t               Process(Long64_t entry);
