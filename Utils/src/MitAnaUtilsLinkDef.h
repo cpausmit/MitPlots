@@ -1,7 +1,8 @@
-// $Id: MitAnaUtilsLinkDef.h,v 1.1 2009/01/23 07:34:34 loizides Exp $
+// $Id: MitAnaUtilsLinkDef.h,v 1.2 2009/08/11 23:09:28 loizides Exp $
 
 #ifndef MITANA_UTILS_LINKDEF_H
 #define MITANA_UTILS_LINKDEF_H
+#include "MitAna/Utils/interface/MyHtml.h"
 #include "MitAna/Utils/interface/SimpleTable.h"
 #include "MitAna/Utils/interface/TClassDocOutput.h"
 #include "MitAna/Utils/interface/TDocDirective.h"
@@ -19,9 +20,10 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
+#pragma link C++ class MyHtml+;
+#pragma link C++ class MyHtml::MyModDef+;
 #pragma link C++ class mithep::SimpleTable+;
 #pragma link C++ class mithep::SimpleTable::MyParameter+;
-
 #pragma link C++ class TClassDocInfo;
 #pragma link C++ class TClassDocOutput;
 #pragma link C++ class TDocDirective;
