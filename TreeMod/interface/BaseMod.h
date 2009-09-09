@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.23 2009/06/18 15:26:12 loizides Exp $
+// $Id: BaseMod.h,v 1.24 2009/07/13 11:08:10 loizides Exp $
 //
 // BaseMod
 //
@@ -17,6 +17,7 @@
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h" 
+#include "MitAna/DataCont/interface/ObjArray.h"
 
 namespace mithep 
 {
@@ -57,6 +58,7 @@ namespace mithep
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
       Int_t                       GetNEventsProcessed()           const { return fNEventsProc;     }
+      template <class T> const T *GetColThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
       template <class T> T       *GetObjThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
@@ -154,6 +156,46 @@ inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char
   // Get pointer to HLT TriggerObjects collection with given name for the current event.
 
   return (dynamic_cast<const TriggerObjectCol *>(FindObjThisEvt(name)));
+}
+
+//--------------------------------------------------------------------------------------------------
+template <class T> 
+const T *mithep::BaseMod::GetColThisEvt(const char *name, Bool_t warn)
+{
+
+  // Get published object for the current event.
+  TObject *inObj = FindObjThisEvt(name);
+  T *ret = dynamic_cast<T*>(inObj);
+
+  if (ret)
+    return ret;
+
+  TString outName(name);
+  outName.Append("_GetColThisEvt_");
+  outName.Append(T::Class_Name());
+
+  ret = dynamic_cast<T*>(FindObjThisEvt(outName));
+  if (ret)
+    return ret;
+
+  mithep::BaseCollection *inCol = dynamic_cast<mithep::BaseCollection*>(inObj);
+
+  if (!inCol && warn) {
+    SendError(kWarning, Form("GetColThisEvt (\"%s\")",GetName()), 
+              "Could not obtain collection with name \"%s\" and type \"%s\" for current event!",
+              name, T::Class_Name());
+  }
+
+  mithep::ObjArray<typename T::element_type> *newRet = new mithep::ObjArray<typename T::element_type>;
+  newRet->SetName(outName);
+  for (UInt_t i=0; i<inCol->GetEntries(); ++i) {
+    const typename T::element_type *outElement = dynamic_cast<typename T::element_type*>(inCol->ObjAt(i));
+    if (outElement)
+      newRet->Add(outElement);
+  }
+  
+  AddObjThisEvt(newRet);
+  return newRet;
 }
 
 //--------------------------------------------------------------------------------------------------
