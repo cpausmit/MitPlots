@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFMet.h,v 1.1 2009/03/12 15:56:50 bendavid Exp $
+// $Id: PFMet.h,v 1.2 2009/03/18 15:44:32 loizides Exp $
 //
 // PFMet
 //
@@ -28,6 +28,7 @@ namespace mithep
 
       Double_t                     ChargedEMFraction()   const       { return fChargedEMFraction;  }
       Double_t                     ChargedHadFraction()  const       { return fChargedHadFraction; }
+      Met                         *MakeCopy()            const       { return new PFMet(*this);    }
       Double_t                     MuonFraction()        const       { return fMuonFraction;       }
       Double_t                     NeutralEMFraction()   const       { return fNeutralEMFraction;  }
       Double_t                     NeutralHadFraction()  const       { return fNeutralHadFraction; }

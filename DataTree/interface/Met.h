@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.16 2009/07/10 14:17:08 loizides Exp $
+// $Id: Met.h,v 1.17 2009/07/13 11:00:29 loizides Exp $
 //
 // Met
 //
@@ -30,6 +30,7 @@ namespace mithep
       const FArrDouble32          &DSumEt()             const { return fDSumEt;                 }
       Double_t                     Elongitudinal()      const { return fElongit;                }
       Bool_t                       HasCorrections()     const;
+      virtual Met                 *MakeCopy()           const { return new Met(*this);          }
       Double_t                     MetSig()             const;
       Double_t                     Mex()                const { return fMex;                    }
       Double_t                     Mey()                const { return fMey;                    }
@@ -39,6 +40,8 @@ namespace mithep
       void                         PushCorrectionY(Double_t x)       { fDmey.Add(x);            }
       void                         PushCorrectionSumEt(Double_t x)   { fDSumEt.Add(x);          }
       void                         SetElongitudinal(Double_t x)      { fElongit = x;            }
+      void                         SetMex(Double_t x)                { fMex = x; ClearMom();    }
+      void                         SetMey(Double_t x)                { fMey = x; ClearMom();    }
       void                         SetSumEt(Double_t x)              { fSumEt = x;              }
       
     protected:

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFJet.h,v 1.3 2009/03/18 15:44:32 loizides Exp $
+// $Id: PFJet.h,v 1.4 2009/03/20 09:37:17 loizides Exp $
 //
 // PFJet
 //
@@ -35,6 +35,7 @@ namespace mithep
       Double_t              MuonEnergy()                    const { return fMuonEnergy;            }
       UInt_t                ChargedMultiplicity()           const { return fChargedMultiplicity;   }
       Bool_t                HasPFCand(const PFCandidate *p) const { return fPFCands.HasObject(p);  }
+      Jet                  *MakeCopy()                      const { return new PFJet(*this);       }
       UInt_t                NConstituents()                 const { return NPFCands();             }
       Double_t              NeutralEmEnergy()               const { return fNeutralEmEnergy;       }
       Double_t              NeutralHadronEnergy()           const { return fNeutralHadronEnergy;   }

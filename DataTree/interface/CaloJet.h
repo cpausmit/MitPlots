@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloJet.h,v 1.3 2009/03/18 15:44:31 loizides Exp $
+// $Id: CaloJet.h,v 1.4 2009/03/20 09:37:17 loizides Exp $
 //
 // CaloJet
 //
@@ -46,6 +46,7 @@ namespace mithep
       Double_t            HadEnergyInHB()               const { return fHadEnergyInHB;           } 
       Double_t            HadEnergyInHF()               const { return fHadEnergyInHF;           } 
       Double_t            HadEnergyInHE()               const { return fHadEnergyInHE;           }
+      Jet                *MakeCopy()                    const { return new CaloJet(*this);       }
       Double_t            MaxEInEmTowers()              const { return fMaxEInEmTowers;          }
       Double_t            MaxEInHadTowers()             const { return fMaxEInHadTowers;         }
       void                SetEmEnergyInEB(Double_t val)       { fEmEnergyInEB     = val;         } 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.21 2009/03/18 15:44:32 loizides Exp $
+// $Id: Jet.h,v 1.22 2009/07/07 08:30:28 bendavid Exp $
 //
 // Jet
 //
@@ -60,6 +60,7 @@ namespace mithep
                       { return fCombinedSecondaryVertexBJetTagsDisc;    } 
       Double_t      CombinedSecondaryVertexMVABJetTagsDisc()       const 
                       { return fCombinedSecondaryVertexMVABJetTagsDisc; }
+      Double_t      CombinedCorrectionScale()     const;
       Double_t      CustomCorrectionScale()       const { return fCustomCorrectionScale;        }
       void          DisableCorrection(ECorr c)          { fCorrections.ClearBit(c); ClearMom(); }
       void          DisableCorrections()                { fCorrections.Clear(); ClearMom();     }
@@ -70,6 +71,7 @@ namespace mithep
       Double_t      JetBProbabilityBJetTagsDisc()                  const 
                       { return fJetBProbabilityBJetTagsDisc;    }
       Int_t         MatchedMCFlavor()             const { return fMatchedMCFlavor;           }
+      virtual Jet  *MakeCopy()                    const { return new Jet(*this);             }
       virtual 
       UInt_t        NConstituents()               const { return 0;                          }
       UInt_t        N()                           const { return NConstituents();            }
@@ -164,28 +166,40 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Jet::CombinedCorrectionScale() const
+{
+  // compute combined correction scale from all enabled corrections
+  Double_t scale = 1.0;
+
+  if (CorrectionActive(L2))
+    scale *= fL2RelativeCorrectionScale;
+    
+  if (CorrectionActive(L3))
+    scale *= fL3AbsoluteCorrectionScale;
+  
+  if (CorrectionActive(L4))
+    scale *= fL4EMFCorrectionScale;
+    
+  if (CorrectionActive(L5))
+    scale *= fL5FlavorCorrectionScale;
+    
+  if (CorrectionActive(L7))
+    scale *= fL7PartonCorrectionScale;
+    
+  if (CorrectionActive(Custom))
+    scale *= fCustomCorrectionScale;
+
+  return scale;
+}
+
+//--------------------------------------------------------------------------------------------------
 inline void mithep::Jet::GetMom() const
 {
   // Get raw momentum values from stored values and apply all enabled corrections.
 
   fCachedMom.SetCoordinates(fRawMom.Pt(),fRawMom.Eta(),fRawMom.Phi(),fRawMom.M()); 
 
-  if (CorrectionActive(L2))
-    fCachedMom *= fL2RelativeCorrectionScale;
-    
-  if (CorrectionActive(L3))
-    fCachedMom *= fL3AbsoluteCorrectionScale;
-  
-  if (CorrectionActive(L4))
-    fCachedMom *= fL4EMFCorrectionScale;
-    
-  if (CorrectionActive(L5))
-    fCachedMom *= fL5FlavorCorrectionScale;
-    
-  if (CorrectionActive(L7))
-    fCachedMom *= fL7PartonCorrectionScale;
-    
-  if (CorrectionActive(Custom))
-    fCachedMom *= fCustomCorrectionScale;
+  fCachedMom *= CombinedCorrectionScale();
+
 }
 #endif

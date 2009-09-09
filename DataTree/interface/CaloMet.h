@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloMet.h,v 1.3 2009/03/12 15:56:50 bendavid Exp $
+// $Id: CaloMet.h,v 1.4 2009/03/18 15:44:32 loizides Exp $
 //
 // CaloMet
 //
@@ -45,6 +45,7 @@ namespace mithep
       Double_t                     HadEtInHO()          const { return fHadEtInHO;              }  
       Double_t                     HadEtInHE()          const { return fHadEtInHE;              }
       Double_t                     HadEtInHF()          const { return fHadEtInHF;              }
+      Met                         *MakeCopy()           const { return new CaloMet(*this);      }
       Double_t                     MaxEtInEmTowers()    const { return fMaxEtInEmTowers;        }
       Double_t                     MaxEtInHadTowers()   const { return fMaxEtInHadTowers;       }
       Double_t                     CaloMetSig()         const { return fCaloMetSig;             }
