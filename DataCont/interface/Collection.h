@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.6 2008/12/10 11:26:52 loizides Exp $
+// $Id: Collection.h,v 1.7 2009/03/02 12:34:00 loizides Exp $
 //
 // Collection
 //
@@ -20,6 +20,8 @@ namespace mithep
   {
     public:
       Collection() {}
+
+      typedef ArrayElement element_type;
 
       virtual ArrayElement        *At(UInt_t idx)                           = 0;
       virtual const ArrayElement  *At(UInt_t idx)                     const = 0;
