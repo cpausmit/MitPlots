@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.12 2009/07/13 10:39:20 loizides Exp $
+// $Id: HLTMod.cc,v 1.13 2009/07/13 13:45:30 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -96,6 +96,7 @@ void HLTMod::BeginRun()
   for (UInt_t i=0; i<fTrigNames.size(); ++i) {
     BitMask256 tmask; //trigger mask
     BitMask256 amask; //bitand mask
+    Bool_t gotamask = 0;
     TString names(fTrigNames.at(i).c_str());
 
     TObjArray *arr = names.Tokenize("&");
@@ -115,6 +116,7 @@ void HLTMod::BeginRun()
           Warning("BeginRun", "Trigger %s not found.", sptr);
           continue;
         }
+        gotamask = 1;
         UShort_t bit = tn->Id();
         amask.SetBit(bit); //always set and-mask bit 
         if (!invert) 
@@ -122,8 +124,10 @@ void HLTMod::BeginRun()
       }
       delete arr;
     }
-    fTrigBitsAnd.push_back(amask);
-    fTrigBitsCmp.push_back(tmask);
+    if (gotamask) {
+      fTrigBitsAnd.push_back(amask);
+      fTrigBitsCmp.push_back(tmask);
+    }
   }
 }
 
