@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.21 2009/04/08 08:52:14 loizides Exp $
+// $Id: MCParticle.h,v 1.22 2009/06/02 11:12:10 bendavid Exp $
 //
 // MCParticle
 //
@@ -23,6 +23,19 @@ namespace mithep
   class MCParticle : public CompositeParticle
   {
     public:
+      enum EPartType {
+        kUnknown=0, 
+        kUp=1, kDown=2, kStrange=3, kCharm=4, kBottom=5, kTop=6,
+        kEl=11, kMu=13, kTau=15, 
+        kElNu=12, kMuNu=14, kTauNu=16,
+        kGlu=21, kGamma=22, kZ=23, kW=24, kH=25,
+        kZp=32, kZpp=33, kWp=34, kH0=35, kA0=36, kHp=37,
+        kPi0=111, kEta=221, kKLong=130, kKShort=310, kK0=311,
+        kD0=413, kB0=511, kB0Bar=513, kJPsi=443, kUpsilon=553,
+        kProton=2122, kNeutron=2122, kDeltaPlusPlus = 2224,
+        kDeltaPlus = 2214, kDelta0 = 2114, kDeltaMinus=1114
+      };
+
       MCParticle() : fPdgId(0), fStatus(0), fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
       MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
         fPdgId(id), fStatus(s), fMom(FourVector(px,py,pz,e)),
@@ -66,19 +79,6 @@ namespace mithep
       void                SetPdgId(Int_t s)              {  fPdgId = s;    }
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
-
-      enum EPartType {
-        kUnknown=0, 
-        kUp=1, kDown=2, kStrange=3, kCharm=4, kBottom=5, kTop=6,
-        kEl=11, kMu=13, kTau=15, 
-        kElNu=12, kMuNu=14, kTauNu=16,
-        kGlu=21, kGamma=22, kZ=23, kW=24, kH=25,
-        kZp=32, kZpp=33, kWp=34, kH0=35, kA0=36, kHp=37,
-        kPi0=111, kEta=221, kKLong=130, kKShort=310, kK0=311,
-        kD0=413, kB0=511, kB0Bar=513, kJPsi=443, kUpsilon=553,
-        kProton=2122, kNeutron=2122, kDeltaPlusPlus = 2224,
-        kDeltaPlus = 2214, kDelta0 = 2114, kDeltaMinus=1114
-      };
       
     protected:
       Double_t            GetCharge()              const;
