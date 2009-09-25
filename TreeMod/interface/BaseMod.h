@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.24 2009/07/13 11:08:10 loizides Exp $
+// $Id: BaseMod.h,v 1.26 2009/09/09 03:47:49 bendavid Exp $
 //
 // BaseMod
 //
@@ -162,7 +162,6 @@ inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char
 template <class T> 
 const T *mithep::BaseMod::GetColThisEvt(const char *name, Bool_t warn)
 {
-
   //Returns a collection of the specified type with the given name from the event.
   //If a collection is present in the event with the given name but a different type, attempt
   //to create an ObjArray of the appropriate type and fill it with the applicable objects
