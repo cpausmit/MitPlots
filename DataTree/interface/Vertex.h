@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.8 2009/02/18 15:38:55 loizides Exp $
+// $Id: Vertex.h,v 1.9 2009/03/18 15:44:32 loizides Exp $
 //
 // Vertex
 //
-// Vertex class implemented as holding a 3d vector as a point in space with fit information.
+// Vertex class derived from BaseVertex holding additional fit information.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseVertex.h,v 1.6 2009/03/18 15:44:31 loizides Exp $
+// $Id: BaseVertex.h,v 1.7 2009/03/20 18:23:27 loizides Exp $
 //
 // BaseVertex
 //
-// Base vertex class implemented as holding a 3d vector as a point in space with fit information.
+// Base vertex class implemented as holding a 3d vector as a point in space including errors.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
