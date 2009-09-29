@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.4 2009/05/12 18:41:39 loizides Exp $
+// $Id: FullExampleMod.h,v 1.5 2009/06/15 15:00:16 loizides Exp $
 //
-// FullExampleAnaMod
+// FullExampleMod
 //
 // This TAM module shows how to use TAM. It takes a couple of branches
 // and produces a pt and eta distribution.
