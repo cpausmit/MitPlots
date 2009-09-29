@@ -1,4 +1,4 @@
-// $Id: runHLTExample.C,v 1.3 2008/11/25 14:31:19 loizides Exp $
+// $Id: runHLTExample.C,v 1.4 2009/08/11 15:27:08 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -9,7 +9,9 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-void runHLTExample(const char *trigger="HLT_Jet80", const char *files = "mit-full_000.root")
+void runHLTExample(const char *trigger="HLT_Jet80", 
+                   const char *files = "mit-full_000.root",
+                   Int_t nEvs = -1)
 {
   using namespace mithep;
   gDebugMask  = Debug::kAnalysis;
@@ -31,7 +33,8 @@ void runHLTExample(const char *trigger="HLT_Jet80", const char *files = "mit-ful
     ana->SetHLTTreeName("HLT_E29");
     ana->SetHLTObjsName("HLTObjects_E29");
   }
-
+  if (nEvs)
+    ana->SetProcessNEvents(nEvs);
   ana->SetSuperModule(hltmod);
   ana->AddFile(files);
   if (gROOT->IsBatch())
