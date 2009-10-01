@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.26 2009/09/09 03:47:49 bendavid Exp $
+// $Id: BaseMod.h,v 1.27 2009/09/25 08:39:26 loizides Exp $
 //
 // BaseMod
 //
@@ -336,7 +336,9 @@ inline void mithep::BaseMod::ReqEventObject(const char *name, const T *&addr, Bo
 {
   // Requests that the object with the specified name is made available
   // during processing. In case name is found in fEvtObjBrNames it 
-  // will be read from a branch to the address specified.
+  // will be read from a branch to the address specified. If "fromBr" is
+  // kTRUE then add the event to the list of events needed to be retrieved
+  // from a branch.
 
   ObjType *o = static_cast<ObjType*>(fEvtObjBrNames.FindObject(name));
   if (!o && fromBr)

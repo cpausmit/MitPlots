@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.15 2009/09/17 14:18:35 loizides Exp $
+// $Id: HLTMod.cc,v 1.16 2009/09/29 19:17:51 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -122,6 +122,7 @@ void HLTMod::BeginRun()
           if (tmask.TestBit(bit)==invert) {
             amask.ClearBit(bit);
             tmask.ClearBit(bit);
+            Warning("BeginRun", "Trigger expression %s always false.", names.Data());
             break;
           }
         } else { //always set and-mask bit 
