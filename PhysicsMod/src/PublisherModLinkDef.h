@@ -1,8 +1,9 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.15 2009/06/15 15:00:16 loizides Exp $
+// $Id: PublisherModLinkDef.h,v 1.1 2009/06/26 16:47:18 loizides Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
 #include "MitAna/PhysicsMod/interface/PublisherMod.h"
+#include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/CaloJet.h"
 #include "MitAna/DataTree/interface/CaloMet.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
@@ -17,6 +18,7 @@
 #include "MitAna/DataTree/interface/PFMet.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/Track.h"
+#include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
 #endif
 
@@ -28,6 +30,7 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
+#pragma link C++ class mithep::PublisherMod<mithep::BasicCluster>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloJet,mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloMet,mithep::Met>+;
@@ -49,6 +52,7 @@
 #pragma link C++ class mithep::PublisherMod<mithep::PFJet,mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Photon>+;
+#pragma link C++ class mithep::PublisherMod<mithep::SuperCluster>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Track>+;
 #pragma link C++ class mithep::PublisherMod<mithep::TriggerObject>+;
 #endif
