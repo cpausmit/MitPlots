@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: GenericParticleColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_GENERICPARTICLECOLLINKDEF_H
 #define MITANA_DATATREE_GENERICPARTICLECOLLINKDEF_H
@@ -19,8 +19,10 @@
 #pragma link C++ class mithep::GenericParticle+;
 #pragma link C++ class mithep::Collection<mithep::GenericParticle>+;
 #pragma link C++ class mithep::RefArray<mithep::GenericParticle>+;
+#pragma link C++ class mithep::Array<mithep::GenericParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::GenericParticle>+;
 #pragma link C++ class mithep::Ref<mithep::GenericParticle>+;
 #pragma link C++ typedef mithep::GenericParticleCol;
+#pragma link C++ typedef mithep::GenericParticleArr;
 #pragma link C++ typedef mithep::GenericParticleOArr;
 #endif

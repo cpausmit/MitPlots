@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: GenericParticleFwd.h,v 1.1 2009/06/15 15:00:12 loizides Exp $
 
 #ifndef MITANA_DATATREE_GENERICPARTICLEFWD_H
 #define MITANA_DATATREE_GENERICPARTICLEFWD_H
@@ -10,7 +10,7 @@
 namespace mithep {
   class GenericParticle;
   typedef Collection<GenericParticle>   GenericParticleCol;
-  typedef ObjArray<GenericParticle>     GenericParticleOArr;
+  typedef Array<GenericParticle>        GenericParticleArr;
   typedef ObjArray<GenericParticle>     GenericParticleOArr;
 }
 #endif
