@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.11 2009/03/18 15:44:32 loizides Exp $
+// $Id: SuperCluster.h,v 1.12 2009/04/08 10:24:33 loizides Exp $
 //
 // SuperCluster
 //
@@ -26,12 +26,14 @@ namespace mithep
       SuperCluster() : fEnergy(0), fEtaWidth(0), fPreshowerEnergy(0), 
                        fPhiWidth(0), fRawEnergy(0) {}     
  
-      void	              AddCluster(const BasicCluster *c)      { fClusters.Add(c);           }
+      void	              AddCluster(const BasicCluster *c)          { fClusters.Add(c);       }
       const BasicCluster     *Cluster(UInt_t i)       const { return fClusters.At(i);              }
       UInt_t                  ClusterSize()           const { return fClusters.Entries();          }
+      Int_t                   Compare(const TObject *o) const;   
       Double_t                Energy()                const { return fEnergy;                      }
       Double_t                Eta()                   const { return fPoint.Eta();                 }
       Double_t                EtaWidth()              const { return fEtaWidth;                    }
+      Bool_t                  IsSortable()            const { return kTRUE;                        }
       EObjType                ObjType()               const { return kSuperCluster;                }
       Double_t                Phi()                   const { return fPoint.Phi();                 }
       Double_t                PhiWidth()              const { return fPhiWidth;                    }
@@ -61,5 +63,25 @@ namespace mithep
 
     ClassDef(SuperCluster, 1) // Super cluster class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::SuperCluster::Compare(const TObject *o) const
+{
+  // Default compare function for sorting according to transverse momentum. 
+  // Returns -1 if this object is smaller than given object, 0 if objects are 
+  // equal and 1 if this is larger than given object.
+
+  const mithep::SuperCluster *s = dynamic_cast<const mithep::SuperCluster *>(o);
+  if (!s)
+    return 1;
+
+  Double_t mye = Energy();
+  Double_t e   = s->Energy();
+  if (mye>e)
+    return -1;
+  else if (e>mye)
+    return +1;
+  return 0;
 }
 #endif
