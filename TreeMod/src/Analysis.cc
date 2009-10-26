@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.35 2009/07/13 20:05:31 loizides Exp $
+// $Id: Analysis.cc,v 1.36 2009/08/11 15:24:39 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <Riostream.h>
@@ -211,10 +211,8 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
   while (in) {
     TString line;
     line.ReadLine(in);
-    cout << line << endl;
     if (!line.EndsWith(".root")) 
       continue;
-    cout << line << endl;
 
     if (!AddFile(line)) {
       Error("AddFiles", "Error adding file with name %s", line.Data());
