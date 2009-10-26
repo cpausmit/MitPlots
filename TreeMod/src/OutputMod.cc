@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.14 2009/07/17 19:18:34 loizides Exp $
+// $Id: OutputMod.cc,v 1.15 2009/07/17 20:47:43 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -273,7 +273,8 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
   }
 
   if (fSkimmedIn) { // copy alread skimmed headers if any there
-    for(UInt_t i=0; i<fSkimmedIn->Entries(); ++i) {
+    const UInt_t n = fSkimmedIn->GetEntries();
+    for(UInt_t i=0; i<n; ++i) {
       const EventHeader *eh = fSkimmedIn->At(i);
       fAllEventHeader->SetEvtNum(eh->EvtNum());
       fAllEventHeader->SetLumiSec(eh->LumiSec());

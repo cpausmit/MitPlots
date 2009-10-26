@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.11 2009/07/13 13:45:30 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.12 2009/08/11 15:24:39 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -207,7 +207,8 @@ void HLTFwkMod::Process()
   LoadBranch(fObjsName);
   LoadBranch(fRelsName);
 
-  for (UInt_t i=0; i<fRels->Entries(); ++i) {
+  const UInt_t n = fRels->GetEntries();
+  for (UInt_t i=0; i<n; ++i) {
     const TriggerObjectRel *rel = fRels->At(i);
     if (!rel) continue;
 
