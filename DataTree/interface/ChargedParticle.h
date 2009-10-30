@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.9 2009/03/03 17:04:09 loizides Exp $
+// $Id: ChargedParticle.h,v 1.10 2009/05/11 08:00:00 loizides Exp $
 //
 // ChargedParticle
 //
@@ -23,7 +23,7 @@ namespace mithep
 
       EObjType                ObjType()    const { return kChargedParticle; }
       virtual const Track    *TrackerTrk() const { return Trk();            }
-      virtual const Track    *Trk()        const = 0;
+      virtual const Track    *Trk()        const { return 0;                }
 
     protected:
       Double_t                GetCharge()  const;

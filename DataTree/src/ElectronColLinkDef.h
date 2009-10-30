@@ -1,4 +1,4 @@
-// $Id:$
+// $Id: ElectronColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_ELECTRONCOLLINKDEF_H
 #define MITANA_DATATREE_ELECTRONCOLLINKDEF_H
@@ -14,6 +14,15 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+
+#pragma read                                              \
+    sourceClass="mithep::Electron"                        \
+    version="[-2]"                                        \
+    source="dummysource"                                  \
+    targetClass="mithep::Electron"                        \
+    target="fCharge"                                      \
+    code="{ fCharge = -99; }"                             \
+
 
 #pragma link C++ class mithep::Electron+;
 #pragma link C++ class mithep::Collection<mithep::Electron>+;

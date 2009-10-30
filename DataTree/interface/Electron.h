@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.35 2009/07/21 16:34:46 bendavid Exp $
+// $Id: Electron.h,v 1.36 2009/08/07 20:12:50 ceballos Exp $
 //
 // Electron
 //
@@ -21,6 +21,7 @@ namespace mithep
   {
     public:
       Electron() : 
+        fCharge(0),
         fESuperClusterOverP(0), fESeedClusterOverPout(0), fDeltaEtaSuperClTrkAtVtx(0),
         fDeltaEtaSeedClTrkAtCalo(0), fDeltaPhiSuperClTrkAtVtx(0), 
         fDeltaPhiSeedClTrkAtCalo(0), fFBrem(0), fHadronicOverEm(0), fHcalDepth1OverEcal(0),
@@ -101,6 +102,7 @@ namespace mithep
       Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
       
       
+      void                 SetCharge(Char_t x)                    { fCharge = x;                   }
       void                 SetClassification(Int_t x)             { fClassification = x;           }
       void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
       void                 SetCoviEtaiEta(Double_t CoviEtaiEta)   { fCoviEtaiEta = CoviEtaiEta;    }
@@ -162,10 +164,12 @@ namespace mithep
       const Track         *Trk()                   const { return BestTrk();                }
 
     protected:
+      Double_t             GetCharge()             const;
       Double_t             GetMass()               const { return 0.51099892e-3;            }
       void                 GetMom()                const;
 
       Vect3C               fMom;                       //stored three-momentum
+      Char_t               fCharge;                    //stored charge - filled with -99 when reading old files
       Ref<Track>           fGsfTrackRef;               //gsf track reference
       Ref<Track>           fTrackerTrackRef;           //tracker track reference
       Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster
@@ -216,7 +220,7 @@ namespace mithep
       Bool_t               fIsEcalDriven;              //is std. egamma electron
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
 
-    ClassDef(Electron, 2) // Electron class
+    ClassDef(Electron, 3) // Electron class
   };
 }
 
@@ -231,6 +235,19 @@ inline const mithep::Track *mithep::Electron::BestTrk() const
     return TrackerTrk();
 
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Electron::GetCharge() const
+{
+  // Return stored charge, unless it is set to invalid (-99),
+  // in that case get charge from track as before
+
+  if (fCharge==-99)
+    return mithep::ChargedParticle::GetCharge();
+  else
+    return fCharge;
+
 }
 
 //--------------------------------------------------------------------------------------------------
