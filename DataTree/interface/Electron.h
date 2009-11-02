@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.36 2009/08/07 20:12:50 ceballos Exp $
+// $Id: Electron.h,v 1.37 2009/10/30 14:16:00 bendavid Exp $
 //
 // Electron
 //
@@ -21,7 +21,7 @@ namespace mithep
   {
     public:
       Electron() : 
-        fCharge(0),
+        fCharge(-99), fScPixCharge(0),
         fESuperClusterOverP(0), fESeedClusterOverPout(0), fDeltaEtaSuperClTrkAtVtx(0),
         fDeltaEtaSeedClTrkAtCalo(0), fDeltaPhiSuperClTrkAtVtx(0), 
         fDeltaPhiSeedClTrkAtCalo(0), fFBrem(0), fHadronicOverEm(0), fHcalDepth1OverEcal(0),
@@ -88,6 +88,7 @@ namespace mithep
       Double_t             PIn()                    const { return fPIn;                           }
       Double_t             POut()                   const { return fPOut;                          }
       const SuperCluster  *SCluster()               const { return fSuperClusterRef.Obj();         }
+      Double_t             ScPixCharge()            const { return fScPixCharge;                   }
       
       Double_t             EcalRecHitIsoDr04()      const { return fEcalJurassicIsolation;         }
       Double_t             HcalTowerSumEtDr04()     const { return HcalDepth1TowerSumEtDr04() +
@@ -103,6 +104,7 @@ namespace mithep
       
       
       void                 SetCharge(Char_t x)                    { fCharge = x;                   }
+      void                 SetScPixCharge(Char_t x)               { fScPixCharge = x;              }
       void                 SetClassification(Int_t x)             { fClassification = x;           }
       void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
       void                 SetCoviEtaiEta(Double_t CoviEtaiEta)   { fCoviEtaiEta = CoviEtaiEta;    }
@@ -170,6 +172,7 @@ namespace mithep
 
       Vect3C               fMom;                       //stored three-momentum
       Char_t               fCharge;                    //stored charge - filled with -99 when reading old files
+      Char_t               fScPixCharge;               //charge from supercluster-pixel matching
       Ref<Track>           fGsfTrackRef;               //gsf track reference
       Ref<Track>           fTrackerTrackRef;           //tracker track reference
       Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster
