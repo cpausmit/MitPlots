@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PixelHit.h,v 1.1 2009/09/25 08:39:10 loizides Exp $
+// $Id: PixelHit.h,v 1.2 2009/09/28 14:15:34 loizides Exp $
 //
 // PixelHit
 //
@@ -104,16 +104,19 @@ namespace mithep
       PixelHit(const ThreeVector &pos) : 
         fPosition(pos),  fType(0), fQuality(0), fCharge(0), fSize(0) {}
 
+      UInt_t              Charge()             const          { return fCharge;       }
       Bool_t              IsOnEdge()           const;
       Bool_t              HasBadPixels()       const;
-      const ThreeVector   Position()           const          { return fPosition.V(); }
       EObjType            ObjType()            const          { return kPixelHit;     }
+      const ThreeVector   Position()           const          { return fPosition.V(); }
+      UInt_t              Quality()            const          { return fQuality;      }
       void                SetCharge(UInt_t u)                 { fCharge = u;          }
       void                SetPosition(const ThreeVector &pos) { fPosition = pos;      }
       void                SetPosition(Double_t x, Double_t y, Double_t z); 
       void                SetQuality(UInt_t u)                { fQuality = u;         }
       void                SetType(Char_t t)                   { fType = t;            }
       void                SetSize(UInt_t u)                   { fSize = u;            }
+      UInt_t              Size()               const          { return fSize;         }
       Bool_t              SpansTwoROCs()       const;
       EType               Type()               const 
                             { return static_cast<EType>(fType); }
