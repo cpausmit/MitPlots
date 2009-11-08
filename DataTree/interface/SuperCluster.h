@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.12 2009/04/08 10:24:33 loizides Exp $
+// $Id: SuperCluster.h,v 1.13 2009/10/26 09:48:09 loizides Exp $
 //
 // SuperCluster
 //
@@ -31,6 +31,7 @@ namespace mithep
       UInt_t                  ClusterSize()           const { return fClusters.Entries();          }
       Int_t                   Compare(const TObject *o) const;   
       Double_t                Energy()                const { return fEnergy;                      }
+      Double_t                Et()                    const;
       Double_t                Eta()                   const { return fPoint.Eta();                 }
       Double_t                EtaWidth()              const { return fEtaWidth;                    }
       Bool_t                  IsSortable()            const { return kTRUE;                        }
@@ -63,6 +64,14 @@ namespace mithep
 
     ClassDef(SuperCluster, 1) // Super cluster class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::SuperCluster::Et() const
+{
+  // Return Transverse Energy
+  return fEnergy*fPoint.Rho()/fPoint.V().R();
+  
 }
 
 //--------------------------------------------------------------------------------------------------
