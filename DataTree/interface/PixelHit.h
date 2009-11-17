@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PixelHit.h,v 1.2 2009/09/28 14:15:34 loizides Exp $
+// $Id: PixelHit.h,v 1.3 2009/11/05 10:30:29 loizides Exp $
 //
 // PixelHit
 //
@@ -98,39 +98,45 @@ namespace mithep
           Char_t          fSpare_width;
       };
 
-      PixelHit() : fType(0), fQuality(0), fCharge(0), fSize(0) {}
+      PixelHit() : fType(0), fQuality(0), fCharge(0), fSizeX(0), fSizeY(0),fIsAnyPixelOnEdge(kFALSE) {}
       PixelHit(Double_t x, Double_t y, Double_t z) : 
-        fPosition(x,y,z), fType(0), fQuality(0), fCharge(0), fSize(0) {}
+        fPosition(x,y,z), fType(0), fQuality(0), fCharge(0), fSizeX(0), fSizeY(0), fIsAnyPixelOnEdge(kFALSE) {}
       PixelHit(const ThreeVector &pos) : 
-        fPosition(pos),  fType(0), fQuality(0), fCharge(0), fSize(0) {}
+        fPosition(pos),  fType(0), fQuality(0), fCharge(0), fSizeX(0), fSizeY(0), fIsAnyPixelOnEdge(kFALSE) {}
 
-      UInt_t              Charge()             const          { return fCharge;       }
-      Bool_t              IsOnEdge()           const;
-      Bool_t              HasBadPixels()       const;
-      EObjType            ObjType()            const          { return kPixelHit;     }
-      const ThreeVector   Position()           const          { return fPosition.V(); }
-      UInt_t              Quality()            const          { return fQuality;      }
-      void                SetCharge(UInt_t u)                 { fCharge = u;          }
-      void                SetPosition(const ThreeVector &pos) { fPosition = pos;      }
+      UInt_t              Charge()              const          { return fCharge;           }
+      Bool_t              IsAnyPixelOnEdge()    const          { return fIsAnyPixelOnEdge; }
+      Bool_t              IsOnEdge()            const;
+      Bool_t              HasBadPixels()        const;
+      EObjType            ObjType()             const          { return kPixelHit;         }
+      const ThreeVector   Position()            const          { return fPosition.V();     }
+      UInt_t              Quality()             const          { return fQuality;          }
+      void                SetAnyPixelIsOnEdge(Bool_t e)        { fIsAnyPixelOnEdge = e;    }
+      void                SetCharge(UInt_t u)                  { fCharge           = u;    }
+      void                SetPosition(const ThreeVector &pos)  { fPosition         = pos;  }
       void                SetPosition(Double_t x, Double_t y, Double_t z); 
-      void                SetQuality(UInt_t u)                { fQuality = u;         }
-      void                SetType(Char_t t)                   { fType = t;            }
-      void                SetSize(UInt_t u)                   { fSize = u;            }
-      UInt_t              Size()               const          { return fSize;         }
-      Bool_t              SpansTwoROCs()       const;
-      EType               Type()               const 
+      void                SetQuality(UInt_t u)                 { fQuality = u;             }
+      void                SetType(Char_t t)                    { fType    = t;             }
+      void                SetSizeX(UInt_t u)                   { fSizeX   = u;             }
+      void                SetSizeY(UInt_t u)                   { fSizeY   = u;             }
+      UInt_t              SizeX()               const          { return fSizeX;            }
+      UInt_t              SizeY()               const          { return fSizeY;            }
+      Bool_t              SpansTwoROCs()        const;
+      EType               Type()                const 
                             { return static_cast<EType>(fType); }
-      Double_t            X()                  const          { return fPosition.X(); }
-      Double_t            Y()                  const          { return fPosition.Y(); }
-      Double_t            Z()                  const          { return fPosition.Z(); }
+      Double_t            X()                   const          { return fPosition.X();     }
+      Double_t            Y()                   const          { return fPosition.Y();     }
+      Double_t            Z()                   const          { return fPosition.Z();     }
             
     protected:
-      Vect3	          fPosition;   //point in space
-      Char_t              fType;       //pixel type
-      UInt_t              fQuality;    //quality word as defined by SiPixelRecHitQuality
-      UInt_t              fCharge;     //charge of assigned cluster
-      UInt_t              fSize;       //size of assigned cluster
-      static Packing      fPacking;    //!the (un)packing helper class 
+      Vect3	          fPosition;          //point in space
+      Char_t              fType;              //pixel type
+      UInt_t              fQuality;           //quality word as defined by SiPixelRecHitQuality
+      UInt_t              fCharge;            //charge of assigned cluster
+      UInt_t              fSizeX;             //size in local x of assigned cluster
+      UInt_t              fSizeY;             //size in local y of assigned cluster
+      Bool_t              fIsAnyPixelOnEdge;  //=true if one pixel is on edge
+      static Packing      fPacking;           //!the (un)packing helper class 
 
     ClassDef(PixelHit, 1) // PixelHit class
   };
