@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerObject.h,v 1.12 2009/07/13 09:42:15 loizides Exp $
+// $Id: TriggerObject.h,v 1.13 2009/07/13 13:44:07 loizides Exp $
 //
 // TriggerObject
 //
@@ -37,6 +37,7 @@ namespace mithep
         TriggerL1TechTrig     = -94,
         TriggerL1Castor       = -95,
         TriggerL1BPTX         = -96,
+        TriggerL1GtExternal   = -97,
         TriggerPhoton         = +81,
         TriggerElectron       = +82,
         TriggerMuon           = +83,
