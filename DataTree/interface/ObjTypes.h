@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.12 2009/07/14 13:46:11 bendavid Exp $
+// $Id: ObjTypes.h,v 1.13 2009/09/25 08:39:10 loizides Exp $
 //
 // ObjTypes
 //
@@ -43,6 +43,7 @@ namespace mithep
     kMCParticle,
     kMet,
     kMuon,
+    kL1TriggerMask,
     kPair,
     kPFCandidate,
     kPFJet,
