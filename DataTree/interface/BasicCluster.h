@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.11 2009/04/06 09:51:04 loizides Exp $
+// $Id: BasicCluster.h,v 1.12 2009/04/08 10:22:59 loizides Exp $
 //
 // BasicCluster
 //
@@ -25,6 +25,7 @@ namespace mithep
         fEnergy(e), fPoint(p) {}
      
       Double_t         Energy()                 const { return fEnergy;       }       
+      Double_t         Et()                     const;
       Double_t         Eta()                    const { return fPoint.Eta();  }
       EObjType         ObjType()                const { return kBasicCluster; }       
       Double_t         Phi()                    const { return fPoint.Phi();  }
@@ -41,5 +42,13 @@ namespace mithep
       
       ClassDef(BasicCluster, 1)  // Basic cluster class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::BasicCluster::Et() const
+{
+  // Return transverse energy.
+
+  return fEnergy*fPoint.Rho()/fPoint.V().R();
 }
 #endif

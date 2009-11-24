@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.13 2009/10/26 09:48:09 loizides Exp $
+// $Id: SuperCluster.h,v 1.14 2009/11/08 13:04:11 sixie Exp $
 //
 // SuperCluster
 //
@@ -69,9 +69,9 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 inline Double_t mithep::SuperCluster::Et() const
 {
-  // Return Transverse Energy
+  // Return transverse energy.
+
   return fEnergy*fPoint.Rho()/fPoint.V().R();
-  
 }
 
 //--------------------------------------------------------------------------------------------------
