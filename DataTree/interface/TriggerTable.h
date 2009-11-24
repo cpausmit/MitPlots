@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id:$
+// $Id: TriggerTable.h,v 1.1 2009/03/24 16:10:15 loizides Exp $
 //
 // TriggerTable
 //
@@ -25,10 +25,11 @@ namespace mithep
       TriggerTable(Int_t capacity = TCollection::kInitHashTableCapacity, Int_t rehash = 0) :
         THashTable(capacity,rehash) {}
 
-      const TriggerName *Get(const char *name)   const;
-      UShort_t           GetId(const char *name) const;
+      const TriggerName *Get(const char *name)     const;
+      const TriggerName *Get(const std::string &s) const { return Get(s.c_str()); }
+      UShort_t           GetId(const char *name)   const;
       using TCollection::Print;
-      void               Print(Option_t *opt="") const;
+      void               Print(Option_t *opt="")   const;
 
     ClassDef(TriggerTable, 0) // A convenient trigger table
   };
