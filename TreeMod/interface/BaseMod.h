@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.27 2009/09/25 08:39:26 loizides Exp $
+// $Id: BaseMod.h,v 1.28 2009/10/01 12:43:53 loizides Exp $
 //
 // BaseMod
 //
@@ -57,6 +57,8 @@ namespace mithep
       const TriggerObjectCol     *GetHLTObjects(const char *name) const;
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
+      const TriggerTable         *GetL1AlgoTable()                const;
+      const TriggerTable         *GetL1TechTable()                const;
       Int_t                       GetNEventsProcessed()           const { return fNEventsProc;     }
       template <class T> const T *GetColThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
@@ -148,14 +150,6 @@ inline void mithep::BaseMod::AddToTrash(TObject *obj)
 
   Selector *sel = const_cast<Selector*>(GetSel()); 
   sel->AddToTrash(obj);
-}
-
-//--------------------------------------------------------------------------------------------------
-inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char *name) const
-{
-  // Get pointer to HLT TriggerObjects collection with given name for the current event.
-
-  return (dynamic_cast<const TriggerObjectCol *>(FindObjThisEvt(name)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,6 +270,14 @@ inline const mithep::Selector *mithep::BaseMod::GetSel() const
   // Get pointer to selector.
 
   return static_cast<const Selector*>(GetSelector()); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char *name) const
+{
+  // Get pointer to HLT TriggerObjects collection with given name for the current event.
+
+  return (dynamic_cast<const TriggerObjectCol *>(FindObjThisEvt(name)));
 }
 
 //--------------------------------------------------------------------------------------------------

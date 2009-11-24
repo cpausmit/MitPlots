@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.7 2009/07/13 10:39:20 loizides Exp $
+// $Id: HLTFwkMod.h,v 1.8 2009/08/11 15:24:39 loizides Exp $
 //
 // HLTFwkMod
 //
@@ -30,6 +30,8 @@ namespace mithep
       HLTFwkMod(const char *name="HLTFwkMod", const char *title="HLT framework module");
       ~HLTFwkMod();
 
+      const char                 *L1ATabNamePub()  const { return fL1ATabNamePub; }
+      const char                 *L1TTabNamePub()  const { return fL1TTabNamePub; }
       const char                 *HLTLabName()     const { return fHLTLabName;    }
       const char                 *HLTLabNamePub()  const { return fHLTLabNamePub; }
       const char                 *HLTObjsName()    const { return fObjsName;      }
@@ -37,6 +39,8 @@ namespace mithep
       const char                 *HLTTabName()     const { return fHLTTabName;    }
       const char                 *HLTTabNamePub()  const { return fHLTTabNamePub; }
       const char                 *HLTTreeName()    const { return fHLTTreeName;   }
+      void                        SetL1ATabName(const char *n)     { fL1ATabNamePub = n; }
+      void                        SetL1TTabName(const char *n)     { fL1TTabNamePub = n; }
       void                        SetHLTLabName(const char *n)     { fHLTLabName    = n; }
       void                        SetHLTLabNamePub(const char *n)  { fHLTLabNamePub = n; }
       void                        SetHLTObjsName(const char *n)    { fObjsName      = n; }
@@ -58,9 +62,11 @@ namespace mithep
       TString                     fHLTLabName;    //HLT module labels branch name
       TString                     fObjsName;      //trigger objects branch name
       TString                     fRelsName;      //trigger to objects relation branch name
-      TString                     fHLTTabNamePub; //HLT trigger names published name
+      TString                     fHLTTabNamePub; //HLT trigger names published qname
       TString                     fHLTLabNamePub; //HLT module labels published name
       TString                     fObjsNamePub;   //trigger objects published name
+      TString                     fL1ATabNamePub; //L1 algorithm trigger names published name
+      TString                     fL1TTabNamePub; //L1 technical trigger names published name
       const UInt_t                fNMaxTriggers;  //maximum number of triggers
       const TriggerObjectBaseArr *fObjs;          //!trigger objects branch
       const TriggerObjectRelArr  *fRels;          //!trigger to objects relation branch
@@ -72,6 +78,8 @@ namespace mithep
       TriggerTable               *fTriggers;      //!exported published HLT trigger table
       TriggerTable               *fLabels;        //!exported published HLT module label table
       TriggerObjectsTable        *fTrigObjs;      //!exported published HLT trigger objects table
+      TriggerTable               *fL1Algos;       //!exported published L1 algorithm triggers table
+      TriggerTable               *fL1Techs;       //!exported published L1 technical triggers table
 
       friend class OutputMod;
 

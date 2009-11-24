@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.8 2009/06/15 15:00:17 loizides Exp $
+// $Id: BaseMod.cc,v 1.9 2009/07/13 10:39:20 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataTree/interface/TriggerObjectsTable.h"
@@ -43,6 +43,28 @@ const TriggerTable *BaseMod::GetHLTTable() const
     return 0;
 
   return (dynamic_cast<const TriggerTable *>(FindPublicObj(fHltFwkMod->HLTTabNamePub())));
+}
+
+//--------------------------------------------------------------------------------------------------
+const TriggerTable *BaseMod::GetL1AlgoTable() const 
+{ 
+  // Get pointer to L1 algorithm trigger table obtained by module with given name.
+  
+  if (!HasHLTInfo()) 
+    return 0;
+
+  return (dynamic_cast<const TriggerTable *>(FindPublicObj(fHltFwkMod->L1ATabNamePub())));
+}
+
+//--------------------------------------------------------------------------------------------------
+const TriggerTable *BaseMod::GetL1TechTable() const 
+{ 
+  // Get pointer to L1 technical trigger table obtained by module with given name.
+  
+  if (!HasHLTInfo()) 
+    return 0;
+
+  return (dynamic_cast<const TriggerTable *>(FindPublicObj(fHltFwkMod->L1TTabNamePub())));
 }
 
 //--------------------------------------------------------------------------------------------------

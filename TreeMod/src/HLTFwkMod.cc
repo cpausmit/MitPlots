@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.12 2009/08/11 15:24:39 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.13 2009/10/26 11:04:56 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -28,6 +28,8 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fHLTTabNamePub(Form("%sFwk",fHLTTabName.Data())),
   fHLTLabNamePub(Form("%sFwk",fHLTLabName.Data())),
   fObjsNamePub(Form("%sFwk",fObjsName.Data())),
+  fL1ATabNamePub("L1AlgoTableFwk"),
+  fL1TTabNamePub("L1TechTableFwk"),
   fNMaxTriggers(256),
   fObjs(0),
   fRels(0),
@@ -38,7 +40,9 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fCurEnt(-2),
   fTriggers(new TriggerTable(fNMaxTriggers)),
   fLabels(new TriggerTable(fNMaxTriggers*16)),
-  fTrigObjs(new TriggerObjectsTable(fTriggers,fNMaxTriggers))
+  fTrigObjs(new TriggerObjectsTable(fTriggers,fNMaxTriggers)),
+  fL1Algos(new TriggerTable(fNMaxTriggers)),
+  fL1Techs(new TriggerTable(fNMaxTriggers))
 {
   // Constructor.
 
@@ -48,6 +52,10 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fLabels->SetOwner();
   fTrigObjs->SetName(fObjsNamePub);
   fTrigObjs->SetOwner();
+  fL1Algos->SetName(fL1ATabNamePub);
+  fL1Algos->SetOwner();
+  fL1Techs->SetName(fL1TTabNamePub);
+  fL1Techs->SetOwner();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -66,6 +74,8 @@ HLTFwkMod::~HLTFwkMod()
   fLabels   = 0;
   delete fTrigObjs;
   fTrigObjs = 0;
+  delete fL1Algos;
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -139,6 +149,14 @@ void HLTFwkMod::BeginRun()
       fTriggers->Print();
       cout << " --- Module lables ---" << endl;
       fLabels->Print();
+      if (fL1Algos->GetEntries()) {
+        cout << " --- L1 Algos ---" << endl;
+        fL1Algos->Print();
+      }
+      if (fL1Techs->GetEntries()) {
+        cout << " --- L1 Techs ---" << endl;
+        fL1Techs->Print();
+      }
     }
   }
 }
@@ -154,6 +172,8 @@ Bool_t HLTFwkMod::LoadTriggerTable()
   // delete old tables
   fTriggers->Delete();
   fLabels->Delete();
+  fL1Algos->Delete();
+  fL1Techs->Delete();
 
   // load next event in HLT tree
   fHLTTab = 0;
@@ -180,9 +200,29 @@ Bool_t HLTFwkMod::LoadTriggerTable()
   } 
 
   // add module labels
-  for (UInt_t i=0; i<fHLTLab->size(); ++i) {
-    TriggerName *tname = new TriggerName(fHLTLab->at(i),i);
-    fLabels->Add(tname);
+  UInt_t counter = 0;
+  UInt_t bitnum  = 0;
+  UInt_t which   = 0;
+  while (counter<fHLTLab->size()) {
+    TString tmpn(fHLTLab->at(counter));
+    ++counter;
+    if (tmpn.CompareTo("xxx-L1AlgoNames-xxx",TString::kIgnoreCase)==0) {
+      bitnum = 0;
+      which  = 1;
+      continue;
+    } else if (tmpn.CompareTo("xxx-L1TechNames-xxx",TString::kIgnoreCase)==0) {
+      bitnum = 0;
+      which  = 2;
+      continue;
+    }
+    TriggerName *tname = new TriggerName(tmpn,bitnum);
+    if (which==0)
+      fLabels->Add(tname);
+    else if (which==1)
+      fL1Algos->Add(tname);
+    else 
+      fL1Techs->Add(tname);
+    ++bitnum;
   } 
 
   return kTRUE;
@@ -256,6 +296,16 @@ void HLTFwkMod::SlaveBegin()
               "Could not publish HLT labels with name %s.", fLabels->GetName());
     return;
   }
+  if (!PublishObj(fL1Algos)) {
+    SendError(kAbortAnalysis, "SlaveBegin", 
+              "Could not publish L1 algo table with name %s.", fL1Algos->GetName());
+    return;
+  }
+  if (!PublishObj(fL1Techs)) {
+    SendError(kAbortAnalysis, "SlaveBegin", 
+              "Could not publish L1 tech table with name %s.", fL1Techs->GetName());
+    return;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,4 +316,6 @@ void HLTFwkMod::SlaveTerminate()
   RetractObj(fTriggers->GetName());
   RetractObj(fLabels->GetName());
   RetractObj(fTrigObjs->GetName());
+  RetractObj(fL1Algos->GetName());
+  RetractObj(fL1Techs->GetName());
 }
