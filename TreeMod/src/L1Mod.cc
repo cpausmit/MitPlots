@@ -1,4 +1,4 @@
-// $Id: L1Mod.cc,v 1.17 2009/10/01 12:43:53 loizides Exp $
+// $Id: L1Mod.cc,v 1.1 2009/11/24 14:27:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/L1Mod.h"
 #include <TFile.h>
@@ -16,10 +16,9 @@ ClassImp(mithep::L1Mod)
 L1Mod::L1Mod(const char *name, const char *title) : 
   BaseMod(name,title),
   fAbort(kTRUE),
-  fAlgo(kFALSE),
   fPrintTable(kFALSE),
   fIgnoreBits(kFALSE),
-  fBitsName(Names::gkL1TechBitsBrn), //Names::gkL1AlgoBitsBrn
+  fBitsName(Names::gkL1TechBitsBrn),
   fBits(0),
   fTriggers(0),
   fNEvents(0),
@@ -148,7 +147,7 @@ void L1Mod::SlaveBegin()
 
   ReqBranch(fBitsName, fBits);
   
-  if (fAlgo)
+  if (fBitsName.Contains("Algo"))
     fTriggers = GetL1AlgoTable();
   else
     fTriggers = GetL1TechTable();

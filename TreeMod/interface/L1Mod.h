@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: L1Mod.h,v 1.14 2009/08/11 15:24:39 loizides Exp $
+// $Id: L1Mod.h,v 1.1 2009/11/24 14:27:32 loizides Exp $
 //
 // L1Mod
 //
@@ -34,13 +34,11 @@ namespace mithep
       ~L1Mod();
 
       void                        AddTrigger(const char *expr);
-      Bool_t                      GetAlgoBit()      const { return fAlgo;          } 
       const char                 *GetBitsName()     const { return fBitsName;      }
       Int_t                       GetNEvents()      const { return fNEvents;       }
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
       Int_t                       GetNFailed()      const { return fNFailed;       }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort         = b; }
-      void                        SetAlgoBit(Bool_t b)              { fAlgo          = b; }
       void                        SetBitsName(const char *n)        { fBitsName      = n; }
       void                        SetIgnoreBits(Bool_t b)           { fIgnoreBits    = b; }
       void                        SetPrintTable(Bool_t b)           { fPrintTable    = b; }
@@ -54,7 +52,6 @@ namespace mithep
       void                        SlaveTerminate();
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
-      Bool_t                      fAlgo;          //=true then use algorithm bits
       Bool_t                      fPrintTable;    //=true then print L1 trigger table in BeginRun
       Bool_t                      fIgnoreBits;    //=true then try to get trigger objects (def=0)
       TString                     fBitsName;      //trigger bits branch name
