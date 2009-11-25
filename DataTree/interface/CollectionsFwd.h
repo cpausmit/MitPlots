@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CollectionsFwd.h,v 1.2 2009/07/13 10:38:59 loizides Exp $
+// $Id: CollectionsFwd.h,v 1.3 2009/09/28 14:15:34 loizides Exp $
 //
 // Collections
 //
@@ -42,6 +42,7 @@
 #include "MitAna/DataTree/interface/PFTauFwd.h"
 #include "MitAna/DataTree/interface/PhotonFwd.h"
 #include "MitAna/DataTree/interface/PixelHitFwd.h"
+#include "MitAna/DataTree/interface/StripHitFwd.h"
 #include "MitAna/DataTree/interface/StableDataFwd.h"
 #include "MitAna/DataTree/interface/StableParticleFwd.h"
 #include "MitAna/DataTree/interface/SuperClusterFwd.h"
