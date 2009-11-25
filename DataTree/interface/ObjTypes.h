@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.13 2009/09/25 08:39:10 loizides Exp $
+// $Id: ObjTypes.h,v 1.14 2009/11/19 14:06:53 loizides Exp $
 //
 // ObjTypes
 //
@@ -56,6 +56,7 @@ namespace mithep
     kStableData,
     kStableDaughter,
     kStableParticle,
+    kStripHit,
     kSuperCluster,
     kTau,
     kTrack,
