@@ -1,4 +1,4 @@
-// $Id: BaseMod.cc,v 1.9 2009/07/13 10:39:20 loizides Exp $
+// $Id: BaseMod.cc,v 1.10 2009/11/24 14:27:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataTree/interface/TriggerObjectsTable.h"
@@ -86,6 +86,18 @@ Bool_t BaseMod::HasHLTInfo() const
   if (fHltFwkMod)
     return kTRUE;
   return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+const TriggerTable *BaseMod::GetTriggerTable(ETrigType t) const 
+{
+  // Return pointer to requested trigger table
+
+  if (t==kL1A)
+    return GetL1AlgoTable();
+   else if (t==kL1T)
+    return GetL1TechTable();
+  return GetHLTTable();
 }
 
 //--------------------------------------------------------------------------------------------------

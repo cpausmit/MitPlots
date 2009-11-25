@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.28 2009/10/01 12:43:53 loizides Exp $
+// $Id: BaseMod.h,v 1.29 2009/11/24 14:27:32 loizides Exp $
 //
 // BaseMod
 //
@@ -27,6 +27,7 @@ namespace mithep
 
   class BaseMod : public TAModule {
     public:
+      enum ETrigType { kHLT, kL1A, kL1T };
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
 
     private:
@@ -66,6 +67,7 @@ namespace mithep
       template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
       template <class T> T       *GetPublicObj(const char *name, Bool_t warn=1);
       const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo();     }
+      const TriggerTable         *GetTriggerTable(ETrigType t)    const;
       const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo()          const;
       void                        IncNEventsProcessed()       { ++fNEventsProc;                    }
@@ -190,10 +192,12 @@ const T *mithep::BaseMod::GetColThisEvt(const char *name, Bool_t warn)
   }
 
   //create and fill output ObjArray with the requested type
-  mithep::ObjArray<typename T::element_type> *newRet = new mithep::ObjArray<typename T::element_type>;
+  mithep::ObjArray<typename T::element_type> *newRet = 
+    new mithep::ObjArray<typename T::element_type>;
   newRet->SetName(outName);
   for (UInt_t i=0; i<inCol->GetEntries(); ++i) {
-    const typename T::element_type *outElement = dynamic_cast<typename T::element_type*>(inCol->ObjAt(i));
+    const typename T::element_type *outElement = 
+      dynamic_cast<typename T::element_type*>(inCol->ObjAt(i));
     if (outElement)
       newRet->Add(outElement);
   }
