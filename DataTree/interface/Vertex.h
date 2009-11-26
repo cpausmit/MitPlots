@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.9 2009/03/18 15:44:32 loizides Exp $
+// $Id: Vertex.h,v 1.10 2009/09/25 08:37:38 loizides Exp $
 //
 // Vertex
 //
@@ -28,6 +28,7 @@ namespace mithep
         BaseVertex(pos), fChi2(0), fNdof(0), fNTracks(0) {}
       
       Double_t            Chi2()      const { return fChi2;                    } 
+      Int_t               Compare(const TObject *o) const;
       UShort_t            Ndof()      const { return fNdof;                    }
       UInt_t              NTracks()   const { return fNTracks;                 }
       EObjType            ObjType()   const { return kVertex;                  }      
@@ -43,5 +44,33 @@ namespace mithep
 	
     ClassDef(Vertex, 1) // Vertex class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::Vertex::Compare(const TObject *o) const
+{
+  // Default compare function for sorting according to transverse momentum. 
+  // Returns -1 if this object is smaller than given object, 0 if objects are 
+  // equal and 1 if this is larger than given object.
+
+  const mithep::Vertex *v = dynamic_cast<const mithep::Vertex *>(o);
+  if (!v)
+    return 1;
+
+  Int_t myn = NTracks();
+  Int_t n   = v->NTracks();
+  if (myn>n)
+    return -1;
+  else if (n>myn)
+    return +1;
+
+  Double_t myd = Chi2();
+  Double_t d   = v->Chi2();
+  if (myd<d)
+    return -1;
+  else if (d<myd)
+    return +1;
+  
+  return 0;
 }
 #endif
