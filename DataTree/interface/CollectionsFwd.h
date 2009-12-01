@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CollectionsFwd.h,v 1.3 2009/09/28 14:15:34 loizides Exp $
+// $Id: CollectionsFwd.h,v 1.4 2009/11/25 15:12:57 loizides Exp $
 //
 // Collections
 //
@@ -35,6 +35,7 @@
 #include "MitAna/DataTree/interface/MCParticleFwd.h"
 #include "MitAna/DataTree/interface/MetFwd.h"
 #include "MitAna/DataTree/interface/MuonFwd.h"
+#include "MitAna/DataTree/interface/L1TriggerMaskFwd.h"
 #include "MitAna/DataTree/interface/ParticleFwd.h"
 #include "MitAna/DataTree/interface/PFCandidateFwd.h"
 #include "MitAna/DataTree/interface/PFJetFwd.h"

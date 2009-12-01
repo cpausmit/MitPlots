@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collections.h,v 1.48 2009/07/13 10:38:59 loizides Exp $
+// $Id: Collections.h,v 1.49 2009/11/25 15:12:57 loizides Exp $
 //
 // Collections
 //
@@ -37,6 +37,7 @@
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/Met.h"
 #include "MitAna/DataTree/interface/Muon.h"
+#include "MitAna/DataTree/interface/L1TriggerMask.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/PFCandidate.h"
 #include "MitAna/DataTree/interface/PFJet.h"
