@@ -1,4 +1,4 @@
-// $Id: L1Mod.cc,v 1.1 2009/11/24 14:27:33 loizides Exp $
+// $Id: L1Mod.cc,v 1.2 2009/11/24 15:58:13 loizides Exp $
 
 #include "MitAna/TreeMod/interface/L1Mod.h"
 #include <TFile.h>
@@ -153,7 +153,7 @@ void L1Mod::SlaveBegin()
     fTriggers = GetL1TechTable();
 
   if (!fTriggers) {
-    SendError(kAbortAnalysis, "SlaveBegin", "Could not get HLT trigger table.");
+    SendError(kAbortAnalysis, "SlaveBegin", "Could not get L1 trigger table.");
     return;
   }
 }

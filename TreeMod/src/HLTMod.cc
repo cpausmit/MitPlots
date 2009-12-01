@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.16 2009/09/29 19:17:51 loizides Exp $
+// $Id: HLTMod.cc,v 1.17 2009/10/01 12:43:53 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -91,8 +91,10 @@ void HLTMod::BeginRun()
   fTrigBitsAnd.clear();
   fTrigBitsCmp.clear();
 
-  if (fPrintTable) 
+  if (fPrintTable) {
+    Info("BeginRun", "Get trigger table for run %d", GetEventHeader()->RunNum());
     fTriggers->Print();
+  }
 
   for (UInt_t i=0; i<fTrigNames.size(); ++i) {
     BitMask256 tmask; //trigger mask
