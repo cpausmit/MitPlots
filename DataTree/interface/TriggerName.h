@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerName.h,v 1.5 2009/02/18 15:38:55 loizides Exp $
+// $Id: TriggerName.h,v 1.6 2009/03/24 16:10:15 loizides Exp $
 //
 // TriggerName
 //
@@ -29,11 +29,13 @@ namespace mithep
       TriggerName(const TString &name, UShort_t id) : 
         fName(name), fId(id), fHash(fName.Hash()) {}
 
-      UShort_t              Id()      const { return fId; }
-      const char           *GetName() const { return fName; }
-      ULong_t               Hash()    const { return fHash; }
-      const char           *Name()    const { return fName; }
-      EObjType              ObjType() const { return kTriggerName; }      
+      Int_t                     Compare(const TObject *o) const;   
+      UShort_t              Id()         const { return fId;   }
+      Bool_t                IsSortable() const { return kTRUE; }
+      const char           *GetName()    const { return fName; }
+      ULong_t               Hash()       const { return fHash; }
+      const char           *Name()       const { return fName; }
+      EObjType              ObjType()    const { return kTriggerName; }      
       void                  Print(Option_t *opt="") const;
 
     protected:
@@ -43,5 +45,25 @@ namespace mithep
 
     ClassDef(TriggerName, 1) // Trigger name class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Int_t mithep::TriggerName::Compare(const TObject *o) const
+{
+  // Default compare function for sorting according to transverse momentum. 
+  // Returns -1 if this object is smaller than given object, 0 if objects are 
+  // equal and 1 if this is larger than given object.
+
+  const mithep::TriggerName *t = dynamic_cast<const mithep::TriggerName *>(o);
+  if (!t)
+    return 1;
+
+  Double_t myid = Id();
+  Double_t id   = t->Id();
+  if (myid<id)
+    return -1;
+  else if (id<myid)
+    return +1;
+  return 0;
 }
 #endif
