@@ -1,4 +1,4 @@
-// $Id: L1Mod.cc,v 1.2 2009/11/24 15:58:13 loizides Exp $
+// $Id: L1Mod.cc,v 1.3 2009/12/01 15:14:11 loizides Exp $
 
 #include "MitAna/TreeMod/interface/L1Mod.h"
 #include <TFile.h>
@@ -58,8 +58,8 @@ void L1Mod::BeginRun()
     fTriggers->Print();
 
   for (UInt_t i=0; i<fTrigNames.size(); ++i) {
-    BitMask64 tmask; //trigger mask
-    BitMask64 amask; //bitand mask
+    BitMask128 tmask; //trigger mask
+    BitMask128 amask; //bitand mask
     TString names(fTrigNames.at(i).c_str());
 
     TObjArray *arr = names.Tokenize("&");
@@ -117,7 +117,7 @@ void L1Mod::Process()
   fBitsDone.Clear();
   Bool_t accept = kFALSE;
   for (UInt_t i = 0; i<fTrigBitsAnd.size(); ++i) {
-    BitMask64 bitmask(fBits->Get());
+    BitMask128 bitmask(fBits->Get());
     bitmask &= fTrigBitsAnd.at(i);
     if (bitmask==fTrigBitsCmp.at(i)) {
       accept = kTRUE;

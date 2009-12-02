@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: L1Mod.h,v 1.1 2009/11/24 14:27:32 loizides Exp $
+// $Id: L1Mod.h,v 1.2 2009/11/24 15:58:12 loizides Exp $
 //
 // L1Mod
 //
@@ -57,8 +57,8 @@ namespace mithep
       TString                     fBitsName;      //trigger bits branch name
       std::vector<std::string>    fTrigNames;     //trigger names requested for test mask
       const L1TriggerMask        *fBits;          //!trigger bits branch
-      std::vector<BitMask64 >     fTrigBitsAnd;   //!trigger bits used in mask
-      std::vector<BitMask64>      fTrigBitsCmp;   //!trigger bits used for comparison
+      std::vector<BitMask128>     fTrigBitsAnd;   //!trigger bits used in mask
+      std::vector<BitMask128>     fTrigBitsCmp;   //!trigger bits used for comparison
       BitMask256                  fBitsDone;      //!bits for which events are accepted
       const TriggerTable         *fTriggers;      //!imported published L1 trigger table
       Int_t                       fNEvents;       //!number of processed events
