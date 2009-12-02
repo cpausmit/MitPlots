@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.16 2009/07/06 13:37:39 loizides Exp $
+// $Id: EventHeader.h,v 1.17 2009/07/13 11:00:29 loizides Exp $
 //
 // EventHeader
 //
@@ -27,6 +27,7 @@ namespace mithep
       Int_t               ExpType()           const { return fExpType;       }
       UInt_t              EvtNum()            const { return fEvtNum;        }
       Bool_t              IsMC()              const { return fIsMC;          }
+      Bool_t              IsPhysDec()         const { return fIsPhysDec;     }
       UInt_t              LumiSec()           const { return fLumiSec;       }
       EObjType            ObjType()           const { return kEventHeader;   }
       Int_t               OrbitNumber()       const { return fOrbitNumber;   }
@@ -42,6 +43,7 @@ namespace mithep
       void                SetIsMC(Bool_t b)         { fIsMC          = b;    }
       void                SetLumiSec(UInt_t i)      { fLumiSec       = i;    }
       void                SetOrbitNumber(Int_t o)   { fOrbitNumber   = o;    }
+      void                SetIsPhysDec(Bool_t b)    { fIsPhysDec     = b;    }
       void                SetRunEntry(Int_t i)      { fRunEntry      = i;    }
       void                SetRunNum(UInt_t i)       { fRunNum        = i;    }
       void                SetSkimmed(UChar_t s)     { fSkimmed       = s;    }
@@ -65,9 +67,10 @@ namespace mithep
       Double32_t          fWeight;          //event weight
       UChar_t             fExpType;         //experiment type (as assigned in EventAuxiliary)
       UChar_t             fSkimmed;         //level of skimming (0 == non-skimmed)
-      Bool_t              fIsMC;            //==true for MC data 
+      Bool_t              fIsMC;            //==true if MC and not real data 
+      Bool_t              fIsPhysDec;       //==true if physics declared
 
-    ClassDef(EventHeader, 2) // Event header class
+    ClassDef(EventHeader, 3) // Event header class
   };
 }
 
