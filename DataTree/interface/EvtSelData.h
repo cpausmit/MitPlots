@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EvtSelData.h,v 1.18 2009/12/02 23:17:37 loizides Exp $
+// $Id: EvtSelData.h,v 1.1 2009/12/08 10:49:54 loizides Exp $
 //
 // EvtSelData
 //
@@ -32,6 +32,8 @@ namespace mithep
                  
       ~EvtSelData() {}
 
+      Double_t      HcalNeg()       const { return fHcalNeg;    }
+      Double_t      HcalPos()       const { return fHcalPos;    }
       Double_t      CastorNeg()     const { return fCaNeg;      }
       Double_t      CastorPos()     const { return fCaPos;      }
       Double_t      CastorNegTime() const { return fCaNegTime;  }
