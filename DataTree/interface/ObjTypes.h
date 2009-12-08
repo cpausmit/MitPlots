@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.14 2009/11/19 14:06:53 loizides Exp $
+// $Id: ObjTypes.h,v 1.15 2009/11/25 00:14:52 loizides Exp $
 //
 // ObjTypes
 //
@@ -34,6 +34,7 @@ namespace mithep
     kDecayParticle,
     kElectron,
     kEventHeader,
+    kEvtSelData,
     kGenJet,
     kGenMet,
     kGenericParticle,

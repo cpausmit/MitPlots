@@ -1,10 +1,11 @@
-// $Id: MitAnaDataTreeLinkDef.h,v 1.69 2009/06/15 15:00:15 loizides Exp $
+// $Id: MitAnaDataTreeLinkDef.h,v 1.70 2009/07/13 09:42:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_LINKDEF_H
 #define MITANA_DATATREE_LINKDEF_H
 
 #include "MitAna/DataTree/interface/BranchName.h"
 #include "MitAna/DataTree/interface/BranchTable.h"
+#include "MitAna/DataTree/interface/EvtSelData.h"
 #include "MitAna/DataTree/interface/LAHeader.h"
 #include "MitAna/DataTree/interface/MCEventInfo.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -24,6 +25,7 @@
 
 #pragma link C++ class mithep::BranchName+;
 #pragma link C++ class mithep::BranchTable+;
+#pragma link C++ class mithep::EvtSelData+;
 #pragma link C++ class mithep::LAHeader+;
 #pragma link C++ class mithep::MCEventInfo+;
 #pragma link C++ class mithep::Names+;
