@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.15 2009/07/17 20:47:43 loizides Exp $
+// $Id: OutputMod.cc,v 1.16 2009/10/26 11:04:56 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -276,19 +276,14 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
     const UInt_t n = fSkimmedIn->GetEntries();
     for(UInt_t i=0; i<n; ++i) {
       const EventHeader *eh = fSkimmedIn->At(i);
-      fAllEventHeader->SetEvtNum(eh->EvtNum());
-      fAllEventHeader->SetLumiSec(eh->LumiSec());
-      fAllEventHeader->SetRunNum(eh->RunNum());
-      fAllEventHeader->SetRunEntry(eh->RunEntry());
+      *fAllEventHeader = *eh;
       fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
       fAllTree->Fill();
     }
   }
 
   const EventHeader *eh = GetEventHeader();
-  fAllEventHeader->SetEvtNum(eh->EvtNum());
-  fAllEventHeader->SetLumiSec(eh->LumiSec());
-  fAllEventHeader->SetRunNum(eh->RunNum());
+  *fAllEventHeader = *eh;
   if (isremoved) {
     fAllEventHeader->SetRunEntry(-1);
     fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
@@ -482,9 +477,7 @@ void OutputMod::Process()
   }
 
   // fill event header
-  fEventHeader->SetEvtNum(GetEventHeader()->EvtNum());
-  fEventHeader->SetLumiSec(GetEventHeader()->LumiSec());
-  fEventHeader->SetRunNum(runnum);
+  *fEventHeader = *GetEventHeader();
 
   // fill all event header
   FillAllEventHeader(kFALSE);
