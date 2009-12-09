@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EvtSelData.h,v 1.1 2009/12/08 10:49:54 loizides Exp $
+// $Id: EvtSelData.h,v 1.2 2009/12/08 20:51:10 loizides Exp $
 //
 // EvtSelData
 //
@@ -23,12 +23,12 @@ namespace mithep
                       fHfNeg(0), fHfPos(0), fHfNegTime(0), fHfPosTime(0), 
                       fCaNeg(0), fCaPos(0), fCaNegTime(0), fCaPosTime(0),
                       fZdcNeg(0), fZdcPos(0), fZdcNegTime(0), fZdcPosTime(0),
-                      fPxbHits(0), fClusVtxQual(0) {}
+                      fPxbHits(0), fPxHits(0), fClusVtxQual(0), fClusVtxDiff(0) {}
       EvtSelData(Double_t HcalNeg, Double_t HcalPos,
                  Double_t HfNeg, Double_t HfPos, Double_t HfNegTime, Double_t HfPosTime,
                  Double_t CaNeg, Double_t CaPos, Double_t CaNegTime, Double_t CaPosTime,
                  Double_t ZdcNeg, Double_t ZdcPos, Double_t ZdcNegTime, Double_t ZdcPosTime,
-                 Int_t PxbHits, Double_t ClusVtxQual);
+                 Int_t PxbHits, Int_t PxHits, Double_t ClusVtxQual, Double_t ClusVtxDiff);
                  
       ~EvtSelData() {}
 
@@ -43,6 +43,7 @@ namespace mithep
       Double_t      HfNegTime()     const { return fHfNegTime;  }
       Double_t      HfPosTime()     const { return fHfPosTime;  }
       Int_t         NpixBarrel()    const { return fPxbHits;    }
+      Int_t         Npix()          const { return fPxHits;     }
       Double_t      ZdcNeg()        const { return fZdcNeg;     }
       Double_t      ZdcPos()        const { return fZdcPos;     }
       Double_t      ZdcNegTime()    const { return fZdcNegTime; }
@@ -52,7 +53,7 @@ namespace mithep
                          Double_t HfNeg, Double_t HfPos, Double_t HfNegTime, Double_t HfPosTime,
                          Double_t CaNeg, Double_t CaPos, Double_t CaNegTime, Double_t CaPosTime,
                          Double_t ZdcNeg, Double_t ZdcPos, Double_t ZdcNegTime, Double_t ZdcPosTime,
-                         Int_t PxbHits, Double_t ClusVtxQual);
+                         Int_t PxbHits, Int_t PxHits, Double_t ClusVtxQual, Double_t ClusVtxDiff);
 
     protected:
       Double_t      fHcalNeg;     //energy HCAL negative side
@@ -70,9 +71,11 @@ namespace mithep
       Double_t      fZdcNegTime;  //energy weighted ZDC time on negative side 
       Double_t      fZdcPosTime;  //energy weighted ZDC time on positive side 
       Int_t         fPxbHits;     //number of pixel rechits in the three barrel layers
-      Double_t      fClusVtxQual; //incompatibility of pixel cluster shapes with vertex
+      Int_t         fPxHits;      //number of pixel rechits in all barrel and forward layers
+      Double_t      fClusVtxQual; //incompatibility of pixel cluster shapes with vertex (ratio)
+      Double_t      fClusVtxDiff; //incompatibility of pixel cluster shapes with vertex (diff)
 
-    ClassDef(EvtSelData, 1) // Event selection data
+    ClassDef(EvtSelData, 2) // Event selection data
   };
 }
 #endif
