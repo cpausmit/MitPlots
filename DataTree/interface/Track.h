@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.43 2009/07/14 13:44:12 bendavid Exp $
+// $Id: Track.h,v 1.44 2009/07/20 04:57:27 loizides Exp $
 //
 // Track
 //
@@ -205,6 +205,7 @@ namespace mithep
       UShort_t             Ndof()           const { return fNdof;                              }
       UInt_t               NHits()          const { return fHits.NBitsSet();                   }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
+      UInt_t               NPixelHits()    const { return PixelHits().NBitsSet();             }
       EObjType             ObjType()        const { return kTrack;                             }    
       Double_t             P2()             const { return 1./fQOverP/fQOverP;                 }
       Double_t             P()              const { return TMath::Abs(1./fQOverP);             }
@@ -222,6 +223,7 @@ namespace mithep
       Double_t             RChi2()          const { return fChi2/(Double_t)fNdof; }
       Double_t             Theta()          const { return (TMath::PiOver2() - fLambda);       }
       const SuperCluster  *SCluster()       const { return fSuperClusterRef.Obj();             }
+      const BitMask48      PixelHits()      const { return (fHits & PixelLayers());            }
       const BitMask48      StereoHits()     const { return (fHits & StereoLayers());           }
       void                 SetAlgo(ETrackAlgorithm e)          { fAlgo = e;                    }
       void                 SetChi2(Double_t chi2)              { fChi2 = chi2;                 }
@@ -239,8 +241,9 @@ namespace mithep
       void	           SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc;        }
       Double_t             Z0()             const { return fDsz/TMath::Cos(fLambda);           }
 
-      static 
-      const BitMask48      StereoLayers();
+       
+      static const BitMask48      StereoLayers();
+      static const BitMask48      PixelLayers();
 
     protected:
       void                 ClearMom()    const { fCacheMomFlag.ClearCache(); }
@@ -358,5 +361,19 @@ inline const mithep::BitMask48 mithep::Track::StereoLayers()
   stereoLayers.SetBit(mithep::Track::TEC8S);
   stereoLayers.SetBit(mithep::Track::TEC9S);
   return stereoLayers;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::BitMask48 mithep::Track::PixelLayers()
+{ 
+  // Build and return BitMask of stereo layers.
+
+  mithep::BitMask48 pixelLayers;
+  pixelLayers.SetBit(mithep::Track::PXB1);
+  pixelLayers.SetBit(mithep::Track::PXB2);
+  pixelLayers.SetBit(mithep::Track::PXB3);
+  pixelLayers.SetBit(mithep::Track::PXF1);
+  pixelLayers.SetBit(mithep::Track::PXF2);
+  return pixelLayers;
 }
 #endif
