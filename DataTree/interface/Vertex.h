@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.10 2009/09/25 08:37:38 loizides Exp $
+// $Id: Vertex.h,v 1.11 2009/11/26 21:42:30 loizides Exp $
 //
 // Vertex
 //
@@ -27,12 +27,13 @@ namespace mithep
       Vertex(const ThreeVector &pos) : 
         BaseVertex(pos), fChi2(0), fNdof(0), fNTracks(0) {}
       
-      Double_t            Chi2()      const { return fChi2;                    } 
+      Double_t            Chi2()       const { return fChi2;                    } 
       Int_t               Compare(const TObject *o) const;
-      UShort_t            Ndof()      const { return fNdof;                    }
-      UInt_t              NTracks()   const { return fNTracks;                 }
-      EObjType            ObjType()   const { return kVertex;                  }      
-      Double_t            Prob()      const { return TMath::Prob(fChi2,fNdof); }
+      Bool_t              IsSortable() const { return kTRUE;                    }
+      UShort_t            Ndof()       const { return fNdof;                    }
+      UInt_t              NTracks()    const { return fNTracks;                 }
+      EObjType            ObjType()    const { return kVertex;                  }      
+      Double_t            Prob()       const { return TMath::Prob(fChi2,fNdof); }
       void                SetChi2(Double_t chi2)     { fChi2 = chi2;     }
       void                SetNdof(UShort_t nDof)     { fNdof = nDof;     } 
       void                SetNTracks(UShort_t ntrks) { fNTracks = ntrks; }
