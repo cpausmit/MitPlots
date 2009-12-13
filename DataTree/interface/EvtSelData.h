@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EvtSelData.h,v 1.2 2009/12/08 20:51:10 loizides Exp $
+// $Id: EvtSelData.h,v 1.3 2009/12/09 12:48:34 edwenger Exp $
 //
 // EvtSelData
 //
@@ -38,6 +38,9 @@ namespace mithep
       Double_t      CastorPos()     const { return fCaPos;      }
       Double_t      CastorNegTime() const { return fCaNegTime;  }
       Double_t      CastorPosTime() const { return fCaPosTime;  }
+      Double_t      ClusVtxQual()   const { return fClusVtxQual;}
+      Double_t      ClusVtxDiff()   const { return fClusVtxDiff;}
+
       Double_t      HfNeg()         const { return fHfNeg;      }
       Double_t      HfPos()         const { return fHfPos;      }
       Double_t      HfNegTime()     const { return fHfNegTime;  }
