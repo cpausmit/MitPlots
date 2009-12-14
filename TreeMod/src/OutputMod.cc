@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.16 2009/10/26 11:04:56 loizides Exp $
+// $Id: OutputMod.cc,v 1.17 2009/12/09 09:46:25 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -461,6 +461,8 @@ void OutputMod::Process()
   // reset per file quantities if a new file was opened
   if (fTreeWriter->GetFileNumber()!=fFileNum) {
     fRunmap.clear();
+    fHLTTab->clear();
+    fHLTLab->clear();
     fRunEntries = 0;
     fHltEntries = 0;
     fFileNum = fTreeWriter->GetFileNumber();
