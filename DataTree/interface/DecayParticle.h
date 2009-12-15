@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.26 2009/03/18 15:44:32 loizides Exp $
+// $Id: DecayParticle.h,v 1.27 2009/07/13 11:00:28 loizides Exp $
 //
 // DecayParticle
 //
@@ -62,6 +62,9 @@ namespace mithep
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);     }
       const ThreeVector        &Position()            const;
       const ThreeVector         RelativePosition()    const;
+      Bool_t                    SharedLayer(Track::EHitLayer l) const  { return fSharedLayers.TestBit(l); }
+      const BitMask48          &SharedLayers()        const { return fSharedLayers;                }
+      UInt_t                    NSharedHits()         const { return fSharedLayers.NBitsSet();     }
       void                      SetAbsPdgId(UInt_t apid)                { fAbsPdgId=apid;          }
       void                      SetChi2(Double_t chi2)                  { fChi2 = chi2;            }
       void                      SetDxy(Double_t dxy)                    { fDxy = dxy; ClearPos();  }
@@ -76,6 +79,8 @@ namespace mithep
                                   { fMomentum = p; ClearMom(); ClearPos(); }
       void                      SetNdof(UShort_t ndof)                  { fNdof = ndof;            }
       void                      SetPriVertex(const Vertex *v)           { fPriVtx = v; ClearPos(); }
+      void                      SetSharedLayer(Track::EHitLayer l)      { fSharedLayers.SetBit(l); }
+      void                      SetSharedLayers(const BitMask48 &layers) { fSharedLayers = layers; }
       using TObject::Error;
 
     protected:
@@ -97,10 +102,11 @@ namespace mithep
       Vect4M                    fMomentum;     //momentum fourvector
       RefArray<DaughterData>    fDaughterData; //momentum of daughters at vertex
       Ref<Vertex>               fPriVtx;       //reference to primary vertex
+      BitMask48                 fSharedLayers; //layer mask for shared hits from daughter particles
       mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
       mutable ThreeVector       fCachedPos;    //!cached momentum vector (filled by derived classes)
       
-      ClassDef(DecayParticle, 1) // Decay particle class
+      ClassDef(DecayParticle, 2) // Decay particle class
   };
 }
 
