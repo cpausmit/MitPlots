@@ -1,4 +1,4 @@
-// $Id: Met.cc,v 1.1 2008/07/07 16:02:25 loizides Exp $
+// $Id: Met.cc,v 1.2 2009/04/07 14:59:08 loizides Exp $
 
 #include "MitAna/DataTree/interface/Met.h"
 #include <TFile.h>
@@ -16,11 +16,19 @@ Bool_t mithep::Met::HasCorrections() const
   if (!gFile)
     return ret;
   
-  TStreamerInfo *si = 
-    dynamic_cast<TStreamerInfo*>(gFile->GetStreamerInfoList()->FindObject("mithep::Met"));
-  if (!si)
+  TList *list = gFile->GetStreamerInfoList();
+  if (!list)
     return ret;
 
+  const TStreamerInfo *si = 
+    dynamic_cast<const TStreamerInfo*>(list->FindObject("mithep::Met"));
+
+  if (!si) {
+    delete list;
+    return ret;
+  }
+
   ret = (si->GetClassVersion()>1);
+  delete list;
   return ret;
 }
