@@ -1,4 +1,4 @@
-// $Id: runHLTExample.C,v 1.4 2009/08/11 15:27:08 loizides Exp $
+// $Id: runHLTExample.C,v 1.5 2009/09/29 19:18:22 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -11,7 +11,7 @@
 //--------------------------------------------------------------------------------------------------
 void runHLTExample(const char *trigger="HLT_Jet80", 
                    const char *files = "mit-full_000.root",
-                   Int_t nEvs = -1)
+                   Int_t nEvs = 0)
 {
   using namespace mithep;
   gDebugMask  = Debug::kAnalysis;
