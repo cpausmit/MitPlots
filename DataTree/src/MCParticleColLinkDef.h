@@ -1,9 +1,10 @@
-// $Id:$
+// $Id: MCParticleColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_MCPARTICLECOLLINKDEF_H
 #define MITANA_DATATREE_MCPARTICLECOLLINKDEF_H
 
 #include "MitAna/DataCont/interface/Ref.h"
+#include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataTree/interface/MCParticleCol.h"
 #endif
 
@@ -20,6 +21,7 @@
 #pragma link C++ class mithep::Collection<mithep::MCParticle>+;
 #pragma link C++ class mithep::Array<mithep::MCParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::MCParticle>+;
+#pragma link C++ class mithep::RefArray<mithep::MCParticle>+;
 #pragma link C++ typedef mithep::MCParticleCol;
 #pragma link C++ typedef mithep::MCParticleArr;
 #pragma link C++ typedef mithep::MCParticleOArr;

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.44 2009/07/20 04:57:27 loizides Exp $
+// $Id: Track.h,v 1.45 2009/12/10 15:02:59 bendavid Exp $
 //
 // Track
 //
@@ -205,7 +205,7 @@ namespace mithep
       UShort_t             Ndof()           const { return fNdof;                              }
       UInt_t               NHits()          const { return fHits.NBitsSet();                   }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
-      UInt_t               NPixelHits()    const { return PixelHits().NBitsSet();             }
+      UInt_t               NPixelHits()     const { return PixelHits().NBitsSet();             }
       EObjType             ObjType()        const { return kTrack;                             }    
       Double_t             P2()             const { return 1./fQOverP/fQOverP;                 }
       Double_t             P()              const { return TMath::Abs(1./fQOverP);             }
