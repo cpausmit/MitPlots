@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackingParticle.h,v 1.23 2009/09/25 08:38:18 loizides Exp $
+// $Id: TrackingParticle.h,v 1.1 2010/01/07 11:03:41 bendavid Exp $
 //
 // TrackingParticle
 //
@@ -27,24 +27,23 @@ namespace mithep
       TrackingParticle() {}
       
       
-      Bool_t              Hit(Track::EHitLayer l)  const { return fHits.TestBit(l);    }
-      const BitMask48    &Hits()                   const { return fHits;               }
-      UInt_t              NHits()                  const { return fHits.NBitsSet();    }
-      void                SetHit(Track::EHitLayer l)     { fHits.SetBit(l);            }
-      void                SetHits(const BitMask48 &hits) { fHits = hits;               }
-      const MCParticle   *DistinctMother()         const;
-      EObjType            ObjType()                const { return kTrackingParticle;   }      
-      void                AddMCPart(const MCParticle *p) { fMCParts.Add(p); ClearCharge(); ClearMom(); }
-      const MCParticle   *InitialMCPart()          const;
-      const MCParticle   *FinalMCPart()            const;
-      const MCParticle   *MCPart(UInt_t i)         const { return fMCParts.At(i);      }
-      UInt_t              NMCParts()               const { return fMCParts.Entries();  }
-      
+      void                 AddMCPart(const MCParticle *p) 
+                             { fMCParts.Add(p); ClearCharge(); ClearMom(); }      
+      const MCParticle    *DistinctMother()         const;
+      const MCParticle    *FinalMCPart()            const;
+      Bool_t               Hit(Track::EHitLayer l)  const { return fHits.TestBit(l);    }
+      const BitMask48     &Hits()                   const { return fHits;               }
+      const MCParticle    *InitialMCPart()          const;
+      const MCParticle    *MCPart(UInt_t i)         const { return fMCParts.At(i);      }
+      UInt_t               NMCParts()               const { return fMCParts.Entries();  }
+      UInt_t               NHits()                  const { return fHits.NBitsSet();    }
+      EObjType             ObjType()                const { return kTrackingParticle;   }      
+      void                 SetHit(Track::EHitLayer l)     { fHits.SetBit(l);            }
+      void                 SetHits(const BitMask48 &hits) { fHits = hits;               }
       
     protected:
-      Double_t            GetCharge()              const;
-      void                GetMom()                 const;
-      
+      Double_t             GetCharge()              const;
+      void                 GetMom()                 const;
       BitMask48            fHits;          //storage for sim hit information
       RefArray<MCParticle> fMCParts;       //reference to corresponding MCParticles
 
