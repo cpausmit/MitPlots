@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackingParticle.h,v 1.1 2010/01/07 11:03:41 bendavid Exp $
+// $Id: TrackingParticle.h,v 1.2 2010/01/07 17:08:40 loizides Exp $
 //
 // TrackingParticle
 //
@@ -26,11 +26,11 @@ namespace mithep
 
       TrackingParticle() {}
       
-      
       void                 AddMCPart(const MCParticle *p) 
                              { fMCParts.Add(p); ClearCharge(); ClearMom(); }      
       const MCParticle    *DistinctMother()         const;
       const MCParticle    *FinalMCPart()            const;
+      Bool_t               HasMCPart(const MCParticle *p) const { return fMCParts.HasObject(p); }
       Bool_t               Hit(Track::EHitLayer l)  const { return fHits.TestBit(l);    }
       const BitMask48     &Hits()                   const { return fHits;               }
       const MCParticle    *InitialMCPart()          const;
