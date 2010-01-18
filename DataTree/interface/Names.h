@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.40 2009/12/08 10:49:54 loizides Exp $
+// $Id: Names.h,v 1.41 2010/01/07 11:03:41 bendavid Exp $
 //
 // Names
 //
@@ -44,6 +44,7 @@ namespace mithep
       static const char *gkPFTauBrn;
       static const char *gkPhotonBrn;
       static const char *gkPixelHitBrn;
+      static const char *gkPVBrn;
       static const char *gkPVBeamSpotBrn;
       static const char *gkSC5GenJetBrn;
       static const char *gkSC5JetBrn;

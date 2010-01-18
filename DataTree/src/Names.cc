@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.40 2009/12/08 10:49:54 loizides Exp $
+// $Id: Names.cc,v 1.41 2010/01/07 11:03:42 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -33,6 +33,7 @@ const char *Names::gkPFCandidatesBrn        = "PFCandidates";
 const char *Names::gkPFTauBrn               = "PFTaus";
 const char *Names::gkPhotonBrn              = "Photons";
 const char *Names::gkPixelHitBrn            = "PixelHits";
+const char *Names::gkPVBrn                  = "PrimaryVertexes";
 const char *Names::gkPVBeamSpotBrn          = "PrimaryVertexesBeamSpot";
 const char *Names::gkSC5GenJetBrn           = "SC5GenJets";
 const char *Names::gkSC5JetBrn              = "SisCone5Jets";
