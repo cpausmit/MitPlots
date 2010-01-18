@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.45 2009/12/10 15:02:59 bendavid Exp $
+// $Id: Track.h,v 1.46 2010/01/07 11:03:41 bendavid Exp $
 //
 // Track
 //
@@ -78,6 +78,7 @@
 #define MITANA_DATATREE_TRACK_H
  
 #include "MitAna/DataCont/interface/BitMask.h"
+#include "MitAna/DataTree/interface/TrackQuality.h"
 #include "MitAna/DataTree/interface/BaseVertex.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
@@ -224,6 +225,8 @@ namespace mithep
       Double_t             Theta()          const { return (TMath::PiOver2() - fLambda);       }
       const SuperCluster  *SCluster()       const { return fSuperClusterRef.Obj();             }
       const BitMask48      PixelHits()      const { return (fHits & PixelLayers());            }
+      const TrackQuality  &Quality()        const { return fQuality;                           }
+      TrackQuality        &Quality()              { return fQuality;                           }
       const BitMask48      StereoHits()     const { return (fHits & StereoLayers());           }
       void                 SetAlgo(ETrackAlgorithm e)          { fAlgo = e;                    }
       void                 SetChi2(Double_t chi2)              { fChi2 = chi2;                 }
@@ -251,6 +254,7 @@ namespace mithep
 
       BitMask48            fHits;                //storage for mostly hit information
       ETrackAlgorithm      fAlgo;                //track algorithm
+      TrackQuality         fQuality;             //track quality
       Bool_t               fIsGsf;               //flag to identify gsf tracks
       Double32_t           fQOverP;              //[0,0,14]signed inverse of momentum [1/GeV]
       Double32_t           fQOverPErr;           //[0,0,14]error of q/p
@@ -271,7 +275,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 2) // Track class
+    ClassDef(Track, 3) // Track class
   };
 }
 
