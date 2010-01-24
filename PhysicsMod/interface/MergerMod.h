@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MergerMod.h,v 1.6 2009/07/20 19:05:05 loizides Exp $
+// $Id: MergerMod.h,v 1.1 2009/10/22 18:44:14 loizides Exp $
 //
 // MergerMod
 //
@@ -44,7 +44,7 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template <class T>
-mithep::MergerMod<T>::MergerMod<T>(const char *name, const char *title) : 
+mithep::MergerMod<T>::MergerMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fInList(0)
 {

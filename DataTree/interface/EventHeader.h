@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EventHeader.h,v 1.18 2009/12/02 23:17:37 loizides Exp $
+// $Id: EventHeader.h,v 1.19 2009/12/14 20:18:13 loizides Exp $
 //
 // EventHeader
 //
@@ -25,7 +25,7 @@ namespace mithep
 
       Int_t               BunchCrossing()     const { return fBunchCrossing;     }
       Int_t               CalcOnLumi()        const { return fOrbitNumber>>20;   }
-      Int_t               CalcOffLumi()       const { return fOrbitNumber>>20+1; }
+      Int_t               CalcOffLumi()       const { return (fOrbitNumber>>20)+1; }
       Int_t               ExpType()           const { return fExpType;       }
       UInt_t              EvtNum()            const { return fEvtNum;        }
       Bool_t              IsMC()              const { return fIsMC;          }

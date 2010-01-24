@@ -1,6 +1,7 @@
-// $Id: Analysis.cc,v 1.36 2009/08/11 15:24:39 loizides Exp $
+// $Id: Analysis.cc,v 1.37 2009/10/26 11:04:03 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
+#include <memory>
 #include <Riostream.h>
 #include <TFile.h>
 #include <TList.h>
