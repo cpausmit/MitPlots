@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.16 2009/12/08 10:49:54 loizides Exp $
+// $Id: ObjTypes.h,v 1.17 2010/01/07 11:03:41 bendavid Exp $
 //
 // ObjTypes
 //
@@ -62,6 +62,7 @@ namespace mithep
     kTau,
     kTrack,
     kTrackingParticle,
+    kTrackJet,
     kTriggerMask,
     kTriggerName,
     kTriggerObject,
