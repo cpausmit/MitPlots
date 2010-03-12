@@ -1,4 +1,4 @@
-// $Id: setRootEnv.C,v 1.5 2008/11/18 16:55:49 loizides Exp $
+// $Id: setRootEnv.C,v 1.6 2009/06/11 19:37:00 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
@@ -53,9 +53,11 @@ void setIncludes()
   }
 
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/");
+  gSystem->AddIncludePath("-I$CMSSW_RELEASE_BASE/src/");
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/TreeMod/inc");
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/macros");
   gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_BASE"))+"/src/");
+  gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_RELEASE_BASE"))+"/src/");
   gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_BASE"))+
 			       "/src/MitAna/TreeMod/interface");
   gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_BASE"))+"/src/MitAna/macros");
