@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.5 2009/06/15 15:00:16 loizides Exp $
+// $Id: FullExampleMod.h,v 1.6 2009/09/29 19:16:58 loizides Exp $
 //
 // FullExampleMod
 //
@@ -35,10 +35,21 @@ namespace mithep
       void                     SlaveTerminate();
       void                     Terminate();
 
+      void                     SetMCPartName(TString name)   { fMCPartName = name; }
+      void                     SetTrackName(TString name)    { fTrackName = name; }
+      void                     SetMuonName(TString name)     { fMuonName = name; }
+      void                     SetElectronName(TString name) { fElectronName = name; }
+      void                     SetElectronsFromBranch(Bool_t b) { fElectronsFromBranch = b; }
+      void                     SetMuonsFromBranch(Bool_t b)  { fMuonsFromBranch = b; }
+
+
+
       TString                  fMCPartName;         //name of particle collection
       TString                  fTrackName;          //name of track collection
       TString                  fMuonName;           //name of muon collection
       TString                  fElectronName;       //name of electron collection
+      Bool_t                   fMuonsFromBranch;    //muons are loaded from a branch
+      Bool_t                   fElectronsFromBranch; //electrons are loaded from a branch
       const MCParticleCol     *fParticles;          //!MCParticle branch
       const TrackCol          *fTracks;	            //!Track branch
       const MuonCol	      *fMuons;              //!Muon branch

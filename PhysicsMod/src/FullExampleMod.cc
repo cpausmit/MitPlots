@@ -1,4 +1,4 @@
-// $Id: FullExampleMod.cc,v 1.4 2009/06/15 15:00:16 loizides Exp $
+// $Id: FullExampleMod.cc,v 1.5 2009/07/10 14:17:08 loizides Exp $
 
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include <TH1D.h>
@@ -19,6 +19,8 @@ FullExampleMod::FullExampleMod(const char *name, const char *title) :
   fTrackName(Names::gkTrackBrn),
   fMuonName(Names::gkMuonBrn),
   fElectronName(Names::gkElectronBrn),
+  fMuonsFromBranch(kTRUE),
+  fElectronsFromBranch(kTRUE),
   fParticles(0),
   fTracks(0),
   fMuons(0),
@@ -48,28 +50,28 @@ void FullExampleMod::Process()
   // Process entries of the tree. For this module, we just load the branches and
   // fill the histograms.
 
-  LoadBranch(fMCPartName);
+  LoadEventObject(fMCPartName,fParticles);
   for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
     const MCParticle *p = fParticles->At(i);
     fMCPtHist->Fill(p->Pt());
     fMCEtaHist->Fill(p->Eta());
   }
   
-  LoadBranch(fTrackName);
+  LoadEventObject(fTrackName,fTracks);
   for (UInt_t i=0; i<fTracks->GetEntries(); ++i) {
     const Track *p = fTracks->At(i);
     fTrackPtHist->Fill(p->Pt());
     fTrackEtaHist->Fill(p->Eta());
   }
   
-  LoadBranch(fMuonName);
+  LoadEventObject(fMuonName,fMuons);
   for (UInt_t i=0; i<fMuons->GetEntries(); ++i) {
     const Muon *p = fMuons->At(i);
     fMuonPtHist->Fill(p->Pt());
     fMuonEtaHist->Fill(p->Eta());
   }
   
-  LoadBranch(fElectronName);
+  LoadEventObject(fElectronName,fElectrons);
   for (UInt_t i=0; i<fElectrons->GetEntries(); ++i) {
     const Electron *p = fElectrons->At(i);
     fElectronPtHist->Fill(p->Pt());
@@ -84,10 +86,10 @@ void FullExampleMod::SlaveBegin()
   // we typically initialize histograms and other analysis objects and request
   // branches. For this module, we request a branch of the MitTree.
 
-  ReqBranch(fMCPartName,   fParticles);
-  ReqBranch(fTrackName,    fTracks);
-  ReqBranch(fMuonName,     fMuons);
-  ReqBranch(fElectronName, fElectrons);
+  ReqEventObject(fMCPartName,   fParticles, kTRUE);
+  ReqEventObject(fTrackName,    fTracks, kTRUE);
+  ReqEventObject(fMuonName,     fMuons, fMuonsFromBranch);
+  ReqEventObject(fElectronName, fElectrons, fElectronsFromBranch);
 
   AddTH1(fMCPtHist,"hMCPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fMCEtaHist,"hMCEtaHist",";#eta;#",160,-8.,8.);
