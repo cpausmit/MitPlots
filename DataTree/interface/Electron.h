@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.37 2009/10/30 14:16:00 bendavid Exp $
+// $Id: Electron.h,v 1.38 2009/11/02 22:54:03 bendavid Exp $
 //
 // Electron
 //
@@ -103,7 +103,7 @@ namespace mithep
       Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
       
       
-      void                 SetCharge(Char_t x)                    { fCharge = x;                   }
+      void                 SetCharge(Char_t x)                    { fCharge = x; ClearCharge();    }
       void                 SetScPixCharge(Char_t x)               { fScPixCharge = x;              }
       void                 SetClassification(Int_t x)             { fClassification = x;           }
       void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
