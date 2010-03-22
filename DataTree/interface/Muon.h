@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.30 2009/06/19 07:41:34 loizides Exp $
+// $Id: Muon.h,v 1.31 2009/07/17 13:01:13 loizides Exp $
 //
 // Muon
 //
@@ -129,6 +129,7 @@ namespace mithep {
                                    Double_t iDXMin = 3, Double_t iPXMin = 3,UInt_t iN = 2) const;
       Bool_t         TMOneStation(Double_t iDYMin = 3, Double_t iPYMin = 3,
                                   Double_t iDXMin = 3, Double_t iPXMin = 3,UInt_t iN = 1)  const;
+      void           SetCharge(Char_t x)                   { fCharge = x;                      }
       void	     SetGlobalTrk(const Track *t)          
                        { fGlobalTrkRef = t; ClearMom(); ClearCharge(); }
       void	     SetStandaloneTrk(const Track *t)      
@@ -161,6 +162,7 @@ namespace mithep {
       void           SetIsoR05NJets(UShort_t isoR05NJets)  { fIsoR05NJets = isoR05NJets;       }
       void           SetNChambers(UShort_t iNTraCh)        { fNTraversedChambers = iNTraCh;    }
       void           SetNSegments(Int_t iStation, Int_t NSegments);
+      void           SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
       void           SetPullX(Int_t iStation, Double_t iPullX);
       void           SetPullY(Int_t iStation, Double_t iPullY);
       void           SetStationMask(UInt_t iStMask)        { fStationMask.SetBits(iStMask);    }
@@ -168,8 +170,12 @@ namespace mithep {
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
     protected:
+      Double_t       GetCharge()                     const;
       Double_t       GetMass()                       const { return 105.658369e-3;             }  
+      void           GetMom()                        const;
 
+      Vect3C         fMom;                 //stored three-momentum
+      Char_t         fCharge;              //stored charge - filled with -99 when reading old files
       Ref<Track>     fGlobalTrkRef;        //global combined track reference
       Ref<Track>     fStaTrkRef;           //standalone muon track reference
       Ref<Track>     fTrkTrkRef;           //tracker track reference
@@ -205,7 +211,7 @@ namespace mithep {
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 1) // Muon class
+    ClassDef(Muon, 2) // Muon class
   };
 }
 
@@ -223,6 +229,37 @@ inline const mithep::Track *mithep::Muon::BestTrk() const
 
   Error("BestTrk", "No track reference found, returning NULL pointer.");
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Muon::GetCharge() const
+{
+  // Return stored charge, unless it is set to invalid (-99),
+  // in that case get charge from track as before
+
+  if (fCharge==-99)
+    return mithep::ChargedParticle::GetCharge();
+  else
+    return fCharge;
+
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::GetMom() const
+{
+  // Get momentum of the muon. We use an explicitly stored three vector, with the pdg mass,
+  // since the momentum vector may be computed non-trivially in cmssw (since the tracker
+  // information has better resolution apparently in some cases than the global fit.)
+  // If momentum is unfilled, fall back to old method of getting momentum from best track
+  // (for backwards compatibility.)
+  
+  if (fMom.Rho()>0.0) {
+    fCachedMom.SetCoordinates(fMom.Rho(),fMom.Eta(),fMom.Phi(),GetMass());
+  }
+  else {
+    mithep::ChargedParticle::GetMom();
+  }
+  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -543,6 +580,15 @@ inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t NSegments)
 
   assert(iStation >= 0 && iStation < 8);
   fNSegments[iStation] = NSegments;
+}
+
+//-------------------------------------------------------------------------------------------------
+inline void mithep::Muon::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
+{
+  // Set three-vector
+  
+  fMom.Set(pt,eta,phi);
+  ClearMom();
 }
 #endif
 
