@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.30 2009/07/21 16:34:46 bendavid Exp $
+// $Id: Photon.h,v 1.31 2009/08/07 20:12:50 ceballos Exp $
 //
 // Photon
 //
@@ -49,10 +49,10 @@ namespace mithep
       Double_t             HcalDepth1TowerSumEtDr03() const { return fHcalDepth1TowerSumEtDr03; }
       Double_t             HcalDepth1TowerSumEtDr04() const { return fHcalDepth1TowerSumEtDr04; }
       Double_t             HcalDepth2TowerSumEtDr03() const { return fHcalDepth2TowerSumEtDr03; }
-      Double_t             HcalDepth2TowerSumEtDr04() const { return fHcalDepth2TowerSumEtDr03; }
+      Double_t             HcalDepth2TowerSumEtDr04() const { return fHcalDepth2TowerSumEtDr04; }
       Double_t             HcalRecHitIso()         const { return fHcalRecHitIso;         } // *DEPRECATED*
       Double_t             HcalTowerSumEtDr03()    const { return fHcalTowerSumEtDr03;    }
-      Double_t             HcalTowerSumEtDr04()    const { return fHcalTowerSumEtDr03;    }
+      Double_t             HcalTowerSumEtDr04()    const { return fHcalTowerSumEtDr04;    }
       UShort_t             HollowConeNTrkDr03()    const { return fHollowConeNTrkDr03;    }
       UShort_t             HollowConeNTrkDr04()    const { return fHollowConeNTrk;        }
       Double_t             HollowConeTrkIsoDr03()  const { return fHollowConeTrkIsoDr03;  }
