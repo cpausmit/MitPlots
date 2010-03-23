@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.46 2010/01/07 11:03:41 bendavid Exp $
+// $Id: Track.h,v 1.47 2010/01/18 14:35:10 bendavid Exp $
 //
 // Track
 //
@@ -197,6 +197,9 @@ namespace mithep
       Double_t             EtaEcal()        const { return fEtaEcal;              }
       Bool_t               Hit(EHitLayer l) const { return fHits.TestBit(l);      }
       const BitMask48     &Hits()           const { return fHits;                 }
+      const BitMask48     &MissingHits()    const { return fMissingHits;          }
+      const BitMask48     &ExpectedHitsInner() const { return fExpectedHitsInner; }
+      const BitMask48     &ExpectedHitsOuter() const { return fExpectedHitsOuter; }
       Bool_t               IsGsf()          const { return fIsGsf;                }
       Double_t             Lambda()         const { return fLambda;               }
       Double_t             LambdaErr()      const { return fLambdaErr;            }
@@ -205,6 +208,9 @@ namespace mithep
       FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),m); }
       UShort_t             Ndof()           const { return fNdof;                              }
       UInt_t               NHits()          const { return fHits.NBitsSet();                   }
+      UInt_t               NMissingHits()   const { return fMissingHits.NBitsSet();            }
+      UInt_t               NExpectedHitsInner() const { return fExpectedHitsInner.NBitsSet();  }
+      UInt_t               NExpectedHitsOuter() const { return fExpectedHitsOuter.NBitsSet();  }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
       UInt_t               NPixelHits()     const { return PixelHits().NBitsSet();             }
       EObjType             ObjType()        const { return kTrack;                             }    
@@ -237,6 +243,9 @@ namespace mithep
                                      Double_t dXy, Double_t dSz);
       void                 SetHit(EHitLayer l)                 { fHits.SetBit(l);              }
       void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
+      void                 SetMissingHits(const BitMask48 &h)  { fMissingHits = h;             }
+      void                 SetExpectedHitsInner(const BitMask48 &h) { fExpectedHitsInner = h;  }
+      void                 SetExpectedHitsOuter(const BitMask48 &h) { fExpectedHitsInner = h;  }
       void                 SetIsGsf(Bool_t b)                  { fIsGsf = b;                   }
       void                 SetNdof(UShort_t dof)               { fNdof = dof;                  }
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
@@ -253,6 +262,9 @@ namespace mithep
       void                 GetMom()      const;
 
       BitMask48            fHits;                //storage for mostly hit information
+      BitMask48            fMissingHits;         //missing hits in crossed good modules
+      BitMask48            fExpectedHitsInner;   //expected hits before first hit
+      BitMask48            fExpectedHitsOuter;   //expected hits after last hit
       ETrackAlgorithm      fAlgo;                //track algorithm
       TrackQuality         fQuality;             //track quality
       Bool_t               fIsGsf;               //flag to identify gsf tracks
@@ -275,7 +287,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 3) // Track class
+    ClassDef(Track, 4) // Track class
   };
 }
 
