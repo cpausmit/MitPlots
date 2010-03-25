@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.38 2009/11/29 13:51:53 loizides Exp $
+# $Id: setup.sh,v 1.39 2009/12/11 17:44:29 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -34,8 +34,7 @@ if test $version -lt 2002014; then
     exit 1;
 fi
 
-case $version in
-    (3003006) 
+if test $version -lt 3006000; then
         #Remove annoying warning messages for the jet to vertex associator.
         if ! test -d "JetMETCorrections/JetVertexAssociation"; then
             addpkg JetMETCorrections/JetVertexAssociation;
@@ -44,14 +43,14 @@ case $version in
             sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
             mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
         fi
-        if ! test -d "RecoLocalTracker/SiPixelRecHits"; then
-            addpkg RecoLocalTracker/SiPixelRecHits;
-            patch -p0 < MitAna/scripts/SiPixelRecHits.patch 
-        fi
+fi
+
+case $version in
+    (3003006) 
         ;;
     *) 
-        echo "Nothing known about this version, exiting";
-        exit 1;
+        #echo "Nothing known about this version, exiting";
+        #exit 1;
     ;;
 esac
 
