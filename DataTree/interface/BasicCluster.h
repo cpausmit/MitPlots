@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.13 2009/11/24 15:57:45 loizides Exp $
+// $Id: BasicCluster.h,v 1.14 2010/03/24 15:35:20 sixie Exp $
 //
 // BasicCluster
 //
@@ -139,7 +139,7 @@ namespace mithep
       Double32_t fZernike42;
 
 
-      ClassDef(BasicCluster, 1)  // Basic cluster class
+      ClassDef(BasicCluster, 2)  // Basic cluster class
   };
 }
 
