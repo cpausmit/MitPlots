@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.23 2009/09/09 03:38:26 bendavid Exp $
+// $Id: Jet.h,v 1.24 2010/03/26 14:17:54 sixie Exp $
 //
 // Jet
 //
@@ -167,7 +167,7 @@ namespace mithep
       Double32_t    fCustomCorrectionScale;                  //[0,0,14]custom correction scale
       BitMask8      fCorrections;                            //mask of corrections to be applied
 
-    ClassDef(Jet, 2) // Jet class
+    ClassDef(Jet, 3) // Jet class
   };
 }
 
