@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.32 2010/03/22 18:40:16 bendavid Exp $
+// $Id: Muon.h,v 1.33 2010/03/22 18:54:19 bendavid Exp $
 //
 // Muon
 //
@@ -61,6 +61,7 @@
 
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
+#include "MitAna/DataTree/interface/MuonQuality.h"
 
 namespace mithep {
   class Muon : public ChargedParticle {
@@ -119,11 +120,13 @@ namespace mithep {
       UInt_t         NSegments()                     const { return fStationMask.NBitsSet();   }
       Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
-      Int_t          LastStation(Int_t iMax=8)                                 const;
+      Int_t          LastStation(Int_t iMax=8)       const;
       Int_t          ObjId()                         const { return ObjType()*1000+Is();       }
       EObjType       ObjType()                       const { return kMuon;                     }
       void           Print(Option_t *opt="")         const;
-      Bool_t         PromptTight(EClassType type)                              const;
+      Bool_t         PromptTight(EClassType type)    const;
+      const MuonQuality  &Quality()                  const { return fQuality;                  }
+      MuonQuality        &Quality()                        { return fQuality;                  }
       Bool_t         StationBit(Int_t bit)           const { return fStationMask.TestBit(bit); }
       Bool_t         TMLastStation(Double_t iDYMin = 3, Double_t iPYMin = 3,
                                    Double_t iDXMin = 3, Double_t iPXMin = 3,UInt_t iN = 2) const;
@@ -198,6 +201,7 @@ namespace mithep {
       Double32_t     fHadS9Energy;         //[0,0,14]energy deposit in 3x3 hcal
       Double32_t     fHoS9Energy;          //[0,0,14]energy deposit in 3x3 outer hcal
       UShort_t       fNTraversedChambers;  //number of traversed chambers
+      MuonQuality    fQuality;             //muon quality
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
       Double32_t     fDX[8];               //[0,0,14]uncertainty in x in given muon chamber
       Double32_t     fDY[8];               //[0,0,14]uncertainty in y in given muon chamber
@@ -211,7 +215,7 @@ namespace mithep {
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 2) // Muon class
+    ClassDef(Muon, 3) // Muon class
   };
 }
 
