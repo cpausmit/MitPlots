@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.15 2009/11/24 15:57:45 loizides Exp $
+// $Id: SuperCluster.h,v 1.16 2010/03/24 15:35:31 sixie Exp $
 //
 // SuperCluster
 //
@@ -72,7 +72,7 @@ namespace mithep
       RefArray<BasicCluster>  fClusters;            //assigned basic clusters
       Ref<BasicCluster>       fSeedRef;             //seed cluster
 
-    ClassDef(SuperCluster, 1) // Super cluster class
+    ClassDef(SuperCluster, 2) // Super cluster class
   };
 }
 
