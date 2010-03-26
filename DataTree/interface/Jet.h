@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.22 2009/07/07 08:30:28 bendavid Exp $
+// $Id: Jet.h,v 1.23 2009/09/09 03:38:26 bendavid Exp $
 //
 // Jet
 //
@@ -98,8 +98,12 @@ namespace mithep
       Double_t      TrackCountingHighPurBJetTagsDisc()             const 
                       { return fTrackCountingHighPurBJetTagsDisc;  }
       FourVectorM   RawMom()                      const { return fRawMom.V();                }
+      Double_t      SigmaEta()                    const { return fSigmaEta;                  }
+      Double_t      SigmaPhi()                    const { return fSigmaPhi;                  }
       void          SetAlpha(Double_t val)              { fAlpha = val;                      }
       void          SetBeta(Double_t val)               { fBeta  = val;                      } 
+      void          SetSigmaEta(Double_t val)           { fSigmaEta = val;                   }
+      void          SetSigmaPhi(Double_t val)           { fSigmaPhi = val;                   }
       void          SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) 
                       { fCombinedSecondaryVertexBJetTagsDisc = d;    }
       void          SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) 
@@ -141,6 +145,8 @@ namespace mithep
       Double32_t    fAlpha;         	                     //[0,0,14]jet vertex alpha variable
       Double32_t    fBeta;         	                     //[0,0,14]jet vertex beta variable
       Int_t         fMatchedMCFlavor;                        //[0,0,14]pdg of matched quark flavor
+      Double32_t    fSigmaEta;                               //[0,0,14]sqrt(etaetaMoment)
+      Double32_t    fSigmaPhi;                               //[0,0,14]sqrt(phiphiMoment)
       Double32_t    fJetProbabilityBJetTagsDisc;             //[0,0,14]discriminants b-tagging algos
       Double32_t    fJetBProbabilityBJetTagsDisc;            //[0,0,14]discriminants b-tagging algos
       Double32_t    fSimpleSecondaryVertexBJetTagsDisc;      //[0,0,14]discriminants b-tagging algos
