@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.41 2010/01/07 11:03:42 bendavid Exp $
+// $Id: Names.cc,v 1.42 2010/01/18 14:34:09 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -9,7 +9,7 @@ using namespace mithep;
 const char *Names::gkEvtTreeName            = "Events";
 const char *Names::gkBarrelBasicClusterBrn  = "BarrelBasicClusters";
 const char *Names::gkBarrelSuperClusterBrn  = "BarrelSuperClusters";
-const char *Names::gkCaloJetBrn             = "ItrCone5Jets";
+const char *Names::gkCaloJetBrn             = "AKt5Jets";
 const char *Names::gkCaloMetBrn             = "CorMuonMet";
 const char *Names::gkCaloTauBrn             = "CaloTaus";
 const char *Names::gkCaloTowerBrn           = "CaloTowers";
@@ -22,7 +22,7 @@ const char *Names::gkGenMetBrn              = "GenMet";
 const char *Names::gkGsfTrackBrn            = "GsfTracks";
 const char *Names::gkHltBitBrn              = "HLTBits";
 const char *Names::gkHltObjBrn              = "HLTObjects";
-const char *Names::gkIC5GenJetBrn           = "IC5GenJets";
+const char *Names::gkGenJetBrn              = "AKT5GenJets";
 const char *Names::gkMCEvtInfoBrn           = "MCEventInfo";
 const char *Names::gkMCPartBrn              = "MCParticles";
 const char *Names::gkMuonBrn                = "Muons";
@@ -30,6 +30,7 @@ const char *Names::gkMvfConversionBrn       = "MvfConversions";
 const char *Names::gkL1TechBitsBrn          = "L1TechBits";
 const char *Names::gkL1AlgoBitsBrn          = "L1AlgoBits";
 const char *Names::gkPFCandidatesBrn        = "PFCandidates";
+const char *Names::gkPFJetBrn               = "AKt5PFJets";
 const char *Names::gkPFTauBrn               = "PFTaus";
 const char *Names::gkPhotonBrn              = "Photons";
 const char *Names::gkPixelHitBrn            = "PixelHits";
