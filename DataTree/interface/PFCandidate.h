@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.5 2010/03/25 18:51:15 bendavid Exp $
+// $Id: PFCandidate.h,v 1.6 2010/03/29 09:33:54 bendavid Exp $
 //
 // PFCandidate
 //
@@ -48,8 +48,8 @@ namespace mithep
         eHBarrelEndcap,
         eHEndcapVFCal,
         eHVFCalEdge,
-        eToNuclInt,
-        eFromNuclInt,
+        eToDispVtx,
+        eFromDispVtx,
         eFromV0,
         eFromGammaConv,
         eToConversion
