@@ -1,4 +1,4 @@
-// $Id: runHLTExample.C,v 1.5 2009/09/29 19:18:22 loizides Exp $
+// $Id: runHLTExample.C,v 1.6 2010/01/04 16:01:24 loizides Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -9,7 +9,7 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-void runHLTExample(const char *trigger="HLT_Jet80", 
+void runHLTExample(const char *trigger="HLT_MinBiasBSC_OR", 
                    const char *files = "mit-full_000.root",
                    Int_t nEvs = 0)
 {
@@ -29,9 +29,9 @@ void runHLTExample(const char *trigger="HLT_Jet80",
   // set up analysis
   Analysis *ana = new Analysis;
   if (0) {
-    hltmod->SetBitsName("HLTBits_E29");
-    ana->SetHLTTreeName("HLT_E29");
-    ana->SetHLTObjsName("HLTObjects_E29");
+    hltmod->SetBitsName("HLTBits");
+    ana->SetHLTTreeName("HLT");
+    ana->SetHLTObjsName("HLTObjects");
   }
   if (nEvs)
     ana->SetProcessNEvents(nEvs);
