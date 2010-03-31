@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.27 2009/07/13 11:00:28 loizides Exp $
+// $Id: DecayParticle.h,v 1.28 2009/12/15 23:27:18 bendavid Exp $
 //
 // DecayParticle
 //
@@ -41,7 +41,11 @@ namespace mithep
       const Particle           *Daughter(UInt_t i)    const { return DaughterDat(i)->Original();   }
       const DaughterData       *DaughterDat(UInt_t i) const { return fDaughterData.At(i);          }
       Double_t                  Dxy()                 const { return fDxy;                         }
+      Double_t                  DxyCorrected(const ThreeVector &v) const;
+      Double_t                  DxyCorrected(const BaseVertex *v)  const;
       Double_t                  DxyError()            const { return fDxyError;                    }
+      Double_t                  DzCorrected(const ThreeVector &v) const;
+      Double_t                  DzCorrected(const BaseVertex *v)  const;
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                    HasPriVertex()        const { return fPriVtx.IsValid();            }
@@ -186,4 +190,40 @@ inline const mithep::ThreeVector mithep::DecayParticle::RelativePosition() const
   mithep::ThreeVector dlxy  =  momPerp*fLxy/momPerp.R();
   return (dxy+dlxy+dz);
 }
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::DxyCorrected(const mithep::ThreeVector &v) const
+{
+  // Compute Dxy with respect to a given position
+  mithep::ThreeVector momPerp(Px(),Py(),0);
+  return momPerp.Cross(Position() - v).Z()/Pt();
+  
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::DxyCorrected(const mithep::BaseVertex *v) const
+{
+  // Compute Dxy with respect to a given beamspot/vertex
+  return DxyCorrected(v->Position());
+  
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::DzCorrected(const mithep::ThreeVector &v) const
+{
+  // Compute Dxy with respect to a given position
+  mithep::ThreeVector momPerp(Px(),Py(),0);
+  mithep::ThreeVector posPerp(Position().X()-v.X(),Position().Y()-v.Y(),0);
+  return Position().Z() - v.Z() - posPerp.Dot(momPerp)/Pt() * (Pz()/Pt());
+  
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::DzCorrected(const mithep::BaseVertex *v) const
+{
+  // Compute Dxy with respect to a given beamspot/vertex
+  return DzCorrected(v->Position());
+  
+}
+
 #endif
