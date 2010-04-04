@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.47 2010/01/18 14:35:10 bendavid Exp $
+// $Id: Track.h,v 1.48 2010/03/23 16:52:46 bendavid Exp $
 //
 // Track
 //
@@ -186,6 +186,7 @@ namespace mithep
       void                 ClearHit(EHitLayer l)  { fHits.ClearBit(l);            } 
       Double_t	           D0()             const { return -fDxy;                 }
       Double_t             D0Corrected(const BaseVertex &iVertex) const;
+      Double_t             DzCorrected(const BaseVertex &iVertex) const;
       Double_t	           D0Err()          const { return fDxyErr;               }
       Double_t             Dsz()            const { return fDsz;                  }
       Double_t             DszErr()         const { return fDszErr;               }
@@ -251,6 +252,8 @@ namespace mithep
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
       void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
       void	           SetSCluster(const SuperCluster* sc) { fSuperClusterRef = sc;        }
+      Double_t             X0()             const { return  D0()*TMath::Sin(Phi());            }
+      Double_t             Y0()             const { return -D0()*TMath::Cos(Phi());            }
       Double_t             Z0()             const { return fDsz/TMath::Cos(fLambda);           }
 
        
@@ -325,6 +328,16 @@ inline Double_t mithep::Track::D0Corrected(const BaseVertex &iVertex) const
   Double_t d0Corr = (Px()*lDY - Py()*lDX)/Pt();
   
   return d0Corr;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Track::DzCorrected(const mithep::BaseVertex &iVertex) const
+{
+  // Compute Dxy with respect to a given position
+  mithep::ThreeVector momPerp(Px(),Py(),0);
+  mithep::ThreeVector posPerp(X0()-iVertex.X(),Y0()-iVertex.Y(),0);
+  return Z0() - iVertex.Z() - posPerp.Dot(momPerp)/Pt() * (Pz()/Pt());
+  
 }
 
 //--------------------------------------------------------------------------------------------------
