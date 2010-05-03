@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.39 2009/12/11 17:44:29 bendavid Exp $
+# $Id: setup.sh,v 1.40 2010/03/25 17:13:17 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -34,7 +34,7 @@ if test $version -lt 2002014; then
     exit 1;
 fi
 
-if test $version -lt 3006000; then
+if test $version -lt 3007000; then
         #Remove annoying warning messages for the jet to vertex associator.
         if ! test -d "JetMETCorrections/JetVertexAssociation"; then
             addpkg JetMETCorrections/JetVertexAssociation;
@@ -43,6 +43,9 @@ if test $version -lt 3006000; then
             sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
             mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
         fi
+
+        addpkg RecoEgamma/EgammaTools V00-05-03
+        checkdeps -a
 fi
 
 case $version in

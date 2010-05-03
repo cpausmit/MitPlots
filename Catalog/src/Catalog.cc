@@ -1,4 +1,4 @@
-// $Id: Catalog.cc,v 1.4 2008/11/12 01:55:40 paus Exp $
+// $Id: Catalog.cc,v 1.5 2009/01/20 09:13:57 loizides Exp $
 
 #include "MitAna/Catalog/interface/Catalog.h"
 #include <TSystem.h>
@@ -41,11 +41,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
 
   // Read the locations and parameters of the different filesets
   f = gSystem->OpenPipe(cmdFilesets.Data(),"r");
-  while (fscanf(f,"%s %s %d %d %d %d %d %d",fset,location,
+  while (fscanf(f,"%s %s %u %u %u %u %u %u",fset,location,
 		&nLumiSecs,&nEvents,&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
 	 != EOF) {
     MDB(kGeneral,1)
-      printf(" --> %s %s %d %d %d %d %d %d\n",fset,location,
+      printf(" --> %s %s %u %u %u %u %u %u\n",fset,location,
 	     nLumiSecs,nEvents,nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     FilesetMetaData *fs = new FilesetMetaData(fset,location);
     ds->AddFileset(fs);
@@ -55,11 +55,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
 
   // Read the parameters for each file
   f = gSystem->OpenPipe(cmdFiles.Data(),"r");
-  while (fscanf(f,"%s %s %d %d %d %d %d %d",fset,file,
+  while (fscanf(f,"%s %s %u %u %u %u %u %u",fset,file,
 		&nLumiSecs,&nEvents,&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
 	 != EOF) {
     MDB(kGeneral,1)
-      printf(" --> %s %s %d %d %d %d %d %d\n",fset,file,
+      printf(" --> %s %s %u %u %u %u %u %u\n",fset,file,
 	     nLumiSecs,nEvents,nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     BaseMetaData  b(nLumiSecs,nEvents,nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     FileMetaData *f = new FileMetaData(file,&b);
