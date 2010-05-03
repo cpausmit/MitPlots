@@ -1,10 +1,11 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.16 2009/06/26 16:47:18 loizides Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.17 2010/01/18 14:35:43 bendavid Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #include "MitAna/PhysicsMod/interface/RunSelectionMod.h"
+#include "MitAna/PhysicsMod/interface/RunLumiSelectionMod.h"
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/PhysicsMod/interface/TrackToPartMod.h"
 #endif
@@ -22,4 +23,5 @@
 #pragma link C++ class mithep::SimpleExampleMod+;
 #pragma link C++ class mithep::TrackToPartMod+;
 #pragma link C++ class mithep::RunSelectionMod+;
+#pragma link C++ class mithep::RunLumiSelectionMod+;
 #endif
