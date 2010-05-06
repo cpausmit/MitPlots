@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunLumiSelectionMod.h,v 1.1 2010/01/18 14:35:43 bendavid Exp $
+// $Id: RunLumiSelectionMod.h,v 1.1 2010/05/03 11:36:01 bendavid Exp $
 //
 // RunLumiSelectionMod
 //
@@ -21,19 +21,20 @@
 namespace mithep 
 {
   class RunLumiSelectionMod : public BaseMod {
+    typedef std::map<UInt_t,std::vector<std::pair<UInt_t,UInt_t> > > MapType;
+    typedef std::pair<UInt_t,UInt_t> RunLumiPairType;
+
+
     public:
       RunLumiSelectionMod(const char *name="RunLumiSelectionMod", const char *title="Run selection module");
       ~RunLumiSelectionMod();
 
-      void                        AddRun(UInt_t i)                { fAcceptedRuns.push_back(UIntPair(i,i)); }
-      void                        AddRuns(UInt_t l, UInt_t u)     { fAcceptedRuns.push_back(UIntPair(l,u)); }
-      void                        ExcludeRun(UInt_t i)            { fExcludedRuns.push_back(UIntPair(i,i)); }
-      void                        ExcludeRuns(UInt_t l, UInt_t u) { fExcludedRuns.push_back(UIntPair(l,u)); }
+      void                        AddJSONFile(const std::string &filepath);
       Int_t                       GetNEvents()      const { return fNEvents;       }
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
       Int_t                       GetNFailed()      const { return fNFailed;       }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort         = b; }
-      void                        SetDefaultAccept(Bool_t b) { fDefaultAccept = b; }
+      void                        SetAcceptMC(Bool_t b)   { fAcceptMC = b; }
 
     protected:
       void                        BeginRun();
@@ -44,13 +45,13 @@ namespace mithep
       void                        SlaveTerminate();
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
-      Bool_t                      fDefaultAccept; //=true then accept runs not explicitly included or excluded
+      Bool_t                      fAcceptMC;      //=true then accept Monte Carlo unconditionally
       Int_t                       fNEvents;       //!number of processed events
       Int_t                       fNAcceped;      //!number of accepted events
       Int_t                       fNFailed;       //!number of failed events
-      Bool_t                      fAcceptCurrentRun; //!cached decision for current run
-      UIntBounds                  fAcceptedRuns; //list of run ranges to accept
-      UIntBounds                  fExcludedRuns; //list of run ranges to exclude
+      RunLumiPairType             fCurrentRunLumi; //!cached current run-lumi pair
+      Bool_t                      fAcceptCurrentRunLumi; //!cached decision for current run-lumi pair
+      MapType                     fAcceptedRunsLumis; //mapped run-lumi ranges to accept
 
     ClassDef(RunLumiSelectionMod, 1) // L1 TAM module
   };
