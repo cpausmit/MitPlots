@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.38 2009/11/02 22:54:03 bendavid Exp $
+// $Id: Electron.h,v 1.39 2010/03/22 18:54:19 bendavid Exp $
 //
 // Electron
 //
@@ -33,12 +33,30 @@ namespace mithep
         fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
         fEcalRecHitSumEtDr03(0), fTrackIsolation(0), fPassLooseID(0),
         fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0), fFracSharedHits(0),
-        fMva(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
+        fMva(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
+        fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0),
+        fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
+        fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0) {}
 
       const Track         *BestTrk()                const;
+      Double_t             D0PV()                   const { return fD0PV;                     }
+      Double_t             D0PVErr()                const { return fD0PVErr;                  }
+      Double_t             D0PVSignificance()       const { return fD0PV/fD0PVErr;            }
+      Double_t             Ip3dPV()                 const { return fIp3dPV;                   }
+      Double_t             Ip3dPVErr()              const { return fIp3dPVErr;                }
+      Double_t             Ip3dPVSignificance()     const { return fIp3dPV/fIp3dPVErr;        }
+      Double_t             D0PVBS()                 const { return fD0PVBS;                   }
+      Double_t             D0PVBSErr()              const { return fD0PVBSErr;                }
+      Double_t             D0PVBSSignificance()     const { return fD0PVBS/fD0PVBSErr;        }
+      Double_t             Ip3dPVBS()               const { return fIp3dPVBS;                 }
+      Double_t             Ip3dPVBSErr()            const { return fIp3dPVBSErr;              }
+      Double_t             Ip3dPVBSSignificance()   const { return fIp3dPVBS/fIp3dPVBSErr;    }
+      Double_t             ConvPartnerDCotTheta()   const { return fConvPartnerDCotTheta;     }
+      Double_t             ConvPartnerDist()        const { return fConvPartnerDist;          }
+      Double_t             ConvPartnerRadius()      const { return fConvPartnerRadius;        }
       Double_t             CaloIsolation()          const { return fCaloIsolation;       } // *DEPRECATED*
       Int_t                Classification()         const { return fClassification;      }
       Double_t             CovEtaEta()              const { return fCovEtaEta;           }
@@ -105,6 +123,17 @@ namespace mithep
       
       void                 SetCharge(Char_t x)                    { fCharge = x; ClearCharge();    }
       void                 SetScPixCharge(Char_t x)               { fScPixCharge = x;              }
+      void                 SetD0PV(Double_t x)                    { fD0PV = x;                     }
+      void                 SetD0PVErr(Double_t x)                 { fD0PVErr = x;                  }
+      void                 SetIp3dPV(Double_t x)                  { fIp3dPV = x;                   }
+      void                 SetIp3dPVErr(Double_t x)               { fIp3dPVErr = x;                }
+      void                 SetD0PVBS(Double_t x)                  { fD0PVBS = x;                   }
+      void                 SetD0PVBSErr(Double_t x)               { fD0PVBSErr = x;                }
+      void                 SetIp3dPVBS(Double_t x)                { fIp3dPVBS = x;                 }
+      void                 SetIp3dPVBSErr(Double_t x)             { fIp3dPVBSErr = x;              }
+      void                 SetConvPartnerDCotTheta(Double_t x)    { fConvPartnerDCotTheta = x;     }
+      void                 SetConvPartnerDist(Double_t x)         { fConvPartnerDist = x;          }
+      void                 SetConvPartnerRadius(Double_t x)       { fConvPartnerRadius = x;        }
       void                 SetClassification(Int_t x)             { fClassification = x;           }
       void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
       void                 SetCoviEtaiEta(Double_t CoviEtaiEta)   { fCoviEtaiEta = CoviEtaiEta;    }
@@ -210,6 +239,17 @@ namespace mithep
       Double32_t           fPOut;                      //[0,0,14]momentum at ecal surface
       Double32_t           fFracSharedHits;            //[0,0,14]fraction of shared hits btw gsf and std. track
       Double32_t           fMva;                       //[0,0,14] pflow mva output
+      Double32_t           fD0PV;                      //[0,0,14]transverse impact parameter to signal PV
+      Double32_t           fD0PVErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV
+      Double32_t           fIp3dPV;                    //[0,0,14]3d impact parameter to signal PV
+      Double32_t           fIp3dPVErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV
+      Double32_t           fD0PVBS;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint
+      Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint
+      Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
+      Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
+      Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
       Bool_t               fIsEnergyScaleCorrected;    //class dependent escale correction
       Bool_t               fIsMomentumCorrected;       //class dependent E-p combination 
       Int_t                fClassification;            //classification (see GsfElectron.h)
@@ -223,7 +263,7 @@ namespace mithep
       Bool_t               fIsEcalDriven;              //is std. egamma electron
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
 
-    ClassDef(Electron, 3) // Electron class
+    ClassDef(Electron, 4) // Electron class
   };
 }
 

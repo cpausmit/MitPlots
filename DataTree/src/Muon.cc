@@ -1,4 +1,4 @@
-// $Id: Muon.cc,v 1.4 2009/05/18 06:28:24 loizides Exp $
+// $Id: Muon.cc,v 1.5 2010/03/22 18:40:17 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Muon.h"
 
@@ -12,7 +12,8 @@ Muon::Muon() :
   fIsoR03NTracks(0), fIsoR03NJets(0), fIsoR05SumPt(0), fIsoR05EmEt(0),
   fIsoR05HadEt(0), fIsoR05HoEt(0), fIsoR05NTracks(0), fIsoR05NJets(0),
   fEmEnergy(0), fHadEnergy(0), fHoEnergy(0), fEmS9Energy(0), 
-  fHadS9Energy(0), fHoS9Energy(0), fNTraversedChambers(0), fIsGlobalMuon(kFALSE),
+  fHadS9Energy(0), fHoS9Energy(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
+  fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0), fNTraversedChambers(0), fIsGlobalMuon(kFALSE),
   fIsTrackerMuon(kFALSE), fIsStandaloneMuon(kFALSE), fIsCaloMuon(kFALSE)
 { 
   // Constructor.
