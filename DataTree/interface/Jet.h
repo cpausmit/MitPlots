@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.24 2010/03/26 14:17:54 sixie Exp $
+// $Id: Jet.h,v 1.25 2010/03/26 14:31:31 sixie Exp $
 //
 // Jet
 //
@@ -38,8 +38,10 @@ namespace mithep
         fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fL1OffsetCorrectionScale(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
-        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
+        fL7PartonCorrectionScale(0),
         fCustomCorrectionScale(0) {}
       Jet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
         fRawMom(FourVector(px,py,pz,e)),
@@ -50,8 +52,10 @@ namespace mithep
         fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fL1OffsetCorrectionScale(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
-        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL7PartonCorrectionScale(0),
+        fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
+        fL7PartonCorrectionScale(0),
         fCustomCorrectionScale(0) {}
 
       Double_t      Alpha()                       const { return fAlpha;                        }
@@ -66,6 +70,7 @@ namespace mithep
       void          DisableCorrections()                { fCorrections.Clear(); ClearMom();     }
       void          EnableCorrection(ECorr c)           { fCorrections.SetBit(c); ClearMom();   }
       Bool_t        CorrectionActive(ECorr c)     const { return fCorrections.TestBit(c);       }
+      const BitMask8 &Corrections()               const { return fCorrections;                  }
       Double_t      JetProbabilityBJetTagsDisc()                   const 
                       { return fJetProbabilityBJetTagsDisc;     }
       Double_t      JetBProbabilityBJetTagsDisc()                  const 
@@ -75,10 +80,12 @@ namespace mithep
       virtual 
       UInt_t        NConstituents()               const { return 0;                          }
       UInt_t        N()                           const { return NConstituents();            }
+      Double_t      L1OffsetCorrectionScale()     const { return fL1OffsetCorrectionScale;   }
       Double_t      L2RelativeCorrectionScale()   const { return fL2RelativeCorrectionScale; }
       Double_t      L3AbsoluteCorrectionScale()   const { return fL3AbsoluteCorrectionScale; }
       Double_t      L4EMFCorrectionScale()        const { return fL4EMFCorrectionScale;      }
       Double_t      L5FlavorCorrectionScale()     const { return fL5FlavorCorrectionScale;   }
+      Double_t      L6LSBCorrectionScale()        const { return fL6LSBCorrectionScale;      }
       Double_t      L7PartonCorrectionScale()     const { return fL7PartonCorrectionScale;   }
       EObjType      ObjType()                     const { return kJet;                       }      
       Double_t      SimpleSecondaryVertexBJetTagsDisc()            const 
@@ -104,6 +111,7 @@ namespace mithep
       void          SetBeta(Double_t val)               { fBeta  = val;                      } 
       void          SetSigmaEta(Double_t val)           { fSigmaEta = val;                   }
       void          SetSigmaPhi(Double_t val)           { fSigmaPhi = val;                   }
+      void          SetCorrections(const BitMask8 &cor) { fCorrections = cor;                }
       void          SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) 
                       { fCombinedSecondaryVertexBJetTagsDisc = d;    }
       void          SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) 
@@ -114,6 +122,8 @@ namespace mithep
                       { fJetBProbabilityBJetTagsDisc = d;    }
       void          SetRawMom(const FourVectorM &mom) { fRawMom = mom; ClearMom();           }
       void          SetMatchedMCFlavor(Int_t flavor)  { fMatchedMCFlavor = flavor;           }
+      void          SetL1OffsetCorrectionScale(Double_t s )   
+                      { fL1OffsetCorrectionScale = s; ClearMom(); }
       void          SetL2RelativeCorrectionScale(Double_t s )   
                       { fL2RelativeCorrectionScale = s; ClearMom(); }
       void          SetL3AbsoluteCorrectionScale(Double_t s )   
@@ -122,6 +132,8 @@ namespace mithep
                       { fL4EMFCorrectionScale = s; ClearMom();      }
       void          SetL5FlavorCorrectionScale(Double_t s )     
                       { fL5FlavorCorrectionScale = s; ClearMom();   }
+      void          SetL6LSBCorrectionScale(Double_t s )   
+                      { fL6LSBCorrectionScale = s; ClearMom(); }
       void          SetL7PartonCorrectionScale(Double_t s )     
                       { fL7PartonCorrectionScale = s; ClearMom();   }
       void          SetCustomCorrectionScale(Double_t s)        
@@ -159,15 +171,17 @@ namespace mithep
       Double32_t    fSoftMuonByPtBJetTagsDisc;               //[0,0,14]discriminants b-tagging algos
       Double32_t    fSoftElectronByIP3dBJetTagsDisc;         //[0,0,14]discriminants b-tagging algos
       Double32_t    fSoftElectronByPtBJetTagsDisc;           //[0,0,14]discriminants b-tagging algos
+      Double32_t    fL1OffsetCorrectionScale;                //[0,0,14]L1 correction scale
       Double32_t    fL2RelativeCorrectionScale;              //[0,0,14]L2 correction scale
       Double32_t    fL3AbsoluteCorrectionScale;              //[0,0,14]L3 correction scale
       Double32_t    fL4EMFCorrectionScale;                   //[0,0,14]L4 correction scale
       Double32_t    fL5FlavorCorrectionScale;                //[0,0,14]L5 correction scale
+      Double32_t    fL6LSBCorrectionScale;                   //[0,0,14]L7 correction scale
       Double32_t    fL7PartonCorrectionScale;                //[0,0,14]L7 correction scale
       Double32_t    fCustomCorrectionScale;                  //[0,0,14]custom correction scale
       BitMask8      fCorrections;                            //mask of corrections to be applied
 
-    ClassDef(Jet, 3) // Jet class
+    ClassDef(Jet, 4) // Jet class
   };
 }
 
