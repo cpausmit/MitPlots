@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.48 2010/03/23 16:52:46 bendavid Exp $
+// $Id: Track.h,v 1.49 2010/04/04 21:34:27 bendavid Exp $
 //
 // Track
 //
@@ -169,12 +169,12 @@ namespace mithep
       };
 
 
-      Track() : fAlgo(undefAlgorithm), fIsGsf(0), fQOverP(0), fQOverPErr(0),
+      Track() : fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(0), fQOverPErr(0),
                 fLambda(0), fLambdaErr(0), fPhi0(0), fPhi0Err(0),
                 fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       Track(Double_t qOverP, Double_t lambda, Double_t phi0, Double_t dxy, Double_t dsz) :
-	        fAlgo(undefAlgorithm), fIsGsf(0), fQOverP(qOverP), fQOverPErr(0),
+	        fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(qOverP), fQOverPErr(0),
                 fLambda(lambda), fLambdaErr(0), fPhi0(phi0), fPhi0Err(0),
                 fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
@@ -223,6 +223,7 @@ namespace mithep
       Double_t             PhiEcal()        const { return fPhiEcal;                           }
       Double_t             Prob()           const { return TMath::Prob(fChi2,fNdof);           }
       Double_t	           Pt()             const { return Mom().Rho();                        }
+      Double_t             PtErr()          const { return fPtErr;                             }
       Double_t             Px()             const { return Mom().X();                          } 
       Double_t             Py()             const { return Mom().Y();                          }
       Double_t             Pz()             const { return Mom().Z();                          }
@@ -242,6 +243,7 @@ namespace mithep
       void                 SetEtaEcal(Double_t eta)            { fEtaEcal = eta;               }
       void                 SetHelix (Double_t qOverP, Double_t lambda, Double_t phi0, 
                                      Double_t dXy, Double_t dSz);
+      void                 SetPtErr(Double_t ptErr)            { fPtErr = ptErr;               }
       void                 SetHit(EHitLayer l)                 { fHits.SetBit(l);              }
       void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
       void                 SetMissingHits(const BitMask48 &h)  { fMissingHits = h;             }
@@ -271,6 +273,7 @@ namespace mithep
       ETrackAlgorithm      fAlgo;                //track algorithm
       TrackQuality         fQuality;             //track quality
       Bool_t               fIsGsf;               //flag to identify gsf tracks
+      Double32_t           fPtErr;               //[0,0,12]pt uncertainty
       Double32_t           fQOverP;              //[0,0,14]signed inverse of momentum [1/GeV]
       Double32_t           fQOverPErr;           //[0,0,14]error of q/p
       Double32_t           fLambda;              //[0,0,14]pi/2 - polar angle at the reference point
@@ -290,7 +293,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 4) // Track class
+    ClassDef(Track, 5) // Track class
   };
 }
 
