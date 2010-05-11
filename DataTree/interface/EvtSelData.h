@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EvtSelData.h,v 1.5 2010/01/05 16:39:44 edwenger Exp $
+// $Id: EvtSelData.h,v 1.6 2010/01/07 17:09:02 loizides Exp $
 //
 // EvtSelData
 //
@@ -54,6 +54,8 @@ namespace mithep
       Double_t      HfPosTime()     const { return fHfPosTime;  }
       Int_t         NpixBarrel()    const { return fPxbHits;    }
       Int_t         Npix()          const { return fPxHits;     }
+      Int_t         NHfTowersP()    const { return fNHfTowersP; }
+      Int_t         NHfTowersN()    const { return fNHfTowersN; }
       Double_t      ZdcNeg()        const { return fZdcNeg;     }
       Double_t      ZdcPos()        const { return fZdcPos;     }
       Double_t      ZdcNegTime()    const { return fZdcNegTime; }
