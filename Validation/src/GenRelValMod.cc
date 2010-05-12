@@ -1,4 +1,4 @@
-// $Id: GenRelValMod.cc,v 1.6 2009/03/23 22:15:16 loizides Exp $
+// $Id: GenRelValMod.cc,v 1.7 2009/06/15 15:00:18 loizides Exp $
 
 #include "MitAna/Validation/interface/GenRelValMod.h"
 #include "MitAna/DataTree/interface/MCParticleCol.h"
@@ -64,7 +64,7 @@ void GenRelValMod::Process()
           if(test==mother) {
             mind=j+1;
             // hack to overcome ambiguity
-            if(mind==5 && I==7 || I==8) mind=0;
+            if(mind==5 && (I==7 || I==8)) mind=0;
             break;
           }
         }
