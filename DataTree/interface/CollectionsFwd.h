@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CollectionsFwd.h,v 1.4 2009/11/25 15:12:57 loizides Exp $
+// $Id: CollectionsFwd.h,v 1.5 2009/12/01 15:14:28 loizides Exp $
 //
 // Collections
 //
@@ -49,6 +49,7 @@
 #include "MitAna/DataTree/interface/SuperClusterFwd.h"
 #include "MitAna/DataTree/interface/TauFwd.h"
 #include "MitAna/DataTree/interface/TrackFwd.h"
+#include "MitAna/DataTree/interface/TrackJetFwd.h"
 #include "MitAna/DataTree/interface/TriggerMaskFwd.h"
 #include "MitAna/DataTree/interface/TriggerObjectFwd.h"
 #include "MitAna/DataTree/interface/TriggerObjectBaseFwd.h"

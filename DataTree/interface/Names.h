@@ -51,6 +51,7 @@ namespace mithep
       static const char *gkSC5JetBrn;
       static const char *gkStripHitBrn;
       static const char *gkTrackBrn;
+      static const char *gkTrackJetBrn;
       static const char *gkTrackingParticleBrn;
 
       static const char *gkRunTreeName;
