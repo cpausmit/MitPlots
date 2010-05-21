@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CollectionsFwd.h,v 1.5 2009/12/01 15:14:28 loizides Exp $
+// $Id: CollectionsFwd.h,v 1.6 2010/05/12 19:04:08 ceballos Exp $
 //
 // Collections
 //
@@ -32,6 +32,7 @@
 #include "MitAna/DataTree/interface/GenericParticleFwd.h"
 #include "MitAna/DataTree/interface/GenJetFwd.h"
 #include "MitAna/DataTree/interface/JetFwd.h"
+#include "MitAna/DataTree/interface/JPTJetFwd.h"
 #include "MitAna/DataTree/interface/MCParticleFwd.h"
 #include "MitAna/DataTree/interface/MetFwd.h"
 #include "MitAna/DataTree/interface/MuonFwd.h"
