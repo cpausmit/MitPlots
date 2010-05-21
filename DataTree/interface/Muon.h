@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.34 2010/03/26 21:40:11 sixie Exp $
+// $Id: Muon.h,v 1.35 2010/05/06 17:30:39 bendavid Exp $
 //
 // Muon
 //
@@ -93,6 +93,8 @@ namespace mithep {
       Double_t       Ip3dPVBS()                      const { return fIp3dPVBS;                 }
       Double_t       Ip3dPVBSErr()                   const { return fIp3dPVBSErr;              }
       Double_t       Ip3dPVBSSignificance()          const { return fIp3dPVBS/fIp3dPVBSErr;    }
+      Double_t       PVCompatibility()               const { return fPVCompatibility;          }
+      Double_t       PVBSCompatibility()             const { return fPVBSCompatibility;        }
       Double_t       EmEnergy()                      const { return fEmEnergy;                 }
       Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
       Double_t       GetDX(Int_t iStation)           const;
@@ -161,6 +163,8 @@ namespace mithep {
       void           SetD0PVBSErr(Double_t x)              { fD0PVBSErr = x;                   }
       void           SetIp3dPVBS(Double_t x)               { fIp3dPVBS = x;                    }
       void           SetIp3dPVBSErr(Double_t x)            { fIp3dPVBSErr = x;                 }
+      void           SetPVCompatibility(Double_t x)        { fPVCompatibility = x;             }
+      void           SetPVBSCompatibility(Double_t x)      { fPVBSCompatibility = x;           }
       void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;             }
       void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;         }
       void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;           }
@@ -228,6 +232,8 @@ namespace mithep {
       Double32_t     fD0PVBSErr;           //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t     fIp3dPVBS;            //[0,0,14]3d impact parameter to signal PV w/ bs constraint
       Double32_t     fIp3dPVBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
+      Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
       UShort_t       fNTraversedChambers;  //number of traversed chambers
       MuonQuality    fQuality;             //muon quality
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
@@ -243,7 +249,7 @@ namespace mithep {
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 4) // Muon class
+    ClassDef(Muon, 5) // Muon class
   };
 }
 
