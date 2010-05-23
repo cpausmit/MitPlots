@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.39 2010/03/22 18:54:19 bendavid Exp $
+// $Id: Electron.h,v 1.40 2010/05/06 17:30:39 bendavid Exp $
 //
 // Electron
 //
@@ -35,6 +35,8 @@ namespace mithep
         fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0), fFracSharedHits(0),
         fMva(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
         fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0),
+        fGsfPVCompatibility(0), fGsfPVBSCompatibility(0),
+        fGsfPVCompatibilityMatched(0), fGsfPVBSCompatibilityMatched(0),
         fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
         fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
@@ -54,6 +56,10 @@ namespace mithep
       Double_t             Ip3dPVBS()               const { return fIp3dPVBS;                 }
       Double_t             Ip3dPVBSErr()            const { return fIp3dPVBSErr;              }
       Double_t             Ip3dPVBSSignificance()   const { return fIp3dPVBS/fIp3dPVBSErr;    }
+      Double_t             GsfPVCompatibility()     const { return fGsfPVCompatibility;       }
+      Double_t             GsfPVBSCompatibility()   const { return fGsfPVBSCompatibility;     }
+      Double_t             GsfPVCompatibilityMatched()     const { return fGsfPVCompatibilityMatched;       }
+      Double_t             GsfPVBSCompatibilityMatched()   const { return fGsfPVBSCompatibilityMatched;     }
       Double_t             ConvPartnerDCotTheta()   const { return fConvPartnerDCotTheta;     }
       Double_t             ConvPartnerDist()        const { return fConvPartnerDist;          }
       Double_t             ConvPartnerRadius()      const { return fConvPartnerRadius;        }
@@ -131,6 +137,10 @@ namespace mithep
       void                 SetD0PVBSErr(Double_t x)               { fD0PVBSErr = x;                }
       void                 SetIp3dPVBS(Double_t x)                { fIp3dPVBS = x;                 }
       void                 SetIp3dPVBSErr(Double_t x)             { fIp3dPVBSErr = x;              }
+      void                 SetGsfPVCompatibility(Double_t x)      { fGsfPVCompatibility = x;       }
+      void                 SetGsfPVBSCompatibility(Double_t x)    { fGsfPVBSCompatibility = x;     }
+      void                 SetGsfPVCompatibilityMatched(Double_t x)      { fGsfPVCompatibilityMatched = x;   }
+      void                 SetGsfPVBSCompatibilityMatched(Double_t x)    { fGsfPVBSCompatibilityMatched = x; }
       void                 SetConvPartnerDCotTheta(Double_t x)    { fConvPartnerDCotTheta = x;     }
       void                 SetConvPartnerDist(Double_t x)         { fConvPartnerDist = x;          }
       void                 SetConvPartnerRadius(Double_t x)       { fConvPartnerRadius = x;        }
@@ -247,6 +257,10 @@ namespace mithep
       Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint
       Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t           fGsfPVCompatibility;        //[0,0,14]gsf compatibility with signal PV
+      Double32_t           fGsfPVBSCompatibility;      //[0,0,14]gsf compatibility with signal PV w/ bs constraint
+      Double32_t           fGsfPVCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
+      Double32_t           fGsfPVBSCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV w/ bs constraint (matching ckf track excluded from vertex)
       Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
       Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
       Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
@@ -263,7 +277,7 @@ namespace mithep
       Bool_t               fIsEcalDriven;              //is std. egamma electron
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
 
-    ClassDef(Electron, 4) // Electron class
+    ClassDef(Electron, 5) // Electron class
   };
 }
 
