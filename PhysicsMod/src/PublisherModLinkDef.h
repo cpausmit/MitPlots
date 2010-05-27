@@ -1,4 +1,4 @@
-// $Id: PublisherModLinkDef.h,v 1.1 2009/06/26 16:47:18 loizides Exp $
+// $Id: PublisherModLinkDef.h,v 1.2 2009/10/22 18:43:48 loizides Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
@@ -14,6 +14,7 @@
 #include "MitAna/DataTree/interface/GenJet.h"
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
+#include "MitAna/DataTree/interface/JPTJet.h"
 #include "MitAna/DataTree/interface/PFJet.h"
 #include "MitAna/DataTree/interface/PFMet.h"
 #include "MitAna/DataTree/interface/Photon.h"
@@ -55,4 +56,5 @@
 #pragma link C++ class mithep::PublisherMod<mithep::SuperCluster>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Track>+;
 #pragma link C++ class mithep::PublisherMod<mithep::TriggerObject>+;
+#pragma link C++ class mithep::PublisherMod<mithep::JPTJet, mithep::Jet>+;
 #endif
