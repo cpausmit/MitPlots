@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.35 2010/05/06 17:30:39 bendavid Exp $
+// $Id: Muon.h,v 1.36 2010/05/21 18:50:07 bendavid Exp $
 //
 // Muon
 //
@@ -130,6 +130,7 @@ namespace mithep {
       Double_t       IsoR05HoEt()                    const { return fIsoR05HoEt;               }
       UShort_t       IsoR05NTracks()                 const { return fIsoR05NTracks;            }
       UShort_t       IsoR05NJets()                   const { return fIsoR05NJets;              }
+      UInt_t         NValidHits()                    const { return fNValidHits;               }
       UInt_t         NChambers()                     const { return fNTraversedChambers;       }
       UInt_t         NSegments()                     const { return fStationMask.NBitsSet();   }
       Int_t          LastHit()                       const;
@@ -187,6 +188,7 @@ namespace mithep {
       void           SetIsoR05HoEt(Double_t isoR05HoEt)    { fIsoR05HoEt = isoR05HoEt;         }
       void           SetIsoR05NTracks(UShort_t isoR05NTrk) { fIsoR05NTracks = isoR05NTrk;      }
       void           SetIsoR05NJets(UShort_t isoR05NJets)  { fIsoR05NJets = isoR05NJets;       }
+      void           SetNValidHits(UShort_t iNValidHits)   { fNValidHits  = iNValidHits;       }
       void           SetNChambers(UShort_t iNTraCh)        { fNTraversedChambers = iNTraCh;    }
       void           SetNSegments(Int_t iStation, Int_t NSegments);
       void           SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
@@ -234,6 +236,7 @@ namespace mithep {
       Double32_t     fIp3dPVBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
       Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
+      UShort_t       fNValidHits;          //number of Valid hits in global fit
       UShort_t       fNTraversedChambers;  //number of traversed chambers
       MuonQuality    fQuality;             //muon quality
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
