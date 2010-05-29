@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.9 2009/03/20 09:35:16 loizides Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.10 2009/06/15 15:00:10 loizides Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -11,6 +11,8 @@
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/DataCont/interface/ProcIDRef.h"
 #include "MitAna/DataCont/interface/RefResolver.h"
+#include "MitAna/DataCont/interface/RunLumiRangeMap.h"
+#include "MitAna/DataCont/interface/RunLumiSet.h"
 #include "MitAna/DataCont/interface/Types.h"
 #endif
 
@@ -60,4 +62,7 @@
 
 #pragma link C++ class mithep::Collection<TObject>+;
 #pragma link C++ class mithep::ObjArray<TObject>+;
+
+#pragma link C++ class mithep::RunLumiRangeMap+;
+#pragma link C++ class mithep::RunLumiSet+;
 #endif

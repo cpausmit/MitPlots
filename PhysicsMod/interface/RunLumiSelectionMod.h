@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunLumiSelectionMod.h,v 1.1 2010/05/03 11:36:01 bendavid Exp $
+// $Id: RunLumiSelectionMod.h,v 1.2 2010/05/06 17:30:16 bendavid Exp $
 //
 // RunLumiSelectionMod
 //
@@ -17,12 +17,12 @@
 #include <string>
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
+#include "MitAna/DataCont/interface/RunLumiRangeMap.h"
 
 namespace mithep 
 {
   class RunLumiSelectionMod : public BaseMod {
-    typedef std::map<UInt_t,std::vector<std::pair<UInt_t,UInt_t> > > MapType;
-    typedef std::pair<UInt_t,UInt_t> RunLumiPairType;
+    typedef RunLumiRangeMap::RunLumiPairType RunLumiPairType;
 
 
     public:
@@ -51,7 +51,7 @@ namespace mithep
       Int_t                       fNFailed;       //!number of failed events
       RunLumiPairType             fCurrentRunLumi; //!cached current run-lumi pair
       Bool_t                      fAcceptCurrentRunLumi; //!cached decision for current run-lumi pair
-      MapType                     fAcceptedRunsLumis; //mapped run-lumi ranges to accept
+      RunLumiRangeMap             fAcceptedRunsLumis; //mapped run-lumi ranges to accept
 
     ClassDef(RunLumiSelectionMod, 1) // L1 TAM module
   };
