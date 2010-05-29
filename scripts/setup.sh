@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.42 2010/05/06 17:30:39 bendavid Exp $
+# $Id: setup.sh,v 1.43 2010/05/12 15:01:58 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -43,6 +43,12 @@ if test $version -lt 3007000; then
             sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
             mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
         fi
+
+        if ! test -d "RecoVertex/GaussianSumVertexFit"; then
+            addpkg RecoVertex/GaussianSumVertexFit;
+            patch -p0 < MitAna/scripts/GSFFitPatch.patch 
+        fi
+
 
         addpkg RecoEgamma/EgammaTools V00-05-03
         checkdeps -a

@@ -1,0 +1,62 @@
+Index: RecoVertex/GaussianSumVertexFit/interface/GsfVertexTrackCompatibilityEstimator.h
+===================================================================
+RCS file: /cvs_server/repositories/CMSSW/CMSSW/RecoVertex/GaussianSumVertexFit/interface/GsfVertexTrackCompatibilityEstimator.h,v
+retrieving revision 1.3
+diff -r1.3 GsfVertexTrackCompatibilityEstimator.h
+12a13
+> #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexUpdator.h"
+51a53,56
+>   virtual BDpair estimate(const reco::Vertex & vertex, 
+>                          const reco::TransientTrack & track,
+>                          const reco::TransientTrack & ckfTrack) const;
+> 
+63a69
+>   KalmanVertexUpdator<5> kalmanUpdater;
+Index: RecoVertex/GaussianSumVertexFit/src/GsfVertexTrackCompatibilityEstimator.cc
+===================================================================
+RCS file: /cvs_server/repositories/CMSSW/CMSSW/RecoVertex/GaussianSumVertexFit/src/GsfVertexTrackCompatibilityEstimator.cc,v
+retrieving revision 1.5
+diff -r1.5 GsfVertexTrackCompatibilityEstimator.cc
+73a74,115
+> std::pair<bool, double>
+> GsfVertexTrackCompatibilityEstimator::estimate(const reco::Vertex & vertex, 
+>                          const reco::TransientTrack & track, const reco::TransientTrack & ckfTrack) const
+> {       
+> //   GlobalPoint linP(vertex.position().x(), vertex.position().z(),vertex.position().z());
+>     GlobalPoint linP(Basic3DVector<float> (vertex.position()));
+> 
+>   RefCountedLinearizedTrackState linTrack = 
+>                         lTrackFactory.linearizedTrackState(linP, track);
+>   GlobalError err(vertex.covariance());
+>   VertexState vState(linP, err);
+>   RefCountedVertexTrack vertexTrack = vTrackFactory.vertexTrack(linTrack, vState);
+> 
+>   LinearizedTrackStateFactory lTrackFactoryCkf;
+>   RefCountedLinearizedTrackState linTrackCkf = 
+>                          lTrackFactoryCkf.linearizedTrackState(linP, ckfTrack);
+>   RefCountedVertexTrack vertexTrackCkf = vTrackFactory.vertexTrack(linTrackCkf, vState);
+> 
+> 
+>   vector<RefCountedVertexTrack> initialTracks;
+>   initialTracks.push_back(vertexTrack);
+>   initialTracks.push_back(vertexTrackCkf);
+> 
+>   CachingVertex<5> cachingVertex(linP, err, initialTracks,
+>                             vertex.chi2());
+> 
+>   //remove ckf track corresponding to the gsf track from vertex before computing gsf track compatibility
+>   if (find(vertex.tracks_begin(), vertex.tracks_end(), ckfTrack.trackBaseRef()) != vertex.tracks_end()) {
+>     cachingVertex = kalmanUpdater.remove(cachingVertex, vertexTrackCkf);
+>   }
+> 
+>   // FIXME: this should work also for tracks without a persistent ref.
+> //   const TrackTransientTrack* ttt = dynamic_cast<const TrackTransientTrack*>(track.basicTransientTrack());
+> //   if ((ttt!=0) && 
+>   if (find(vertex.tracks_begin(), vertex.tracks_end(), track.trackBaseRef()) != vertex.tracks_end())
+>   {
+>     return estimateFittedTrack(cachingVertex, vertexTrack);
+>   } else {
+>     return estimateNFittedTrack(cachingVertex, vertexTrack);
+>   }
+> }
+> 
