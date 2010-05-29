@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.36 2010/05/21 18:50:07 bendavid Exp $
+// $Id: Muon.h,v 1.37 2010/05/28 18:49:09 pharris Exp $
 //
 // Muon
 //
@@ -252,7 +252,7 @@ namespace mithep {
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 5) // Muon class
+    ClassDef(Muon, 6) // Muon class
   };
 }
 
