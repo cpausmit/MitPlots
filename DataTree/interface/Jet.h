@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.25 2010/03/26 14:31:31 sixie Exp $
+// $Id: Jet.h,v 1.26 2010/05/10 15:13:29 bendavid Exp $
 //
 // Jet
 //
@@ -33,11 +33,13 @@ namespace mithep
       Jet() : 
         fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
         fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
-        fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
+        fSimpleSecondaryVertexBJetTagsDisc(0), fSimpleSecondaryVertexHighEffBJetTagsDisc(0),
+        fSimpleSecondaryVertexHighPurBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
         fCombinedSecondaryVertexMVABJetTagsDisc(0), fTrackCountingHighEffBJetTagsDisc(0),
         fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fGhostTrackBJetTagsDisc(0),
         fL1OffsetCorrectionScale(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
         fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
@@ -47,11 +49,13 @@ namespace mithep
         fRawMom(FourVector(px,py,pz,e)),
         fAlpha(0), fBeta(0), fMatchedMCFlavor(0),
         fJetProbabilityBJetTagsDisc(0), fJetBProbabilityBJetTagsDisc(0),
-        fSimpleSecondaryVertexBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
+        fSimpleSecondaryVertexBJetTagsDisc(0), fSimpleSecondaryVertexHighEffBJetTagsDisc(0),
+        fSimpleSecondaryVertexHighPurBJetTagsDisc(0), fCombinedSecondaryVertexBJetTagsDisc(0),
         fCombinedSecondaryVertexMVABJetTagsDisc(0), fTrackCountingHighEffBJetTagsDisc(0),
         fTrackCountingHighPurBJetTagsDisc(0), fSoftMuonBJetTagsDisc(0),
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
+        fGhostTrackBJetTagsDisc(0),
         fL1OffsetCorrectionScale(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
         fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
@@ -90,6 +94,10 @@ namespace mithep
       EObjType      ObjType()                     const { return kJet;                       }      
       Double_t      SimpleSecondaryVertexBJetTagsDisc()            const 
                       { return fSimpleSecondaryVertexBJetTagsDisc; }
+      Double_t      SimpleSecondaryVertexHighEffBJetTagsDisc()            const 
+                      { return fSimpleSecondaryVertexHighEffBJetTagsDisc; }
+      Double_t      SimpleSecondaryVertexHighPurBJetTagsDisc()            const 
+                      { return fSimpleSecondaryVertexHighPurBJetTagsDisc; }                      
       Double_t      SoftMuonBJetTagsDisc()                         const 
                       { return fSoftMuonBJetTagsDisc;              }
       Double_t      SoftMuonByIP3dBJetTagsDisc()                     const 
@@ -104,6 +112,8 @@ namespace mithep
                       { return fTrackCountingHighEffBJetTagsDisc;  }
       Double_t      TrackCountingHighPurBJetTagsDisc()             const 
                       { return fTrackCountingHighPurBJetTagsDisc;  }
+      Double_t      GhostTrackBJetTagsDisc()                       const 
+                      { return fGhostTrackBJetTagsDisc; }                      
       FourVectorM   RawMom()                      const { return fRawMom.V();                }
       Double_t      SigmaEta()                    const { return fSigmaEta;                  }
       Double_t      SigmaPhi()                    const { return fSigmaPhi;                  }
@@ -140,6 +150,10 @@ namespace mithep
                       { fCustomCorrectionScale = s; ClearMom(); }
       void          SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) 
                       { fSimpleSecondaryVertexBJetTagsDisc = d;     }
+      void          SetSimpleSecondaryVertexHighEffBJetTagsDisc(Double_t d) 
+                      { fSimpleSecondaryVertexHighEffBJetTagsDisc = d;     }
+      void          SetSimpleSecondaryVertexHighPurBJetTagsDisc(Double_t d) 
+                      { fSimpleSecondaryVertexHighPurBJetTagsDisc = d;     }                      
       void          SetSoftMuonBJetTagsDisc(Double_t d)     { fSoftMuonBJetTagsDisc = d;     }
       void          SetSoftMuonByIP3dBJetTagsDisc(Double_t d) { fSoftMuonByIP3dBJetTagsDisc = d; }
       void          SetSoftMuonByPtBJetTagsDisc(Double_t d) { fSoftMuonByPtBJetTagsDisc = d; }
@@ -149,6 +163,7 @@ namespace mithep
                       { fTrackCountingHighEffBJetTagsDisc = d;      }
       void          SetTrackCountingHighPurBJetTagsDisc(Double_t d) 
                       { fTrackCountingHighPurBJetTagsDisc = d;      }
+      void          SetGhostTrackBJetTagsDisc(Double_t d) { fGhostTrackBJetTagsDisc = d; }                      
 
     protected:
       void          GetMom()                   const;
@@ -162,6 +177,8 @@ namespace mithep
       Double32_t    fJetProbabilityBJetTagsDisc;             //[0,0,14]discriminants b-tagging algos
       Double32_t    fJetBProbabilityBJetTagsDisc;            //[0,0,14]discriminants b-tagging algos
       Double32_t    fSimpleSecondaryVertexBJetTagsDisc;      //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSimpleSecondaryVertexHighEffBJetTagsDisc; //[0,0,14]discriminants b-tagging algos
+      Double32_t    fSimpleSecondaryVertexHighPurBJetTagsDisc; //[0,0,14]discriminants b-tagging algos      
       Double32_t    fCombinedSecondaryVertexBJetTagsDisc;    //[0,0,14]discriminants b-tagging algos
       Double32_t    fCombinedSecondaryVertexMVABJetTagsDisc; //[0,0,14]discriminants b-tagging algos
       Double32_t    fTrackCountingHighEffBJetTagsDisc;       //[0,0,14]discriminants b-tagging algos
@@ -171,6 +188,7 @@ namespace mithep
       Double32_t    fSoftMuonByPtBJetTagsDisc;               //[0,0,14]discriminants b-tagging algos
       Double32_t    fSoftElectronByIP3dBJetTagsDisc;         //[0,0,14]discriminants b-tagging algos
       Double32_t    fSoftElectronByPtBJetTagsDisc;           //[0,0,14]discriminants b-tagging algos
+      Double32_t    fGhostTrackBJetTagsDisc;                 //[0,0,14]discriminants b-tagging algos            
       Double32_t    fL1OffsetCorrectionScale;                //[0,0,14]L1 correction scale
       Double32_t    fL2RelativeCorrectionScale;              //[0,0,14]L2 correction scale
       Double32_t    fL3AbsoluteCorrectionScale;              //[0,0,14]L3 correction scale
@@ -181,7 +199,7 @@ namespace mithep
       Double32_t    fCustomCorrectionScale;                  //[0,0,14]custom correction scale
       BitMask8      fCorrections;                            //mask of corrections to be applied
 
-    ClassDef(Jet, 4) // Jet class
+    ClassDef(Jet, 5) // Jet class
   };
 }
 
