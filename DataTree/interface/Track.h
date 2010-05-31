@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.49 2010/04/04 21:34:27 bendavid Exp $
+// $Id: Track.h,v 1.50 2010/05/10 15:13:09 bendavid Exp $
 //
 // Track
 //
@@ -248,7 +248,7 @@ namespace mithep
       void                 SetHits(const BitMask48 &hits)      { fHits = hits;                 }
       void                 SetMissingHits(const BitMask48 &h)  { fMissingHits = h;             }
       void                 SetExpectedHitsInner(const BitMask48 &h) { fExpectedHitsInner = h;  }
-      void                 SetExpectedHitsOuter(const BitMask48 &h) { fExpectedHitsInner = h;  }
+      void                 SetExpectedHitsOuter(const BitMask48 &h) { fExpectedHitsOuter = h;  }
       void                 SetIsGsf(Bool_t b)                  { fIsGsf = b;                   }
       void                 SetNdof(UShort_t dof)               { fNdof = dof;                  }
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
