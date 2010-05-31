@@ -17,7 +17,14 @@ Index: RecoVertex/GaussianSumVertexFit/src/GsfVertexTrackCompatibilityEstimator.
 RCS file: /cvs_server/repositories/CMSSW/CMSSW/RecoVertex/GaussianSumVertexFit/src/GsfVertexTrackCompatibilityEstimator.cc,v
 retrieving revision 1.5
 diff -r1.5 GsfVertexTrackCompatibilityEstimator.cc
-73a74,115
+53a54,55
+>   const TrajectoryStateOnSurface &tsos = track.stateOnSurface(linP);
+>   if (!tsos.isValid()) return BDpair(false,-1.);
+55c57
+<   			lTrackFactory.linearizedTrackState(linP, track);
+---
+>   			lTrackFactory.linearizedTrackState(linP, track, tsos);
+73a76,122
 > std::pair<bool, double>
 > GsfVertexTrackCompatibilityEstimator::estimate(const reco::Vertex & vertex, 
 >                          const reco::TransientTrack & track, const reco::TransientTrack & ckfTrack) const
@@ -25,15 +32,19 @@ diff -r1.5 GsfVertexTrackCompatibilityEstimator.cc
 > //   GlobalPoint linP(vertex.position().x(), vertex.position().z(),vertex.position().z());
 >     GlobalPoint linP(Basic3DVector<float> (vertex.position()));
 > 
+>   const TrajectoryStateOnSurface &tsos = track.stateOnSurface(linP);
+>   if (!tsos.isValid()) return BDpair(false,-1.);
 >   RefCountedLinearizedTrackState linTrack = 
->                         lTrackFactory.linearizedTrackState(linP, track);
+>                         lTrackFactory.linearizedTrackState(linP, track, tsos);
 >   GlobalError err(vertex.covariance());
 >   VertexState vState(linP, err);
 >   RefCountedVertexTrack vertexTrack = vTrackFactory.vertexTrack(linTrack, vState);
 > 
 >   LinearizedTrackStateFactory lTrackFactoryCkf;
+>   const TrajectoryStateOnSurface &tsosCkf = ckfTrack.impactPointState();
+>   if (!tsosCkf.isValid()) return BDpair(false,-1.);
 >   RefCountedLinearizedTrackState linTrackCkf = 
->                          lTrackFactoryCkf.linearizedTrackState(linP, ckfTrack);
+>                          lTrackFactoryCkf.linearizedTrackState(linP, ckfTrack, tsosCkf);
 >   RefCountedVertexTrack vertexTrackCkf = vTrackFactory.vertexTrack(linTrackCkf, vState);
 > 
 > 
@@ -47,6 +58,7 @@ diff -r1.5 GsfVertexTrackCompatibilityEstimator.cc
 >   //remove ckf track corresponding to the gsf track from vertex before computing gsf track compatibility
 >   if (find(vertex.tracks_begin(), vertex.tracks_end(), ckfTrack.trackBaseRef()) != vertex.tracks_end()) {
 >     cachingVertex = kalmanUpdater.remove(cachingVertex, vertexTrackCkf);
+>     if (!cachingVertex.isValid()) return BDpair(false,-1.);
 >   }
 > 
 >   // FIXME: this should work also for tracks without a persistent ref.

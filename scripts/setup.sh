@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.43 2010/05/12 15:01:58 bendavid Exp $
+# $Id: setup.sh,v 1.44 2010/05/29 18:09:17 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -47,6 +47,11 @@ if test $version -lt 3007000; then
         if ! test -d "RecoVertex/GaussianSumVertexFit"; then
             addpkg RecoVertex/GaussianSumVertexFit;
             patch -p0 < MitAna/scripts/GSFFitPatch.patch 
+        fi
+
+        if ! test -d "RecoVertex/KalmanVertexFit"; then
+            addpkg RecoVertex/KalmanVertexFit;
+            patch -p0 < MitAna/scripts/KalmanFitPatch.patch 
         fi
 
 

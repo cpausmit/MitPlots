@@ -1,0 +1,12 @@
+Index: RecoVertex/KalmanVertexFit/src/KalmanVertexTrackCompatibilityEstimator.cc
+===================================================================
+RCS file: /cvs_server/repositories/CMSSW/CMSSW/RecoVertex/KalmanVertexFit/src/KalmanVertexTrackCompatibilityEstimator.cc,v
+retrieving revision 1.14
+diff -r1.14 KalmanVertexTrackCompatibilityEstimator.cc
+44a45,46
+>   const TrajectoryStateOnSurface &tsos = track.impactPointState();
+>   if (!tsos.isValid()) return BDpair(false,-1.);  
+46c48
+<   			lTrackFactory.linearizedTrackState(linP, track);
+---
+>   			lTrackFactory.linearizedTrackState(linP, track, tsos);
