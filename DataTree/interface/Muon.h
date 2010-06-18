@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.37 2010/05/28 18:49:09 pharris Exp $
+// $Id: Muon.h,v 1.38 2010/05/29 18:08:05 bendavid Exp $
 //
 // Muon
 //
@@ -261,10 +261,10 @@ inline const mithep::Track *mithep::Muon::BestTrk() const
 {
   // Return "best" track.
 
-  if (HasGlobalTrk())
-    return GlobalTrk();
-  else if (HasTrackerTrk())
+  if (HasTrackerTrk())
     return TrackerTrk();
+  else if (HasGlobalTrk())
+    return GlobalTrk();
   else if (HasStandaloneTrk())
     return StandaloneTrk();
 
