@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.44 2010/05/29 18:09:17 bendavid Exp $
+# $Id: setup.sh,v 1.45 2010/05/31 23:04:56 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -35,7 +35,12 @@ if test $version -lt 2002014; then
 fi
 
 if test $version -lt 3007000; then
-        #Remove annoying warning messages for the jet to vertex associator.
+        addpkg RecoEgamma/EgammaTools V00-05-03
+        checkdeps -a
+fi
+
+if test $version -lt 3008000; then
+      #Remove annoying warning messages for the jet to vertex associator.
         if ! test -d "JetMETCorrections/JetVertexAssociation"; then
             addpkg JetMETCorrections/JetVertexAssociation;
             TMP=`mktemp`;
@@ -54,9 +59,6 @@ if test $version -lt 3007000; then
             patch -p0 < MitAna/scripts/KalmanFitPatch.patch 
         fi
 
-
-        addpkg RecoEgamma/EgammaTools V00-05-03
-        checkdeps -a
 fi
 
 case $version in
