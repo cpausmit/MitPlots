@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.40 2010/05/06 17:30:39 bendavid Exp $
+// $Id: Electron.h,v 1.41 2010/05/23 21:09:38 bendavid Exp $
 //
 // Electron
 //
@@ -41,7 +41,7 @@ namespace mithep
         fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
-        fIsEcalDriven(0), fIsTrackerDriven(0) {}
+        fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0) {}
 
       const Track         *BestTrk()                const;
       Double_t             D0PV()                   const { return fD0PV;                     }
@@ -125,6 +125,7 @@ namespace mithep
       Double_t             HcalDepth1TowerSumEtDr03() const { return fHcalDepth1TowerSumEtDr03;    }
       Double_t             HcalDepth2TowerSumEtDr03() const { return fHcalDepth2TowerSumEtDr03;    }
       Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
+      Bool_t               MatchesVertexConversion() const { return fMatchesVertexConversion;      }
       
       
       void                 SetCharge(Char_t x)                    { fCharge = x; ClearCharge();    }
@@ -180,6 +181,8 @@ namespace mithep
                              { fSuperClusterRef = sc; }
       void	           SetTrackerTrk(const Track* t)                 
                              { fTrackerTrackRef = t; ClearCharge(); }
+      void                 SetConvPartnerTrk(const Track *t)
+                             { fConvPartnerTrackRef = t; }
       void                 SetEcalRecHitIsoDr04(Double_t x)        { fEcalJurassicIsolation = x;    }
       void                 SetHcalDepth1TowerSumEtDr04(Double_t x) { fHcalDepth1TowerSumEtDr04 = x; }
       void                 SetHcalDepth2TowerSumEtDr04(Double_t x) { fHcalDepth2TowerSumEtDr04 = x; }
@@ -199,10 +202,14 @@ namespace mithep
       void                 SetIsEERingGap(Bool_t b)                { fIsEERingGap = b;      }
       void                 SetIsEcalDriven(Bool_t b)               { fIsEcalDriven = b;     }
       void                 SetIsTrackerDriven(Bool_t b)            { fIsTrackerDriven = b;  }
+      void                 SetMatchesVertexConversion(Bool_t b)    { fMatchesVertexConversion = b; }
+      void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
+                                  { fConvPosition.SetXYZ(x,y,z); }
       
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
       const Track         *Trk()                   const { return BestTrk();                }
+      const Track         *ConvPartnerTrk()        const { return fConvPartnerTrackRef.Obj(); }
 
     protected:
       Double_t             GetCharge()             const;
@@ -214,6 +221,7 @@ namespace mithep
       Char_t               fScPixCharge;               //charge from supercluster-pixel matching
       Ref<Track>           fGsfTrackRef;               //gsf track reference
       Ref<Track>           fTrackerTrackRef;           //tracker track reference
+      Ref<Track>           fConvPartnerTrackRef;       //conversion partner track reference
       Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster
       Double32_t           fESuperClusterOverP;        //[0,0,14]super cluster e over p ratio
       Double32_t           fESeedClusterOverPout;      //[0,0,14]seed cluster e over p mom
@@ -264,6 +272,7 @@ namespace mithep
       Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
       Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
       Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
+      Vect3C               fConvPosition;
       Bool_t               fIsEnergyScaleCorrected;    //class dependent escale correction
       Bool_t               fIsMomentumCorrected;       //class dependent E-p combination 
       Int_t                fClassification;            //classification (see GsfElectron.h)
@@ -276,8 +285,9 @@ namespace mithep
       Bool_t               fIsEERingGap;               //is in EE ring gap
       Bool_t               fIsEcalDriven;              //is std. egamma electron
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
+      Bool_t               fMatchesVertexConversion;
 
-    ClassDef(Electron, 5) // Electron class
+    ClassDef(Electron, 7) // Electron class
   };
 }
 
