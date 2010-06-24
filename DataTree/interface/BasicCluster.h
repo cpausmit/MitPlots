@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.14 2010/03/24 15:35:20 sixie Exp $
+// $Id: BasicCluster.h,v 1.15 2010/03/26 14:31:51 sixie Exp $
 //
 // BasicCluster
 //
@@ -41,6 +41,7 @@ namespace mithep
       Double_t         E3x3()                    const { return  fE3x3;         }
       Double_t         E4x4()                    const { return  fE4x4;         }
       Double_t         E5x5()                    const { return  fE5x5;         }
+      Double_t         SwissCross()              const { return  fSwissCross;   }
       Double_t         E2x5Right()               const { return  fE2x5Right;    }
       Double_t         E2x5Left()                const { return  fE2x5Left;     }
       Double_t         E2x5Top()                 const { return  fE2x5Top;      }
@@ -76,6 +77,7 @@ namespace mithep
       void	       SetE3x3(Double_t x)                        {  fE3x3 = x;            }
       void	       SetE4x4(Double_t x)                        {  fE4x4 = x;            }
       void	       SetE5x5(Double_t x)                        {  fE5x5 = x;            }
+      void	       SetSwissCross(Double_t x)                  {  fSwissCross = x;      }
       void	       SetE2x5Right(Double_t x)                   {  fE2x5Right = x;       }
       void	       SetE2x5Left(Double_t x)                    {  fE2x5Left = x;        }
       void	       SetE2x5Top(Double_t x)                     {  fE2x5Top = x;         }
@@ -115,6 +117,7 @@ namespace mithep
       Double32_t fE3x3;
       Double32_t fE4x4;
       Double32_t fE5x5;
+      Double32_t fSwissCross;
       Double32_t fE2x5Right;
       Double32_t fE2x5Left;
       Double32_t fE2x5Top;
@@ -139,7 +142,7 @@ namespace mithep
       Double32_t fZernike42;
 
 
-      ClassDef(BasicCluster, 2)  // Basic cluster class
+      ClassDef(BasicCluster, 3)  // Basic cluster class
   };
 }
 
