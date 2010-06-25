@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.50 2010/05/10 15:13:09 bendavid Exp $
+// $Id: Track.h,v 1.51 2010/05/31 12:44:05 bendavid Exp $
 //
 // Track
 //
@@ -169,14 +169,16 @@ namespace mithep
       };
 
 
-      Track() : fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(0), fQOverPErr(0),
+      Track() : fNHits(0), fNPixelHits(0), fNMissingHits(0), fNExpectedHitsInner(0), fNExpectedHitsOuter(0),
+                fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(0), fQOverPErr(0),
                 fLambda(0), fLambdaErr(0), fPhi0(0), fPhi0Err(0),
                 fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       Track(Double_t qOverP, Double_t lambda, Double_t phi0, Double_t dxy, Double_t dsz) :
-	        fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(qOverP), fQOverPErr(0),
-                fLambda(lambda), fLambdaErr(0), fPhi0(phi0), fPhi0Err(0),
-                fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0), fChi2(0),
+	        fNHits(0), fNPixelHits(0), fNMissingHits(0), fNExpectedHitsInner(0), fNExpectedHitsOuter(0),
+                fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(0), fQOverPErr(0),
+                fLambda(0), fLambdaErr(0), fPhi0(0), fPhi0Err(0),
+                fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
@@ -208,12 +210,12 @@ namespace mithep
       const ThreeVectorC  &Mom()            const;
       FourVectorM          Mom4(Double_t m) const { return FourVectorM(Pt(),Eta(),Phi(),m); }
       UShort_t             Ndof()           const { return fNdof;                              }
-      UInt_t               NHits()          const { return fHits.NBitsSet();                   }
-      UInt_t               NMissingHits()   const { return fMissingHits.NBitsSet();            }
-      UInt_t               NExpectedHitsInner() const { return fExpectedHitsInner.NBitsSet();  }
-      UInt_t               NExpectedHitsOuter() const { return fExpectedHitsOuter.NBitsSet();  }
+      UInt_t               NHits()          const { if (fNHits) return fNHits; else return fHits.NBitsSet(); }
+      UInt_t               NMissingHits()   const { if (fNMissingHits) return fNMissingHits; else return fMissingHits.NBitsSet(); }
+      UInt_t               NExpectedHitsInner() const { if (fNExpectedHitsInner) return fNExpectedHitsInner; else return fExpectedHitsInner.NBitsSet(); }
+      UInt_t               NExpectedHitsOuter() const { if (fNExpectedHitsOuter) return fNExpectedHitsOuter; else return fExpectedHitsOuter.NBitsSet(); }
       UInt_t               NStereoHits()    const { return StereoHits().NBitsSet();            }
-      UInt_t               NPixelHits()     const { return PixelHits().NBitsSet();             }
+      UInt_t               NPixelHits()     const { if (fNPixelHits) return fNPixelHits; else return PixelHits().NBitsSet(); }
       EObjType             ObjType()        const { return kTrack;                             }    
       Double_t             P2()             const { return 1./fQOverP/fQOverP;                 }
       Double_t             P()              const { return TMath::Abs(1./fQOverP);             }
@@ -250,6 +252,11 @@ namespace mithep
       void                 SetExpectedHitsInner(const BitMask48 &h) { fExpectedHitsInner = h;  }
       void                 SetExpectedHitsOuter(const BitMask48 &h) { fExpectedHitsOuter = h;  }
       void                 SetIsGsf(Bool_t b)                  { fIsGsf = b;                   }
+      void                 SetNHits(Byte_t n)                  { fNHits = n;                   }
+      void                 SetNPixelHits(Byte_t n)             { fNPixelHits = n;              }
+      void                 SetNMissingHits(Byte_t n)           { fNMissingHits = n;            }
+      void                 SetNExpectedHitsInner(Byte_t n)     { fNExpectedHitsInner = n;      }
+      void                 SetNExpectedHitsOuter(Byte_t n)     { fNExpectedHitsOuter = n;      }
       void                 SetNdof(UShort_t dof)               { fNdof = dof;                  }
       void	           SetMCPart(const MCParticle *p)      { fMCParticleRef = p;           }
       void                 SetPhiEcal(Double_t phi)            { fPhiEcal = phi;               }
@@ -270,6 +277,11 @@ namespace mithep
       BitMask48            fMissingHits;         //missing hits in crossed good modules
       BitMask48            fExpectedHitsInner;   //expected hits before first hit
       BitMask48            fExpectedHitsOuter;   //expected hits after last hit
+      Byte_t               fNHits;               //number of valid hits
+      Byte_t               fNPixelHits;          //number of valid pixel hits
+      Byte_t               fNMissingHits;        //number of missing hits
+      Byte_t               fNExpectedHitsInner;  //number of expected inner hits
+      Byte_t               fNExpectedHitsOuter;  //number of expected outer hits
       ETrackAlgorithm      fAlgo;                //track algorithm
       TrackQuality         fQuality;             //track quality
       Bool_t               fIsGsf;               //flag to identify gsf tracks
@@ -293,7 +305,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 5) // Track class
+    ClassDef(Track, 6) // Track class
   };
 }
 
