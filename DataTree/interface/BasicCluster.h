@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.15 2010/03/26 14:31:51 sixie Exp $
+// $Id: BasicCluster.h,v 1.16 2010/06/24 13:08:45 peveraer Exp $
 //
 // BasicCluster
 //
@@ -20,9 +20,71 @@ namespace mithep
   class BasicCluster : public DataObject
   {
     public:
-      BasicCluster() : fEnergy(0) {}
+      BasicCluster() : fEnergy(0), fNHits(0),
+                       fE1x3(0),
+                       fE3x1(0),
+                       fE1x5(0),
+                       fE2x2(0),
+                       fE3x2(0),
+                       fE3x3(0),
+                       fE4x4(0),
+                       fE5x5(0),
+                       fSwissCross(0),
+                       fE2x5Right(0),
+                       fE2x5Left(0),
+                       fE2x5Top(0),
+                       fE2x5Bottom(0),
+                       fE2x5Max(0),
+                       fELeft(0),
+                       fERight(0),
+                       fETop(0),
+                       fEBottom(0),
+                       fEMax(0),
+                       fE2nd(0),
+                       fEtaLat(0),
+                       fPhiLat(0),
+                       fLat(0),
+                       fCovEtaEta(0),
+                       fCovEtaPhi(0),
+                       fCovPhiPhi(0),
+                       fCoviEtaiEta(0),
+                       fCoviEtaiPhi(0),
+                       fCoviPhiiPhi(0),
+                       fZernike20(0),
+                       fZernike42(0) {}
       BasicCluster(Double_t e, const ThreeVector &p) : 
-        fEnergy(e), fPoint(p) {}
+        fEnergy(e), fPoint(p), fNHits(0),
+                       fE1x3(0),
+                       fE3x1(0),
+                       fE1x5(0),
+                       fE2x2(0),
+                       fE3x2(0),
+                       fE3x3(0),
+                       fE4x4(0),
+                       fE5x5(0),
+                       fSwissCross(0),
+                       fE2x5Right(0),
+                       fE2x5Left(0),
+                       fE2x5Top(0),
+                       fE2x5Bottom(0),
+                       fE2x5Max(0),
+                       fELeft(0),
+                       fERight(0),
+                       fETop(0),
+                       fEBottom(0),
+                       fEMax(0),
+                       fE2nd(0),
+                       fEtaLat(0),
+                       fPhiLat(0),
+                       fLat(0),
+                       fCovEtaEta(0),
+                       fCovEtaPhi(0),
+                       fCovPhiPhi(0),
+                       fCoviEtaiEta(0),
+                       fCoviEtaiPhi(0),
+                       fCoviPhiiPhi(0),
+                       fZernike20(0),
+                       fZernike42(0) {}
      
       Double_t         Energy()                  const { return  fEnergy;       }       
       Double_t         Et()                      const;
