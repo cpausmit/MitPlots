@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.16 2010/03/24 15:35:31 sixie Exp $
+// $Id: SuperCluster.h,v 1.17 2010/03/26 15:09:11 sixie Exp $
 //
 // SuperCluster
 //
@@ -15,6 +15,7 @@
 #include "MitCommon/DataFormats/interface/Vect3C.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
+#include "MitAna/DataTree/interface/CaloTower.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataCont/interface/Ref.h"
 
@@ -27,6 +28,7 @@ namespace mithep
                        fPhiWidth(0), fRawEnergy(0) {}     
  
       void	             AddCluster(const BasicCluster *c)          { fClusters.Add(c);        }
+      void                   AddTower(const CaloTower *t)               { fCaloTowers.Add(t);      }
       const BasicCluster    *Cluster(UInt_t i)       const { return fClusters.At(i);               }
       UInt_t                 ClusterSize()           const { return fClusters.Entries();           }
       Int_t                  Compare(const TObject *o) const;   
@@ -42,6 +44,7 @@ namespace mithep
                                                                      fHcalDepth2Energy)/fEnergy;   }
       Bool_t                 IsSortable()            const { return kTRUE;                         }
       EObjType               ObjType()               const { return kSuperCluster;                 }
+      UInt_t                 NTowers()               const { return fCaloTowers.Entries();         }
       Double_t               Phi()                   const { return fPoint.Phi();                  }
       Double_t               PhiWidth()              const { return fPhiWidth;                     }
       ThreeVectorC           Point()                 const { return fPoint.V();                    }
@@ -50,6 +53,7 @@ namespace mithep
       Double_t               RawEnergy()             const { return fRawEnergy;                    }
       Double_t               Rho()                   const { return fPoint.Rho();                  }
       const BasicCluster    *Seed()                  const { return fSeedRef.Obj();                }
+      const CaloTower       *Tower(UInt_t i)         const { return fCaloTowers.At(i);             }
       void	             SetEnergy(Double_t energy)                 { fEnergy = energy;        }
       void	             SetEtaWidth(Double_t etaWidth)             { fEtaWidth = etaWidth;    }
       void	             SetPhiWidth(Double_t phiWidth)             { fPhiWidth = phiWidth;    }
@@ -71,8 +75,9 @@ namespace mithep
       Double32_t              fHcalDepth2Energy;    //[0,0,14] hcal depth2 over ECAL energy
       RefArray<BasicCluster>  fClusters;            //assigned basic clusters
       Ref<BasicCluster>       fSeedRef;             //seed cluster
+      RefArray<CaloTower>     fCaloTowers;          //calo towers (matched by detid)
 
-    ClassDef(SuperCluster, 2) // Super cluster class
+    ClassDef(SuperCluster, 3) // Super cluster class
   };
 }
 
