@@ -1,8 +1,9 @@
 # -*- Makefile -*-
-# $Id: BuildFile,v 1.3 2009/02/17 21:54:35 bendavid Exp $
+# $Id: BuildFile,v 1.4 2010/05/29 18:10:14 bendavid Exp $
 
 <use name=root>
 <use name=boost>
+<use name=MitCommon/JSONSpirit>
 <use name=MitAna/TAM>
 #<flags CXXFLAGS="-g">
 <export>

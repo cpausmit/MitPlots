@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.10 2009/06/15 15:00:10 loizides Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.11 2010/05/29 18:10:14 bendavid Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -63,6 +63,13 @@
 #pragma link C++ class mithep::Collection<TObject>+;
 #pragma link C++ class mithep::ObjArray<TObject>+;
 
+#pragma link C++ class std::pair<UInt_t,UInt_t>+;
+#pragma link C++ class std::set<std::pair<UInt_t,UInt_t> >+;
+
+#pragma link C++ typedef mithep::RunLumiSet::RunLumiPairType;
+#pragma link C++ typedef mithep::RunLumiSet::SetType;
+
 #pragma link C++ class mithep::RunLumiRangeMap+;
 #pragma link C++ class mithep::RunLumiSet+;
+
 #endif

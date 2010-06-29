@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunLumiSelectionMod.h,v 1.2 2010/05/06 17:30:16 bendavid Exp $
+// $Id: RunLumiSelectionMod.h,v 1.3 2010/05/29 18:10:15 bendavid Exp $
 //
 // RunLumiSelectionMod
 //
@@ -16,8 +16,10 @@
 
 #include <string>
 #include <TString.h>
+#include <TGraph.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataCont/interface/RunLumiRangeMap.h"
+#include "MitAna/DataCont/interface/RunLumiSet.h"
 
 namespace mithep 
 {
@@ -51,7 +53,9 @@ namespace mithep
       Int_t                       fNFailed;       //!number of failed events
       RunLumiPairType             fCurrentRunLumi; //!cached current run-lumi pair
       Bool_t                      fAcceptCurrentRunLumi; //!cached decision for current run-lumi pair
-      RunLumiRangeMap             fAcceptedRunsLumis; //mapped run-lumi ranges to accept
+      RunLumiRangeMap             fAcceptedRunsLumis; //!mapped run-lumi ranges to accept
+      RunLumiSet                  fRunLumiSet; //!
+      TGraph                     *fRunLumiGraph; //!
 
     ClassDef(RunLumiSelectionMod, 1) // L1 TAM module
   };

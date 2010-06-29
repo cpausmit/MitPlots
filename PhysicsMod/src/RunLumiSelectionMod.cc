@@ -1,4 +1,4 @@
-// $Id: RunLumiSelectionMod.cc,v 1.2 2010/05/06 17:30:17 bendavid Exp $
+// $Id: RunLumiSelectionMod.cc,v 1.3 2010/05/29 18:10:15 bendavid Exp $
 
 #include "MitAna/PhysicsMod/interface/RunLumiSelectionMod.h"
 #include <TTree.h>
@@ -16,7 +16,8 @@ RunLumiSelectionMod::RunLumiSelectionMod(const char *name, const char *title) :
   fNEvents(0),
   fNAcceped(0),
   fNFailed(0),
-  fAcceptCurrentRunLumi(kFALSE)
+  fAcceptCurrentRunLumi(kFALSE),
+  fRunLumiGraph(0)
 {
   // Constructor. 
 }
@@ -54,6 +55,9 @@ void RunLumiSelectionMod::Process()
       fAcceptCurrentRunLumi = fAcceptedRunsLumis.HasRunLumi(runLumi);
     }
     fCurrentRunLumi = runLumi;
+    if (fAcceptCurrentRunLumi) {
+      fRunLumiSet.Add(runLumi);
+    }
     if (0) {
       printf("Run %u, Lumi %u, accepted = %i\n",runLumi.first,runLumi.second,fAcceptCurrentRunLumi);
     }
@@ -79,6 +83,10 @@ void RunLumiSelectionMod::Process()
 void RunLumiSelectionMod::SlaveBegin()
 {
 
+//   fRunLumiVector = new RunLumiVector;
+//   fRunLumiVector->SetName("ProcessedRunsLumis");
+//   AddOutput(fRunLumiVector);
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,6 +94,27 @@ void RunLumiSelectionMod::SlaveTerminate()
 {
   // Save number of accepted events.
 
+  const RunLumiSet::SetType &theset = fRunLumiSet.runLumiSet();
+
+  UInt_t setSize = theset.size();
+  Double_t *runArray = new Double_t[setSize];
+  Double_t *lumiArray = new Double_t[setSize];
+  
+  UInt_t arrayPos = 0;
+  for (RunLumiSet::SetType::const_iterator it = theset.begin(); it!=theset.end(); ++it) {
+    printf("first = %u, second = %u\n",it->first,it->second);
+    runArray[arrayPos] = it->first;
+    lumiArray[arrayPos] = it->second;
+    ++arrayPos;
+  }
+
+  fRunLumiGraph = new TGraph(setSize,runArray,lumiArray);
+  fRunLumiGraph->SetName("ProcessedRunsLumis");
+  AddOutput(fRunLumiGraph);
+  
+  delete runArray;
+  delete lumiArray;
+  
   SaveNEventsProcessed();
 }
 

@@ -1,9 +1,10 @@
-// $Id: BaseCollection.cc,v 1.3 2009/03/02 12:34:00 loizides Exp $
+// $Id: RunLumiRangeMap.cc,v 1.1 2010/05/29 18:10:14 bendavid Exp $
 
 #include "MitAna/DataCont/interface/RunLumiRangeMap.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/lexical_cast.hpp>
+#include "MitCommon/JSONSpirit/src/json_spirit.h"
 #include <TClass.h>
 
 ClassImp(mithep::RunLumiRangeMap)
@@ -72,21 +73,47 @@ void mithep::RunLumiRangeMap::AddJSONFile(const std::string &filepath)
 void mithep::RunLumiRangeMap::DumpJSONFile(const std::string &filepath) 
 {
 
-  //read json file into boost property tree
-  boost::property_tree::ptree jsonTree;
+  json_spirit::Object jsonTree;
   
-  //loop through map and fill boost property tree
   for (MapType::const_iterator it = fMap.begin(); it!=fMap.end(); ++it) {
     UInt_t runnum  = it->first;
-    //jsonTree.put(boost::lexical_cast<string>(runnum));
-    //check lumis
+    json_spirit::Array lumiPairListArray;
     const MapType::mapped_type &lumiPairList = it->second;
     for (MapType::mapped_type::const_iterator jt = lumiPairList.begin(); jt<lumiPairList.end(); ++jt) {
-      ;
+      json_spirit::Array lumiPairArray;
+      lumiPairArray.push_back(int(jt->first));
+      lumiPairArray.push_back(int(jt->second));
+      
+      lumiPairListArray.push_back(lumiPairArray);
     }
-  }
-  
-  //write file
-  boost::property_tree::write_json(filepath,jsonTree);
+    json_spirit::Pair runPair(boost::lexical_cast<std::string>(runnum), lumiPairListArray);
+    jsonTree.push_back(runPair);
+  } 
 
+  ofstream os(filepath.c_str());
+  json_spirit::write(jsonTree,os);
+ 
+}
+
+//--------------------------------------------------------------------------------------------------
+void mithep::RunLumiRangeMap::FillRunLumiSet(const RunLumiSet &rlSet)
+{
+  fMap.clear();
+  const RunLumiSet::SetType &theset = rlSet.runLumiSet();
+
+  UInt_t firstlumi = 0;
+  for (RunLumiSet::SetType::const_iterator it = theset.begin(); it!=theset.end(); ++it) {
+
+    if (firstlumi==0) firstlumi = it->second;
+    MapType::mapped_type &lumiPairList = fMap[it->first];
+
+    RunLumiSet::SetType::const_iterator itnext = it;
+    ++itnext;
+
+    if ( itnext==theset.end() || itnext->first!=it->first || itnext->second!=(it->second+1) ) {
+      lumiPairList.push_back(std::pair<UInt_t,UInt_t>(firstlumi,it->second));
+      firstlumi = 0;
+    }
+    
+  }
 }
