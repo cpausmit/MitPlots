@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.51 2010/05/31 12:44:05 bendavid Exp $
+// $Id: Track.h,v 1.52 2010/06/25 15:11:34 bendavid Exp $
 //
 // Track
 //
@@ -175,10 +175,10 @@ namespace mithep
                 fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       Track(Double_t qOverP, Double_t lambda, Double_t phi0, Double_t dxy, Double_t dsz) :
-	        fNHits(0), fNPixelHits(0), fNMissingHits(0), fNExpectedHitsInner(0), fNExpectedHitsOuter(0),
-                fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(0), fQOverPErr(0),
-                fLambda(0), fLambdaErr(0), fPhi0(0), fPhi0Err(0),
-                fDxy(0), fDxyErr(0), fDsz(0), fDszErr(0), fChi2(0),
+                fNHits(0), fNPixelHits(0), fNMissingHits(0), fNExpectedHitsInner(0), fNExpectedHitsOuter(0),
+                fAlgo(undefAlgorithm), fIsGsf(0), fPtErr(0), fQOverP(qOverP), fQOverPErr(0),
+                fLambda(lambda), fLambdaErr(0), fPhi0(phi0), fPhi0Err(0),
+                fDxy(dxy), fDxyErr(0), fDsz(dsz), fDszErr(0), fChi2(0),
                 fNdof(0), fEtaEcal(0), fPhiEcal(0) {}
       ~Track() {}
 
