@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.17 2010/03/26 15:09:11 sixie Exp $
+// $Id: SuperCluster.h,v 1.18 2010/06/25 15:12:58 bendavid Exp $
 //
 // SuperCluster
 //
@@ -36,6 +36,7 @@ namespace mithep
       Double_t               Et()                    const;
       Double_t               Eta()                   const { return fPoint.Eta();                  }
       Double_t               EtaWidth()              const { return fEtaWidth;                     }
+      Bool_t                 HasTower(const CaloTower *t) const { return fCaloTowers.HasObject(t); }
       Double_t               HcalDepth1Energy()      const { return fHcalDepth1Energy;             }
       Double_t               HcalDepth2Energy()      const { return fHcalDepth2Energy;             }
       Double_t               HadDepth1OverEm()       const { return fHcalDepth1Energy/fEnergy;     }
