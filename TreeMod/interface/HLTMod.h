@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.13 2009/07/13 13:45:30 loizides Exp $
+// $Id: HLTMod.h,v 1.14 2009/08/11 15:24:39 loizides Exp $
 //
 // HLTMod
 //
@@ -26,6 +26,7 @@
 #define MITANA_TREEMOD_HLTMOD_H
 
 #include <string>
+#include <utility>
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/TriggerObjectFwd.h"
@@ -47,7 +48,7 @@ namespace mithep
       HLTMod(const char *name="HLTMod", const char *title="High-level trigger module");
       ~HLTMod();
 
-      void                        AddTrigger(const char *expr);
+      void                        AddTrigger(const char *expr, UInt_t firstRun=0, UInt_t lastRun=0);
       const char                 *GetBitsName()     const { return fBitsName;      }
       Int_t                       GetNEvents()      const { return fNEvents;       }
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
@@ -77,7 +78,7 @@ namespace mithep
       EObjMode                    fObjMode;       //defines which objects to get (def=kHlt)
       TString                     fBitsName;      //trigger bits branch name
       TString                     fMyObjsNamePub; //name of exported trigger object array
-      std::vector<std::string>    fTrigNames;     //trigger names requested for test mask
+      std::vector<std::pair<std::string,std::pair<UInt_t,UInt_t> > > fTrigNames;     //trigger names requested for test mask with valid run range
       const TriggerMask          *fBits;          //!trigger bits branch
       std::vector<BitMask256>     fTrigBitsAnd;   //!trigger bits used in mask
       std::vector<BitMask256>     fTrigBitsCmp;   //!trigger bits used for comparison

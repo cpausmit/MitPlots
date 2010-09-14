@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.17 2009/10/01 12:43:53 loizides Exp $
+// $Id: HLTMod.cc,v 1.18 2009/12/01 15:14:11 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -41,7 +41,7 @@ HLTMod::~HLTMod()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HLTMod::AddTrigger(const char *expr)
+void HLTMod::AddTrigger(const char *expr, UInt_t firstRun, UInt_t lastRun)
 {
   // Add trigger search pattern to the list of patters. Each element of the list is logically 
   // "ored". The given expression can contain several trigger names logically "anded" (using "&"). 
@@ -49,7 +49,8 @@ void HLTMod::AddTrigger(const char *expr)
   // "A", "!A", "A&B", "A&!B" or "A&B&C"  
 
   string tname(expr);
-  fTrigNames.push_back(tname);
+  std::pair<std::string,std::pair<UInt_t,UInt_t> > element(tname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+  fTrigNames.push_back(element);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -95,11 +96,19 @@ void HLTMod::BeginRun()
     Info("BeginRun", "Get trigger table for run %d", GetEventHeader()->RunNum());
     fTriggers->Print();
   }
+  
+  UInt_t runNumber = GetEventHeader()->RunNum();
 
   for (UInt_t i=0; i<fTrigNames.size(); ++i) {
+    
+    UInt_t firstRun = fTrigNames.at(i).second.first;
+    UInt_t lastRun = fTrigNames.at(i).second.second;
+    
+    if ( (!(firstRun==0 && lastRun==0)) && ( runNumber<firstRun || runNumber>lastRun ) ) continue;
+    
     BitMask256 tmask; //trigger mask
     BitMask256 amask; //bitand mask
-    TString names(fTrigNames.at(i).c_str());
+    TString names(fTrigNames.at(i).first.c_str());
 
     TObjArray *arr = names.Tokenize("&");
     if (arr) {
