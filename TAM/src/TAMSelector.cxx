@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.16 2009/07/13 19:20:25 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.17 2009/07/16 21:02:05 loizides Exp $
 //
 
 #include "MitAna/TAM/interface/TAMSelector.h"
@@ -187,8 +187,10 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
             readentry, tamentry);
    }
 
+   Long64_t chainentry = readentry + fSel->GetTree()->GetChainOffset();
+
    // read branchref if needed
-   if (fCurEntry != readentry) {
+   if (fCurEntry != chainentry) {
       Int_t bytes = br->GetEntry(readentry);
       if (bytes<0) {
          Fatal("Load", "Could not get entry %d from %s branch",
@@ -204,7 +206,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
       if (friends) {
 
          // reset branch read flags if new entry to be read
-         if (fCurEntry != readentry)
+         if (fCurEntry != chainentry)
             memset(fBrRead, 0, 1024*sizeof(Bool_t));
 
          TObjLink *lnk = friends->FirstLink();
@@ -231,7 +233,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    }
 
    // cache last branch read attempt
-   fCurEntry = readentry;
+   fCurEntry = chainentry;
 
    if (!branch) {
       return kFALSE;
