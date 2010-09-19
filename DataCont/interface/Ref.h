@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.5 2009/03/23 22:15:10 loizides Exp $
+// $Id: Ref.h,v 1.6 2009/03/24 05:44:14 loizides Exp $
 //
 // Ref
 //
@@ -68,7 +68,12 @@ TObject *mithep::Ref<ArrayElement>::GetObject() const
     return 0;
   }
 
-  return RefResolver::GetObjectWithID(fUID,pid);
+  TObject *obj = RefResolver::GetObjectWithID(fUID,pid);
+  if (!obj) {
+    Fatal("Ref::GetObject","Null pointer for valid ref!");
+  }
+  
+  return obj;
 }
 
 //--------------------------------------------------------------------------------------------------

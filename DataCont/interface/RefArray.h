@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.21 2009/03/23 13:07:17 loizides Exp $
+// $Id: RefArray.h,v 1.22 2009/03/23 22:15:10 loizides Exp $
 //
 // RefArray
 //
@@ -158,7 +158,11 @@ TObject *mithep::RefArray<ArrayElement>::GetObject(UInt_t idx) const
   }
 
   UInt_t uid = GetUID(idx);
-  return RefResolver::GetObjectWithID(uid,pid);
+  TObject *obj = RefResolver::GetObjectWithID(uid,pid);
+  if (!obj) {
+    Fatal("RefArray::GetObject","Null pointer for filled element!");
+  }
+  return obj;
 }
 
 //--------------------------------------------------------------------------------------------------
