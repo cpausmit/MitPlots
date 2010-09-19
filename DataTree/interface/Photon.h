@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.31 2009/08/07 20:12:50 ceballos Exp $
+// $Id: Photon.h,v 1.32 2010/03/22 18:39:57 bendavid Exp $
 //
 // Photon
 //
@@ -22,7 +22,10 @@ namespace mithep
   {
     public:
       Photon() : 
-        fR9(0),fHadOverEm(0),fEcalRecHitIso(0),fHcalRecHitIso(0), fHcalTowerSumEtDr04(0),
+        fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
+        fHcalDepth2OverEcal(0), fMaxEnergyXtal(0), fE15(0), fE25(0), fE33(0),
+        fE55(0), fCovEtaEta(0), fCoviEtaiEta(0),
+        fEcalRecHitIso(0),fHcalRecHitIso(0), fHcalTowerSumEtDr04(0),
         fHcalDepth1TowerSumEtDr04(0), fHcalDepth2TowerSumEtDr04(0), fSolidConeTrkIso(0),
         fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
         fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
@@ -32,7 +35,10 @@ namespace mithep
         fIsConverted(0) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
-        fR9(0),fHadOverEm(0),fEcalRecHitIso(0),fHcalRecHitIso(0), fHcalTowerSumEtDr04(0),
+        fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
+        fHcalDepth2OverEcal(0), fMaxEnergyXtal(0), fE15(0), fE25(0), fE33(0),
+        fE55(0), fCovEtaEta(0), fCoviEtaiEta(0),
+        fEcalRecHitIso(0),fHcalRecHitIso(0), fHcalTowerSumEtDr04(0),
         fHcalDepth1TowerSumEtDr04(0), fHcalDepth2TowerSumEtDr04(0), fSolidConeTrkIso(0),
         fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
         fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
@@ -45,6 +51,15 @@ namespace mithep
       Double_t             EcalRecHitIsoDr03()     const { return fEcalRecHitIsoDr03;  }
       Double_t             EcalRecHitIsoDr04()     const { return fEcalRecHitIso;      }
       Double_t             HadOverEm()             const { return fHadOverEm;          }
+      Double_t             HcalDepth1OverEcal()    const { return fHcalDepth1OverEcal; }
+      Double_t             HcalDepth2OverEcal()    const { return fHcalDepth2OverEcal; }
+      Double_t             MaxEnergyXtal()         const { return fMaxEnergyXtal;      }
+      Double_t             E15()                   const { return fE15;                }
+      Double_t             E25()                   const { return fE25;                }
+      Double_t             E33()                   const { return fE33;                }      
+      Double_t             E55()                   const { return fE55;                }      
+      Double_t             CovEtaEta()             const { return fCovEtaEta;          }
+      Double_t             CoviEtaiEta()           const { return fCoviEtaiEta;        }         
       Bool_t               HasPixelSeed()          const { return fHasPixelSeed;       }
       Double_t             HcalDepth1TowerSumEtDr03() const { return fHcalDepth1TowerSumEtDr03; }
       Double_t             HcalDepth1TowerSumEtDr04() const { return fHcalDepth1TowerSumEtDr04; }
@@ -80,6 +95,15 @@ namespace mithep
       void                 SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
       void                 SetR9(Double_t x)                       { fR9                       = x; }
       void                 SetHadOverEm(Double_t x)                { fHadOverEm                = x; }
+      void                 SetHcalDepth1OverEcal(Double_t x)       { fHcalDepth1OverEcal       = x; }
+      void                 SetHcalDepth2OverEcal(Double_t x)       { fHcalDepth2OverEcal       = x; } 
+      void                 SetMaxEnergyXtal(Double_t x)            { fMaxEnergyXtal            = x; }
+      void                 SetE15(Double_t x)                      { fE15                      = x; }
+      void                 SetE25(Double_t x)                      { fE25                      = x; }
+      void                 SetE33(Double_t x)                      { fE33                      = x; }      
+      void                 SetE55(Double_t x)                      { fE55                      = x; }      
+      void                 SetCovEtaEta(Double_t CovEtaEta)        { fCovEtaEta   = CovEtaEta;      }
+      void                 SetCoviEtaiEta(Double_t CoviEtaiEta)    { fCoviEtaiEta = CoviEtaiEta;    }      
       void                 SetHasPixelSeed(Bool_t x)               { fHasPixelSeed             = x; }
       void                 SetEcalRecHitIsoDr04(Double_t x)        { fEcalRecHitIso            = x; }
       void                 SetHcalTowerSumEtDr04(Double_t x)       { fHcalTowerSumEtDr04       = x; }
@@ -112,6 +136,15 @@ namespace mithep
       Vect4M               fMom;                //four momentum vector
       Double32_t           fR9;                 //[0,0,14]r9=e3x3/etotal variable
       Double32_t           fHadOverEm;          //[0,0,14]hadronic over em fraction
+      Double32_t           fHcalDepth1OverEcal;        //[0,0,14]hadronic over em fraction depth1
+      Double32_t           fHcalDepth2OverEcal;        //[0,0,14]hadronic over em fraction depth2
+      Double32_t           fMaxEnergyXtal;          //[0,0,14]maximum single crystal energy
+      Double32_t           fE15;                       //[0,0,14]1x5 crystal energy
+      Double32_t           fE25;                    //[0,0,14]2x5 crystal energy
+      Double32_t           fE33;                    //[0,0,14]3x3 crystal energy      
+      Double32_t           fE55;                       //[0,0,14]5x5 crystal energy
+      Double32_t           fCovEtaEta;                 //[0,0,14]variance eta-eta
+      Double32_t           fCoviEtaiEta;               //[0,0,14]covariance eta-eta (in crystals)      
       Double32_t           fEcalRecHitIso;      //[0,0,14]ecal rechit based isolation dR 0.4 *RENAMING*
       Double32_t           fHcalRecHitIso;      //[0,0,14]hcal rechit based isolation dR 0.4 - *DEPRECATED*
       Double32_t           fHcalTowerSumEtDr04; //[0,0,14]hcal tower based isolation dR 0.4
@@ -144,7 +177,7 @@ namespace mithep
       RefArray<Conversion> fConversions;        //refs to associated conversion candidates
       Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
 	
-    ClassDef(Photon,2) // Photon class
+    ClassDef(Photon,3) // Photon class
   };
 }
 
