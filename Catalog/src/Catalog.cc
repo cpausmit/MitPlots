@@ -1,7 +1,7 @@
-// $Id: Catalog.cc,v 1.5 2009/01/20 09:13:57 loizides Exp $
+// $Id: Catalog.cc,v 1.6 2010/05/03 11:37:48 bendavid Exp $
 
-#include "MitAna/Catalog/interface/Catalog.h"
 #include <TSystem.h>
+#include "MitAna/Catalog/interface/Catalog.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/Catalog/interface/Dataset.h"
 
@@ -35,13 +35,13 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
   char    file[1024], fset[1024], location[1024];
   UInt_t  nLumiSecs=0, nEvents=0;
   UInt_t  nMaxRun=0, nMaxLumiSecMaxRun=0, nMinRun=0, nMinLumiSecMinRun=0;
-  FILE   *f=0;
+  FILE   *fHandle=0;
 
   Dataset *ds = new Dataset(dataset);
 
   // Read the locations and parameters of the different filesets
-  f = gSystem->OpenPipe(cmdFilesets.Data(),"r");
-  while (fscanf(f,"%s %s %u %u %u %u %u %u",fset,location,
+  fHandle = gSystem->OpenPipe(cmdFilesets.Data(),"r");
+  while (fscanf(fHandle,"%s %s %u %u %u %u %u %u",fset,location,
 		&nLumiSecs,&nEvents,&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
 	 != EOF) {
     MDB(kGeneral,1)
@@ -51,11 +51,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
     ds->AddFileset(fs);
     delete fs;
   }
-  gSystem->ClosePipe(f);
+  gSystem->ClosePipe(fHandle);
 
   // Read the parameters for each file
-  f = gSystem->OpenPipe(cmdFiles.Data(),"r");
-  while (fscanf(f,"%s %s %u %u %u %u %u %u",fset,file,
+  fHandle = gSystem->OpenPipe(cmdFiles.Data(),"r");
+  while (fscanf(fHandle,"%s %s %u %u %u %u %u %u",fset,file,
 		&nLumiSecs,&nEvents,&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
 	 != EOF) {
     MDB(kGeneral,1)
@@ -66,7 +66,7 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
     ds->AddFile(fset,f);
     delete f;
   }
-  gSystem->ClosePipe(f);
+  gSystem->ClosePipe(fHandle);
 
   return ds;
 }

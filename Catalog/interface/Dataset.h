@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Dataset.h,v 1.2 2008/07/08 05:50:57 loizides Exp $
+// $Id: Dataset.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
 //
 // Dataset
 //
@@ -38,7 +38,7 @@ namespace mithep
       std::vector<FilesetMetaData> fFilesetList;        //list of filesets contained in the dataset
       UInt_t                       fNFiles;             //number of files in dataset
 
-      ClassDef(Dataset, 1) // Dataset consisting out of filesets.
+      ClassDef(Dataset, 1) // Dataset consisting of filesets.
   };
 }
 #endif

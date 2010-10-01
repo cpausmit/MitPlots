@@ -1,11 +1,17 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Catalog.h,v 1.4 2008/11/12 01:55:40 paus Exp $
+// $Id: Catalog.h,v 1.5 2009/01/20 09:13:57 loizides Exp $
 //
 // Catalog
 //
-// This class implements a catalog. The catalog consists of books which in turn consists of
+// This class implements a catalog. The catalog consists of books which in turn consist of
 // datasets. Datasets are a set of data which represent a coherent set of events. The catalog knows
 // about the location of all datasets and can therefore provide any combination of (book,dataset).
+//
+// For convenience datasets are subdivided into filesets which each contain a number of files.
+// Filesets have to live in the same 'directory'. In principle a dataset could reside on various
+// logical locations, but this likely never happens with the mass storage systems at hand. The main
+// advantage of filesets is that they provide a natural unit to define separate processing tasks
+// for job submission.
 //
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
@@ -30,7 +36,7 @@ namespace mithep
 					   const char *fileset = "") const;
 
     private:
-      TString                  fLocation;    //location of catalog
+      TString                  fLocation;    // location of catalog
 
     ClassDef(Catalog, 0) // Simple catalog for books consisting of datasets
   };
