@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.39 2010/03/22 18:40:59 bendavid Exp $
+// $Id: Analysis.cc,v 1.40 2010/05/10 16:16:39 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
@@ -98,7 +98,7 @@ Bool_t Analysis::AddDataset(const Dataset *dataset)
 {
   // Add a full dataset to the analysis.
 
-  Bool_t status = true;
+  Bool_t status = kTRUE;
 
   for (UInt_t i=0; i<dataset->NFiles(); ++i)
     status = (status && AddFile(dataset->FileUrl(i)));
@@ -117,7 +117,14 @@ Bool_t Analysis::AddFile(const char *pname)
     return kFALSE;
   }
 
-  TString pnamestr(pname);
+  //================================================================================================
+  // Please do not ask me why I need to do this but I have to?! (CP - Oct02, 2010)
+  char   fileName[4096];
+  strcpy(fileName,pname);
+  //================================================================================================
+
+  TString pnamestr(fileName);
+
   if (pnamestr.IsNull()) 
     return kFALSE;
 
@@ -174,7 +181,8 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     return;
   }
    
-  if (!IsValidName(pname)) return;
+  if (! IsValidName(pname))
+    return;
 
   TString theFile(pname);
   if ( theFile.BeginsWith("castor:") )
@@ -182,7 +190,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
   if ( theFile.BeginsWith("/castor/"))
     theFile.Prepend("root://castorcms/");
   printf("Adding file with path: %s\n",theFile.Data());
-  l->Add(new TObjString(theFile));
+  l->Add(new TObjString(theFile.Data()));
 
   MDB(kAnalysis, 2)
     Info("AddFile", "Added %s to list of files.", pname);
@@ -293,11 +301,11 @@ void Analysis::FileInputFromEnv()
 {
   // Attempt to get list of filesets/files from environment.
 
-  TString catalog(gSystem->Getenv("MIT_CATALOG"));
-  TString book(gSystem->Getenv("MIT_BOOK"));
-  TString dataset(gSystem->Getenv("MIT_DATASET"));
+  TString catalog (gSystem->Getenv("MIT_CATALOG"));
+  TString book    (gSystem->Getenv("MIT_BOOK"));
+  TString dataset (gSystem->Getenv("MIT_DATASET"));
   TString filesets(gSystem->Getenv("MIT_FILESETS"));
-  TString files(gSystem->Getenv("MIT_FILES"));
+  TString files   (gSystem->Getenv("MIT_FILES"));
 
   if ((catalog.IsNull() || book.IsNull() || dataset.IsNull()) && files.IsNull()) {
       Warning("FileInputFromEnv", "Called to get file info from environment, but did not get"
