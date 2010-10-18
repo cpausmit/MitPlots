@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.10 2009/05/11 08:00:00 loizides Exp $
+// $Id: ChargedParticle.h,v 1.11 2009/10/30 14:16:00 bendavid Exp $
 //
 // ChargedParticle
 //
@@ -24,12 +24,15 @@ namespace mithep
       EObjType                ObjType()    const { return kChargedParticle; }
       virtual const Track    *TrackerTrk() const { return Trk();            }
       virtual const Track    *Trk()        const { return 0;                }
+      Int_t CorrectedNExpectedHitsInner()  const { return fCorrectedNExpectedHitsInner; }
+      void SetCorrectedNExpectedHitsInner(Int_t n)    { fCorrectedNExpectedHitsInner = n; }
 
     protected:
       Double_t                GetCharge()  const;
       void                    GetMom()     const;
+      Int_t                   fCorrectedNExpectedHitsInner; //corrected NExpectedHitsInner
 
-    ClassDef(ChargedParticle, 1) // Charged particle class
+    ClassDef(ChargedParticle, 2) // Charged particle class
   };
 }
 
