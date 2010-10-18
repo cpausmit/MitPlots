@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ChargedParticle.h,v 1.11 2009/10/30 14:16:00 bendavid Exp $
+// $Id: ChargedParticle.h,v 1.12 2010/10/18 01:33:09 bendavid Exp $
 //
 // ChargedParticle
 //
@@ -19,7 +19,7 @@ namespace mithep
   class ChargedParticle : public Particle
   {
     public:
-      ChargedParticle() {}
+      ChargedParticle() : fCorrectedNExpectedHitsInner(0) {}
 
       EObjType                ObjType()    const { return kChargedParticle; }
       virtual const Track    *TrackerTrk() const { return Trk();            }
