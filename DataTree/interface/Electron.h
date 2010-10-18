@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.41 2010/05/23 21:09:38 bendavid Exp $
+// $Id: Electron.h,v 1.42 2010/06/23 09:02:04 bendavid Exp $
 //
 // Electron
 //
@@ -126,8 +126,11 @@ namespace mithep
       Double_t             HcalDepth2TowerSumEtDr03() const { return fHcalDepth2TowerSumEtDr03;    }
       Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
       Bool_t               MatchesVertexConversion() const { return fMatchesVertexConversion;      }
+      UInt_t               NAmbiguousGsfTracks()     const { return fAmbiguousGsfTracks.Entries();  }
+      Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
+      const Track         *AmbiguousGsfTrack(UInt_t i) const { return fAmbiguousGsfTracks.At(i);   }
       
-      
+      void                 AddAmbiguousGsfTrack(const Track *t)   { fAmbiguousGsfTracks.Add(t);    }
       void                 SetCharge(Char_t x)                    { fCharge = x; ClearCharge();    }
       void                 SetScPixCharge(Char_t x)               { fScPixCharge = x;              }
       void                 SetD0PV(Double_t x)                    { fD0PV = x;                     }
@@ -286,8 +289,9 @@ namespace mithep
       Bool_t               fIsEcalDriven;              //is std. egamma electron
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
       Bool_t               fMatchesVertexConversion;
+      RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
 
-    ClassDef(Electron, 7) // Electron class
+    ClassDef(Electron, 8) // Electron class
   };
 }
 
