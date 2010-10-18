@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.46 2010/06/23 15:01:16 bendavid Exp $
+# $Id: setup.sh,v 1.47 2010/08/06 03:59:10 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -58,6 +58,16 @@ if test $version -lt 3009000; then
             addpkg RecoVertex/KalmanVertexFit;
             patch -p0 < MitAna/scripts/KalmanFitPatch.patch 
         fi
+
+        cvs co -rV00-04-08 DataFormats/GeometrySurface
+        cvs co -rV08-11-01 RecoTracker/MeasurementDet
+        cvs co -rV00-03-00 TrackingTools/MeasurementDet
+        cvs co -rV00-3_8_X HiggsAnalysis/HiggsToWW2Leptons
+
+        addpkg RecoEgamma/ElectronIdentification V00-03-14
+
+        checkdeps -a
+
 
 fi
 
