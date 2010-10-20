@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.47 2010/08/06 03:59:10 bendavid Exp $
+# $Id: setup.sh,v 1.48 2010/10/18 01:31:47 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -64,7 +64,7 @@ if test $version -lt 3009000; then
         cvs co -rV00-03-00 TrackingTools/MeasurementDet
         cvs co -rV00-3_8_X HiggsAnalysis/HiggsToWW2Leptons
 
-        addpkg RecoEgamma/ElectronIdentification V00-03-14
+        addpkg RecoEgamma/ElectronIdentification V00-03-14-01
 
         checkdeps -a
 
