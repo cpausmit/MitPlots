@@ -1,4 +1,4 @@
-// $Id: Muon.cc,v 1.7 2010/05/21 18:50:07 bendavid Exp $
+// $Id: Muon.cc,v 1.8 2010/05/29 11:56:48 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Muon.h"
 
@@ -14,9 +14,9 @@ Muon::Muon() :
   fEmEnergy(0), fHadEnergy(0), fHoEnergy(0), fEmS9Energy(0), 
   fHadS9Energy(0), fHoS9Energy(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
   fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0), fPVCompatibility(0), fPVBSCompatibility(0),
-  fNValidHits(0), fNTraversedChambers(0), fIsGlobalMuon(kFALSE),
+  fNValidHits(0), fNTraversedChambers(0), fNMatches(0), fIsGlobalMuon(kFALSE),
   fIsTrackerMuon(kFALSE), fIsStandaloneMuon(kFALSE), fIsCaloMuon(kFALSE)
-{ 
+{
   // Constructor.
 
   memset(fDX,0,sizeof(Double32_t)*8); 

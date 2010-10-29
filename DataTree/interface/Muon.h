@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.38 2010/05/29 18:08:05 bendavid Exp $
+// $Id: Muon.h,v 1.39 2010/06/18 06:10:04 ceballos Exp $
 //
 // Muon
 //
@@ -43,6 +43,7 @@
 //    to propagated track
 //   NSegments : Number of segments in muon using Segment+Track Arbitration 
 //   NChambers : Number of muon chambers traversed in propagated track
+//   NMatches  : Number of muon chambers with matches
 //   LastHit   : Returns farest (from center) station with a recorded segment
 //   LastStation  : Returns farest station using Segment+Track Arbitration
 //
@@ -133,6 +134,7 @@ namespace mithep {
       UInt_t         NValidHits()                    const { return fNValidHits;               }
       UInt_t         NChambers()                     const { return fNTraversedChambers;       }
       UInt_t         NSegments()                     const { return fStationMask.NBitsSet();   }
+      UInt_t         NMatches()                      const { return fNMatches;                 }
       Int_t          LastHit()                       const;
       Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
       Int_t          LastStation(Int_t iMax=8)       const;
@@ -191,6 +193,7 @@ namespace mithep {
       void           SetNValidHits(UShort_t iNValidHits)   { fNValidHits  = iNValidHits;       }
       void           SetNChambers(UShort_t iNTraCh)        { fNTraversedChambers = iNTraCh;    }
       void           SetNSegments(Int_t iStation, Int_t NSegments);
+      void           SetNMatches(UShort_t iNMatCh)         { fNMatches = iNMatCh;              }
       void           SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
       void           SetPullX(Int_t iStation, Double_t iPullX);
       void           SetPullY(Int_t iStation, Double_t iPullY);
@@ -238,6 +241,7 @@ namespace mithep {
       Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
       UShort_t       fNValidHits;          //number of Valid hits in global fit
       UShort_t       fNTraversedChambers;  //number of traversed chambers
+      UShort_t       fNMatches;            //number of muon chambers with matches
       MuonQuality    fQuality;             //muon quality
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
       Double32_t     fDX[8];               //[0,0,14]uncertainty in x in given muon chamber
