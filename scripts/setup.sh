@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.48 2010/10/18 01:31:47 bendavid Exp $
+# $Id: setup.sh,v 1.49 2010/10/20 20:33:50 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,47 +29,10 @@ echo
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 2002014; then
-    echo "Version not supported, exiting";
-    exit 1;
+if test $version -lt 3010000; then
+ ;
 fi
 
-if test $version -lt 3007000; then
-        addpkg RecoEgamma/EgammaTools V00-05-03
-        checkdeps -a
-fi
-
-if test $version -lt 3009000; then
-      #Remove annoying warning messages for the jet to vertex associator.
-        if ! test -d "JetMETCorrections/JetVertexAssociation"; then
-            addpkg JetMETCorrections/JetVertexAssociation;
-            TMP=`mktemp`;
-            cat JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc | 
-            sed -e 's/else  std::cout << \"\[Jets\] JetVertexAssociation: Warning\! problems for  Algo = 2: possible division by zero ..\" << std::endl;//' > $TMP;
-            mv $TMP JetMETCorrections/JetVertexAssociation/src/JetVertexMain.cc
-        fi
-
-        if ! test -d "RecoVertex/GaussianSumVertexFit"; then
-            addpkg RecoVertex/GaussianSumVertexFit;
-            patch -p0 < MitAna/scripts/GSFFitPatch.patch 
-        fi
-
-        if ! test -d "RecoVertex/KalmanVertexFit"; then
-            addpkg RecoVertex/KalmanVertexFit;
-            patch -p0 < MitAna/scripts/KalmanFitPatch.patch 
-        fi
-
-        cvs co -rV00-04-08 DataFormats/GeometrySurface
-        cvs co -rV08-11-01 RecoTracker/MeasurementDet
-        cvs co -rV00-03-00 TrackingTools/MeasurementDet
-        cvs co -rV00-3_8_X HiggsAnalysis/HiggsToWW2Leptons
-
-        addpkg RecoEgamma/ElectronIdentification V00-03-14-01
-
-        checkdeps -a
-
-
-fi
 
 case $version in
     (3003006) 
