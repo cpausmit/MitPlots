@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.28 2009/12/15 23:27:18 bendavid Exp $
+// $Id: DecayParticle.h,v 1.29 2010/03/31 12:04:06 bendavid Exp $
 //
 // DecayParticle
 //
@@ -20,6 +20,7 @@
 #include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/DaughterData.h"
 #include "MitAna/DataTree/interface/Vertex.h"
+#include "MitAna/DataTree/interface/ConversionQuality.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep 
@@ -29,10 +30,10 @@ namespace mithep
     public:
       DecayParticle() :
         fAbsPdgId(0), fChi2(0), fNdof(0), fMassError(0), 
-        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fNSharedHits(0) {}
       DecayParticle(Int_t absPdgId) : 
         fAbsPdgId(absPdgId), fChi2(0), fNdof(0), fMassError(0), 
-        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0) {}
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fNSharedHits(0) {}
 
       void                      AddDaughterData(const DaughterData *dd) 
                                   { fDaughterData.Add(dd); ClearCharge(); }
@@ -65,10 +66,13 @@ namespace mithep
       const Vertex             *PriVertex()           const { return fPriVtx.Obj();                }
       Double_t                  Prob()                const { return TMath::Prob(fChi2,fNdof);     }
       const ThreeVector        &Position()            const;
+      const ConversionQuality  &Quality()             const { return fQuality;                     }
+      ConversionQuality        &Quality()                   { return fQuality;                     }
       const ThreeVector         RelativePosition()    const;
       Bool_t                    SharedLayer(Track::EHitLayer l) const  { return fSharedLayers.TestBit(l); }
       const BitMask48          &SharedLayers()        const { return fSharedLayers;                }
-      UInt_t                    NSharedHits()         const { return fSharedLayers.NBitsSet();     }
+      UInt_t                    NSharedLayers()       const { return fSharedLayers.NBitsSet();     }
+      UInt_t                    NSharedHits()         const { return TMath::Max(UInt_t(fNSharedHits),NSharedLayers()); }      
       void                      SetAbsPdgId(UInt_t apid)                { fAbsPdgId=apid;          }
       void                      SetChi2(Double_t chi2)                  { fChi2 = chi2;            }
       void                      SetDxy(Double_t dxy)                    { fDxy = dxy; ClearPos();  }
@@ -82,6 +86,7 @@ namespace mithep
       void                      SetMom(const FourVector &p)             
                                   { fMomentum = p; ClearMom(); ClearPos(); }
       void                      SetNdof(UShort_t ndof)                  { fNdof = ndof;            }
+      void                      SetNSharedHits(UShort_t nhits)          { fNSharedHits = nhits;    }
       void                      SetPriVertex(const Vertex *v)           { fPriVtx = v; ClearPos(); }
       void                      SetSharedLayer(Track::EHitLayer l)      { fSharedLayers.SetBit(l); }
       void                      SetSharedLayers(const BitMask48 &layers) { fSharedLayers = layers; }
@@ -107,10 +112,12 @@ namespace mithep
       RefArray<DaughterData>    fDaughterData; //momentum of daughters at vertex
       Ref<Vertex>               fPriVtx;       //reference to primary vertex
       BitMask48                 fSharedLayers; //layer mask for shared hits from daughter particles
+      UShort_t                  fNSharedHits;  //number of shared hits
+      ConversionQuality         fQuality;      //conversion quality flags
       mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
       mutable ThreeVector       fCachedPos;    //!cached momentum vector (filled by derived classes)
       
-      ClassDef(DecayParticle, 2) // Decay particle class
+      ClassDef(DecayParticle, 3) // Decay particle class
   };
 }
 

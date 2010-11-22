@@ -1,4 +1,4 @@
-// $Id: StableData.cc,v 1.4 2008/10/29 17:03:31 bendavid Exp $
+// $Id: StableData.cc,v 1.5 2008/10/31 17:42:09 bendavid Exp $
 
 #include "MitAna/DataTree/interface/StableData.h"
 
@@ -7,7 +7,7 @@ ClassImp(mithep::StableData)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-const BitMask48 StableData::MissedHits() const
+const BitMask48 StableData::MissedLayers() const
 {
   // Construct layer mask of missed hits
 
@@ -22,7 +22,7 @@ const BitMask48 StableData::MissedHits() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const BitMask48 StableData::WrongHits() const
+const BitMask48 StableData::WrongLayers() const
 {
   // Construct layer mask of wrong (before decay vertex) hits
 
