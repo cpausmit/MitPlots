@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.1.2.2 2010/10/12 21:25:03 paus Exp $
+// $Id: PlotTask.cc,v 1.2 2011/01/25 11:30:30 paus Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -223,7 +223,8 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
   // go through the Monte Carlo samples
   //------------------------------------------------------------------------------------------------
   // loop through samples and determine maximum
-  printf("\n monte carlo \n");
+  printf("\n Monte Carlo \n");
+  double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
   for (UInt_t i=0; i<*fTask->NSamples(); i++) {
     const Sample *s = fTask->GetSample(i);
     // open file belonging to this sample
@@ -270,8 +271,12 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     double nEvtsSel    = nEvtsSelRaw * factor * scale;
     double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw) * factor * scale;
 
-    printf(" -> %-40s - %14.0f %10.3f +- %6.3f %16.7f: %16.4f (x %f x %f - %p)\n",
+    printf(" -> %-40s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f - %p)\n",
            s->Name()->Data(),nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale,(void*)h);
+
+    nTotRaw += nEvts;
+    nTot    += nEvtsSel;
+    nTot2   += nEvtsSelErr*nEvtsSelErr;
 
     // scale it
     TH1D *hTmp = new TH1D(factor * scale * (*h));
@@ -288,13 +293,20 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       fStackedHists.push_back(hStackedTmp);
     }
   }
+  // Monte Carlo summary
+  printf(" %-40s    - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f)\n",
+	 "== Monte Carlo Total ==",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0,1.0);
+
 
   //------------------------------------------------------------------------------------------------
   // go through the data samples
   //------------------------------------------------------------------------------------------------
   // loop through data samples and add them up, straight away
   if (*fTask->NDataSamples() > 0)
-    printf("\n data \n");
+    printf("\n Data \n");
+  nTotRaw = 0.0;
+  nTot    = 0.0;
+  nTot2   = 0.0;
   for (UInt_t i=0; i<*fTask->NDataSamples(); i++) {
     const Sample *s = fTask->GetDataSample(i);
     // open file belonging to the data sample
@@ -333,10 +345,12 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
-	printf(" -> %-40s - %14.0f %10.3f +- %6.3f %16.7f: %16.4f (x %f)\n",
+	printf(" -> %-40s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n",
 	       s->Name()->Data(),nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
 
-
+	nTotRaw += nEvts;
+	nTot    += nEvtsSel;
+	nTot2   += nEvtsSelErr*nEvtsSelErr;
 
         // construct the complete data histogram
         if (! fDataHist)
@@ -346,6 +360,9 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       }
     }
   }
+  // Data summary
+  printf(" %-40s    - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n\n",
+	 "== Data Total =========",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0);
 
   return;
 }
