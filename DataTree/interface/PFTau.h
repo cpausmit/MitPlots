@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.3 2009/03/22 19:55:45 loizides Exp $
+// $Id: PFTau.h,v 1.4 2009/04/08 10:01:50 loizides Exp $
 //
 // PFTau
 //
@@ -28,7 +28,10 @@ namespace mithep
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
                   fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE), 
-                  fMuonDecision(kFALSE) {}
+		  fMuonDecision(kFALSE), fDiscriminationAgainstElectron(0),
+		  fDiscriminationAgainstMuon(0), fDiscriminationByDecayModeFinding(0),
+		  fDiscriminationByLooseIsolation(0), fDiscriminationByMediumIsolation(0),
+		  fDiscriminationByTightIsolation(0) {}
                   
       PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) : 
                   Tau(px,py,pz,e),
@@ -37,7 +40,10 @@ namespace mithep
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
                   fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
-                  fMuonDecision(kFALSE) {}
+		  fMuonDecision(kFALSE), fDiscriminationAgainstElectron(0),
+		  fDiscriminationAgainstMuon(0), fDiscriminationByDecayModeFinding(0),
+		  fDiscriminationByLooseIsolation(0), fDiscriminationByMediumIsolation(0),
+		  fDiscriminationByTightIsolation(0) {}
 
       void               AddIsoPFCand(const PFCandidate *p)  { fIsoPFCands.Add(p);                 }
       void               AddSignalPFCand(const PFCandidate *p)      
@@ -65,6 +71,13 @@ namespace mithep
       UInt_t             NSignalPFCands()              const { return fSignalPFCands.Entries();    }
       EObjType           ObjType()                     const { return kPFTau;                      }
       Double_t           SegmentCompatibility()        const { return fSegmentCompatibility;       }
+      Double_t DiscriminationAgainstElectron()         const {return fDiscriminationAgainstElectron;}
+      Double_t DiscriminationAgainstMuon()             const {return fDiscriminationAgainstMuon;}
+      Double_t DiscriminationByDecayModeFinding()      const {return fDiscriminationByDecayModeFinding;}
+      Double_t DiscriminationByLooseIsolation()        const {return fDiscriminationByLooseIsolation;}
+      Double_t DiscriminationByMediumIsolation()       const {return fDiscriminationByMediumIsolation;}
+      Double_t DiscriminationByTightIsolation()        const {return fDiscriminationByTightIsolation;}
+      
       void               SetBremRecoveryEOverP(Double_t x)   { fBremRecoveryEOverP = x;            }
       void               SetCaloCompatibility(Double_t x)    { fCaloCompatibility = x;             }
       void               SetECalStripSumEOverP(Double_t x)   { fECalStripSumEOverP = x;            }
@@ -90,6 +103,13 @@ namespace mithep
       const PFJet       *SourcePFJet()                  const { return fPFJet.Obj();               }
       const Jet         *SourceJet()                    const { return SourcePFJet();              }
 
+      void SetDiscriminationAgainstElectron(Double_t x)    {fDiscriminationAgainstElectron = x;}
+      void SetDiscriminationAgainstMuon(Double_t x)        {fDiscriminationAgainstMuon = x;}
+      void SetDiscriminationByDecayModeFinding(Double_t x) {fDiscriminationByDecayModeFinding = x;}
+      void SetDiscriminationByLooseIsolation(Double_t x)   {fDiscriminationByLooseIsolation = x;}
+      void SetDiscriminationByMediumIsolation(Double_t x)  {fDiscriminationByMediumIsolation = x;}
+      void SetDiscriminationByTightIsolation(Double_t x)   {fDiscriminationByTightIsolation = x;}
+
     protected:
       Double_t           GetCharge()                    const;
 
@@ -108,6 +128,13 @@ namespace mithep
       Double32_t         fSegmentCompatibility;  //[0,0,14]segment comp. for this tau to be a muon
       Bool_t             fElectronPreIDDecision; //pf electron pre id decision
       Bool_t             fMuonDecision;          //pf muon id decision
+      Double32_t fDiscriminationAgainstElectron;    // HPS discriminant
+      Double32_t fDiscriminationAgainstMuon;        // HPS discriminant
+      Double32_t fDiscriminationByDecayModeFinding; // HPS discriminant
+      Double32_t fDiscriminationByLooseIsolation;   // HPS discriminant
+      Double32_t fDiscriminationByMediumIsolation;  // HPS discriminant
+      Double32_t fDiscriminationByTightIsolation;   // HPS discriminant
+      
       Ref<PFCandidate>   fLeadPFCand;            //leading signal pf candidate (charged or neutral)
       Ref<PFCandidate>   fLeadChargedHadPFCand;  //leading charged hadron signal pf candidate
       Ref<PFCandidate>   fLeadNeutralPFCand;     //leading neutral signal pf candidate
@@ -115,8 +142,10 @@ namespace mithep
       Ref<Track>         fElectronTrack;         //track corresponding to possible matching el cand.
       RefArray<PFCandidate> fSignalPFCands;      //selected pf candidates in signal cone
       RefArray<PFCandidate> fIsoPFCands;         //selected pf candidates in isolation annulus
+      
 
-    ClassDef(PFTau, 1) // PFTau class
+
+    ClassDef(PFTau, 2) // PFTau class
   };
 }
 
