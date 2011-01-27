@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.4 2009/04/08 10:01:50 loizides Exp $
+// $Id: PFTau.h,v 1.5 2011/01/27 12:35:13 mhchan Exp $
 //
 // PFTau
 //
@@ -128,12 +128,12 @@ namespace mithep
       Double32_t         fSegmentCompatibility;  //[0,0,14]segment comp. for this tau to be a muon
       Bool_t             fElectronPreIDDecision; //pf electron pre id decision
       Bool_t             fMuonDecision;          //pf muon id decision
-      Double32_t fDiscriminationAgainstElectron;    // HPS discriminant
-      Double32_t fDiscriminationAgainstMuon;        // HPS discriminant
-      Double32_t fDiscriminationByDecayModeFinding; // HPS discriminant
-      Double32_t fDiscriminationByLooseIsolation;   // HPS discriminant
-      Double32_t fDiscriminationByMediumIsolation;  // HPS discriminant
-      Double32_t fDiscriminationByTightIsolation;   // HPS discriminant
+      Double32_t fDiscriminationAgainstElectron;    //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationAgainstMuon;        //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByDecayModeFinding; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByLooseIsolation;   //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByMediumIsolation;  //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByTightIsolation;   //[0,0,14]HPS discriminant
       
       Ref<PFCandidate>   fLeadPFCand;            //leading signal pf candidate (charged or neutral)
       Ref<PFCandidate>   fLeadChargedHadPFCand;  //leading charged hadron signal pf candidate
