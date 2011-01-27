@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.42 2010/06/23 09:02:04 bendavid Exp $
+// $Id: Electron.h,v 1.43 2010/10/18 01:33:37 bendavid Exp $
 //
 // Electron
 //
@@ -35,6 +35,8 @@ namespace mithep
         fPassTightID(0), fIDLikelihood(0), fPIn(0), fPOut(0), fFracSharedHits(0),
         fMva(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
         fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0),
+        fD0PVCkf(0), fD0PVCkfErr(0), fIp3dPVCkf(0), fIp3dPVCkfErr(0),
+        fD0PVBSCkf(0), fD0PVBSCkfErr(0), fIp3dPVBSCkf(0), fIp3dPVBSCkfErr(0),
         fGsfPVCompatibility(0), fGsfPVBSCompatibility(0),
         fGsfPVCompatibilityMatched(0), fGsfPVBSCompatibilityMatched(0),
         fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
@@ -56,6 +58,18 @@ namespace mithep
       Double_t             Ip3dPVBS()               const { return fIp3dPVBS;                 }
       Double_t             Ip3dPVBSErr()            const { return fIp3dPVBSErr;              }
       Double_t             Ip3dPVBSSignificance()   const { return fIp3dPVBS/fIp3dPVBSErr;    }
+      Double_t             D0PVCkf()                   const { return fD0PVCkf;                     }
+      Double_t             D0PVCkfErr()                const { return fD0PVCkfErr;                  }
+      Double_t             D0PVCkfSignificance()       const { return fD0PVCkf/fD0PVCkfErr;         }
+      Double_t             Ip3dPVCkf()                 const { return fIp3dPVCkf;                   }
+      Double_t             Ip3dPVCkfErr()              const { return fIp3dPVCkfErr;                }
+      Double_t             Ip3dPVCkfSignificance()     const { return fIp3dPVCkf/fIp3dPVCkfErr;     }
+      Double_t             D0PVBSCkf()                 const { return fD0PVBSCkf;                   }
+      Double_t             D0PVBSCkfErr()              const { return fD0PVBSCkfErr;                }
+      Double_t             D0PVBSCkfSignificance()     const { return fD0PVBSCkf/fD0PVBSCkfErr;     }
+      Double_t             Ip3dPVBSCkf()               const { return fIp3dPVBSCkf;                 }
+      Double_t             Ip3dPVBSCkfErr()            const { return fIp3dPVBSCkfErr;              }
+      Double_t             Ip3dPVBSCkfSignificance()   const { return fIp3dPVBSCkf/fIp3dPVBSCkfErr; }
       Double_t             GsfPVCompatibility()     const { return fGsfPVCompatibility;       }
       Double_t             GsfPVBSCompatibility()   const { return fGsfPVBSCompatibility;     }
       Double_t             GsfPVCompatibilityMatched()     const { return fGsfPVCompatibilityMatched;       }
@@ -141,6 +155,14 @@ namespace mithep
       void                 SetD0PVBSErr(Double_t x)               { fD0PVBSErr = x;                }
       void                 SetIp3dPVBS(Double_t x)                { fIp3dPVBS = x;                 }
       void                 SetIp3dPVBSErr(Double_t x)             { fIp3dPVBSErr = x;              }
+      void                 SetD0PVCkf(Double_t x)                 { fD0PVCkf = x;                     }
+      void                 SetD0PVCkfErr(Double_t x)              { fD0PVCkfErr = x;                  }
+      void                 SetIp3dPVCkf(Double_t x)               { fIp3dPVCkf = x;                   }
+      void                 SetIp3dPVCkfErr(Double_t x)            { fIp3dPVCkfErr = x;                }
+      void                 SetD0PVBSCkf(Double_t x)               { fD0PVBSCkf = x;                   }
+      void                 SetD0PVBSCkfErr(Double_t x)            { fD0PVBSCkfErr = x;                }
+      void                 SetIp3dPVBSCkf(Double_t x)             { fIp3dPVBSCkf = x;                 }
+      void                 SetIp3dPVBSCkfErr(Double_t x)          { fIp3dPVBSCkfErr = x;              }
       void                 SetGsfPVCompatibility(Double_t x)      { fGsfPVCompatibility = x;       }
       void                 SetGsfPVBSCompatibility(Double_t x)    { fGsfPVBSCompatibility = x;     }
       void                 SetGsfPVCompatibilityMatched(Double_t x)      { fGsfPVCompatibilityMatched = x;   }
@@ -260,14 +282,22 @@ namespace mithep
       Double32_t           fPOut;                      //[0,0,14]momentum at ecal surface
       Double32_t           fFracSharedHits;            //[0,0,14]fraction of shared hits btw gsf and std. track
       Double32_t           fMva;                       //[0,0,14] pflow mva output
-      Double32_t           fD0PV;                      //[0,0,14]transverse impact parameter to signal PV
-      Double32_t           fD0PVErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV
-      Double32_t           fIp3dPV;                    //[0,0,14]3d impact parameter to signal PV
-      Double32_t           fIp3dPVErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV
-      Double32_t           fD0PVBS;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint
-      Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint
-      Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint
-      Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t           fD0PV;                      //[0,0,14]transverse impact parameter to signal PV (gsf track)
+      Double32_t           fD0PVErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV (gsf track)
+      Double32_t           fIp3dPV;                    //[0,0,14]3d impact parameter to signal PV (gsf track)
+      Double32_t           fIp3dPVErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV (gsf track)
+      Double32_t           fD0PVBS;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (gsf track)
+      Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
+      Double32_t           fD0PVCkf;                      //[0,0,14]transverse impact parameter to signal PV (ckf track)
+      Double32_t           fD0PVCkfErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV (ckf track)
+      Double32_t           fIp3dPVCkf;                    //[0,0,14]3d impact parameter to signal PV (ckf track)
+      Double32_t           fIp3dPVCkfErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV (ckf track)
+      Double32_t           fD0PVBSCkf;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (ckf track)
+      Double32_t           fD0PVBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVBSCkf;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
       Double32_t           fGsfPVCompatibility;        //[0,0,14]gsf compatibility with signal PV
       Double32_t           fGsfPVBSCompatibility;      //[0,0,14]gsf compatibility with signal PV w/ bs constraint
       Double32_t           fGsfPVCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
@@ -291,7 +321,7 @@ namespace mithep
       Bool_t               fMatchesVertexConversion;
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
 
-    ClassDef(Electron, 8) // Electron class
+    ClassDef(Electron, 9) // Electron class
   };
 }
 
