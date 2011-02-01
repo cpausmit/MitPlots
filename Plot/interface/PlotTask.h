@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotTask.h,v 1.1.2.2 2010/10/12 21:25:03 paus Exp $
+// $Id: PlotTask.h,v 1.2 2011/01/25 11:30:30 paus Exp $
 //
 // PlotTask
 //
@@ -34,6 +34,8 @@ namespace mithep
     void                 SetXLegend       (double x)   { fXLegend = x; }
     void                 SetYLegend       (double y)   { fYLegend = y; }
     void                 SetNRebin        (UInt_t n)   { fNRebin = n; }
+    void                 SetNBins         (UInt_t n)   { fNBins = n;  }
+    void                 SetDrawExp       (const char* draw, const char* sel);
     
   private:
     // Overlay the contribution in a single histogram (no adding/stacking)
@@ -64,6 +66,9 @@ namespace mithep
     TString              fAxisTitleY;   // y axis title
     double               fXLegend;      // x position of upper left legend box
     double               fYLegend;      // y position of upper left legend box
+    UInt_t               fNBins;        // number of bins for TTree-derived histograms
+    TString              fDrawExp;      // draw expression for TTree::Draw
+    TString              fSelExp;       // selection expression for TTree::Draw
     std::vector<TH1D*>   fHists;        // list of scaled histograms
     std::vector<TH1D*>   fStackedHists; // list of scaled histograms
     

@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.2 2011/01/25 11:30:30 paus Exp $
+// $Id: PlotTask.cc,v 1.3 2011/01/27 14:10:01 paus Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -11,6 +11,7 @@
 #include <TBox.h>
 #include <TMarker.h>
 #include <TLatex.h>
+#include <TTree.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitPlots/Style/interface/MitStyle.h"
 #include "MitPlots/Plot/interface/PlotTask.h"
@@ -36,7 +37,8 @@ PlotTask::PlotTask(const TaskSamples *taskSamples, const double lumi) :
   fAxisTitleX  (""),
   fAxisTitleY  ("Number of Events"),
   fXLegend     (70.),
-  fYLegend     (98.)
+  fYLegend     (98.),
+  fNBins       (100)
 {
   // Constructor
 }
@@ -60,6 +62,16 @@ void PlotTask::SetAxisTitles(const char* xtit, const char* ytit)
 
   return;
 }
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::SetDrawExp(const char* draw, const char* sel)
+{
+  fDrawExp = TString(draw);
+  fSelExp  = TString(sel);
+
+  return;
+}
+
 
 //--------------------------------------------------------------------------------------------------
 void PlotTask::PlotContributions(const char* dir, const char* hist)
@@ -255,12 +267,24 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     else
       factor = 0;
 
-    TH1D *h    = (TH1D*) fif->FindObjectAny(hist);
-    if (! h) {
-      printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
-             s->Name()->Data());
-      continue;
+    TH1D *h = dynamic_cast<TH1D*>(fif->FindObjectAny(hist));
+    
+    //histogram doesn't exist, try to find TTree instead
+    if (!h) {
+      TTree *htree = dynamic_cast<TTree*>(fif->FindObjectAny(hist));
+      if (!htree) {
+        printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
+        s->Name()->Data());
+        continue;
+      }
+      
+      TString histname("htempmc_");
+      histname += i;
+      h = new TH1D(histname,histname,fNBins,fHistXMinimum,fHistXMaximum);
+      TString drawexp = fDrawExp + TString(">>") + histname;
+      htree->Draw(drawexp,fSelExp);
     }
+    
     if (! fEmptyHist) {
       fEmptyHist = new TH1D(factor * scale * (*h));
       fEmptyHist->Rebin(fNRebin);
@@ -331,12 +355,23 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       else {
         double nEvts = hAllEvts->GetEntries();
 
-	TH1D *h = (TH1D*) fif->FindObjectAny(hist);
-        if (! h) {
-          printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
-                 s->Name()->Data());
-	  continue;
-	}
+	TH1D *h = dynamic_cast<TH1D*>(fif->FindObjectAny(hist));
+        //histogram doesn't exist, try to find TTree instead
+        if (!h) {
+          TTree *htree = dynamic_cast<TTree*>(fif->FindObjectAny(hist));
+          if (!htree) {
+            printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
+            s->Name()->Data());
+            continue;
+          }
+          
+          TString histname("htempdata_");
+          histname += i;
+          h = new TH1D(histname,histname,fNBins,fHistXMinimum,fHistXMaximum);
+          TString drawexp = fDrawExp + TString(">>") + histname;
+          //printf ("Draw(%s, %s);\n",drawexp.Data(),fSelExp.Data());
+          htree->Draw(drawexp,fSelExp);
+        }
         else
           // rebin it
           h->Rebin(fNRebin);
