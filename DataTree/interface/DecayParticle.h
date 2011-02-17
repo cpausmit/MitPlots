@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.29 2010/03/31 12:04:06 bendavid Exp $
+// $Id: DecayParticle.h,v 1.30 2010/11/22 16:51:26 bendavid Exp $
 //
 // DecayParticle
 //
@@ -55,6 +55,7 @@ namespace mithep
       Bool_t                    HasSameDaughters(const DecayParticle *p)  const;
       Double_t                  Lxy()                 const { return fLxy;                         }
       Double_t                  LxyError()            const { return fLxyError;                    }
+      Double_t                  LxyCorrected(const BaseVertex *v)  const;
       Double_t                  Lz()                  const { return fLz;                          }
       Double_t                  LzError()             const { return fLzError;                     }
       Double_t                  MassError()           const { return fMassError;                   }
@@ -230,6 +231,16 @@ inline Double_t mithep::DecayParticle::DzCorrected(const mithep::BaseVertex *v) 
 {
   // Compute Dxy with respect to a given beamspot/vertex
   return DzCorrected(v->Position());
+  
+}
+
+inline Double_t mithep::DecayParticle::LxyCorrected(const mithep::BaseVertex *v) const
+{
+  // Compute Dxy with respect to a given beamspot/vertex
+  Double_t dx = Position().X() - v->X();
+  Double_t dy = Position().Y() - v->Y();
+  Double_t lxy = (dx*Px() + dy*Py())/Pt();
+  return lxy;
   
 }
 
