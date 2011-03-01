@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Jet.h,v 1.26 2010/05/10 15:13:29 bendavid Exp $
+// $Id: Jet.h,v 1.27 2010/05/30 14:00:24 bendavid Exp $
 //
 // Jet
 //
@@ -40,7 +40,7 @@ namespace mithep
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
         fGhostTrackBJetTagsDisc(0),
-        fL1OffsetCorrectionScale(0),
+        fL1OffsetCorrectionScale(0), fJetArea(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
         fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
         fL7PartonCorrectionScale(0),
@@ -56,7 +56,7 @@ namespace mithep
         fSoftMuonByIP3dBJetTagsDisc(0), fSoftMuonByPtBJetTagsDisc(0),
         fSoftElectronByIP3dBJetTagsDisc(0), fSoftElectronByPtBJetTagsDisc(0),
         fGhostTrackBJetTagsDisc(0),
-        fL1OffsetCorrectionScale(0),
+        fL1OffsetCorrectionScale(0), fJetArea(0),
         fL2RelativeCorrectionScale(0), fL3AbsoluteCorrectionScale(0),
         fL4EMFCorrectionScale(0), fL5FlavorCorrectionScale(0), fL6LSBCorrectionScale(0),
         fL7PartonCorrectionScale(0),
@@ -85,6 +85,7 @@ namespace mithep
       UInt_t        NConstituents()               const { return 0;                          }
       UInt_t        N()                           const { return NConstituents();            }
       Double_t      L1OffsetCorrectionScale()     const { return fL1OffsetCorrectionScale;   }
+      Double_t      JetArea()                     const { return fJetArea;   }
       Double_t      L2RelativeCorrectionScale()   const { return fL2RelativeCorrectionScale; }
       Double_t      L3AbsoluteCorrectionScale()   const { return fL3AbsoluteCorrectionScale; }
       Double_t      L4EMFCorrectionScale()        const { return fL4EMFCorrectionScale;      }
@@ -134,6 +135,7 @@ namespace mithep
       void          SetMatchedMCFlavor(Int_t flavor)  { fMatchedMCFlavor = flavor;           }
       void          SetL1OffsetCorrectionScale(Double_t s )   
                       { fL1OffsetCorrectionScale = s; ClearMom(); }
+      void          SetJetArea(Double_t a) { fJetArea = a; }
       void          SetL2RelativeCorrectionScale(Double_t s )   
                       { fL2RelativeCorrectionScale = s; ClearMom(); }
       void          SetL3AbsoluteCorrectionScale(Double_t s )   
@@ -190,6 +192,7 @@ namespace mithep
       Double32_t    fSoftElectronByPtBJetTagsDisc;           //[0,0,14]discriminants b-tagging algos
       Double32_t    fGhostTrackBJetTagsDisc;                 //[0,0,14]discriminants b-tagging algos            
       Double32_t    fL1OffsetCorrectionScale;                //[0,0,14]L1 correction scale
+      Double32_t    fJetArea;                                //[0,0,14]infrared safe jet area
       Double32_t    fL2RelativeCorrectionScale;              //[0,0,14]L2 correction scale
       Double32_t    fL3AbsoluteCorrectionScale;              //[0,0,14]L3 correction scale
       Double32_t    fL4EMFCorrectionScale;                   //[0,0,14]L4 correction scale
@@ -199,7 +202,7 @@ namespace mithep
       Double32_t    fCustomCorrectionScale;                  //[0,0,14]custom correction scale
       BitMask8      fCorrections;                            //mask of corrections to be applied
 
-    ClassDef(Jet, 5) // Jet class
+    ClassDef(Jet, 6) // Jet class
   };
 }
 
@@ -208,6 +211,9 @@ inline Double_t mithep::Jet::CombinedCorrectionScale() const
 {
   // compute combined correction scale from all enabled corrections
   Double_t scale = 1.0;
+
+  if (CorrectionActive(L1))
+    scale *= fL1OffsetCorrectionScale;
 
   if (CorrectionActive(L2))
     scale *= fL2RelativeCorrectionScale;
