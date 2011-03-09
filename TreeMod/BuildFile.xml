@@ -1,0 +1,11 @@
+<use   name="MitAna/TAM"/>
+<use   name="MitAna/DataTree"/>
+<use   name="MitAna/DataCont"/>
+<use   name="MitAna/DataUtil"/>
+<use   name="MitAna/Catalog"/>
+<use   name="MitCommon/MathTools"/>
+<use   root=""/>
+<lib   name="Proof"/>
+<export>
+  <lib   name="1"/>
+</export>

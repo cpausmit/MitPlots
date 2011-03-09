@@ -1,0 +1,7 @@
+<use   name="root"/>
+<use   name="boost"/>
+<use   name="MitCommon/JSONSpirit"/>
+<use   name="MitAna/TAM"/>
+<export>
+  <lib   name="1"/>
+</export>
