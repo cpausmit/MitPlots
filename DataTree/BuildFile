@@ -1,9 +1,0 @@
-# -*- Makefile -*-
-# $Id: BuildFile,v 1.9 2008/09/17 04:22:56 loizides Exp $
-
-<use name=MitCommon/DataFormats>
-<use name=MitAna/DataCont>
-#<flags CXXFLAGS="-g">
-<export>
-   <lib name=MitAnaDataTree>
-</export>
