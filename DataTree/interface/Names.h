@@ -38,7 +38,6 @@ namespace mithep
       static const char *gkMCEvtInfoBrn;
       static const char *gkMCPartBrn;
       static const char *gkPileupInfoBrn;
-      static const char *gkPileupEnergyDensityBrn;
       static const char *gkMuonBrn;
       static const char *gkMvfConversionBrn;
       static const char *gkL1TechBitsBrn;
@@ -46,6 +45,7 @@ namespace mithep
       static const char *gkPFCandidatesBrn;
       static const char *gkPFJetBrn;
       static const char *gkPFTauBrn;
+      static const char *gkHPSTauBrn;
       static const char *gkPhotonBrn;
       static const char *gkPixelHitBrn;
       static const char *gkPVBrn;
