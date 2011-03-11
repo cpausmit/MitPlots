@@ -1,9 +1,16 @@
-// $Id: ConversionQualityLinkDef.h,v 1.1 2010/01/18 14:35:10 bendavid Exp $
+// $Id: ConversionQualityLinkDef.h,v 1.1 2010/11/22 16:51:27 bendavid Exp $
 
 #ifndef MITANA_DATATREE_CONVERSIONQUALITYLINKDEF_H
 #define MITANA_DATATREE_CONVERSIONQUALITYLINKDEF_H
 
 #include "MitAna/DataTree/interface/ConversionQuality.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ ConversionQuality
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

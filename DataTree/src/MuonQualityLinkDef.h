@@ -1,9 +1,16 @@
-// $Id: $
+// $Id: MuonQualityLinkDef.h,v 1.1 2010/03/26 21:40:11 sixie Exp $
 
 #ifndef MITANA_DATATREE_MUONQUALITYLINKDEF_H
 #define MITANA_DATATREE_MUONQUALITYLINKDEF_H
 
 #include "MitAna/DataTree/interface/MuonQuality.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ MuonQuality
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

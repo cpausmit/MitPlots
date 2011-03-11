@@ -1,4 +1,4 @@
-// $Id: PairTypesLinkDef.h,v 1.1 2009/06/16 15:56:22 loizides Exp $
+// $Id: PairTypesLinkDef.h,v 1.2 2009/06/16 17:08:21 loizides Exp $
 
 #ifndef MITANA_DATATREE_PAIRLINKDEF_H
 #define MITANA_DATATREE_PAIRLINKDEF_H
@@ -10,6 +10,13 @@
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ PairTypes
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

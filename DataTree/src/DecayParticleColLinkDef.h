@@ -1,9 +1,16 @@
-// $Id:$
+// $Id: DecayParticleColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_DECAYPARTICLECOLLINKDEF_H
 #define MITANA_DATATREE_DECAYPARTICLECOLLINKDEF_H
 
 #include "MitAna/DataTree/interface/DecayParticleCol.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ DecayParticleCol
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

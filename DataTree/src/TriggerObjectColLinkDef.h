@@ -1,9 +1,16 @@
-// $Id: TriggerObjectColLinkDef.h,v 1.1 2009/06/15 15:00:16 loizides Exp $
+// $Id: TriggerObjectColLinkDef.h,v 1.2 2009/07/13 09:42:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_TRIGGEROBJECTCOLLINKDEF_H
 #define MITANA_DATATREE_TRIGGEROBJECTCOLLINKDEF_H
 
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ TriggerObjectCol
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

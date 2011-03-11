@@ -1,4 +1,4 @@
-// $Id: TrackColLinkDef.h,v 1.1 2009/06/15 15:00:16 loizides Exp $
+// $Id: TrackColLinkDef.h,v 1.2 2009/07/20 04:57:27 loizides Exp $
 
 #ifndef MITANA_DATATREE_TRACKCOLLINKDEF_H
 #define MITANA_DATATREE_TRACKCOLLINKDEF_H
@@ -6,6 +6,13 @@
 #include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/TrackCol.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ TrackCol
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

@@ -1,10 +1,17 @@
-// $Id:$
+// $Id: PFMetColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
 
 #ifndef MITANA_DATATREE_PFMETCOLLINKDEF_H
 #define MITANA_DATATREE_PFMETCOLLINKDEF_H
 
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/PFMetCol.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ PFMetCol
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__

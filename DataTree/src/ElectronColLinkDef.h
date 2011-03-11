@@ -1,10 +1,17 @@
-// $Id: ElectronColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
+// $Id: ElectronColLinkDef.h,v 1.2 2009/10/30 14:16:01 bendavid Exp $
 
 #ifndef MITANA_DATATREE_ELECTRONCOLLINKDEF_H
 #define MITANA_DATATREE_ELECTRONCOLLINKDEF_H
 
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/ElectronCol.h"
+#endif
+
+#ifndef __CINT__
+#   define _R__UNIQUEIDENTIFIER_ ElectronCol
+#   define _R__JOIN3_(F,X,Y) _NAME3_(F,X,Y)
+#   undef _R__UNIQUE_
+#   define _R__UNIQUE_(X) _R__JOIN3_( _R__UNIQUEIDENTIFIER_,X,__LINE__)
 #endif
 
 #ifdef __CINT__
