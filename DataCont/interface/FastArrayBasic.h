@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.9 2009/03/23 22:15:09 loizides Exp $
+// $Id: FastArrayBasic.h,v 1.10 2009/04/06 13:44:08 loizides Exp $
 //
 // FastArrayBasic
 //
@@ -27,6 +27,11 @@
 #include <TStorage.h>
 #include "MitAna/DataCont/interface/Collection.h"
 
+typedef UInt_t unsignedint;
+typedef UChar_t unsignedchar;
+typedef UShort_t unsignedshort;
+typedef ULong64_t unsignedlonglong;
+
 namespace mithep 
 {
   template<class ArrayElement, Bool_t IsDouble32 = kFALSE>
@@ -37,7 +42,7 @@ namespace mithep
       FastArrayBasic(const FastArrayBasic &a);
       ~FastArrayBasic() { Init(0); }
 
-      void                      Add(const ArrayElement &ae);
+      Int_t                     Add(const ArrayElement &ae);
       ArrayElement              At(UInt_t idx);
       const ArrayElement        At(UInt_t idx)                     const;
       void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0);    }
@@ -95,7 +100,7 @@ inline mithep::FastArrayBasic<ArrayElement, IsDouble32>::FastArrayBasic(const Fa
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
-void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &ae)
+Int_t mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &ae)
 {
   // Add a copy of an existing object.
   
@@ -105,6 +110,8 @@ void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &a
   ++fSize; 
   fArray[fSize-1] = ae;
   BaseCollection::Clear();
+
+  return fSize;
 }
 
 //--------------------------------------------------------------------------------------------------

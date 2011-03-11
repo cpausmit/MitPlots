@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.11 2010/05/29 18:10:14 bendavid Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.12 2010/06/29 15:51:53 bendavid Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -15,6 +15,13 @@
 #include "MitAna/DataCont/interface/RunLumiSet.h"
 #include "MitAna/DataCont/interface/Types.h"
 #endif
+
+
+// typedef UInt_t unsignedint;
+// typedef UChar_t unsignedchar;
+// typedef UShort_t unsignedshort;
+// typedef ULong64_t unsignedlonglong;
+
 
 #ifdef __CINT__
 #pragma link off all globals;
@@ -39,7 +46,7 @@
 #pragma link C++ typedef mithep::BitMask48;
 #pragma link C++ typedef mithep::BitMask64;
 #pragma link C++ typedef mithep::BitMask128;
-#pragma link C++ typedef mithep::BitMask256;
+#pragma link C++ typedef mithep::BitMask256; 
 
 #pragma link C++ class mithep::CacheFlag-;
 #pragma link C++ class mithep::RefResolver+;

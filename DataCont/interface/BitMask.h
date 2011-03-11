@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BitMask.h,v 1.15 2009/03/07 08:30:49 loizides Exp $
+// $Id: BitMask.h,v 1.1 2009/03/08 12:08:31 loizides Exp $
 //
 // BitMask
 //
@@ -13,6 +13,11 @@
  
 #include <Rtypes.h>
 #include <TError.h>
+
+typedef UInt_t unsignedint;
+typedef UChar_t unsignedchar;
+typedef UShort_t unsignedshort;
+typedef ULong64_t unsignedlonglong;
 
 namespace mithep
 {
