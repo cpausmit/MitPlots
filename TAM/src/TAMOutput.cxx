@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx,v 1.5 2009/07/13 19:19:44 loizides Exp $
+// $Id: TAMOutput.cxx,v 1.6 2009/07/16 21:02:05 loizides Exp $
 //
 
 #include "MitAna/TAM/interface/TAMOutput.h"
@@ -648,7 +648,7 @@ void TAMOutput::SetOutputMembers(const Bool_t setAddresses)
    // first update the addresses of the members
    Char_t parent[kParentStrLen];
    memset(parent, 0, kParentStrLen * sizeof(Char_t));
-   fMod->ShowMembers(fInspector, parent);
+   fMod->ShowMembers(fInspector);
    
    if (setAddresses) {
       // loop through output objects and set the corresponding members

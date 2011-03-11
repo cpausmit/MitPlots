@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.11 2009/03/23 14:39:52 loizides Exp $
+// $Id: Selector.cc,v 1.12 2009/06/11 08:59:32 loizides Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -97,7 +97,7 @@ Bool_t Selector::EndRun()
   Int_t ret = fLATree->GetEvent(fCurEvt);
   if (ret<0 || fLAHeader==0) {
     Error("EndRun", "Could not get entry lookahead entry for next event,"
-                    " assuming end of run %ld reached!", fCurRunNum);
+                    " assuming end of run %d reached!", fCurRunNum);
     return kTRUE;
   }
 
@@ -184,7 +184,7 @@ void Selector::UpdateRunInfo()
 
   Int_t ret = fRunTree->GetEvent(fEventHeader->RunEntry());
   if (ret<0 || fRunInfo==0) {
-    Error("UpdateRunInfo", "Error updating run info for run %ld, entry %ld, return value %d", 
+    Error("UpdateRunInfo", "Error updating run info for run %d, entry %d, return value %d", 
           fEventHeader->RunNum(), fEventHeader->RunEntry(), ret);
     return;
   }

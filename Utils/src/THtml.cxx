@@ -1,4 +1,4 @@
-// @(#)root/html:$Id: THtml.cxx 26858 2008-12-12 08:54:14Z axel $
+// @(#)root/html:$Id: THtml.cxx,v 1.1 2009/08/11 23:09:28 loizides Exp $
 // Author: Nenad Buncic (18/10/95), Axel Naumann (09/28/01)
 
 /*************************************************************************
@@ -1446,7 +1446,7 @@ void THtml::Convert(const char *filename, const char *title,
    TDocOutput output(*this);
    if (!fGClient)
       gROOT->ProcessLine(TString::Format("*((TGClient**)0x%lx) = gClient;",
-                                         &fGClient));
+                                         (ULong_t)&fGClient));
    if (includeOutput && !fGClient)
       Warning("Convert", "Output requested but cannot initialize graphics: GUI  and GL windows not be available");
    output.Convert(sourceFile, realFilename, tmp1, title, relpath, includeOutput, context, fGClient);

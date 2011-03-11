@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.17 2009/12/09 09:46:25 loizides Exp $
+// $Id: OutputMod.cc,v 1.18 2009/12/14 20:19:15 loizides Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -428,13 +428,13 @@ void OutputMod::Process()
   // correctly updated.
 
   if (GetSel()->GetCurEvt() == fLastSeenEvt) {
-    Warning("Process", "Event with %ul already seen", fLastSeenEvt);
+    Warning("Process", "Event with %lld already seen", fLastSeenEvt);
     return;
   }
   fLastSeenEvt = GetSel()->GetCurEvt();
 
   if (GetSel()->GetCurEvt() == fLastWrittenEvt) {
-    Warning("Process", "Event with %ul already written", fLastWrittenEvt);
+    Warning("Process", "Event with %lld already written", fLastWrittenEvt);
     return;
   }
   fLastWrittenEvt = GetSel()->GetCurEvt();
@@ -657,6 +657,6 @@ void OutputMod::SlaveTerminate()
   delete[] fBranches; 
 
   Double_t frac =  100.*GetNEventsProcessed()/fCounter;
-  Info("SlaveTerminate", "Stored %.2f%% events (%ld out of %ld)", 
+  Info("SlaveTerminate", "Stored %.2f%% events (%d out of %lld)", 
        frac, GetNEventsProcessed(), fCounter);
 }

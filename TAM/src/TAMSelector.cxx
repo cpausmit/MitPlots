@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.17 2009/07/16 21:02:05 loizides Exp $
+// $Id: TAMSelector.cxx,v 1.18 2010/09/19 18:27:29 bendavid Exp $
 //
 
 #include "MitAna/TAM/interface/TAMSelector.h"
@@ -183,7 +183,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    Long64_t tamentry  = fSel->fCurEvt;
    if (readentry!=tamentry) {
       Fatal("Load", 
-            "Entries from BranchRef (%d) differs from TAM current entry (%d)",
+            "Entries from BranchRef (%lld) differs from TAM current entry (%lld)",
             readentry, tamentry);
    }
 
@@ -193,7 +193,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    if (fCurEntry != chainentry) {
       Int_t bytes = br->GetEntry(readentry);
       if (bytes<0) {
-         Fatal("Load", "Could not get entry %d from %s branch",
+         Fatal("Load", "Could not get entry %lld from %s branch",
                readentry, br->GetName());
       }
    }
@@ -815,7 +815,7 @@ Bool_t TAMSelector::Notify()
 #endif
 
    if (fVerbosity>0) {
-      Info("Notify","Opening file [%s] at current event [%d].",
+      Info("Notify","Opening file [%s] at current event [%lld].",
            (GetCurrentFile()!=0) ? (GetCurrentFile()->GetName()) : "null",
            fCurEvt);
    }

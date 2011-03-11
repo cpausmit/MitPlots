@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.13 2009/06/22 15:36:47 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.14 2009/06/28 08:02:05 loizides Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -168,7 +168,7 @@ void AnaFwkMod::Process()
   if (fNEventsSkipped<fSkipNEvents) {
     ++fNEventsSkipped;
     MDB(kAnalysis, 3) {
-      Info("Process", "Skipping (aborting) %d out of %d first events.",
+      Info("Process", "Skipping (aborting) %d out of %lld first events.",
            fNEventsSkipped, fSkipNEvents);
     }
     AbortEvent();

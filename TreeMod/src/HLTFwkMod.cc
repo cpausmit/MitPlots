@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.13 2009/10/26 11:04:56 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.14 2009/11/24 14:27:33 loizides Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -133,7 +133,7 @@ void HLTFwkMod::BeginRun()
   // load trigger table
   if (runinfo->HltEntry()!=fCurEnt) {
     MDB(kAnalysis, 1)
-      Info("BeginRun", "Loading trigger table for run %ld", runinfo->RunNum());
+      Info("BeginRun", "Loading trigger table for run %u", runinfo->RunNum());
     
     fCurEnt = runinfo->HltEntry();
     Bool_t load = LoadTriggerTable();
@@ -144,7 +144,7 @@ void HLTFwkMod::BeginRun()
     }
 
     MDB(kAnalysis, 2) {
-      Info("BeginRun", "Printing tables for run %ld", runinfo->RunNum());
+      Info("BeginRun", "Printing tables for run %u", runinfo->RunNum());
       cout << " --- Trigger table ---" << endl;
       fTriggers->Print();
       cout << " --- Module lables ---" << endl;
