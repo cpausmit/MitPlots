@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.32 2010/03/22 18:39:57 bendavid Exp $
+// $Id: Photon.h,v 1.33 2010/09/19 23:46:27 bendavid Exp $
 //
 // Photon
 //
@@ -58,6 +58,7 @@ namespace mithep
       Double_t             E25()                   const { return fE25;                }
       Double_t             E33()                   const { return fE33;                }      
       Double_t             E55()                   const { return fE55;                }      
+      ThreeVectorC         CaloPos()               const { return fCaloPos.V();        }      
       Double_t             CovEtaEta()             const { return fCovEtaEta;          }
       Double_t             CoviEtaiEta()           const { return fCoviEtaiEta;        }         
       Bool_t               HasPixelSeed()          const { return fHasPixelSeed;       }
@@ -81,6 +82,8 @@ namespace mithep
       Bool_t               IsLoosePhoton()         const { return fIsLoosePhoton;     }
       Bool_t               IsTightPhoton()         const { return fIsTightPhoton;     }
       Bool_t               IsConverted()           const { return fIsConverted;       }
+      ThreeVector          Mom3(const ThreeVector &vtx) const { return E()*(ThreeVector(CaloPos()) - vtx).Unit(); }
+      FourVectorM          Mom(const ThreeVector &vtx)  const;
       UInt_t               NConversions()          const { return fConversions.Entries();   }
       EObjType             ObjType()               const { return kPhoton;                  }
       Double_t             R9()                    const { return fR9;                      }
@@ -129,11 +132,14 @@ namespace mithep
       void                 SetIsLooseEM(Bool_t x)                  { fIsLooseEM     = x; }
       void                 SetIsLoosePhoton(Bool_t x)              { fIsLoosePhoton = x; }
       void                 SetIsTightPhoton(Bool_t x)              { fIsTightPhoton = x; }
+      void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z) { fCaloPos.SetXYZ(x,y,z);    }
+
 
     protected:
       void                 GetMom()                const;
 
       Vect4M               fMom;                //four momentum vector
+      Vect3C               fCaloPos;            //shower position      
       Double32_t           fR9;                 //[0,0,14]r9=e3x3/etotal variable
       Double32_t           fHadOverEm;          //[0,0,14]hadronic over em fraction
       Double32_t           fHcalDepth1OverEcal;        //[0,0,14]hadronic over em fraction depth1
@@ -177,7 +183,7 @@ namespace mithep
       RefArray<Conversion> fConversions;        //refs to associated conversion candidates
       Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
 	
-    ClassDef(Photon,3) // Photon class
+    ClassDef(Photon,4) // Photon class
   };
 }
 
@@ -197,4 +203,17 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   fMom.SetXYZT(px, py, pz, e);
   ClearMom();
 }
+
+//--------------------------------------------------------------------------------------------------
+inline mithep::FourVectorM mithep::Photon::Mom(const ThreeVector &vtx) const
+{
+  // Get momentum values from stored values.
+  ThreeVector momv = Mom3(vtx);
+  FourVectorM newmom;
+  
+  newmom.SetCoordinates(momv.Rho(),momv.Eta(),momv.Phi(),0.); 
+  
+  return newmom;
+}
+
 #endif
