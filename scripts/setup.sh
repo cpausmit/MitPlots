@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.50 2010/11/22 16:51:45 bendavid Exp $
+# $Id: setup.sh,v 1.51 2010/11/25 15:49:11 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -32,6 +32,12 @@ cd $CMSSW_BASE/src;
 if test $version -lt 3010000; then
  
   addpkg RecoEgamma/ElectronIdentification V00-03-20
+
+fi
+
+if test $version -lt 4200000; then
+ 
+  addpkg TrackingTools/TrajectoryState V06-04-07-01
 
 fi
 
