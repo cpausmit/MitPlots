@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.12 2009/06/11 08:59:32 loizides Exp $
+// $Id: Selector.cc,v 1.13 2011/03/11 04:03:54 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -113,11 +113,11 @@ Bool_t Selector::Notify()
   if (!GetCurrentFile()) 
     return kTRUE;
 
+  //needed to force caching to occur for all files  
+  fTree->GetTree()->SetCacheSize(fTree->GetCacheSize());  
+  
   if (fDoRunInfo) 
     UpdateRunInfoTree();
-
-  //needed to force caching to occur for all files  
-  fTree->GetTree()->SetCacheSize(fTree->GetCacheSize());
     
   return TAMSelector::Notify();
 }
