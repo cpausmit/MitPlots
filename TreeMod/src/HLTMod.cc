@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.18 2009/12/01 15:14:11 loizides Exp $
+// $Id: HLTMod.cc,v 1.19 2010/09/14 22:51:28 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -28,7 +28,7 @@ HLTMod::HLTMod(const char *name, const char *title) :
   fTriggers(0),
   fTrigObjs(0),
   fNEvents(0),
-  fNAcceped(0),
+  fNAccepted(0),
   fNFailed(0)
 {
   // Constructor. 
@@ -102,9 +102,12 @@ void HLTMod::BeginRun()
   for (UInt_t i=0; i<fTrigNames.size(); ++i) {
     
     UInt_t firstRun = fTrigNames.at(i).second.first;
-    UInt_t lastRun = fTrigNames.at(i).second.second;
+    UInt_t lastRun  = fTrigNames.at(i).second.second;
     
-    if ( (!(firstRun==0 && lastRun==0)) && ( runNumber<firstRun || runNumber>lastRun ) ) continue;
+    // implement run dependence of the triggers
+    if ( (!(firstRun==0 && lastRun==0)) &&
+	 ( runNumber<firstRun || runNumber>lastRun ) )
+      continue;
     
     BitMask256 tmask; //trigger mask
     BitMask256 amask; //bitand mask
@@ -187,7 +190,7 @@ void HLTMod::Process()
   } 
 
   // take action if accepted
-  ++fNAcceped;
+  ++fNAccepted;
   IncNEventsProcessed();
   OnAccepted();
   if (!AddObjThisEvt(fMyTrgObjs)) {
@@ -223,5 +226,6 @@ void HLTMod::SlaveTerminate()
 {
   // Save number of accepted events.
 
+  printf(" %s - Accepted events: %d (/%d)\n",GetName(),fNAccepted,fNEvents);
   SaveNEventsProcessed("hDHLTEvents");
 }

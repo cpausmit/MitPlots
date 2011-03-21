@@ -107,15 +107,12 @@ Bool_t Selector::EndRun()
 //--------------------------------------------------------------------------------------------------
 Bool_t Selector::Notify()
 {
-  // The Notify() function is called when a new file is opened. 
-  // Here, we check for a new run info tree. 
+  // The Notify() function is called when a new file is opened.  Here, we check for a new run info
+  // tree.
 
   if (!GetCurrentFile()) 
     return kTRUE;
 
-  //needed to force caching to occur for all files  
-  fTree->GetTree()->SetCacheSize(fTree->GetCacheSize());  
-  
   if (fDoRunInfo) 
     UpdateRunInfoTree();
     

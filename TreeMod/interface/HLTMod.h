@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.14 2009/08/11 15:24:39 loizides Exp $
+// $Id: HLTMod.h,v 1.15 2010/09/14 22:51:28 bendavid Exp $
 //
 // HLTMod
 //
@@ -51,7 +51,7 @@ namespace mithep
       void                        AddTrigger(const char *expr, UInt_t firstRun=0, UInt_t lastRun=0);
       const char                 *GetBitsName()     const { return fBitsName;      }
       Int_t                       GetNEvents()      const { return fNEvents;       }
-      Int_t                       GetNAccepted()    const { return fNAcceped;      }
+      Int_t                       GetNAccepted()    const { return fNAccepted;     }
       Int_t                       GetNFailed()      const { return fNFailed;       }
       const char                 *GetOutputName()   const { return fMyObjsNamePub; }
       const char                 *GetTrigObjsName() const { return fMyObjsNamePub; }
@@ -87,7 +87,7 @@ namespace mithep
       const TriggerTable         *fTriggers;      //!imported published HLT trigger table
       const TriggerObjectsTable  *fTrigObjs;      //!imported published HLT trigger objects table
       Int_t                       fNEvents;       //!number of processed events
-      Int_t                       fNAcceped;      //!number of accepted events
+      Int_t                       fNAccepted;     //!number of accepted events
       Int_t                       fNFailed;       //!number of failed events
 
     ClassDef(HLTMod, 1) // HLT TAM module

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FilesetMetaData.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
+// $Id: FilesetMetaData.h,v 1.4 2009/01/20 09:13:57 loizides Exp $
 //
 // FilesetMetaData
 //
@@ -32,6 +32,8 @@ namespace mithep
       UInt_t                       NFiles      ()         const { return fFileList.size(); }
       const TString               *Location    ()         const { return &fLocation;       }
       void                         Print       () const;
+
+      void                         OverrideLocation(const char *loc) { fLocation = loc; }
 
     protected:
       TString                      fFilesetName;   //name of the fileset

@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.40 2010/05/10 16:16:39 bendavid Exp $
+// $Id: Analysis.cc,v 1.41 2010/10/03 02:26:30 paus Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
@@ -440,8 +440,8 @@ Bool_t Analysis::Init()
   if (fParallel)
     TTreeCacheUnzip::SetParallelUnzip(TTreeCacheUnzip::kEnable);
 
-  if (fCacheSize>=0) 
-    fChain->SetCacheSize(fCacheSize);
+  //if (fCacheSize>=0) 
+  //  fChain->SetCacheSize(fCacheSize);    
 
   // create our customized loader plugin for TAM
   TreeLoader *bl = new TreeLoader;
@@ -483,6 +483,7 @@ Bool_t Analysis::Init()
 
     // when not running Proof, we must make a selector
     Selector *sel = new Selector; 
+    sel->SetCacheSize(fCacheSize);  
     sel->SetDoProxy(fDoProxy);
     sel->SetDoObjTabClean(fDoObjTabClean);
     sel->SetDoRunInfo(kTRUE);

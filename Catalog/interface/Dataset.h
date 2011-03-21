@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Dataset.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
+// $Id: Dataset.h,v 1.4 2010/10/01 02:20:26 paus Exp $
 //
 // Dataset
 //
@@ -32,6 +32,8 @@ namespace mithep
       const TString               *Name      ()         const { return &fName; }
       const UInt_t                 NFiles    ()         const { return fNFiles; }
       void                         Print     ()         const;
+
+      void                         OverrideLocation(const char *loc);
 
     private:
       TString                      fName;               //name of dataset

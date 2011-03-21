@@ -1,4 +1,4 @@
-// $Id: Dataset.cc,v 1.2 2008/07/08 05:50:57 loizides Exp $
+// $Id: Dataset.cc,v 1.3 2009/03/12 18:36:07 loizides Exp $
 
 #include "MitAna/Catalog/interface/Dataset.h"
 #include <Riostream.h>
@@ -97,4 +97,13 @@ void Dataset::Print() const
     fFilesetList[i].Print();
   }
   cout << endl;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Dataset::OverrideLocation(const char *loc)
+{
+  // Override all locations in the filesets.
+
+  for (UInt_t i=0; i<fFilesetList.size(); i++)
+    fFilesetList[i].OverrideLocation(loc);
 }
