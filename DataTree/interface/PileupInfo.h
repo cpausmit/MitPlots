@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PileupInfo.h,v 1.1 2011/02/08 15:04:13 mzanetti Exp $
+// $Id: PileupInfo.h,v 1.2 2011/03/25 15:40:54 mzanetti Exp $
 //
 // Met
 //
@@ -54,7 +54,7 @@ namespace mithep
     FArrUInt                   ntrks_highpT;            //||array highpT tracks
     
     
-    ClassDef(PileupInfo, 1) // Pileup Information class
+    ClassDef(PileupInfo, 2) // Pileup Information class
   };
 }
 
