@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Met.h,v 1.18 2009/09/09 03:38:26 bendavid Exp $
+// $Id: PileupInfo.h,v 1.1 2011/02/08 15:04:13 mzanetti Exp $
 //
 // Met
 //
@@ -22,9 +22,11 @@ namespace mithep
   {
   public:
     PileupInfo(): 
-      num_PU_vertices(0) 
+      bunchCrossing(0),
+      num_PU_vertices(0)
     { };    
     
+    const Int_t            GetBunchCrossing()         const { return bunchCrossing;           }
     const UInt_t           GetPU_NumInteractions()    const { return num_PU_vertices;         }
     const FArrDouble32    &GetPU_zPositions()         const { return zPositions;              }
     const FArrDouble32    &GetPU_sumpT_lowpT()        const { return sumpT_lowpT;             }
@@ -33,7 +35,8 @@ namespace mithep
     const FArrUInt        &GetPU_ntrks_highpT()       const { return ntrks_highpT;            }
     
     virtual PileupInfo    *MakeCopy()                 const { return new PileupInfo(*this);   }
-    
+
+    void                 SetBunchCrossing(Int_t i)        { bunchCrossing = i;            }    
     void                 SetPU_NumInteractions(UInt_t i)  { num_PU_vertices = i;            }
     void                 PushPU_zPositions(Double32_t x)    { zPositions.Add(x);              }
     void                 PushPU_sumpT_lowpT(Double32_t x)   { sumpT_lowpT.Add(x);             }
@@ -42,6 +45,7 @@ namespace mithep
     void                 PushPU_ntrks_highpT(UInt_t i)  { ntrks_highpT.Add(i);            }
         
   protected:
+    Int_t                      bunchCrossing;           //bunch crossing
     UInt_t                     num_PU_vertices;         //number of PU vertices
     FArrDouble32               zPositions;              //||array positions along z
     FArrDouble32               sumpT_lowpT;             //||array sumpT for lowpT tracks
