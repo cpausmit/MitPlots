@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Dataset.h,v 1.4 2010/10/01 02:20:26 paus Exp $
+// $Id: Dataset.h,v 1.5 2011/03/21 15:58:17 paus Exp $
 //
 // Dataset
 //
@@ -28,7 +28,7 @@ namespace mithep
       void                         AddFileset(const FilesetMetaData *fs);
       void                         AddFile   (const char *filesetName, const FileMetaData *f);
       const FileMetaData          *File      (UInt_t i) const;
-      const char                  *FileUrl   (UInt_t i) const;
+      TString                      FileUrl   (UInt_t i) const;
       const TString               *Name      ()         const { return &fName; }
       const UInt_t                 NFiles    ()         const { return fNFiles; }
       void                         Print     ()         const;

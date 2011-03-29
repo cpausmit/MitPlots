@@ -1,4 +1,4 @@
-// $Id: Dataset.cc,v 1.4 2011/03/21 15:58:37 paus Exp $
+// $Id: Dataset.cc,v 1.5 2011/03/28 14:06:36 ceballos Exp $
 
 #include "MitAna/Catalog/interface/Dataset.h"
 #include <Riostream.h>
@@ -63,7 +63,7 @@ const FileMetaData *Dataset::File(UInt_t iFile) const
 }
 
 //--------------------------------------------------------------------------------------------------
-const char* Dataset::FileUrl(UInt_t iFile) const
+TString Dataset::FileUrl(UInt_t iFile) const
 {
   // Get url corresponding to given file number.
 
@@ -82,8 +82,7 @@ const char* Dataset::FileUrl(UInt_t iFile) const
       localI -= fFilesetList[i].NFiles();
   }
   
-  string *test = new string(url.Data());
-  return test->c_str();
+  return url;
 }
 
 //--------------------------------------------------------------------------------------------------

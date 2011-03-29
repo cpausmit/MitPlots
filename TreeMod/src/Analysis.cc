@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.41 2010/10/03 02:26:30 paus Exp $
+// $Id: Analysis.cc,v 1.42 2011/03/21 15:58:37 paus Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
@@ -101,7 +101,7 @@ Bool_t Analysis::AddDataset(const Dataset *dataset)
   Bool_t status = kTRUE;
 
   for (UInt_t i=0; i<dataset->NFiles(); ++i)
-    status = (status && AddFile(dataset->FileUrl(i)));
+    status = (status && AddFile((dataset->FileUrl(i)).Data()));
 
   return status;
 }
@@ -117,13 +117,13 @@ Bool_t Analysis::AddFile(const char *pname)
     return kFALSE;
   }
 
-  //================================================================================================
-  // Please do not ask me why I need to do this but I have to?! (CP - Oct02, 2010)
-  char   fileName[4096];
-  strcpy(fileName,pname);
-  //================================================================================================
+  ////================================================================================================
+  //// Please do not ask me why I need to do this but I have to?! (CP - Oct02, 2010)
+  //char   fileName[4096];
+  //strcpy(fileName,pname);
+  ////================================================================================================
 
-  TString pnamestr(fileName);
+  TString pnamestr(pname);
 
   if (pnamestr.IsNull()) 
     return kFALSE;
