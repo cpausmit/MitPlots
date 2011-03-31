@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.3 2011/01/27 14:10:01 paus Exp $
+// $Id: PlotTask.cc,v 1.4 2011/02/01 16:43:55 bendavid Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -267,11 +267,25 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     else
       factor = 0;
 
-    TH1D *h = dynamic_cast<TH1D*>(fif->FindObjectAny(hist));
+    TDirectory *fid = 0;
+    TString histname = hist;
+    if (TString(hist).Contains("/")) {
+      TObjArray *substra = TString(hist).Tokenize("/");
+      fid = (TDirectory*)fif->FindObjectAny(((TObjString*)(substra->At(0)))->GetString());
+      histname = ((TObjString*)substra->At(1))->GetString();
+      delete substra;
+    }
+    else {
+      fid = fif;
+    }
+        
+    
+    
+    TH1D *h = dynamic_cast<TH1D*>(fid->FindObjectAny(histname));
     
     //histogram doesn't exist, try to find TTree instead
     if (!h) {
-      TTree *htree = dynamic_cast<TTree*>(fif->FindObjectAny(hist));
+      TTree *htree = dynamic_cast<TTree*>(fid->FindObjectAny(histname));
       if (!htree) {
         printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
         s->Name()->Data());
@@ -354,11 +368,23 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       }
       else {
         double nEvts = hAllEvts->GetEntries();
-
-	TH1D *h = dynamic_cast<TH1D*>(fif->FindObjectAny(hist));
+        
+        TDirectory *fid = 0;
+        TString histname = hist;
+        if (TString(hist).Contains("/")) {
+          TObjArray *substra = TString(hist).Tokenize("/");
+          fid = (TDirectory*)fif->FindObjectAny(((TObjString*)(substra->At(0)))->GetString());
+          histname = ((TObjString*)substra->At(1))->GetString();
+          delete substra;
+        }
+        else {
+          fid = fif;
+        }
+            
+	TH1D *h = dynamic_cast<TH1D*>(fid->FindObjectAny(histname));
         //histogram doesn't exist, try to find TTree instead
         if (!h) {
-          TTree *htree = dynamic_cast<TTree*>(fif->FindObjectAny(hist));
+          TTree *htree = dynamic_cast<TTree*>(fid->FindObjectAny(histname));
           if (!htree) {
             printf(" WARNING -- sample  %s  does not have requested histogram. Next sample!\n",
             s->Name()->Data());
