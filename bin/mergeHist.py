@@ -15,6 +15,10 @@ def usage():
 #===================================================================================================
 def filesExist(path,filenameExpression):
     exists = False
+    
+    if not os.path.exists(path):
+      return exists;
+    
     for fileName in os.listdir(path):
         if fnmatch.fnmatch (fileName,filenameExpression):
             exists = True
@@ -35,7 +39,8 @@ def MergeFilesets(versionList,datasetNameList,skimNameList,inputPath,outputPath,
 
         outputMergedFilename = filenameHeader + '_' + dataset + '_' + skimNameList[n] + '.root'
         inputFilenameRegExp  = filenameHeader + '_' + dataset + '_' + skimNameList[n] + '_????.root'
-        command              = setupCmsswCommand + 'hadd -f ' + outputPath + outputMergedFilename \
+#        command              = setupCmsswCommand + 'hadd -f ' + outputPath + outputMergedFilename \
+        command              = 'hadd -f7 ' + outputPath + outputMergedFilename \
                                + ' ' + inputPath + '/' + versionList[n] + '/' + dataset + '/' \
                                + inputFilenameRegExp + ' >& ./merging.tmp'
 #        command              = 'hadd -f ' + outputPath + \
@@ -117,6 +122,7 @@ except IOError:
     print "Error: The specified dataset list file " + datasetListFile + " could not be opened."
     sys.exit()
 
+print datasetListFile
 #===================================================================================================
 # Read in list of datasets and skim names
 #===================================================================================================
@@ -124,12 +130,17 @@ lineNumber = 1
 templine = inputFile.readline()
 while len(templine.split()) > 0:
 
+   # print "reading line"
+   # print templine
+
     # ignore commented lines
     if (templine[0] == '#'):
         templine = inputFile.readline()
         lineNumber += 1
         continue;
 
+
+   # print "processing line"
     # check what type of list was provided and assume 'noskim' as default
     if (len(templine.split()) == 7) :
         tempInputList = templine.split()
