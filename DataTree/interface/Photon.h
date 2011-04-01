@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.33 2010/09/19 23:46:27 bendavid Exp $
+// $Id: Photon.h,v 1.34 2011/03/13 22:14:23 bendavid Exp $
 //
 // Photon
 //
@@ -83,7 +83,7 @@ namespace mithep
       Bool_t               IsTightPhoton()         const { return fIsTightPhoton;     }
       Bool_t               IsConverted()           const { return fIsConverted;       }
       ThreeVector          Mom3(const ThreeVector &vtx) const { return E()*(ThreeVector(CaloPos()) - vtx).Unit(); }
-      FourVectorM          Mom(const ThreeVector &vtx)  const;
+      FourVectorM          MomVtx(const ThreeVector &vtx)  const;
       UInt_t               NConversions()          const { return fConversions.Entries();   }
       EObjType             ObjType()               const { return kPhoton;                  }
       Double_t             R9()                    const { return fR9;                      }
@@ -205,7 +205,7 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
 }
 
 //--------------------------------------------------------------------------------------------------
-inline mithep::FourVectorM mithep::Photon::Mom(const ThreeVector &vtx) const
+inline mithep::FourVectorM mithep::Photon::MomVtx(const ThreeVector &vtx) const
 {
   // Get momentum values from stored values.
   ThreeVector momv = Mom3(vtx);
