@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.43 2010/10/18 01:33:37 bendavid Exp $
+// $Id: Electron.h,v 1.44 2011/01/27 21:57:15 bendavid Exp $
 //
 // Electron
 //
@@ -40,7 +40,7 @@ namespace mithep
         fGsfPVCompatibility(0), fGsfPVBSCompatibility(0),
         fGsfPVCompatibilityMatched(0), fGsfPVBSCompatibilityMatched(0),
         fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
-        fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
+        fConvFlag(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0) {}
@@ -77,6 +77,7 @@ namespace mithep
       Double_t             ConvPartnerDCotTheta()   const { return fConvPartnerDCotTheta;     }
       Double_t             ConvPartnerDist()        const { return fConvPartnerDist;          }
       Double_t             ConvPartnerRadius()      const { return fConvPartnerRadius;        }
+      Int_t                ConvFlag()               const { return fConvFlag;            }
       Double_t             CaloIsolation()          const { return fCaloIsolation;       } // *DEPRECATED*
       Int_t                Classification()         const { return fClassification;      }
       Double_t             CovEtaEta()              const { return fCovEtaEta;           }
@@ -170,6 +171,7 @@ namespace mithep
       void                 SetConvPartnerDCotTheta(Double_t x)    { fConvPartnerDCotTheta = x;     }
       void                 SetConvPartnerDist(Double_t x)         { fConvPartnerDist = x;          }
       void                 SetConvPartnerRadius(Double_t x)       { fConvPartnerRadius = x;        }
+      void                 SetConvFlag(Int_t n)                   { fConvFlag = n;                 }
       void                 SetClassification(Int_t x)             { fClassification = x;           }
       void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
       void                 SetCoviEtaiEta(Double_t CoviEtaiEta)   { fCoviEtaiEta = CoviEtaiEta;    }
@@ -305,6 +307,7 @@ namespace mithep
       Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
       Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
       Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
+      Int_t                fConvFlag;                  //conversion flag indicating which track combination was used
       Vect3C               fConvPosition;
       Bool_t               fIsEnergyScaleCorrected;    //class dependent escale correction
       Bool_t               fIsMomentumCorrected;       //class dependent E-p combination 
@@ -321,7 +324,7 @@ namespace mithep
       Bool_t               fMatchesVertexConversion;
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
 
-    ClassDef(Electron, 9) // Electron class
+    ClassDef(Electron, 10) // Electron class
   };
 }
 
