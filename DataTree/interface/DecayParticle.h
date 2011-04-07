@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.31 2011/02/17 13:44:14 bendavid Exp $
+// $Id: DecayParticle.h,v 1.32 2011/03/13 22:14:11 bendavid Exp $
 //
 // DecayParticle
 //
@@ -30,10 +30,12 @@ namespace mithep
     public:
       DecayParticle() :
         fAbsPdgId(0), fChi2(0), fNdof(0), fMassError(0), 
-        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fDzBeamlineError(0), fNSharedHits(0) {}
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fDzBeamlineError(0),
+        fDzBeamlineEcal(0), fDzBeamlineEcalError(0), fNSharedHits(0) {}
       DecayParticle(Int_t absPdgId) : 
         fAbsPdgId(absPdgId), fChi2(0), fNdof(0), fMassError(0), 
-        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fDzBeamlineError(0), fNSharedHits(0) {}
+        fLxy(0), fLxyError(0), fDxy(0), fDxyError(0), fLz(0), fLzError(0), fDzBeamlineError(0),
+        fDzBeamlineEcal(0), fDzBeamlineEcalError(0), fNSharedHits(0) {}
 
       void                      AddDaughterData(const DaughterData *dd) 
                                   { fDaughterData.Add(dd); ClearCharge(); }
@@ -46,6 +48,8 @@ namespace mithep
       Double_t                  DxyCorrected(const BaseVertex *v)  const;
       Double_t                  DxyError()            const { return fDxyError;                    }
       Double_t                  DzBeamlineError()     const { return fDzBeamlineError;             }
+      Double_t                  DzBeamlineEcal()      const { return fDzBeamlineEcal;              }
+      Double_t                  DzBeamlineEcalError() const { return fDzBeamlineEcalError;         }      
       Double_t                  DzCorrected(const ThreeVector &v) const;
       Double_t                  DzCorrected(const BaseVertex *v)  const;
       Bool_t                    HasDaughter(const Particle *p)            const;
@@ -80,6 +84,8 @@ namespace mithep
       void                      SetDxy(Double_t dxy)                    { fDxy = dxy; ClearPos();  }
       void                      SetDxyError(Double_t dxyError)          { fDxyError = dxyError;    }
       void                      SetDzBeamlineError(Double_t dzError)    { fDzBeamlineError = dzError; }
+      void                      SetDzBeamlineEcal(Double_t dz)    { fDzBeamlineEcal = dz; }
+      void                      SetDzBeamlineEcalError(Double_t dzError) { fDzBeamlineEcalError = dzError; }      
       void                      SetLxy(Double_t lxy)                    { fLxy = lxy; ClearPos();  }
       void                      SetLxyError(Double_t lxyError)          { fLxyError = lxyError;    }
       void                      SetLz(Double_t lz)                      { fLz = lz; ClearPos();    }
@@ -112,6 +118,8 @@ namespace mithep
       Double32_t                fLz;           //[0,0,14]fitted lz (decay length)
       Double32_t                fLzError;      //[0,0,14]fitted lz error
       Double32_t                fDzBeamlineError; //[0,0,14]fitted deltaz error at beamline
+      Double32_t                fDzBeamlineEcal; //[0,0,14]fitted deltaz at beamline (with ecal constraint) 
+      Double32_t                fDzBeamlineEcalError; //[0,0,14]fitted deltaz error at beamline (with ecal constraint)       
       Vect4M                    fMomentum;     //momentum fourvector
       RefArray<DaughterData>    fDaughterData; //momentum of daughters at vertex
       Ref<Vertex>               fPriVtx;       //reference to primary vertex
@@ -121,7 +129,7 @@ namespace mithep
       mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
       mutable ThreeVector       fCachedPos;    //!cached momentum vector (filled by derived classes)
       
-      ClassDef(DecayParticle, 4) // Decay particle class
+      ClassDef(DecayParticle, 5) // Decay particle class
   };
 }
 
