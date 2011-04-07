@@ -52,6 +52,7 @@ namespace mithep
       Double_t                  DzBeamlineEcalError() const { return fDzBeamlineEcalError;         }      
       Double_t                  DzCorrected(const ThreeVector &v) const;
       Double_t                  DzCorrected(const BaseVertex *v)  const;
+      Double_t                  Z0EcalVtx(const ThreeVector &bspos, const ThreeVector &ecalpos) const;
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                    HasPriVertex()        const { return fPriVtx.IsValid();            }
@@ -242,6 +243,19 @@ inline Double_t mithep::DecayParticle::DzCorrected(const mithep::BaseVertex *v) 
 {
   // Compute Dxy with respect to a given beamspot/vertex
   return DzCorrected(v->Position());
+  
+}
+
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::Z0EcalVtx(const ThreeVector &bspos, const ThreeVector &ecalpos) const
+{
+  // Compute z position at beamline with vector joining conversion vertex to ecal position
+  mithep::ThreeVector dirscvtx = ecalpos - Position();
+  
+  mithep::ThreeVector momPerp(dirscvtx.X(),dirscvtx.Y(),0);
+  mithep::ThreeVector posPerp(Position().X()-bspos.X(),Position().Y()-bspos.Y(),0);
+  return Position().Z() - posPerp.Dot(momPerp)/dirscvtx.Rho() * (dirscvtx.Z()/dirscvtx.Rho());
   
 }
 
