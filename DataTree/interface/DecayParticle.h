@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.32 2011/03/13 22:14:11 bendavid Exp $
+// $Id: DecayParticle.h,v 1.34 2011/04/07 11:30:45 bendavid Exp $
 //
 // DecayParticle
 //
@@ -253,9 +253,9 @@ inline Double_t mithep::DecayParticle::Z0EcalVtx(const ThreeVector &bspos, const
   // Compute z position at beamline with vector joining conversion vertex to ecal position
   mithep::ThreeVector dirscvtx = ecalpos - Position();
   
-  mithep::ThreeVector momPerp(dirscvtx.X(),dirscvtx.Y(),0);
+  mithep::ThreeVector momPerp(Px(),Py(),0);
   mithep::ThreeVector posPerp(Position().X()-bspos.X(),Position().Y()-bspos.Y(),0);
-  return Position().Z() - posPerp.Dot(momPerp)/dirscvtx.Rho() * (dirscvtx.Z()/dirscvtx.Rho());
+  return Position().Z() - posPerp.Dot(momPerp)/Pt() * (dirscvtx.Z()/dirscvtx.Rho());
   
 }
 
