@@ -1,4 +1,4 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.17 2010/01/18 14:35:43 bendavid Exp $
+// $Id: MitAnaPhysicsModLinkDef.h,v 1.18 2010/05/03 11:36:01 bendavid Exp $
 
 #ifndef MITANA_PHYSICSMOD_LINKDEF_H
 #define MITANA_PHYSICSMOD_LINKDEF_H
@@ -8,6 +8,7 @@
 #include "MitAna/PhysicsMod/interface/RunLumiSelectionMod.h"
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/PhysicsMod/interface/TrackToPartMod.h"
+#include "MitAna/PhysicsMod/interface/MCProcessSelectionMod.h"
 #endif
 
 #ifdef __CINT__
@@ -24,4 +25,5 @@
 #pragma link C++ class mithep::TrackToPartMod+;
 #pragma link C++ class mithep::RunSelectionMod+;
 #pragma link C++ class mithep::RunLumiSelectionMod+;
+#pragma link C++ class mithep::MCProcessSelectionMod+;
 #endif
