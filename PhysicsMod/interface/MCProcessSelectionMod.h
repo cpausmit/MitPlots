@@ -16,6 +16,7 @@
 
 #include <string>
 #include <TString.h>
+#include <TH1F.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/MCEventInfo.h" 
 
@@ -50,7 +51,8 @@ namespace mithep
       Int_t                       fNFailed;       //!number of failed events
       std::vector<Int_t>          fAcceptedProcessIds; //list of process ids accept
       std::vector<Int_t>          fExcludedProcessIds; //list of process ids to exclude
-      const MCEventInfo*          fMCEventInfo;        //!MC Event Info pointer
+      const MCEventInfo          *fMCEventInfo;        //!MC Event Info pointer
+      TH1F                       *hProcessId;     //histogram of process id's
 
     ClassDef(MCProcessSelectionMod, 1) // L1 TAM module
   };

@@ -18,7 +18,8 @@ MCProcessSelectionMod::MCProcessSelectionMod(const char *name, const char *title
   fNEvents(0),
   fNAcceped(0),
   fNFailed(0),
-  fMCEventInfo(0)
+  fMCEventInfo(0),
+  hProcessId(0)
 {
   // Constructor. 
 }
@@ -53,6 +54,7 @@ void MCProcessSelectionMod::Process()
   
   LoadBranch(fMCEventInfoName);
   Int_t processid = fMCEventInfo->ProcessId();
+  hProcessId->Fill(processid);
   
   Bool_t accepted = kFALSE;
   Bool_t excluded = kFALSE;
@@ -97,6 +99,9 @@ void MCProcessSelectionMod::Process()
 void MCProcessSelectionMod::SlaveBegin()
 {
 
+  hProcessId = new TH1F("hProcessId","hProcessId",501,-0.5,500.5);
+  AddOutput(hProcessId);
+  
   if (! (fDefaultAccept && fExcludedProcessIds.size()==0) )
     ReqBranch(fMCEventInfoName,fMCEventInfo);
 }
