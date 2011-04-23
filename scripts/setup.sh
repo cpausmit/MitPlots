@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.53 2011/03/22 00:22:02 bendavid Exp $
+# $Id: setup.sh,v 1.54 2011/04/04 23:37:02 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,13 +29,11 @@ echo
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 4200000; then
+#if test $version -lt 4200000; then
  
-  addpkg TrackingTools/TrajectoryState V06-04-07-01
-  addpkg RecoEgamma/EgammaTools V08-11-08
-  checkdeps -a
 
-fi
+
+#fi
 
 
 case $version in
