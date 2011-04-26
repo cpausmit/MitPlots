@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.5 2011/01/27 12:35:13 mhchan Exp $
+// $Id: PFTau.h,v 1.6 2011/01/27 14:30:03 mhchan Exp $
 //
 // PFTau
 //
@@ -28,10 +28,17 @@ namespace mithep
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
                   fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE), 
-		  fMuonDecision(kFALSE), fDiscriminationAgainstElectron(0),
-		  fDiscriminationAgainstMuon(0), fDiscriminationByDecayModeFinding(0),
-		  fDiscriminationByLooseIsolation(0), fDiscriminationByMediumIsolation(0),
-		  fDiscriminationByTightIsolation(0) {}
+		  fMuonDecision(kFALSE), 
+		  fDiscriminationAgainstElectron(0), 
+		  fDiscriminationAgainstMuon(0),
+		  fDiscriminationByLooseElectronRejection(0),
+		  fDiscriminationByMediumElectronRejection(0), 
+		  fDiscriminationByTightElectronRejection(0),
+		  fDiscriminationByLooseMuonRejection(0),
+		  fDiscriminationByTightMuonRejection(0),
+		  fDiscriminationByDecayModeFinding(0),
+		  fDiscriminationByVLooseIsolation(0), fDiscriminationByLooseIsolation(0),
+		  fDiscriminationByMediumIsolation(0), fDiscriminationByTightIsolation(0) {}
                   
       PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) : 
                   Tau(px,py,pz,e),
@@ -40,10 +47,17 @@ namespace mithep
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
                   fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
-		  fMuonDecision(kFALSE), fDiscriminationAgainstElectron(0),
-		  fDiscriminationAgainstMuon(0), fDiscriminationByDecayModeFinding(0),
-		  fDiscriminationByLooseIsolation(0), fDiscriminationByMediumIsolation(0),
-		  fDiscriminationByTightIsolation(0) {}
+		  fMuonDecision(kFALSE),
+		  fDiscriminationAgainstElectron(0), 
+		  fDiscriminationAgainstMuon(0),
+		  fDiscriminationByLooseElectronRejection(0),
+		  fDiscriminationByMediumElectronRejection(0), 
+		  fDiscriminationByTightElectronRejection(0),
+		  fDiscriminationByLooseMuonRejection(0),
+		  fDiscriminationByTightMuonRejection(0),
+		  fDiscriminationByDecayModeFinding(0),
+		  fDiscriminationByVLooseIsolation(0), fDiscriminationByLooseIsolation(0),
+		  fDiscriminationByMediumIsolation(0), fDiscriminationByTightIsolation(0) {}
 
       void               AddIsoPFCand(const PFCandidate *p)  { fIsoPFCands.Add(p);                 }
       void               AddSignalPFCand(const PFCandidate *p)      
@@ -73,7 +87,13 @@ namespace mithep
       Double_t           SegmentCompatibility()        const { return fSegmentCompatibility;       }
       Double_t DiscriminationAgainstElectron()         const {return fDiscriminationAgainstElectron;}
       Double_t DiscriminationAgainstMuon()             const {return fDiscriminationAgainstMuon;}
+      Double_t DiscriminationByLooseElectronRejection()  const {return fDiscriminationByLooseElectronRejection;}
+      Double_t DiscriminationByMediumElectronRejection() const {return fDiscriminationByMediumElectronRejection;}
+      Double_t DiscriminationByTightElectronRejection()  const {return fDiscriminationByTightElectronRejection;}
+      Double_t DiscriminationByLooseMuonRejection()    const {return fDiscriminationByLooseMuonRejection;}
+      Double_t DiscriminationByTightMuonRejection()    const {return fDiscriminationByTightMuonRejection;}
       Double_t DiscriminationByDecayModeFinding()      const {return fDiscriminationByDecayModeFinding;}
+      Double_t DiscriminationByVLooseIsolation()       const {return fDiscriminationByVLooseIsolation;}
       Double_t DiscriminationByLooseIsolation()        const {return fDiscriminationByLooseIsolation;}
       Double_t DiscriminationByMediumIsolation()       const {return fDiscriminationByMediumIsolation;}
       Double_t DiscriminationByTightIsolation()        const {return fDiscriminationByTightIsolation;}
@@ -105,7 +125,13 @@ namespace mithep
 
       void SetDiscriminationAgainstElectron(Double_t x)    {fDiscriminationAgainstElectron = x;}
       void SetDiscriminationAgainstMuon(Double_t x)        {fDiscriminationAgainstMuon = x;}
+      void SetDiscriminationByLooseElectronRejection(Double_t x) {fDiscriminationByLooseElectronRejection = x;}
+      void SetDiscriminationByMediumElectronRejection(Double_t x) {fDiscriminationByMediumElectronRejection = x;}
+      void SetDiscriminationByTightElectronRejection(Double_t x) {fDiscriminationByTightElectronRejection = x;}
+      void SetDiscriminationByLooseMuonRejection(Double_t x) {fDiscriminationByLooseMuonRejection = x;}
+      void SetDiscriminationByTightMuonRejection(Double_t x) {fDiscriminationByTightMuonRejection = x;}
       void SetDiscriminationByDecayModeFinding(Double_t x) {fDiscriminationByDecayModeFinding = x;}
+      void SetDiscriminationByVLooseIsolation(Double_t x)   {fDiscriminationByVLooseIsolation = x;}
       void SetDiscriminationByLooseIsolation(Double_t x)   {fDiscriminationByLooseIsolation = x;}
       void SetDiscriminationByMediumIsolation(Double_t x)  {fDiscriminationByMediumIsolation = x;}
       void SetDiscriminationByTightIsolation(Double_t x)   {fDiscriminationByTightIsolation = x;}
@@ -130,7 +156,13 @@ namespace mithep
       Bool_t             fMuonDecision;          //pf muon id decision
       Double32_t fDiscriminationAgainstElectron;    //[0,0,14]HPS discriminant
       Double32_t fDiscriminationAgainstMuon;        //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByLooseElectronRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByMediumElectronRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByTightElectronRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByLooseMuonRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByTightMuonRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByDecayModeFinding; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByVLooseIsolation;  //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByLooseIsolation;   //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByMediumIsolation;  //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByTightIsolation;   //[0,0,14]HPS discriminant
@@ -145,7 +177,7 @@ namespace mithep
       
 
 
-    ClassDef(PFTau, 2) // PFTau class
+    ClassDef(PFTau, 3) // PFTau class
   };
 }
 
