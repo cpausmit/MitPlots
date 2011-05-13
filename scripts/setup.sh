@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.55 2011/04/23 19:13:13 bendavid Exp $
+# $Id: setup.sh,v 1.56 2011/05/09 10:33:07 rwolf Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -59,9 +59,10 @@ else
         ;;
 	021)
 	echo "Checkout additional tags for nSVfit. Proper tag will be provided asa available from the TauPOG"
-	cvs co AnalysisDataFormats/TauAnalysis
-	cvs co TauAnalysis/CandidateTools
-	cvs co -r V01-00-33-03 RecoTauTag/RecoTau
+        cvs co -r b4_1_x_2011Apr25 TauAnalysis
+        cvs up -r 1.16 TauAnalysis/CandidateTools/python/nSVfitAlgorithmDiTau_cfi.py
+        cvs co -r b4_1_x_2011Apr25 AnalysisDataFormats/TauAnalysis 
+	cvs co -r V01-00-33-04 RecoTauTag/RecoTau
 	;;
         *) 
 	echo "Nothing special to be done for this version";
