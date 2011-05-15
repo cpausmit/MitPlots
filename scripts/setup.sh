@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.57 2011/05/13 18:01:51 rwolf Exp $
+# $Id: setup.sh,v 1.58 2011/05/13 18:36:35 rwolf Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,11 +29,20 @@ echo
 
 cd $CMSSW_BASE/src;
 
-#if test $version -lt 4200000; then
- 
+if test $version -lt 4300000; then
+  #tau id and svfit
+  addpkg TauAnalysis/CandidateTools b4_1_x_2011Apr25 
+  cvs up -r 1.16 TauAnalysis/CandidateTools/python/nSVfitAlgorithmDiTau_cfi.py
+  addpkg AnalysisDataFormats/TauAnalysis b4_1_x_2011Apr25
+  addpkg RecoTauTag/RecoTau V01-00-33-04
 
+  #deterministic rho computation
+  addpkg RecoJets/Configuration V02-04-16
+  addpkg RecoJets/JetAlgorithms V04-01-00      
+  addpkg RecoJets/JetProducers V05-05-03
 
-#fi
+  checkdeps -a
+fi
 
 
 case $version in
@@ -57,13 +66,6 @@ else
         005)
             MitAna/scripts/setup-pixelLessTracking.sh
         ;;
-	021)
-	echo "Checkout additional tags for nSVfit. Proper tag will be provided asa available from the TauPOG"
-        cvs co -r b4_1_x_2011Apr25 TauAnalysis/CandidateTools
-        cvs up -r 1.16 TauAnalysis/CandidateTools/python/nSVfitAlgorithmDiTau_cfi.py
-        cvs co -r b4_1_x_2011Apr25 AnalysisDataFormats/TauAnalysis 
-	cvs co -r V01-00-33-04 RecoTauTag/RecoTau
-	;;
         *) 
 	echo "Nothing special to be done for this version";
         ;;
