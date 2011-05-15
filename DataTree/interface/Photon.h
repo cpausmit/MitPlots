@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.34 2011/03/13 22:14:23 bendavid Exp $
+// $Id: Photon.h,v 1.35 2011/04/01 14:52:04 bendavid Exp $
 //
 // Photon
 //
@@ -30,7 +30,8 @@ namespace mithep
         fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
         fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
         fSolidConeTrkIsoDr03(0), fHollowConeTrkIsoDr03(0),fSolidConeNTrkDr03(0),
-        fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
+        fHollowConeNTrkDr03(0), fPFChargedHadronIso(0), fPFNeutralHadronIso(0), fPFPhotonIso(0),
+        fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
@@ -43,7 +44,8 @@ namespace mithep
         fHollowConeTrkIso(0),fSolidConeNTrk(0),fHollowConeNTrk(0), fEcalRecHitIsoDr03(0),
         fHcalTowerSumEtDr03(0), fHcalDepth1TowerSumEtDr03(0), fHcalDepth2TowerSumEtDr03(0),
         fSolidConeTrkIsoDr03(0), fHollowConeTrkIsoDr03(0),fSolidConeNTrkDr03(0),
-        fHollowConeNTrkDr03(0), fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
+        fHollowConeNTrkDr03(0), fPFChargedHadronIso(0), fPFNeutralHadronIso(0), fPFPhotonIso(0),
+        fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0) {}
 
@@ -73,6 +75,9 @@ namespace mithep
       UShort_t             HollowConeNTrkDr04()    const { return fHollowConeNTrk;        }
       Double_t             HollowConeTrkIsoDr03()  const { return fHollowConeTrkIsoDr03;  }
       Double_t             HollowConeTrkIsoDr04()  const { return fHollowConeTrkIso;  }
+      Double_t             PFChargedHadronIso()      const { return fPFChargedHadronIso;           }
+      Double_t             PFNeutralHadronIso()      const { return fPFNeutralHadronIso;           }
+      Double_t             PFPhotonIso()             const { return fPFPhotonIso;                  }      
       Bool_t               IsEB()                  const { return fIsEB;              }
       Bool_t               IsEE()                  const { return fIsEE;              }
       Bool_t               IsEBGap()               const { return fIsEBGap;           }
@@ -124,6 +129,9 @@ namespace mithep
       void                 SetHollowConeTrkIsoDr03(Double_t x)     { fHollowConeTrkIsoDr03     = x; }
       void                 SetSolidConeNTrkDr03(UShort_t x)        { fSolidConeNTrkDr03        = x; }
       void                 SetHollowConeNTrkDr03(UShort_t x)       { fHollowConeNTrkDr03       = x; }
+      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso = x;       }
+      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso = x;       }
+      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso = x;              }      
       void                 SetIsEB(Bool_t x)                       { fIsEB          = x; }
       void                 SetIsEE(Bool_t x)                       { fIsEE          = x; }
       void                 SetIsEBGap(Bool_t x)                    { fIsEBGap       = x; }
@@ -168,6 +176,9 @@ namespace mithep
       Double32_t           fHollowConeTrkIsoDr03;     //[0,0,14]as above excluding the core, dR 0.3
       UShort_t             fSolidConeNTrkDr03;  //number of tracks in a cone of dR 0.3
       UShort_t             fHollowConeNTrkDr03; //as above excluding the core, dR 0.3
+      Double32_t           fPFChargedHadronIso;        //[0,0,14]pf isolation, charged hadrons
+      Double32_t           fPFNeutralHadronIso;        //[0,0,14]pf isolation, neutral hadrons
+      Double32_t           fPFPhotonIso;               //[0,0,14]pf isolation, photons
       Bool_t               fHasPixelSeed;       //=true if super cluster has matched seed
       Bool_t               fIsEB;               //=true if photon is ECal barrel
       Bool_t               fIsEE;               //=true if photon is ECAL endcap
@@ -183,7 +194,7 @@ namespace mithep
       RefArray<Conversion> fConversions;        //refs to associated conversion candidates
       Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
 	
-    ClassDef(Photon,4) // Photon class
+    ClassDef(Photon,5) // Photon class
   };
 }
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.44 2011/01/27 21:57:15 bendavid Exp $
+// $Id: Electron.h,v 1.45 2011/04/04 23:38:00 bendavid Exp $
 //
 // Electron
 //
@@ -40,6 +40,7 @@ namespace mithep
         fGsfPVCompatibility(0), fGsfPVBSCompatibility(0),
         fGsfPVCompatibilityMatched(0), fGsfPVBSCompatibilityMatched(0),
         fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
+        fPFChargedHadronIso(0), fPFNeutralHadronIso(0), fPFPhotonIso(0),
         fConvFlag(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
@@ -140,6 +141,9 @@ namespace mithep
       Double_t             HcalDepth1TowerSumEtDr03() const { return fHcalDepth1TowerSumEtDr03;    }
       Double_t             HcalDepth2TowerSumEtDr03() const { return fHcalDepth2TowerSumEtDr03;    }
       Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
+      Double_t             PFChargedHadronIso()      const { return fPFChargedHadronIso;           }
+      Double_t             PFNeutralHadronIso()      const { return fPFNeutralHadronIso;           }
+      Double_t             PFPhotonIso()             const { return fPFPhotonIso;                  }
       Bool_t               MatchesVertexConversion() const { return fMatchesVertexConversion;      }
       UInt_t               NAmbiguousGsfTracks()     const { return fAmbiguousGsfTracks.Entries();  }
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
@@ -219,6 +223,9 @@ namespace mithep
       void                 SetHcalDepth1TowerSumEtDr03(Double_t x) { fHcalDepth1TowerSumEtDr03 = x; }
       void                 SetHcalDepth2TowerSumEtDr03(Double_t x) { fHcalDepth2TowerSumEtDr03 = x; }
       void                 SetTrackIsolationDr03(Double_t x)       { fTrackIsolation = x;   }
+      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso = x;       }
+      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso = x;       }
+      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso = x;              }
       void                 SetMva(Double_t x)                      { fMva = x;              }
       void                 SetIsEB(Bool_t b)                       { fIsEB = b;             }
       void                 SetIsEE(Bool_t b)                       { fIsEE = b;             }
@@ -307,6 +314,9 @@ namespace mithep
       Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
       Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
       Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
+      Double32_t           fPFChargedHadronIso;        //[0,0,14]pf isolation, charged hadrons
+      Double32_t           fPFNeutralHadronIso;        //[0,0,14]pf isolation, neutral hadrons
+      Double32_t           fPFPhotonIso;               //[0,0,14]pf isolation, photons
       Int_t                fConvFlag;                  //conversion flag indicating which track combination was used
       Vect3C               fConvPosition;
       Bool_t               fIsEnergyScaleCorrected;    //class dependent escale correction
@@ -324,7 +334,7 @@ namespace mithep
       Bool_t               fMatchesVertexConversion;
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
 
-    ClassDef(Electron, 10) // Electron class
+    ClassDef(Electron, 11) // Electron class
   };
 }
 
