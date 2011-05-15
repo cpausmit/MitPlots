@@ -1,4 +1,4 @@
-// $Id: runHLTExample.C,v 1.6 2010/01/04 16:01:24 loizides Exp $
+// $Id: runHLTExample.C,v 1.7 2010/03/30 12:10:08 bendavid Exp $
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
@@ -9,8 +9,9 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-void runHLTExample(const char *trigger="HLT_MinBiasBSC_OR", 
-                   const char *files = "mit-full_000.root",
+void runHLTExample(const char *trigger="HLT_Mu15_v1",
+                   //const char *files = "XX-MITDATASET-XX_000.root",
+                   const char *files = "/castor/cern.ch/user/p/paus/filefi/020/p11-h160ww2l-gf-v1g1-pu/342631BD-F250-E011-9C32-00A0D1EE8B54.root",
                    Int_t nEvs = 0)
 {
   using namespace mithep;

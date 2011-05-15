@@ -1,4 +1,4 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.12 2010/06/29 15:51:53 bendavid Exp $
+// $Id: MitAnaDataContLinkDef.h,v 1.13 2011/03/11 04:02:39 bendavid Exp $
 
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
@@ -40,6 +40,7 @@
 #pragma link C++ class mithep::BitMaskT<ULong64_t>+;
 #pragma link C++ class mithep::BitMask<16>+;
 #pragma link C++ class mithep::BitMask<32>+;
+#pragma link C++ class mithep::BitMask<128>+;
 #pragma link C++ typedef mithep::BitMask8;
 #pragma link C++ typedef mithep::BitMask16;
 #pragma link C++ typedef mithep::BitMask32;
@@ -47,6 +48,8 @@
 #pragma link C++ typedef mithep::BitMask64;
 #pragma link C++ typedef mithep::BitMask128;
 #pragma link C++ typedef mithep::BitMask256; 
+#pragma link C++ typedef mithep::BitMask1024; 
+
 
 #pragma link C++ class mithep::CacheFlag-;
 #pragma link C++ class mithep::RefResolver+;

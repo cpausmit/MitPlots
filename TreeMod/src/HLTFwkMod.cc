@@ -1,4 +1,4 @@
-// $Id: HLTFwkMod.cc,v 1.14 2009/11/24 14:27:33 loizides Exp $
+// $Id: HLTFwkMod.cc,v 1.15 2011/03/11 04:03:54 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
@@ -30,7 +30,7 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fObjsNamePub(Form("%sFwk",fObjsName.Data())),
   fL1ATabNamePub("L1AlgoTableFwk"),
   fL1TTabNamePub("L1TechTableFwk"),
-  fNMaxTriggers(256),
+  fNMaxTriggers(1024),
   fObjs(0),
   fRels(0),
   fReload(0),

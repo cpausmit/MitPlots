@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.3 2009/03/06 13:52:54 loizides Exp $
+// $Id: Types.h,v 1.4 2009/03/08 12:08:31 loizides Exp $
 //
 // Types
 //
@@ -27,6 +27,7 @@ namespace mithep
   typedef BitMaskT<ULong64_t>              BitMask64;
   typedef BitMask<16>                      BitMask128;
   typedef BitMask<32>                      BitMask256;
+  typedef BitMask<128>                     BitMask1024;
 
   typedef FastArrayBasic<Double_t>         FArrDouble;
   typedef FastArrayBasic<Double32_t,kTRUE> FArrDouble32;

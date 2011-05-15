@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.19 2010/09/14 22:51:28 bendavid Exp $
+// $Id: HLTMod.cc,v 1.20 2011/03/21 15:58:37 paus Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -58,8 +58,8 @@ void HLTMod::AddTrigObjs(UInt_t tid)
 {
   // Add trigger objects corresponding to trigger id.
 
-  const BitMask256 &ba = fTrigBitsAnd.at(tid);
-  const BitMask256 &bm = fTrigBitsCmp.at(tid);
+  const BitMask1024 &ba = fTrigBitsAnd.at(tid);
+  const BitMask1024 &bm = fTrigBitsCmp.at(tid);
   for (UInt_t i=0; i<bm.Size(); ++i) {
     if (ba.TestBit(i)==0 && !fIgnoreBits)
       continue; // not an active trigger bit
@@ -109,8 +109,8 @@ void HLTMod::BeginRun()
 	 ( runNumber<firstRun || runNumber>lastRun ) )
       continue;
     
-    BitMask256 tmask; //trigger mask
-    BitMask256 amask; //bitand mask
+    BitMask1024 tmask; //trigger mask
+    BitMask1024 amask; //bitand mask
     TString names(fTrigNames.at(i).first.c_str());
 
     TObjArray *arr = names.Tokenize("&");
@@ -170,7 +170,7 @@ void HLTMod::Process()
   fBitsDone.Clear();
   Bool_t accept = kFALSE;
   for (UInt_t i = 0; i<fTrigBitsAnd.size(); ++i) {
-    BitMask256 bitmask(fBits->Get());
+    BitMask1024 bitmask(fBits->Get());
     bitmask &= fTrigBitsAnd.at(i);
     if (bitmask==fTrigBitsCmp.at(i)) {
       accept = kTRUE;

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTMod.h,v 1.15 2010/09/14 22:51:28 bendavid Exp $
+// $Id: HLTMod.h,v 1.16 2011/03/21 15:58:37 paus Exp $
 //
 // HLTMod
 //
@@ -80,9 +80,9 @@ namespace mithep
       TString                     fMyObjsNamePub; //name of exported trigger object array
       std::vector<std::pair<std::string,std::pair<UInt_t,UInt_t> > > fTrigNames;     //trigger names requested for test mask with valid run range
       const TriggerMask          *fBits;          //!trigger bits branch
-      std::vector<BitMask256>     fTrigBitsAnd;   //!trigger bits used in mask
-      std::vector<BitMask256>     fTrigBitsCmp;   //!trigger bits used for comparison
-      BitMask256                  fBitsDone;      //!bits for which trigger objects are copied
+      std::vector<BitMask1024>     fTrigBitsAnd;   //!trigger bits used in mask
+      std::vector<BitMask1024>     fTrigBitsCmp;   //!trigger bits used for comparison
+      BitMask1024                  fBitsDone;      //!bits for which trigger objects are copied
       TriggerObjectOArr          *fMyTrgObjs;     //!exported published trigger object array
       const TriggerTable         *fTriggers;      //!imported published HLT trigger table
       const TriggerObjectsTable  *fTrigObjs;      //!imported published HLT trigger objects table
