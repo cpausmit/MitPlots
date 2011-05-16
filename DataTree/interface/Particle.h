@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.32 2009/05/18 06:28:49 loizides Exp $
+// $Id: Particle.h,v 1.33 2009/07/13 11:00:30 loizides Exp $
 //
 // Particle
 //
@@ -22,7 +22,7 @@ namespace mithep
   class Particle : public DataObject
   {
     public:
-      Particle() {}
+      Particle() : fIsFakeable(0) {}
      
       Double_t                  AbsEta()                  const { return TMath::Abs(Eta());        }
       Double_t 		        Charge()                  const;
@@ -46,6 +46,8 @@ namespace mithep
       Double_t		        Rapidity()                const { return Mom().Rapidity();         }
       Double_t                  Theta()                   const { return Mom().Theta();            }
       Double_t		        TMass()                   const;
+      Bool_t                    IsFakeable()              const { return fIsFakeable;              }
+      void		        SetIsFakeable(Bool_t b)         { fIsFakeable = b;                 }
      
     protected:
       void                      ClearCharge()             const { fCacheQFlag.ClearCache();   }
@@ -58,6 +60,7 @@ namespace mithep
       mutable CacheFlag         fCacheQFlag;   //||cache validity flag for charge
       mutable FourVectorM       fCachedMom;    //!cached momentum vector (filled by derived classes)
       mutable Double_t          fCachedQ;      //!chached charge value (filled by derived classes)
+      Bool_t                    fIsFakeable;   //set to true if the lepton is a fakeable object
 
     ClassDef(Particle, 1) // Generic particle class
   };
