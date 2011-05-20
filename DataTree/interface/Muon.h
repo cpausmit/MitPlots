@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.40 2010/10/29 16:21:14 ceballos Exp $
+// $Id: Muon.h,v 1.41 2010/11/11 20:57:58 bendavid Exp $
 //
 // Muon
 //
@@ -94,8 +94,22 @@ namespace mithep {
       Double_t       Ip3dPVBS()                      const { return fIp3dPVBS;                 }
       Double_t       Ip3dPVBSErr()                   const { return fIp3dPVBSErr;              }
       Double_t       Ip3dPVBSSignificance()          const { return fIp3dPVBS/fIp3dPVBSErr;    }
+      Double_t       D0PVUB()                          const { return fD0PVUB;                     }
+      Double_t       D0PVUBErr()                       const { return fD0PVUBErr;                  }
+      Double_t       D0PVUBSignificance()              const { return fD0PVUB/fD0PVUBErr;            }
+      Double_t       Ip3dPVUB()                        const { return fIp3dPVUB;                   }
+      Double_t       Ip3dPVUBErr()                     const { return fIp3dPVUBErr;                }
+      Double_t       Ip3dPVUBSignificance()            const { return fIp3dPVUB/fIp3dPVUBErr;        }
+      Double_t       D0PVUBBS()                        const { return fD0PVUBBS;                   }
+      Double_t       D0PVUBBSErr()                     const { return fD0PVUBBSErr;                }
+      Double_t       D0PVUBBSSignificance()            const { return fD0PVUBBS/fD0PVUBBSErr;        }
+      Double_t       Ip3dPVUBBS()                      const { return fIp3dPVUBBS;                 }
+      Double_t       Ip3dPVUBBSErr()                   const { return fIp3dPVUBBSErr;              }
+      Double_t       Ip3dPVUBBSSignificance()          const { return fIp3dPVUBBS/fIp3dPVUBBSErr;    }
       Double_t       PVCompatibility()               const { return fPVCompatibility;          }
       Double_t       PVBSCompatibility()             const { return fPVBSCompatibility;        }
+      Double_t       TrkKink()                       const { return fTrkKink;                  }
+      Double_t       GlbKink()                       const { return fGlbKink;                  }
       Double_t       EmEnergy()                      const { return fEmEnergy;                 }
       Double_t       EmS9Energy()                    const { return fEmS9Energy;               }
       Double_t       GetDX(Int_t iStation)           const;
@@ -166,8 +180,18 @@ namespace mithep {
       void           SetD0PVBSErr(Double_t x)              { fD0PVBSErr = x;                   }
       void           SetIp3dPVBS(Double_t x)               { fIp3dPVBS = x;                    }
       void           SetIp3dPVBSErr(Double_t x)            { fIp3dPVBSErr = x;                 }
+      void           SetD0PVUB(Double_t x)                   { fD0PVUB = x;                        }
+      void           SetD0PVUBErr(Double_t x)                { fD0PVUBErr = x;                     }
+      void           SetIp3dPVUB(Double_t x)                 { fIp3dPVUB = x;                      }
+      void           SetIp3dPVUBErr(Double_t x)              { fIp3dPVUBErr = x;                   }
+      void           SetD0PVUBBS(Double_t x)                 { fD0PVUBBS = x;                      }
+      void           SetD0PVUBBSErr(Double_t x)              { fD0PVUBBSErr = x;                   }
+      void           SetIp3dPVUBBS(Double_t x)               { fIp3dPVUBBS = x;                    }
+      void           SetIp3dPVUBBSErr(Double_t x)            { fIp3dPVUBBSErr = x;                 }
       void           SetPVCompatibility(Double_t x)        { fPVCompatibility = x;             }
       void           SetPVBSCompatibility(Double_t x)      { fPVBSCompatibility = x;           }
+      void           SetTrkKink(Double_t x)                { fTrkKink = x;                     }
+      void           SetGlbKink(Double_t x)                { fGlbKink = x;                     }
       void           SetEmEnergy(Double_t EmEnergy)        { fEmEnergy = EmEnergy;             }
       void           SetEmS9Energy(Double_t EmS9Energy)    { fEmS9Energy = EmS9Energy;         }
       void           SetHadEnergy(Double_t HadEnergy)      { fHadEnergy = HadEnergy;           }
@@ -239,6 +263,16 @@ namespace mithep {
       Double32_t     fIp3dPVBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
       Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
+      Double32_t     fD0PVUB;                //[0,0,14]transverse impact parameter to signal PVUB (unbiased primary vertex - refit removing lepton track)
+      Double32_t     fD0PVUBErr;             //[0,0,14]transverse impact parameter uncertainty to signal PVUB
+      Double32_t     fIp3dPVUB;              //[0,0,14]3d impact parameter to signal PVUB
+      Double32_t     fIp3dPVUBErr;           //[0,0,14]3d impact parameter uncertainty to signal PVUB
+      Double32_t     fD0PVUBBS;              //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint
+      Double32_t     fD0PVUBBSErr;           //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint
+      Double32_t     fIp3dPVUBBS;            //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint
+      Double32_t     fIp3dPVUBBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint
+      Double32_t     fTrkKink;             //[0,0,14]kink algorithm output (tracker track)
+      Double32_t     fGlbKink;             //[0,0,14]kink algorithm output (global track)
       UShort_t       fNValidHits;          //number of Valid hits in global fit
       UShort_t       fNTraversedChambers;  //number of traversed chambers
       UShort_t       fNMatches;            //number of muon chambers with matches
@@ -256,7 +290,7 @@ namespace mithep {
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 7) // Muon class
+    ClassDef(Muon, 8) // Muon class
   };
 }
 

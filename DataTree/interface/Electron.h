@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.45 2011/04/04 23:38:00 bendavid Exp $
+// $Id: Electron.h,v 1.46 2011/05/15 14:11:00 bendavid Exp $
 //
 // Electron
 //
@@ -37,6 +37,10 @@ namespace mithep
         fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0),
         fD0PVCkf(0), fD0PVCkfErr(0), fIp3dPVCkf(0), fIp3dPVCkfErr(0),
         fD0PVBSCkf(0), fD0PVBSCkfErr(0), fIp3dPVBSCkf(0), fIp3dPVBSCkfErr(0),
+        fD0PVUB(0), fD0PVUBErr(0), fIp3dPVUB(0), fIp3dPVUBErr(0),
+        fD0PVUBBS(0), fD0PVUBBSErr(0), fIp3dPVUBBS(0), fIp3dPVUBBSErr(0),
+        fD0PVUBCkf(0), fD0PVUBCkfErr(0), fIp3dPVUBCkf(0), fIp3dPVUBCkfErr(0),
+        fD0PVUBBSCkf(0), fD0PVUBBSCkfErr(0), fIp3dPVUBBSCkf(0), fIp3dPVUBBSCkfErr(0),
         fGsfPVCompatibility(0), fGsfPVBSCompatibility(0),
         fGsfPVCompatibilityMatched(0), fGsfPVBSCompatibilityMatched(0),
         fConvPartnerDCotTheta(0), fConvPartnerDist(0), fConvPartnerRadius(0),
@@ -71,6 +75,30 @@ namespace mithep
       Double_t             Ip3dPVBSCkf()               const { return fIp3dPVBSCkf;                 }
       Double_t             Ip3dPVBSCkfErr()            const { return fIp3dPVBSCkfErr;              }
       Double_t             Ip3dPVBSCkfSignificance()   const { return fIp3dPVBSCkf/fIp3dPVBSCkfErr; }
+      Double_t             D0PVUB()                   const { return fD0PVUB;                     }
+      Double_t             D0PVUBErr()                const { return fD0PVUBErr;                  }
+      Double_t             D0PVUBSignificance()       const { return fD0PVUB/fD0PVUBErr;            }
+      Double_t             Ip3dPVUB()                 const { return fIp3dPVUB;                   }
+      Double_t             Ip3dPVUBErr()              const { return fIp3dPVUBErr;                }
+      Double_t             Ip3dPVUBSignificance()     const { return fIp3dPVUB/fIp3dPVUBErr;        }
+      Double_t             D0PVUBBS()                 const { return fD0PVUBBS;                   }
+      Double_t             D0PVUBBSErr()              const { return fD0PVUBBSErr;                }
+      Double_t             D0PVUBBSSignificance()     const { return fD0PVUBBS/fD0PVUBBSErr;        }
+      Double_t             Ip3dPVUBBS()               const { return fIp3dPVUBBS;                 }
+      Double_t             Ip3dPVUBBSErr()            const { return fIp3dPVUBBSErr;              }
+      Double_t             Ip3dPVUBBSSignificance()   const { return fIp3dPVUBBS/fIp3dPVUBBSErr;    }
+      Double_t             D0PVUBCkf()                   const { return fD0PVUBCkf;                     }
+      Double_t             D0PVUBCkfErr()                const { return fD0PVUBCkfErr;                  }
+      Double_t             D0PVUBCkfSignificance()       const { return fD0PVUBCkf/fD0PVUBCkfErr;         }
+      Double_t             Ip3dPVUBCkf()                 const { return fIp3dPVUBCkf;                   }
+      Double_t             Ip3dPVUBCkfErr()              const { return fIp3dPVUBCkfErr;                }
+      Double_t             Ip3dPVUBCkfSignificance()     const { return fIp3dPVUBCkf/fIp3dPVUBCkfErr;     }
+      Double_t             D0PVUBBSCkf()                 const { return fD0PVUBBSCkf;                   }
+      Double_t             D0PVUBBSCkfErr()              const { return fD0PVUBBSCkfErr;                }
+      Double_t             D0PVUBBSCkfSignificance()     const { return fD0PVUBBSCkf/fD0PVUBBSCkfErr;     }
+      Double_t             Ip3dPVUBBSCkf()               const { return fIp3dPVUBBSCkf;                 }
+      Double_t             Ip3dPVUBBSCkfErr()            const { return fIp3dPVUBBSCkfErr;              }
+      Double_t             Ip3dPVUBBSCkfSignificance()   const { return fIp3dPVUBBSCkf/fIp3dPVUBBSCkfErr; }
       Double_t             GsfPVCompatibility()     const { return fGsfPVCompatibility;       }
       Double_t             GsfPVBSCompatibility()   const { return fGsfPVBSCompatibility;     }
       Double_t             GsfPVCompatibilityMatched()     const { return fGsfPVCompatibilityMatched;       }
@@ -168,6 +196,22 @@ namespace mithep
       void                 SetD0PVBSCkfErr(Double_t x)            { fD0PVBSCkfErr = x;                }
       void                 SetIp3dPVBSCkf(Double_t x)             { fIp3dPVBSCkf = x;                 }
       void                 SetIp3dPVBSCkfErr(Double_t x)          { fIp3dPVBSCkfErr = x;              }
+      void                 SetD0PVUB(Double_t x)                    { fD0PVUB = x;                     }
+      void                 SetD0PVUBErr(Double_t x)                 { fD0PVUBErr = x;                  }
+      void                 SetIp3dPVUB(Double_t x)                  { fIp3dPVUB = x;                   }
+      void                 SetIp3dPVUBErr(Double_t x)               { fIp3dPVUBErr = x;                }
+      void                 SetD0PVUBBS(Double_t x)                  { fD0PVUBBS = x;                   }
+      void                 SetD0PVUBBSErr(Double_t x)               { fD0PVUBBSErr = x;                }
+      void                 SetIp3dPVUBBS(Double_t x)                { fIp3dPVUBBS = x;                 }
+      void                 SetIp3dPVUBBSErr(Double_t x)             { fIp3dPVUBBSErr = x;              }
+      void                 SetD0PVUBCkf(Double_t x)                 { fD0PVUBCkf = x;                     }
+      void                 SetD0PVUBCkfErr(Double_t x)              { fD0PVUBCkfErr = x;                  }
+      void                 SetIp3dPVUBCkf(Double_t x)               { fIp3dPVUBCkf = x;                   }
+      void                 SetIp3dPVUBCkfErr(Double_t x)            { fIp3dPVUBCkfErr = x;                }
+      void                 SetD0PVUBBSCkf(Double_t x)               { fD0PVUBBSCkf = x;                   }
+      void                 SetD0PVUBBSCkfErr(Double_t x)            { fD0PVUBBSCkfErr = x;                }
+      void                 SetIp3dPVUBBSCkf(Double_t x)             { fIp3dPVUBBSCkf = x;                 }
+      void                 SetIp3dPVUBBSCkfErr(Double_t x)          { fIp3dPVUBBSCkfErr = x;              }
       void                 SetGsfPVCompatibility(Double_t x)      { fGsfPVCompatibility = x;       }
       void                 SetGsfPVBSCompatibility(Double_t x)    { fGsfPVBSCompatibility = x;     }
       void                 SetGsfPVCompatibilityMatched(Double_t x)      { fGsfPVCompatibilityMatched = x;   }
@@ -307,6 +351,22 @@ namespace mithep
       Double32_t           fD0PVBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
       Double32_t           fIp3dPVBSCkf;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
       Double32_t           fIp3dPVBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+      Double32_t           fD0PVUB;                      //[0,0,14]transverse impact parameter to signal PVUB (gsf track)
+      Double32_t           fD0PVUBErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PVUB (gsf track)
+      Double32_t           fIp3dPVUB;                    //[0,0,14]3d impact parameter to signal PVUB (gsf track)
+      Double32_t           fIp3dPVUBErr;                 //[0,0,14]3d impact parameter uncertainty to signal PVUB (gsf track)
+      Double32_t           fD0PVUBBS;                    //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fD0PVUBBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVUBBS;                  //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVUBBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fD0PVUBCkf;                      //[0,0,14]transverse impact parameter to signal PVUB (ckf track)
+      Double32_t           fD0PVUBCkfErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PVUB (ckf track)
+      Double32_t           fIp3dPVUBCkf;                    //[0,0,14]3d impact parameter to signal PVUB (ckf track)
+      Double32_t           fIp3dPVUBCkfErr;                 //[0,0,14]3d impact parameter uncertainty to signal PVUB (ckf track)
+      Double32_t           fD0PVUBBSCkf;                    //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fD0PVUBBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVUBBSCkf;                  //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVUBBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
       Double32_t           fGsfPVCompatibility;        //[0,0,14]gsf compatibility with signal PV
       Double32_t           fGsfPVBSCompatibility;      //[0,0,14]gsf compatibility with signal PV w/ bs constraint
       Double32_t           fGsfPVCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
@@ -334,7 +394,7 @@ namespace mithep
       Bool_t               fMatchesVertexConversion;
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
 
-    ClassDef(Electron, 11) // Electron class
+    ClassDef(Electron, 12) // Electron class
   };
 }
 
