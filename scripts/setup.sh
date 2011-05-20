@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.59 2011/05/15 14:13:09 bendavid Exp $
+# $Id: setup.sh,v 1.60 2011/05/20 11:42:33 mhchan Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -34,7 +34,7 @@ if test $version -lt 4300000; then
   addpkg TauAnalysis/CandidateTools b4_1_x_2011Apr25 
   cvs up -r 1.16 TauAnalysis/CandidateTools/python/nSVfitAlgorithmDiTau_cfi.py
   addpkg AnalysisDataFormats/TauAnalysis b4_1_x_2011Apr25
-  addpkg RecoTauTag/RecoTau V01-00-33-05
+  addpkg RecoTauTag/RecoTau V01-00-33-06
 
   #deterministic rho computation
   addpkg RecoJets/Configuration V02-04-16
