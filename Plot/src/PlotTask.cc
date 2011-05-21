@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.4 2011/02/01 16:43:55 bendavid Exp $
+// $Id: PlotTask.cc,v 1.5 2011/03/31 21:14:31 bendavid Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -84,7 +84,7 @@ void PlotTask::PlotContributions(const char* dir, const char* hist)
 
   // say what we are doing
   printf("\n ==== Plotting Contributions -- %s ====\n\n",fTask->Name()->Data());
-  printf("  index of highest histogram %d (0-%d)\n\n",fIdxHistMax,fHists.size()-1);
+  printf("  index of highest histogram %d (0-%d)\n\n",fIdxHistMax,int(fHists.size()-1));
 
   // check x-axis title
   if (fAxisTitleX == TString(""))
