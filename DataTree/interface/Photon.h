@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.35 2011/04/01 14:52:04 bendavid Exp $
+// $Id: Photon.h,v 1.36 2011/05/15 14:11:00 bendavid Exp $
 //
 // Photon
 //
@@ -60,7 +60,7 @@ namespace mithep
       Double_t             E25()                   const { return fE25;                }
       Double_t             E33()                   const { return fE33;                }      
       Double_t             E55()                   const { return fE55;                }      
-      ThreeVectorC         CaloPos()               const { return fCaloPos.V();        }      
+      ThreeVectorC         CaloPos()               const;
       Double_t             CovEtaEta()             const { return fCovEtaEta;          }
       Double_t             CoviEtaiEta()           const { return fCoviEtaiEta;        }         
       Bool_t               HasPixelSeed()          const { return fHasPixelSeed;       }
@@ -196,6 +196,20 @@ namespace mithep
 	
     ClassDef(Photon,5) // Photon class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline mithep::ThreeVectorC mithep::Photon::CaloPos() const
+{
+  // Get caloposition
+  mithep::ThreeVectorC calopos = fCaloPos.V();
+  if (calopos.Rho()>1.0) {
+    return calopos;
+  }
+  else {
+    return SCluster()->Point();
+  }
+  
 }
 
 //--------------------------------------------------------------------------------------------------
