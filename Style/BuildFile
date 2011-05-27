@@ -1,8 +1,0 @@
-# -*- Makefile -*-
-# $Id: BuildFile,v 1.1.2.1 2010/10/03 04:08:49 paus Exp $
-
-<use name=rootgraphics>
-<use name=root>
-<export>
-   <lib name=MitPlotsStyle>
-</export>

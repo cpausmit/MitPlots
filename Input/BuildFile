@@ -1,8 +1,0 @@
-# -*- Makefile -*-
-# $Id: BuildFile,v 1.2 2011/01/25 11:30:30 paus Exp $
-
-<use name=MitAna/DataUtil>
-<use name=root>
-<export>
-   <lib name=MitPlotsInput>
-</export>
