@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.5 2011/03/31 21:14:31 bendavid Exp $
+// $Id: PlotTask.cc,v 1.6 2011/05/21 00:23:12 klute Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -305,7 +305,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       fEmptyHist->Reset();
     }
 
-    double nEvtsSelRaw = h->GetEntries();
+    double nEvtsSelRaw = h->GetSumOfWeights();
     double nEvtsSel    = nEvtsSelRaw * factor * scale;
     double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw) * factor * scale;
 
@@ -402,7 +402,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
           // rebin it
           h->Rebin(fNRebin);
 
-	double nEvtsSelRaw = h->GetEntries();
+	double nEvtsSelRaw = h->GetSumOfWeights();
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
