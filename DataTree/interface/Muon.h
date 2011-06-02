@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.42 2011/05/20 16:51:39 bendavid Exp $
+// $Id: Muon.h,v 1.43 2011/05/21 13:27:58 ceballos Exp $
 //
 // Muon
 //
@@ -261,6 +261,8 @@ namespace mithep {
       Double32_t     fD0PVBSErr;           //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t     fIp3dPVBS;            //[0,0,14]3d impact parameter to signal PV w/ bs constraint
       Double32_t     fIp3dPVBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
+      Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
+      Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)      
       Double32_t     fD0PVUB;                //[0,0,14]transverse impact parameter to signal PVUB (unbiased primary vertex - refit removing lepton track)
       Double32_t     fD0PVUBErr;             //[0,0,14]transverse impact parameter uncertainty to signal PVUB
       Double32_t     fIp3dPVUB;              //[0,0,14]3d impact parameter to signal PVUB
@@ -269,8 +271,6 @@ namespace mithep {
       Double32_t     fD0PVUBBSErr;           //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint
       Double32_t     fIp3dPVUBBS;            //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint
       Double32_t     fIp3dPVUBBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint
-      Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
-      Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
       Double32_t     fTrkKink;             //[0,0,14]kink algorithm output (tracker track)
       Double32_t     fGlbKink;             //[0,0,14]kink algorithm output (global track)
       UShort_t       fNValidHits;          //number of Valid hits in global fit

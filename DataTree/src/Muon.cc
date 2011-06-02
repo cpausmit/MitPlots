@@ -1,4 +1,4 @@
-// $Id: Muon.cc,v 1.9 2010/10/29 16:21:14 ceballos Exp $
+// $Id: Muon.cc,v 1.10 2011/05/20 16:51:40 bendavid Exp $
 
 #include "MitAna/DataTree/interface/Muon.h"
 
@@ -14,9 +14,9 @@ Muon::Muon() :
   fEmEnergy(0), fHadEnergy(0), fHoEnergy(0), fEmS9Energy(0), 
   fHadS9Energy(0), fHoS9Energy(0), fD0PV(0), fD0PVErr(0), fIp3dPV(0), fIp3dPVErr(0),
   fD0PVBS(0), fD0PVBSErr(0), fIp3dPVBS(0), fIp3dPVBSErr(0), 
-  fD0PVUBErr(0), fIp3dPVUB(0), fIp3dPVUBErr(0),
-  fD0PVUBBS(0), fD0PVUBBSErr(0), fIp3dPVUBBS(0), fIp3dPVUBBSErr(0),
   fPVCompatibility(0), fPVBSCompatibility(0),
+  fD0PVUB(0), fD0PVUBErr(0), fIp3dPVUB(0), fIp3dPVUBErr(0),
+  fD0PVUBBS(0), fD0PVUBBSErr(0), fIp3dPVUBBS(0), fIp3dPVUBBSErr(0),
   fTrkKink(0), fGlbKink(0),
   fNValidHits(0), fNTraversedChambers(0), fNMatches(0), fIsGlobalMuon(kFALSE),
   fIsTrackerMuon(kFALSE), fIsStandaloneMuon(kFALSE), fIsCaloMuon(kFALSE)
