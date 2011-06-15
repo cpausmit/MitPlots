@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.61 2011/05/20 14:55:18 rwolf Exp $
+# $Id: setup.sh,v 1.62 2011/06/07 13:53:05 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -38,8 +38,6 @@ if test $version -lt 4003000 -a $version -ge 4002000; then
 
   #deterministic rho computation
   addpkg RecoJets/Configuration V02-04-16
-  addpkg RecoJets/JetAlgorithms V04-01-00      
-  addpkg RecoJets/JetProducers V05-05-03
 
   checkdeps -a
 fi
