@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.64 2011/06/16 11:46:44 rwolf Exp $
+# $Id: setup.sh,v 1.65 2011/06/16 13:47:05 rwolf Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -30,13 +30,20 @@ echo
 cd $CMSSW_BASE/src;
 
 if test $version -lt 4003000 -a $version -ge 4002000; then
-  #tau id and svfit
-  addpkg TauAnalysis/CandidateTools b4_1_x_2011Apr25 
-  cvs up -r 1.16 TauAnalysis/CandidateTools/python/nSVfitAlgorithmDiTau_cfi.py
-  addpkg AnalysisDataFormats/TauAnalysis b4_1_x_2011Apr25
-  addpkg RecoTauTag/RecoTau V01-00-33-06
 
-  #deterministic rho computation
+  # latest PhysicsTools patches for tauID
+  addpkg DataFormats/PatCandidates V06-04-16
+  addpkg PhysicsTools/PatAlgos V08-06-34
+  addpkg PhysicsTools/MVAComputer V00-06-06
+  # latest RecoTauTag patches for tauID
+  addpkg RecoTauTag/Configuration V01-02-00
+  addpkg RecoTauTag/RecoTau V01-02-00
+  addpkg RecoTauTag/TauTagTools V01-02-00 
+  # and finally latest svfit developments
+  addpkg AnalysisDataFormats/TauAnalysis b4_2_x_2011Jun13
+  addpkg TauAnalysis/CandidateTools b4_2_x_2011Jun13
+
+  #deterministic rho computation (voronoi tesselation flavour by default in this tag)
   addpkg RecoJets/Configuration V02-04-16
 
   checkdeps -a
@@ -69,27 +76,6 @@ else
     echo
     echo "Entering production setup. Looking for MIT_VERS: $MIT_VERS dependencies."
     echo
-    case $MIT_VERS in
-        005)
-            MitAna/scripts/setup-pixelLessTracking.sh
-        ;;
-	022)
-	echo "Checkout additional tags for nSVfit. Status 11/06/13"
-	# latest PhysicsTools patches for tauID
-	cvs co -r V06-04-16 DataFormats/PatCandidates
-	cvs co -r V08-06-34 PhysicsTools/PatAlgos
-	cvs co -r V00-06-06 PhysicsTools/MVAComputer
-	# latest RecoTauTag patches for tauID
-	cvs co -r V01-02-00 RecoTauTag/Configuration
-	cvs co -r V01-02-00 RecoTauTag/RecoTau
-	cvs co -r V01-02-00 RecoTauTag/TauTagTools 
-	# and finally latest svfit developments
-	cvs co -r b4_2_x_2011Jun13 AnalysisDataFormats/TauAnalysis
-	cvs co -r b4_2_x_2011Jun13 TauAnalysis/CandidateTools
-        *) 
-	echo "Nothing special to be done for this version";
-        ;;
-    esac
 fi
 
 echo "Setup done; you probably want to compile your project area now";
