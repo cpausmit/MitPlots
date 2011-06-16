@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.62 2011/06/07 13:53:05 bendavid Exp $
+# $Id: setup.sh,v 1.63 2011/06/15 20:03:00 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -73,6 +73,19 @@ else
         005)
             MitAna/scripts/setup-pixelLessTracking.sh
         ;;
+	022)
+	echo "Checkout additional tags for nSVfit. Status 11/06/13"
+	# latest PhysicsTools patches for tauID
+	cvs co -r V06-04-16 DataFormats/PatCandidates
+	cvs co -r V08-06-33 PhysicsTools/PatAlgos
+	cvs co -r V00-06-06 PhysicsTools/MVAComputer
+	# latest RecoTauTag patches for tauID
+	cvs co -r V01-02-00 RecoTauTag/Configuration
+	cvs co -r V01-02-00 RecoTauTag/RecoTau
+	cvs co -r V01-02-00 RecoTauTag/TauTagTools 
+	# and finally latest svfit developments
+	cvs co -r b4_2_x_2011Jun13 AnalysisDataFormats/TauAnalysis
+	cvs co -r b4_2_x_2011Jun13 TauAnalysis/CandidateTools
         *) 
 	echo "Nothing special to be done for this version";
         ;;
