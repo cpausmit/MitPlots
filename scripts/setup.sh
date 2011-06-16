@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.63 2011/06/15 20:03:00 bendavid Exp $
+# $Id: setup.sh,v 1.64 2011/06/16 11:46:44 rwolf Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -77,7 +77,7 @@ else
 	echo "Checkout additional tags for nSVfit. Status 11/06/13"
 	# latest PhysicsTools patches for tauID
 	cvs co -r V06-04-16 DataFormats/PatCandidates
-	cvs co -r V08-06-33 PhysicsTools/PatAlgos
+	cvs co -r V08-06-34 PhysicsTools/PatAlgos
 	cvs co -r V00-06-06 PhysicsTools/MVAComputer
 	# latest RecoTauTag patches for tauID
 	cvs co -r V01-02-00 RecoTauTag/Configuration
