@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.20 2010/09/19 18:26:41 bendavid Exp $
+// $Id: SuperCluster.h,v 1.21 2010/09/20 12:09:15 bendavid Exp $
 //
 // SuperCluster
 //
@@ -55,6 +55,7 @@ namespace mithep
       Double_t               PreshowerEnergy()       const { return fPreshowerEnergy;              }
       Double_t               RawEnergy()             const { return fRawEnergy;                    }
       Double_t               Rho()                   const { return fPoint.Rho();                  }
+      Double_t               R9()                    const { return fSeedRef.Obj()->E3x3()/fRawEnergy; }
       const BasicCluster    *Seed()                  const { return fSeedRef.Obj();                }
       const CaloTower       *Tower(UInt_t i)         const { return fCaloTowers.At(i);             }
       void	             SetEnergy(Double_t energy)                 { fEnergy = energy;        }
