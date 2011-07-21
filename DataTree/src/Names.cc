@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.51 2011/03/09 21:30:10 bendavid Exp $
+// $Id: Names.cc,v 1.52 2011/05/05 12:40:37 rwolf Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -38,6 +38,7 @@ const char *Names::gkPFTauBrn               = "ShrinkingConePFTaus";
 const char *Names::gkHPSTauBrn              = "HPSTaus";
 const char *Names::gkNSVFitBrn              = "NSVFitResults";
 const char *Names::gkNSVFitEMuBrn           = "NSVFitResultsEMu";
+const char *Names::gkNSVFitMuMuBrn          = "NSVFitResultsMuMu";
 const char *Names::gkNSVFitETauBrn          = "NSVFitResultsETau";
 const char *Names::gkNSVFitMuTauBrn         = "NSVFitResultsMuTau";
 const char *Names::gkPhotonBrn              = "Photons";
