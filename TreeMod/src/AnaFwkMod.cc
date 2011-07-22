@@ -1,10 +1,12 @@
-// $Id: AnaFwkMod.cc,v 1.14 2009/06/28 08:02:05 loizides Exp $
+// $Id: AnaFwkMod.cc,v 1.15 2011/03/11 04:03:54 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
+#include "MitAna/DataTree/interface/PileupInfo.h"
 #include <TFile.h>
 #include <TH1D.h>
+#include <TH3D.h>
 #include <TStopwatch.h>
 #include <TTree.h>
 
@@ -27,7 +29,11 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fReload(kFALSE),
   fCurEnt(-2),
   fNEventsSkimmed(0),
-  fNEventsSkipped(0)
+  fNEventsSkipped(0),
+  fPileupInfoName("PileupInfo"),
+  fDoPUInfo(kFALSE),
+  hNPU(0),
+  hNPU50ns(0)
 {
   // Constructor.
 }
@@ -202,6 +208,21 @@ void AnaFwkMod::Process()
     }
   }
 
+  if (GetEventHeader()->IsMC()) {
+    LoadBranch(fPileupInfoName);  
+    Int_t npu[3] = {0,0,0};
+    for (UInt_t i=0; i<fPileupInfo->GetEntries(); ++i) {
+      const PileupInfo *puinfo = fPileupInfo->At(i);
+      if (puinfo->GetBunchCrossing()==0) npu[0]= puinfo->GetPU_NumInteractions();
+      else if (puinfo->GetBunchCrossing()==-1) npu[1] = puinfo->GetPU_NumInteractions();
+      else if (puinfo->GetBunchCrossing()==1) npu[2] = puinfo->GetPU_NumInteractions();
+    }
+    
+    hNPU->Fill(npu[0]);
+    hNPU50ns->Fill(npu[0],npu[1],npu[2]);
+  }
+
+
   if (doPrint) {
     fSWevent->Stop();
     Info("Process", 
@@ -210,7 +231,9 @@ void AnaFwkMod::Process()
          fSWevent->RealTime()/nProcessed, 
          fSWevent->CpuTime()/nProcessed);
     fSWevent->Start();
-  }  
+  }
+  
+    
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,6 +249,15 @@ void AnaFwkMod::SlaveBegin()
               "Could not publish all event headers with name %s.", fAllHeaders.GetName());
     return;
   }
+  
+  ReqBranch(fPileupInfoName, fPileupInfo);
+  
+  hNPU = new TH1D("hNPU", "hNPU", 51, -0.5, 50.5);
+  AddOutput(hNPU);  
+  
+  hNPU50ns = new TH3D("hNPU50ns", "hNPU50ns", 51, -0.5, 50.5, 51, -0.5, 50.5, 51, -0.5, 50.5);
+  AddOutput(hNPU50ns);  
+  
 }
 
 //--------------------------------------------------------------------------------------------------

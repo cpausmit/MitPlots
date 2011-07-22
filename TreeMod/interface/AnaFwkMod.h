@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.7 2009/06/15 15:00:17 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.8 2009/06/19 07:39:01 loizides Exp $
 //
 // AnaFwkMod
 //
@@ -14,9 +14,11 @@
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/EventHeaderCol.h"
+#include "MitAna/DataTree/interface/PileupInfoFwd.h"
 
 class TTree;
 class TH1D;
+class TH3D;
 class TStopwatch;
 
 namespace mithep 
@@ -53,7 +55,12 @@ namespace mithep
       Int_t            fCurEnt;            //!curent entry in AllEvents tree
       Int_t            fNEventsSkimmed;    //!number of skimmed events
       Int_t            fNEventsSkipped;    //!number of skippeded events
-      
+      const PileupInfoCol *fPileupInfo;    //!      
+      TString          fPileupInfoName;    //Name of PileupInfo Branch for pileup truth distributions
+      Bool_t           fDoPUInfo;
+      TH1D             *hNPU;              //in-time pileup distribution
+      TH3D             *hNPU50ns;          //three-dimensional pileup distribution (bx=0,-2,+2) suitable for 50ns spacing
+
     ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
 }
