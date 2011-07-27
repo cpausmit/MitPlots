@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.16 2010/06/24 13:08:45 peveraer Exp $
+// $Id: BasicCluster.h,v 1.17 2010/06/25 15:10:35 bendavid Exp $
 //
 // BasicCluster
 //
@@ -94,7 +94,7 @@ namespace mithep
       ThreeVectorC     Pos()                     const { return  fPoint.V();    }
       void             Print(Option_t *opt="")   const;
       Double_t         Rho()                     const { return  fPoint.Rho();  }
-      Double_t         NHits()                   const { return  fNHits;        }
+      Int_t            NHits()                   const { return  fNHits;        }
       Double_t         E1x3()                    const { return  fE1x3;         }
       Double_t         E3x1()                    const { return  fE3x1;         }
       Double_t         E1x5()                    const { return  fE1x5;         }

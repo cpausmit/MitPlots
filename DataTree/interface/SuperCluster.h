@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.21 2010/09/20 12:09:15 bendavid Exp $
+// $Id: SuperCluster.h,v 1.22 2011/07/15 17:23:50 fabstoec Exp $
 //
 // SuperCluster
 //
@@ -31,6 +31,7 @@ namespace mithep
       void                   AddTower(const CaloTower *t)               { fCaloTowers.Add(t);      }
       const BasicCluster    *Cluster(UInt_t i)       const { return fClusters.At(i);               }
       UInt_t                 ClusterSize()           const { return fClusters.Entries();           }
+      UInt_t                 NHits()                 const;
       Int_t                  Compare(const TObject *o) const;   
       Double_t               Energy()                const { return fEnergy;                       }
       Double_t               Et()                    const;
@@ -84,6 +85,19 @@ namespace mithep
     ClassDef(SuperCluster, 3) // Super cluster class
   };
 }
+
+//--------------------------------------------------------------------------------------------------
+inline UInt_t mithep::SuperCluster::NHits() const
+{
+  // Return transverse energy.
+
+  UInt_t nhits = 0;
+  for (UInt_t i=0; i<fClusters.GetEntries(); ++i) {
+    nhits += fClusters.At(i)->NHits();
+  }
+  return nhits;
+}
+
 
 //--------------------------------------------------------------------------------------------------
 inline Double_t mithep::SuperCluster::Et() const
