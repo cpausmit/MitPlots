@@ -1,4 +1,4 @@
-// $Id: RunLumiSelectionMod.cc,v 1.3 2010/05/29 18:10:15 bendavid Exp $
+// $Id: RunLumiSelectionMod.cc,v 1.4 2010/06/29 15:51:53 bendavid Exp $
 
 #include "MitAna/PhysicsMod/interface/RunLumiSelectionMod.h"
 #include <TTree.h>
@@ -13,6 +13,7 @@ RunLumiSelectionMod::RunLumiSelectionMod(const char *name, const char *title) :
   BaseMod(name,title),
   fAbort(kTRUE),
   fAcceptMC(kFALSE),
+  fAcceptAll(kFALSE),
   fNEvents(0),
   fNAcceped(0),
   fNFailed(0),
@@ -48,7 +49,7 @@ void RunLumiSelectionMod::Process()
   if (runLumi != fCurrentRunLumi) {
     fAcceptCurrentRunLumi = kFALSE;
     //check for MC default accept
-    if (fAcceptMC && GetEventHeader()->IsMC()) {
+    if (fAcceptAll || (fAcceptMC && GetEventHeader()->IsMC())) {
       fAcceptCurrentRunLumi = kTRUE;
     }
     else {

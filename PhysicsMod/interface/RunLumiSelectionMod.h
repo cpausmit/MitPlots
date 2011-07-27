@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunLumiSelectionMod.h,v 1.3 2010/05/29 18:10:15 bendavid Exp $
+// $Id: RunLumiSelectionMod.h,v 1.4 2010/06/29 15:51:53 bendavid Exp $
 //
 // RunLumiSelectionMod
 //
@@ -36,7 +36,8 @@ namespace mithep
       Int_t                       GetNAccepted()    const { return fNAcceped;      }
       Int_t                       GetNFailed()      const { return fNFailed;       }
       void                        SetAbortIfNotAccepted(Bool_t b)   { fAbort         = b; }
-      void                        SetAcceptMC(Bool_t b)   { fAcceptMC = b; }
+      void                        SetAcceptMC(Bool_t b)   { fAcceptMC  = b; }
+      void                        SetAcceptAll(Bool_t b)  { fAcceptAll = b; }
 
     protected:
       void                        BeginRun();
@@ -48,6 +49,7 @@ namespace mithep
 
       Bool_t                      fAbort;         //=true then abort (sub-)modules if not accepted
       Bool_t                      fAcceptMC;      //=true then accept Monte Carlo unconditionally
+      Bool_t                      fAcceptAll;     //=true then accept all events unconditionally
       Int_t                       fNEvents;       //!number of processed events
       Int_t                       fNAcceped;      //!number of accepted events
       Int_t                       fNFailed;       //!number of failed events
