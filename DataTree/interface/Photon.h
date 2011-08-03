@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.36 2011/05/15 14:11:00 bendavid Exp $
+// $Id: Photon.h,v 1.37 2011/05/27 14:15:45 bendavid Exp $
 //
 // Photon
 //
@@ -14,6 +14,7 @@
 #include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataTree/interface/Vertex.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep 
@@ -141,6 +142,10 @@ namespace mithep
       void                 SetIsLoosePhoton(Bool_t x)              { fIsLoosePhoton = x; }
       void                 SetIsTightPhoton(Bool_t x)              { fIsTightPhoton = x; }
       void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z) { fCaloPos.SetXYZ(x,y,z);    }
+      void                 SetPV(const Vertex *v)                  { fPVRef = v;         }
+      Bool_t               HasPV()                           const { return fPVRef.IsValid(); }
+      const Vertex        *PV()                              const { return fPVRef.Obj(); }
+
 
 
     protected:
@@ -193,8 +198,9 @@ namespace mithep
       Bool_t               fIsConverted;        //=true if photon converted
       RefArray<Conversion> fConversions;        //refs to associated conversion candidates
       Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
+      Ref<Vertex>          fPVRef;              //ref to associated primary vertex
 	
-    ClassDef(Photon,5) // Photon class
+    ClassDef(Photon,6) // Photon class
   };
 }
 
