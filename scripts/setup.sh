@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.67 2011/06/18 13:47:46 bendavid Exp $
+# $Id: setup.sh,v 1.68 2011/06/29 07:27:21 rwolf Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -31,9 +31,9 @@ cd $CMSSW_BASE/src;
 
 if test $version -lt 4003000 -a $version -ge 4002000; then
 
-  # latest PhysicsTools patches for tauID
-  addpkg DataFormats/PatCandidates V06-04-16
-  addpkg PhysicsTools/PatAlgos V08-06-34
+# latest PhysicsTools patches for tauID
+#   addpkg DataFormats/PatCandidates V06-04-16
+#   addpkg PhysicsTools/PatAlgos V08-06-34
 #  addpkg PhysicsTools/MVAComputer V00-06-06
   # latest RecoTauTag patches for tauID
   addpkg RecoTauTag/Configuration V01-02-02
