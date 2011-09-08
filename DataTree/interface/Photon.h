@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.37 2011/05/27 14:15:45 bendavid Exp $
+// $Id: Photon.h,v 1.38 2011/08/03 17:14:41 bendavid Exp $
 //
 // Photon
 //
@@ -34,7 +34,7 @@ namespace mithep
         fHollowConeNTrkDr03(0), fPFChargedHadronIso(0), fPFNeutralHadronIso(0), fPFPhotonIso(0),
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
-        fIsConverted(0) {}
+        fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
         fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -48,11 +48,13 @@ namespace mithep
         fHollowConeNTrkDr03(0), fPFChargedHadronIso(0), fPFNeutralHadronIso(0), fPFPhotonIso(0),
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
-        fIsConverted(0) {}
+        fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.) {}
 
       const Conversion    *ConvCand(UInt_t i)      const { return fConversions.At(i);  }
       Double_t             EcalRecHitIsoDr03()     const { return fEcalRecHitIsoDr03;  }
       Double_t             EcalRecHitIsoDr04()     const { return fEcalRecHitIso;      }
+      Double_t             EnergyErr()             const { return fEnergyErr;          }
+      Double_t             EnergyErrSmeared()      const { return fEnergyErrSmeared;   }      
       Double_t             HadOverEm()             const { return fHadOverEm;          }
       Double_t             HcalDepth1OverEcal()    const { return fHcalDepth1OverEcal; }
       Double_t             HcalDepth2OverEcal()    const { return fHcalDepth2OverEcal; }
@@ -98,7 +100,9 @@ namespace mithep
       Double_t             SolidConeTrkIsoDr04()   const { return fSolidConeTrkIso;         }
       UShort_t             SolidConeNTrkDr03()     const { return fSolidConeNTrkDr03;       }
       UShort_t             SolidConeNTrkDr04()     const { return fSolidConeNTrk;           }
-      void                 AddConversion(const Conversion *c)      { fConversions.Add(c);   }  
+      void                 AddConversion(const Conversion *c)      { fConversions.Add(c);   }
+      void                 SetEnergyErr(Double_t err)              { fEnergyErr = err;      }
+      void                 SetEnergyErrSmeared(Double_t err)       { fEnergyErrSmeared = err; }
       void                 SetIsConverted(Bool_t isConv)           { fIsConverted = isConv; }
       void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void                 SetSuperCluster(const SuperCluster* sc) { fSuperClusterRef = sc; }
@@ -199,8 +203,10 @@ namespace mithep
       RefArray<Conversion> fConversions;        //refs to associated conversion candidates
       Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
       Ref<Vertex>          fPVRef;              //ref to associated primary vertex
+      Double32_t           fEnergyErr;          //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression
+      Double32_t           fEnergyErrSmeared;   //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression with added smearing
 	
-    ClassDef(Photon,6) // Photon class
+    ClassDef(Photon,8) // Photon class
   };
 }
 
