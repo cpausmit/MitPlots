@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFMet.h,v 1.2 2009/03/18 15:44:32 loizides Exp $
+// $Id: PFMet.h,v 1.3 2009/09/09 03:38:26 bendavid Exp $
 //
 // PFMet
 //
@@ -19,11 +19,11 @@ namespace mithep
   {
     public:
       PFMet() :
-        fNeutralEMFraction(0), fNeutralHadFraction(0), fChargedEMFraction(0),
+        fPFMetSig(0), fNeutralEMFraction(0), fNeutralHadFraction(0), fChargedEMFraction(0),
         fChargedHadFraction(0), fMuonFraction(0) {}
       PFMet(Double_t mex, Double_t mey) : 
         Met(mex,mey),
-        fNeutralEMFraction(0), fNeutralHadFraction(0), fChargedEMFraction(0),
+        fPFMetSig(0), fNeutralEMFraction(0), fNeutralHadFraction(0), fChargedEMFraction(0),
         fChargedHadFraction(0), fMuonFraction(0) {}
 
       Double_t                     ChargedEMFraction()   const       { return fChargedEMFraction;  }
@@ -33,13 +33,16 @@ namespace mithep
       Double_t                     NeutralEMFraction()   const       { return fNeutralEMFraction;  }
       Double_t                     NeutralHadFraction()  const       { return fNeutralHadFraction; }
       EObjType                     ObjType()             const       { return kPFMet;              }
+      Double_t                     PFMetSig()            const       { return fPFMetSig;           }
       void                         SetChargedEMFraction(Double_t x)  { fChargedEMFraction = x;     }
       void                         SetChargedHadFraction(Double_t x) { fChargedHadFraction = x;    } 
       void                         SetMuonFraction(Double_t x)       { fMuonFraction = x;          }
       void                         SetNeutralEMFraction(Double_t x)  { fNeutralEMFraction = x;     }
       void                         SetNeutralHadFraction(Double_t x) { fNeutralHadFraction = x;    }
+      void                         SetPFMetSig(Double_t x)           { fPFMetSig = x;              }
       
     protected:
+      Double32_t                   fPFMetSig;            //[0,0,14]pf met significance
       Double32_t                   fNeutralEMFraction;   //[0,0,14]neutral em fraction
       Double32_t                   fNeutralHadFraction;  //[0,0,14]neutral had fraction
       Double32_t                   fChargedEMFraction;   //[0,0,14]charged em fraction
