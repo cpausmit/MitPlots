@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFMet.h,v 1.3 2009/09/09 03:38:26 bendavid Exp $
+// $Id: PFMet.h,v 1.4 2011/09/12 13:46:13 ksung Exp $
 //
 // PFMet
 //
@@ -49,7 +49,7 @@ namespace mithep
       Double32_t                   fChargedHadFraction;  //[0,0,14]charged had fraction
       Double32_t                   fMuonFraction;        //[0,0,14]muon fraction
     
-    ClassDef(PFMet, 1) // Missing transverse energy class
+    ClassDef(PFMet, 2) // Missing transverse energy class
   };
 }
 #endif
