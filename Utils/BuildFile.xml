@@ -1,5 +1,5 @@
 <use   name="MitCommon/DataFormats"/>
-<use   name="root"/>
+<lib   name="Graf"/>
 <export>
   <lib   name="1"/>
 </export>

@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.68 2011/06/29 07:27:21 rwolf Exp $
+# $Id: setup.sh,v 1.69 2011/08/22 16:32:09 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,34 +29,18 @@ echo
 
 cd $CMSSW_BASE/src;
 
-if test $version -lt 4003000 -a $version -ge 4002000; then
 
-# latest PhysicsTools patches for tauID
-#   addpkg DataFormats/PatCandidates V06-04-16
-#   addpkg PhysicsTools/PatAlgos V08-06-34
-#  addpkg PhysicsTools/MVAComputer V00-06-06
-  # latest RecoTauTag patches for tauID
-  addpkg RecoTauTag/Configuration V01-02-02
-  addpkg RecoTauTag/RecoTau V01-02-06
-  addpkg RecoTauTag/TauTagTools V01-02-00 
+
+
+if test $version -lt 4005000 -a $version -ge 4004000; then
+
   # and finally latest svfit developments
   addpkg AnalysisDataFormats/TauAnalysis b4_2_x_2011Jun26
   addpkg TauAnalysis/CandidateTools b4_2_x_2011Jun27
 
-  #deterministic rho computation (voronoi tesselation flavour by default in this tag)
-  addpkg RecoJets/Configuration V02-04-16
-
   checkdeps -a
 fi
 
-if test $version -lt 4002000; then
-  #tau id and svfit
-  addpkg RecoJets/Configuration V02-04-16
-  addpkg RecoJets/JetAlgorithms V04-01-00
-  addpkg RecoJets/JetProducers V05-05-03-00
-
-  checkdeps -a
-fi
 
 
 case $version in

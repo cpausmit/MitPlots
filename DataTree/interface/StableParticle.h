@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.10 2009/02/26 17:06:25 bendavid Exp $
+// $Id: StableParticle.h,v 1.11 2009/03/18 15:44:32 loizides Exp $
 //
 // StableParticle
 //
@@ -53,13 +53,5 @@ inline Double_t mithep::StableParticle::GetMass() const
           "Absolute pdg code %i not found in table, returning mass=-99.0 GeV", fAbsPdgId);
     return -99.0;
   }
-}
-
-//--------------------------------------------------------------------------------------------------
-inline TParticlePDG *mithep::StableParticle::PdgEntry() const 
-{ 
-  // Return entry to pdg database for the particle.
-
-  return TDatabasePDG::Instance()->GetParticle(fAbsPdgId); 
 }
 #endif

@@ -1,5 +1,7 @@
 <use   name="MitCommon/DataFormats"/>
 <use   name="MitAna/DataCont"/>
+<lib   name="EG"/>
 <export>
+  <use   name="EG"/>
   <lib   name="1"/>
 </export>
