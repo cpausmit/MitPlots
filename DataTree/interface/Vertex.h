@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.14 2010/10/20 20:33:39 bendavid Exp $
+// $Id: Vertex.h,v 1.15 2010/10/22 00:05:25 bendavid Exp $
 //
 // Vertex
 //
@@ -29,7 +29,7 @@ namespace mithep
       Vertex(const ThreeVector &pos) : 
         BaseVertex(pos), fChi2(0), fNdof(0), fAdaptiveNdof(0), fNTracks(0) {}
       
-      void                AddTrack(const Track *t) { fTracks.Add(t);           }
+      void                AddTrack(const Track *t, Double32_t wgt = -1) { fTracks.Add(t); fTrkWeights.Add(wgt); }
       Double_t            Chi2()      const { return fChi2;                    } 
       Int_t               Compare(const TObject *o) const;
       Bool_t              HasTrack(const Track *t)  const { return fTracks.HasObject(t); }
@@ -45,6 +45,7 @@ namespace mithep
       void                SetNdof(Double_t nDof)     { fAdaptiveNdof = nDof;   } 
       void                SetNTracksFit(UInt_t n)    { fNTracks = n;           }
       const Track        *Trk(UInt_t i) const        { return fTracks.At(i);   }
+      Double32_t          TrackWeight(const Track *t) const;
             
     protected:
       Double32_t          fChi2;     //[0,0,12]chi squared of conversion vertex fit
@@ -52,9 +53,10 @@ namespace mithep
       UShort_t            fNdof;     //number of degrees of freedom of conversion vertex fit
       Double32_t          fAdaptiveNdof; //number of degrees of freedom of vertex fit (can be non-integer for weighted components)
       UShort_t            fNTracks;  //number of tracks used for the fit
+      FArrDouble32        fTrkWeights; //track weights
       RefArray<Track>     fTracks;   //tracks associated with the PV
 	
-    ClassDef(Vertex, 3) // Vertex class
+    ClassDef(Vertex, 4) // Vertex class
   };
 }
 
@@ -84,5 +86,17 @@ inline Int_t mithep::Vertex::Compare(const TObject *o) const
     return +1;
   
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::Vertex::TrackWeight(const Track *t) const
+{
+  for(UInt_t i = 0; i < fTracks.Entries(); i++)
+  {
+    if(t == fTracks.At(i))
+      return fTrkWeights.At(i);
+  }
+
+  return -1;
 }
 #endif
