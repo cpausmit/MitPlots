@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.69 2011/08/22 16:32:09 bendavid Exp $
+# $Id: setup.sh,v 1.70 2011/09/12 15:21:36 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -37,6 +37,10 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   # and finally latest svfit developments
   addpkg AnalysisDataFormats/TauAnalysis b4_2_x_2011Jun26
   addpkg TauAnalysis/CandidateTools b4_2_x_2011Jun27
+
+  # add packages for clustered PFMET
+  cvs co -r AlbertoAndPedro_Sep20_FastJetDevelopments -d RecoParticleFlow/PostProcessing UserCode/RecoParticleFlow/PostProcessing
+  cvs co -r v11_09_28 -d CommonTools/ClusteredPFMetProducer UserCode/psilva/ClusteredPFMetProducer
 
   checkdeps -a
 fi
