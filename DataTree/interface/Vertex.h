@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.15 2010/10/22 00:05:25 bendavid Exp $
+// $Id: Vertex.h,v 1.16 2011/09/23 15:38:32 mhchan Exp $
 //
 // Vertex
 //
@@ -46,6 +46,7 @@ namespace mithep
       void                SetNTracksFit(UInt_t n)    { fNTracks = n;           }
       const Track        *Trk(UInt_t i) const        { return fTracks.At(i);   }
       Double32_t          TrackWeight(const Track *t) const;
+      const FArrDouble32 &GetTrkWeights() const { return fTrkWeights; }
             
     protected:
       Double32_t          fChi2;     //[0,0,12]chi squared of conversion vertex fit
@@ -53,7 +54,7 @@ namespace mithep
       UShort_t            fNdof;     //number of degrees of freedom of conversion vertex fit
       Double32_t          fAdaptiveNdof; //number of degrees of freedom of vertex fit (can be non-integer for weighted components)
       UShort_t            fNTracks;  //number of tracks used for the fit
-      FArrDouble32        fTrkWeights; //track weights
+      FArrDouble32        fTrkWeights; //||array of track weights
       RefArray<Track>     fTracks;   //tracks associated with the PV
 	
     ClassDef(Vertex, 4) // Vertex class
