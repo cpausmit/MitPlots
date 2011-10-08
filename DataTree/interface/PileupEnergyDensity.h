@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PileupEnergyDensity.h,v 1.2 2011/03/23 19:03:46 mzanetti Exp $
+// $Id: PileupEnergyDensity.h,v 1.3 2011/06/15 20:03:18 bendavid Exp $
 //
 // PileupEnergyDensity
 //
@@ -20,6 +20,8 @@ namespace mithep
   public:
     PileupEnergyDensity() : fRho(0), fRhoHighEta(0), fRhoRandom(0), fRhoRandomLowEta(0) {}
     
+    Double_t  RhoDefault() const { return fRhoRandom; }
+
     Double_t  Rho()  const { return fRho; }
     Double_t  RhoHighEta()  const { return fRho; }
     Double_t  RhoLowEta()  const { return fRhoHighEta; }
