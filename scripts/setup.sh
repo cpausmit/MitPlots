@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.70 2011/09/12 15:21:36 bendavid Exp $
+# $Id: setup.sh,v 1.71 2011/10/03 16:32:10 ksung Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -41,6 +41,9 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   # add packages for clustered PFMET
   cvs co -r AlbertoAndPedro_Sep20_FastJetDevelopments -d RecoParticleFlow/PostProcessing UserCode/RecoParticleFlow/PostProcessing
   cvs co -r v11_09_28 -d CommonTools/ClusteredPFMetProducer UserCode/psilva/ClusteredPFMetProducer
+
+  #regression corrections
+  cvs co -r regression_Sept30 HiggsAnalysis/HiggsToGammaGamma
 
   checkdeps -a
 fi
