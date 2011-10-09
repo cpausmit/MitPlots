@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.16 2011/09/23 15:38:32 mhchan Exp $
+// $Id: Vertex.h,v 1.17 2011/10/07 23:00:04 mhchan Exp $
 //
 // Vertex
 //
@@ -27,7 +27,7 @@ namespace mithep
       Vertex(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) :
         BaseVertex(x,y,z,xErr,yErr,zErr), fChi2(0), fIsValid(kFALSE), fNdof(0), fAdaptiveNdof(0), fNTracks(0) {}
       Vertex(const ThreeVector &pos) : 
-        BaseVertex(pos), fChi2(0), fNdof(0), fAdaptiveNdof(0), fNTracks(0) {}
+        BaseVertex(pos), fChi2(0), fIsValid(kFALSE), fNdof(0), fAdaptiveNdof(0), fNTracks(0) {}
       
       void                AddTrack(const Track *t, Double32_t wgt = -1) { fTracks.Add(t); fTrkWeights.Add(wgt); }
       Double_t            Chi2()      const { return fChi2;                    } 
@@ -45,7 +45,8 @@ namespace mithep
       void                SetNdof(Double_t nDof)     { fAdaptiveNdof = nDof;   } 
       void                SetNTracksFit(UInt_t n)    { fNTracks = n;           }
       const Track        *Trk(UInt_t i) const        { return fTracks.At(i);   }
-      Double32_t          TrackWeight(const Track *t) const;
+      Double_t            TrackWeight(UInt_t i) const { return fTrkWeights.At(i); }
+      Double_t            TrackWeight(const Track *t) const;
       const FArrDouble32 &GetTrkWeights() const { return fTrkWeights; }
             
     protected:
