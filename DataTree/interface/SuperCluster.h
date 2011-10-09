@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.22 2011/07/15 17:23:50 fabstoec Exp $
+// $Id: SuperCluster.h,v 1.23 2011/07/27 15:15:07 bendavid Exp $
 //
 // SuperCluster
 //
@@ -25,7 +25,11 @@ namespace mithep
   {
     public:
       SuperCluster() : fEnergy(0), fEtaWidth(0), fPreshowerEnergy(0), 
-                       fPhiWidth(0), fRawEnergy(0) {}     
+                       fPhiWidth(0), fRawEnergy(0),
+                       fEtaC(-99.), fEtaS(-99.), fEtaM(-99.),
+                       fPhiC(-99.), fPhiS(-99.), fPhiM(-99.), 
+                       fXC(-99.), fXS(-99.), fXM(-99.), fXZ(-99.),
+                       fYC(-99.), fYS(-99.), fYM(-99.), fYZ(-99.) {}     
  
       void	             AddCluster(const BasicCluster *c)          { fClusters.Add(c);        }
       void                   AddTower(const CaloTower *t)               { fCaloTowers.Add(t);      }
@@ -59,6 +63,20 @@ namespace mithep
       Double_t               R9()                    const { return fSeedRef.Obj()->E3x3()/fRawEnergy; }
       const BasicCluster    *Seed()                  const { return fSeedRef.Obj();                }
       const CaloTower       *Tower(UInt_t i)         const { return fCaloTowers.At(i);             }
+      Double_t               EtaC()                  const { return fEtaC;                         }
+      Double_t               EtaS()                  const { return fEtaS;                         }
+      Double_t               EtaM()                  const { return fEtaM;                         }
+      Double_t               PhiC()                  const { return fPhiC;                         }
+      Double_t               PhiS()                  const { return fPhiS;                         }
+      Double_t               PhiM()                  const { return fPhiM;                         }      
+      Double_t               XC()                    const { return fXC;                           }
+      Double_t               XS()                    const { return fXS;                           }
+      Double_t               XM()                    const { return fXM;                           }      
+      Double_t               XZ()                    const { return fXZ;                           }      
+      Double_t               YC()                    const { return fYC;                           }
+      Double_t               YS()                    const { return fYS;                           }
+      Double_t               YM()                    const { return fYM;                           }      
+      Double_t               YZ()                    const { return fYZ;                           }
       void	             SetEnergy(Double_t energy)                 { fEnergy = energy;        }
       void	             SetEtaWidth(Double_t etaWidth)             { fEtaWidth = etaWidth;    }
       void	             SetPhiWidth(Double_t phiWidth)             { fPhiWidth = phiWidth;    }
@@ -68,6 +86,20 @@ namespace mithep
       void	             SetHcalDepth2Energy(Double_t x)            { fHcalDepth2Energy = x;   }
       void	             SetSeed(const BasicCluster *s)             { fSeedRef = s;            }
       void	             SetXYZ(Double_t x, Double_t y, Double_t z) { fPoint.SetXYZ(x,y,z);    }
+      void                   SetEtaC(Double_t x)                        { fEtaC = x;               }
+      void                   SetEtaS(Double_t x)                        { fEtaS = x;               }
+      void                   SetEtaM(Double_t x)                        { fEtaM = x;               }
+      void                   SetPhiC(Double_t x)                        { fPhiC = x;               }
+      void                   SetPhiS(Double_t x)                        { fPhiS = x;               }
+      void                   SetPhiM(Double_t x)                        { fPhiM = x;               }      
+      void                   SetXC(Double_t x)                          { fXC = x;                 }
+      void                   SetXS(Double_t x)                          { fXS = x;                 }
+      void                   SetXM(Double_t x)                          { fXM = x;                 }      
+      void                   SetXZ(Double_t x)                          { fXZ = x;                 }         
+      void                   SetYC(Double_t x)                          { fYC = x;                 }
+      void                   SetYS(Double_t x)                          { fYS = x;                 }
+      void                   SetYM(Double_t x)                          { fYM = x;                 }      
+      void                   SetYZ(Double_t x)                          { fYZ = x;                 }      
       
     protected:
       Vect3C                  fPoint;               //centroid Position
@@ -81,8 +113,22 @@ namespace mithep
       RefArray<BasicCluster>  fClusters;            //assigned basic clusters
       Ref<BasicCluster>       fSeedRef;             //seed cluster
       RefArray<CaloTower>     fCaloTowers;          //calo towers (matched by detid)
+      Double32_t              fEtaC;                //local coordinates
+      Double32_t              fEtaS;                //local coordinates
+      Double32_t              fEtaM;                //local coordinates
+      Double32_t              fPhiC;                //local coordinates
+      Double32_t              fPhiS;                //local coordinates
+      Double32_t              fPhiM;                //local coordinates      
+      Double32_t              fXC;                  //local coordinates
+      Double32_t              fXS;                  //local coordinates
+      Double32_t              fXM;                  //local coordinates 
+      Double32_t              fXZ;                  //local coordinates
+      Double32_t              fYC;                  //local coordinates
+      Double32_t              fYS;                  //local coordinates
+      Double32_t              fYM;                  //local coordinates 
+      Double32_t              fYZ;                  //local coordinates
 
-    ClassDef(SuperCluster, 3) // Super cluster class
+    ClassDef(SuperCluster, 4) // Super cluster class
   };
 }
 

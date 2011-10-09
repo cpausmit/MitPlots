@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.17 2010/06/25 15:10:35 bendavid Exp $
+// $Id: BasicCluster.h,v 1.18 2011/07/27 15:15:06 bendavid Exp $
 //
 // BasicCluster
 //
@@ -51,7 +51,8 @@ namespace mithep
                        fCoviEtaiPhi(0),
                        fCoviPhiiPhi(0),
                        fZernike20(0),
-                       fZernike42(0) {}
+                       fZernike42(0),
+                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
       BasicCluster(Double_t e, const ThreeVector &p) : 
         fEnergy(e), fPoint(p), fNHits(0),
                        fE1x3(0),
@@ -84,7 +85,8 @@ namespace mithep
                        fCoviEtaiPhi(0),
                        fCoviPhiiPhi(0),
                        fZernike20(0),
-                       fZernike42(0) {}
+                       fZernike42(0),
+                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
      
       Double_t         Energy()                  const { return  fEnergy;       }       
       Double_t         Et()                      const;
@@ -126,7 +128,14 @@ namespace mithep
       Double_t         CoviPhiiPhi()             const { return  fCoviPhiiPhi;  }
       Double_t         Zernike20()               const { return  fZernike20;    }
       Double_t         Zernike42()               const { return  fZernike42;    }
-
+      Double_t         EtaCry()                  const { return  fEtaCry;       }
+      Double_t         PhiCry()                  const { return  fPhiCry;       }
+      Double_t         XCry()                    const { return  fXCry;         }
+      Double_t         YCry()                    const { return  fYCry;         }
+      Short_t          IEta()                    const { return  fIEta;         }
+      Short_t          IPhi()                    const { return  fIPhi;         }
+      Short_t          IX()                      const { return  fIX;           }
+      Short_t          IY()                      const { return  fIY;           }
 
       void	       SetEnergy(Double_t energy)                 {  fEnergy = energy;     }      
       void	       SetXYZ(Double_t x, Double_t y, Double_t z) {  fPoint.SetXYZ(x,y,z); } 
@@ -162,6 +171,14 @@ namespace mithep
       void	       SetCoviPhiiPhi(Double_t x)                 {  fCoviPhiiPhi = x;     }
       void	       SetZernike20(Double_t x)                   {  fZernike20 = x;       }
       void	       SetZernike42(Double_t x)                   {  fZernike42 = x;       }
+      void             SetEtaCry(Double_t x)                      {  fEtaCry = x;          }
+      void             SetPhiCry(Double_t x)                      {  fPhiCry = x;          }
+      void             SetXCry(Double_t x)                        {  fXCry = x;            }
+      void             SetYCry(Double_t x)                        {  fYCry = x;            }
+      void             SetIEta(Short_t i)                         {  fIEta = i;            }
+      void             SetIPhi(Short_t i)                         {  fIPhi = i;            }
+      void             SetIX(Short_t i)                           {  fIX = i;              }
+      void             SetIY(Short_t i)                           {  fIY = i;              }
 
 
     protected:
@@ -202,9 +219,16 @@ namespace mithep
       Double32_t fCoviPhiiPhi;
       Double32_t fZernike20;
       Double32_t fZernike42;
-
-
-      ClassDef(BasicCluster, 3)  // Basic cluster class
+      Double32_t fEtaCry;  //local coordinates and index of max energy crystal (for local containment corrections)
+      Double32_t fPhiCry;
+      Double32_t fXCry;
+      Double32_t fYCry;
+      Short_t    fIEta;
+      Short_t    fIPhi;
+      Short_t    fIX;
+      Short_t    fIY;
+      
+      ClassDef(BasicCluster, 4)  // Basic cluster class
   };
 }
 
