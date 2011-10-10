@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.72 2011/10/08 18:54:07 bendavid Exp $
+# $Id: setup.sh,v 1.73 2011/10/09 23:27:24 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -38,8 +38,13 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   cvs co -r AlbertoAndPedro_Sep20_FastJetDevelopments -d RecoParticleFlow/PostProcessing UserCode/RecoParticleFlow/PostProcessing
   cvs co -r v11_09_28 -d CommonTools/ClusteredPFMetProducer UserCode/psilva/ClusteredPFMetProducer
 
+  #patch silly bug...
+  patch -p0 -u -N -i MitAna/scripts/ClusteredPFMetProducer.cc.patch -r /dev/null
+
   #regression and photonfix corrections
-  cvs co -r regression_Oct10 HiggsAnalysis/HiggsToGammaGamma
+  cvs co -r regression_Oct11 HiggsAnalysis/HiggsToGammaGamma
+
+  addpkg RecoVertex/PrimaryVertexProducer V01-04-13
 
   checkdeps -a
 fi

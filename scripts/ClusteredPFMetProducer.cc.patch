@@ -1,0 +1,22 @@
+Index: CommonTools/ClusteredPFMetProducer/plugins/ClusteredPFMetProducer.cc
+===================================================================
+RCS file: /cvs_server/repositories/CMSSW/UserCode/psilva/ClusteredPFMetProducer/plugins/ClusteredPFMetProducer.cc,v
+retrieving revision 1.1
+diff -u -r1.1 ClusteredPFMetProducer.cc
+--- CommonTools/ClusteredPFMetProducer/plugins/ClusteredPFMetProducer.cc	28 Sep 2011 13:20:27 -0000	1.1
++++ CommonTools/ClusteredPFMetProducer/plugins/ClusteredPFMetProducer.cc	10 Oct 2011 20:18:13 -0000
+@@ -160,12 +160,12 @@
+   //vertices
+   iEvent.getByLabel(vertexTag_ ,vtxH_);
+   const size_t nVtx(vtxH_->size());
+-  if( nVtx == 0 ) throw cms::Exception("CorruptData") << "No vertex was found in the event\n";
++  //if( nVtx == 0 ) throw cms::Exception("CorruptData") << "No vertex was found in the event\n";
+   
+   //particle flow candidates
+   iEvent.getByLabel(collectionTag_, pfCandsH_); 
+   const size_t nPFCands( pfCandsH_->size() );
+-  if( nPFCands == 0 ) throw cms::Exception("CorruptData") << "No particle flow candidates collection was found in the event\n";
++  //if( nPFCands == 0 ) throw cms::Exception("CorruptData") << "No particle flow candidates collection was found in the event\n";
+ 
+   //loop over the pf candidates and:
+   // - compute sums 
