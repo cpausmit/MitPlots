@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.18 2011/07/27 15:15:06 bendavid Exp $
+// $Id: BasicCluster.h,v 1.19 2011/10/09 23:28:47 bendavid Exp $
 //
 // BasicCluster
 //
@@ -52,7 +52,7 @@ namespace mithep
                        fCoviPhiiPhi(0),
                        fZernike20(0),
                        fZernike42(0),
-                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
+                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fThetaAxis(0.), fPhiAxis(0.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
       BasicCluster(Double_t e, const ThreeVector &p) : 
         fEnergy(e), fPoint(p), fNHits(0),
                        fE1x3(0),
@@ -86,7 +86,7 @@ namespace mithep
                        fCoviPhiiPhi(0),
                        fZernike20(0),
                        fZernike42(0),
-                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
+                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fThetaAxis(0.), fPhiAxis(0.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
      
       Double_t         Energy()                  const { return  fEnergy;       }       
       Double_t         Et()                      const;
@@ -132,6 +132,8 @@ namespace mithep
       Double_t         PhiCry()                  const { return  fPhiCry;       }
       Double_t         XCry()                    const { return  fXCry;         }
       Double_t         YCry()                    const { return  fYCry;         }
+      Double_t         ThetaAxis()               const { return  fThetaAxis;    }
+      Double_t         PhiAxis()                 const { return  fPhiAxis;      }
       Short_t          IEta()                    const { return  fIEta;         }
       Short_t          IPhi()                    const { return  fIPhi;         }
       Short_t          IX()                      const { return  fIX;           }
@@ -175,6 +177,8 @@ namespace mithep
       void             SetPhiCry(Double_t x)                      {  fPhiCry = x;          }
       void             SetXCry(Double_t x)                        {  fXCry = x;            }
       void             SetYCry(Double_t x)                        {  fYCry = x;            }
+      void             SetThetaAxis(Double_t x)                   {  fThetaAxis = x;       }
+      void             SetPhiAxis(Double_t x)                     {  fPhiAxis = x;         }
       void             SetIEta(Short_t i)                         {  fIEta = i;            }
       void             SetIPhi(Short_t i)                         {  fIPhi = i;            }
       void             SetIX(Short_t i)                           {  fIX = i;              }
@@ -223,6 +227,8 @@ namespace mithep
       Double32_t fPhiCry;
       Double32_t fXCry;
       Double32_t fYCry;
+      Double32_t fThetaAxis;
+      Double32_t fPhiAxis;
       Short_t    fIEta;
       Short_t    fIPhi;
       Short_t    fIX;
