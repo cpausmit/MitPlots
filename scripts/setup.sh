@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.74 2011/10/10 20:56:43 bendavid Exp $
+# $Id: setup.sh,v 1.75 2011/10/17 15:16:21 mhchan Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -46,10 +46,8 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
 
   addpkg RecoVertex/PrimaryVertexProducer V01-04-13
 
-  # RecoTauTag packages for 42X
-  addpkg RecoTauTag/RecoTau V01-02-07
-  addpkg RecoTauTag/TauTagTools V01-02-00
-  addpkg RecoTauTag/Configuration V01-02-03
+  # RecoTauTag package with bug fix
+  addpkg RecoTauTag/Configuration V01-02-08
 
   checkdeps -a
 fi
