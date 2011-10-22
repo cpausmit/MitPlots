@@ -1,0 +1,16 @@
+Index: DataFormats/TrackReco/src/HitPattern.cc
+===================================================================
+RCS file: /cvs/CMSSW/CMSSW/DataFormats/TrackReco/src/HitPattern.cc,v
+retrieving revision 1.24
+diff -u -r1.24 HitPattern.cc
+--- DataFormats/TrackReco/src/HitPattern.cc	9 Apr 2011 17:20:00 -0000	1.24
++++ DataFormats/TrackReco/src/HitPattern.cc	22 Oct 2011 13:52:17 -0000
+@@ -156,7 +156,7 @@
+   int count = 0;
+   for (int i=0; i<(PatternSize * 32) / HitSize; i++) {
+     uint32_t pattern = getHitPattern(i);
+-    if (pattern == 0) break;
++    if (pattern == 0) continue;
+     ++count;
+   }
+   return count;

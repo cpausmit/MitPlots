@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.75 2011/10/17 15:16:21 mhchan Exp $
+# $Id: setup.sh,v 1.76 2011/10/20 12:54:24 mhchan Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -44,10 +44,12 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   #regression and photonfix corrections
   cvs co -r regression_Oct11 HiggsAnalysis/HiggsToGammaGamma
 
-  addpkg RecoVertex/PrimaryVertexProducer V01-04-13
-
   # RecoTauTag package with bug fix
   addpkg RecoTauTag/Configuration V01-02-08
+
+  #fix HitPattern accessor issue in 44x
+  addpkg DataFormats/TrackReco
+  patch -p0 -u -N -i MitAna/scripts/HitPattern.cc.patch -r /dev/null
 
   checkdeps -a
 fi
