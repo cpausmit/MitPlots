@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.46 2011/05/15 14:11:00 bendavid Exp $
+// $Id: Electron.h,v 1.47 2011/05/20 16:51:39 bendavid Exp $
 //
 // Electron
 //
@@ -50,207 +50,203 @@ namespace mithep
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0) {}
 
-      const Track         *BestTrk()                const;
-      Double_t             D0PV()                   const { return fD0PV;                     }
-      Double_t             D0PVErr()                const { return fD0PVErr;                  }
-      Double_t             D0PVSignificance()       const { return fD0PV/fD0PVErr;            }
-      Double_t             Ip3dPV()                 const { return fIp3dPV;                   }
-      Double_t             Ip3dPVErr()              const { return fIp3dPVErr;                }
-      Double_t             Ip3dPVSignificance()     const { return fIp3dPV/fIp3dPVErr;        }
-      Double_t             D0PVBS()                 const { return fD0PVBS;                   }
-      Double_t             D0PVBSErr()              const { return fD0PVBSErr;                }
-      Double_t             D0PVBSSignificance()     const { return fD0PVBS/fD0PVBSErr;        }
-      Double_t             Ip3dPVBS()               const { return fIp3dPVBS;                 }
-      Double_t             Ip3dPVBSErr()            const { return fIp3dPVBSErr;              }
-      Double_t             Ip3dPVBSSignificance()   const { return fIp3dPVBS/fIp3dPVBSErr;    }
-      Double_t             D0PVCkf()                   const { return fD0PVCkf;                     }
-      Double_t             D0PVCkfErr()                const { return fD0PVCkfErr;                  }
-      Double_t             D0PVCkfSignificance()       const { return fD0PVCkf/fD0PVCkfErr;         }
-      Double_t             Ip3dPVCkf()                 const { return fIp3dPVCkf;                   }
-      Double_t             Ip3dPVCkfErr()              const { return fIp3dPVCkfErr;                }
-      Double_t             Ip3dPVCkfSignificance()     const { return fIp3dPVCkf/fIp3dPVCkfErr;     }
-      Double_t             D0PVBSCkf()                 const { return fD0PVBSCkf;                   }
-      Double_t             D0PVBSCkfErr()              const { return fD0PVBSCkfErr;                }
-      Double_t             D0PVBSCkfSignificance()     const { return fD0PVBSCkf/fD0PVBSCkfErr;     }
-      Double_t             Ip3dPVBSCkf()               const { return fIp3dPVBSCkf;                 }
-      Double_t             Ip3dPVBSCkfErr()            const { return fIp3dPVBSCkfErr;              }
-      Double_t             Ip3dPVBSCkfSignificance()   const { return fIp3dPVBSCkf/fIp3dPVBSCkfErr; }
-      Double_t             D0PVUB()                   const { return fD0PVUB;                     }
-      Double_t             D0PVUBErr()                const { return fD0PVUBErr;                  }
-      Double_t             D0PVUBSignificance()       const { return fD0PVUB/fD0PVUBErr;            }
-      Double_t             Ip3dPVUB()                 const { return fIp3dPVUB;                   }
-      Double_t             Ip3dPVUBErr()              const { return fIp3dPVUBErr;                }
-      Double_t             Ip3dPVUBSignificance()     const { return fIp3dPVUB/fIp3dPVUBErr;        }
-      Double_t             D0PVUBBS()                 const { return fD0PVUBBS;                   }
-      Double_t             D0PVUBBSErr()              const { return fD0PVUBBSErr;                }
-      Double_t             D0PVUBBSSignificance()     const { return fD0PVUBBS/fD0PVUBBSErr;        }
-      Double_t             Ip3dPVUBBS()               const { return fIp3dPVUBBS;                 }
-      Double_t             Ip3dPVUBBSErr()            const { return fIp3dPVUBBSErr;              }
-      Double_t             Ip3dPVUBBSSignificance()   const { return fIp3dPVUBBS/fIp3dPVUBBSErr;    }
-      Double_t             D0PVUBCkf()                   const { return fD0PVUBCkf;                     }
-      Double_t             D0PVUBCkfErr()                const { return fD0PVUBCkfErr;                  }
-      Double_t             D0PVUBCkfSignificance()       const { return fD0PVUBCkf/fD0PVUBCkfErr;         }
-      Double_t             Ip3dPVUBCkf()                 const { return fIp3dPVUBCkf;                   }
-      Double_t             Ip3dPVUBCkfErr()              const { return fIp3dPVUBCkfErr;                }
-      Double_t             Ip3dPVUBCkfSignificance()     const { return fIp3dPVUBCkf/fIp3dPVUBCkfErr;     }
-      Double_t             D0PVUBBSCkf()                 const { return fD0PVUBBSCkf;                   }
-      Double_t             D0PVUBBSCkfErr()              const { return fD0PVUBBSCkfErr;                }
-      Double_t             D0PVUBBSCkfSignificance()     const { return fD0PVUBBSCkf/fD0PVUBBSCkfErr;     }
-      Double_t             Ip3dPVUBBSCkf()               const { return fIp3dPVUBBSCkf;                 }
-      Double_t             Ip3dPVUBBSCkfErr()            const { return fIp3dPVUBBSCkfErr;              }
+      const Track         *BestTrk()                     const;
+      Double_t             D0PV()                        const { return fD0PV; }
+      Double_t             D0PVErr()                     const { return fD0PVErr; }
+      Double_t             D0PVSignificance()            const { return fD0PV/fD0PVErr; }
+      Double_t             Ip3dPV()                      const { return fIp3dPV; }
+      Double_t             Ip3dPVErr()                   const { return fIp3dPVErr; }
+      Double_t             Ip3dPVSignificance()          const { return fIp3dPV/fIp3dPVErr; }
+      Double_t             D0PVBS()                      const { return fD0PVBS; }
+      Double_t             D0PVBSErr()                   const { return fD0PVBSErr; }
+      Double_t             D0PVBSSignificance()          const { return fD0PVBS/fD0PVBSErr; }
+      Double_t             Ip3dPVBS()                    const { return fIp3dPVBS; }
+      Double_t             Ip3dPVBSErr()                 const { return fIp3dPVBSErr; }
+      Double_t             Ip3dPVBSSignificance()        const { return fIp3dPVBS/fIp3dPVBSErr; }
+      Double_t             D0PVCkf()                     const { return fD0PVCkf; }
+      Double_t             D0PVCkfErr()                  const { return fD0PVCkfErr; }
+      Double_t             D0PVCkfSignificance()         const { return fD0PVCkf/fD0PVCkfErr; }
+      Double_t             Ip3dPVCkf()                   const { return fIp3dPVCkf; }
+      Double_t             Ip3dPVCkfErr()                const { return fIp3dPVCkfErr; }
+      Double_t             Ip3dPVCkfSignificance()       const { return fIp3dPVCkf/fIp3dPVCkfErr; }
+      Double_t             D0PVBSCkf()                   const { return fD0PVBSCkf; }
+      Double_t             D0PVBSCkfErr()                const { return fD0PVBSCkfErr; }
+      Double_t             D0PVBSCkfSignificance()       const { return fD0PVBSCkf/fD0PVBSCkfErr; }
+      Double_t             Ip3dPVBSCkf()                 const { return fIp3dPVBSCkf; }
+      Double_t             Ip3dPVBSCkfErr()              const { return fIp3dPVBSCkfErr; }
+      Double_t             Ip3dPVBSCkfSignificance()     const { return fIp3dPVBSCkf/fIp3dPVBSCkfErr; }
+      Double_t             D0PVUB()                      const { return fD0PVUB; }
+      Double_t             D0PVUBErr()                   const { return fD0PVUBErr; }
+      Double_t             D0PVUBSignificance()          const { return fD0PVUB/fD0PVUBErr; }
+      Double_t             Ip3dPVUB()                    const { return fIp3dPVUB; }
+      Double_t             Ip3dPVUBErr()                 const { return fIp3dPVUBErr; }
+      Double_t             Ip3dPVUBSignificance()        const { return fIp3dPVUB/fIp3dPVUBErr; }
+      Double_t             D0PVUBBS()                    const { return fD0PVUBBS; }
+      Double_t             D0PVUBBSErr()                 const { return fD0PVUBBSErr; }
+      Double_t             D0PVUBBSSignificance()        const { return fD0PVUBBS/fD0PVUBBSErr; }
+      Double_t             Ip3dPVUBBS()                  const { return fIp3dPVUBBS; }
+      Double_t             Ip3dPVUBBSErr()               const { return fIp3dPVUBBSErr; }
+      Double_t             Ip3dPVUBBSSignificance()      const { return fIp3dPVUBBS/fIp3dPVUBBSErr; }
+      Double_t             D0PVUBCkf()                   const { return fD0PVUBCkf; }
+      Double_t             D0PVUBCkfErr()                const { return fD0PVUBCkfErr; }
+      Double_t             D0PVUBCkfSignificance()       const { return fD0PVUBCkf/fD0PVUBCkfErr; }
+      Double_t             Ip3dPVUBCkf()                 const { return fIp3dPVUBCkf; }
+      Double_t             Ip3dPVUBCkfErr()              const { return fIp3dPVUBCkfErr; }
+      Double_t             Ip3dPVUBCkfSignificance()     const { return fIp3dPVUBCkf/fIp3dPVUBCkfErr; }
+      Double_t             D0PVUBBSCkf()                 const { return fD0PVUBBSCkf; }
+      Double_t             D0PVUBBSCkfErr()              const { return fD0PVUBBSCkfErr; }
+      Double_t             D0PVUBBSCkfSignificance()     const { return fD0PVUBBSCkf/fD0PVUBBSCkfErr; }
+      Double_t             Ip3dPVUBBSCkf()               const { return fIp3dPVUBBSCkf; }
+      Double_t             Ip3dPVUBBSCkfErr()            const { return fIp3dPVUBBSCkfErr; }
       Double_t             Ip3dPVUBBSCkfSignificance()   const { return fIp3dPVUBBSCkf/fIp3dPVUBBSCkfErr; }
-      Double_t             GsfPVCompatibility()     const { return fGsfPVCompatibility;       }
-      Double_t             GsfPVBSCompatibility()   const { return fGsfPVBSCompatibility;     }
-      Double_t             GsfPVCompatibilityMatched()     const { return fGsfPVCompatibilityMatched;       }
-      Double_t             GsfPVBSCompatibilityMatched()   const { return fGsfPVBSCompatibilityMatched;     }
-      Double_t             ConvPartnerDCotTheta()   const { return fConvPartnerDCotTheta;     }
-      Double_t             ConvPartnerDist()        const { return fConvPartnerDist;          }
-      Double_t             ConvPartnerRadius()      const { return fConvPartnerRadius;        }
-      Int_t                ConvFlag()               const { return fConvFlag;            }
-      Double_t             CaloIsolation()          const { return fCaloIsolation;       } // *DEPRECATED*
-      Int_t                Classification()         const { return fClassification;      }
-      Double_t             CovEtaEta()              const { return fCovEtaEta;           }
-      Double_t             CoviEtaiEta()            const { return fCoviEtaiEta;         }
-      Double_t             DeltaEtaSuperClusterTrackAtVtx() const 
-                             { return fDeltaEtaSuperClTrkAtVtx; }
-      Double_t             DeltaEtaSeedClusterTrackAtCalo() const 
-                             { return fDeltaEtaSeedClTrkAtCalo; }
-      Double_t             DeltaPhiSuperClusterTrackAtVtx() const 
-                             { return fDeltaPhiSuperClTrkAtVtx; }
-      Double_t             DeltaPhiSeedClusterTrackAtCalo() const 
-                             { return fDeltaPhiSeedClTrkAtCalo; }
-      Double_t             E15()                    const { return fE15;                }
-      Double_t             E25Max()                 const { return fE25Max;             }
-      Double_t             E55()                    const { return fE55;                }
-      Double_t             ESuperClusterOverP()     const { return fESuperClusterOverP;            }
-      Double_t             ESeedClusterOverPout()   const { return fESeedClusterOverPout;          }
-      Double_t             ESeedClusterOverPIn()    const;
-      Double_t             FBrem()                  const { return fFBrem;                         }
-      Double_t             FBremOld()               const { return (PIn() - POut())/PIn();         }
-      Double_t             FracSharedHits()         const { return fFracSharedHits;                }
-      const Track         *GsfTrk()                 const { return fGsfTrackRef.Obj();             }
-      Double_t             HadronicOverEm()         const { return fHadronicOverEm;                }
-      Double_t             HcalDepth1OverEcal()     const { return fHcalDepth1OverEcal;            }
-      Double_t             HcalDepth2OverEcal()     const { return fHcalDepth2OverEcal;            }
-      Bool_t               HasGsfTrk()              const { return fGsfTrackRef.IsValid();         }
-      Bool_t               HasTrackerTrk()          const { return fTrackerTrackRef.IsValid();     }
-      Bool_t               HasSuperCluster()        const { return fSuperClusterRef.IsValid();     }
-      Double_t             HcalIsolation()          const { return fHcalJurassicIsolation;         } // *DEPRECATED*
-      Double_t             IDLikelihood()           const { return fIDLikelihood;                  }
-      Bool_t               IsEnergyScaleCorrected() const { return fIsEnergyScaleCorrected;        }
-      Bool_t               IsMomentumCorrected()    const { return fIsMomentumCorrected;           }
-      Bool_t               IsEB()                   const { return fIsEB;                          }
-      Bool_t               IsEE()                   const { return fIsEE;                          }
-      Bool_t               IsEBEEGap()              const { return fIsEBEEGap;                     }
-      Bool_t               IsEBEtaGap()             const { return fIsEBEtaGap;                    }
-      Bool_t               IsEBPhiGap()             const { return fIsEBPhiGap;                    }
-      Bool_t               IsEEDeeGap()             const { return fIsEEDeeGap;                    }
-      Bool_t               IsEERingGap()            const { return fIsEERingGap;                   }
-      Bool_t               IsEcalDriven()           const { return fIsEcalDriven;                  }
-      Bool_t               IsTrackerDriven()        const { return fIsTrackerDriven;               }
-      Double_t             Mva()                    const { return fMva;                           }
-      Double_t             NumberOfClusters()       const { return fNumberOfClusters;              }
-      EObjType             ObjType()                const { return kElectron;                      }
-      Double_t             PassLooseID()            const { return fPassLooseID;                   }
-      Double_t             PassTightID()            const { return fPassTightID;                   }
-      Double_t             PIn()                    const { return fPIn;                           }
-      Double_t             POut()                   const { return fPOut;                          }
-      const SuperCluster  *SCluster()               const { return fSuperClusterRef.Obj();         }
-      Double_t             ScPixCharge()            const { return fScPixCharge;                   }
-      
-      Double_t             EcalRecHitIsoDr04()      const { return fEcalJurassicIsolation;         }
-      Double_t             HcalTowerSumEtDr04()     const { return HcalDepth1TowerSumEtDr04() +
-                                                                   HcalDepth2TowerSumEtDr04();     }
-      Double_t             HcalDepth1TowerSumEtDr04() const { return fHcalDepth1TowerSumEtDr04;    }
-      Double_t             HcalDepth2TowerSumEtDr04() const { return fHcalDepth2TowerSumEtDr04;    }
-      Double_t             TrackIsolationDr04()     const { return fTrackIsolationDr04;            }
-      Double_t             EcalRecHitIsoDr03()      const { return fEcalRecHitSumEtDr03;           }
-      Double_t             HcalTowerSumEtDr03()     const { return fCaloTowerIsolation;            }
-      Double_t             HcalDepth1TowerSumEtDr03() const { return fHcalDepth1TowerSumEtDr03;    }
-      Double_t             HcalDepth2TowerSumEtDr03() const { return fHcalDepth2TowerSumEtDr03;    }
-      Double_t             TrackIsolationDr03()     const { return fTrackIsolation;                }
-      Double_t             PFChargedHadronIso()      const { return fPFChargedHadronIso;           }
-      Double_t             PFNeutralHadronIso()      const { return fPFNeutralHadronIso;           }
-      Double_t             PFPhotonIso()             const { return fPFPhotonIso;                  }
-      Bool_t               MatchesVertexConversion() const { return fMatchesVertexConversion;      }
-      UInt_t               NAmbiguousGsfTracks()     const { return fAmbiguousGsfTracks.Entries();  }
+      Double_t             GsfPVCompatibility()          const { return fGsfPVCompatibility; }
+      Double_t             GsfPVBSCompatibility()        const { return fGsfPVBSCompatibility; }
+      Double_t             GsfPVCompatibilityMatched()   const { return fGsfPVCompatibilityMatched; }
+      Double_t             GsfPVBSCompatibilityMatched() const { return fGsfPVBSCompatibilityMatched; }
+      Double_t             ConvPartnerDCotTheta()        const { return fConvPartnerDCotTheta; }
+      Double_t             ConvPartnerDist()             const { return fConvPartnerDist; }
+      Double_t             ConvPartnerRadius()           const { return fConvPartnerRadius; }
+      Int_t                ConvFlag()                    const { return fConvFlag; }
+      Double_t             CaloIsolation()               const { return fCaloIsolation; } // *DEPRECATED*
+      Int_t                Classification()              const { return fClassification; }
+      Double_t             CovEtaEta()                   const { return fCovEtaEta; }
+      Double_t             CoviEtaiEta()                 const { return fCoviEtaiEta; }
+      Double_t             DeltaEtaSuperClusterTrackAtVtx() const { return fDeltaEtaSuperClTrkAtVtx; }
+      Double_t             DeltaEtaSeedClusterTrackAtCalo() const { return fDeltaEtaSeedClTrkAtCalo; }
+      Double_t             DeltaPhiSuperClusterTrackAtVtx() const { return fDeltaPhiSuperClTrkAtVtx; }
+      Double_t             DeltaPhiSeedClusterTrackAtCalo() const { return fDeltaPhiSeedClTrkAtCalo; }
+      Double_t             E15()                            const { return fE15; }
+      Double_t             E25Max()                         const { return fE25Max; }
+      Double_t             E55()                            const { return fE55; }
+      Double_t             ESuperClusterOverP()             const { return fESuperClusterOverP; }
+      Double_t             ESeedClusterOverPout()           const { return fESeedClusterOverPout; }
+      Double_t             ESeedClusterOverPIn()            const;
+      Double_t             FBrem()                          const { return fFBrem; }
+      Double_t             FBremOld()                       const { return (PIn() - POut())/PIn(); }
+      Double_t             FracSharedHits()                 const { return fFracSharedHits; }
+      const Track         *GsfTrk()                         const { return fGsfTrackRef.Obj(); }
+      Double_t             HadronicOverEm()                 const { return fHadronicOverEm; }
+      Double_t             HcalDepth1OverEcal()             const { return fHcalDepth1OverEcal; }
+      Double_t             HcalDepth2OverEcal()             const { return fHcalDepth2OverEcal; }
+      Bool_t               HasGsfTrk()                      const { return fGsfTrackRef.IsValid(); }
+      Bool_t               HasTrackerTrk()                  const { return fTrackerTrackRef.IsValid(); }
+      Bool_t               HasSuperCluster()                const { return fSuperClusterRef.IsValid(); }
+      Double_t             HcalIsolation()                  const { return fHcalJurassicIsolation; } // *DEPRECATED*
+      Double_t             IDLikelihood()                   const { return fIDLikelihood; }
+      Bool_t               IsEnergyScaleCorrected()         const { return fIsEnergyScaleCorrected; }
+      Bool_t               IsMomentumCorrected()            const { return fIsMomentumCorrected; }
+      Bool_t               IsEB()                           const { return fIsEB; }
+      Bool_t               IsEE()                           const { return fIsEE; }
+      Bool_t               IsEBEEGap()                      const { return fIsEBEEGap; }
+      Bool_t               IsEBEtaGap()                     const { return fIsEBEtaGap; }
+      Bool_t               IsEBPhiGap()                     const { return fIsEBPhiGap; }
+      Bool_t               IsEEDeeGap()                     const { return fIsEEDeeGap; }
+      Bool_t               IsEERingGap()                    const { return fIsEERingGap; }
+      Bool_t               IsEcalDriven()                   const { return fIsEcalDriven; }
+      Bool_t               IsTrackerDriven()                const { return fIsTrackerDriven; }
+      Double_t             Mva()                            const { return fMva; }
+      Double_t             NumberOfClusters()               const { return fNumberOfClusters; }
+      EObjType             ObjType()                        const { return kElectron; }
+      Double_t             PassLooseID()                    const { return fPassLooseID; }
+      Double_t             PassTightID()                    const { return fPassTightID; }
+      Double_t             PIn()                            const { return fPIn; }
+      Double_t             POut()                           const { return fPOut; }
+      const SuperCluster  *SCluster()                       const { return fSuperClusterRef.Obj(); }
+      Double_t             ScPixCharge()                    const { return fScPixCharge; }
+      						            
+      Double_t             EcalRecHitIsoDr04()              const { return fEcalJurassicIsolation; }
+      Double_t             HcalTowerSumEtDr04()             const { return HcalDepth1TowerSumEtDr04() +
+                                                                   HcalDepth2TowerSumEtDr04(); }
+      Double_t             HcalDepth1TowerSumEtDr04()       const { return fHcalDepth1TowerSumEtDr04; }
+      Double_t             HcalDepth2TowerSumEtDr04()       const { return fHcalDepth2TowerSumEtDr04; }
+      Double_t             TrackIsolationDr04()             const { return fTrackIsolationDr04; }
+      Double_t             EcalRecHitIsoDr03()              const { return fEcalRecHitSumEtDr03; }
+      Double_t             HcalTowerSumEtDr03()             const { return fCaloTowerIsolation; }
+      Double_t             HcalDepth1TowerSumEtDr03()       const { return fHcalDepth1TowerSumEtDr03; }
+      Double_t             HcalDepth2TowerSumEtDr03()       const { return fHcalDepth2TowerSumEtDr03; }
+      Double_t             TrackIsolationDr03()             const { return fTrackIsolation; }
+      Double_t             PFChargedHadronIso()             const { return fPFChargedHadronIso; }
+      Double_t             PFNeutralHadronIso()             const { return fPFNeutralHadronIso; }
+      Double_t             PFPhotonIso()                    const { return fPFPhotonIso; }
+      Bool_t               MatchesVertexConversion()        const { return fMatchesVertexConversion; }
+      UInt_t               NAmbiguousGsfTracks()            const { return fAmbiguousGsfTracks.Entries(); }
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
-      const Track         *AmbiguousGsfTrack(UInt_t i) const { return fAmbiguousGsfTracks.At(i);   }
+      const Track         *AmbiguousGsfTrack(UInt_t i)      const { return fAmbiguousGsfTracks.At(i); }
       
-      void                 AddAmbiguousGsfTrack(const Track *t)   { fAmbiguousGsfTracks.Add(t);    }
-      void                 SetCharge(Char_t x)                    { fCharge = x; ClearCharge();    }
-      void                 SetScPixCharge(Char_t x)               { fScPixCharge = x;              }
-      void                 SetD0PV(Double_t x)                    { fD0PV = x;                     }
-      void                 SetD0PVErr(Double_t x)                 { fD0PVErr = x;                  }
-      void                 SetIp3dPV(Double_t x)                  { fIp3dPV = x;                   }
-      void                 SetIp3dPVErr(Double_t x)               { fIp3dPVErr = x;                }
-      void                 SetD0PVBS(Double_t x)                  { fD0PVBS = x;                   }
-      void                 SetD0PVBSErr(Double_t x)               { fD0PVBSErr = x;                }
-      void                 SetIp3dPVBS(Double_t x)                { fIp3dPVBS = x;                 }
-      void                 SetIp3dPVBSErr(Double_t x)             { fIp3dPVBSErr = x;              }
-      void                 SetD0PVCkf(Double_t x)                 { fD0PVCkf = x;                     }
-      void                 SetD0PVCkfErr(Double_t x)              { fD0PVCkfErr = x;                  }
-      void                 SetIp3dPVCkf(Double_t x)               { fIp3dPVCkf = x;                   }
-      void                 SetIp3dPVCkfErr(Double_t x)            { fIp3dPVCkfErr = x;                }
-      void                 SetD0PVBSCkf(Double_t x)               { fD0PVBSCkf = x;                   }
-      void                 SetD0PVBSCkfErr(Double_t x)            { fD0PVBSCkfErr = x;                }
-      void                 SetIp3dPVBSCkf(Double_t x)             { fIp3dPVBSCkf = x;                 }
-      void                 SetIp3dPVBSCkfErr(Double_t x)          { fIp3dPVBSCkfErr = x;              }
-      void                 SetD0PVUB(Double_t x)                    { fD0PVUB = x;                     }
-      void                 SetD0PVUBErr(Double_t x)                 { fD0PVUBErr = x;                  }
-      void                 SetIp3dPVUB(Double_t x)                  { fIp3dPVUB = x;                   }
-      void                 SetIp3dPVUBErr(Double_t x)               { fIp3dPVUBErr = x;                }
-      void                 SetD0PVUBBS(Double_t x)                  { fD0PVUBBS = x;                   }
-      void                 SetD0PVUBBSErr(Double_t x)               { fD0PVUBBSErr = x;                }
-      void                 SetIp3dPVUBBS(Double_t x)                { fIp3dPVUBBS = x;                 }
-      void                 SetIp3dPVUBBSErr(Double_t x)             { fIp3dPVUBBSErr = x;              }
-      void                 SetD0PVUBCkf(Double_t x)                 { fD0PVUBCkf = x;                     }
-      void                 SetD0PVUBCkfErr(Double_t x)              { fD0PVUBCkfErr = x;                  }
-      void                 SetIp3dPVUBCkf(Double_t x)               { fIp3dPVUBCkf = x;                   }
-      void                 SetIp3dPVUBCkfErr(Double_t x)            { fIp3dPVUBCkfErr = x;                }
-      void                 SetD0PVUBBSCkf(Double_t x)               { fD0PVUBBSCkf = x;                   }
-      void                 SetD0PVUBBSCkfErr(Double_t x)            { fD0PVUBBSCkfErr = x;                }
-      void                 SetIp3dPVUBBSCkf(Double_t x)             { fIp3dPVUBBSCkf = x;                 }
-      void                 SetIp3dPVUBBSCkfErr(Double_t x)          { fIp3dPVUBBSCkfErr = x;              }
-      void                 SetGsfPVCompatibility(Double_t x)      { fGsfPVCompatibility = x;       }
-      void                 SetGsfPVBSCompatibility(Double_t x)    { fGsfPVBSCompatibility = x;     }
-      void                 SetGsfPVCompatibilityMatched(Double_t x)      { fGsfPVCompatibilityMatched = x;   }
+      void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
+      void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
+      void                 SetScPixCharge(Char_t x)                      { fScPixCharge = x; }
+      void                 SetD0PV(Double_t x)                           { fD0PV = x; }
+      void                 SetD0PVErr(Double_t x)                        { fD0PVErr = x; }
+      void                 SetIp3dPV(Double_t x)                         { fIp3dPV = x; }
+      void                 SetIp3dPVErr(Double_t x)                      { fIp3dPVErr = x; }
+      void                 SetD0PVBS(Double_t x)                         { fD0PVBS = x; }
+      void                 SetD0PVBSErr(Double_t x)                      { fD0PVBSErr = x; }
+      void                 SetIp3dPVBS(Double_t x)                       { fIp3dPVBS = x; }
+      void                 SetIp3dPVBSErr(Double_t x)                    { fIp3dPVBSErr = x; }
+      void                 SetD0PVCkf(Double_t x)                        { fD0PVCkf = x; }
+      void                 SetD0PVCkfErr(Double_t x)                     { fD0PVCkfErr = x; }
+      void                 SetIp3dPVCkf(Double_t x)                      { fIp3dPVCkf = x; }
+      void                 SetIp3dPVCkfErr(Double_t x)                   { fIp3dPVCkfErr = x; }
+      void                 SetD0PVBSCkf(Double_t x)                      { fD0PVBSCkf = x; }
+      void                 SetD0PVBSCkfErr(Double_t x)                   { fD0PVBSCkfErr = x; }
+      void                 SetIp3dPVBSCkf(Double_t x)                    { fIp3dPVBSCkf = x; }
+      void                 SetIp3dPVBSCkfErr(Double_t x)                 { fIp3dPVBSCkfErr = x; }
+      void                 SetD0PVUB(Double_t x)                         { fD0PVUB = x; }
+      void                 SetD0PVUBErr(Double_t x)                      { fD0PVUBErr = x; }
+      void                 SetIp3dPVUB(Double_t x)                       { fIp3dPVUB = x; }
+      void                 SetIp3dPVUBErr(Double_t x)                    { fIp3dPVUBErr = x; }
+      void                 SetD0PVUBBS(Double_t x)                       { fD0PVUBBS = x; }
+      void                 SetD0PVUBBSErr(Double_t x)                    { fD0PVUBBSErr = x; }
+      void                 SetIp3dPVUBBS(Double_t x)                     { fIp3dPVUBBS = x; }
+      void                 SetIp3dPVUBBSErr(Double_t x)                  { fIp3dPVUBBSErr = x; }
+      void                 SetD0PVUBCkf(Double_t x)                      { fD0PVUBCkf = x; }
+      void                 SetD0PVUBCkfErr(Double_t x)                   { fD0PVUBCkfErr = x; }
+      void                 SetIp3dPVUBCkf(Double_t x)                    { fIp3dPVUBCkf = x; }
+      void                 SetIp3dPVUBCkfErr(Double_t x)                 { fIp3dPVUBCkfErr = x; }
+      void                 SetD0PVUBBSCkf(Double_t x)                    { fD0PVUBBSCkf = x; }
+      void                 SetD0PVUBBSCkfErr(Double_t x)                 { fD0PVUBBSCkfErr = x; }
+      void                 SetIp3dPVUBBSCkf(Double_t x)                  { fIp3dPVUBBSCkf = x; }
+      void                 SetIp3dPVUBBSCkfErr(Double_t x)               { fIp3dPVUBBSCkfErr = x; }
+      void                 SetGsfPVCompatibility(Double_t x)             { fGsfPVCompatibility = x; }
+      void                 SetGsfPVBSCompatibility(Double_t x)           { fGsfPVBSCompatibility = x; }
+      void                 SetGsfPVCompatibilityMatched(Double_t x)      { fGsfPVCompatibilityMatched = x; }
       void                 SetGsfPVBSCompatibilityMatched(Double_t x)    { fGsfPVBSCompatibilityMatched = x; }
-      void                 SetConvPartnerDCotTheta(Double_t x)    { fConvPartnerDCotTheta = x;     }
-      void                 SetConvPartnerDist(Double_t x)         { fConvPartnerDist = x;          }
-      void                 SetConvPartnerRadius(Double_t x)       { fConvPartnerRadius = x;        }
-      void                 SetConvFlag(Int_t n)                   { fConvFlag = n;                 }
-      void                 SetClassification(Int_t x)             { fClassification = x;           }
-      void                 SetCovEtaEta(Double_t CovEtaEta)       { fCovEtaEta = CovEtaEta;        }
-      void                 SetCoviEtaiEta(Double_t CoviEtaiEta)   { fCoviEtaiEta = CoviEtaiEta;    }
+      void                 SetConvPartnerDCotTheta(Double_t x)           { fConvPartnerDCotTheta = x; }
+      void                 SetConvPartnerDist(Double_t x)                { fConvPartnerDist = x; }
+      void                 SetConvPartnerRadius(Double_t x)              { fConvPartnerRadius = x; }
+      void                 SetConvFlag(Int_t n)                          { fConvFlag = n; }
+      void                 SetClassification(Int_t x)                    { fClassification = x; }
+      void                 SetCovEtaEta(Double_t x)                      { fCovEtaEta = x; }
+      void                 SetCoviEtaiEta(Double_t x)                    { fCoviEtaiEta = x; }
       void                 SetDeltaEtaSuperClusterTrackAtVtx(Double_t x)  
-                             { fDeltaEtaSuperClTrkAtVtx = x;   }
+                             { fDeltaEtaSuperClTrkAtVtx = x; }
       void                 SetDeltaEtaSeedClusterTrackAtCalo(Double_t x)  
-                             { fDeltaEtaSeedClTrkAtCalo = x;   }
+                             { fDeltaEtaSeedClTrkAtCalo = x; }
       void                 SetDeltaPhiSuperClusterTrackAtVtx(Double_t x)  
-                             { fDeltaPhiSuperClTrkAtVtx = x;   }
+                             { fDeltaPhiSuperClTrkAtVtx = x; }
       void                 SetDeltaPhiSeedClusterTrackAtCalo(Double_t x)  
-                             { fDeltaPhiSeedClTrkAtCalo = x;   }
-      void                 SetE15(Double_t x)                     { fE15 = x;                      }
-      void                 SetE25Max(Double_t x)                  { fE25Max = x;                   }
-      void                 SetE55(Double_t x)                     { fE55 = x;                      }
-      void                 SetESeedClusterOverPout(Double_t x)    { fESeedClusterOverPout = x;     }
-      void                 SetESuperClusterOverP(Double_t x)      { fESuperClusterOverP = x;       }
-      void                 SetFBrem(Double_t x)                   { fFBrem = x;                    }
-      void                 SetFracSharedHits(Double_t x)          { fFracSharedHits = x;           }
+                             { fDeltaPhiSeedClTrkAtCalo = x; }
+      void                 SetE15(Double_t x)                     { fE15 = x; }
+      void                 SetE25Max(Double_t x)                  { fE25Max = x; }
+      void                 SetE55(Double_t x)                     { fE55 = x; }
+      void                 SetESeedClusterOverPout(Double_t x)    { fESeedClusterOverPout = x; }
+      void                 SetESuperClusterOverP(Double_t x)      { fESuperClusterOverP = x; }
+      void                 SetFBrem(Double_t x)                   { fFBrem = x; }
+      void                 SetFracSharedHits(Double_t x)          { fFracSharedHits = x; }
       void	           SetGsfTrk(const Track* t)                     
                              { fGsfTrackRef = t; ClearCharge(); }
-      void                 SetHadronicOverEm(Double_t x)          { fHadronicOverEm = x;           }
-      void                 SetHcalDepth1OverEcal(Double_t x)      { fHcalDepth1OverEcal = x;       }
-      void                 SetHcalDepth2OverEcal(Double_t x)      { fHcalDepth2OverEcal = x;       }
-      void                 SetIDLikelihood(Double_t likelihood)   { fIDLikelihood = likelihood;    }
-      void                 SetIsEnergyScaleCorrected(Bool_t x)    { fIsEnergyScaleCorrected = x;   }
-      void                 SetIsMomentumCorrected(Bool_t x)       { fIsMomentumCorrected = x;      }
-      void                 SetNumberOfClusters(Double_t x)        { fNumberOfClusters = x;         }
-      void                 SetPIn(Double_t PIn)                   { fPIn = PIn;                    }
-      void                 SetPOut(Double_t POut)                 { fPOut = POut;                  }
-      void                 SetPassLooseID(Double_t passLooseID)   { fPassLooseID = passLooseID;    }
-      void                 SetPassTightID(Double_t passTightID)   { fPassTightID = passTightID;    }
+      void                 SetHadronicOverEm(Double_t x)          { fHadronicOverEm = x; }
+      void                 SetHcalDepth1OverEcal(Double_t x)      { fHcalDepth1OverEcal = x; }
+      void                 SetHcalDepth2OverEcal(Double_t x)      { fHcalDepth2OverEcal = x; }
+      void                 SetIDLikelihood(Double_t x)            { fIDLikelihood = x; }
+      void                 SetIsEnergyScaleCorrected(Bool_t x)    { fIsEnergyScaleCorrected = x; }
+      void                 SetIsMomentumCorrected(Bool_t x)       { fIsMomentumCorrected = x; }
+      void                 SetNumberOfClusters(Double_t x)        { fNumberOfClusters = x; }
+      void                 SetPIn(Double_t pIn)                   { fPIn = pIn; }
+      void                 SetPOut(Double_t pOut)                 { fPOut = pOut; }
+      void                 SetPassLooseID(Double_t passLooseID)   { fPassLooseID = passLooseID; }
+      void                 SetPassTightID(Double_t passTightID)   { fPassTightID = passTightID; }
       void                 SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
       void	           SetSuperCluster(const SuperCluster* sc) 
                              { fSuperClusterRef = sc; }
@@ -258,40 +254,40 @@ namespace mithep
                              { fTrackerTrackRef = t; ClearCharge(); }
       void                 SetConvPartnerTrk(const Track *t)
                              { fConvPartnerTrackRef = t; }
-      void                 SetEcalRecHitIsoDr04(Double_t x)        { fEcalJurassicIsolation = x;    }
+      void                 SetEcalRecHitIsoDr04(Double_t x)        { fEcalJurassicIsolation = x; }
       void                 SetHcalDepth1TowerSumEtDr04(Double_t x) { fHcalDepth1TowerSumEtDr04 = x; }
       void                 SetHcalDepth2TowerSumEtDr04(Double_t x) { fHcalDepth2TowerSumEtDr04 = x; }
-      void                 SetTrackIsolationDr04(Double_t x)       { fTrackIsolationDr04 = x;       }
-      void                 SetEcalRecHitIsoDr03(Double_t x)        { fEcalRecHitSumEtDr03 = x;      }
-      void                 SetHcalTowerSumEtDr03(Double_t x)       { fCaloTowerIsolation = x;       }
+      void                 SetTrackIsolationDr04(Double_t x)       { fTrackIsolationDr04 = x; }
+      void                 SetEcalRecHitIsoDr03(Double_t x)        { fEcalRecHitSumEtDr03 = x; }
+      void                 SetHcalTowerSumEtDr03(Double_t x)       { fCaloTowerIsolation = x; }
       void                 SetHcalDepth1TowerSumEtDr03(Double_t x) { fHcalDepth1TowerSumEtDr03 = x; }
       void                 SetHcalDepth2TowerSumEtDr03(Double_t x) { fHcalDepth2TowerSumEtDr03 = x; }
-      void                 SetTrackIsolationDr03(Double_t x)       { fTrackIsolation = x;   }
-      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso = x;       }
-      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso = x;       }
-      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso = x;              }
-      void                 SetMva(Double_t x)                      { fMva = x;              }
-      void                 SetIsEB(Bool_t b)                       { fIsEB = b;             }
-      void                 SetIsEE(Bool_t b)                       { fIsEE = b;             }
-      void                 SetIsEBEEGap(Bool_t b)                  { fIsEBEEGap = b;        }
-      void                 SetIsEBEtaGap(Bool_t b)                 { fIsEBEtaGap = b;       }
-      void                 SetIsEBPhiGap(Bool_t b)                 { fIsEBPhiGap = b;       }
-      void                 SetIsEEDeeGap(Bool_t b)                 { fIsEEDeeGap = b;       }
-      void                 SetIsEERingGap(Bool_t b)                { fIsEERingGap = b;      }
-      void                 SetIsEcalDriven(Bool_t b)               { fIsEcalDriven = b;     }
-      void                 SetIsTrackerDriven(Bool_t b)            { fIsTrackerDriven = b;  }
+      void                 SetTrackIsolationDr03(Double_t x)       { fTrackIsolation = x; }
+      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso = x; }
+      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso = x; }
+      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso = x; }
+      void                 SetMva(Double_t x)                      { fMva = x; }
+      void                 SetIsEB(Bool_t b)                       { fIsEB = b; }
+      void                 SetIsEE(Bool_t b)                       { fIsEE = b; }
+      void                 SetIsEBEEGap(Bool_t b)                  { fIsEBEEGap = b; }
+      void                 SetIsEBEtaGap(Bool_t b)                 { fIsEBEtaGap = b; }
+      void                 SetIsEBPhiGap(Bool_t b)                 { fIsEBPhiGap = b; }
+      void                 SetIsEEDeeGap(Bool_t b)                 { fIsEEDeeGap = b; }
+      void                 SetIsEERingGap(Bool_t b)                { fIsEERingGap = b; }
+      void                 SetIsEcalDriven(Bool_t b)               { fIsEcalDriven = b; }
+      void                 SetIsTrackerDriven(Bool_t b)            { fIsTrackerDriven = b; }
       void                 SetMatchesVertexConversion(Bool_t b)    { fMatchesVertexConversion = b; }
       void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
                                   { fConvPosition.SetXYZ(x,y,z); }
       
      
-      const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj();   }
-      const Track         *Trk()                   const { return BestTrk();                }
+      const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
+      const Track         *Trk()                   const { return BestTrk(); }
       const Track         *ConvPartnerTrk()        const { return fConvPartnerTrackRef.Obj(); }
 
     protected:
       Double_t             GetCharge()             const;
-      Double_t             GetMass()               const { return 0.51099892e-3;            }
+      Double_t             GetMass()               const { return 0.51099892e-3; }
       void                 GetMom()                const;
 
       Vect3C               fMom;                       //stored three-momentum

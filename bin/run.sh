@@ -28,8 +28,8 @@ id; env | grep HOST; pwd;
 # initialize the CMSSW environment
 echo " "; echo "${h}: Initialize CMSSW"; echo " "
 workDir=`pwd`
-cd   /home/$USER/cms/cmssw/017/CMSSW_3_9_5_patch1/src
-eval `scram runtime -sh`
+#cd   $CMSSW_BASE
+#eval `scram runtime -sh`
 
 # make sure to copy what we need locally if we are not in the original area (when in condor)
 pwd

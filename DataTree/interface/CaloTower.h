@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTower.h,v 1.14 2009/05/18 07:00:53 loizides Exp $
+// $Id: CaloTower.h,v 1.15 2009/06/18 22:56:30 bendavid Exp $
 //
 // CaloTower
 //
-// This class holds calo tower information. Note that the energy of the tower does not 
-// necessarily have to be greater 0. As such E() and  Et() can return negative
-// values. In those cases the FourVectorM will be 0, and also Pt() will return 0.
+// This class holds calo tower information. Note that the energy of the tower does not necessarily
+// have to be greater 0. As such E() and Et() can return negative values. In those cases the
+// FourVectorM will be 0, and also Pt() will return 0.
 //
 // Authors: S.Xie
 //--------------------------------------------------------------------------------------------------
@@ -43,12 +43,12 @@ namespace mithep
       Double_t             OuterEt()     const { return fOuterEnergy*TMath::Sin(Theta());        }
       const ThreeVectorC  &Position()    const;
       Double_t             Theta()       const { return Position().Theta();                      }
-      void	           SetEmEnergy(Double_t EmEnergy)       
-                             { fEmEnergy    = EmEnergy;  ClearMom(); }
-      void	           SetHadEnergy(Double_t HadEnergy)     
-                             { fHadEnergy   = HadEnergy; ClearMom(); }
-      void	           SetOuterEnergy(Double_t OuterEnergy) 
-                             { fOuterEnergy = OuterEnergy; ClearMom(); }
+      void	           SetEmEnergy(Double_t emEnergy)       
+                             { fEmEnergy    = emEnergy;  ClearMom(); }
+      void	           SetHadEnergy(Double_t hadEnergy)     
+                             { fHadEnergy   = hadEnergy; ClearMom(); }
+      void	           SetOuterEnergy(Double_t outerEnergy) 
+                             { fOuterEnergy = outerEnergy; ClearMom(); }
       void                 SetMass(Double_t mass) { fMass = mass;      }
       void                 SetPosition(Double_t x, Double_t y, Double_t z)
                              { fPosition.SetXYZ(x,y,z); ClearMom(); ClearPos(); }
