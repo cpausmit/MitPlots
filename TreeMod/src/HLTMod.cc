@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.20 2011/03/21 15:58:37 paus Exp $
+// $Id: HLTMod.cc,v 1.21 2011/05/15 20:40:30 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -119,13 +119,25 @@ void HLTMod::BeginRun()
         TObjString *s = dynamic_cast<TObjString*>(arr->At(j));
         if (!s) 
           continue;
-        const char *sptr = s->GetString().Data();
+        TString st = s->GetString();
+        bool wildcard = false;
+        if (st.EndsWith("*")) {
+          st.ReplaceAll("*","");
+          wildcard = true;
+        }
+        const char *sptr = st.Data();
         Bool_t invert = kFALSE;
         if (sptr[0] == '!') { 
           invert = kTRUE; //inverted bit set
           ++sptr;
         }
-        const TriggerName *tn = fTriggers->Get(sptr);
+        const TriggerName *tn = 0;
+        if (wildcard) {
+          tn = fTriggers->GetWildcard(sptr);
+        }
+        else {
+          tn = fTriggers->Get(sptr);
+        }
         if (!tn) {
           Warning("BeginRun", "Trigger %s not found.", sptr);
           continue;

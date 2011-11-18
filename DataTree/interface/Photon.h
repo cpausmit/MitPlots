@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.41 2011/10/08 18:21:02 bendavid Exp $
+// $Id: Photon.h,v 1.42 2011/10/23 01:53:16 paus Exp $
 //
 // Photon
 //
@@ -35,7 +35,7 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
         fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -50,7 +50,7 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0) {}
 
       const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
       Double_t             EcalRecHitIsoDr03()        const { return fEcalRecHitIsoDr03;  }
@@ -147,23 +147,23 @@ namespace mithep
       void                 SetHollowConeTrkIsoDr03(Double_t x)     { fHollowConeTrkIsoDr03     = x; }
       void                 SetSolidConeNTrkDr03(UShort_t x)        { fSolidConeNTrkDr03        = x; }
       void                 SetHollowConeNTrkDr03(UShort_t x)       { fHollowConeNTrkDr03       = x; }
-      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso       = x; }
-      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso       = x; }
-      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso              = x; }      
-      void                 SetIsEB(Bool_t x)                       { fIsEB                     = x; }
-      void                 SetIsEE(Bool_t x)                       { fIsEE                     = x; }
-      void                 SetIsEBGap(Bool_t x)                    { fIsEBGap                  = x; }
-      void                 SetIsEEGap(Bool_t x)                    { fIsEEGap                  = x; }
-      void                 SetIsEBEEGap(Bool_t x)                  { fIsEBEEGap                = x; }
-      void                 SetIsLooseEM(Bool_t x)                  { fIsLooseEM                = x; }
-      void                 SetIsLoosePhoton(Bool_t x)              { fIsLoosePhoton            = x; }
-      void                 SetIsTightPhoton(Bool_t x)              { fIsTightPhoton            = x; }
-      void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z) { fCaloPos.SetXYZ(x,y,z); }
-      void                 SetPV(const Vertex *v)                  { fPVRef                    = v; }
-      Bool_t               HasPV()                           const { return fPVRef.IsValid();       }
-      const Vertex        *PV()                              const { return fPVRef.Obj();           }
-
-
+      void                 SetPFChargedHadronIso(Double_t x)       { fPFChargedHadronIso = x;       }
+      void                 SetPFNeutralHadronIso(Double_t x)       { fPFNeutralHadronIso = x;       }
+      void                 SetPFPhotonIso(Double_t x)              { fPFPhotonIso = x;              }      
+      void                 SetIsEB(Bool_t x)                       { fIsEB          = x; }
+      void                 SetIsEE(Bool_t x)                       { fIsEE          = x; }
+      void                 SetIsEBGap(Bool_t x)                    { fIsEBGap       = x; }
+      void                 SetIsEEGap(Bool_t x)                    { fIsEEGap       = x; }
+      void                 SetIsEBEEGap(Bool_t x)                  { fIsEBEEGap     = x; }
+      void                 SetIsLooseEM(Bool_t x)                  { fIsLooseEM     = x; }
+      void                 SetIsLoosePhoton(Bool_t x)              { fIsLoosePhoton = x; }
+      void                 SetIsTightPhoton(Bool_t x)              { fIsTightPhoton = x; }
+      void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z) { fCaloPos.SetXYZ(x,y,z);    }
+      void                 SetPV(const Vertex *v)                  { fPVRef = v;         }
+      void                 SetVtxProb(Double_t x)                  { fVtxProb = x;       }
+      Bool_t               HasPV()                           const { return fPVRef.IsValid(); }
+      const Vertex        *PV()                              const { return fPVRef.Obj(); }
+      Double_t             VtxProb()                         const { return fVtxProb;    }
 
     protected:
       void                 GetMom() const;
@@ -196,35 +196,37 @@ namespace mithep
       Double32_t           fHcalDepth2TowerSumEtDr03; //[0,0,14]hcal depth2 tower based isolation dR 0.3
       Double32_t           fSolidConeTrkIsoDr03;      //[0,0,14]sum track pT in cone of dR 0.3
       Double32_t           fHollowConeTrkIsoDr03;     //[0,0,14]as above excluding the core, dR 0.3
-      UShort_t             fSolidConeNTrkDr03;        //number of tracks in a cone of dR 0.3
-      UShort_t             fHollowConeNTrkDr03;       //as above excluding the core, dR 0.3
-      Double32_t           fPFChargedHadronIso;       //[0,0,14]pf isolation, charged hadrons
-      Double32_t           fPFNeutralHadronIso;       //[0,0,14]pf isolation, neutral hadrons
-      Double32_t           fPFPhotonIso;              //[0,0,14]pf isolation, photons
-      Bool_t               fHasPixelSeed;             //=true if super cluster has matched seed
-      Bool_t               fIsEB;                     //=true if photon is ECal barrel
-      Bool_t               fIsEE;                     //=true if photon is ECAL endcap
-      Bool_t               fIsEBGap;                  //=true photon is in ECAL barrel crystal gap
-      Bool_t               fIsEEGap;                  //=true photon is in ECAL endcap crystal gap
-      Bool_t               fIsEBEEGap;                //=true photon is in boundary between EB/EE
-      Bool_t               fIsLooseEM;                //=true if loose em cuts are passed *DEPRECATED*
-                                                      // LooseEM corresponds to supercluster preselection in 3_1_X
-                                                      //so this variable is now always true for photon objects
-      Bool_t               fIsLoosePhoton;            //=true if loose photon cuts are passed
-      Bool_t               fIsTightPhoton;            //=true if tight photon cuts are passed
-      Bool_t               fIsConverted;              //=true if photon converted
-      RefArray<Conversion> fConversions;              //refs to associated conversion candidates
-      Ref<SuperCluster>    fSuperClusterRef;          //ref to associated super cluster
-      Ref<Vertex>          fPVRef;                    //ref to associated primary vertex
-      Double32_t           fEnergyErr;                //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression
-      Double32_t           fEnergyErrSmeared;         //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression with added smearing
-      Double32_t           fEnergySmearing;           //[0,0,14]additional energy smearing applied or required wrt MC
-      Double32_t           fEnergyRegr;               //[0,0,14]regression energy (computed at filler time)
-      Double32_t           fEnergyErrRegr;            //[0,0,14]regression energy uncertainty (computed at filler time)
-      Double32_t           fEnergyPhoFix;             //[0,0,14]PhotonFix energy (computed at filler time)
-      Double32_t           fEnergyErrPhoFix;          //[0,0,14]PhotonFix energy uncertainty (computed at filler time)
+      UShort_t             fSolidConeNTrkDr03;  //number of tracks in a cone of dR 0.3
+      UShort_t             fHollowConeNTrkDr03; //as above excluding the core, dR 0.3
+      Double32_t           fPFChargedHadronIso;        //[0,0,14]pf isolation, charged hadrons
+      Double32_t           fPFNeutralHadronIso;        //[0,0,14]pf isolation, neutral hadrons
+      Double32_t           fPFPhotonIso;               //[0,0,14]pf isolation, photons
+      Bool_t               fHasPixelSeed;       //=true if super cluster has matched seed
+      Bool_t               fIsEB;               //=true if photon is ECal barrel
+      Bool_t               fIsEE;               //=true if photon is ECAL endcap
+      Bool_t               fIsEBGap;            //=true photon is in ECAL barrel crystal gap
+      Bool_t               fIsEEGap;            //=true photon is in ECAL endcap crystal gap
+      Bool_t               fIsEBEEGap;          //=true photon is in boundary between EB/EE
+      Bool_t               fIsLooseEM;          //=true if loose em cuts are passed *DEPRECATED*
+                                                // LooseEM corresponds to supercluster preselection in 3_1_X
+                                                //so this variable is now always true for photon objects
+      Bool_t               fIsLoosePhoton;      //=true if loose photon cuts are passed
+      Bool_t               fIsTightPhoton;      //=true if tight photon cuts are passed
+      Bool_t               fIsConverted;        //=true if photon converted
+      RefArray<Conversion> fConversions;        //refs to associated conversion candidates
+      Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
+      Ref<Vertex>          fPVRef;              //ref to associated primary vertex
+      Double32_t           fEnergyErr;          //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression
+      Double32_t           fEnergyErrSmeared;   //[0,0,14]uncertainty on energy measurement (in GeV), eg from variance regression with added smearing
+      Double32_t           fEnergySmearing;     //[0,0,14]additional energy smearing applied or required wrt MC
+      Double32_t           fEnergyRegr;         //[0,0,14]regression energy (computed at filler time)
+      Double32_t           fEnergyErrRegr;      //[0,0,14]regression energy uncertainty (computed at filler time)
+      Double32_t           fEnergyPhoFix;       //[0,0,14]PhotonFix energy (computed at filler time)
+      Double32_t           fEnergyErrPhoFix;    //[0,0,14]PhotonFix energy uncertainty (computed at filler time)
+      Double32_t           fVtxProb;            //[0,0,14]Probability that linked primary vertex is the correct one
 
-    ClassDef(Photon,10) // Photon class
+
+    ClassDef(Photon,11) // Photon class
   };
 }
 

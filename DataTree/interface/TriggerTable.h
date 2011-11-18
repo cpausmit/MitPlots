@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TriggerTable.h,v 1.1 2009/03/24 16:10:15 loizides Exp $
+// $Id: TriggerTable.h,v 1.2 2009/11/24 15:57:37 loizides Exp $
 //
 // TriggerTable
 //
@@ -26,6 +26,7 @@ namespace mithep
         THashTable(capacity,rehash) {}
 
       const TriggerName *Get(const char *name)     const;
+      const TriggerName *GetWildcard(const char *name) const;      
       const TriggerName *Get(const std::string &s) const { return Get(s.c_str()); }
       UShort_t           GetId(const char *name)   const;
       using TCollection::Print;
@@ -41,6 +42,28 @@ inline const mithep::TriggerName *mithep::TriggerTable::Get(const char *name) co
   // Return TriggerName pointer for given name.
 
   return dynamic_cast<const TriggerName *>(FindObject(name)); 
+}
+
+//--------------------------------------------------------------------------------------------------
+inline const mithep::TriggerName *mithep::TriggerTable::GetWildcard(const char *name) const
+{ 
+  // Return TriggerName pointer for given name.
+
+  TIterator *it = MakeIterator();
+  
+  TObject* tempObj=0;
+  
+  while((tempObj=it->Next())) {
+    TString tmpstr(tempObj->GetName());
+    if (tmpstr.BeginsWith(name)) {
+      delete it;
+      printf("returning wildcard trigger %s\n",tempObj->GetName());
+      return dynamic_cast<const TriggerName *>(tempObj); 
+    }
+  }
+  
+  return 0;
+
 }
 
 //--------------------------------------------------------------------------------------------------
