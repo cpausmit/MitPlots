@@ -1,4 +1,4 @@
-// $Id: Names.cc,v 1.52 2011/05/05 12:40:37 rwolf Exp $
+// $Id: Names.cc,v 1.53 2011/07/21 16:25:51 rwolf Exp $
 
 #include "MitAna/DataTree/interface/Names.h"
 
@@ -17,6 +17,7 @@ const char *Names::gkCaloTowerBrn           = "CaloTowers";
 const char *Names::gkElectronBrn            = "Electrons";
 const char *Names::gkEndcapBasicClusterBrn  = "EndcapBasicClusters";
 const char *Names::gkEndcapSuperClusterBrn  = "EndcapSuperClusters";
+const char *Names::gkEmbedWeightBrn         = "EmbedWeight";
 const char *Names::gkEvtHeaderBrn           = "EventHeader";
 const char *Names::gkEvtSelDataBrn          = "EvtSelData";
 const char *Names::gkGenMetBrn              = "GenMet";

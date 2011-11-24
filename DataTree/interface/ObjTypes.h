@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.18 2010/02/21 23:42:00 bendavid Exp $
+// $Id: ObjTypes.h,v 1.19 2010/05/04 11:56:05 bendavid Exp $
 //
 // ObjTypes
 //
@@ -32,6 +32,7 @@ namespace mithep
     kDaughterData,
     kDecayData,
     kDecayParticle,
+    kEmbedWeight,
     kElectron,
     kEventHeader,
     kEvtSelData,
@@ -52,6 +53,7 @@ namespace mithep
     kPFMet,
     kPFTau,
     kParticle,
+    kSParticle,
     kPhoton,
     kPixelHit,
     kRunInfo,
