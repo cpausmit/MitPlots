@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.42 2011/10/23 01:53:16 paus Exp $
+// $Id: Photon.h,v 1.43 2011/11/18 00:02:02 bendavid Exp $
 //
 // Photon
 //
@@ -35,7 +35,7 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
         fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -50,7 +50,7 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.) {}
 
       const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
       Double_t             EcalRecHitIsoDr03()        const { return fEcalRecHitIsoDr03;  }
@@ -161,9 +161,11 @@ namespace mithep
       void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z) { fCaloPos.SetXYZ(x,y,z);    }
       void                 SetPV(const Vertex *v)                  { fPVRef = v;         }
       void                 SetVtxProb(Double_t x)                  { fVtxProb = x;       }
+      void                 SetIdMva(Double_t x)                    { fIdMva = x;         }
       Bool_t               HasPV()                           const { return fPVRef.IsValid(); }
       const Vertex        *PV()                              const { return fPVRef.Obj(); }
       Double_t             VtxProb()                         const { return fVtxProb;    }
+      Double_t             IdMva()                           const { return fIdMva;      }
 
     protected:
       void                 GetMom() const;
@@ -224,9 +226,10 @@ namespace mithep
       Double32_t           fEnergyPhoFix;       //[0,0,14]PhotonFix energy (computed at filler time)
       Double32_t           fEnergyErrPhoFix;    //[0,0,14]PhotonFix energy uncertainty (computed at filler time)
       Double32_t           fVtxProb;            //[0,0,14]Probability that linked primary vertex is the correct one
+      Double32_t           fIdMva;              //[0,0,14]output of photon id mva
 
 
-    ClassDef(Photon,11) // Photon class
+    ClassDef(Photon,12) // Photon class
   };
 }
 
