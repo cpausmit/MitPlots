@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotTask.h,v 1.2 2011/01/25 11:30:30 paus Exp $
+// $Id: PlotTask.h,v 1.3 2011/02/01 16:43:55 bendavid Exp $
 //
 // PlotTask
 //
@@ -37,6 +37,11 @@ namespace mithep
     void                 SetNBins         (UInt_t n)   { fNBins = n;  }
     void                 SetDrawExp       (const char* draw, const char* sel);
     
+    void                 SetPuTarget(const TH1D *h) { fPuTarget = h; }
+    
+    static float         PuWeight(Int_t npu);
+    
+    
   private:
     // Overlay the contribution in a single histogram (no adding/stacking)
     void                 PlotContributions(const char* dir, const char* hist);
@@ -71,7 +76,10 @@ namespace mithep
     TString              fSelExp;       // selection expression for TTree::Draw
     std::vector<TH1D*>   fHists;        // list of scaled histograms
     std::vector<TH1D*>   fStackedHists; // list of scaled histograms
-    
+
+    const TH1D          *fPuTarget;
+    static const TH1D   *sPuWeights;
+
     ClassDef(PlotTask, 0) // PlotTask plots analysis task with various options
   };
 }

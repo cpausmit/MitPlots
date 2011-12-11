@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.6 2011/05/21 00:23:12 klute Exp $
+// $Id: PlotTask.cc,v 1.7 2011/05/27 14:21:11 bendavid Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -21,6 +21,8 @@ ClassImp(mithep::PlotTask)
 using namespace std;
 using namespace mithep;
 
+const TH1D *PlotTask::sPuWeights = 0;
+
 //--------------------------------------------------------------------------------------------------
 PlotTask::PlotTask(const TaskSamples *taskSamples, const double lumi) :
   fTask        (taskSamples),
@@ -36,9 +38,10 @@ PlotTask::PlotTask(const TaskSamples *taskSamples, const double lumi) :
   fHistXMaximum(0),
   fAxisTitleX  (""),
   fAxisTitleY  ("Number of Events"),
-  fXLegend     (70.),
-  fYLegend     (98.),
-  fNBins       (100)
+  fXLegend     (65.),
+  fYLegend     (94.),
+  fNBins       (100),
+  fPuTarget    (0)
 {
   // Constructor
 }
@@ -257,6 +260,20 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
              s->Name()->Data());
       continue;
     }
+    
+    //set pileup weights
+    if (fPuTarget) {
+      if (sPuWeights) {
+        delete sPuWeights;
+      }
+      
+      TH1D *pusource = (TH1D*)dirTmp->Get("hNPU")->Clone();
+      pusource->Scale(1.0/pusource->GetSumOfWeights());
+      
+      sPuWeights = new TH1D( (*fPuTarget) / (*pusource) );
+      
+    }
+      
     double nEvts   = hAllEvts->GetEntries();
     double lumi    = nEvts / *s->Xsec();
     double factor,scale = *s->Scale();
@@ -607,4 +624,13 @@ void PlotTask::OverlayFrame() const
   delete box;
 
   return;
+}
+
+//--------------------------------------------------------------------------------------------------
+float PlotTask::PuWeight(Int_t npu) {
+  if (npu<0) return 1.0;
+  if (!sPuWeights) return 1.0;
+  
+  return sPuWeights->GetBinContent(sPuWeights->FindFixBin(npu));
+  
 }
