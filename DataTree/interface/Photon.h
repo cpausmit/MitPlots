@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.43 2011/11/18 00:02:02 bendavid Exp $
+// $Id: Photon.h,v 1.44 2011/12/11 00:00:28 bendavid Exp $
 //
 // Photon
 //
@@ -35,7 +35,8 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.),
+        fEtaWidth(-99.), fPhiWidth(-99.) {}
       Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :    
         fMom(FourVector(px,py,pz,e)), 
         fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -50,7 +51,8 @@ namespace mithep
         fHasPixelSeed(0), fIsEB(0), fIsEE(0), fIsEBGap(0),
         fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
         fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
-        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.) {}
+        fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0), fIdMva(-99.),
+        fEtaWidth(-99.), fPhiWidth(-99.) {}
 
       const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
       Double_t             EcalRecHitIsoDr03()        const { return fEcalRecHitIsoDr03;  }
@@ -107,6 +109,8 @@ namespace mithep
       Double_t             SolidConeTrkIsoDr04()      const { return fSolidConeTrkIso;       }
       UShort_t             SolidConeNTrkDr03()        const { return fSolidConeNTrkDr03;     }
       UShort_t             SolidConeNTrkDr04()        const { return fSolidConeNTrk;         }
+      Double_t             EtaWidth()                 const { return fEtaWidth >= 0. ? fEtaWidth : SCluster()->EtaWidth(); }
+      Double_t             PhiWidth()                 const { return fPhiWidth >= 0. ? fPhiWidth : SCluster()->PhiWidth(); }
 
       void                 AddConversion(const Conversion *c)      { fConversions.Add(c);    }
       void                 SetEnergyErr(Double_t x)                { fEnergyErr                = x; }
@@ -162,6 +166,9 @@ namespace mithep
       void                 SetPV(const Vertex *v)                  { fPVRef = v;         }
       void                 SetVtxProb(Double_t x)                  { fVtxProb = x;       }
       void                 SetIdMva(Double_t x)                    { fIdMva = x;         }
+      void                 SetEtaWidth(Double_t x)                 { fEtaWidth = x;      }
+      void                 SetPhiWidth(Double_t x)                 { fPhiWidth = x;      }
+      
       Bool_t               HasPV()                           const { return fPVRef.IsValid(); }
       const Vertex        *PV()                              const { return fPVRef.Obj(); }
       Double_t             VtxProb()                         const { return fVtxProb;    }
@@ -227,9 +234,11 @@ namespace mithep
       Double32_t           fEnergyErrPhoFix;    //[0,0,14]PhotonFix energy uncertainty (computed at filler time)
       Double32_t           fVtxProb;            //[0,0,14]Probability that linked primary vertex is the correct one
       Double32_t           fIdMva;              //[0,0,14]output of photon id mva
+      Double32_t           fEtaWidth;              //[0,0,14]output of photon id mva
+      Double32_t           fPhiWidth;              //[0,0,14]output of photon id mva
 
 
-    ClassDef(Photon,12) // Photon class
+    ClassDef(Photon,13) // Photon class
   };
 }
 
