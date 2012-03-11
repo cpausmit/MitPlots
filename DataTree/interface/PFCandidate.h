@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.6 2010/03/29 09:33:54 bendavid Exp $
+// $Id: PFCandidate.h,v 1.7 2010/03/30 05:32:25 bendavid Exp $
 //
 // PFCandidate
 //
@@ -52,7 +52,8 @@ namespace mithep
         eFromDispVtx,
         eFromV0,
         eFromGammaConv,
-        eToConversion
+        eToConversion,
+	ePFNoPileup
       };
 
       PFCandidate() : fCharge(0), fEECal(0), fEHCal(0), fEECalRaw(0), fEHCalRaw(0),

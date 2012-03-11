@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.19 2010/05/04 11:56:05 bendavid Exp $
+// $Id: ObjTypes.h,v 1.20 2011/11/24 11:30:41 pharris Exp $
 //
 // ObjTypes
 //
@@ -30,6 +30,7 @@ namespace mithep
     kDataBase,
     kDataObject,
     kDaughterData,
+    kDCASig,
     kDecayData,
     kDecayParticle,
     kEmbedWeight,
