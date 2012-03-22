@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.34 2011/04/07 11:30:45 bendavid Exp $
+// $Id: DecayParticle.h,v 1.35 2011/04/08 00:01:29 bendavid Exp $
 //
 // DecayParticle
 //
@@ -53,6 +53,7 @@ namespace mithep
       Double_t                  DzCorrected(const ThreeVector &v) const;
       Double_t                  DzCorrected(const BaseVertex *v)  const;
       Double_t                  Z0EcalVtx(const ThreeVector &bspos, const ThreeVector &ecalpos) const;
+      Double_t                  Z0EcalVtxCiC(const ThreeVector &bspos, const ThreeVector &ecalpos) const;      
       Bool_t                    HasDaughter(const Particle *p)            const;
       Bool_t                    HasCommonDaughter(const DecayParticle *p) const;
       Bool_t                    HasPriVertex()        const { return fPriVtx.IsValid();            }
@@ -256,6 +257,18 @@ inline Double_t mithep::DecayParticle::Z0EcalVtx(const ThreeVector &bspos, const
   mithep::ThreeVector momPerp(Px(),Py(),0);
   mithep::ThreeVector posPerp(Position().X()-bspos.X(),Position().Y()-bspos.Y(),0);
   return Position().Z() - posPerp.Dot(momPerp)/Pt() * (dirscvtx.Z()/dirscvtx.Rho());
+  
+}
+
+//--------------------------------------------------------------------------------------------------
+inline Double_t mithep::DecayParticle::Z0EcalVtxCiC(const ThreeVector &bspos, const ThreeVector &ecalpos) const
+{
+  // Compute z position at beamline with vector joining conversion vertex to ecal position
+  mithep::ThreeVector dirscvtx = ecalpos - Position();
+  
+  mithep::ThreeVector momPerp(Px(),Py(),0);
+  mithep::ThreeVector posPerp(Position().X()-bspos.X(),Position().Y()-bspos.Y(),0);
+  return Position().Z() - posPerp.Rho() * (dirscvtx.Z()/dirscvtx.Rho());
   
 }
 
