@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.76 2011/10/20 12:54:24 mhchan Exp $
+# $Id: setup.sh,v 1.77 2011/10/22 15:08:08 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -45,7 +45,8 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   cvs co -r regression_Oct11 HiggsAnalysis/HiggsToGammaGamma
 
   # RecoTauTag package with bug fix
-  addpkg RecoTauTag/Configuration V01-02-08
+  addpkg RecoTauTag/RecoTau V01-02-16
+  addpkg RecoTauTag/Configuration V01-02-12
 
   #fix HitPattern accessor issue in 44x
   addpkg DataFormats/TrackReco
