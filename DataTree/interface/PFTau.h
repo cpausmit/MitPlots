@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.7 2011/04/26 12:12:20 mhchan Exp $
+// $Id: PFTau.h,v 1.8 2011/09/23 15:34:45 mhchan Exp $
 //
 // PFTau
 //
@@ -34,6 +34,7 @@ namespace mithep
 		  fDiscriminationByLooseElectronRejection(0),
 		  fDiscriminationByMediumElectronRejection(0), 
 		  fDiscriminationByTightElectronRejection(0),
+                  fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
 		  fDiscriminationByTightMuonRejection(0),
 		  fDiscriminationByDecayModeFinding(0),
@@ -42,7 +43,8 @@ namespace mithep
 		  fDiscriminationByVLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByMediumCombinedIsolationDBSumPtCorr(0),
-		  fDiscriminationByTightCombinedIsolationDBSumPtCorr(0) {}
+                  fDiscriminationByTightCombinedIsolationDBSumPtCorr(0),
+                  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0) {}
                   
       PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) : 
                   Tau(px,py,pz,e),
@@ -57,6 +59,7 @@ namespace mithep
 		  fDiscriminationByLooseElectronRejection(0),
 		  fDiscriminationByMediumElectronRejection(0), 
 		  fDiscriminationByTightElectronRejection(0),
+		  fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
 		  fDiscriminationByTightMuonRejection(0),
 		  fDiscriminationByDecayModeFinding(0),
@@ -65,7 +68,8 @@ namespace mithep
 		  fDiscriminationByVLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByMediumCombinedIsolationDBSumPtCorr(0),
-		  fDiscriminationByTightCombinedIsolationDBSumPtCorr(0) {}
+		  fDiscriminationByTightCombinedIsolationDBSumPtCorr(0),
+		  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0) {}
 
       void               AddIsoPFCand(const PFCandidate *p)  { fIsoPFCands.Add(p);                 }
       void               AddSignalPFCand(const PFCandidate *p)      
@@ -104,6 +108,7 @@ namespace mithep
       Double_t DiscriminationByLooseElectronRejection()  const {return fDiscriminationByLooseElectronRejection;}
       Double_t DiscriminationByMediumElectronRejection() const {return fDiscriminationByMediumElectronRejection;}
       Double_t DiscriminationByTightElectronRejection()  const {return fDiscriminationByTightElectronRejection;}
+      Double_t DiscriminationByMVAElectronRejection()  const {return fDiscriminationByMVAElectronRejection;}
       Double_t DiscriminationByLooseMuonRejection()    const {return fDiscriminationByLooseMuonRejection;}
       Double_t DiscriminationByTightMuonRejection()    const {return fDiscriminationByTightMuonRejection;}
       Double_t DiscriminationByDecayModeFinding()      const {return fDiscriminationByDecayModeFinding;}
@@ -115,6 +120,7 @@ namespace mithep
       Double_t DiscriminationByLooseCombinedIsolationDBSumPtCorr() const {return fDiscriminationByLooseCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByMediumCombinedIsolationDBSumPtCorr() const {return fDiscriminationByMediumCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByTightCombinedIsolationDBSumPtCorr() const {return fDiscriminationByTightCombinedIsolationDBSumPtCorr;}
+      Double_t DiscriminationByRawCombinedIsolationDBSumPtCorr() const {return fDiscriminationByRawCombinedIsolationDBSumPtCorr;}
       
       void               SetCharge(Char_t x)                 { fCharge = x; ClearCharge();         }
       void               SetBremRecoveryEOverP(Double_t x)   { fBremRecoveryEOverP = x;            }
@@ -150,6 +156,7 @@ namespace mithep
       void SetDiscriminationByLooseElectronRejection(Double_t x) {fDiscriminationByLooseElectronRejection = x;}
       void SetDiscriminationByMediumElectronRejection(Double_t x) {fDiscriminationByMediumElectronRejection = x;}
       void SetDiscriminationByTightElectronRejection(Double_t x) {fDiscriminationByTightElectronRejection = x;}
+      void SetDiscriminationByMVAElectronRejection(Double_t x) {fDiscriminationByMVAElectronRejection = x;}
       void SetDiscriminationByLooseMuonRejection(Double_t x) {fDiscriminationByLooseMuonRejection = x;}
       void SetDiscriminationByTightMuonRejection(Double_t x) {fDiscriminationByTightMuonRejection = x;}
       void SetDiscriminationByDecayModeFinding(Double_t x) {fDiscriminationByDecayModeFinding = x;}
@@ -161,6 +168,7 @@ namespace mithep
       void SetDiscriminationByLooseCombinedIsolationDBSumPtCorr(Double_t x)  {fDiscriminationByLooseCombinedIsolationDBSumPtCorr = x; }
       void SetDiscriminationByMediumCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByMediumCombinedIsolationDBSumPtCorr = x;}
       void SetDiscriminationByTightCombinedIsolationDBSumPtCorr(Double_t x)  {fDiscriminationByTightCombinedIsolationDBSumPtCorr = x; }
+      void SetDiscriminationByRawCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByRawCombinedIsolationDBSumPtCorr = x;}
 
     protected:
       Double_t           GetCharge()                    const;
@@ -186,6 +194,7 @@ namespace mithep
       Double32_t fDiscriminationByLooseElectronRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByMediumElectronRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByTightElectronRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByMVAElectronRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByLooseMuonRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByTightMuonRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByDecayModeFinding; //[0,0,14]HPS discriminant
@@ -197,6 +206,7 @@ namespace mithep
       Double32_t fDiscriminationByLooseCombinedIsolationDBSumPtCorr;  //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByMediumCombinedIsolationDBSumPtCorr; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByTightCombinedIsolationDBSumPtCorr;  //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByRawCombinedIsolationDBSumPtCorr;    //[0,0,14]HPS discriminant
       
       Ref<PFCandidate>   fLeadPFCand;            //leading signal pf candidate (charged or neutral)
       Ref<PFCandidate>   fLeadChargedHadPFCand;  //leading charged hadron signal pf candidate
@@ -211,7 +221,7 @@ namespace mithep
       
 
 
-    ClassDef(PFTau, 4) // PFTau class
+    ClassDef(PFTau, 5) // PFTau class
   };
 }
 
