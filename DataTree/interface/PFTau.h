@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.8 2011/09/23 15:34:45 mhchan Exp $
+// $Id: PFTau.h,v 1.9 2012/03/25 17:09:56 mhchan Exp $
 //
 // PFTau
 //
@@ -36,6 +36,7 @@ namespace mithep
 		  fDiscriminationByTightElectronRejection(0),
                   fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
+                  fDiscriminationByMediumMuonRejection(0),
 		  fDiscriminationByTightMuonRejection(0),
 		  fDiscriminationByDecayModeFinding(0),
 		  fDiscriminationByVLooseIsolation(0), fDiscriminationByLooseIsolation(0),
@@ -61,6 +62,7 @@ namespace mithep
 		  fDiscriminationByTightElectronRejection(0),
 		  fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
+		  fDiscriminationByMediumMuonRejection(0),
 		  fDiscriminationByTightMuonRejection(0),
 		  fDiscriminationByDecayModeFinding(0),
 		  fDiscriminationByVLooseIsolation(0), fDiscriminationByLooseIsolation(0),
@@ -110,6 +112,7 @@ namespace mithep
       Double_t DiscriminationByTightElectronRejection()  const {return fDiscriminationByTightElectronRejection;}
       Double_t DiscriminationByMVAElectronRejection()  const {return fDiscriminationByMVAElectronRejection;}
       Double_t DiscriminationByLooseMuonRejection()    const {return fDiscriminationByLooseMuonRejection;}
+      Double_t DiscriminationByMediumMuonRejection()   const {return fDiscriminationByMediumMuonRejection;}
       Double_t DiscriminationByTightMuonRejection()    const {return fDiscriminationByTightMuonRejection;}
       Double_t DiscriminationByDecayModeFinding()      const {return fDiscriminationByDecayModeFinding;}
       Double_t DiscriminationByVLooseIsolation()       const {return fDiscriminationByVLooseIsolation;}
@@ -158,6 +161,7 @@ namespace mithep
       void SetDiscriminationByTightElectronRejection(Double_t x) {fDiscriminationByTightElectronRejection = x;}
       void SetDiscriminationByMVAElectronRejection(Double_t x) {fDiscriminationByMVAElectronRejection = x;}
       void SetDiscriminationByLooseMuonRejection(Double_t x) {fDiscriminationByLooseMuonRejection = x;}
+      void SetDiscriminationByMediumMuonRejection(Double_t x) {fDiscriminationByMediumMuonRejection = x;}
       void SetDiscriminationByTightMuonRejection(Double_t x) {fDiscriminationByTightMuonRejection = x;}
       void SetDiscriminationByDecayModeFinding(Double_t x) {fDiscriminationByDecayModeFinding = x;}
       void SetDiscriminationByVLooseIsolation(Double_t x)   {fDiscriminationByVLooseIsolation = x;}
@@ -196,6 +200,7 @@ namespace mithep
       Double32_t fDiscriminationByTightElectronRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByMVAElectronRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByLooseMuonRejection; //[0,0,14]HPS discriminant
+      Double32_t fDiscriminationByMediumMuonRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByTightMuonRejection; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByDecayModeFinding; //[0,0,14]HPS discriminant
       Double32_t fDiscriminationByVLooseIsolation;  //[0,0,14]HPS discriminant
