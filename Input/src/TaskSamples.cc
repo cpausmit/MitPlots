@@ -1,4 +1,4 @@
-// $Id: TaskSamples.cc,v 1.1.2.2 2011/01/24 15:04:34 paus Exp $
+// $Id: TaskSamples.cc,v 1.2 2011/01/25 14:24:52 fabstoec Exp $
 
 #include <TSystem.h>
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -27,13 +27,13 @@ void TaskSamples::Show() const
 
   printf("\n ==== Analysis task overview -- %s ====\n\n",fName.Data());
   printf(" Histogram directory: %s\n\n",fDir.Data());
-  printf(" Dataset name                   Legend               Histogram file");
+  printf(" Dataset name                   Skim   Legend               Histogram file");
   printf("                                                  Cross Section [pb]   Scale\n");
-  printf(" ------------------------------------------------------------------");
+  printf(" ------------------------------------------------------------------------");
   printf("----------------------------------------------------------------------------\n");
   for (UInt_t i=0; i<fDataSamples.size(); i++)
     fDataSamples[i].Show();
-  printf(" ------------------------------------------------------------------");
+  printf(" ------------------------------------------------------------------------");
   printf("----------------------------------------------------------------------------\n");
   for (UInt_t i=0; i<fMcSamples.size(); i++)
     fMcSamples[i].Show();
@@ -64,11 +64,12 @@ const Sample *TaskSamples::GetDataSample(UInt_t iSample) const
 }
 
 //--------------------------------------------------------------------------------------------------
-Sample *TaskSamples::AddSample(const char* name, const char* file, double xsec, double scale)
+Sample *TaskSamples::AddSample(const char* name,const char* skimName, const char* file,
+			       double xsec, double scale)
 {
   // Adding another sample (vector takes care of memory management)
 
-  Sample* tmpSample = new Sample(name,file,fDir,xsec,scale);
+  Sample* tmpSample = new Sample(name,skimName,file,fDir,xsec,scale);
   fMcSamples.push_back(*tmpSample);
   fNMcSamples++;
   // cleanup after yourself
@@ -78,11 +79,11 @@ Sample *TaskSamples::AddSample(const char* name, const char* file, double xsec, 
 }
 
 //--------------------------------------------------------------------------------------------------
-Sample *TaskSamples::AddDataSample(const char* name, const char* file)
+Sample *TaskSamples::AddDataSample(const char* name, const char* skimName, const char* file)
 {
   // Adding another the data sample (existing definition is overwritten)
 
-  Sample* tmpSample = new Sample(name,file,fDir,-1.0,1.0);
+  Sample* tmpSample = new Sample(name,skimName,file,fDir,-1.0,1.0);
   fDataSamples.push_back(*tmpSample);
   fNDataSamples++;
   // cleanup after yourself
@@ -96,7 +97,7 @@ void TaskSamples::ReadFile(const char* dir)
 {
   // Reading the full task setup from a single file
 
-  char    vers[1024], dset[1024], legend[1024], json[1024];
+  char    vers[1024], dset[1024], skim[1024], legend[1024], json[1024];
   float   xsec,scale,overlap;
 
   // construct name of the config file
@@ -111,23 +112,22 @@ void TaskSamples::ReadFile(const char* dir)
     printf(" ------------------------------------------------------------------------");
     printf("----------------------------\n");
   }
-  while (fscanf(f,"%s %s %s %f %f %f %s",vers,dset,legend,&xsec,&scale,&overlap,json) != EOF) {
+  while (fscanf(f,"%s %s %s %s %f %f %f %s",vers,dset,skim,legend,&xsec,&scale,&overlap,json)
+	 != EOF) {
     // show what was read
-    TString skim("noskim");
     MDB(kGeneral,1)
       printf(" adding: %3s %-40s %-40s %20.7f %7.3f %7.1f %-70s %-8s\n",
-	     vers,dset,legend,xsec,scale,overlap,json,skim.Data());
+	     vers,dset,legend,xsec,scale,overlap,json,skim);
     
-    TString histFile = fName+TString("_")+TString(dset)+TString("_")+skim+TString(".root");
-    // found 'the data sample'
+    TString histFile = fName + TString("_") + TString(dset) + TString("_")
+      +                        TString(skim) + TString(".root");
+
     Sample *tmpSample = 0;
-    if (xsec < 0) {
-      tmpSample = AddDataSample(dset,histFile.Data());
-    }
-    // define the new Monte Carlo sample
-    else {
-      tmpSample = AddSample(dset,histFile.Data(), double(xsec), double(scale));
-    }
+    if (xsec < 0)                                                        // found 'the data sample'
+      tmpSample = AddDataSample(dset,skim,histFile.Data());
+    else                                                       // define the new Monte Carlo sample
+      tmpSample = AddSample(dset,skim,histFile.Data(), double(xsec), double(scale));
+
     // Convert '~' -> ' '
     TString tmpLegend = TString(legend);
     tmpLegend.ReplaceAll(TString("~"),TString(" "));

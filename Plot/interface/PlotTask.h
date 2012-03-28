@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotTask.h,v 1.3 2011/02/01 16:43:55 bendavid Exp $
+// $Id: PlotTask.h,v 1.4 2011/12/11 19:22:29 bendavid Exp $
 //
 // PlotTask
 //
@@ -45,7 +45,7 @@ namespace mithep
   private:
     // Overlay the contribution in a single histogram (no adding/stacking)
     void                 PlotContributions(const char* dir, const char* hist);
-    void                 PlotStack        (const char* dir, const char* hist);
+    void                 PlotStack        (const char* dir, const char* hist, bool rescale = kFALSE);
     
     // Basic function to perfrom all reading and scaling operations
     void                 ScaleHistograms  (const char* dir, const char* hist);

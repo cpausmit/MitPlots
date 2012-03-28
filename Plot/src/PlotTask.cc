@@ -1,4 +1,4 @@
-// $Id: PlotTask.cc,v 1.7 2011/05/27 14:21:11 bendavid Exp $
+// $Id: PlotTask.cc,v 1.8 2011/12/11 19:22:29 bendavid Exp $
 
 #include <vector>
 #include <TROOT.h>
@@ -130,7 +130,7 @@ void PlotTask::PlotContributions(const char* dir, const char* hist)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::PlotStack(const char* dir, const char* hist)
+void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
 {
   // Show present list of defined samples
 
@@ -177,11 +177,30 @@ void PlotTask::PlotStack(const char* dir, const char* hist)
   hFrame->SetMaximum(fHistMaximum*1.1);
   hFrame->Draw("");
 
+  Double_t nmctotal = 0.;
+  for (UInt_t i=fHists.size(); i>0; i--) {
+    nmctotal += fHists[i-1]->GetSumOfWeights();
+  }
+  
+  Double_t ndata = 1.0;
+  Double_t scale = 1.0;
+  if (dynamic_cast<TH1D*>(fDataHist)) {
+    ndata = fDataHist->GetSumOfWeights();
+    scale = ndata/nmctotal;
+  }
+    
+//  if (fDataHist) {
+    
+//  }
+  
+  printf("nmc = %5f, ndata = %5f, scale = %5f\n",nmctotal,ndata,scale);
+  
   // loop through samples and draw all histograms
   fHistStyles->ResetStyle();
   for (UInt_t i=fStackedHists.size(); i>0; i--) {
     const Sample *s = fTask->GetSample(i);
     MitStyle::InitHist(fStackedHists[i-1],fAxisTitleX.Data(),fAxisTitleY.Data());
+    if (rescale) fStackedHists[i-1]->Scale(scale);
     if (i == fStackedHists.size()) {
       fHistStyles->ApplyCurrentStyle(fStackedHists[i-1]);
       fStackedHists[i-1]->Draw("same;Hist");
@@ -326,8 +345,9 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     double nEvtsSel    = nEvtsSelRaw * factor * scale;
     double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw) * factor * scale;
 
-    printf(" -> %-40s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f - %p)\n",
-           s->Name()->Data(),nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale,(void*)h);
+    printf(" -> %-40s %-6s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f - %p)\n",
+           s->Name()->Data(),s->SkimName()->Data(),
+	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale,(void*)h);
 
     nTotRaw += nEvts;
     nTot    += nEvtsSel;
@@ -349,7 +369,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     }
   }
   // Monte Carlo summary
-  printf(" %-40s    - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f)\n",
+  printf(" %-40s           - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f)\n",
 	 "== Monte Carlo Total ==",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0,1.0);
 
 
@@ -423,8 +443,9 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
-	printf(" -> %-40s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n",
-	       s->Name()->Data(),nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
+	printf(" -> %-40s %-6s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n",
+	       s->Name()->Data(),s->SkimName()->Data(),
+	       nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
 
 	nTotRaw += nEvts;
 	nTot    += nEvtsSel;
@@ -439,7 +460,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     }
   }
   // Data summary
-  printf(" %-40s    - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n\n",
+  printf(" %-40s           - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n\n",
 	 "== Data Total =========",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0);
 
   return;
@@ -627,10 +648,12 @@ void PlotTask::OverlayFrame() const
 }
 
 //--------------------------------------------------------------------------------------------------
-float PlotTask::PuWeight(Int_t npu) {
-  if (npu<0) return 1.0;
-  if (!sPuWeights) return 1.0;
+float PlotTask::PuWeight(Int_t npu)
+{
+  if (npu<0)
+    return 1.0;
+  if (!sPuWeights)
+    return 1.0;
   
   return sPuWeights->GetBinContent(sPuWeights->FindFixBin(npu));
-  
 }

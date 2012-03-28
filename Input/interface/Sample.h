@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Sample.h,v 1.1.2.1 2010/10/03 04:08:48 paus Exp $
+// $Id: Sample.h,v 1.2 2011/01/25 11:30:30 paus Exp $
 //
 // Sample
 //
@@ -20,11 +20,12 @@ namespace mithep
   {
   public:
     Sample() {}
-    Sample(const char* name, const char* file, const char* dir,
+    Sample(const char* name,  const char* skimName, const char* file, const char* dir,
 	   const double xsec, const double scale);
     ~Sample() {}
     
     const TString           *Name()                           const { return &fName; }
+    const TString           *SkimName()                       const { return &fSkimName; }
     const TString           *Legend()                         const { return &fLegend; }
     const TString           *File()                           const { return &fFile; }
     const TString           *Dir()                            const { return &fDir; }
@@ -36,13 +37,14 @@ namespace mithep
     void                     Show()                           const; // show sample properties
 
   private:
-    TString                  fName;   // name of the sample
-    TString                  fLegend; // legend used for this sample
-    TString                  fFile;   // file name of the histograms etc.
-    TString                  fDir;    // directory with sample file
+    TString                  fName;     // name of the sample
+    TString                  fSkimName; // name of the skim
+    TString                  fLegend;   // legend used for this sample
+    TString                  fFile;     // file name of the histograms etc.
+    TString                  fDir;      // directory with sample file
 
-    double                   fXsec;   // cross section
-    double                   fScale;  // k-factor to scale the MC cross section
+    double                   fXsec;     // cross section
+    double                   fScale;    // k-factor to scale the MC cross section
     
     ClassDef(Sample, 0) // Sample describes all relevant aspects of a sample for plotting
   };
