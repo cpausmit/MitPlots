@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 #===================================================================================================
+#
+# Merge root files from a given datasets together.
+#
+#===================================================================================================
 import sys, getopt, os, fnmatch, commands
 import string
 
-# declare
-setupCmsswCommand = \
-  'cd /home/$USER/cms/cmssw/017/CMSSW_3_9_5_patch1/src;eval `scram runtime -sh`;cd - >& /dev/null;'
-
 #===================================================================================================
 def usage():
-    print "possible options are: --help, --InputPath=<myInputPath>, --OutputPath=<myOutputPath>," \
-          + " --FilenameHeader=<myFileHeader>, --DatasetListFile=<datasetListFile>"
+    print "\n" \
+          "possible options are:                 \n" \
+          "    --help                            \n" \
+          "    --debug                           \n" \
+          "    --Dataset=<dataset>               \n" \
+          "    --Skim=< noskim | skim >          \n" \
+          "    --InputPath=<myInputPath>         \n" \
+          "    --OutputPath=<myOutputPath>       \n" \
+          "    --FilenameHeader=<myFileHeader>   \n"
 
 #===================================================================================================
 def filesExist(path,filenameExpression):
@@ -27,50 +34,50 @@ def filesExist(path,filenameExpression):
 #===================================================================================================
 # Merge Filesets
 #===================================================================================================
-def MergeFilesets(versionList,datasetNameList,skimNameList,inputPath,outputPath,filenameHeader):
-    n = 0
-    for dataset in datasetNameList:
-        #print "================================================================"
-        print " Merging files for dataset: " + dataset
+def MergeFilesets(debug,dataset,skim,inputPath,outputPath,filenameHeader):
 
-        # create the output directory in case it is not yet there
-        command              = 'mkdir -p ' + outputPath
+    # say what we try to do
+    print " Merging files for dataset: " + dataset + " (skim: " + skim + ")"
+
+    # create the output directory in case it is not yet there
+    command              = 'mkdir -p ' + outputPath
+    os.system(command)
+
+    # output name
+    outputMergedFilename = filenameHeader + '_' + dataset + '_' + skim + '.root'
+
+    # input file pattern to create input list
+    inputFilenameRegExp  = filenameHeader + '_' + dataset + '_' + skim + '_????.root'
+    if (debug):
+        print " Input file data pattern: " + inputFilenameRegExp
+
+    command              = 'hadd -f7 ' + outputPath + outputMergedFilename \
+                           + ' ' + inputPath + '/' + dataset + '/' \
+                           + inputFilenameRegExp + ' >& ./merging.tmp'
+        
+    if (filesExist(inputPath+'/'+dataset,inputFilenameRegExp) == True):
+        if (os.path.exists(outputPath+outputMergedFilename)):
+            print " Warning: merged file already exists. It will be deleted.\n " + \
+                  outputPath+outputMergedFilename
+            os.system('rm ' + outputPath+outputMergedFilename)
         os.system(command)
-
-        outputMergedFilename = filenameHeader + '_' + dataset + '_' + skimNameList[n] + '.root'
-        inputFilenameRegExp  = filenameHeader + '_' + dataset + '_' + skimNameList[n] + '_????.root'
-#        command              = setupCmsswCommand + 'hadd -f ' + outputPath + outputMergedFilename \
-        command              = 'hadd -f7 ' + outputPath + outputMergedFilename \
-                               + ' ' + inputPath + '/' + versionList[n] + '/' + dataset + '/' \
-                               + inputFilenameRegExp + ' >& ./merging.tmp'
-#        command              = 'hadd -f ' + outputPath + \
-#                               outputMergedFilename + ' ' + inputPath + inputFilenameRegExp + \
-#                               ' >& ./merging.tmp'
-
-        if (filesExist(inputPath+'/'+versionList[n]+'/'+dataset,inputFilenameRegExp) == True):
-            if (os.path.exists(outputPath+outputMergedFilename)):
-                print " Warning: merged file already exists. It will be deleted.\n " + \
-                      outputPath+outputMergedFilename
-                os.system('rm ' + outputPath+outputMergedFilename)
-            #print ' merging: ' + command
-            os.system(command)
-            #print ''
-        else:
-            print " Warning: No files for dataset " + dataset + "\n at the location: " + inputPath \
-                  + '/' + versionList[n] + '/' + dataset + '/' + inputFilenameRegExp
-        #print ''
-        n += 1
+    else:
+        print " Warning: No files for dataset " + dataset + "\n at the location: " + inputPath \
+              + '/' + dataset + '/' + inputFilenameRegExp
 
 #===================================================================================================
 # Main Program
 #===================================================================================================
+debug           = False
 datasetListFile = ''
-inputPath = ''
-outputPath = ''
-filenameHeader = ''
-versionList = list()
+dataset         = ''
+skim            = ''
+inputPath       = ''
+outputPath      = ''
+filenameHeader  = ''
+versionList     = list()
 datasetNameList = list()
-skimNameList = list()
+skimNameList    = list()
 
 if len(sys.argv[1:]) < 1:
     print "Error: not enough parameters specified"
@@ -78,21 +85,25 @@ if len(sys.argv[1:]) < 1:
     sys.exit()
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hi:o:f:d:",
-                               ["help","InputPath=","OutputPath=",
-                                "FilenameHeader=","DatasetListFile="])
+    opts, args = getopt.getopt(sys.argv[1:], "hi:o:f:d:s:",
+                               ["InputPath=","OutputPath=","FilenameHeader=","Dataset=","Skim=",
+                                "help","debug"])
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in   ("-h", "--help"):
             usage()
             sys.exit()
+        if o in   ("--debug"):
+            debug = True
         elif o in ("-i", "--InputPath"):
             inputPath = a + "/"
         elif o in ("-o", "--OutputPath"):
             outputPath = a + "/"
         elif o in ("-f", "--FilenameHeader"):
             filenameHeader = a
-        elif o in ("-d", "--DatasetListFile"):
-            datasetListFile = a
+        elif o in ("-d", "--Dataset"):
+            dataset = a
+        elif o in ("-s", "--Skim"):
+            skim = a
         else:
             usage()
             sys.exit()
@@ -112,54 +123,13 @@ if (filenameHeader == ''):
     print "Error: No FilenameHeader specified."
     sys.exit()
 
-if (datasetListFile == ''):
-    print "Error: No dataset list file specified."
+if (dataset == ''):
+    print "Error: No Dataset specified."
     sys.exit()
 
-try:
-    inputFile = open(datasetListFile,"r")
-except IOError:
-    print "Error: The specified dataset list file " + datasetListFile + " could not be opened."
+if (skim == ''):
+    print "Error: No Skim variable specified."
     sys.exit()
 
-print datasetListFile
-#===================================================================================================
-# Read in list of datasets and skim names
-#===================================================================================================
-lineNumber = 1
-templine = inputFile.readline()
-while len(templine.split()) > 0:
-
-   # print "reading line"
-   # print templine
-
-    # ignore commented lines
-    if (templine[0] == '#'):
-        templine = inputFile.readline()
-        lineNumber += 1
-        continue;
-
-
-   # print "processing line"
-    # check what type of list was provided and assume 'noskim' as default
-    if (len(templine.split()) == 7) :
-        tempInputList = templine.split()
-        versionList    .append(tempInputList[0])
-        datasetNameList.append(tempInputList[1])
-        skimNameList   .append('noskim')
-        lineNumber += 1
-    else:
-        print " ERROR: incorrect format for cross section file. Check line %s" % lineNumber
-        sys.exit()
-
-    # read the next line
-    templine = inputFile.readline()
-
-inputFile.close()
-
-# Check the list of variables
-count = 0
-for l in datasetNameList:
-    count += 1
-
-MergeFilesets(versionList,datasetNameList,skimNameList,inputPath,outputPath,filenameHeader)
+# Here is where it all happens
+MergeFilesets(debug,dataset,skim,inputPath,outputPath,filenameHeader)

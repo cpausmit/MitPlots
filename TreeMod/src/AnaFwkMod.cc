@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.15 2011/03/11 04:03:54 bendavid Exp $
+// $Id: AnaFwkMod.cc,v 1.16 2011/07/22 18:21:02 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -98,19 +98,19 @@ void AnaFwkMod::CopyAllEventHeaders()
       return;
     }
     fAllHeadTree->GetEntry(fCurEnt++);
-    while(fCurEnt<=nemax && fAllEventHeader->Skimmed()) {
+    while (fCurEnt <= nemax && fAllEventHeader->Skimmed()) {
       EventHeader *eh = fAllHeaders.AddNew();
-      eh->SetRunNum(fAllEventHeader->RunNum());
-      eh->SetEvtNum(fAllEventHeader->EvtNum());
-      eh->SetLumiSec(fAllEventHeader->LumiSec());
+      eh->SetRunNum  (fAllEventHeader->RunNum());
+      eh->SetEvtNum  (fAllEventHeader->EvtNum());
+      eh->SetLumiSec (fAllEventHeader->LumiSec());
       eh->SetRunEntry(fAllEventHeader->RunEntry());
-      eh->SetSkimmed(fAllEventHeader->Skimmed());
+      eh->SetSkimmed (fAllEventHeader->Skimmed());
       fAllHeadTree->GetEntry(fCurEnt++);
     }
-    if ((fAllEventHeader->RunNum()!=curev->RunNum())   ||
-        (fAllEventHeader->EvtNum()!=curev->EvtNum())   ||
-        (fAllEventHeader->LumiSec()!=curev->LumiSec()) ||
-        (fAllEventHeader->RunEntry()!=curev->RunEntry())) {
+    if ((fAllEventHeader->RunNum()   != curev->RunNum())   ||
+        (fAllEventHeader->EvtNum()   != curev->EvtNum())   ||
+        (fAllEventHeader->LumiSec()  != curev->LumiSec())  ||
+        (fAllEventHeader->RunEntry() != curev->RunEntry())) {
       SendError(kWarning, "CopyAllEventHeaders", 
                 "Event header information for entry %d inconsistent: "
                 "%d==%d, %d==%d, %d==%d, %d==%d",
@@ -126,17 +126,17 @@ void AnaFwkMod::CopyAllEventHeaders()
     if (fCurEnt<nemax) { 
       Int_t testEnt = fCurEnt;
       fAllHeadTree->GetEntry(testEnt++);
-      while(testEnt<=nemax && fAllEventHeader->Skimmed())
+      while (testEnt<=nemax && fAllEventHeader->Skimmed())
         fAllHeadTree->GetEntry(testEnt++);
       if (testEnt==nemax+1) { // need to add remaining skimmed events
         fAllHeadTree->GetEntry(fCurEnt++);
         while(fCurEnt<=nemax) {
           EventHeader *eh = fAllHeaders.AddNew();
-          eh->SetRunNum(fAllEventHeader->RunNum());
-          eh->SetEvtNum(fAllEventHeader->EvtNum());
-          eh->SetLumiSec(fAllEventHeader->LumiSec());
+          eh->SetRunNum  (fAllEventHeader->RunNum());
+          eh->SetEvtNum  (fAllEventHeader->EvtNum());
+          eh->SetLumiSec (fAllEventHeader->LumiSec());
           eh->SetRunEntry(fAllEventHeader->RunEntry());
-          eh->SetSkimmed(fAllEventHeader->Skimmed());
+          eh->SetSkimmed (fAllEventHeader->Skimmed());
           fAllHeadTree->GetEntry(fCurEnt++);
         }
         if (fCurEnt != nemax+1) {

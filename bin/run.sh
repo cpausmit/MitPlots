@@ -64,7 +64,7 @@ mv       ${outputName}_${dataset}_${skim}_${fileset}*.root \
 
 echo " "; echo "${h}: Checking the work area after copy"; echo " "
 ls -lhrt ./
-echo " "; echo "${h}: Checking the remote area after copy (only $dataset file)"; echo " "
+echo " "; echo "${h}: Checking the remote area ($outputDir/$outputName/$book/$dataset) after copy (only $dataset file)"; echo " "
 ls -lhrt $outputDir/$outputName/$book/$dataset
 
 exit $status

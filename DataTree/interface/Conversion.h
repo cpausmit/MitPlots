@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Conversion.h,v 1.14 2009/03/18 15:25:48 loizides Exp $
+// $Id: Conversion.h,v 1.15 2009/03/18 15:44:32 loizides Exp $
 //
 // Conversion
 //
@@ -25,7 +25,7 @@ namespace mithep
       Conversion() : fDCotTheta(0), fEOverP(0), fPairMass(0) {}
       Conversion(Double_t x, Double_t y, Double_t z) : 
         fVertex(x,y,z), fDCotTheta(0), fEOverP(0), fPairMass(0) {}
-      Conversion(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) : 
+      Conversion(Double_t x, Double_t y, Double_t z, Double_t xErr, Double_t yErr, Double_t zErr) :
         fVertex(x,y,z,xErr,yErr,zErr) ,fDCotTheta(0), fEOverP(0), fPairMass(0) {}
       Conversion(const Vertex &v) : 
         fVertex(v) ,fDCotTheta(0), fEOverP(0), fPairMass(0) {}

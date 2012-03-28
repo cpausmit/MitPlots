@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayData.h,v 1.12 2009/04/08 10:24:22 loizides Exp $
+// $Id: DecayData.h,v 1.13 2009/07/13 11:00:27 loizides Exp $
 //
 // DecayData
 //
 // Additional information on a stable daughter which is specific to a particular decay.
 //
-// Authors: J.Bendavid
+// Authors: J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_DECAYDATA_H

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTau.h,v 1.2 2009/03/20 09:37:17 loizides Exp $
+// $Id: CaloTau.h,v 1.3 2009/04/08 10:01:50 loizides Exp $
 //
 // CaloTau
 //
@@ -68,6 +68,9 @@ namespace mithep
       const Jet             *SourceJet()                   const { return SourceCaloJet();         }
       Double_t               TracksMass()                  const { return fTracksMass;             }
 
+      // Some structural tools
+      void                   Mark()                        const;
+
     protected:
       Double_t               GetCharge()                   const;
 
@@ -88,6 +91,22 @@ namespace mithep
 
     ClassDef(CaloTau, 1) // CaloTau class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::CaloTau::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  LeadTrack()->Mark();
+  SourceCaloJet()->Mark();
+  for (UInt_t i=0; i<NSignalTracks(); i++)
+    fSignalTracks.At(i)->Mark();
+  for (UInt_t i=0; i<NIsoTracks(); i++)
+    fIsoTracks.At(i)->Mark();
+  for (UInt_t i=0; i<NNeutralBCs(); i++)
+    fNeutralBCs.At(i)->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

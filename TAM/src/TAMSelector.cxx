@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.19 2011/03/11 04:03:54 bendavid Exp $
+// $Id: TAMSelector.cxx,v 1.20 2011/03/21 15:58:37 paus Exp $
 //
 
 #include "MitAna/TAM/interface/TAMSelector.h"
@@ -149,6 +149,8 @@ TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
    // use TAM. Branch loading via TAM is handled through the BranchProxy class.
    // Optimized loading is used if the object table cleaning has been 
    // enabled in TAM.
+
+  //  printf("enter TAMSelector::BranchProxy::GetObjectWithID: %d\n",uid);
   
    if (fSel->GetObjTabClean()) {
       // can trust that object table was cleaned
@@ -160,13 +162,21 @@ TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
    TBranchRef *br = fSel->GetTree()->GetTree()->GetBranchRef();
    if (!br) 
       return pid->GetObjectWithID(uid);
-  
+
+   //printf(" br table loaded %p\n",(void*)br);
+   
    TRefTable *table = br->GetRefTable();
    if (!table) 
       return pid->GetObjectWithID(uid);
+
+   //printf(" ref table loaded %p\n",(void*)table);
+
    table->SetUID(uid,pid);
 
+
+   //printf("loading\n");
    Load(uid,pid,br,table);
+   //printf(" loaded %p\n",(void*)pid->GetObjectWithID(uid));
 
    return pid->GetObjectWithID(uid);
 }

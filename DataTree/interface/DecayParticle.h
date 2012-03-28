@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.35 2011/04/08 00:01:29 bendavid Exp $
+// $Id: DecayParticle.h,v 1.36 2012/03/22 15:48:59 bendavid Exp $
 //
 // DecayParticle
 //
@@ -103,6 +103,9 @@ namespace mithep
       void                      SetSharedLayers(const BitMask48 &layers) { fSharedLayers = layers; }
       using TObject::Error;
 
+      // Some structural tools
+      void                      Mark()                const;
+
     protected:
       void                      ClearPos()            const { fCachePosFlag.ClearCache(); }
       Double_t                  GetCharge()           const;
@@ -133,6 +136,17 @@ namespace mithep
       
       ClassDef(DecayParticle, 5) // Decay particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DecayParticle::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  PriVertex()->Mark();
+  for (UInt_t i=0; i<NDaughters(); i++)
+    DaughterDat(i)->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

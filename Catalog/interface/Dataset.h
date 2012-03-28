@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Dataset.h,v 1.5 2011/03/21 15:58:17 paus Exp $
+// $Id: Dataset.h,v 1.6 2011/03/29 01:35:07 paus Exp $
 //
 // Dataset
 //
@@ -21,8 +21,8 @@ namespace mithep
   class Dataset : public BaseMetaData
   {
     public:
-      Dataset(TRootIOCtor *rio) {}
-      Dataset(const char *name);
+      Dataset(TRootIOCtor *rio) { if (rio && kFALSE) printf(" "); }
+      Dataset(const char  *name);
       ~Dataset() {}
 
       void                         AddFileset(const FilesetMetaData *fs);
@@ -30,15 +30,15 @@ namespace mithep
       const FileMetaData          *File      (UInt_t i) const;
       TString                      FileUrl   (UInt_t i) const;
       const TString               *Name      ()         const { return &fName; }
-      const UInt_t                 NFiles    ()         const { return fNFiles; }
+      UInt_t                       NFiles    ()         const { return fNFiles; }
       void                         Print     ()         const;
 
       void                         OverrideLocation(const char *loc);
 
     private:
-      TString                      fName;               //name of dataset
-      std::vector<FilesetMetaData> fFilesetList;        //list of filesets contained in the dataset
-      UInt_t                       fNFiles;             //number of files in dataset
+      TString                      fName;               // name of dataset
+      std::vector<FilesetMetaData> fFilesetList;        // list of filesets contained in the dataset
+      UInt_t                       fNFiles;             // number of files in dataset
 
       ClassDef(Dataset, 1) // Dataset consisting of filesets.
   };

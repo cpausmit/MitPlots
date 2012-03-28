@@ -1,4 +1,4 @@
-// $Id: Selector.cc,v 1.13 2011/03/11 04:03:54 bendavid Exp $
+// $Id: Selector.cc,v 1.15 2011/03/21 15:58:37 paus Exp $
 
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -14,21 +14,21 @@ ClassImp(mithep::Selector)
 
 //--------------------------------------------------------------------------------------------------
 Selector::Selector() : 
-  fDoRunInfo(kTRUE),
-  fEvtHdrName(Names::gkEvtHeaderBrn),
-  fRunTreeName(Names::gkRunTreeName),
-  fRunInfoName(Names::gkRunInfoBrn),
-  fAllEvtHdrBrn(Names::gkAllEvtHeaderBrn),
-  fLATreeName(Names::gkLATreeName),
-  fLAHdrName(Names::gkLAHeaderBrn),
+  fDoRunInfo     (kTRUE),
+  fEvtHdrName    (Names::gkEvtHeaderBrn),
+  fRunTreeName   (Names::gkRunTreeName),
+  fRunInfoName   (Names::gkRunInfoBrn),
+  fAllEvtHdrBrn  (Names::gkAllEvtHeaderBrn),
+  fLATreeName    (Names::gkLATreeName),
+  fLAHdrName     (Names::gkLAHeaderBrn),
   fAllEvtTreeName(Names::gkAllEvtTreeName),
-  fRunTree(0),
-  fEventHeader(0),
-  fRunInfo(0),
-  fLATree(0),
-  fLAHeader(0),
-  fCurRunNum(UInt_t(-1)),
-  fTrash(0)
+  fRunTree       (0),
+  fEventHeader   (0),
+  fRunInfo       (0),
+  fLATree        (0),
+  fLAHeader      (0),
+  fCurRunNum     (UInt_t(-1)),
+  fTrash         (0)
 {
   // Constructor.
 

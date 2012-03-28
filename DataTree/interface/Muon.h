@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.44 2011/06/02 13:47:44 bendavid Exp $
+// $Id: Muon.h,v 1.45 2011/10/23 01:53:16 paus Exp $
 //
 // Muon
 //
@@ -15,7 +15,7 @@
 //  is subsequently returned. To consult more see:
 //  http://cmsdoc.cern.ch/cms/Physics/muon/MPOG/Notes/MuonReco.pdf
 //
-// Quality Varaibles for Selection
+// Quality Variables for Selection
 //  Isolation : decomposed to IsoRNNXXXXX 
 //    NN = 03,05 to denote R =0.3,0.5 in Isolation Cone
 //    XXXXX = SumPt - Sum of Pt of Tracks in Cone (using all Pt Tracks)
@@ -225,6 +225,9 @@ namespace mithep {
       void           SetTrackDist(Int_t iStation, Double_t iDist);
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
+      // Some structural tools
+      void           Mark()                          const;
+
     protected:
       Double_t       GetCharge()                     const;
       Double_t       GetMass()                       const { return 105.658369e-3;             }  
@@ -295,6 +298,20 @@ namespace mithep {
 }
 
 //--------------------------------------------------------------------------------------------------
+inline void mithep::Muon::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (HasTrackerTrk())
+    GlobalTrk()->Mark();
+  if (HasStandaloneTrk())
+    StandaloneTrk()->Mark();
+  if (HasTrackerTrk())
+    TrackerTrk()->Mark();
+}
+
+//--------------------------------------------------------------------------------------------------
 inline const mithep::Track *mithep::Muon::BestTrk() const
 {
   // Return "best" track.
@@ -320,7 +337,6 @@ inline Double_t mithep::Muon::GetCharge() const
     return mithep::ChargedParticle::GetCharge();
   else
     return fCharge;
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -332,13 +348,10 @@ inline void mithep::Muon::GetMom() const
   // If momentum is unfilled, fall back to old method of getting momentum from best track
   // (for backwards compatibility.)
   
-  if (fMom.Rho()>0.0) {
+  if (fMom.Rho()>0.0)
     fCachedMom.SetCoordinates(fMom.Rho(),fMom.Eta(),fMom.Phi(),GetMass());
-  }
-  else {
+  else
     mithep::ChargedParticle::GetMom();
-  }
-  
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -670,8 +683,3 @@ inline void mithep::Muon::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
   ClearMom();
 }
 #endif
-
-
-
-
-

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: JPTJet.h,v 1.6 2010/02/21 23:42:00 bendavid Exp $
+// $Id: JPTJet.h,v 1.1 2010/05/04 11:56:05 bendavid Exp $
 //
 // JPTJet
 //
@@ -79,6 +79,9 @@ namespace mithep
       void                  SetElectronMultiplicity(UInt_t n)            { fElectronMultiplicity = n;         }
       void                  SetOriginalJet(const Jet *j)                 { fOriginalJet = j;                  }
 
+      // Some structural tools
+      void                  Mark() const;
+
     protected:
       Double32_t            fZSPCor;               //[0,0,14]ZSP correction
       Double32_t            fChargedHadronEnergy;  //[0,0,14]charged hadron energy
@@ -103,5 +106,14 @@ namespace mithep
 
     ClassDef(JPTJet, 1) // JPTJet class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::JPTJet::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  OriginalJet()->Mark();
 }
 #endif

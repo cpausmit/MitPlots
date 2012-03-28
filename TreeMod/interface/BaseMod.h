@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.29 2009/11/24 14:27:32 loizides Exp $
+// $Id: BaseMod.h,v 1.30 2009/11/25 15:13:16 loizides Exp $
 //
 // BaseMod
 //
@@ -315,8 +315,8 @@ inline Bool_t mithep::BaseMod::LoadEventObject(const char *name, const T *&addr,
 template <class T>
 inline void mithep::BaseMod::ReqBranch(const char *bname, const T *&addr)
 {
-  // Requests that the branch with the specified name is made available
-  // during processing and that it be read in to the address specified.
+  // Requests that the branch with the specified name is made available during processing and that
+  // it be read in to the address specified.
 
   TAModule::ReqBranch(bname, const_cast<T*&>(addr));
 }

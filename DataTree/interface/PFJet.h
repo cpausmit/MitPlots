@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFJet.h,v 1.5 2009/09/09 03:38:26 bendavid Exp $
+// $Id: PFJet.h,v 1.6 2010/02/21 23:42:00 bendavid Exp $
 //
 // PFJet
 //
@@ -53,6 +53,9 @@ namespace mithep
       void                  SetNeutralHadronEnergy(Double_t e)    { fNeutralHadronEnergy = e;      }
       void                  SetNeutralMultiplicity(UInt_t n)      { fNeutralMultiplicity = n;      }
 
+      // Some structural tools
+      void                  Mark()                          const;
+
     protected:
       Double_t              GetCharge()                     const;
 
@@ -68,6 +71,16 @@ namespace mithep
 
     ClassDef(PFJet, 1) // PFJet class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::PFJet::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  for (UInt_t i=0; i<fPFCands.Entries(); i++)
+    fPFCands.At(i)->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

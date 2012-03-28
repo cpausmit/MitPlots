@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CacheFlag.h,v 1.3 2009/03/07 08:31:04 loizides Exp $
+// $Id: CacheFlag.h,v 1.1 2009/03/08 12:08:31 loizides Exp $
 //
 // CacheFlag
 //
-// Container for a transient Bool_t which is set by the reading streamer to kFALSE.
-// This meant to be used as a cache valid flag for transient cached quantities.
+// Container for a transient Bool_t which is set by the reading streamer to kFALSE.  This meant to
+// be used as a cache valid flag for transient cached quantities.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------

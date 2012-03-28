@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.9 2012/03/25 17:09:56 mhchan Exp $
+// $Id: PFTau.h,v 1.10 2012/03/26 15:26:35 mhchan Exp $
 //
 // PFTau
 //
 // This class holds information about reconstructed tau based on PFCandidates.
 //
-// Authors: J.Bendavid
+// Authors: J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_PFTAU_H
@@ -120,7 +120,7 @@ namespace mithep
       Double_t DiscriminationByMediumIsolation()       const {return fDiscriminationByMediumIsolation;}
       Double_t DiscriminationByTightIsolation()        const {return fDiscriminationByTightIsolation;}
       Double_t DiscriminationByVLooseCombinedIsolationDBSumPtCorr() const {return fDiscriminationByVLooseCombinedIsolationDBSumPtCorr;}
-      Double_t DiscriminationByLooseCombinedIsolationDBSumPtCorr() const {return fDiscriminationByLooseCombinedIsolationDBSumPtCorr;}
+      Double_t DiscriminationByLooseCombinedIsolationDBSumPtCorr()  const {return fDiscriminationByLooseCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByMediumCombinedIsolationDBSumPtCorr() const {return fDiscriminationByMediumCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByTightCombinedIsolationDBSumPtCorr() const {return fDiscriminationByTightCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByRawCombinedIsolationDBSumPtCorr() const {return fDiscriminationByRawCombinedIsolationDBSumPtCorr;}
@@ -174,60 +174,88 @@ namespace mithep
       void SetDiscriminationByTightCombinedIsolationDBSumPtCorr(Double_t x)  {fDiscriminationByTightCombinedIsolationDBSumPtCorr = x; }
       void SetDiscriminationByRawCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByRawCombinedIsolationDBSumPtCorr = x;}
 
-    protected:
-      Double_t           GetCharge()                    const;
-
-      Char_t             fCharge;                //stored charge
-      Double32_t         fLeadPFCandSignD0Sig;   //[0,0,14]signed lead track D0 significance
-      Double32_t         fHCalTotalEOverP;       //[0,0,14]total hcal e / lead ch had pfcand mom
-      Double32_t         fHCalMaxEOverP;         //[0,0,14]max hcal e / lead ch had pfcand. mom
-      Double32_t         fHCal3x3EOverP;         //[0,0,14]3x3 hcal e / lead ch hadron pfcand. mom
-      Double32_t         fIsoChargedHadronPtSum; //[0,0,14]sum pt of sel. ch had pfcands in iso cone
-      Double32_t         fIsoGammaEtSum;         //[0,0,14]sum et of sel. photon pfcands in iso cone
-      Double32_t         fMaxHCalPFClusterEt;    //[0,0,14]et of largest et hcal pfcluster
-      Double32_t         fEMFraction;            //[0,0,14]em energy fraction
-      Double32_t         fECalStripSumEOverP;    //[0,0,14]simple brem recovery e / lead ch had mom
-      Double32_t         fBremRecoveryEOverP;    //[0,0,14]brem recovery E / lead charged hadron P
-      Double32_t         fElectronPreIDOutput;   //[0,0,14]pfel pre id bdt output to be an el
-      Double32_t         fCaloCompatibility;     //[0,0,14]calo comp. for this tau to be a muon
-      Double32_t         fSegmentCompatibility;  //[0,0,14]segment comp. for this tau to be a muon
-      Bool_t             fElectronPreIDDecision; //pf electron pre id decision
-      Bool_t             fMuonDecision;          //pf muon id decision
-      Double32_t fDiscriminationAgainstElectron;    //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationAgainstMuon;        //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByLooseElectronRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByMediumElectronRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByTightElectronRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByMVAElectronRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByLooseMuonRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByMediumMuonRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByTightMuonRejection; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByDecayModeFinding; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByVLooseIsolation;  //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByLooseIsolation;   //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByMediumIsolation;  //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByTightIsolation;   //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByVLooseCombinedIsolationDBSumPtCorr; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByLooseCombinedIsolationDBSumPtCorr;  //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByMediumCombinedIsolationDBSumPtCorr; //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByTightCombinedIsolationDBSumPtCorr;  //[0,0,14]HPS discriminant
-      Double32_t fDiscriminationByRawCombinedIsolationDBSumPtCorr;    //[0,0,14]HPS discriminant
+      // Some structural tools
+      void                  Mark()                         const;
+			    
+    protected:		    
+      Double_t              GetCharge()                    const;
+      Char_t                fCharge;                //stored charge
+      Double32_t            fLeadPFCandSignD0Sig;   //[0,0,14]signed lead track D0 significance
+      Double32_t            fHCalTotalEOverP;       //[0,0,14]total hcal e / lead ch had pfcand mom
+      Double32_t            fHCalMaxEOverP;         //[0,0,14]max hcal e / lead ch had pfcand. mom
+      Double32_t            fHCal3x3EOverP;         //[0,0,14]3x3 hcal e / lead ch hadron pfcand. mom
+      Double32_t            fIsoChargedHadronPtSum; //[0,0,14]sum pt of sel. ch had pfcands in iso cone
+      Double32_t            fIsoGammaEtSum;         //[0,0,14]sum et of sel. photon pfcands in iso cone
+      Double32_t            fMaxHCalPFClusterEt;    //[0,0,14]et of largest et hcal pfcluster
+      Double32_t            fEMFraction;            //[0,0,14]em energy fraction
+      Double32_t            fECalStripSumEOverP;    //[0,0,14]simple brem recovery e / lead ch had mom
+      Double32_t            fBremRecoveryEOverP;    //[0,0,14]brem recovery E / lead charged hadron P
+      Double32_t            fElectronPreIDOutput;   //[0,0,14]pfel pre id bdt output to be an el
+      Double32_t            fCaloCompatibility;     //[0,0,14]calo comp. for this tau to be a muon
+      Double32_t            fSegmentCompatibility;  //[0,0,14]segment comp. for this tau to be a muon
+      Bool_t                fElectronPreIDDecision; //pf electron pre id decision
+      Bool_t                fMuonDecision;          //pf muon id decision
+      Double32_t            fDiscriminationAgainstElectron;    
+      Double32_t            fDiscriminationAgainstMuon;        
+      Double32_t            fDiscriminationByLooseElectronRejection; 
+      Double32_t            fDiscriminationByMediumElectronRejection; 
+      Double32_t            fDiscriminationByTightElectronRejection; 
+      Double32_t            fDiscriminationByMVAElectronRejection; 
+      Double32_t            fDiscriminationByLooseMuonRejection; 
+      Double32_t            fDiscriminationByMediumMuonRejection; 
+      Double32_t            fDiscriminationByTightMuonRejection; 
+      Double32_t            fDiscriminationByDecayModeFinding; 
+      Double32_t            fDiscriminationByVLooseIsolation;  
+      Double32_t            fDiscriminationByLooseIsolation;   
+      Double32_t            fDiscriminationByMediumIsolation;  
+      Double32_t            fDiscriminationByTightIsolation;   
+      Double32_t            fDiscriminationByVLooseCombinedIsolationDBSumPtCorr; 
+      Double32_t            fDiscriminationByLooseCombinedIsolationDBSumPtCorr;  
+      Double32_t            fDiscriminationByMediumCombinedIsolationDBSumPtCorr; 
+      Double32_t            fDiscriminationByTightCombinedIsolationDBSumPtCorr;  
+      Double32_t            fDiscriminationByRawCombinedIsolationDBSumPtCorr;
       
-      Ref<PFCandidate>   fLeadPFCand;            //leading signal pf candidate (charged or neutral)
-      Ref<PFCandidate>   fLeadChargedHadPFCand;  //leading charged hadron signal pf candidate
-      Ref<PFCandidate>   fLeadNeutralPFCand;     //leading neutral signal pf candidate
-      Ref<PFJet>         fPFJet;                 //original reconstructed pf jet
-      Ref<Track>         fElectronTrack;         //track corresponding to possible matching el cand.
-      RefArray<PFCandidate> fSignalPFCands;      //selected pf candidates in signal cone
-      RefArray<PFCandidate> fSignalPFChargedHadrCands; // signal pf charged hadron candidates
-      RefArray<PFCandidate> fSignalPFNeutrHadrCands; // signal pf neutral hadron candidates
-      RefArray<PFCandidate> fSignalPFGammaCands; // signal pf gamma candidates
-      RefArray<PFCandidate> fIsoPFCands;         //selected pf candidates in isolation annulus
-      
-
+      Ref<PFCandidate>      fLeadPFCand;               //leading sig pf cand (charged or neutral)
+      Ref<PFCandidate>      fLeadChargedHadPFCand;     //leading charged hadron signal pf cand
+      Ref<PFCandidate>      fLeadNeutralPFCand;        //leading neutral signal pf cand
+      Ref<PFJet>            fPFJet;                    //original reconstructed pf jet
+      Ref<Track>            fElectronTrack;            //track corresp. to pot. matching el cand
+      RefArray<PFCandidate> fSignalPFCands;            //selected pf candidates in signal cone
+      RefArray<PFCandidate> fSignalPFChargedHadrCands; //signal pf charged hadron candidates
+      RefArray<PFCandidate> fSignalPFNeutrHadrCands;   //signal pf neutral hadron candidates
+      RefArray<PFCandidate> fSignalPFGammaCands;       //signal pf gamma candidates
+      RefArray<PFCandidate> fIsoPFCands;               //selected pf candidates in isolation annulus
 
     ClassDef(PFTau, 5) // PFTau class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::PFTau::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (fLeadPFCand          .IsValid())
+    fLeadPFCand          .Obj()->Mark();
+  if (fLeadChargedHadPFCand.IsValid())
+    fLeadChargedHadPFCand.Obj()->Mark();
+  if (fLeadNeutralPFCand   .IsValid())
+    fLeadNeutralPFCand   .Obj()->Mark();
+  if (fPFJet               .IsValid())
+    fPFJet               .Obj()->Mark();
+  if (fElectronTrack       .IsValid())
+    fElectronTrack       .Obj()->Mark();
+  for (UInt_t i=0; i<fSignalPFCands           .Entries(); i++)
+    fSignalPFCands           .At(i)->Mark();
+  for (UInt_t i=0; i<fSignalPFChargedHadrCands.Entries(); i++)
+    fSignalPFChargedHadrCands.At(i)->Mark();
+  for (UInt_t i=0; i<fSignalPFNeutrHadrCands  .Entries(); i++)
+    fSignalPFNeutrHadrCands  .At(i)->Mark();
+  for (UInt_t i=0; i<fSignalPFGammaCands      .Entries(); i++)
+    fSignalPFGammaCands      .At(i)->Mark();
+  for (UInt_t i=0; i<fIsoPFCands              .Entries(); i++)
+    fIsoPFCands              .At(i)->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

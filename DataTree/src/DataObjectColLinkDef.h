@@ -1,4 +1,4 @@
-// $Id: DataObjectColLinkDef.h,v 1.1 2009/06/15 15:00:14 loizides Exp $
+// $Id: DataObjectColLinkDef.h,v 1.2 2011/03/11 04:03:00 bendavid Exp $
 
 #ifndef MITANA_DATATREE_DATAOBJECTCOLLINKDEF_H
 #define MITANA_DATATREE_DATAOBJECTCOLLINKDEF_H
@@ -21,6 +21,13 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+#pragma read                                               \
+     sourceClass="mithep::DataObject"                      \
+     version="[-2]"                                        \
+     source="dummysource"                                  \
+     targetClass="mithep::DataObject"                      \
+     target="fMarker"                                      \
+  code="{ fMarker = 0; }"   \
 
 #pragma link C++ typedef mithep::DataObjectCol;
 #pragma link C++ typedef mithep::DataObjectArr;

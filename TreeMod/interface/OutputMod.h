@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: OutputMod.h,v 1.11 2009/07/17 19:18:34 loizides Exp $
+// $Id: OutputMod.h,v 1.12 2009/07/17 20:47:42 loizides Exp $
 //
 // OutputMod
 //
@@ -13,6 +13,7 @@
 
 #include "MitAna/TreeMod/interface/BaseMod.h"
 #include "MitAna/DataTree/interface/EventHeaderFwd.h"
+#include "MitAna/DataTree/interface/PhotonFwd.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -109,6 +110,11 @@ namespace mithep
       Long64_t                    fLastSeenEvt;     //!entry of last seen event
       Long64_t                    fCounter;         //!count number of events
 
+      // --- hacking it
+      const PhotonCol            *fGoodPhotons;     //! hacking it
+      // ---
+
+
       friend class Selector;
 
     ClassDef(OutputMod, 1) // Output module
@@ -118,8 +124,7 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 inline void mithep::OutputMod::AddNewBranch(const char *bname)
 { 
-  // Add new branch with given name. The content is taken 
-  // from the public object list.
+  // Add new branch with given name. The content is taken from the public object list.
 
   fAddList.push_back(std::string(bname)); 
 }

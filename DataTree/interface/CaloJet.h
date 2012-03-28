@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloJet.h,v 1.5 2009/09/09 03:38:26 bendavid Exp $
+// $Id: CaloJet.h,v 1.6 2010/03/17 15:32:59 bendavid Exp $
 //
 // CaloJet
 //
 // This class holds information about reconstructed jet based on calorimeter towers.
 //
-// Authors: S.Xie, C.Loizides, J.Bendavid
+// Authors: S.Xie, C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_CALOJET_H
@@ -101,7 +101,8 @@ namespace mithep
       UInt_t              NHits3RPC()                   const { return fNHits3RPC;               }
       UInt_t              NHitsRPC()                    const { return fNHitsRPC;                }
 
-
+      // Some structural tools
+      void                Mark()                        const;
 
     protected:
 
@@ -138,4 +139,15 @@ namespace mithep
     ClassDef(CaloJet, 2) // CaloJet class
   };
 }
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::CaloJet::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  for (UInt_t i=0; i<NTowers(); i++)
+    Tower(i)->Mark();
+}
+
 #endif

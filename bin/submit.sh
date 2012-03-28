@@ -49,14 +49,38 @@ fi
 
 for fileset in `cat $filesets | cut -d' ' -f1 `
 do
-  # check if the output already exists
+  # check if the output already exists and whether it is complete
   rFile="$outputDir/$outputName/$book/$dataset"
   rFile=`ls $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root 2> /dev/null`
 
+  process=false
   if [ -f "$rFile" ]
   then
      echo "  File: $rFile exists already."
+     dir=`dirname $rFile`
+     file=`basename $rFile`
+     # check whether the output file shows the expected number of events
+     if [ "$noStage" == "1" ] 
+     then
+       root -l -b -q $MIT_ANA_DIR/macros/runSimpleFileCataloger.C+\(\"$dir\",\"$file\"\) >& /tmp/tmp.$$
+       nEventsProcessed=`grep XX-CATALOG-XX /tmp/tmp.$$ | cut -d' ' -f3`
+       nEventsInFileset=`grep ^$fileset     $catalogDir/$book/$dataset/Filesets | tr -s ' ' | cut -d' ' -f3`
+       if [ "$nEventsProcessed" != "$nEventsInFileset" ]
+       then
+         echo " "
+         echo " ERROR - "
+         echo "   Processed  $nEventsProcessed  of  $nEventsInFileset  total"
+         echo " "
+         process=true
+       fi
+     fi
   else
+    process=true
+  fi
+
+  if [ "$process" == "true" ]
+  then
+
     logFile=`echo $book/$dataset/$fileset | tr '/' '+'`
     logFile=/tmp/$USER/$logFile
     mkdir -p /tmp/$USER
@@ -65,7 +89,7 @@ do
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Requirements            = ((Arch == "X86_64" || Arch == "INTEL") && (OpSys == "LINUX") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
+Requirements            = ((Arch == "X86_64") && (OpSys == "LINUX") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
@@ -84,6 +108,7 @@ EOF
     condor_submit submit.cmd >& /dev/null;
     rm submit.cmd
   fi
+
 done
 
 exit 0

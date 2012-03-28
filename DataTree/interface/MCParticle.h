@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.22 2009/06/02 11:12:10 bendavid Exp $
+// $Id: MCParticle.h,v 1.23 2009/09/25 08:38:18 loizides Exp $
 //
 // MCParticle
 //
 // Stores MC information for both generated and simulated particles.
 //
-// Authors: C.Loizides, J.Bendavid
+// Authors: C.Loizides, J.Bendavid, C.Paus
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_MCPARTICLE_H
@@ -80,6 +80,9 @@ namespace mithep
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
       
+      // Some structural tools
+      void                Mark()                   const;
+
     protected:
       Double_t            GetCharge()              const;
       void                GetMom()                 const;
@@ -94,6 +97,16 @@ namespace mithep
 
     ClassDef(MCParticle,1) // Generated particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::MCParticle::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (fMother.IsValid())
+    fMother.Obj()->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

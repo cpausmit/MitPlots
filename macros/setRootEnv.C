@@ -1,5 +1,4 @@
-// $Id: setRootEnv.C,v 1.6 2009/06/11 19:37:00 loizides Exp $
-
+// $Id: setRootEnv.C,v 1.7 2010/03/12 13:44:53 bendavid Exp $
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
 #include <TString.h>
@@ -14,10 +13,11 @@
 #include <TError.h>
 #endif
 
-void setIncludes();
+void sayHello     ();
+void setIncludes  ();
 void loadLibraries(const char *libpattern="libMitAna*.so");
-void loadmylib(const char *name);
-void loadmylib(const char *pkgname, const char *subpkgname);
+void loadmylib    (const char *name);
+void loadmylib    (const char *pkgname, const char *subpkgname);
 
 //__________________________________________________________________________________________________
 
@@ -35,10 +35,16 @@ void setRootEnv()
   setIncludes();
   loadLibraries();
   loadmylib("libMitCommonMathTools.so");
+}
 
+void sayHello()
+{
   // have a friendly welcome message
   if (gClassTable->GetID("mithep::Particle") >= 0) {
-    ::Info("setRootEnv", "Welcome to MITROOT!\n");
+    ::Info("setRootEnv", "Welcome to MITROOT! Loaded default libraries.\n");
+  }
+  else {
+    ::Info("setRootEnv", "Ooops, at least one essential library did not load....\n");
   }
 }
 
@@ -54,7 +60,7 @@ void setIncludes()
 
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/");
   gSystem->AddIncludePath("-I$CMSSW_RELEASE_BASE/src/");
-  gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/TreeMod/inc");
+  gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/TreeMod/interface");
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/MitAna/macros");
   gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_BASE"))+"/src/");
   gInterpreter->AddIncludePath(TString(gSystem->Getenv("CMSSW_RELEASE_BASE"))+"/src/");

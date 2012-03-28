@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.52 2010/06/25 15:11:34 bendavid Exp $
+// $Id: Track.h,v 1.53 2010/07/01 15:05:15 bendavid Exp $
 //
 // Track
 //
@@ -269,6 +269,9 @@ namespace mithep
       static const BitMask48      StereoLayers();
       static const BitMask48      PixelLayers();
 
+      // Some structural tools
+      void                 Mark()        const;
+
     protected:
       void                 ClearMom()    const { fCacheMomFlag.ClearCache(); }
       void                 GetMom()      const;
@@ -307,6 +310,18 @@ namespace mithep
 	      
     ClassDef(Track, 6) // Track class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Track::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (fSuperClusterRef.IsValid())
+    fSuperClusterRef.Obj()->Mark();
+  if (fMCParticleRef.IsValid())
+    fMCParticleRef.Obj()->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

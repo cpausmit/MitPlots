@@ -1,4 +1,4 @@
-// $Id: HLTMod.cc,v 1.21 2011/05/15 20:40:30 bendavid Exp $
+// $Id: HLTMod.cc,v 1.22 2011/11/18 00:02:02 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
 #include <TFile.h>
@@ -49,7 +49,8 @@ void HLTMod::AddTrigger(const char *expr, UInt_t firstRun, UInt_t lastRun)
   // "A", "!A", "A&B", "A&!B" or "A&B&C"  
 
   string tname(expr);
-  std::pair<std::string,std::pair<UInt_t,UInt_t> > element(tname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+  std::pair<std::string,std::pair<UInt_t,UInt_t> >
+    element(tname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
   fTrigNames.push_back(element);
 }
 
@@ -73,9 +74,9 @@ void HLTMod::AddTrigObjs(UInt_t tid)
       TIter iter(list->MakeIterator());
       const TriggerObject *to = dynamic_cast<const TriggerObject*>(iter.Next());
       while (to) {
-        if ( (fObjMode == kAll) ||
-             ((fObjMode==kHlt) && (to->IsHLT())) ||
-             ((fObjMode==kL1) && (to->IsL1())) )
+        if ( (fObjMode == kAll)  ||
+             ((fObjMode == kHlt) && (to->IsHLT())) ||
+             ((fObjMode == kL1)  && (to->IsL1())) )
           fMyTrgObjs->Add(to);    
         to = dynamic_cast<const TriggerObject*>(iter.Next());
       }
@@ -94,6 +95,7 @@ void HLTMod::BeginRun()
 
   if (fPrintTable) {
     Info("BeginRun", "Get trigger table for run %d", GetEventHeader()->RunNum());
+    printf(" Trigger table for run %d:\n",GetEventHeader()->RunNum());
     fTriggers->Print();
   }
   

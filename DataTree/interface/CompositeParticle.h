@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.21 2009/06/11 04:44:46 loizides Exp $
+// $Id: CompositeParticle.h,v 1.22 2009/07/13 11:00:18 loizides Exp $
 //
 // CompositeParticle
 //
 // A composite particle class that holds other (daughter) particles.
 //
-// Authors: J.Bendavid, C.Loizides
+// Authors: J.Bendavid, C.Loizides, C.Paus
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_COMPOSITEPARTICLE_H
@@ -21,16 +21,20 @@ namespace mithep
     public:
       CompositeParticle() {}
     
-      void                      AddDaughter(const Particle *p)    
+      void                      AddDaughter      (const Particle *p)
                                   { fDaughters.Add(p); ClearMom(); ClearCharge(); }
-      void                      Clear(Option_t *opt="")           
+      void                      Clear            (Option_t *opt="")
                                   { fDaughters.Clear(opt); ClearMom(); ClearCharge(); }
-      const Particle           *Daughter(UInt_t i)    const       { return fDaughters.At(i);     }
-      UInt_t                    NDaughters()          const       { return fDaughters.Entries(); }
-      Bool_t			HasDaughter(const Particle *p)                const;
+      const Particle           *Daughter         (UInt_t i) const  { return fDaughters.At(i); }
+      UInt_t                    NDaughters       ()         const  { return fDaughters.Entries(); }
+      Bool_t			HasDaughter      (const Particle *p)          const;
       Bool_t			HasCommonDaughter(const CompositeParticle *p) const;
-      Bool_t			HasSameDaughters(const CompositeParticle *p)  const;
-      EObjType                  ObjType()             const       { return kCompositeParticle;   }
+      Bool_t			HasSameDaughters (const CompositeParticle *p) const;
+      EObjType                  ObjType          ()                           const
+                                  { return kCompositeParticle;   }
+
+      // Some structural tools
+      void                      Mark()                const;
 
     protected:
       Double_t		        GetCharge()           const;
@@ -40,6 +44,16 @@ namespace mithep
       
     ClassDef(CompositeParticle, 1) // Composite particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::CompositeParticle::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  for (UInt_t i=0; i<NDaughters(); i++)
+    fDaughters.At(i)->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

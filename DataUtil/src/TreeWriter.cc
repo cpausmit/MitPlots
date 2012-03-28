@@ -1,4 +1,4 @@
-// $Id: TreeWriter.cc,v 1.16 2009/03/23 22:15:11 loizides Exp $
+// $Id: TreeWriter.cc,v 1.17 2009/07/13 20:04:13 loizides Exp $
 
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
@@ -48,8 +48,8 @@ TreeWriter::~TreeWriter()
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj, Int_t bsize, Int_t level)
 {
-  // Add branch with name "name" into tree with name "tname" and set its address 
-  // to object pointer for class name "cname" using a given buffer size and splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address to object pointer
+  // for class name "cname" using a given buffer size and splitlevel.
 
   MyTree  *t = AddOrGetMyTree(GetName());
   TBranch *b = t->Bronch(name, cname, obj, bsize, level);
@@ -59,8 +59,8 @@ void TreeWriter::AddBranch(const char *name, const char *cname,
 //--------------------------------------------------------------------------------------------------
 void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level)
 {
-  // Add branch with name "name" into tree with name "tname" and set its address 
-  // to object pointer using a given buffer size and splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address to object pointer
+  // using a given buffer size and splitlevel.
 
   AddBranch(name, CName(obj), obj, bsize, level);
 }
@@ -69,8 +69,8 @@ void TreeWriter::AddBranch(const char *name, void *obj, Int_t bsize, Int_t level
 void TreeWriter::AddBranch(const char *name, const char *cname, 
                            void *obj, Int_t bsize)
 {
-  // Add branch with name "name" into tree with name "tname" and set its address 
-  // to object pointer for class name "cname" using a given buffer size and default splitlevel.
+  // Add branch with name "name" into tree with name "tname" and set its address to object pointer
+  // for class name "cname" using a given buffer size and default splitlevel.
 
   MyTree  *t = AddOrGetMyTree(GetName());
   TBranch *b = t->Bronch(name, cname, obj, bsize, fDefSL);
@@ -507,8 +507,7 @@ void TreeWriter::SetMaxSize(Long64_t s)
 //--------------------------------------------------------------------------------------------------
 void TreeWriter::StoreObject(const TObject *obj)
 {
-  // Store object next to tree in file. Used to store the
-  // settings of how the tree was created.
+  // Store object next to tree in file. Used to store the settings of how the tree was created.
 
   if (!fIsInit) {
     Fatal("StoreObject", "Tree is not created, call create first!");

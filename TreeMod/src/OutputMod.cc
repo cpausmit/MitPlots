@@ -1,4 +1,4 @@
-// $Id: OutputMod.cc,v 1.18 2009/12/14 20:19:15 loizides Exp $
+// $Id: OutputMod.cc,v 1.19 2011/03/11 04:03:54 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/OutputMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
@@ -9,6 +9,8 @@
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include "MitAna/TreeMod/interface/TreeBranchLoader.h"
 
+#include "MitAna/DataTree/interface/PhotonCol.h"
+
 using namespace mithep;
 using namespace std;
 
@@ -16,40 +18,41 @@ ClassImp(mithep::OutputMod)
 
 //--------------------------------------------------------------------------------------------------
 OutputMod::OutputMod(const char *name, const char *title) : 
-  BaseMod(name,title),
-  fTreeName(Names::gkEvtTreeName),
-  fPrefix("skimtest"),
-  fPathName("."),
-  fMaxSize(1024),
-  fCompLevel(9),
-  fSplitLevel(99),
-  fBranchSize(16*1024),
-  fDoReset(kFALSE),
-  fCheckBrDep(kTRUE),
-  fUseBrDep(kTRUE),
-  fCheckTamBr(kTRUE),
-  fKeepTamBr(kFALSE),
-  fTreeWriter(0),
-  fEventHeader(0),
+  BaseMod        (name,title),
+  fTreeName      (Names::gkEvtTreeName),
+  fPrefix        ("skimtest"),
+  fPathName      ("."),
+  fMaxSize       (1024),
+  fCompLevel     (9),
+  fSplitLevel    (99),
+  fBranchSize    (16*1024),
+  fDoReset       (kFALSE),
+  fCheckBrDep    (kTRUE),
+  fUseBrDep      (kTRUE),
+  fCheckTamBr    (kTRUE),
+  fKeepTamBr     (kFALSE),
+  fTreeWriter    (0),
+  fEventHeader   (0),
   fAllEventHeader(0),
-  fRunInfo(0),
-  fLaHeader(0),
-  fBranchTable(0),
-  fBranches(0),
-  fNBranchesMax(1024),
-  fRunTree(0),
-  fLATree(0),
-  fAllTree(0),
-  fSkimmedIn(0),
-  fHltTree(0),
-  fHLTTab(new vector<string>),
-  fHLTLab(new vector<string>),
-  fRunEntries(0),
-  fHltEntries(0),
-  fFileNum(-1),
+  fRunInfo       (0),
+  fLaHeader      (0),
+  fBranchTable   (0),
+  fBranches      (0),
+  fNBranchesMax  (1024),
+  fRunTree       (0),
+  fLATree        (0),
+  fAllTree       (0),
+  fSkimmedIn     (0),
+  fHltTree       (0),
+  fHLTTab        (new vector<string>),
+  fHLTLab        (new vector<string>),
+  fRunEntries    (0),
+  fHltEntries    (0),
+  fFileNum       (-1),
   fLastWrittenEvt(-1),
-  fLastSeenEvt(-1),
-  fCounter(0)
+  fLastSeenEvt   (-1),
+  fCounter       (0),
+  fGoodPhotons   (0)
 {
   // Constructor.
 }
@@ -97,8 +100,8 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 
   // decide whether given branch name should be kept or dropped
   TString brname(bname);
-  Bool_t decision       = kFALSE;
-  Bool_t decision_found = kFALSE;
+  Bool_t  decision       = kFALSE;
+  Bool_t  decision_found = kFALSE;
 
   for (UInt_t i=0; i<fCmdList.size(); ++i) {
     TRegexp &re(fCmdReList.at(i));
@@ -125,7 +128,7 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
   Info("CheckAndAddBranch", 
        "Kept branch '%s' and class '%s'", bname, cname);
 
-  fBrNameList.push_back(string(bname));
+  fBrNameList .push_back(string(bname));
   fBrClassList.push_back(string(cname));
 }
 
@@ -189,7 +192,7 @@ Bool_t OutputMod::CheckAndResolveBranchDep()
             Info("CheckAndResolveBranchDep", 
                  "Adding branch '%s' to resolve dependency for branch '%s'", 
                  n->GetName(), brname.Data());
-            fBrNameList.push_back(string(n->GetName()));
+            fBrNameList .push_back(string(n->GetName()));
             fBrClassList.push_back(br->GetClassName());
             sht.Add(new TObjString(n->GetName()));
             fBranchTable->Add(new BranchName(brname,n->GetName()));
@@ -244,7 +247,7 @@ void OutputMod::CheckAndResolveTAMDep(Bool_t solve)
       Info("CheckAndResolveTAMDep", 
            "Resolving dependency for loaded branch '%s' and class '%s'", bname,cname);
 
-      fBrNameList.push_back(string(bname));
+      fBrNameList. push_back(string(bname));
       fBrClassList.push_back(string(cname));
       fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
 
@@ -274,15 +277,15 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
 
   if (fSkimmedIn) { // copy alread skimmed headers if any there
     const UInt_t n = fSkimmedIn->GetEntries();
-    for(UInt_t i=0; i<n; ++i) {
-      const EventHeader *eh = fSkimmedIn->At(i);
+    for (UInt_t i=0; i<n; ++i) {
+      const EventHeader  *eh = fSkimmedIn->At(i);
       *fAllEventHeader = *eh;
       fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
       fAllTree->Fill();
     }
   }
 
-  const EventHeader *eh = GetEventHeader();
+  const EventHeader  *eh = GetEventHeader();
   *fAllEventHeader = *eh;
   if (isremoved) {
     fAllEventHeader->SetRunEntry(-1);
@@ -416,9 +419,8 @@ void OutputMod::LoadBranches()
 {
   // Loop over requested branches and load them.
 
-  for (UInt_t i=0; i<GetNBranches(); ++i) {
+  for (UInt_t i=0; i<GetNBranches(); ++i)
     LoadBranch(fBrNameList.at(i).c_str());
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -487,8 +489,8 @@ void OutputMod::Process()
   // look-up if entry is in map
   map<UInt_t,Int_t>::iterator riter = fRunmap.find(runnum);
   if (riter != fRunmap.end()) { // found existing run info
-    Int_t runentry = riter->second;
-    fEventHeader->SetRunEntry(runentry);
+    Int_t runEntry = riter->second;
+    fEventHeader->SetRunEntry(runEntry);
 
     IncNEventsProcessed();
     fTreeWriter->EndEvent(fDoReset);
@@ -496,18 +498,18 @@ void OutputMod::Process()
   }
 
   // fill new run info
-  Int_t runentry = fRunEntries;
+  Int_t runEntry = fRunEntries;
   ++fRunEntries;
-  fEventHeader->SetRunEntry(runentry);
-  fRunmap.insert(pair<UInt_t,Int_t>(runnum,runentry));
+  fEventHeader->SetRunEntry(runEntry);
+  fRunmap.insert(pair<UInt_t,Int_t>(runnum,runEntry));
   fRunInfo->SetRunNum(runnum);
 
-  Int_t hltentry = fHltEntries;
+  Int_t hltEntry = fHltEntries;
   FillHltInfo();
-  if (hltentry < fHltEntries)
-    fRunInfo->SetHltEntry(hltentry);
+  if (hltEntry < fHltEntries)
+    fRunInfo->SetHltEntry(hltEntry);
   else
-    fRunInfo->SetHltEntry(hltentry-1);
+    fRunInfo->SetHltEntry(hltEntry-1);
   
   fRunTree->Fill();
  
@@ -582,15 +584,15 @@ void OutputMod::SlaveBegin()
   // Setup the tree writer and create branches that can already be created at this point.
 
   // setup tree writer
-  fTreeWriter = new TreeWriter(fTreeName, kFALSE);
-  fTreeWriter->SetBaseURL(fPathName);
-  fTreeWriter->SetPrefix(fPrefix);
-  fTreeWriter->SetMaxSize(fMaxSize*1024*1024);
+  fTreeWriter = new TreeWriter (fTreeName, kFALSE);
+  fTreeWriter->SetBaseURL      (fPathName);
+  fTreeWriter->SetPrefix       (fPrefix);
+  fTreeWriter->SetMaxSize      (fMaxSize*1024*1024);
   fTreeWriter->SetCompressLevel(fCompLevel);
-  fTreeWriter->SetDefaultSL(fSplitLevel);
+  fTreeWriter->SetDefaultSL    (fSplitLevel);
   fTreeWriter->SetDefaultBrSize(fBranchSize);
-  fTreeWriter->AddTree(fTreeName);
-  fTreeWriter->DoBranchRef(fTreeName);
+  fTreeWriter->AddTree         (fTreeName);
+  fTreeWriter->DoBranchRef     (fTreeName);
 
   // deal with my own tree objects
   fEventHeader = new EventHeader;
@@ -602,11 +604,13 @@ void OutputMod::SlaveBegin()
   tname = GetSel()->GetRunTreeName();
   fTreeWriter->AddBranchToTree(tname, GetSel()->GetRunInfoName(), &fRunInfo);
   fTreeWriter->SetAutoFill(tname, 0);
+  // the run tree first
   fRunTree = fTreeWriter->GetTree(tname);
   fLaHeader = new LAHeader;
   tname = GetSel()->GetLATreeName();
   fTreeWriter->AddBranchToTree(tname, GetSel()->GetLAHdrName(), &fLaHeader);
   fTreeWriter->SetAutoFill(tname, 0);
+  // the Look Ahead tree next
   fLATree = fTreeWriter->GetTree(tname);
   fAllEventHeader = new EventHeader;
   tname = GetSel()->GetAllEvtTreeName();
@@ -626,7 +630,7 @@ void OutputMod::SlaveBegin()
     TObject *obj = FindPublicObj(objname);
     if (obj) {
       fBranches[fNBranchesMax+i] = obj;
-      fTreeWriter->AddBranch(objname, &fBranches[fNBranchesMax+i]);
+      fTreeWriter->AddBranch(objname, &fBranches[fNBranchesMax+i], 64*1024, 0);
       Info("SlaveBegin", "Adding additional branch named '%s' as requested", objname.Data());
     } else {
       SendError(kAbortAnalysis, "SlaveBegin", 

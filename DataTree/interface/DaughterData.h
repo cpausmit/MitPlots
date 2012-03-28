@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.7 2009/02/18 15:38:54 loizides Exp $
+// $Id: DaughterData.h,v 1.8 2009/07/13 11:00:25 loizides Exp $
 //
 // DaughterData
 //
@@ -28,10 +28,22 @@ namespace mithep
       EObjType             ObjType()                      const { return kDaughterData;           }
       const Particle      *Original()                     const { return fOriginal.Obj();         }
 
+      // Some structural tools
+      void                 Mark()                         const;
+
     protected:
       Ref<Particle>        fOriginal; //reference to original particle
 
     ClassDef(DaughterData, 1) // Daughter data class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::DaughterData::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  Original()->Mark();
 }
 #endif

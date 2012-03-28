@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.7 2010/03/30 05:32:25 bendavid Exp $
+// $Id: PFCandidate.h,v 1.8 2012/03/11 22:32:00 pharris Exp $
 //
 // PFCandidate
 //
@@ -131,6 +131,9 @@ namespace mithep
       const Track        *BestTrk()                const;
       const Track        *Trk()                    const    { return BestTrk();                   }
       
+      // Some structural tools
+      void                Mark()                   const;
+
     protected:
       Double_t            GetCharge()              const;
       void                GetMom()                 const;
@@ -163,6 +166,24 @@ namespace mithep
 
     ClassDef(PFCandidate,1) // Particle-flow candidate class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::PFCandidate::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (fMother.IsValid())
+    fMother.Obj()->Mark();
+  if (fTrackerTrack.IsValid())
+    fTrackerTrack.Obj()->Mark();
+  if (fGsfTrack.IsValid())
+    fGsfTrack.Obj()->Mark();
+  if (fMuon.IsValid())
+    fMuon.Obj()->Mark();
+  if (fConversion.IsValid())
+    fConversion.Obj()->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.47 2011/05/20 16:51:39 bendavid Exp $
+// $Id: Electron.h,v 1.48 2011/10/23 01:53:16 paus Exp $
 //
 // Electron
 //
@@ -285,6 +285,9 @@ namespace mithep
       const Track         *Trk()                   const { return BestTrk(); }
       const Track         *ConvPartnerTrk()        const { return fConvPartnerTrackRef.Obj(); }
 
+      // Some structural tools
+      void                 Mark()                  const;
+
     protected:
       Double_t             GetCharge()             const;
       Double_t             GetMass()               const { return 0.51099892e-3; }
@@ -394,6 +397,24 @@ namespace mithep
   };
 }
 
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Electron::Mark() const
+{
+  // mark myself
+  mithep::DataObject::Mark();
+  // mark my dependencies if they are there
+  if (HasSuperCluster())
+    SCluster()->Mark();
+  if (HasGsfTrk())
+    GsfTrk()->Mark();
+  if (HasTrackerTrk())
+    TrackerTrk()->Mark();
+  if (fConvPartnerTrackRef.IsValid())
+    ConvPartnerTrk()->Mark();
+  for (UInt_t i=0; i<NAmbiguousGsfTracks(); i++)
+    fAmbiguousGsfTracks.At(i)->Mark();
+}
+  
 //--------------------------------------------------------------------------------------------------
 inline const mithep::Track *mithep::Electron::BestTrk() const
 {

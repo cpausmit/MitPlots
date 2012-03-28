@@ -1,4 +1,4 @@
-// $Id: BaseMetaData.cc,v 1.1 2008/07/07 16:41:52 paus Exp $
+// $Id: BaseMetaData.cc,v 1.2 2008/07/08 05:50:57 loizides Exp $
 
 #include "MitAna/Catalog/interface/BaseMetaData.h"
 #include "MitAna/Catalog/interface/Dataset.h"
@@ -9,6 +9,7 @@ using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
 BaseMetaData::BaseMetaData() :
+  fNAllEvents        (0),
   fNEvents           (0),
   fNLumiSecs         (0),
   fMinRun            (999999999),
@@ -20,8 +21,9 @@ BaseMetaData::BaseMetaData() :
 }
 
 //--------------------------------------------------------------------------------------------------
-BaseMetaData::BaseMetaData(UInt_t nEvts, UInt_t nLs,
-                           UInt_t nMinR, UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR) :
+BaseMetaData::BaseMetaData(UInt_t nAllEvts, UInt_t nEvts,      UInt_t nLs,
+                           UInt_t nMinR,    UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR) :
+  fNAllEvents        (nAllEvts),
   fNEvents           (nEvts),
   fNLumiSecs         (nLs),
   fMinRun            (nMinR),
@@ -38,8 +40,9 @@ void BaseMetaData::Add(const BaseMetaData *b)
   // Account for new meta data information.
 
   // Add simple counts (nRun count is incorrect... we are counting the times BeginRun is hit...)
-  fNEvents   += b->NEvents  ();
-  fNLumiSecs += b->NLumiSecs();
+  fNAllEvents += b->NAllEvents();
+  fNEvents    += b->NEvents   ();
+  fNLumiSecs  += b->NLumiSecs ();
   // Determine the lowest and highest data location in the new data
   if (b->MinRun() < fMinRun ||
       (b->MinRun() == fMinRun && b->MinLumiSecInMinRun() < fMinLumiSecInMinRun)) {
@@ -94,8 +97,9 @@ void BaseMetaData::Print() const
   // Print useful information.
 
   printf("%9d %9d %9d %6d %9d %6d\n",
-	 fNLumiSecs         ,
+	 fNAllEvents        ,
 	 fNEvents           ,
+	 //fNLumiSecs         ,
 	 fMinRun            ,
 	 fMinLumiSecInMinRun,
 	 fMaxRun            ,

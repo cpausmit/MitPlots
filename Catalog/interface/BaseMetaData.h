@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMetaData.h,v 1.3 2008/09/10 03:33:25 loizides Exp $
+// $Id: BaseMetaData.h,v 1.4 2009/03/12 18:36:06 loizides Exp $
 //
 // BaseMetaData
 //
@@ -21,14 +21,16 @@ namespace mithep
   {
     public:
       BaseMetaData();
-      BaseMetaData(UInt_t nEvts, UInt_t nLs,
-		   UInt_t nMinR, UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR);
+      BaseMetaData(UInt_t nAllEvts, UInt_t nEvts,      UInt_t nLs,
+		   UInt_t nMinR,    UInt_t nMinLsMinR, UInt_t nMaxR, UInt_t nMaxLsMaxR);
       virtual ~BaseMetaData() {}
 
       void                     Add               (const BaseMetaData *b);
+      void                     AddAllEvent       () { fNAllEvents++; }
       void                     AddEvent          () { fNEvents++; }
       void                     AddLumiSec        (UInt_t nR, UInt_t nLs);
       void                     AddRun            (UInt_t nR, UInt_t nLs);
+      UInt_t                   NAllEvents        () const { return fNAllEvents        ; }
       UInt_t                   NEvents           () const { return fNEvents           ; }
       UInt_t                   NLumiSecs         () const { return fNLumiSecs         ; }
       UInt_t                   MaxRun            () const { return fMaxRun            ; }  
@@ -38,12 +40,13 @@ namespace mithep
       virtual void             Print             () const;
 
     protected:
-      UInt_t                   fNEvents;             //number of events analyzed
-      UInt_t                   fNLumiSecs;           //number of lumi sections analyzed
-      UInt_t                   fMinRun;              //smallest run number encountered
-      UInt_t                   fMinLumiSecInMinRun;  //smallest lumi section in that run
-      UInt_t                   fMaxRun;              //largest run nnumber encountered
-      UInt_t                   fMaxLumiSecInMaxRun;  //largest lumi section in that run
+      UInt_t                   fNAllEvents;          // number of all events analyzed
+      UInt_t                   fNEvents;             // number of events analyzed
+      UInt_t                   fNLumiSecs;           // number of lumi sections analyzed
+      UInt_t                   fMinRun;              // smallest run number encountered
+      UInt_t                   fMinLumiSecInMinRun;  // smallest lumi section in that run
+      UInt_t                   fMaxRun;              // largest run nnumber encountered
+      UInt_t                   fMaxLumiSecInMaxRun;  // largest lumi section in that run
 
     ClassDef(BaseMetaData, 1) // Base class for collections of data
   };
