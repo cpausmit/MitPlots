@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: JPTJet.h,v 1.1 2010/05/04 11:56:05 bendavid Exp $
+// $Id: JPTJet.h,v 1.2 2012/03/28 12:15:34 paus Exp $
 //
 // JPTJet
 //
@@ -80,7 +80,7 @@ namespace mithep
       void                  SetOriginalJet(const Jet *j)                 { fOriginalJet = j;                  }
 
       // Some structural tools
-      void                  Mark() const;
+      void                  Mark(UInt_t i=1) const;
 
     protected:
       Double32_t            fZSPCor;               //[0,0,14]ZSP correction
@@ -109,11 +109,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::JPTJet::Mark() const
+inline void mithep::JPTJet::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  OriginalJet()->Mark();
+  if (fOriginalJet.IsValid())
+    fOriginalJet.Obj()->Mark(ib);
 }
 #endif

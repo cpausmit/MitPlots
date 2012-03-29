@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.10 2012/03/26 15:26:35 mhchan Exp $
+// $Id: PFTau.h,v 1.11 2012/03/28 12:15:34 paus Exp $
 //
 // PFTau
 //
@@ -175,7 +175,7 @@ namespace mithep
       void SetDiscriminationByRawCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByRawCombinedIsolationDBSumPtCorr = x;}
 
       // Some structural tools
-      void                  Mark()                         const;
+      void                  Mark(UInt_t i=1)               const;
 			    
     protected:		    
       Double_t              GetCharge()                    const;
@@ -231,31 +231,27 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::PFTau::Mark() const
+inline void mithep::PFTau::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fLeadPFCand          .IsValid())
-    fLeadPFCand          .Obj()->Mark();
+    fLeadPFCand          .Obj()->Mark(ib);
   if (fLeadChargedHadPFCand.IsValid())
-    fLeadChargedHadPFCand.Obj()->Mark();
+    fLeadChargedHadPFCand.Obj()->Mark(ib);
   if (fLeadNeutralPFCand   .IsValid())
-    fLeadNeutralPFCand   .Obj()->Mark();
+    fLeadNeutralPFCand   .Obj()->Mark(ib);
   if (fPFJet               .IsValid())
-    fPFJet               .Obj()->Mark();
+    fPFJet               .Obj()->Mark(ib);
   if (fElectronTrack       .IsValid())
-    fElectronTrack       .Obj()->Mark();
-  for (UInt_t i=0; i<fSignalPFCands           .Entries(); i++)
-    fSignalPFCands           .At(i)->Mark();
-  for (UInt_t i=0; i<fSignalPFChargedHadrCands.Entries(); i++)
-    fSignalPFChargedHadrCands.At(i)->Mark();
-  for (UInt_t i=0; i<fSignalPFNeutrHadrCands  .Entries(); i++)
-    fSignalPFNeutrHadrCands  .At(i)->Mark();
-  for (UInt_t i=0; i<fSignalPFGammaCands      .Entries(); i++)
-    fSignalPFGammaCands      .At(i)->Mark();
-  for (UInt_t i=0; i<fIsoPFCands              .Entries(); i++)
-    fIsoPFCands              .At(i)->Mark();
+    fElectronTrack       .Obj()->Mark(ib);
+
+  fSignalPFCands           .Mark(ib);
+  fSignalPFChargedHadrCands.Mark(ib);
+  fSignalPFNeutrHadrCands  .Mark(ib);
+  fSignalPFGammaCands      .Mark(ib);
+  fIsoPFCands              .Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

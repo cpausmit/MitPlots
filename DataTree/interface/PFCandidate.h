@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.8 2012/03/11 22:32:00 pharris Exp $
+// $Id: PFCandidate.h,v 1.9 2012/03/28 12:15:34 paus Exp $
 //
 // PFCandidate
 //
@@ -132,7 +132,7 @@ namespace mithep
       const Track        *Trk()                    const    { return BestTrk();                   }
       
       // Some structural tools
-      void                Mark()                   const;
+      void                Mark(UInt_t i=1)         const;
 
     protected:
       Double_t            GetCharge()              const;
@@ -169,21 +169,21 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::PFCandidate::Mark() const
+inline void mithep::PFCandidate::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fMother.IsValid())
-    fMother.Obj()->Mark();
+    fMother.Obj()->Mark(ib);
   if (fTrackerTrack.IsValid())
-    fTrackerTrack.Obj()->Mark();
+    fTrackerTrack.Obj()->Mark(ib);
   if (fGsfTrack.IsValid())
-    fGsfTrack.Obj()->Mark();
+    fGsfTrack.Obj()->Mark(ib);
   if (fMuon.IsValid())
-    fMuon.Obj()->Mark();
+    fMuon.Obj()->Mark(ib);
   if (fConversion.IsValid())
-    fConversion.Obj()->Mark();
+    fConversion.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

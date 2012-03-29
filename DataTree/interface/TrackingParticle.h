@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackingParticle.h,v 1.3 2010/01/18 14:33:02 bendavid Exp $
+// $Id: TrackingParticle.h,v 1.4 2012/03/28 12:15:35 paus Exp $
 //
 // TrackingParticle
 //
@@ -42,7 +42,7 @@ namespace mithep
       void                 SetHits(const BitMask48 &hits) { fHits = hits;               }
       
       // Some structural tools
-      void                 Mark()                   const;
+      void                 Mark(UInt_t i=1)         const;
 
     protected:
       Double_t             GetCharge()              const;
@@ -55,13 +55,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::TrackingParticle::Mark() const
+inline void mithep::TrackingParticle::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  for (UInt_t i=0; i<fMCParts.Entries(); i++)
-    fMCParts.At(i)->Mark();
+  fMCParts.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

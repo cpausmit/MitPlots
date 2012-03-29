@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.24 2011/10/09 23:28:47 bendavid Exp $
+// $Id: SuperCluster.h,v 1.25 2012/03/28 12:15:34 paus Exp $
 //
 // SuperCluster
 //
@@ -103,7 +103,7 @@ namespace mithep
     void                   SetYZ(Double_t x)                          { fYZ = x;                 }
 
     // Some structural tools
-    void                   Mark()  const;
+    void                   Mark(UInt_t i=1)  const;
 
   protected:
     Vect3C                  fPoint;               //centroid Position
@@ -137,17 +137,15 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::SuperCluster::Mark() const
+inline void mithep::SuperCluster::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fSeedRef.IsValid())
-    fSeedRef.Obj()->Mark();
-  for (UInt_t i=0; i<NClusters(); i++)
-    fClusters.At(i)->Mark();
-  for (UInt_t i=0; i<NTowers(); i++)
-    fCaloTowers.At(i)->Mark();
+    fSeedRef.Obj()->Mark(ib);
+  fClusters  .Mark(ib);
+  fCaloTowers.Mark(ib);
 }
 
 

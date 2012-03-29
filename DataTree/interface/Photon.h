@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.45 2011/12/19 21:57:09 bendavid Exp $
+// $Id: Photon.h,v 1.46 2012/03/28 12:15:34 paus Exp $
 //
 // Photon
 //
@@ -180,7 +180,7 @@ namespace mithep
     Double_t             IdMva()                           const { return fIdMva;                }
 
     // Some structural tools
-    void                 Mark()                            const;
+    void                 Mark(UInt_t i=1)                  const;
 
   protected:
     void                 GetMom() const;
@@ -250,16 +250,16 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::Mark() const
+inline void mithep::Photon::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  if (HasPV())
-    fPVRef.Obj()->Mark();
-  fSuperClusterRef.Obj()->Mark();
-  for (UInt_t i=0; i<NConversions(); i++)
-    fConversions.At(i)->Mark();
+  if (fPVRef.IsValid())
+    fPVRef.Obj()->Mark(ib);
+  if (fSuperClusterRef.IsValid())
+    fSuperClusterRef.Obj()->Mark(ib);
+  fConversions.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

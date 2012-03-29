@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.48 2011/10/23 01:53:16 paus Exp $
+// $Id: Electron.h,v 1.49 2012/03/28 12:15:34 paus Exp $
 //
 // Electron
 //
@@ -286,7 +286,7 @@ namespace mithep
       const Track         *ConvPartnerTrk()        const { return fConvPartnerTrackRef.Obj(); }
 
       // Some structural tools
-      void                 Mark()                  const;
+      void                 Mark(UInt_t i=1)        const;
 
     protected:
       Double_t             GetCharge()             const;
@@ -398,21 +398,20 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Electron::Mark() const
+inline void mithep::Electron::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  if (HasSuperCluster())
-    SCluster()->Mark();
-  if (HasGsfTrk())
-    GsfTrk()->Mark();
-  if (HasTrackerTrk())
-    TrackerTrk()->Mark();
+  if (fSuperClusterRef.IsValid())
+    fSuperClusterRef.Obj()->Mark(ib);
+  if (fGsfTrackRef.IsValid())
+    fGsfTrackRef.Obj()->Mark(ib);
+  if (fTrackerTrackRef.IsValid())
+    fTrackerTrackRef.Obj()->Mark(ib);
   if (fConvPartnerTrackRef.IsValid())
-    ConvPartnerTrk()->Mark();
-  for (UInt_t i=0; i<NAmbiguousGsfTracks(); i++)
-    fAmbiguousGsfTracks.At(i)->Mark();
+    fConvPartnerTrackRef.Obj()->Mark(ib);
+  fAmbiguousGsfTracks.Mark(ib);
 }
   
 //--------------------------------------------------------------------------------------------------

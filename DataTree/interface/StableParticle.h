@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.12 2011/09/12 15:21:36 bendavid Exp $
+// $Id: StableParticle.h,v 1.13 2012/03/28 12:15:34 paus Exp $
 //
 // StableParticle
 //
@@ -31,7 +31,7 @@ namespace mithep
       void	           SetTrk(const Track *t)   { fTrackRef = t; ClearMom(); ClearCharge(); }
       
       // Some structural tools
-      void                 Mark()             const;
+      void                 Mark(UInt_t i=1)   const;
 
     protected:
       Double_t             GetMass()          const;
@@ -44,13 +44,13 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::StableParticle::Mark() const
+inline void mithep::StableParticle::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fTrackRef.IsValid())
-    fTrackRef.Obj()->Mark();
+    fTrackRef.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

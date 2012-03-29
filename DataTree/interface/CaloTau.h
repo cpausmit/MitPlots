@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTau.h,v 1.3 2009/04/08 10:01:50 loizides Exp $
+// $Id: CaloTau.h,v 1.4 2012/03/28 12:15:34 paus Exp $
 //
 // CaloTau
 //
@@ -69,7 +69,7 @@ namespace mithep
       Double_t               TracksMass()                  const { return fTracksMass;             }
 
       // Some structural tools
-      void                   Mark()                        const;
+      void                   Mark(UInt_t  i = 1)           const;
 
     protected:
       Double_t               GetCharge()                   const;
@@ -94,19 +94,19 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::CaloTau::Mark() const
+inline void mithep::CaloTau::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  LeadTrack()->Mark();
-  SourceCaloJet()->Mark();
-  for (UInt_t i=0; i<NSignalTracks(); i++)
-    fSignalTracks.At(i)->Mark();
-  for (UInt_t i=0; i<NIsoTracks(); i++)
-    fIsoTracks.At(i)->Mark();
-  for (UInt_t i=0; i<NNeutralBCs(); i++)
-    fNeutralBCs.At(i)->Mark();
+  if (fLeadTrack.IsValid()) 
+    fLeadTrack.Obj()->Mark(ib);
+  if (fCaloJet.IsValid())
+    fCaloJet.Obj()->Mark(ib);
+  // arrays
+  fSignalTracks.Mark(ib);
+  fIsoTracks   .Mark(ib);
+  fNeutralBCs  .Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

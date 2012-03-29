@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.8 2009/07/13 11:00:25 loizides Exp $
+// $Id: DaughterData.h,v 1.9 2012/03/28 12:15:34 paus Exp $
 //
 // DaughterData
 //
@@ -29,7 +29,7 @@ namespace mithep
       const Particle      *Original()                     const { return fOriginal.Obj();         }
 
       // Some structural tools
-      void                 Mark()                         const;
+      void                 Mark(UInt_t i=1)               const;
 
     protected:
       Ref<Particle>        fOriginal; //reference to original particle
@@ -39,11 +39,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::DaughterData::Mark() const
+inline void mithep::DaughterData::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  Original()->Mark();
+  if (fOriginal.IsValid())
+    fOriginal.Obj()->Mark(ib);
 }
 #endif

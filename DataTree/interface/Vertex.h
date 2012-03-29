@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.18 2011/10/09 23:27:44 bendavid Exp $
+// $Id: Vertex.h,v 1.19 2012/03/28 12:15:35 paus Exp $
 //
 // Vertex
 //
@@ -55,7 +55,7 @@ namespace mithep
     
     
     // Some structural tools
-    void                Mark()                      const;
+    void                Mark(UInt_t i=1)            const;
     
     
   protected:
@@ -72,13 +72,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Vertex::Mark() const
+inline void mithep::Vertex::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  for (UInt_t i=0; i<NTracks(); i++)
-    fTracks.At(i)->Mark();
+  fTracks.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

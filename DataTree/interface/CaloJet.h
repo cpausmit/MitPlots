@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloJet.h,v 1.6 2010/03/17 15:32:59 bendavid Exp $
+// $Id: CaloJet.h,v 1.7 2012/03/28 12:15:34 paus Exp $
 //
 // CaloJet
 //
@@ -102,7 +102,7 @@ namespace mithep
       UInt_t              NHitsRPC()                    const { return fNHitsRPC;                }
 
       // Some structural tools
-      void                Mark()                        const;
+      void                Mark(UInt_t i = 1)            const;
 
     protected:
 
@@ -141,13 +141,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::CaloJet::Mark() const
+inline void mithep::CaloJet::Mark(UInt_t i) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(i);
   // mark my dependencies if they are there
-  for (UInt_t i=0; i<NTowers(); i++)
-    Tower(i)->Mark();
+  fTowers.Mark(i);
 }
 
 #endif

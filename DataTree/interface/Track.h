@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.53 2010/07/01 15:05:15 bendavid Exp $
+// $Id: Track.h,v 1.54 2012/03/28 12:15:34 paus Exp $
 //
 // Track
 //
@@ -270,11 +270,11 @@ namespace mithep
       static const BitMask48      PixelLayers();
 
       // Some structural tools
-      void                 Mark()        const;
+      void                 Mark(UInt_t i=1) const;
 
     protected:
-      void                 ClearMom()    const { fCacheMomFlag.ClearCache(); }
-      void                 GetMom()      const;
+      void                 ClearMom()       const { fCacheMomFlag.ClearCache(); }
+      void                 GetMom()         const;
 
       BitMask48            fHits;                //storage for mostly hit information
       BitMask48            fMissingHits;         //missing hits in crossed good modules
@@ -313,15 +313,15 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Track::Mark() const
+inline void mithep::Track::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fSuperClusterRef.IsValid())
-    fSuperClusterRef.Obj()->Mark();
+    fSuperClusterRef.Obj()->Mark(ib);
   if (fMCParticleRef.IsValid())
-    fMCParticleRef.Obj()->Mark();
+    fMCParticleRef.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

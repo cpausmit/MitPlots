@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.23 2009/09/25 08:38:18 loizides Exp $
+// $Id: MCParticle.h,v 1.24 2012/03/28 12:15:34 paus Exp $
 //
 // MCParticle
 //
@@ -79,9 +79,6 @@ namespace mithep
       void                SetPdgId(Int_t s)              {  fPdgId = s;    }
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
-      
-      // Some structural tools
-      void                Mark()                   const;
 
     protected:
       Double_t            GetCharge()              const;
@@ -97,16 +94,6 @@ namespace mithep
 
     ClassDef(MCParticle,1) // Generated particle class
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void mithep::MCParticle::Mark() const
-{
-  // mark myself
-  mithep::DataObject::Mark();
-  // mark my dependencies if they are there
-  if (fMother.IsValid())
-    fMother.Obj()->Mark();
 }
 
 //--------------------------------------------------------------------------------------------------

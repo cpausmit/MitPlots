@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackJet.h,v 1.1 2010/02/21 23:42:00 bendavid Exp $
+// $Id: TrackJet.h,v 1.2 2012/03/28 12:15:34 paus Exp $
 //
 // TrackJet
 //
@@ -36,7 +36,7 @@ namespace mithep
       void                  SetVertex(const Vertex *v)            { fVertex = v;                   }
 
       // Some structural tools
-      void                  Mark()                          const;
+      void                  Mark(UInt_t i=1)                const;
 
     protected:
       Double_t              GetCharge()                     const;
@@ -49,15 +49,14 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::TrackJet::Mark() const
+inline void mithep::TrackJet::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
   if (fVertex.IsValid())
-    fVertex.Obj()->Mark();
-  for (UInt_t i=0; i<fTracks.Entries(); i++)
-    fTracks.At(i)->Mark();
+    fVertex.Obj()->Mark(ib);
+  fTracks.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

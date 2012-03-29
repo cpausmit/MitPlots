@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.36 2012/03/22 15:48:59 bendavid Exp $
+// $Id: DecayParticle.h,v 1.37 2012/03/28 12:15:34 paus Exp $
 //
 // DecayParticle
 //
@@ -104,7 +104,7 @@ namespace mithep
       using TObject::Error;
 
       // Some structural tools
-      void                      Mark()                const;
+      void                      Mark(UInt_t i=1)      const;
 
     protected:
       void                      ClearPos()            const { fCachePosFlag.ClearCache(); }
@@ -139,14 +139,14 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::DecayParticle::Mark() const
+inline void mithep::DecayParticle::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  PriVertex()->Mark();
-  for (UInt_t i=0; i<NDaughters(); i++)
-    DaughterDat(i)->Mark();
+  if (fPriVtx.IsValid())
+    fPriVtx.Obj()->Mark(ib);
+  fDaughterData.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

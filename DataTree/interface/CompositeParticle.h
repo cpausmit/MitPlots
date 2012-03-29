@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.22 2009/07/13 11:00:18 loizides Exp $
+// $Id: CompositeParticle.h,v 1.23 2012/03/28 12:15:34 paus Exp $
 //
 // CompositeParticle
 //
@@ -34,7 +34,7 @@ namespace mithep
                                   { return kCompositeParticle;   }
 
       // Some structural tools
-      void                      Mark()                const;
+      void                      Mark(UInt_t i=1)      const;
 
     protected:
       Double_t		        GetCharge()           const;
@@ -47,13 +47,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::CompositeParticle::Mark() const
+inline void mithep::CompositeParticle::Mark(UInt_t i) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(i);
   // mark my dependencies if they are there
-  for (UInt_t i=0; i<NDaughters(); i++)
-    fDaughters.At(i)->Mark();
+  fDaughters.Mark(i);
 }
 
 //--------------------------------------------------------------------------------------------------

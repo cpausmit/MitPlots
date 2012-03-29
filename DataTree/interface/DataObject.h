@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.22 2009/07/13 11:00:25 loizides Exp $
+// $Id: DataObject.h,v 1.23 2012/03/28 12:15:34 paus Exp $
 //
 // DataObject
 //
@@ -29,25 +29,25 @@ namespace mithep
     public:
     DataObject() : fMarker(0) {}
 
-      Bool_t               Is(EObjType t) const { return (ObjType()==t); }
-      Bool_t               IsCached()     const { return TestBit(23); }
-      Bool_t               MustClear()    const { return TestBit(14); }
-      Bool_t               MustDelete()   const { return TestBit(15); }
-      virtual Int_t        ObjId()        const { return ObjType()*1000; }
-      virtual EObjType     ObjType()      const { return kDataObject; }
+      Bool_t               Is(EObjType t)   const { return (ObjType()==t); }
+      Bool_t               IsCached()       const { return TestBit(23); }
+      Bool_t               MustClear()      const { return TestBit(14); }
+      Bool_t               MustDelete()     const { return TestBit(15); }
+      virtual Int_t        ObjId()          const { return ObjType()*1000; }
+      virtual EObjType     ObjType()        const { return kDataObject; }
       template <class Col> 
-      const Col           *ParentCol()    const;
+      const Col           *ParentCol()      const;
 
       // Object marking
-      Bool_t               IsMarked()     const { return TestBit(16); }
-      void                 Mark()         const { const_cast<DataObject*>(this)->SetBit(16); }
-      void                 Unmark()       const { const_cast<DataObject*>(this)->SetBit(16,0); }
+      Bool_t               IsMarked()       const { return TestBit(16); }
+      virtual void         Mark(UInt_t i=1) const;
+      void                 UnmarkMe()       const { const_cast<DataObject*>(this)->SetBit(16,0); }
 
     protected:
-      void                 ResetCacheBit()      { SetBit(23,0); }
-      void                 SetCacheBit()        { SetBit(23); }
-      void                 SetClearBit()        { SetBit(14); }
-      void                 SetDeleteBit()       { SetBit(15); }
+      void                 ResetCacheBit()        { SetBit(23,0); }
+      void                 SetCacheBit()          { SetBit(23); }
+      void                 SetClearBit()          { SetBit(14); }
+      void                 SetDeleteBit()         { SetBit(15); }
 
       mutable UInt_t       fMarker;             //!  marker uses custom streamer
 

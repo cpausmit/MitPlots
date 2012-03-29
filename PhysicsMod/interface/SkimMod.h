@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: $
+// $Id: SkimMod.h,v 1.1 2012/03/28 12:15:35 paus Exp $
 //
 // SkimMod
 //
@@ -76,13 +76,13 @@ void mithep::SkimMod<T>::Process()
   for (UInt_t i=0; i<entries; ++i) {
     if (fCol->At(i)->IsMarked()) {
       // Make sure the mark is not written to file
-      //fCol->At(i)->Unmark();
+      fCol->At(i)->UnmarkMe();
       fColSkm->Add(fCol->At(i));
-      if (fCol->At(i)->GetUniqueID() == 0)
-        printf(" SkimMod -- WARNING -- UID ZERO: %d %d %s\n",
-      	 fCol->At(i)->GetUniqueID(),
-      	 fCol->At(i)->GetUniqueID()&0xfffff,
-      	 fCol->GetName());
+      //if (fCol->At(i)->GetUniqueID() == 0)
+      //  printf(" SkimMod -- WARNING -- UID ZERO: %d %d %s\n",
+      //	 fCol->At(i)->GetUniqueID(),
+      //	 fCol->At(i)->GetUniqueID()&0xfffff,
+      //	 fCol->GetName());
     }
   }
 }

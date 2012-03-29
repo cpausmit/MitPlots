@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFJet.h,v 1.6 2010/02/21 23:42:00 bendavid Exp $
+// $Id: PFJet.h,v 1.7 2012/03/28 12:15:34 paus Exp $
 //
 // PFJet
 //
@@ -54,7 +54,7 @@ namespace mithep
       void                  SetNeutralMultiplicity(UInt_t n)      { fNeutralMultiplicity = n;      }
 
       // Some structural tools
-      void                  Mark()                          const;
+      void                  Mark(UInt_t i=1)                const;
 
     protected:
       Double_t              GetCharge()                     const;
@@ -74,13 +74,12 @@ namespace mithep
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::PFJet::Mark() const
+inline void mithep::PFJet::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  for (UInt_t i=0; i<fPFCands.Entries(); i++)
-    fPFCands.At(i)->Mark();
+  fPFCands.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

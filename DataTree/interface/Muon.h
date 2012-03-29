@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.45 2011/10/23 01:53:16 paus Exp $
+// $Id: Muon.h,v 1.46 2012/03/28 12:15:34 paus Exp $
 //
 // Muon
 //
@@ -226,7 +226,7 @@ namespace mithep {
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
       // Some structural tools
-      void           Mark()                          const;
+      void           Mark(UInt_t i=1)                const;
 
     protected:
       Double_t       GetCharge()                     const;
@@ -298,17 +298,17 @@ namespace mithep {
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::Mark() const
+inline void mithep::Muon::Mark(UInt_t ib) const
 {
   // mark myself
-  mithep::DataObject::Mark();
+  mithep::DataObject::Mark(ib);
   // mark my dependencies if they are there
-  if (HasTrackerTrk())
-    GlobalTrk()->Mark();
-  if (HasStandaloneTrk())
-    StandaloneTrk()->Mark();
-  if (HasTrackerTrk())
-    TrackerTrk()->Mark();
+  if (fGlobalTrkRef.IsValid())
+    fGlobalTrkRef.Obj()->Mark(ib);
+  if (fStaTrkRef.IsValid())
+    fStaTrkRef.Obj()->Mark(ib);
+  if (fTrkTrkRef.IsValid())
+    fTrkTrkRef.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

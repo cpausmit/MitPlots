@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.22 2009/03/23 22:15:10 loizides Exp $
+// $Id: RefArray.h,v 1.23 2010/09/19 23:46:08 bendavid Exp $
 //
 // RefArray
 //
@@ -50,6 +50,8 @@ namespace mithep
       const ArrayElement       *UncheckedAt(UInt_t idx)      const;
       ArrayElement             *operator[](UInt_t idx);
       const ArrayElement       *operator[](UInt_t idx)       const;
+
+      void                      Mark(UInt_t i=1)             const;
 
     protected:
       TObject                  *GetObject(UInt_t idx)        const;
@@ -137,6 +139,16 @@ inline const ArrayElement *mithep::RefArray<ArrayElement>::At(UInt_t idx) const
 
   Fatal("At", "Given index (%u) is larger than array size (%u)", idx, Entries());
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+void mithep::RefArray<ArrayElement>::Mark(UInt_t ib) const
+{
+  // Mark the entire array
+
+  for (UInt_t i=0; i<Entries(); ++i)
+    At(i)->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------
