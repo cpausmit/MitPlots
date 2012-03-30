@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.cxx,v 1.6 2009/07/16 21:02:05 loizides Exp $
+// $Id: TAMOutput.cxx,v 1.7 2011/03/11 04:03:54 bendavid Exp $
 //
 
 #include "MitAna/TAM/interface/TAMOutput.h"
@@ -491,7 +491,7 @@ void TAMOutput::ls(Option_t* option) const
 
 
 //______________________________________________________________________________
-void TAMOutput::Merge(TCollection* list) 
+Long64_t TAMOutput::Merge(TCollection* list) 
 {
    // Called by Proof after SlaveTerminate() and before Terminate()
    // to merge the output objects from each worker ("slave") computer.
@@ -499,7 +499,7 @@ void TAMOutput::Merge(TCollection* list)
    // recursively proceed through the sub modules to merge their objects.
    
    // merge this module's output objects
-   MergeOutput(list);
+   Long64_t mergeCount = MergeOutput(list);
 
    // then merge its sub modules' objects:
    if (!IsEmpty()) { // (if we have any sub modules)
@@ -532,11 +532,12 @@ void TAMOutput::Merge(TCollection* list)
       DeleteIterators(slaveIters);
    }
 
+   return mergeCount;
 }
 
 
 //______________________________________________________________________________
-void TAMOutput::MergeOutput(TCollection* list) 
+Long64_t TAMOutput::MergeOutput(TCollection* list) 
 {
    // Merges the actual output objects in fCurOutput given a list of
    // all the TAMOutput objects from the worker computers that
@@ -574,6 +575,7 @@ void TAMOutput::MergeOutput(TCollection* list)
       DeleteIterators(slaveIters);
    }
 
+   return list->GetEntries();
 }
 
 

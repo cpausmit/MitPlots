@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h,v 1.3 2009/07/13 19:19:44 loizides Exp $
+// $Id: TAMOutput.h,v 1.4 2009/07/17 19:18:04 loizides Exp $
 //
 
 #ifndef ROOT_TAMOutput
@@ -87,7 +87,7 @@ private:
    void              DeleteIterators(vector<TIterator*>& iters);
    TList            *GetCurOutputList()       { return &fCurOutput; }
    using      TList::FindObject;
-   void              MergeOutput(TCollection* list);
+   Long64_t          MergeOutput(TCollection* list);
    void              NullObjInAddOutput() const;
    void              NullClassFor(void* adr, const Char_t* tid) const;
    void              WarnNameDuplicate(const TObject* obj) const;
@@ -110,7 +110,7 @@ public:
    TAModule         *GetMod()       { return fMod; }
    const TList      *GetOutputList() const { return &fOutput; }
    TList            *GetOutputList()       { return &fOutput; }
-   virtual void      Merge(TCollection* list);
+   virtual Long64_t  Merge(TCollection* list);
    virtual void      ls(Option_t* option="") const;
    using             TCollection::Print;
    virtual void      Print(Option_t* wildcard="") const;
