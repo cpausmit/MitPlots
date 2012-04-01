@@ -36,6 +36,7 @@ pwd
 cd $workDir
 if [ "$workDir" != "/home/$USER/cms/root" ]
 then
+#  cp /home/$USER/cms/condor/.rootrc         ./
   cp /home/$USER/cms/condor/.rootlogon.C    ./
   cp /home/$USER/cms/condor/${runMacro}     ./
 fi

@@ -31,7 +31,7 @@ mkdir -p $workDir
 cd $workDir
 cp /home/$USER/cms/root/.rootlogon.C $workDir
 cp $MIT_ANA_DIR/bin/run.sh           $workDir
-cp $MIT_HGG_DIR/macros/$runMacro     $workDir
+cp $MIT_USER_DIR/macros/$runMacro    $workDir
 script=$workDir/run.sh
 
 # Create the directory for the results
