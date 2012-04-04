@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.49 2012/03/28 12:15:34 paus Exp $
+// $Id: Electron.h,v 1.50 2012/03/29 23:41:55 paus Exp $
 //
 // Electron
 //
@@ -120,6 +120,7 @@ namespace mithep
       Double_t             E55()                            const { return fE55; }
       Double_t             ESuperClusterOverP()             const { return fESuperClusterOverP; }
       Double_t             ESeedClusterOverPout()           const { return fESeedClusterOverPout; }
+      Double_t             EEleClusterOverPout()            const { return fEEleClusterOverPout; }
       Double_t             ESeedClusterOverPIn()            const;
       Double_t             FBrem()                          const { return fFBrem; }
       Double_t             FBremOld()                       const { return (PIn() - POut())/PIn(); }
@@ -172,7 +173,8 @@ namespace mithep
       UInt_t               NAmbiguousGsfTracks()            const { return fAmbiguousGsfTracks.Entries(); }
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
       const Track         *AmbiguousGsfTrack(UInt_t i)      const { return fAmbiguousGsfTracks.At(i); }
-      
+      Int_t                CTFTrkNLayersWithMeasurement()   const { return fCTFTrkNLayersWithMeasurement; }
+
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
       void                 SetScPixCharge(Char_t x)                      { fScPixCharge = x; }
@@ -231,6 +233,7 @@ namespace mithep
       void                 SetE25Max(Double_t x)                  { fE25Max = x; }
       void                 SetE55(Double_t x)                     { fE55 = x; }
       void                 SetESeedClusterOverPout(Double_t x)    { fESeedClusterOverPout = x; }
+      void                 SetEEleClusterOverPout(Double_t x)     { fEEleClusterOverPout = x; }
       void                 SetESuperClusterOverP(Double_t x)      { fESuperClusterOverP = x; }
       void                 SetFBrem(Double_t x)                   { fFBrem = x; }
       void                 SetFracSharedHits(Double_t x)          { fFracSharedHits = x; }
@@ -279,7 +282,8 @@ namespace mithep
       void                 SetMatchesVertexConversion(Bool_t b)    { fMatchesVertexConversion = b; }
       void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
                                   { fConvPosition.SetXYZ(x,y,z); }
-      
+      void                 SetCTFTrkNLayersWithMeasurement(Int_t x){ fCTFTrkNLayersWithMeasurement = x; }
+
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
@@ -392,8 +396,10 @@ namespace mithep
       Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
       Bool_t               fMatchesVertexConversion;
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
+      Double_t             fEEleClusterOverPout;       //energy of the electron cluster
+      Int_t                fCTFTrkNLayersWithMeasurement; //number of tracker layers from associated ctf trk
 
-    ClassDef(Electron, 12) // Electron class
+    ClassDef(Electron, 13) // Electron class
   };
 }
 
