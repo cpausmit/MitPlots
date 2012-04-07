@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.cxx,v 1.20 2011/03/21 15:58:37 paus Exp $
+// $Id: TAMSelector.cxx,v 1.21 2012/03/28 12:15:37 paus Exp $
 //
 
 #include "MitAna/TAM/interface/TAMSelector.h"
@@ -189,14 +189,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    // Find and load branch corresponding to given uid/pid.
 
    // read entry for this event
-   Long64_t readentry = br->GetReadEntry();
-   Long64_t tamentry  = fSel->fCurEvt;
-   if (readentry!=tamentry) {
-      Fatal("Load", 
-            "Entries from BranchRef (%lld) differs from TAM current entry (%lld)",
-            readentry, tamentry);
-   }
-
+   Long64_t readentry  = fSel->fCurEvt;
    Long64_t chainentry = readentry + fSel->GetTree()->GetChainOffset();
 
    // read branchref if needed
