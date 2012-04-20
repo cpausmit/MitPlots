@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.46 2012/03/28 12:15:34 paus Exp $
+// $Id: Photon.h,v 1.47 2012/03/29 23:41:55 paus Exp $
 //
 // Photon
 //
@@ -36,7 +36,8 @@ namespace mithep
       fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
       fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
-      fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.) {}
+      fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
+      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
     Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :
       fMom(FourVector(px,py,pz,e)),
       fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -52,7 +53,8 @@ namespace mithep
       fIsEEGap(0),fIsEBEEGap(0), fIsLooseEM(0),fIsLoosePhoton(0), fIsTightPhoton(0),
       fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
-      fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.) {}
+      fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
+      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
 
     // Contents of the Photons
     const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
@@ -105,6 +107,7 @@ namespace mithep
     FourVectorM          MomVtx(const ThreeVector &v)  const;
     UInt_t               NConversions()             const { return fConversions.Entries(); }
     EObjType             ObjType()                  const { return kPhoton;                }
+    const SuperCluster  *PFSCluster()               const { return fPFSuperClusterRef.Obj(); }
     Double_t             R9()                       const { return fR9;                    }
     const SuperCluster  *SCluster()                 const { return fSuperClusterRef.Obj(); }
     Double_t             SolidConeTrkIsoDr03()      const { return fSolidConeTrkIsoDr03;   }
@@ -115,6 +118,9 @@ namespace mithep
 	                                               fEtaWidth : SCluster()->EtaWidth(); }
     Double_t             PhiWidth()                 const { return fPhiWidth >= 0. ?
 	                                               fPhiWidth : SCluster()->PhiWidth(); }
+    Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
+    Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
+    Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
 
     void                 AddConversion(const Conversion *c)      { fConversions.Add(c); }
     void                 SetEnergyErr(Double_t x)                { fEnergyErr               = x; }
@@ -169,10 +175,14 @@ namespace mithep
     void                 SetCaloPosXYZ(Double_t x, Double_t y,
                                        Double_t z)               { fCaloPos.SetXYZ(x,y,z);       }
     void                 SetPV(const Vertex *v)                  { fPVRef                   = v; }
+    void                 SetPFSuperCluster(const SuperCluster *s) { fPFSuperClusterRef = s;      }
     void                 SetVtxProb(Double_t x)                  { fVtxProb                 = x; }
     void                 SetIdMva(Double_t x)                    { fIdMva                   = x; }
     void                 SetEtaWidth(Double_t x)                 { fEtaWidth                = x; }
     void                 SetPhiWidth(Double_t x)                 { fPhiWidth                = x; }
+    void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
+    void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
+    void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
 
     Bool_t               HasPV()                           const { return fPVRef.IsValid();      }
     const Vertex        *PV()                              const { return fPVRef.Obj();          }
@@ -244,8 +254,12 @@ namespace mithep
     Double32_t           fIdMva;              //[0,0,14]output of photon id mva
     Double32_t           fEtaWidth;           //[0,0,14]output of photon id mva
     Double32_t           fPhiWidth;           //[0,0,14]output of photon id mva
+    Ref<SuperCluster>    fPFSuperClusterRef;    //ref to associated PF super cluster
+    Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
+    Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
+    Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
 
-    ClassDef(Photon,13) // Photon class
+    ClassDef(Photon,15) // Photon class
   };
 }
 

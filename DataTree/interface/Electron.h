@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.50 2012/03/29 23:41:55 paus Exp $
+// $Id: Electron.h,v 1.51 2012/04/04 21:00:15 sixie Exp $
 //
 // Electron
 //
@@ -48,7 +48,8 @@ namespace mithep
         fConvFlag(0), fIsEnergyScaleCorrected(0), fIsMomentumCorrected(0),
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
-        fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0) {}
+        fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0),
+        fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
 
       const Track         *BestTrk()                     const;
       Double_t             D0PV()                        const { return fD0PV; }
@@ -174,6 +175,9 @@ namespace mithep
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
       const Track         *AmbiguousGsfTrack(UInt_t i)      const { return fAmbiguousGsfTracks.At(i); }
       Int_t                CTFTrkNLayersWithMeasurement()   const { return fCTFTrkNLayersWithMeasurement; }
+      Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
+      Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
+      Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
 
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
@@ -283,7 +287,9 @@ namespace mithep
       void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
                                   { fConvPosition.SetXYZ(x,y,z); }
       void                 SetCTFTrkNLayersWithMeasurement(Int_t x){ fCTFTrkNLayersWithMeasurement = x; }
-
+      void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
+      void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
+      void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
@@ -398,8 +404,11 @@ namespace mithep
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
       Double_t             fEEleClusterOverPout;       //energy of the electron cluster
       Int_t                fCTFTrkNLayersWithMeasurement; //number of tracker layers from associated ctf trk
+      Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
+      Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
+      Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
 
-    ClassDef(Electron, 13) // Electron class
+    ClassDef(Electron, 14) // Electron class
   };
 }
 
