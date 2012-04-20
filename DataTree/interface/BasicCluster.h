@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BasicCluster.h,v 1.19 2011/10/09 23:28:47 bendavid Exp $
+// $Id: BasicCluster.h,v 1.20 2011/10/10 20:56:56 bendavid Exp $
 //
 // BasicCluster
 //
@@ -86,9 +86,11 @@ namespace mithep
                        fCoviPhiiPhi(0),
                        fZernike20(0),
                        fZernike42(0),
-                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fThetaAxis(0.), fPhiAxis(0.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999) {}
+                       fEtaCry(-99.), fPhiCry(-99.), fXCry(-99.), fYCry(-99.), fThetaAxis(0.), fPhiAxis(0.), fIEta(-999), fIPhi(-999), fIX(-999), fIY(-999),
+                       fSumRecHitEnergy(0.) {}
      
       Double_t         Energy()                  const { return  fEnergy;       }       
+      Double_t         SumRecHitEnergy()         const { return fSumRecHitEnergy; }
       Double_t         Et()                      const;
       Double_t         Eta()                     const { return  fPoint.Eta();  }
       EObjType         ObjType()                 const { return  kBasicCluster; }       
@@ -139,7 +141,8 @@ namespace mithep
       Short_t          IX()                      const { return  fIX;           }
       Short_t          IY()                      const { return  fIY;           }
 
-      void	       SetEnergy(Double_t energy)                 {  fEnergy = energy;     }      
+      void	       SetEnergy(Double_t energy)                 {  fEnergy = energy;     }    
+      void             SetSumRecHitEnergy(Double_t energy)        {  fSumRecHitEnergy = energy; }  
       void	       SetXYZ(Double_t x, Double_t y, Double_t z) {  fPoint.SetXYZ(x,y,z); } 
       void	       SetNHits(Int_t x)                          {  fNHits = x;            }
       void	       SetE1x3(Double_t x)                        {  fE1x3 = x;            }
@@ -233,8 +236,9 @@ namespace mithep
       Short_t    fIPhi;
       Short_t    fIX;
       Short_t    fIY;
-      
-      ClassDef(BasicCluster, 4)  // Basic cluster class
+      Double32_t fSumRecHitEnergy; //energy from manual rechit sum (to recover from bugged pf cluster energies) 
+
+      ClassDef(BasicCluster, 5)  // Basic cluster class
   };
 }
 
