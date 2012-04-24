@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.77 2011/10/22 15:08:08 bendavid Exp $
+# $Id: setup.sh,v 1.78 2012/03/25 17:16:14 mhchan Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -29,6 +29,13 @@ echo
 
 cd $CMSSW_BASE/src;
 
+if test $version -lt 5003000 -a $version -ge 5002000; then
+  #support GBRForest for classification, and make compatible with GBRTrain
+  addpkg CondFormats/EgammaObjects V00-04-00
+
+  checkdeps -a
+
+fi
 
 
 
