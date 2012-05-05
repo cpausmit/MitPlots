@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.20 2011/11/24 11:30:41 pharris Exp $
+// $Id: ObjTypes.h,v 1.21 2012/03/11 22:32:00 pharris Exp $
 //
 // ObjTypes
 //
@@ -57,6 +57,7 @@ namespace mithep
     kSParticle,
     kPhoton,
     kPixelHit,
+    kPsCluster,
     kRunInfo,
     kStableData,
     kStableDaughter,

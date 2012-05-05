@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.47 2012/03/29 23:41:55 paus Exp $
+// $Id: Photon.h,v 1.48 2012/04/20 16:05:48 bendavid Exp $
 //
 // Photon
 //
@@ -14,7 +14,9 @@
 #include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Conversion.h"
+#include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Vertex.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep
@@ -58,6 +60,8 @@ namespace mithep
 
     // Contents of the Photons
     const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
+    const DecayParticle *ConversionD(UInt_t i)      const { return fConversionsD.At(i); }
+    const DecayParticle *ConversionS(UInt_t i)      const { return fConversionsS.At(i); }
     Double_t             EcalRecHitIsoDr03()        const { return fEcalRecHitIsoDr03;  }
     Double_t             EcalRecHitIsoDr04()        const { return fEcalRecHitIso;      }
     Double_t             EnergyErr()                const { return fEnergyErr;          }
@@ -106,6 +110,8 @@ namespace mithep
 	                                            E()*(ThreeVector(CaloPos())-v).Unit(); }
     FourVectorM          MomVtx(const ThreeVector &v)  const;
     UInt_t               NConversions()             const { return fConversions.Entries(); }
+    UInt_t               NConversionsD()            const { return fConversionsD.Entries(); }
+    UInt_t               NConversionsS()            const { return fConversionsS.Entries(); }
     EObjType             ObjType()                  const { return kPhoton;                }
     const SuperCluster  *PFSCluster()               const { return fPFSuperClusterRef.Obj(); }
     Double_t             R9()                       const { return fR9;                    }
@@ -121,8 +127,16 @@ namespace mithep
     Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
     Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
     Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
+    UInt_t               NPFPhotonsInMustache()  const { return fPFPhotonsInMustache.Entries(); }
+    UInt_t               NPFPhotonsOutOfMustache() const { return fPFPhotonsOutOfMustache.Entries(); }
+    const PFCandidate   *PFPhotonInMustache(UInt_t i) const { return fPFPhotonsInMustache.At(i); }
+    const PFCandidate   *PFPhotonOutOfMustache(UInt_t i) const { return fPFPhotonsOutOfMustache.At(i); }
 
-    void                 AddConversion(const Conversion *c)      { fConversions.Add(c); }
+    //void                 AddConversion(const Conversion *c)      { fConversions.Add(c); } *DEPRECATED*
+    void                 AddConversionD(const DecayParticle *c)  { fConversionsD.Add(c); }
+    void                 AddConversionS(const DecayParticle *c)  { fConversionsS.Add(c); }
+    void                 AddPFPhotonInMustache(const PFCandidate *c) { fPFPhotonsInMustache.Add(c); }
+    void                 AddPFPhotonOutOfMustache(const PFCandidate *c) { fPFPhotonsOutOfMustache.Add(c); }
     void                 SetEnergyErr(Double_t x)                { fEnergyErr               = x; }
     void                 SetEnergyErrSmeared(Double_t x)         { fEnergyErrSmeared        = x; }
     void                 SetEnergySmearing(Double_t x)           { fEnergySmearing          = x; }
@@ -240,7 +254,7 @@ namespace mithep
     Bool_t               fIsLoosePhoton;      //if loose photon cuts are passed
     Bool_t               fIsTightPhoton;      //if tight photon cuts are passed
     Bool_t               fIsConverted;        //if photon converted
-    RefArray<Conversion> fConversions;        //refs to associated conversion candidates
+    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*
     Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
     Ref<Vertex>          fPVRef;              //ref to associated primary vertex
     Double32_t           fEnergyErr;          //[0,0,14]ene uncer. from var. regr.
@@ -258,8 +272,12 @@ namespace mithep
     Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
     Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
     Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
-
-    ClassDef(Photon,15) // Photon class
+    RefArray<DecayParticle> fConversionsD;        //refs to associated conversion candidates (using newer DecayParticle format)
+    RefArray<DecayParticle> fConversionsS;        //refs to associated conversion candidates (using newer DecayParticle format) - single leg conversions
+    RefArray<PFCandidate> fPFPhotonsInMustache; //refs to photon-type PFCandidates inside of mustache region
+    RefArray<PFCandidate> fPFPhotonsOutOfMustache; //refs to photon-type PFCandidates outside of mustache region
+    
+    ClassDef(Photon,16) // Photon class
   };
 }
 
@@ -274,6 +292,10 @@ inline void mithep::Photon::Mark(UInt_t ib) const
   if (fSuperClusterRef.IsValid())
     fSuperClusterRef.Obj()->Mark(ib);
   fConversions.Mark(ib);
+  fConversionsD.Mark(ib);
+  fConversionsS.Mark(ib);
+  fPFPhotonsInMustache.Mark(ib);
+  fPFPhotonsOutOfMustache.Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

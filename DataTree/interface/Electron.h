@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.51 2012/04/04 21:00:15 sixie Exp $
+// $Id: Electron.h,v 1.52 2012/04/20 16:05:48 bendavid Exp $
 //
 // Electron
 //
@@ -154,6 +154,7 @@ namespace mithep
       Double_t             PIn()                            const { return fPIn; }
       Double_t             POut()                           const { return fPOut; }
       const SuperCluster  *SCluster()                       const { return fSuperClusterRef.Obj(); }
+      const SuperCluster  *PFSCluster()                     const { return fPFSuperClusterRef.Obj(); }      
       Double_t             ScPixCharge()                    const { return fScPixCharge; }
       						            
       Double_t             EcalRecHitIsoDr04()              const { return fEcalJurassicIsolation; }
@@ -257,6 +258,8 @@ namespace mithep
       void                 SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
       void	           SetSuperCluster(const SuperCluster* sc) 
                              { fSuperClusterRef = sc; }
+      void	           SetPFSuperCluster(const SuperCluster* sc) 
+                             { fPFSuperClusterRef = sc; }                             
       void	           SetTrackerTrk(const Track* t)                 
                              { fTrackerTrackRef = t; ClearCharge(); }
       void                 SetConvPartnerTrk(const Track *t)
@@ -407,6 +410,7 @@ namespace mithep
       Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
       Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
       Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
+      Ref<SuperCluster>    fPFSuperClusterRef;  //reference to Particle Flow SuperCluster
 
     ClassDef(Electron, 14) // Electron class
   };

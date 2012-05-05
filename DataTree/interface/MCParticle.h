@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.24 2012/03/28 12:15:34 paus Exp $
+// $Id: MCParticle.h,v 1.25 2012/03/29 23:41:55 paus Exp $
 //
 // MCParticle
 //
@@ -80,6 +80,9 @@ namespace mithep
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
 
+      // Some structural tools
+      void                MarkMother(UInt_t i=1)   const;
+
     protected:
       Double_t            GetCharge()              const;
       void                GetMom()                 const;
@@ -94,6 +97,18 @@ namespace mithep
 
     ClassDef(MCParticle,1) // Generated particle class
   };
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::MCParticle::MarkMother(UInt_t ib) const
+{
+  // mark myself
+  mithep::DataObject::Mark(ib);
+  // mark only the mother reference (as opposed to standard Mark() function which marks
+  // only daughters, keep them seperate to avoid circular references
+  if (fMother.IsValid())
+    fMother.Obj()->Mark(ib);
+
 }
 
 //--------------------------------------------------------------------------------------------------

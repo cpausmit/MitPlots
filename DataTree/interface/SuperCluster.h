@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.25 2012/03/28 12:15:34 paus Exp $
+// $Id: SuperCluster.h,v 1.26 2012/03/29 23:41:55 paus Exp $
 //
 // SuperCluster
 //
 // This class holds the super cluster information.
 //
-// Authors: S.Xie
+// Authors: C.Paus, J.Bendavid, S.Xie
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_SUPERCLUSTER_H
@@ -15,6 +15,7 @@
 #include "MitCommon/DataFormats/interface/Vect3C.h"
 #include "MitAna/DataTree/interface/DataObject.h"
 #include "MitAna/DataTree/interface/BasicCluster.h"
+#include "MitAna/DataTree/interface/PsCluster.h"
 #include "MitAna/DataTree/interface/CaloTower.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataCont/interface/Ref.h"
@@ -29,14 +30,19 @@ namespace mithep
                      fEtaC(-99.), fEtaS(-99.), fEtaM(-99.),
                      fPhiC(-99.), fPhiS(-99.), fPhiM(-99.),
                      fXC(-99.), fXS(-99.), fXM(-99.), fXZ(-99.),
-                     fYC(-99.), fYS(-99.), fYM(-99.), fYZ(-99.) {}
+                     fYC(-99.), fYS(-99.), fYM(-99.), fYZ(-99.),
+                     fPreshowerEnergyPlane1(0.), fPreshowerEnergyPlane2(0.),
+                     fPsEffWidthSigmaXX(-99.), fPsEffWidthSigmaYY(-99.) {}
 
     void                   AddCluster(const BasicCluster *c)          { fClusters.Add(c);        }
+    void                   AddPsClust(const PsCluster *c)             { fPsClusts.Add(c);        }
     void                   AddTower(const CaloTower *t)               { fCaloTowers.Add(t);      }
     const BasicCluster    *Cluster(UInt_t i)       const { return fClusters.At(i);               }
     UInt_t                 ClusterSize()           const { return fClusters.Entries();           }
     UInt_t                 NClusters()             const { return fClusters.Entries();           }
     UInt_t                 NHits()                 const;
+    const PsCluster       *PsClust(UInt_t i)       const { return fPsClusts.At(i);               }    
+    UInt_t                 NPsClusts()             const { return fPsClusts.Entries();           }    
     Int_t                  Compare(const TObject *o) const;
     Double_t               Energy()                const { return fEnergy;                       }
     Double_t               Et()                    const;
@@ -59,6 +65,8 @@ namespace mithep
     ThreeVectorC           Point()                 const { return fPoint.V();                    }
     void                   Print(Option_t *opt="") const;
     Double_t               PreshowerEnergy()       const { return fPreshowerEnergy;              }
+    Double_t               PreshowerEnergyPlane1() const { return fPreshowerEnergyPlane1;        }
+    Double_t               PreshowerEnergyPlane2() const { return fPreshowerEnergyPlane2;        }
     Double_t               RawEnergy()             const { return fRawEnergy;                    }
     Double_t               Rho()                   const { return fPoint.Rho();                  }
     Double_t               R9()                    const { return fSeedRef.Obj()->E3x3()/fRawEnergy; }
@@ -78,10 +86,17 @@ namespace mithep
     Double_t               YS()                    const { return fYS;                           }
     Double_t               YM()                    const { return fYM;                           }
     Double_t               YZ()                    const { return fYZ;                           }
+    Double_t               Time()                  const { return fTime;                         }
+    Double_t               SeedTime()              const { return fSeedTime;                     }
+    Double_t               PsEffWidthSigmaXX()     const { return fPsEffWidthSigmaXX;            }
+    Double_t               PsEffWidthSigmaYY()     const { return fPsEffWidthSigmaYY;            }
+
     void                   SetEnergy(Double_t energy)                 { fEnergy = energy;        }
     void                   SetEtaWidth(Double_t etaWidth)             { fEtaWidth = etaWidth;    }
     void                   SetPhiWidth(Double_t phiWidth)             { fPhiWidth = phiWidth;    }
     void                   SetPreshowerEnergy(Double_t e)             { fPreshowerEnergy = e;    }
+    void                   SetPreshowerEnergyPlane1(Double_t e)       { fPreshowerEnergyPlane1 = e; }
+    void                   SetPreshowerEnergyPlane2(Double_t e)       { fPreshowerEnergyPlane2 = e; }
     void                   SetRawEnergy(Double_t rawEnergy)           { fRawEnergy = rawEnergy;  }
     void                   SetHcalDepth1Energy(Double_t x)            { fHcalDepth1Energy = x;   }
     void                   SetHcalDepth2Energy(Double_t x)            { fHcalDepth2Energy = x;   }
@@ -101,6 +116,10 @@ namespace mithep
     void                   SetYS(Double_t x)                          { fYS = x;                 }
     void                   SetYM(Double_t x)                          { fYM = x;                 }
     void                   SetYZ(Double_t x)                          { fYZ = x;                 }
+    void                   SetTime(Double_t x)                        { fTime = x;               }
+    void                   SetSeedTime(Double_t x)                    { fSeedTime = x;           }
+    void                   SetPsEffWidthSigmaXX(Double_t x)           { fPsEffWidthSigmaXX = x;  }
+    void                   SetPsEffWidthSigmaYY(Double_t x)           { fPsEffWidthSigmaYY = x;  }
 
     // Some structural tools
     void                   Mark(UInt_t i=1)  const;
@@ -131,8 +150,16 @@ namespace mithep
     Double32_t              fYS;                  //local coordinates
     Double32_t              fYM;                  //local coordinates
     Double32_t              fYZ;                  //local coordinates
+    Double32_t              fTime;                //ecal timing (weighted average)
+    Double32_t              fSeedTime;            //ecal timing (seed crystal)
 
-    ClassDef(SuperCluster, 4) // Super cluster class
+    Double32_t              fPreshowerEnergyPlane1; //local coordinates
+    Double32_t              fPreshowerEnergyPlane2; //local coordinates
+    Double32_t              fPsEffWidthSigmaXX;       //preshower cluster width in x plane
+    Double32_t              fPsEffWidthSigmaYY;       //preshower cluster width in y plane
+    RefArray<PsCluster>     fPsClusts;              //assigned preshower clusters
+
+    ClassDef(SuperCluster, 5) // Super cluster class
   };
 }
 
@@ -145,6 +172,7 @@ inline void mithep::SuperCluster::Mark(UInt_t ib) const
   if (fSeedRef.IsValid())
     fSeedRef.Obj()->Mark(ib);
   fClusters  .Mark(ib);
+  fPsClusts  .Mark(ib);
   fCaloTowers.Mark(ib);
 }
 

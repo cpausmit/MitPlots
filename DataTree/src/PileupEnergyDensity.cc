@@ -1,6 +1,5 @@
-// $Id: PileupEnergyDensity.cc,v 1.1 2008/11/12 18:18:28 bendavid Exp $
+// $Id: PileupEnergyDensity.cc,v 1.1 2011/03/01 14:23:28 mzanetti Exp $
 
 #include "MitAna/DataTree/interface/PileupEnergyDensity.h"
-
 
 ClassImp(mithep::PileupEnergyDensity)

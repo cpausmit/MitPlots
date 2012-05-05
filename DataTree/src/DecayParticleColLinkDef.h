@@ -1,4 +1,4 @@
-// $Id: DecayParticleColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
+// $Id: DecayParticleColLinkDef.h,v 1.2 2011/03/11 04:03:00 bendavid Exp $
 
 #ifndef MITANA_DATATREE_DECAYPARTICLECOLLINKDEF_H
 #define MITANA_DATATREE_DECAYPARTICLECOLLINKDEF_H
@@ -25,6 +25,8 @@
 #pragma link C++ class mithep::Collection<mithep::DecayParticle>+;
 #pragma link C++ class mithep::Array<mithep::DecayParticle>+;
 #pragma link C++ class mithep::ObjArray<mithep::DecayParticle>+;
+#pragma link C++ class mithep::Ref<mithep::DecayParticle>+;
+#pragma link C++ class mithep::RefArray<mithep::DecayParticle>+;
 #pragma link C++ typedef mithep::DecayParticleCol;
 #pragma link C++ typedef mithep::DecayParticleArr;
 #pragma link C++ typedef mithep::DecayParticleOArr;

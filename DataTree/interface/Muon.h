@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.46 2012/03/28 12:15:34 paus Exp $
+// $Id: Muon.h,v 1.47 2012/03/29 23:41:55 paus Exp $
 //
 // Muon
 //
@@ -9,14 +9,14 @@
 //  Global      : Combined track and muon chambers fit
 //
 //  In the muon class all three muon classes exist and can be determined by checking
-//  whether a fit track exists for such a Muon (eg HasTrackerTrk() == kTRUE). When 
+//  whether a fit track exists for such a Muon (eg HasTrackerTrk() == kTRUE). When
 //  BestTrk function is called the global fit is returned, if that does not
 //  exist the tracker fit is returned upon that failure the standalone muon
 //  is subsequently returned. To consult more see:
 //  http://cmsdoc.cern.ch/cms/Physics/muon/MPOG/Notes/MuonReco.pdf
 //
 // Quality Variables for Selection
-//  Isolation : decomposed to IsoRNNXXXXX 
+//  Isolation : decomposed to IsoRNNXXXXX
 //    NN = 03,05 to denote R =0.3,0.5 in Isolation Cone
 //    XXXXX = SumPt - Sum of Pt of Tracks in Cone (using all Pt Tracks)
 //    XXXXX = EmEt  - Sum of Et of Em component of Calo Towers  (Veto=0.08)
@@ -26,9 +26,9 @@
 //    XXXXX = NJet  - Sum of Jets inside Cone
 //
 // Muon Quality Variables
-//  Extracted from the Muon Tracking Associator 
+//  Extracted from the Muon Tracking Associator
 //   For more se https://twiki.cern.ch/twiki/bin/view/CMS/TrackAssociator
-//  Energy Variables : Energy within (5x5 Ecal Crystal/Hcal/Ho) along Track 
+//  Energy Variables : Energy within (5x5 Ecal Crystal/Hcal/Ho) along Track
 //   using calo towers
 //  S9 Energy Variables : Energy using reconstructed hits calo towers default
 //  Segment Variables :
@@ -37,22 +37,22 @@
 //     4-7: Correspond to segments in 4 CSC chambers in->out
 //    If value undetermined 999999 is returned.
 //   Variables:
-//    DX,DY,PullX,PullY: Uncertainties/Pulls of propagated track 
+//    DX,DY,PullX,PullY: Uncertainties/Pulls of propagated track
 //     with respect to local muon segment
 //   TrackDist,TrackDistErr: Summed Dist/Err (in X,Y) of segment with respect
 //    to propagated track
-//   NSegments : Number of segments in muon using Segment+Track Arbitration 
+//   NSegments : Number of segments in muon using Segment+Track Arbitration
 //   NChambers : Number of muon chambers traversed in propagated track
 //   NMatches  : Number of muon chambers with matches
 //   LastHit   : Returns farest (from center) station with a recorded segment
 //   LastStation  : Returns farest station using Segment+Track Arbitration
 //
-//  Muon Id Methods: Please see Muon Id Note(as of now unpublished): 
+//  Muon Id Methods: Please see Muon Id Note(as of now unpublished):
 //      https://www.cmsaf.mit.edu/twiki/pub/CmsHep/HepWAnalysis/MuonID-ingo.pdf
 //   TMOneStation : Returns bool whether muon passes "Tracker Muon One StationId"
 //    -Matching criteria for one of all segments matched to muon
 //   TMLastStation : Returns bool whether muon passes "LastStation Id" criteria
-//    -Matching criteria for last most segment 
+//    -Matching criteria for last most segment
 //
 // Authors: J.Bendavid, C.Loizides, C.Paus, P.Harris
 //--------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace mithep {
         kSta,               //"Standalone"
         kAny                //any "best" of the above
       };
-      
+
       const Track   *BestTrk()                       const;
       const Track   *GlobalTrk()                     const { return fGlobalTrkRef.Obj();       }
       const Track   *StandaloneTrk()                 const { return fStaTrkRef.Obj();          }
@@ -132,13 +132,14 @@ namespace mithep {
       Bool_t         IsGlobalMuon()                  const { return fIsGlobalMuon;             }
       Bool_t         IsTrackerMuon()                 const { return fIsTrackerMuon;            }
       Bool_t         IsStandaloneMuon()              const { return fIsStandaloneMuon;         }
+      Bool_t         IsPFMuon()                      const { return fIsPFMuon;                 }
       Bool_t         IsCaloMuon()                    const { return fIsCaloMuon;               }
       Double_t       IsoR03SumPt()                   const { return fIsoR03SumPt;              }
       Double_t       IsoR03EmEt()                    const { return fIsoR03EmEt;               }
       Double_t       IsoR03HadEt()                   const { return fIsoR03HadEt;              }
       Double_t       IsoR03HoEt()                    const { return fIsoR03HoEt;               }
       UShort_t       IsoR03NTracks()                 const { return fIsoR03NTracks;            }
-      UShort_t       IsoR03NJets()                   const { return fIsoR03NJets;              } 
+      UShort_t       IsoR03NJets()                   const { return fIsoR03NJets;              }
       Double_t       IsoR05SumPt()                   const { return fIsoR05SumPt;              }
       Double_t       IsoR05EmEt()                    const { return fIsoR05EmEt;               }
       Double_t       IsoR05HadEt()                   const { return fIsoR05HadEt;              }
@@ -149,8 +150,14 @@ namespace mithep {
       UInt_t         NChambers()                     const { return fNTraversedChambers;       }
       UInt_t         NSegments()                     const { return fStationMask.NBitsSet();   }
       UInt_t         NMatches()                      const { return fNMatches;                 }
+      Int_t          NTrkLayersHit()                 const { return fNTrkLayersHit;            }
+      Int_t          NTrkLayersNoHit()               const { return fNTrkLayersNoHit;          }
+      Int_t          NPxlLayersHit()                 const { return fNPxlLayersHit;            }
+      Int_t          NTrkLostHitsIn()                const { return fNTrkLostHitsIn;           }
+      Int_t          NTrkLostHitsOut()               const { return fNTrkLostHitsOut;          }
       Int_t          LastHit()                       const;
-      Int_t          LastStation(Double_t iMaxD, Double_t iMaxP)               const;
+      Int_t          LastStation(Double_t iMaxD,
+				 Double_t iMaxP)     const;
       Int_t          LastStation(Int_t iMax=8)       const;
       Int_t          ObjId()                         const { return ObjType()*1000+Is();       }
       EObjType       ObjType()                       const { return kMuon;                     }
@@ -164,11 +171,11 @@ namespace mithep {
       Bool_t         TMOneStation(Double_t iDYMin = 3, Double_t iPYMin = 3,
                                   Double_t iDXMin = 3, Double_t iPXMin = 3,UInt_t iN = 1)  const;
       void           SetCharge(Char_t x)                   { fCharge = x; ClearCharge();       }
-      void	     SetGlobalTrk(const Track *t)          
+      void           SetGlobalTrk(const Track *t)
                        { fGlobalTrkRef = t; ClearMom(); ClearCharge(); }
-      void	     SetStandaloneTrk(const Track *t)      
+      void           SetStandaloneTrk(const Track *t)
                        { fStaTrkRef = t;    ClearMom(); ClearCharge(); }
-      void	     SetTrackerTrk(const Track *t)         
+      void           SetTrackerTrk(const Track *t)
                        { fTrkTrkRef = t;    ClearMom(); ClearCharge(); }
       void           SetDX(Int_t iStation, Double_t iDX);
       void           SetDY(Int_t iStation, Double_t iDY);
@@ -192,6 +199,7 @@ namespace mithep {
       void           SetPVBSCompatibility(Double_t x)      { fPVBSCompatibility = x;           }
       void           SetTrkKink(Double_t x)                { fTrkKink = x;                     }
       void           SetGlbKink(Double_t x)                { fGlbKink = x;                     }
+      void           SetValidFraction(Double_t x)          { fValidFraction = x;               }
       void           SetEmEnergy(Double_t emEnergy)        { fEmEnergy = emEnergy;             }
       void           SetEmS9Energy(Double_t emS9Energy)    { fEmS9Energy = emS9Energy;         }
       void           SetHadEnergy(Double_t hadEnergy)      { fHadEnergy = hadEnergy;           }
@@ -201,6 +209,7 @@ namespace mithep {
       void           SetIsGlobalMuon(Bool_t b)             { fIsGlobalMuon = b;                }
       void           SetIsTrackerMuon(Bool_t b)            { fIsTrackerMuon = b;               }
       void           SetIsStandaloneMuon(Bool_t b)         { fIsStandaloneMuon = b;            }
+      void           SetIsPFMuon(Bool_t b)                 { fIsPFMuon = b;                    }
       void           SetIsCaloMuon(Bool_t b)               { fIsCaloMuon = b;                  }
       void           SetIsoR03SumPt(Double_t isoR03SumPt)  { fIsoR03SumPt = isoR03SumPt;       }
       void           SetIsoR03EmEt(Double_t isoR03EmEt)    { fIsoR03EmEt = isoR03EmEt;         }
@@ -217,7 +226,12 @@ namespace mithep {
       void           SetNValidHits(UShort_t iNValidHits)   { fNValidHits  = iNValidHits;       }
       void           SetNChambers(UShort_t iNTraCh)        { fNTraversedChambers = iNTraCh;    }
       void           SetNSegments(Int_t iStation, Int_t nSegments);
-      void           SetNMatches(UShort_t iNMatCh)         { fNMatches = iNMatCh;              }
+      void           SetNMatches(UShort_t i)               { fNMatches = i;                    }
+      void           SetNTrkLayersHit(Int_t i)             { fNTrkLayersHit = i;               }
+      void           SetNTrkLayersNoHit(Int_t i)           { fNTrkLayersNoHit = i;             }
+      void           SetNPxlLayersHit(Int_t i)             { fNPxlLayersHit = i;               }
+      void           SetNTrkLostHitsIn(Int_t i)            { fNTrkLostHitsIn = i;              }
+      void           SetNTrkLostHitsOut(Int_t i)           { fNTrkLostHitsOut = i;             }
       void           SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
       void           SetPullX(Int_t iStation, Double_t iPullX);
       void           SetPullY(Int_t iStation, Double_t iPullY);
@@ -230,7 +244,7 @@ namespace mithep {
 
     protected:
       Double_t       GetCharge()                     const;
-      Double_t       GetMass()                       const { return 105.658369e-3;             }  
+      Double_t       GetMass()                       const { return 105.658369e-3;             }
       void           GetMom()                        const;
 
       Vect3C         fMom;                 //stored three-momentum
@@ -239,21 +253,21 @@ namespace mithep {
       Ref<Track>     fStaTrkRef;           //standalone muon track reference
       Ref<Track>     fTrkTrkRef;           //tracker track reference
       Double32_t     fIsoR03SumPt;         //[0,0,14]isolation size R=0.3 sum pt
-      Double32_t     fIsoR03EmEt;          //[0,0,14]isolation size R=0.3 em  trans energy 
+      Double32_t     fIsoR03EmEt;          //[0,0,14]isolation size R=0.3 em  trans energy
       Double32_t     fIsoR03HadEt;         //[0,0,14]isolation size R=0.3 had trans energy
       Double32_t     fIsoR03HoEt;          //[0,0,14]isolation size R=0.3 ho  trans energy
       UShort_t       fIsoR03NTracks;       //isolation size R=0.3 number of tracks
       UShort_t       fIsoR03NJets;         //isolation size R=0.3 number of jets
       Double32_t     fIsoR05SumPt;         //[0,0,14]isolation size R=0.5 sum pt
-      Double32_t     fIsoR05EmEt;          //[0,0,14]isolation size R=0.5 em  trans energy 
+      Double32_t     fIsoR05EmEt;          //[0,0,14]isolation size R=0.5 em  trans energy
       Double32_t     fIsoR05HadEt;         //[0,0,14]isolation size R=0.5 had trans energy
       Double32_t     fIsoR05HoEt;          //[0,0,14]isolation size R=0.5 ho  trans energy
       UShort_t       fIsoR05NTracks;       //isolation size R=0.5 number of tracks
-      UShort_t       fIsoR05NJets;         //isolation size R=0.5 number of jets      
+      UShort_t       fIsoR05NJets;         //isolation size R=0.5 number of jets
       Double32_t     fEmEnergy;            //[0,0,14]energy deposit in ecal
       Double32_t     fHadEnergy;           //[0,0,14]energy deposit in hcal
       Double32_t     fHoEnergy;            //[0,0,14]energy deposit in outer hcal
-      Double32_t     fEmS9Energy;          //[0,0,14]energy deposit in 3x3 ecal 
+      Double32_t     fEmS9Energy;          //[0,0,14]energy deposit in 3x3 ecal
       Double32_t     fHadS9Energy;         //[0,0,14]energy deposit in 3x3 hcal
       Double32_t     fHoS9Energy;          //[0,0,14]energy deposit in 3x3 outer hcal
       Double32_t     fD0PV;                //[0,0,14]transverse impact parameter to signal PV
@@ -265,7 +279,7 @@ namespace mithep {
       Double32_t     fIp3dPVBS;            //[0,0,14]3d impact parameter to signal PV w/ bs constraint
       Double32_t     fIp3dPVBSErr;         //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint
       Double32_t     fPVCompatibility;     //[0,0,14]chi^2 compatibility with signal PV (ndof=2)
-      Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)      
+      Double32_t     fPVBSCompatibility;   //[0,0,14]chi^2 compatibility with signal PV w/ bs constraint (ndof=2)
       Double32_t     fD0PVUB;              //[0,0,14]transverse impact parameter to signal PVUB (unbiased primary vertex - refit removing lepton track)
       Double32_t     fD0PVUBErr;           //[0,0,14]transverse impact parameter uncertainty to signal PVUB
       Double32_t     fIp3dPVUB;            //[0,0,14]3d impact parameter to signal PVUB
@@ -276,9 +290,15 @@ namespace mithep {
       Double32_t     fIp3dPVUBBSErr;       //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint
       Double32_t     fTrkKink;             //[0,0,14]kink algorithm output (tracker track)
       Double32_t     fGlbKink;             //[0,0,14]kink algorithm output (global track)
+      Double32_t     fValidFraction;       //valid tracker hits divided by expected tracker hits
       UShort_t       fNValidHits;          //number of Valid hits in global fit
       UShort_t       fNTraversedChambers;  //number of traversed chambers
       UShort_t       fNMatches;            //number of muon chambers with matches
+      Int_t          fNTrkLayersHit;       //number of tracker layers of track
+      Int_t          fNTrkLayersNoHit;     //number of missing tracker layers of track
+      Int_t          fNPxlLayersHit;       //number of pixel layers of track
+      Int_t          fNTrkLostHitsIn;      //number of expected hits before the first hit in the trajectory
+      Int_t          fNTrkLostHitsOut;     //number of expected hits after the last hit in the trajectory
       MuonQuality    fQuality;             //muon quality
       BitMask8       fStationMask;         //bitmap of station with tracks, 0-3 DT, 4-7 CSCs
       Double32_t     fDX[8];               //[0,0,14]uncertainty in x in given muon chamber
@@ -291,6 +311,7 @@ namespace mithep {
       Bool_t         fIsGlobalMuon;        //GlobalMuon algo flag
       Bool_t         fIsTrackerMuon;       //TrackerMuon algo flag
       Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
+      Bool_t         fIsPFMuon;            //particle flow muon flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
     ClassDef(Muon, 8) // Muon class
@@ -347,7 +368,7 @@ inline void mithep::Muon::GetMom() const
   // information has better resolution apparently in some cases than the global fit.)
   // If momentum is unfilled, fall back to old method of getting momentum from best track
   // (for backwards compatibility.)
-  
+
   if (fMom.Rho()>0.0)
     fCachedMom.SetCoordinates(fMom.Rho(),fMom.Eta(),fMom.Phi(),GetMass());
   else
@@ -355,66 +376,66 @@ inline void mithep::Muon::GetMom() const
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetDX(Int_t iStation) const 
+inline Double_t mithep::Muon::GetDX(Int_t iStation) const
 {
   // Return uncertainty in x in given chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fDX[iStation]; 
+  return fDX[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetDY(Int_t iStation) const 
+inline Double_t mithep::Muon::GetDY(Int_t iStation) const
 {
   // Return uncertainty in y in given chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fDY[iStation]; 
+  return fDY[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetPullX(Int_t iStation) const 
+inline Double_t mithep::Muon::GetPullX(Int_t iStation) const
 {
   // Return pull in x in given chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fPullX[iStation]; 
+  return fPullX[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetPullY(Int_t iStation) const 
+inline Double_t mithep::Muon::GetPullY(Int_t iStation) const
 {
   // Return pull in y in given chamber.
-  
+
   assert(iStation >= 0 && iStation < 8);
-  return fPullY[iStation]; 
+  return fPullY[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetTrackDist(Int_t iStation) const 
+inline Double_t mithep::Muon::GetTrackDist(Int_t iStation) const
 {
   // Return track distance in given chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fTrackDist[iStation]; 
+  return fTrackDist[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Double_t mithep::Muon::GetTrackDistErr(Int_t iStation) const 
+inline Double_t mithep::Muon::GetTrackDistErr(Int_t iStation) const
 {
   // Return error of track distance in given chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fTrackDistErr[iStation]; 
+  return fTrackDistErr[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Int_t mithep::Muon::GetNSegments(Int_t iStation) const 
+inline Int_t mithep::Muon::GetNSegments(Int_t iStation) const
 {
   // Return number of segments in chamber.
 
   assert(iStation >= 0 && iStation < 8);
-  return fNSegments[iStation]; 
+  return fNSegments[iStation];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -424,23 +445,23 @@ inline Bool_t mithep::Muon::Has(EClassType type) const
 
   switch (type) {
     case kAny:
-      if (HasTrk()) 
+      if (HasTrk())
         return kTRUE;
       break;
     case kGlobal:
-      if (HasGlobalTrk()) 
+      if (HasGlobalTrk())
         return kTRUE;
       break;
     case kTracker:
-      if (HasTrackerTrk()) 
+      if (HasTrackerTrk())
         return kTRUE;
       break;
     case kSta:
-      if (HasStandaloneTrk()) 
+      if (HasStandaloneTrk())
         return kTRUE;
       break;
     case kNone:
-      if (!HasTrk()) 
+      if (!HasTrk())
         return kTRUE;
       break;
     default:
@@ -480,7 +501,7 @@ inline Int_t mithep::Muon::LastHit() const
 
   Int_t lId = -1;
   for (Int_t i0 = 0; i0 < 8; ++i0) {
-    if (GetDX(i0) < 99999 || GetDY(i0) < 99999) 
+    if (GetDX(i0) < 99999 || GetDY(i0) < 99999)
       lId = i0;
   }
   return lId;
@@ -491,8 +512,8 @@ inline Int_t mithep::Muon::LastStation(Int_t iMax) const
 {
   // Return the last station, or -1 of no one found.
 
-  Int_t lId = -1; 
-  if(TMath::Abs(iMax) > 8) 
+  Int_t lId = -1;
+  if(TMath::Abs(iMax) > 8)
     iMax = 8;
   for (Int_t i0 = 0; i0 < iMax; ++i0) {
     if (StationBit(i0) && ((lId % 4) < (i0 % 4)))
@@ -508,10 +529,10 @@ inline Int_t mithep::Muon::LastStation(Double_t iMaxD, Double_t iMaxP) const
 
   Int_t lId = -1;
   for (Int_t i0 = 0; i0 < 8; ++i0) {
-    if ((lId % 4) > (i0 % 4)) 
+    if ((lId % 4) > (i0 % 4))
       continue;
     if (GetTrackDist(i0) < iMaxD &&
-        GetTrackDist(i0)/GetTrackDistErr(i0) < iMaxP) 
+        GetTrackDist(i0)/GetTrackDistErr(i0) < iMaxP)
       lId = i0;
   }
   return lId;
@@ -540,15 +561,15 @@ inline Bool_t mithep::Muon::PromptTight(EClassType type) const
       break;
   }
 
-  if (lTrack == 0) 
+  if (lTrack == 0)
     return kFALSE;
-  if (lTrack->NHits() < 11)        
+  if (lTrack->NHits() < 11)
     return kFALSE;
-  if (lTrack->Chi2()/lTrack->Ndof() > 10.)                         
+  if (lTrack->Chi2()/lTrack->Ndof() > 10.)
     return kFALSE;
-  if (lTrack->D0() > 0.2)                                          
+  if (lTrack->D0() > 0.2)
     return kFALSE;
-  if ((LastHit() % 4) == 0)                                   
+  if ((LastHit() % 4) == 0)
     return kFALSE;
   return kTRUE;
 }
@@ -557,24 +578,24 @@ inline Bool_t mithep::Muon::PromptTight(EClassType type) const
 inline Bool_t mithep::Muon::TMOneStation(Double_t iDYMin, Double_t iPYMin,
                                          Double_t iDXMin, Double_t iPXMin, UInt_t iN) const
 {
-  // Check if the muon is matched to at least one station (chamber). 
+  // Check if the muon is matched to at least one station (chamber).
 
   if (NSegments() < iN)
     return kFALSE; //second last one
 
-  Bool_t pGoodX  = kFALSE; 
+  Bool_t pGoodX  = kFALSE;
   Bool_t pBadY   = kFALSE;
   for (Int_t i0 = 0; i0 < 8; ++i0) {
     if ((TMath::Abs(GetDX(i0))    < iDXMin  ||
-         TMath::Abs(GetPullX(i0)) < iPXMin)) 
-      pGoodX = kTRUE; 
+         TMath::Abs(GetPullX(i0)) < iPXMin))
+      pGoodX = kTRUE;
     if (pGoodX &&
-        (TMath::Abs(GetDY(i0))    < iDYMin  || 
-         TMath::Abs(GetPullY(i0)) < iPYMin))  
+        (TMath::Abs(GetDY(i0))    < iDYMin  ||
+         TMath::Abs(GetPullY(i0)) < iPYMin))
       return kTRUE;
-    if (TMath::Abs(GetDY(i0)) < 999999) 
+    if (TMath::Abs(GetDY(i0)) < 999999)
       pBadY = kTRUE;
-    if (i0 == 3 && pGoodX && !pBadY)             
+    if (i0 == 3 && pGoodX && !pBadY)
       return kTRUE;
   }
   return kFALSE;
@@ -584,34 +605,34 @@ inline Bool_t mithep::Muon::TMOneStation(Double_t iDYMin, Double_t iPYMin,
 inline Bool_t mithep::Muon::TMLastStation(Double_t iDYMin, Double_t iPYMin,
                                           Double_t iDXMin, Double_t iPXMin, UInt_t iN) const
 {
-  // Check if the muon is matched to its last station (chamber). 
-  
-  if (NSegments() < iN) 
+  // Check if the muon is matched to its last station (chamber).
+
+  if (NSegments() < iN)
     return kFALSE; //second last one
 
   Int_t lLast = LastStation(-3.,-3.); // last required station
-  if (lLast < 0)                                   
+  if (lLast < 0)
     return kFALSE;
-  if (GetDX(lLast) > 9999.)                
+  if (GetDX(lLast) > 9999.)
     return kFALSE;
   lLast = LastStation(); //no requirements
-  if (lLast < 0)                                   
+  if (lLast < 0)
     return kFALSE;
   if (!(TMath::Abs(GetDX(lLast))    < iDXMin  ||
-        TMath::Abs(GetPullX(lLast)) < iPXMin))  
+        TMath::Abs(GetPullX(lLast)) < iPXMin))
     return kFALSE;
-  if (lLast == 3) 
+  if (lLast == 3)
     lLast = LastStation(3);
-  if (lLast < 0)                                   
+  if (lLast < 0)
     return kFALSE;
   if (!(TMath::Abs(GetDY(lLast))    < iDYMin ||
-        TMath::Abs(GetPullY(lLast)) < iPYMin))  
+        TMath::Abs(GetPullY(lLast)) < iPYMin))
     return kFALSE;
   return kTRUE;
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::SetDX(Int_t iStation, Double_t iDX) 
+inline void mithep::Muon::SetDX(Int_t iStation, Double_t iDX)
 {
   // Return uncertainty in x in given chamber.
 
@@ -638,7 +659,7 @@ inline void mithep::Muon::SetPullX(Int_t iStation, Double_t iPullX)
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::SetPullY(Int_t iStation, Double_t iPullY) 
+inline void mithep::Muon::SetPullY(Int_t iStation, Double_t iPullY)
 {
   // Set pull in y in given chamber.
 
@@ -647,7 +668,7 @@ inline void mithep::Muon::SetPullY(Int_t iStation, Double_t iPullY)
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::SetTrackDist(Int_t iStation, Double_t iDist) 
+inline void mithep::Muon::SetTrackDist(Int_t iStation, Double_t iDist)
 
 {
   // Set track distance in given chamber.
@@ -666,7 +687,7 @@ inline void mithep::Muon::SetTrackDistErr(Int_t iStation, Double_t iDistErr)
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t nSegments) 
+inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t nSegments)
 {
   // Set number of segments in chamber.
 
@@ -678,7 +699,7 @@ inline void mithep::Muon::SetNSegments(Int_t iStation, Int_t nSegments)
 inline void mithep::Muon::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
 {
   // Set three-vector
-  
+
   fMom.Set(pt,eta,phi);
   ClearMom();
 }

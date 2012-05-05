@@ -1,10 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTau.h,v 1.4 2012/03/28 12:15:34 paus Exp $
+// $Id: CaloTau.h,v 1.5 2012/03/29 23:41:54 paus Exp $
 //
 // CaloTau
 //
-// This class holds information about reconstructed Taus based on calorimeter towers, 
-// ecal basic clusters, and tracks.
+// This class holds information about reconstructed Taus based on calorimeter towers, ecal basic
+// clusters, and tracks.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
