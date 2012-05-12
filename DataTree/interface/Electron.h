@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.53 2012/05/05 16:49:09 paus Exp $
+// $Id: Electron.h,v 1.54 2012/05/12 11:37:23 ceballos Exp $
 //
 // Electron
 //
 // This class holds information about reconstructed electrons from CMSSW.
 //
-// Authors: C.Loizides, J.Bendavid, S.Xie
+// Authors: C.Paus, G.Ceballos, C.Loizides, J.Bendavid, S.Xie
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_ELECTRON_H
@@ -49,8 +49,13 @@ namespace mithep
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0),
+<<<<<<< Electron.h
+        fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
+	fEcalEnergy(0), fEcalEnergyError(0) {}
+=======
         fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
 	fCorrectedEcalEnergy(0), fCorrectedEcalEnergyError(0) {}
+>>>>>>> 1.54
 
       const Track         *BestTrk()                     const;
       Double_t             D0PV()                        const { return fD0PV; }
@@ -177,11 +182,19 @@ namespace mithep
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
       const Track         *AmbiguousGsfTrack(UInt_t i)      const { return fAmbiguousGsfTracks.At(i); }
       Int_t                CTFTrkNLayersWithMeasurement()   const { return fCTFTrkNLayersWithMeasurement; }
+<<<<<<< Electron.h
+      Double_t             HadOverEmTow()                   const { return fHadOverEmTow;       }
+      Double_t             HcalIsoTowDr03()                 const { return fHCalIsoTowDr03;    }
+      Double_t             HcalIsoTowDr04()                 const { return fHCalIsoTowDr04;    } 
+      Double_t             EcalEnergy()                     const { return fEcalEnergy;      }
+      Double_t             EcalEnergyError()                const { return fEcalEnergyError; }
+=======
       Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
       Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
       Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
       Double_t             CorrectedEcalEnergy()      const { return fCorrectedEcalEnergy;      }
       Double_t             CorrectedEcalEnergyError() const { return fCorrectedEcalEnergyError; }
+>>>>>>> 1.54
 
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
@@ -293,11 +306,19 @@ namespace mithep
       void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
                                   { fConvPosition.SetXYZ(x,y,z); }
       void                 SetCTFTrkNLayersWithMeasurement(Int_t x){ fCTFTrkNLayersWithMeasurement = x; }
+<<<<<<< Electron.h
+      void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x; }
+      void                 SetHCalIsoTowDr03(Double_t x)           { fHCalIsoTowDr03 = x; }
+      void                 SetHCalIsoTowDr04(Double_t x)           { fHCalIsoTowDr04 = x; } 
+      void                 SetEcalEnergy(Double_t e)               { fEcalEnergy = e; }
+      void                 SetEcalEnergyError(Double_t e)          { fEcalEnergyError = e; }
+=======
       void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
       void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
       void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
       void                 SetCorrectedEcalEnergy(Double_t e)     { fCorrectedEcalEnergy= e;       }
       void                 SetCorrectedEcalEnergyError(Double_t e){ fCorrectedEcalEnergyError = e; }
+>>>>>>> 1.54
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
@@ -360,30 +381,30 @@ namespace mithep
       Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
       Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (gsf track)
       Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
-      Double32_t           fD0PVCkf;                      //[0,0,14]transverse impact parameter to signal PV (ckf track)
-      Double32_t           fD0PVCkfErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV (ckf track)
-      Double32_t           fIp3dPVCkf;                    //[0,0,14]3d impact parameter to signal PV (ckf track)
-      Double32_t           fIp3dPVCkfErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV (ckf track)
-      Double32_t           fD0PVBSCkf;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (ckf track)
-      Double32_t           fD0PVBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
-      Double32_t           fIp3dPVBSCkf;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
-      Double32_t           fIp3dPVBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
-      Double32_t           fD0PVUB;                      //[0,0,14]transverse impact parameter to signal PVUB (gsf track)
-      Double32_t           fD0PVUBErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PVUB (gsf track)
-      Double32_t           fIp3dPVUB;                    //[0,0,14]3d impact parameter to signal PVUB (gsf track)
-      Double32_t           fIp3dPVUBErr;                 //[0,0,14]3d impact parameter uncertainty to signal PVUB (gsf track)
-      Double32_t           fD0PVUBBS;                    //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (gsf track)
-      Double32_t           fD0PVUBBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
-      Double32_t           fIp3dPVUBBS;                  //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (gsf track)
-      Double32_t           fIp3dPVUBBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
-      Double32_t           fD0PVUBCkf;                      //[0,0,14]transverse impact parameter to signal PVUB (ckf track)
-      Double32_t           fD0PVUBCkfErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PVUB (ckf track)
-      Double32_t           fIp3dPVUBCkf;                    //[0,0,14]3d impact parameter to signal PVUB (ckf track)
-      Double32_t           fIp3dPVUBCkfErr;                 //[0,0,14]3d impact parameter uncertainty to signal PVUB (ckf track)
-      Double32_t           fD0PVUBBSCkf;                    //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (ckf track)
-      Double32_t           fD0PVUBBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
-      Double32_t           fIp3dPVUBBSCkf;                  //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (ckf track)
-      Double32_t           fIp3dPVUBBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fD0PVCkf;                   //[0,0,14]transverse impact parameter to signal PV (ckf track)
+      Double32_t           fD0PVCkfErr;                //[0,0,14]transverse impact parameter uncertainty to signal PV (ckf track)
+      Double32_t           fIp3dPVCkf;                 //[0,0,14]3d impact parameter to signal PV (ckf track)
+      Double32_t           fIp3dPVCkfErr;              //[0,0,14]3d impact parameter uncertainty to signal PV (ckf track)
+      Double32_t           fD0PVBSCkf;                 //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (ckf track)
+      Double32_t           fD0PVBSCkfErr;              //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVBSCkf;               //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVBSCkfErr;            //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+      Double32_t           fD0PVUB;                    //[0,0,14]transverse impact parameter to signal PVUB (gsf track)
+      Double32_t           fD0PVUBErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB (gsf track)
+      Double32_t           fIp3dPVUB;                  //[0,0,14]3d impact parameter to signal PVUB (gsf track)
+      Double32_t           fIp3dPVUBErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB (gsf track)
+      Double32_t           fD0PVUBBS;                  //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fD0PVUBBSErr;               //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVUBBS;                //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fIp3dPVUBBSErr;             //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+      Double32_t           fD0PVUBCkf;                 //[0,0,14]transverse impact parameter to signal PVUB (ckf track)
+      Double32_t           fD0PVUBCkfErr;              //[0,0,14]transverse impact parameter uncertainty to signal PVUB (ckf track)
+      Double32_t           fIp3dPVUBCkf;               //[0,0,14]3d impact parameter to signal PVUB (ckf track)
+      Double32_t           fIp3dPVUBCkfErr;            //[0,0,14]3d impact parameter uncertainty to signal PVUB (ckf track)
+      Double32_t           fD0PVUBBSCkf;               //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fD0PVUBBSCkfErr;            //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVUBBSCkf;             //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (ckf track)
+      Double32_t           fIp3dPVUBBSCkfErr;          //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
       Double32_t           fGsfPVCompatibility;        //[0,0,14]gsf compatibility with signal PV
       Double32_t           fGsfPVBSCompatibility;      //[0,0,14]gsf compatibility with signal PV w/ bs constraint
       Double32_t           fGsfPVCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
@@ -412,14 +433,14 @@ namespace mithep
       RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
       Double_t             fEEleClusterOverPout;       //energy of the electron cluster
       Int_t                fCTFTrkNLayersWithMeasurement; //number of tracker layers from associated ctf trk
-      Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
-      Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
-      Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
-      Double32_t           fCorrectedEcalEnergy;      //[0,0,14]corrected Ecal energy
-      Double32_t           fCorrectedEcalEnergyError; //[0,0,14]corrected Ecal energy error
-      Ref<SuperCluster>    fPFSuperClusterRef;  //reference to Particle Flow SuperCluster
+      Double32_t           fHadOverEmTow;              //[0,0,14]per-tower definition of hadronic/em energy fraction
+      Double32_t           fHCalIsoTowDr03;            //[0,0,14]hcal isolation matched to per tower h/e definition
+      Double32_t           fHCalIsoTowDr04;            //[0,0,14]hcal isolation matched to per tower h/e definition
+      Double32_t           fEcalEnergy;                //[0,0,14]corrected Ecal energy
+      Double32_t           fEcalEnergyError;           //[0,0,14]corrected Ecal energy error
+      Ref<SuperCluster>    fPFSuperClusterRef;         //reference to Particle Flow SuperCluster
 
-    ClassDef(Electron, 15) // Electron class
+    ClassDef(Electron, 15)                             // Electron class
   };
 }
 
