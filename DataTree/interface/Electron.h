@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.55 2012/05/12 15:55:10 paus Exp $
+// $Id: Electron.h,v 1.56 2012/05/12 16:06:05 paus Exp $
 //
 // Electron
 //
@@ -177,19 +177,11 @@ namespace mithep
       Bool_t               HasAmbiguousGsfTrack(const Track *t) const { return fAmbiguousGsfTracks.HasObject(t); }
       const Track         *AmbiguousGsfTrack(UInt_t i)      const { return fAmbiguousGsfTracks.At(i); }
       Int_t                CTFTrkNLayersWithMeasurement()   const { return fCTFTrkNLayersWithMeasurement; }
-<<<<<<< Electron.h
       Double_t             HadOverEmTow()                   const { return fHadOverEmTow;       }
       Double_t             HcalIsoTowDr03()                 const { return fHCalIsoTowDr03;    }
       Double_t             HcalIsoTowDr04()                 const { return fHCalIsoTowDr04;    } 
       Double_t             EcalEnergy()                     const { return fEcalEnergy;      }
       Double_t             EcalEnergyError()                const { return fEcalEnergyError; }
-=======
-      Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
-      Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
-      Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
-      Double_t             CorrectedEcalEnergy()      const { return fCorrectedEcalEnergy;      }
-      Double_t             CorrectedEcalEnergyError() const { return fCorrectedEcalEnergyError; }
->>>>>>> 1.54
 
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
