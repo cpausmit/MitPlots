@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.52 2012/04/20 16:05:48 bendavid Exp $
+// $Id: Electron.h,v 1.53 2012/05/05 16:49:09 paus Exp $
 //
 // Electron
 //
@@ -49,7 +49,8 @@ namespace mithep
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0),
-        fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
+        fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
+	fCorrectedEcalEnergy(0), fCorrectedEcalEnergyError(0) {}
 
       const Track         *BestTrk()                     const;
       Double_t             D0PV()                        const { return fD0PV; }
@@ -179,6 +180,8 @@ namespace mithep
       Double_t             HadOverEmTow()          const { return fHadOverEmTow;       }
       Double_t             HcalIsoTowDr03()        const { return fHCalIsoTowDr03;    }
       Double_t             HcalIsoTowDr04()        const { return fHCalIsoTowDr04;    } 
+      Double_t             CorrectedEcalEnergy()      const { return fCorrectedEcalEnergy;      }
+      Double_t             CorrectedEcalEnergyError() const { return fCorrectedEcalEnergyError; }
 
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
@@ -293,6 +296,8 @@ namespace mithep
       void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
       void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
       void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
+      void                 SetCorrectedEcalEnergy(Double_t e)     { fCorrectedEcalEnergy= e;       }
+      void                 SetCorrectedEcalEnergyError(Double_t e){ fCorrectedEcalEnergyError = e; }
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
@@ -410,9 +415,11 @@ namespace mithep
       Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
       Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
       Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
+      Double32_t           fCorrectedEcalEnergy;      //[0,0,14]corrected Ecal energy
+      Double32_t           fCorrectedEcalEnergyError; //[0,0,14]corrected Ecal energy error
       Ref<SuperCluster>    fPFSuperClusterRef;  //reference to Particle Flow SuperCluster
 
-    ClassDef(Electron, 14) // Electron class
+    ClassDef(Electron, 15) // Electron class
   };
 }
 
