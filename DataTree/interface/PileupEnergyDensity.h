@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PileupEnergyDensity.h,v 1.4 2011/10/08 17:53:57 bendavid Exp $
+// $Id: PileupEnergyDensity.h,v 1.5 2012/05/05 16:49:10 paus Exp $
 //
 // PileupEnergyDensity
 //
 // Class to store the pu energy density as computed by fastjet algorithm
 //
-// Authors: M. Zanetti
+// Authors: C.Paus, A.Levin, M.Zanetti
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATATREE_PILEUPENERGYDENSITY_H
@@ -79,7 +79,7 @@ namespace mithep
     Double32_t          fRhoKt6PFJetsCentralNeutral;
     Double32_t          fRhoKt6PFJetsCentralNeutralTight;
 
-    ClassDef(PileupEnergyDensity, 2)             // Pileup Energy Density class
+    ClassDef(PileupEnergyDensity, 3)             // Pileup Energy Density class
   };
 }
 #endif

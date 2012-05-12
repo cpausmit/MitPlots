@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Muon.h,v 1.47 2012/03/29 23:41:55 paus Exp $
+// $Id: Muon.h,v 1.48 2012/05/05 16:49:10 paus Exp $
 //
 // Muon
 //
@@ -314,7 +314,7 @@ namespace mithep {
       Bool_t         fIsPFMuon;            //particle flow muon flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 8) // Muon class
+    ClassDef(Muon, 9) // Muon class
   };
 }
 
