@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.54 2012/05/12 11:37:23 ceballos Exp $
+// $Id: Electron.h,v 1.55 2012/05/12 15:55:10 paus Exp $
 //
 // Electron
 //
@@ -49,13 +49,8 @@ namespace mithep
         fClassification(0), fIsEB(), fIsEE(0), fIsEBEEGap(0), fIsEBEtaGap(0),
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0),
-<<<<<<< Electron.h
         fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
 	fEcalEnergy(0), fEcalEnergyError(0) {}
-=======
-        fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
-	fCorrectedEcalEnergy(0), fCorrectedEcalEnergyError(0) {}
->>>>>>> 1.54
 
       const Track         *BestTrk()                     const;
       Double_t             D0PV()                        const { return fD0PV; }
@@ -306,19 +301,11 @@ namespace mithep
       void                 SetConversionXYZ(Double_t x, Double_t y, Double_t z)
                                   { fConvPosition.SetXYZ(x,y,z); }
       void                 SetCTFTrkNLayersWithMeasurement(Int_t x){ fCTFTrkNLayersWithMeasurement = x; }
-<<<<<<< Electron.h
       void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x; }
       void                 SetHCalIsoTowDr03(Double_t x)           { fHCalIsoTowDr03 = x; }
       void                 SetHCalIsoTowDr04(Double_t x)           { fHCalIsoTowDr04 = x; } 
       void                 SetEcalEnergy(Double_t e)               { fEcalEnergy = e; }
       void                 SetEcalEnergyError(Double_t e)          { fEcalEnergyError = e; }
-=======
-      void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
-      void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
-      void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
-      void                 SetCorrectedEcalEnergy(Double_t e)     { fCorrectedEcalEnergy= e;       }
-      void                 SetCorrectedEcalEnergyError(Double_t e){ fCorrectedEcalEnergyError = e; }
->>>>>>> 1.54
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
