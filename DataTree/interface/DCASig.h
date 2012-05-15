@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DCASig.h,v 1.2 2012/03/28 12:15:34 paus Exp $
+// $Id: DCASig.h,v 1.3 2012/03/29 23:41:55 paus Exp $
 //
 // DCA Significance
 //
@@ -71,9 +71,6 @@ namespace mithep
                                                   { i2nd ? f2ndMuonRef = iMuon : fMuonRef = iMuon; }
     void            SetType         (EDCAType v)           { fDCAType      = v; }
 
-    // Some structural tools
-    void            Mark(UInt_t i=1) const;
-
   protected:
  
     EDCAType      fDCAType;         // Lepton pair type
@@ -96,19 +93,5 @@ namespace mithep
 
     ClassDef(DCASig,1) // DCA Significance reference
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void mithep::DCASig::Mark(UInt_t ib) const
-{
-  // mark myself
-  mithep::DataObject::Mark(ib);
-  // mark my dependencies if they are there
-  GetTau()        ->Mark(ib);
-  GetElectron()   ->Mark(ib);
-  GetMuon()       ->Mark(ib);
-  Get2ndTau()     ->Mark(ib);
-  Get2ndElectron()->Mark(ib);
-  Get2ndMuon()    ->Mark(ib);
 }
 #endif
