@@ -1,9 +1,9 @@
 //
-// $Id: TAMOutput.cxx,v 1.7 2011/03/11 04:03:54 bendavid Exp $
+// $Id: TAMOutput.cxx,v 1.8 2012/03/30 01:08:39 paus Exp $
 //
 
 #include "MitAna/TAM/interface/TAMOutput.h"
-
+#include "TTree.h"
 
 #ifndef G__API_H
 #include "Api.h"
@@ -764,7 +764,7 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
             ++counter;
          }
          newdir = gDirectory->mkdir(dirname);
-         TDirectory::TContext context(newdir);
+         TDirectory::TContext context(newdir);	 
          nbytes += obj->Write(name, option, bsize);
       }
       return nbytes;
@@ -823,6 +823,10 @@ Int_t TAMOutput::WriteCol(const TCollection *col, const char* name,
                  tmpname.Data(), oname.Data());
       }
 
+      TTree *treeobj = dynamic_cast<TTree*>(obj);
+      if (treeobj && treeobj->GetDirectory()->GetFile())
+	obj = treeobj->CloneTree();
+      
       nbytes += obj->Write(oname, option, bsize);
    }
    return nbytes;
