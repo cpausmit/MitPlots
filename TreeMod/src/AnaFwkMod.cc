@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.16 2011/07/22 18:21:02 bendavid Exp $
+// $Id: AnaFwkMod.cc,v 1.17 2012/03/28 12:15:38 paus Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -252,10 +252,10 @@ void AnaFwkMod::SlaveBegin()
   
   ReqBranch(fPileupInfoName, fPileupInfo);
   
-  hNPU = new TH1D("hNPU", "hNPU", 51, -0.5, 50.5);
+  hNPU = new TH1D("hNPU", "hNPU", 201, -0.5, 200.5);
   AddOutput(hNPU);  
   
-  hNPU50ns = new TH3D("hNPU50ns", "hNPU50ns", 51, -0.5, 50.5, 51, -0.5, 50.5, 51, -0.5, 50.5);
+  hNPU50ns = new TH3D("hNPU50ns", "hNPU50ns", 201, -0.5, 200.5, 201, -0.5, 200.5, 201, -0.5, 200.5);
   AddOutput(hNPU50ns);  
   
 }
