@@ -51,7 +51,7 @@ for fileset in `cat $filesets | cut -d' ' -f1 `
 do
   # check if the output already exists and whether it is complete
   rFile="$outputDir/$outputName/$book/$dataset"
-  rFile=`ls $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root 2> /dev/null`
+  rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
 
   process=false
   if [ -f "$rFile" ]
