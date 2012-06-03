@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.79 2012/04/24 15:37:09 bendavid Exp $
+# $Id: setup.sh,v 1.80 2012/05/05 16:49:11 paus Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -32,8 +32,8 @@ cd $CMSSW_BASE/src;
 if test $version -lt 5003000 -a $version -ge 5002000; then
   #support GBRForest for classification, and make compatible with GBRTrain
   addpkg CondFormats/EgammaObjects V00-04-00
-  addpkg RecoEcal/EgammaCoreTools V05-08-20
-  addpkg RecoEgamma/EgammaTools GlobePFDevPatch1
+  addpkg RecoEcal/EgammaCoreTools  V05-08-20
+  addpkg RecoEgamma/EgammaTools    GlobePFDevPatch1
   checkdeps -a
 fi
 
@@ -50,8 +50,15 @@ if test $version -lt 4005000 -a $version -ge 4004000; then
   cvs co -r regression_Oct11 HiggsAnalysis/HiggsToGammaGamma
 
   # RecoTauTag package with bug fix
-  addpkg RecoTauTag/RecoTau V01-02-16
+  addpkg RecoTauTag/RecoTau       V01-02-16
   addpkg RecoTauTag/Configuration V01-02-12
+
+  # RecoTauTag package recommended for 2012
+  addpkg DataFormats/TauReco    CMSSW_5_2_4 # yes, this is correct
+  addpkg RecoTauTag/TauTagTools CMSSW_5_2_4
+  cvs co -r V01-04-17 RecoTauTag/RecoTau
+  cvs co -r V01-04-03 RecoTauTag/Configuration
+
 
   #fix HitPattern accessor issue in 44x
   addpkg DataFormats/TrackReco

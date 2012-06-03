@@ -1,4 +1,4 @@
-// $Id: PairTypesLinkDef.h,v 1.2 2009/06/16 17:08:21 loizides Exp $
+// $Id: PairTypesLinkDef.h,v 1.3 2011/03/11 04:03:00 bendavid Exp $
 
 #ifndef MITANA_DATATREE_PAIRLINKDEF_H
 #define MITANA_DATATREE_PAIRLINKDEF_H
@@ -38,7 +38,6 @@
 #pragma link C++ class mithep::Pair<mithep::Electron,mithep::TriggerObject>+;
 #pragma link C++ class mithep::Collection<mithep::Pair<mithep::Electron,mithep::TriggerObject> >+;
 #pragma link C++ class mithep::ObjArray<mithep::Pair<mithep::Electron,mithep::TriggerObject> >+;
-
 
 #pragma link C++ class mithep::Pair<mithep::Muon,mithep::TriggerObject>+;
 #pragma link C++ class mithep::Collection<mithep::Pair<mithep::Muon,mithep::TriggerObject> >+;

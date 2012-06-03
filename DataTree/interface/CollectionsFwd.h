@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CollectionsFwd.h,v 1.6 2010/05/12 19:04:08 ceballos Exp $
+// $Id: CollectionsFwd.h,v 1.7 2010/05/21 06:01:45 ceballos Exp $
 //
 // Collections
 //
@@ -43,6 +43,7 @@
 #include "MitAna/DataTree/interface/PFMetFwd.h"
 #include "MitAna/DataTree/interface/PFTauFwd.h"
 #include "MitAna/DataTree/interface/PhotonFwd.h"
+#include "MitAna/DataTree/interface/PileupEnergyDensityFwd.h"
 #include "MitAna/DataTree/interface/PixelHitFwd.h"
 #include "MitAna/DataTree/interface/StripHitFwd.h"
 #include "MitAna/DataTree/interface/StableDataFwd.h"

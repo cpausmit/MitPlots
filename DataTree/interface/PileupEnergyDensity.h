@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PileupEnergyDensity.h,v 1.5 2012/05/05 16:49:10 paus Exp $
+// $Id: PileupEnergyDensity.h,v 1.6 2012/05/12 13:33:54 paus Exp $
 //
 // PileupEnergyDensity
 //
@@ -30,7 +30,9 @@ namespace mithep
       fRhoKt6PFJets                    (0),
       fRhoKt6PFJetsCentralChargedPileUp(0),
       fRhoKt6PFJetsCentralNeutral      (0),
-      fRhoKt6PFJetsCentralNeutralTight (0)
+      fRhoKt6PFJetsCentralNeutralTight (0),
+      fRhoKt6PFJetsForIso31            (0),
+      fRhoKt6PFJetsForIso25            (0)
         {}
 
     Double_t  RhoDefault()                       const { return fRhoRandom; }
@@ -48,8 +50,10 @@ namespace mithep
     Double_t  RhoKt6PFJetsCentralChargedPileUp() const { return fRhoKt6PFJetsCentralChargedPileUp; }
     Double_t  RhoKt6PFJetsCentralNeutral()       const { return fRhoKt6PFJetsCentralNeutral; }
     Double_t  RhoKt6PFJetsCentralNeutralTight()  const { return fRhoKt6PFJetsCentralNeutralTight; }
-    
-    virtual PileupEnergyDensity *MakeCopy()      const { return new PileupEnergyDensity(*this);   }
+    Double_t  RhoKt6PFJetsForIso31()             const { return fRhoKt6PFJetsForIso31; }
+    Double_t  RhoKt6PFJetsForIso25()             const { return fRhoKt6PFJetsForIso25; }
+
+        virtual PileupEnergyDensity *MakeCopy()      const { return new PileupEnergyDensity(*this);   }
     
     void      SetRho                             (Double_t r) { fRho = r; }
     void      SetRhoLowEta                       (Double_t r) { fRhoHighEta = r; }
@@ -63,6 +67,8 @@ namespace mithep
     void      SetRhoKt6PFJetsCentralChargedPileUp(Double_t r) { fRhoKt6PFJetsCentralChargedPileUp = r; }
     void      SetRhoKt6PFJetsCentralNeutral      (Double_t r) { fRhoKt6PFJetsCentralNeutral = r; }
     void      SetRhoKt6PFJetsCentralNeutralTight (Double_t r) { fRhoKt6PFJetsCentralNeutralTight = r; }
+    void      SetRhoKt6PFJetsForIso31            (Double_t r) { fRhoKt6PFJetsForIso31 = r; }
+    void      SetRhoKt6PFJetsForIso25            (Double_t r) { fRhoKt6PFJetsForIso25 = r; }
     
     
   protected:
@@ -78,8 +84,10 @@ namespace mithep
     Double32_t          fRhoKt6PFJetsCentralChargedPileUp;
     Double32_t          fRhoKt6PFJetsCentralNeutral;
     Double32_t          fRhoKt6PFJetsCentralNeutralTight;
+    Double32_t          fRhoKt6PFJetsForIso31;
+    Double32_t          fRhoKt6PFJetsForIso25;
 
-    ClassDef(PileupEnergyDensity, 3)             // Pileup Energy Density class
+    ClassDef(PileupEnergyDensity, 4)             // Pileup Energy Density class
   };
 }
 #endif
