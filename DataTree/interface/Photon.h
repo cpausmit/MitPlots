@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.48 2012/04/20 16:05:48 bendavid Exp $
+// $Id: Photon.h,v 1.49 2012/05/05 16:49:10 paus Exp $
 //
 // Photon
 //
@@ -39,7 +39,8 @@ namespace mithep
       fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
       fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
-      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
+      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0),
+      fS4Ratio(-99.), fEffSigmaRR(-99.) {}
     Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :
       fMom(FourVector(px,py,pz,e)),
       fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -56,7 +57,8 @@ namespace mithep
       fIsConverted(0), fEnergyErr(-99.), fEnergyErrSmeared(-99.), fEnergySmearing(0.),
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
       fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
-      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0) {}
+      fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0),
+      fS4Ratio(-99.), fEffSigmaRR(-99.) {}
 
     // Contents of the Photons
     const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
@@ -131,6 +133,11 @@ namespace mithep
     UInt_t               NPFPhotonsOutOfMustache() const { return fPFPhotonsOutOfMustache.Entries(); }
     const PFCandidate   *PFPhotonInMustache(UInt_t i) const { return fPFPhotonsInMustache.At(i); }
     const PFCandidate   *PFPhotonOutOfMustache(UInt_t i) const { return fPFPhotonsOutOfMustache.At(i); }
+    Double_t             S4Ratio()                 const { return fS4Ratio >= 0. ?
+                                                       fS4Ratio : SCluster()->Seed()->E2x2()/SCluster()->Seed()->E5x5(); }
+    Double_t             EffSigmaRR()              const { return fEffSigmaRR >= 0. ?
+                                                       fEffSigmaRR :
+                                                       sqrt((SCluster()->PsEffWidthSigmaXX())*(SCluster()->PsEffWidthSigmaXX())+(SCluster()->PsEffWidthSigmaYY())*(SCluster()->PsEffWidthSigmaYY())); }
 
     //void                 AddConversion(const Conversion *c)      { fConversions.Add(c); } *DEPRECATED*
     void                 AddConversionD(const DecayParticle *c)  { fConversionsD.Add(c); }
@@ -197,6 +204,8 @@ namespace mithep
     void                 SetHadOverEmTow(Double_t x)             { fHadOverEmTow = x;  }
     void                 SetHCalIsoTowDr03(Double_t x)          { fHCalIsoTowDr03 = x; }
     void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
+    void                 SetS4Ratio(Double_t x)                 { fS4Ratio = x;        }
+    void                 SetEffSigmaRR(Double_t x)              { fEffSigmaRR = x;     }
 
     Bool_t               HasPV()                           const { return fPVRef.IsValid();      }
     const Vertex        *PV()                              const { return fPVRef.Obj();          }
@@ -276,8 +285,10 @@ namespace mithep
     RefArray<DecayParticle> fConversionsS;        //refs to associated conversion candidates (using newer DecayParticle format) - single leg conversions
     RefArray<PFCandidate> fPFPhotonsInMustache; //refs to photon-type PFCandidates inside of mustache region
     RefArray<PFCandidate> fPFPhotonsOutOfMustache; //refs to photon-type PFCandidates outside of mustache region
+    Double32_t           fS4Ratio;           //[0,0,14]S4 ratio
+    Double32_t           fEffSigmaRR;        //[0,0,14]preshower width variable
     
-    ClassDef(Photon,16) // Photon class
+    ClassDef(Photon,17) // Photon class
   };
 }
 
