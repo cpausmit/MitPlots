@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.6 2009/03/24 05:44:14 loizides Exp $
+// $Id: Ref.h,v 1.7 2010/09/19 23:46:08 bendavid Exp $
 //
 // Ref
 //
@@ -82,7 +82,7 @@ const ArrayElement *mithep::Ref<ArrayElement>::Obj() const
 {
   // Return entry at given index. Code adapted from TRef::GetObject().
 
-  return static_cast<const ArrayElement*>(GetObject());
+  return reinterpret_cast<const ArrayElement*>(GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ ArrayElement *mithep::Ref<ArrayElement>::Obj()
 {
   // Return entry at given index. Code adapted from TRef::GetObject().
 
-  return static_cast<ArrayElement*>(GetObject());
+  return reinterpret_cast<ArrayElement*>(GetObject());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,12 +102,14 @@ Bool_t mithep::Ref<ArrayElement>::RefsObject(const ArrayElement *ae) const
 
   if (IsNull())
     return kFALSE;
+
+  const TObject *oe = reinterpret_cast<const TObject*>(ae);
   
-  if (!ae->TestBit(kIsReferenced))
+  if (!oe->TestBit(kIsReferenced))
     return kFALSE;
 
-  UInt_t oUid = ae->GetUniqueID();
-  TProcessID *oPid = TProcessID::GetProcessWithUID(oUid, const_cast<ArrayElement*>(ae));
+  UInt_t oUid = oe->GetUniqueID();
+  TProcessID *oPid = TProcessID::GetProcessWithUID(oUid, const_cast<TObject*>(oe));
   if (!oPid)
     return kFALSE;
 
@@ -125,18 +127,21 @@ void mithep::Ref<ArrayElement>::SetObject(const ArrayElement *ae)
   if (!ae)
     return;
 
+  const TObject *oe = reinterpret_cast<const TObject*>(ae);
+
+
   // check if the object can belong here and assign or get its uid
-  if (ae->TestBit(kHasUUID)) {
+  if (oe->TestBit(kHasUUID)) {
     Fatal("Add", "Object cannot be added as it has not UUID!");
     return;
   }
 
-  if (ae->TestBit(kIsReferenced)) {
-    fUID = ae->GetUniqueID();
-    fPID.SetPid(TProcessID::GetProcessWithUID(fUID, const_cast<ArrayElement*>(ae)));
+  if (oe->TestBit(kIsReferenced)) {
+    fUID = oe->GetUniqueID();
+    fPID.SetPid(TProcessID::GetProcessWithUID(fUID, const_cast<TObject*>(oe)));
   } else {
     fPID.SetPid(TProcessID::GetSessionProcessID());
-    fUID = TProcessID::AssignID(const_cast<ArrayElement*>(ae));
+    fUID = TProcessID::AssignID(const_cast<TObject*>(oe));
   }
 }
 #endif

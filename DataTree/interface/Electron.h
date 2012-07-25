@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.56 2012/05/12 16:06:05 paus Exp $
+// $Id: Electron.h,v 1.57 2012/05/12 16:12:43 paus Exp $
 //
 // Electron
 //
@@ -298,6 +298,7 @@ namespace mithep
       void                 SetHCalIsoTowDr04(Double_t x)           { fHCalIsoTowDr04 = x; } 
       void                 SetEcalEnergy(Double_t e)               { fEcalEnergy = e; }
       void                 SetEcalEnergyError(Double_t e)          { fEcalEnergyError = e; }
+      void                 SetTrackMomentumError(Double_t e)       { fTrackMomentumError = e; }
      
       const Track         *TrackerTrk()            const { return fTrackerTrackRef.Obj(); }
       const Track         *Trk()                   const { return BestTrk(); }
@@ -417,6 +418,7 @@ namespace mithep
       Double32_t           fHCalIsoTowDr04;            //[0,0,14]hcal isolation matched to per tower h/e definition
       Double32_t           fEcalEnergy;                //[0,0,14]corrected Ecal energy
       Double32_t           fEcalEnergyError;           //[0,0,14]corrected Ecal energy error
+      Double32_t           fTrackMomentumError;        //track momentum error
       Ref<SuperCluster>    fPFSuperClusterRef;         //reference to Particle Flow SuperCluster
 
     ClassDef(Electron, 15)                             // Electron class

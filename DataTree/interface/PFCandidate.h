@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.9 2012/03/28 12:15:34 paus Exp $
+// $Id: PFCandidate.h,v 1.10 2012/03/29 23:41:55 paus Exp $
 //
 // PFCandidate
 //
@@ -17,10 +17,13 @@
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Muon.h"
+#include "MitAna/DataTree/interface/Electron.h"
+#include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 
 namespace mithep 
 {
+  class Photon;
   class PFCandidate : public CompositeParticle
   {
     public:
@@ -95,10 +98,14 @@ namespace mithep
       Bool_t              HasGsfTrk()              const    { return fGsfTrack.IsValid();         }
       Bool_t              HasTrk()                 const 
                             { return (HasTrackerTrk() || HasGsfTrk()); }
+      Bool_t              HasSCluster()            const    { return fSCluster.IsValid();         }
       const PFCandidate  *Mother()                 const    { return fMother.Obj();               }
       const Muon         *Mu()                     const    { return fMuon.Obj();                 }
+      const Electron     *Ele()                    const    { return fElectron.Obj();             }
+      const Photon       *Pho()                    const    { return fPhoton.Obj();               }
       EObjType            ObjType()                const    { return kPFCandidate;                }
       EPFType             PFType()                 const    { return fPFType;                     }
+      const SuperCluster *SCluster()               const    { return fSCluster.Obj();             }
       void                SetCharge(Double_t c)             { fCharge = c; ClearCharge();         }
       void                SetEECal(Double_t e)              { fEECal = e;                         }
       void                SetEHCal(Double_t e)              { fEHCal = e;                         }
@@ -122,8 +129,11 @@ namespace mithep
       void                SetTrackerTrk(const Track *t)     { fTrackerTrack = t;                  }
       void                SetGsfTrk(const Track *t)         { fGsfTrack = t;                      }
       void                SetMuon(const Muon *m)            { fMuon = m;                          }
+      void                SetElectron(const Electron *e)    { fElectron = e;                      }
+      void                SetPhoton(const Photon *p)        { fPhoton = p;                        }
       void                SetConversion(const Conversion *c) 
                             { fConversion = c; }
+      void                SetSCluster(const SuperCluster *s) { fSCluster = s;                     }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
       const ThreeVector   SourceVertex()           const    { return fSourceVertex.V();           }
       const Track        *TrackerTrk()             const    { return fTrackerTrack.Obj();         }
@@ -163,8 +173,11 @@ namespace mithep
       Ref<Track>          fGsfTrack;         //reference to gsf track (for electrons only)
       Ref<Muon>           fMuon;             //reference to corresponding reco muon
       Ref<Conversion>     fConversion;       //reference to corresponding reco conversion
+      Ref<SuperCluster>   fSCluster;         //reference to egamma supercluster
+      Ref<Electron>       fElectron;         //reference to electron
+      Ref<Photon>         fPhoton;           //reference to egamma photon
 
-    ClassDef(PFCandidate,1) // Particle-flow candidate class
+    ClassDef(PFCandidate,2) // Particle-flow candidate class
   };
 }
 
@@ -184,6 +197,8 @@ inline void mithep::PFCandidate::Mark(UInt_t ib) const
     fMuon.Obj()->Mark(ib);
   if (fConversion.IsValid())
     fConversion.Obj()->Mark(ib);
+  if (fSCluster.IsValid())
+    fSCluster.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------
