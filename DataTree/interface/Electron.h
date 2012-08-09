@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.57 2012/05/12 16:12:43 paus Exp $
+// $Id: Electron.h,v 1.58 2012/07/25 03:08:41 paus Exp $
 //
 // Electron
 //
@@ -50,7 +50,7 @@ namespace mithep
         fIsEBPhiGap(0), fIsEEDeeGap(0), fIsEERingGap(0),
         fIsEcalDriven(0), fIsTrackerDriven(0), fMatchesVertexConversion(0),
         fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0), 
-	fEcalEnergy(0), fEcalEnergyError(0) {}
+	fEcalEnergy(0), fEcalEnergyError(0), fTrackMomentumError(0) {}
 
       const Track         *BestTrk()                     const;
       Double_t             D0PV()                        const { return fD0PV; }

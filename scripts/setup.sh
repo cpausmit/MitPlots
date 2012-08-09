@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.81 2012/06/03 20:34:59 paus Exp $
+# $Id: setup.sh,v 1.82 2012/07/16 13:13:39 bendavid Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -30,10 +30,10 @@ echo
 cd $CMSSW_BASE/src;
 
 if test $version -lt 5004000 -a $version -ge 5003000; then
-  #support GBRForest for classification, and make compatible with GBRTrain
-  #addpkg CondFormats/EgammaObjects V00-04-00
-  #addpkg RecoEcal/EgammaCoreTools  V05-08-20
-  addpkg RecoEgamma/EgammaTools    PFSCTools 
+  addpkg RecoEcal/EgammaCoreTools  V05-08-20
+  # not protected pointer of recHits (very often they are not there)
+  patch  RecoEcal/EgammaCoreTools/src/EcalClusterLazyTools.cc MitAna/scripts/EcalClusterLazyTools.cc.patch
+  addpkg RecoEgamma/EgammaTools    EcalLocalFix
   checkdeps -a
 fi
 

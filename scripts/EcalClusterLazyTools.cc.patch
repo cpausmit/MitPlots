@@ -1,0 +1,14 @@
+525c525
+<   EcalRecHitCollection::const_iterator theSeedHit = recHits->find (id);
+---
+>   EcalRecHitCollection::const_iterator theSeedHit = recHits->find(id);
+530,531c530,535
+<   
+<   return (*theSeedHit).time();
+---
+> 
+>   // protect against the fact that recHits in AOD might not have been stored
+>   if (theSeedHit == recHits->end())
+>     return -99;
+>   else
+>     return (*theSeedHit).time();
