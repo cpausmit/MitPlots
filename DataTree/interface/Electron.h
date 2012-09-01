@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.58 2012/07/25 03:08:41 paus Exp $
+// $Id: Electron.h,v 1.59 2012/08/09 21:15:46 paus Exp $
 //
 // Electron
 //
@@ -182,6 +182,7 @@ namespace mithep
       Double_t             HcalIsoTowDr04()                 const { return fHCalIsoTowDr04;    } 
       Double_t             EcalEnergy()                     const { return fEcalEnergy;      }
       Double_t             EcalEnergyError()                const { return fEcalEnergyError; }
+      Double_t             TrackMomentumError()             const { return fTrackMomentumError; }
 
       void                 AddAmbiguousGsfTrack(const Track *t)          { fAmbiguousGsfTracks.Add(t); }
       void                 SetCharge(Char_t x)                           { fCharge = x; ClearCharge(); }
