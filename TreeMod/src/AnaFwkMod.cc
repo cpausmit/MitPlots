@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.17 2012/03/28 12:15:38 paus Exp $
+// $Id: AnaFwkMod.cc,v 1.18 2012/05/30 16:23:54 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -33,7 +33,8 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fPileupInfoName("PileupInfo"),
   fDoPUInfo(kFALSE),
   hNPU(0),
-  hNPU50ns(0)
+  hNPU50ns(0),
+  hNPUTrue(0)
 {
   // Constructor.
 }
@@ -210,16 +211,18 @@ void AnaFwkMod::Process()
 
   if (GetEventHeader()->IsMC()) {
     LoadBranch(fPileupInfoName);  
-    Int_t npu[3] = {0,0,0};
+    Int_t npu[4] = {0,0,0,0};
     for (UInt_t i=0; i<fPileupInfo->GetEntries(); ++i) {
       const PileupInfo *puinfo = fPileupInfo->At(i);
       if (puinfo->GetBunchCrossing()==0) npu[0]= puinfo->GetPU_NumInteractions();
       else if (puinfo->GetBunchCrossing()==-1) npu[1] = puinfo->GetPU_NumInteractions();
       else if (puinfo->GetBunchCrossing()==1) npu[2] = puinfo->GetPU_NumInteractions();
+      if (puinfo->GetBunchCrossing()==0) npu[3]= puinfo->GetPU_NumMean();
     }
     
     hNPU->Fill(npu[0]);
     hNPU50ns->Fill(npu[0],npu[1],npu[2]);
+    hNPUTrue->Fill(npu[3]);
   }
 
 
@@ -257,6 +260,9 @@ void AnaFwkMod::SlaveBegin()
   
   hNPU50ns = new TH3D("hNPU50ns", "hNPU50ns", 201, -0.5, 200.5, 201, -0.5, 200.5, 201, -0.5, 200.5);
   AddOutput(hNPU50ns);  
+  
+  hNPUTrue = new TH1D("hNPUTrue", "hNPUTrue", 201, -0.5, 200.5);
+  AddOutput(hNPUTrue);  
   
 }
 

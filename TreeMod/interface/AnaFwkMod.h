@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.8 2009/06/19 07:39:01 loizides Exp $
+// $Id: AnaFwkMod.h,v 1.9 2011/07/22 18:21:01 bendavid Exp $
 //
 // AnaFwkMod
 //
@@ -60,6 +60,7 @@ namespace mithep
       Bool_t           fDoPUInfo;
       TH1D             *hNPU;              //in-time pileup distribution
       TH3D             *hNPU50ns;          //three-dimensional pileup distribution (bx=0,-2,+2) suitable for 50ns spacing
+      TH1D             *hNPUTrue;          //true pileup distribution
 
     ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
