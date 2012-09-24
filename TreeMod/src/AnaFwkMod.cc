@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.19 2012/09/22 07:55:22 ceballos Exp $
+// $Id: AnaFwkMod.cc,v 1.20 2012/09/24 12:00:02 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -211,7 +211,7 @@ void AnaFwkMod::Process()
 
   if (GetEventHeader()->IsMC()) {
     LoadBranch(fPileupInfoName);  
-    Int_t npu[4] = {0,0,0,0};
+    Double_t npu[4] = {0.,0.,0.,0.};
     for (UInt_t i=0; i<fPileupInfo->GetEntries(); ++i) {
       const PileupInfo *puinfo = fPileupInfo->At(i);
       if (puinfo->GetBunchCrossing()==0) npu[0]= puinfo->GetPU_NumInteractions();
@@ -219,7 +219,6 @@ void AnaFwkMod::Process()
       else if (puinfo->GetBunchCrossing()==1) npu[2] = puinfo->GetPU_NumInteractions();
       if (puinfo->GetBunchCrossing()==0) npu[3]= puinfo->GetPU_NumMean();
     }
-    
     hNPU->Fill(npu[0]);
     hNPU50ns->Fill(npu[0],npu[1],npu[2]);
     hNPUTrue->Fill(npu[3]);
