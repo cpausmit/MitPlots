@@ -1,4 +1,4 @@
-// $Id: Analysis.cc,v 1.43 2011/03/29 01:35:08 paus Exp $
+// $Id: Analysis.cc,v 1.44 2012/07/23 15:47:24 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
@@ -185,10 +185,14 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     return;
 
   TString theFile(pname);
+  //if ( theFile.BeginsWith("castor:") )
+  //  theFile.ReplaceAll("castor:","rfio:");
+  //if ( theFile.BeginsWith("/castor/"))
+  //  theFile.ReplaceAll("/castor/","rfio:/castor/");
   if ( theFile.BeginsWith("castor:") )
-    theFile.ReplaceAll("castor:","rfio:");
+    theFile.ReplaceAll("castor:","root://castorcms/");
   if ( theFile.BeginsWith("/castor/"))
-    theFile.ReplaceAll("/castor/","rfio:/castor/");
+    theFile.Prepend("root://castorcms/");
   printf("Adding file with path: %s\n",theFile.Data());
   l->Add(new TObjString(theFile.Data()));
 
