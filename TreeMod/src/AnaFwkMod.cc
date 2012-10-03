@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.20 2012/09/24 12:00:02 ceballos Exp $
+// $Id: AnaFwkMod.cc,v 1.21 2012/09/24 13:22:22 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -260,7 +260,7 @@ void AnaFwkMod::SlaveBegin()
   hNPU50ns = new TH3D("hNPU50ns", "hNPU50ns", 201, -0.5, 200.5, 201, -0.5, 200.5, 201, -0.5, 200.5);
   AddOutput(hNPU50ns);  
   
-  hNPUTrue = new TH1D("hNPUTrue", "hNPUTrue", 2000, 0.0, 2000.0);
+  hNPUTrue = new TH1D("hNPUTrue", "hNPUTrue", 2000, 0.0, 200.0);
   AddOutput(hNPUTrue);  
   
 }
