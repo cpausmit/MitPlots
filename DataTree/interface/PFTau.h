@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.11 2012/03/28 12:15:34 paus Exp $
+// $Id: PFTau.h,v 1.12 2012/03/29 23:41:55 paus Exp $
 //
 // PFTau
 //
@@ -10,7 +10,7 @@
 
 #ifndef MITANA_DATATREE_PFTAU_H
 #define MITANA_DATATREE_PFTAU_H
- 
+
 #include "MitAna/DataTree/interface/Tau.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 #include "MitAna/DataCont/interface/Ref.h"
@@ -18,7 +18,7 @@
 #include "MitAna/DataTree/interface/BasicCluster.h"
 #include "MitAna/DataTree/interface/PFJet.h"
 
-namespace mithep 
+namespace mithep
 {
   class PFTau : public Tau
   {
@@ -26,13 +26,13 @@ namespace mithep
       PFTau() :   fLeadPFCandSignD0Sig(0), fHCalTotalEOverP(0), fHCalMaxEOverP(0),
                   fHCal3x3EOverP(0), fIsoChargedHadronPtSum(0), fIsoGammaEtSum(0),
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
-                  fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
-                  fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE), 
-		  fMuonDecision(kFALSE), 
-		  fDiscriminationAgainstElectron(0), 
+                  fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0),
+                  fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
+		  fMuonDecision(kFALSE),
+		  fDiscriminationAgainstElectron(0),
 		  fDiscriminationAgainstMuon(0),
 		  fDiscriminationByLooseElectronRejection(0),
-		  fDiscriminationByMediumElectronRejection(0), 
+		  fDiscriminationByMediumElectronRejection(0),
 		  fDiscriminationByTightElectronRejection(0),
                   fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
@@ -40,25 +40,44 @@ namespace mithep
 		  fDiscriminationByTightMuonRejection(0),
 		  fDiscriminationByDecayModeFinding(0),
 		  fDiscriminationByVLooseIsolation(0), fDiscriminationByLooseIsolation(0),
-                  fDiscriminationByMediumIsolation(0), fDiscriminationByTightIsolation(0), 
+                  fDiscriminationByMediumIsolation(0), fDiscriminationByTightIsolation(0),
 		  fDiscriminationByVLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByMediumCombinedIsolationDBSumPtCorr(0),
                   fDiscriminationByTightCombinedIsolationDBSumPtCorr(0),
-                  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0) {}
-                  
-      PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) : 
+                  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0),
+                  fMVA2rawElectronRejection(-1),
+                  fMVA2rawElectronRejectionCategory(0),
+                  fMVA2LooseElectronRejection(0),
+                  fMVA2MediumElectronRejection(0),
+                  fMVA2TightElectronRejection(0),
+                  fMVA3rawElectronRejection(-1),
+                  fMVA3rawElectronRejectionCategory(0),
+                  fMVA3LooseElectronRejection(0),
+                  fMVA3MediumElectronRejection(0),
+                  fMVA3TightElectronRejection(0),
+                  fMVA3VTightElectronRejection(0),
+                  fLooseCombinedIsolationDBSumPtCorr3Hits(0),
+                  fMediumCombinedIsolationDBSumPtCorr3Hits(0),
+                  fTightCombinedIsolationDBSumPtCorr3Hits(0),
+                  fRawCombinedIsolationDBSumPtCorr3Hits(0),
+                  fLooseMuonRejection2(0),
+                  fMediumMuonRejection2(0),
+                  fTightMuonRejection2(0)
+      {}
+
+      PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) :
                   Tau(px,py,pz,e),
                   fLeadPFCandSignD0Sig(0), fHCalTotalEOverP(0), fHCalMaxEOverP(0),
                   fHCal3x3EOverP(0), fIsoChargedHadronPtSum(0), fIsoGammaEtSum(0),
                   fMaxHCalPFClusterEt(0), fEMFraction(0), fECalStripSumEOverP(0),
-                  fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0), 
+                  fBremRecoveryEOverP(0), fElectronPreIDOutput(0), fCaloCompatibility(0),
                   fSegmentCompatibility(0), fElectronPreIDDecision(kFALSE),
 		  fMuonDecision(kFALSE),
-		  fDiscriminationAgainstElectron(0), 
+		  fDiscriminationAgainstElectron(0),
 		  fDiscriminationAgainstMuon(0),
 		  fDiscriminationByLooseElectronRejection(0),
-		  fDiscriminationByMediumElectronRejection(0), 
+		  fDiscriminationByMediumElectronRejection(0),
 		  fDiscriminationByTightElectronRejection(0),
 		  fDiscriminationByMVAElectronRejection(0),
 		  fDiscriminationByLooseMuonRejection(0),
@@ -71,10 +90,29 @@ namespace mithep
 		  fDiscriminationByLooseCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByMediumCombinedIsolationDBSumPtCorr(0),
 		  fDiscriminationByTightCombinedIsolationDBSumPtCorr(0),
-		  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0) {}
+		  fDiscriminationByRawCombinedIsolationDBSumPtCorr(0),
+                  fMVA2rawElectronRejection(-1),
+                  fMVA2rawElectronRejectionCategory(0),
+                  fMVA2LooseElectronRejection(0),
+                  fMVA2MediumElectronRejection(0),
+                  fMVA2TightElectronRejection(0),
+                  fMVA3rawElectronRejection(-1),
+                  fMVA3rawElectronRejectionCategory(0),
+                  fMVA3LooseElectronRejection(0),
+                  fMVA3MediumElectronRejection(0),
+                  fMVA3TightElectronRejection(0),
+                  fMVA3VTightElectronRejection(0),
+                  fLooseCombinedIsolationDBSumPtCorr3Hits(0),
+                  fMediumCombinedIsolationDBSumPtCorr3Hits(0),
+                  fTightCombinedIsolationDBSumPtCorr3Hits(0),
+                  fRawCombinedIsolationDBSumPtCorr3Hits(0),
+                  fLooseMuonRejection2(0),
+                  fMediumMuonRejection2(0),
+                  fTightMuonRejection2(0)
+      {}
 
       void               AddIsoPFCand(const PFCandidate *p)  { fIsoPFCands.Add(p);                 }
-      void               AddSignalPFCand(const PFCandidate *p)      
+      void               AddSignalPFCand(const PFCandidate *p)
                             { ClearCharge(); fSignalPFCands.Add(p); }
       void               AddSignalPFChargedHadrCand(const PFCandidate *p) { fSignalPFChargedHadrCands.Add(p); }
       void               AddSignalPFNeutrHadrCand(const PFCandidate *p)   { fSignalPFNeutrHadrCands.Add(p); }
@@ -124,7 +162,24 @@ namespace mithep
       Double_t DiscriminationByMediumCombinedIsolationDBSumPtCorr() const {return fDiscriminationByMediumCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByTightCombinedIsolationDBSumPtCorr() const {return fDiscriminationByTightCombinedIsolationDBSumPtCorr;}
       Double_t DiscriminationByRawCombinedIsolationDBSumPtCorr() const {return fDiscriminationByRawCombinedIsolationDBSumPtCorr;}
-      
+      Double_t MVA2rawElectronRejection()      const { return fMVA2rawElectronRejection; }
+      Double_t MVA2rawElectronRejectionCategory() const { return fMVA2rawElectronRejectionCategory; }
+      Double_t MVA2LooseElectronRejection()    const { return fMVA2LooseElectronRejection; }
+      Double_t MVA2MediumElectronRejection()   const { return fMVA2MediumElectronRejection; }
+      Double_t MVA2TightElectronRejection()    const { return fMVA2TightElectronRejection; }
+      Double_t MVA3rawElectronRejection()      const { return fMVA3rawElectronRejection; }
+      Double_t MVA3rawElectronRejectionCategory() const { return fMVA3rawElectronRejectionCategory; }
+      Double_t MVA3LooseElectronRejection()    const { return fMVA3LooseElectronRejection; }
+      Double_t MVA3MediumElectronRejection()   const { return fMVA3MediumElectronRejection; }
+      Double_t MVA3TightElectronRejection()    const { return fMVA3TightElectronRejection; }
+      Double_t MVA3VTightElectronRejection()   const { return fMVA3VTightElectronRejection; }
+      Double_t LooseCombinedIsolationDBSumPtCorr3Hits()  const { return fLooseCombinedIsolationDBSumPtCorr3Hits;  }
+      Double_t MediumCombinedIsolationDBSumPtCorr3Hits() const { return fMediumCombinedIsolationDBSumPtCorr3Hits; }
+      Double_t TightCombinedIsolationDBSumPtCorr3Hits()  const { return fTightCombinedIsolationDBSumPtCorr3Hits;  }
+      Double_t RawCombinedIsolationDBSumPtCorr3Hits()    const { return fRawCombinedIsolationDBSumPtCorr3Hits;    }
+      Double_t LooseMuonRejection2()  const { return fLooseMuonRejection2;  }
+      Double_t MediumMuonRejection2() const { return fMediumMuonRejection2; }
+      Double_t TightMuonRejection2()  const { return fTightMuonRejection2;  }
       void               SetCharge(Char_t x)                 { fCharge = x; ClearCharge();         }
       void               SetBremRecoveryEOverP(Double_t x)   { fBremRecoveryEOverP = x;            }
       void               SetCaloCompatibility(Double_t x)    { fCaloCompatibility = x;             }
@@ -138,7 +193,7 @@ namespace mithep
       void               SetHCalTotalEOverP(Double_t x)      { fHCalTotalEOverP = x;               }
       void               SetIsoChargedHadronPtSum(Double_t x){ fIsoChargedHadronPtSum = x;         }
       void               SetIsoGammaEtSum(Double_t x)        { fIsoGammaEtSum = x;                 }
-      void               SetLeadChargedHadronPFCand(const PFCandidate *p) 
+      void               SetLeadChargedHadronPFCand(const PFCandidate *p)
                                                                     { fLeadChargedHadPFCand = p;   }
       void               SetLeadNeutralPFCand(const PFCandidate *p) { fLeadNeutralPFCand = p;      }
       void               SetLeadPFCand(const PFCandidate *p)        { fLeadPFCand = p;             }
@@ -172,12 +227,31 @@ namespace mithep
       void SetDiscriminationByLooseCombinedIsolationDBSumPtCorr(Double_t x)  {fDiscriminationByLooseCombinedIsolationDBSumPtCorr = x; }
       void SetDiscriminationByMediumCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByMediumCombinedIsolationDBSumPtCorr = x;}
       void SetDiscriminationByTightCombinedIsolationDBSumPtCorr(Double_t x)  {fDiscriminationByTightCombinedIsolationDBSumPtCorr = x; }
-      void SetDiscriminationByRawCombinedIsolationDBSumPtCorr(Double_t x) {fDiscriminationByRawCombinedIsolationDBSumPtCorr = x;}
+      void SetDiscriminationByRawCombinedIsolationDBSumPtCorr(Double_t x)    {fDiscriminationByRawCombinedIsolationDBSumPtCorr = x;}
+      void SetMVA2rawElectronRejection(Double_t x)         { fMVA2rawElectronRejection = x; }
+      void SetMVA2rawElectronRejectionCategory(Double_t x) { fMVA2rawElectronRejectionCategory = x; }
+      void SetMVA2LooseElectronRejection(Double_t x)       { fMVA2LooseElectronRejection = x; }
+      void SetMVA2MediumElectronRejection(Double_t x)      { fMVA2MediumElectronRejection = x; }
+      void SetMVA2TightElectronRejection(Double_t x)       { fMVA2TightElectronRejection = x; }
+      void SetMVA3rawElectronRejection(Double_t x)         { fMVA3rawElectronRejection = x; }
+      void SetMVA3rawElectronRejectionCategory(Double_t x) { fMVA3rawElectronRejectionCategory = x; }
+      void SetMVA3LooseElectronRejection(Double_t x)       { fMVA3LooseElectronRejection = x; }
+      void SetMVA3MediumElectronRejection(Double_t x)      { fMVA3MediumElectronRejection = x; }
+      void SetMVA3TightElectronRejection(Double_t x)       { fMVA3TightElectronRejection = x; }
+      void SetMVA3VTightElectronRejection(Double_t x)      { fMVA3VTightElectronRejection = x; }
+      void SetLooseCombinedIsolationDBSumPtCorr3Hits(Double_t x)  { fLooseCombinedIsolationDBSumPtCorr3Hits = x;  }
+      void SetMediumCombinedIsolationDBSumPtCorr3Hits(Double_t x) { fMediumCombinedIsolationDBSumPtCorr3Hits = x; }
+      void SetTightCombinedIsolationDBSumPtCorr3Hits(Double_t x)  { fTightCombinedIsolationDBSumPtCorr3Hits = x;  }
+      void SetRawCombinedIsolationDBSumPtCorr3Hits(Double_t x)    { fRawCombinedIsolationDBSumPtCorr3Hits = x;    }
+      void SetLooseMuonRejection2(Double_t x)  { fLooseMuonRejection2 = x;  }
+      void SetMediumMuonRejection2(Double_t x) { fMediumMuonRejection2 = x; }
+      void SetTightMuonRejection2(Double_t x)  { fTightMuonRejection2 = x;  }
+
 
       // Some structural tools
       void                  Mark(UInt_t i=1)               const;
-			    
-    protected:		    
+
+    protected:
       Double_t              GetCharge()                    const;
       Char_t                fCharge;                //stored charge
       Double32_t            fLeadPFCandSignD0Sig;   //[0,0,14]signed lead track D0 significance
@@ -195,26 +269,44 @@ namespace mithep
       Double32_t            fSegmentCompatibility;  //[0,0,14]segment comp. for this tau to be a muon
       Bool_t                fElectronPreIDDecision; //pf electron pre id decision
       Bool_t                fMuonDecision;          //pf muon id decision
-      Double32_t            fDiscriminationAgainstElectron;    
-      Double32_t            fDiscriminationAgainstMuon;        
-      Double32_t            fDiscriminationByLooseElectronRejection; 
-      Double32_t            fDiscriminationByMediumElectronRejection; 
-      Double32_t            fDiscriminationByTightElectronRejection; 
-      Double32_t            fDiscriminationByMVAElectronRejection; 
-      Double32_t            fDiscriminationByLooseMuonRejection; 
-      Double32_t            fDiscriminationByMediumMuonRejection; 
-      Double32_t            fDiscriminationByTightMuonRejection; 
-      Double32_t            fDiscriminationByDecayModeFinding; 
-      Double32_t            fDiscriminationByVLooseIsolation;  
-      Double32_t            fDiscriminationByLooseIsolation;   
-      Double32_t            fDiscriminationByMediumIsolation;  
-      Double32_t            fDiscriminationByTightIsolation;   
-      Double32_t            fDiscriminationByVLooseCombinedIsolationDBSumPtCorr; 
-      Double32_t            fDiscriminationByLooseCombinedIsolationDBSumPtCorr;  
-      Double32_t            fDiscriminationByMediumCombinedIsolationDBSumPtCorr; 
-      Double32_t            fDiscriminationByTightCombinedIsolationDBSumPtCorr;  
+      Double32_t            fDiscriminationAgainstElectron;
+      Double32_t            fDiscriminationAgainstMuon;
+      Double32_t            fDiscriminationByLooseElectronRejection;
+      Double32_t            fDiscriminationByMediumElectronRejection;
+      Double32_t            fDiscriminationByTightElectronRejection;
+      Double32_t            fDiscriminationByMVAElectronRejection;
+      Double32_t            fDiscriminationByLooseMuonRejection;
+      Double32_t            fDiscriminationByMediumMuonRejection;
+      Double32_t            fDiscriminationByTightMuonRejection;
+      Double32_t            fDiscriminationByDecayModeFinding;
+      Double32_t            fDiscriminationByVLooseIsolation;
+      Double32_t            fDiscriminationByLooseIsolation;
+      Double32_t            fDiscriminationByMediumIsolation;
+      Double32_t            fDiscriminationByTightIsolation;
+      Double32_t            fDiscriminationByVLooseCombinedIsolationDBSumPtCorr;
+      Double32_t            fDiscriminationByLooseCombinedIsolationDBSumPtCorr;
+      Double32_t            fDiscriminationByMediumCombinedIsolationDBSumPtCorr;
+      Double32_t            fDiscriminationByTightCombinedIsolationDBSumPtCorr;
       Double32_t            fDiscriminationByRawCombinedIsolationDBSumPtCorr;
-      
+      Double32_t            fMVA2rawElectronRejection;
+      Double32_t            fMVA2rawElectronRejectionCategory;
+      Double32_t            fMVA2LooseElectronRejection;
+      Double32_t            fMVA2MediumElectronRejection;
+      Double32_t            fMVA2TightElectronRejection;
+      Double32_t            fMVA3rawElectronRejection;
+      Double32_t            fMVA3rawElectronRejectionCategory;
+      Double32_t            fMVA3LooseElectronRejection;
+      Double32_t            fMVA3MediumElectronRejection;
+      Double32_t            fMVA3TightElectronRejection;
+      Double32_t            fMVA3VTightElectronRejection;
+      Double32_t            fLooseCombinedIsolationDBSumPtCorr3Hits;
+      Double32_t            fMediumCombinedIsolationDBSumPtCorr3Hits;
+      Double32_t            fTightCombinedIsolationDBSumPtCorr3Hits;
+      Double32_t            fRawCombinedIsolationDBSumPtCorr3Hits;
+      Double32_t            fLooseMuonRejection2;
+      Double32_t            fMediumMuonRejection2;
+      Double32_t            fTightMuonRejection2;
+
       Ref<PFCandidate>      fLeadPFCand;               //leading sig pf cand (charged or neutral)
       Ref<PFCandidate>      fLeadChargedHadPFCand;     //leading charged hadron signal pf cand
       Ref<PFCandidate>      fLeadNeutralPFCand;        //leading neutral signal pf cand
@@ -226,7 +318,7 @@ namespace mithep
       RefArray<PFCandidate> fSignalPFGammaCands;       //signal pf gamma candidates
       RefArray<PFCandidate> fIsoPFCands;               //selected pf candidates in isolation annulus
 
-    ClassDef(PFTau, 5) // PFTau class
+    ClassDef(PFTau, 6) // PFTau class
   };
 }
 
