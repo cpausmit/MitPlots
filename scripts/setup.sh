@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.82 2012/07/16 13:13:39 bendavid Exp $
+# $Id: setup.sh,v 1.83 2012/08/09 21:15:47 paus Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -28,6 +28,12 @@ echo "Setup called for $CMSSW_VERSION ($version)";
 echo
 
 cd $CMSSW_BASE/src;
+
+if test $version -lt 6000000 -a $version -ge 5002000; then
+    cvs co -r V01-04-23 RecoTauTag/RecoTau
+    cvs co -r V01-04-10 RecoTauTag/Configuration
+    cvs co -r V00-04-00 CondFormats/EgammaObjects
+fi
 
 if test $version -lt 5004000 -a $version -ge 5003000; then
   addpkg RecoEcal/EgammaCoreTools  V05-08-20
