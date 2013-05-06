@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.83 2012/08/09 21:15:47 paus Exp $
+# $Id: setup.sh,v 1.84 2012/12/28 18:58:53 pharris Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -33,6 +33,7 @@ if test $version -lt 6000000 -a $version -ge 5002000; then
     cvs co -r V01-04-23 RecoTauTag/RecoTau
     cvs co -r V01-04-10 RecoTauTag/Configuration
     cvs co -r V00-04-00 CondFormats/EgammaObjects
+    cvs co -r b5_3_x_analysis_2013Apr18 TauAnalysis/MCEmbeddingTools
 fi
 
 if test $version -lt 5004000 -a $version -ge 5003000; then
