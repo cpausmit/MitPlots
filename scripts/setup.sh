@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.84 2012/12/28 18:58:53 pharris Exp $
+# $Id: setup.sh,v 1.85 2013/05/06 18:31:21 pharris Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -37,7 +37,7 @@ if test $version -lt 6000000 -a $version -ge 5002000; then
 fi
 
 if test $version -lt 5004000 -a $version -ge 5003000; then
-  addpkg RecoEcal/EgammaCoreTools  V05-08-20
+  addpkg RecoEcal/EgammaCoreTools  V05-08-21
   # not protected pointer of recHits (very often they are not there)
   patch  RecoEcal/EgammaCoreTools/src/EcalClusterLazyTools.cc MitAna/scripts/EcalClusterLazyTools.cc.patch
   addpkg RecoEgamma/EgammaTools    EcalLocalFix
