@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: EmbedWeight.h,v 1.1 2011/11/24 11:30:41 pharris Exp $
+// $Id: EmbedWeight.h,v 1.2 2013/05/06 18:33:00 pharris Exp $
 //
 // EmebedWeight
 //
@@ -38,9 +38,26 @@ namespace mithep
 	fGenTau2EtaVsGenTau1EtaRec(1),
 	fDiTauMassVsGenDiTauPtRec(1)
 	  {}
-
+      
       Double_t            Weight()                    const { return fWeight;}
       EObjType            ObjType()                   const { return kEmbedWeight;   }  
+      Double_t            GenWeight()                 const { return fGenWeight          ;}
+      Double_t            SpinnerWeight()             const { return fSpinnerWeight      ;}
+      Double_t            SpinnerFlipWeight()         const { return fSpinnerFlipWeight  ;}
+      Double_t            SpinnerPlusWeight()         const { return fSpinnerPlusWeight  ;}
+      Double_t            SpinnerMinusWeight()        const { return fSpinnerMinusWeight ;}
+      Double_t            MuEffWeight()               const { return fMuEffWeight        ;}
+      Double_t            MuEffWeightUp()             const { return fMuEffWeightUp      ;}
+      Double_t            MuEffWeightDown()           const { return fMuEffWeightDown    ;}
+      Double_t            MuRadWeight()               const { return fMuRadWeight        ;}
+      Double_t            MuRadWeightUp()             const { return fMuRadWeightUp      ;}
+      Double_t            MuRadWeightDown()           const { return fMuRadWeightDown    ;}
+      Double_t            GenTau2VsGenTau1PtGen()     const { return fGenTau2PtVsGenTau1PtGen       ;}
+      Double_t            GenTau2VsGenTau1EtaGen()    const { return fGenTau2EtaVsGenTau1EtaGen      ;}
+      Double_t            DiTauMassVsGenDiTauPtGen()  const { return fDiTauMassVsGenDiTauPtGen    ;}
+      Double_t            GenTau2VsGenTau1PtRec()     const { return fGenTau2PtVsGenTau1PtRec       ;}
+      Double_t            GenTau2VsGenTau1EtaRec()    const { return fGenTau2EtaVsGenTau1EtaRec      ;}
+      Double_t            DiTauMassVsGenDiTauPtRec()  const { return fDiTauMassVsGenDiTauPtRec    ;}
       void                SetGenWeight         (Double_t weight) {fGenWeight          = weight; fWeight = weight;}
       void                SetSpinnerWeight     (Double_t weight) {fSpinnerWeight      = weight;}
       void                SetSpinnerFlipWeight (Double_t weight) {fSpinnerFlipWeight  = weight;}
