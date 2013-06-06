@@ -23,14 +23,18 @@ do
   DATASET=`     echo $line | tr -s ' ' | cut -d ' ' -f 2`
   SKIM=`        echo $line | tr -s ' ' | cut -d ' ' -f 3`
 
+  # adjust book / catalog dir
+  BOOK=`echo $BOOK_VERSION | cut -d/ -f2-3`
+  CEXT=`echo $BOOK_VERSION | cut -d/ -f1`
+
   # find potential JSON file and the cut to remove overlaps
   export MIT_PROD_JSON=`   echo $line | tr -s ' ' | cut -d ' ' -f 8`
   export MIT_PROD_OVERLAP=`echo $line | tr -s ' ' | cut -d ' ' -f 7`
   echo " JSON: $MIT_PROD_JSON  Overlap: $MIT_PROD_OVERLAP"
 
   # now submit the sucker
-  submit.sh $MIT_PROD_MACRO $MIT_CATALOG   $BOOK_VERSION   $DATASET $SKIM \
-            $MIT_PROD_CFG   $MIT_PROD_HIST $CHECK_COMPLETE
+  submit.sh $MIT_PROD_MACRO $MIT_CATALOG/$CEXT $BOOK            $DATASET $SKIM \
+            $MIT_PROD_CFG   $MIT_PROD_HIST     $CHECK_COMPLETE
 
 done
 

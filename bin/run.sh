@@ -22,14 +22,20 @@ echo "Script:    $h"
 echo "Arguments: $*"
 
 # some basic printing
-echo " "; echo "${h}: Show who and where we are"; echo " "
-id; env | grep HOST; pwd;
+echo " "; echo "${h}: Show who and where we are";
+echo " "
+echo " user executing: "`id`;
+echo " running on    : "`hostname`;
+echo " executing in  : "`pwd`;
+echo " submitted from: $HOSTNAME";
+echo " ";
+
 
 # initialize the CMSSW environment
-echo " "; echo "${h}: Initialize CMSSW"; echo " "
+echo " "; echo "${h}: Initialize CMSSW (in $CMSSW_BASE)"; echo " "
 workDir=`pwd`
-#cd   $CMSSW_BASE
-#eval `scram runtime -sh`
+cd   $CMSSW_BASE
+eval `scram runtime -sh`
 
 # make sure to copy what we need locally if we are not in the original area (when in condor)
 pwd
@@ -39,6 +45,22 @@ then
 #  cp /home/$USER/cms/condor/.rootrc         ./
   cp /home/$USER/cms/condor/.rootlogon.C    ./
   cp /home/$USER/cms/condor/${runMacro}     ./
+fi
+
+# make sure to get the ticket
+id=`id -u`
+cp ~/.krb5/x509up_u${id} /tmp/
+cp ~/.krb5/krb5cc_${id}  /tmp/krb5cc_${id}
+ls -lhrt /tmp/krb5cc_${id}
+export KRB5CCNAME=FILE:/tmp/krb5cc_${id}
+
+# check whether our files are in the smartcache or download them
+echo " "; echo "${h}: Check input file status"; echo " ";
+cacheFileset.sh $catalogDir $book $dataset $skim $fileset
+if [ "$?" != "0" ]
+then
+  echo "ERROR ($h) -- file caching failed. EXIT!"
+  exit 1
 fi
 
 # get ready to run

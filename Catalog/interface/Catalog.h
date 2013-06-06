@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Catalog.h,v 1.5 2009/01/20 09:13:57 loizides Exp $
+// $Id: Catalog.h,v 1.6 2010/10/01 02:20:26 paus Exp $
 //
 // Catalog
 //
@@ -33,7 +33,7 @@ namespace mithep
 
       const TString           &Location()                            const { return fLocation; }
       Dataset                 *FindDataset(const char *book, const char *dataset,
-					   const char *fileset = "") const;
+					   const char *fileset = "", bool local = false) const;
 
     private:
       TString                  fLocation;    // location of catalog

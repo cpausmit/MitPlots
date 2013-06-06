@@ -1,4 +1,4 @@
-// $Id: Catalog.cc,v 1.7 2010/10/01 02:20:26 paus Exp $
+// $Id: Catalog.cc,v 1.8 2012/03/28 12:15:32 paus Exp $
 
 #include <TSystem.h>
 #include "MitAna/Catalog/interface/Catalog.h"
@@ -17,7 +17,8 @@ Catalog::Catalog(const char *location) :
 }
 
 //--------------------------------------------------------------------------------------------------
-Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char *fileset) const
+Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char *fileset,
+			      bool local) const
 {
   // Try to find the given dataset in the catalog and return it properly filled.
   // Note that the caller must delete the returned dataset.
@@ -49,7 +50,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
       printf(" --> %s %s %u %u %u %u %u %u\n",fset,location,
 	     nAllEvents,nEvents,//nLumiSecs,
 	     nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
-    FilesetMetaData *fs = new FilesetMetaData(fset,location);
+    TString dir = TString(location);
+    if (local) {
+      dir.ReplaceAll("root://xrootd.cmsaf.mit.edu/","/mnt/hadoop/cms");
+    }
+    FilesetMetaData *fs = new FilesetMetaData(fset,dir.Data());
     ds->AddFileset(fs);
     delete fs;
   }

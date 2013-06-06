@@ -35,7 +35,30 @@ cp $MIT_USER_DIR/macros/$runMacro    $workDir
 script=$workDir/run.sh
 
 # Create the directory for the results
-mkdir -p $workDir/res/$outputName/$book/$dataset/
+mkdir -p $MIT_PROD_LOGS/$outputName/$book/$dataset/
+
+# Make sure there are kerberos and globus tickets available
+id=`id -u`
+mkdir             -p  ~/.krb5/
+cp /tmp/x509up_u${id} ~/.krb5/
+KRB5CCNAME=`klist -5 | grep 'Ticket cache:' | cut -d' ' -f 3`
+if ! [ -z $KRB5CCNAME ]
+then
+  mkdir    -p  ~/.krb5/
+  chmod 0      ~/.krb5
+  chmod u=rwx  ~/.krb5
+  file=`echo $KRB5CCNAME | cut -d: -f2`
+  if [ -f "$file" ]
+  then
+    cp $file ~/.krb5/krb5cc_${id}
+  else
+    echo " ERROR -- missing kerberos ticket ($KRB5CCNAME)."
+    exit 1
+  fi
+else
+  echo " ERROR -- missing kerberos ticket ($KRB5CCNAME)."
+  exit 1
+fi
 
 # Looping through each single fileset and submitting the condor jobs
 echo "  Submitting jobs to condor"
@@ -89,7 +112,7 @@ do
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Requirements            = ((Arch == "X86_64") && (OpSys == "LINUX") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
+Requirements            = ((Arch == "X86_64") && (Machine != "t3btch112.mit.edu") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
@@ -97,8 +120,8 @@ Rank                    = Mips
 GetEnv                  = True
 Initialdir              = $workDir
 Input                   = /dev/null
-Output                  = $workDir/res/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
-Error                   = $workDir/res/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
+Output                  = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
+Error                   = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
 Log                     = $logFile
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
