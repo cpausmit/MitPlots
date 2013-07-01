@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.26 2012/03/29 23:41:55 paus Exp $
+// $Id: SuperCluster.h,v 1.27 2012/05/05 16:49:10 paus Exp $
 //
 // SuperCluster
 //
@@ -88,6 +88,8 @@ namespace mithep
     Double_t               YZ()                    const { return fYZ;                           }
     Double_t               Time()                  const { return fTime;                         }
     Double_t               SeedTime()              const { return fSeedTime;                     }
+    Double_t               LeadTimeSpan()          const { return fLeadTimeSpan;                 }
+    Double_t               SubLeadTimeSpan()       const { return fSubLeadTimeSpan;              }
     Double_t               PsEffWidthSigmaXX()     const { return fPsEffWidthSigmaXX;            }
     Double_t               PsEffWidthSigmaYY()     const { return fPsEffWidthSigmaYY;            }
 
@@ -118,6 +120,8 @@ namespace mithep
     void                   SetYZ(Double_t x)                          { fYZ = x;                 }
     void                   SetTime(Double_t x)                        { fTime = x;               }
     void                   SetSeedTime(Double_t x)                    { fSeedTime = x;           }
+    void                   SetLeadTimeSpan(Double_t x)                { fLeadTimeSpan = x;       }
+    void                   SetSubLeadTimeSpan(Double_t x)             { fSubLeadTimeSpan = x;    }
     void                   SetPsEffWidthSigmaXX(Double_t x)           { fPsEffWidthSigmaXX = x;  }
     void                   SetPsEffWidthSigmaYY(Double_t x)           { fPsEffWidthSigmaYY = x;  }
 
@@ -152,6 +156,8 @@ namespace mithep
     Double32_t              fYZ;                  //local coordinates
     Double32_t              fTime;                //ecal timing (weighted average)
     Double32_t              fSeedTime;            //ecal timing (seed crystal)
+    Double32_t              fLeadTimeSpan;        //ecal supercluster max timespan (seed vs. any other xtal)
+    Double32_t              fSubLeadTimeSpan;     //ecal supercluster next-to-max timespan (seed vs. any other xtal)
 
     Double32_t              fPreshowerEnergyPlane1; //local coordinates
     Double32_t              fPreshowerEnergyPlane2; //local coordinates
@@ -159,7 +165,7 @@ namespace mithep
     Double32_t              fPsEffWidthSigmaYY;       //preshower cluster width in y plane
     RefArray<PsCluster>     fPsClusts;              //assigned preshower clusters
 
-    ClassDef(SuperCluster, 5) // Super cluster class
+    ClassDef(SuperCluster, 6) // Super cluster class
   };
 }
 

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.49 2012/05/05 16:49:10 paus Exp $
+// $Id: Photon.h,v 1.50 2012/06/07 14:43:24 bendavid Exp $
 //
 // Photon
 //
@@ -40,7 +40,12 @@ namespace mithep
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
       fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
       fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0),
-      fS4Ratio(-99.), fEffSigmaRR(-99.) {}
+      fS4Ratio(-99.), fEffSigmaRR(-99.),
+      fMipChi2(-999.), fMipTotEnergy(-999.), fMipSlope(-999.), fMipIntercept(-999.), fMipNHitCone(-1), fMipIsHalo(false),
+      fMatchHePlusPos(ThreeVector(0.,0.,0.)),fMatchHePlusEn(-1.),fMatchHePlusTime(-1000.),
+      fMatchHeMinusPos(ThreeVector(0.,0.,0.)),fMatchHeMinusEn(-1.),fMatchHeMinusTime(-1000.),
+      fMatchHePlusPosDR15(ThreeVector(0.,0.,0.)),fMatchHePlusEnDR15(-1.),fMatchHePlusTimeDR15(-1000.),
+      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.) {}
     Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :
       fMom(FourVector(px,py,pz,e)),
       fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -58,7 +63,12 @@ namespace mithep
       fEnergyRegr(0.), fEnergyErrRegr(0.), fEnergyPhoFix(0.), fEnergyErrPhoFix(0.), fVtxProb(1.0),
       fIdMva(-99.), fEtaWidth(-99.), fPhiWidth(-99.),
       fHadOverEmTow(0), fHCalIsoTowDr03(0), fHCalIsoTowDr04(0),
-      fS4Ratio(-99.), fEffSigmaRR(-99.) {}
+      fS4Ratio(-99.), fEffSigmaRR(-99.), 
+      fMipChi2(-999.), fMipTotEnergy(-999.), fMipSlope(-999.), fMipIntercept(-999.), fMipNHitCone(-1), fMipIsHalo(false), 
+      fMatchHePlusPos(ThreeVector(0.,0.,0.)),fMatchHePlusEn(-1.),fMatchHePlusTime(-1000.),
+      fMatchHeMinusPos(ThreeVector(0.,0.,0.)),fMatchHeMinusEn(-1.),fMatchHeMinusTime(-1000.),
+      fMatchHePlusPosDR15(ThreeVector(0.,0.,0.)),fMatchHePlusEnDR15(-1.),fMatchHePlusTimeDR15(-1000.),
+      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.) {}
 
     // Contents of the Photons
     const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
@@ -138,7 +148,25 @@ namespace mithep
     Double_t             EffSigmaRR()              const { return fEffSigmaRR >= 0. ?
                                                        fEffSigmaRR :
                                                        sqrt((SCluster()->PsEffWidthSigmaXX())*(SCluster()->PsEffWidthSigmaXX())+(SCluster()->PsEffWidthSigmaYY())*(SCluster()->PsEffWidthSigmaYY())); }
-
+    Double_t             MipChi2()                  const { return fMipChi2;               }
+    Double_t             MipTotEnergy()             const { return fMipTotEnergy;          }
+    Double_t             MipSlope()                 const { return fMipSlope;              }
+    Double_t             MipIntercept()             const { return fMipIntercept;          }
+    Int_t                MipNhitCone()              const { return fMipNHitCone;           }
+    Bool_t               MipIsHalo()                const { return fMipIsHalo;             } 
+    ThreeVector          MatchHePlusPos()           const { return fMatchHePlusPos.V();    }
+    Double_t             MatchHePlusEn()            const { return fMatchHePlusEn;         }
+    Double_t             MatchHePlusTime()          const { return fMatchHePlusTime;       }
+    ThreeVector          MatchHeMinusPos()          const { return fMatchHeMinusPos.V();    }
+    Double_t             MatchHeMinusEn()           const { return fMatchHeMinusEn;         }
+    Double_t             MatchHeMinusTime()         const { return fMatchHeMinusTime;       }
+    ThreeVector          MatchHePlusPosDR15()       const { return fMatchHePlusPosDR15.V(); }
+    Double_t             MatchHePlusEnDR15()        const { return fMatchHePlusEnDR15;      }
+    Double_t             MatchHePlusTimeDR15()      const { return fMatchHePlusTimeDR15;    }
+    ThreeVector          MatchHeMinusPosDR15()      const { return fMatchHeMinusPosDR15.V();}
+    Double_t             MatchHeMinusEnDR15()       const { return fMatchHeMinusEnDR15;     }
+    Double_t             MatchHeMinusTimeDR15()     const { return fMatchHeMinusTimeDR15;   }
+    
     //void                 AddConversion(const Conversion *c)      { fConversions.Add(c); } *DEPRECATED*
     void                 AddConversionD(const DecayParticle *c)  { fConversionsD.Add(c); }
     void                 AddConversionS(const DecayParticle *c)  { fConversionsS.Add(c); }
@@ -206,6 +234,24 @@ namespace mithep
     void                 SetHCalIsoTowDr04(Double_t x)          { fHCalIsoTowDr04 = x; } 
     void                 SetS4Ratio(Double_t x)                 { fS4Ratio = x;        }
     void                 SetEffSigmaRR(Double_t x)              { fEffSigmaRR = x;     }
+    void                 SetMipChi2(Double_t x)                  { fMipChi2 = x;              }
+    void                 SetMipTotEnergy(Double_t x)             { fMipTotEnergy = x;         }
+    void                 SetMipSlope(Double_t x)                 { fMipSlope = x;             }
+    void                 SetMipIntercept(Double_t x)             { fMipIntercept = x;         }
+    void                 SetMipNhitCone(Int_t x)                 { fMipNHitCone = x;          }
+    void                 SetMipIsHalo(Bool_t x)                  { fMipIsHalo = x;            } 
+    void                 SetMatchHePlusPos(Double_t x, Double_t y, Double_t z)     {  fMatchHePlusPos.SetXYZ(x,y,z);     }
+    void                 SetMatchHePlusEn(Double_t x)                              {  fMatchHePlusEn = x;                }
+    void                 SetMatchHePlusTime(Double_t x)                            {  fMatchHePlusTime = x;              }
+    void                 SetMatchHeMinusPos(Double_t x, Double_t y, Double_t z)    {  fMatchHeMinusPos.SetXYZ(x,y,z);    }
+    void                 SetMatchHeMinusEn(Double_t x)                             {  fMatchHeMinusEn = x;               }
+    void                 SetMatchHeMinusTime(Double_t x)                           {  fMatchHeMinusTime = x;             }
+    void                 SetMatchHePlusPosDR15(Double_t x, Double_t y, Double_t z) {  fMatchHePlusPosDR15.SetXYZ(x,y,z); }
+    void                 SetMatchHePlusEnDR15(Double_t x)                          {  fMatchHePlusEnDR15 = x;            }
+    void                 SetMatchHePlusTimeDR15(Double_t x)                        {  fMatchHePlusTimeDR15 = x;          }
+    void                 SetMatchHeMinusPosDR15(Double_t x, Double_t y, Double_t z){  fMatchHeMinusPosDR15.SetXYZ(x,y,z);}
+    void                 SetMatchHeMinusEnDR15(Double_t x)                         {  fMatchHeMinusEnDR15 = x;           }
+    void                 SetMatchHeMinusTimeDR15(Double_t x)                       {  fMatchHeMinusTimeDR15 = x;         }
 
     Bool_t               HasPV()                           const { return fPVRef.IsValid();      }
     const Vertex        *PV()                              const { return fPVRef.Obj();          }
@@ -287,8 +333,26 @@ namespace mithep
     RefArray<PFCandidate> fPFPhotonsOutOfMustache; //refs to photon-type PFCandidates outside of mustache region
     Double32_t           fS4Ratio;           //[0,0,14]S4 ratio
     Double32_t           fEffSigmaRR;        //[0,0,14]preshower width variable
-    
-    ClassDef(Photon,17) // Photon class
+    Double32_t           fMipChi2;               // mip fitted track chi2
+    Double32_t           fMipTotEnergy;          // mip fitted track energy
+    Double32_t           fMipSlope;              // mip fitted track slope
+    Double32_t           fMipIntercept;          // mip fitted track intercept
+    Int_t                fMipNHitCone;           // mip fitted track nhits
+    Bool_t               fMipIsHalo;             // mip fitted track is halo decision
+    Vect3                fMatchHePlusPos;        // phi matched HBHE+ rechit pos
+    Double32_t           fMatchHePlusEn;         // phi matched HBHE+ energy
+    Double32_t           fMatchHePlusTime;       // phi matched HBHE+ time
+    Vect3                fMatchHeMinusPos;       // phi matched HBHE- rechit pos
+    Double32_t           fMatchHeMinusEn;        // phi matched HBHE- energy
+    Double32_t           fMatchHeMinusTime;      // phi matched HBHE- time
+    Vect3                fMatchHePlusPosDR15;    // phi matched HBHE+ rechit pos - 15 cm DR match window
+    Double32_t           fMatchHePlusEnDR15;     // phi matched HBHE+ energy - 15 cm DR match window
+    Double32_t           fMatchHePlusTimeDR15;   // phi matched HBHE+ time - 15 cm DR match window
+    Vect3                fMatchHeMinusPosDR15;   // phi matched HBHE- rechit pos - 15 cm DR match window
+    Double32_t           fMatchHeMinusEnDR15;    // phi matched HBHE- energy - 15 cm DR match window
+    Double32_t           fMatchHeMinusTimeDR15;  // phi matched HBHE- time - 15 cm DR match window
+
+    ClassDef(Photon,18) // Photon class
   };
 }
 
