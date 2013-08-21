@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id: setup.sh,v 1.85 2013/05/06 18:31:21 pharris Exp $
+# $Id: setup.sh,v 1.86 2013/05/15 13:57:46 ksung Exp $
 
 if test -z $CMSSW_VERSION; then
     echo "Need cmssw project area setup!";
@@ -41,6 +41,7 @@ if test $version -lt 5004000 -a $version -ge 5003000; then
   # not protected pointer of recHits (very often they are not there)
   patch  RecoEcal/EgammaCoreTools/src/EcalClusterLazyTools.cc MitAna/scripts/EcalClusterLazyTools.cc.patch
   addpkg RecoEgamma/EgammaTools    EcalLocalFix
+  git clone -b hggpaperV5 https://github.com/bendavid/GBRLikelihood.git HiggsAnalysis/GBRLikelihood
   checkdeps -a
 fi
 
