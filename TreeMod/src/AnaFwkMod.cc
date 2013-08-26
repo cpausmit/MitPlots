@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.21 2012/09/24 13:22:22 ceballos Exp $
+// $Id: AnaFwkMod.cc,v 1.22 2012/10/03 18:13:59 ceballos Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -34,7 +34,10 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   fDoPUInfo(kFALSE),
   hNPU(0),
   hNPU50ns(0),
-  hNPUTrue(0)
+  hNPUTrue(0),
+  fMCEventInfo(0),
+  fMCEventInfoName(Names::gkMCEvtInfoBrn),
+  hDTotalMCWeight(0)
 {
   // Constructor.
 }
@@ -222,6 +225,10 @@ void AnaFwkMod::Process()
     hNPU->Fill(npu[0]);
     hNPU50ns->Fill(npu[0],npu[1],npu[2]);
     hNPUTrue->Fill(npu[3]);
+    
+    LoadBranch(fMCEventInfoName);
+    hDTotalMCWeight->Fill(0., fMCEventInfo->Weight());
+
   }
 
 
@@ -262,6 +269,9 @@ void AnaFwkMod::SlaveBegin()
   
   hNPUTrue = new TH1D("hNPUTrue", "hNPUTrue", 2000, 0.0, 200.0);
   AddOutput(hNPUTrue);  
+  
+  hDTotalMCWeight = new TH1D("hDTotalMCWeight","hDTotalMCWeight",1,-0.5,0.5);
+  AddOutput(hDTotalMCWeight);
   
 }
 

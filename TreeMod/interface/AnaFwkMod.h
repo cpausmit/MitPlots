@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.9 2011/07/22 18:21:01 bendavid Exp $
+// $Id: AnaFwkMod.h,v 1.10 2012/09/22 07:55:22 ceballos Exp $
 //
 // AnaFwkMod
 //
@@ -14,6 +14,7 @@
 
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/EventHeaderCol.h"
+#include "MitAna/DataTree/interface/MCEventInfo.h"
 #include "MitAna/DataTree/interface/PileupInfoFwd.h"
 
 class TTree;
@@ -61,6 +62,9 @@ namespace mithep
       TH1D             *hNPU;              //in-time pileup distribution
       TH3D             *hNPU50ns;          //three-dimensional pileup distribution (bx=0,-2,+2) suitable for 50ns spacing
       TH1D             *hNPUTrue;          //true pileup distribution
+      const MCEventInfo *fMCEventInfo;        //!MC Event Info pointer
+      TString          fMCEventInfoName;    //name of MC Event info branch
+      TH1D             *hDTotalMCWeight;    //total monte carlo weight from mc event header
 
     ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
