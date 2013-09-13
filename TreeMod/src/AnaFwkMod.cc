@@ -1,4 +1,4 @@
-// $Id: AnaFwkMod.cc,v 1.23 2013/08/26 22:43:59 bendavid Exp $
+// $Id: AnaFwkMod.cc,v 1.24 2013/08/27 14:13:15 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
@@ -37,7 +37,13 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   hNPUTrue(0),
   fMCEventInfo(0),
   fMCEventInfoName(Names::gkMCEvtInfoBrn),
-  hDTotalMCWeight(0)
+  hDTotalMCWeight(0),
+  hNPURunABObs(0),
+  hNPURunCObs(0),
+  hNPURunDObs(0),
+  hNPURunABTrue(0),
+  hNPURunCTrue(0),
+  hNPURunDTrue(0)
 {
   // Constructor.
 }
@@ -222,12 +228,32 @@ void AnaFwkMod::Process()
       else if (puinfo->GetBunchCrossing()==1) npu[2] = puinfo->GetPU_NumInteractions();
       if (puinfo->GetBunchCrossing()==0) npu[3]= puinfo->GetPU_NumMean();
     }
-    hNPU->Fill(npu[0]);
-    hNPU50ns->Fill(npu[0],npu[1],npu[2]);
-    hNPUTrue->Fill(npu[3]);
     
     LoadBranch(fMCEventInfoName);
-    hDTotalMCWeight->Fill(0., fMCEventInfo->Weight());
+    double mcweight = fMCEventInfo->Weight();
+    
+    hNPU->Fill(npu[0],mcweight);
+    hNPU50ns->Fill(npu[0],npu[1],npu[2],mcweight);
+    hNPUTrue->Fill(npu[3],mcweight);
+    
+    UInt_t run = GetEventHeader()->RunNum();
+    
+    //Josh: fill pileup histograms for 2012 run-dependent Monte Carlo which currently has one of three run numbers
+    //More generic solution to be implemented depending on future run/lumi dependent Monte Carlo production strategy
+    if (run==194533) {
+      hNPURunABObs->Fill(npu[0],mcweight); 
+      hNPURunABTrue->Fill(npu[3],mcweight); 
+    }
+    else if (run==200519) {
+      hNPURunCObs->Fill(npu[0],mcweight); 
+      hNPURunCTrue->Fill(npu[3],mcweight);       
+    }
+    else if (run==206859) {
+      hNPURunDObs->Fill(npu[0],mcweight); 
+      hNPURunDTrue->Fill(npu[3],mcweight);       
+    }    
+    
+    hDTotalMCWeight->Fill(0., mcweight);
 
   }
 
@@ -273,6 +299,24 @@ void AnaFwkMod::SlaveBegin()
   
   hDTotalMCWeight = new TH1D("hDTotalMCWeight","hDTotalMCWeight",1,-0.5,0.5);
   AddOutput(hDTotalMCWeight);
+  
+  hNPURunABObs = new TH1D("hNPURunABObs","hNPURunABObs",201, -0.5, 200.5);
+  AddOutput(hNPURunABObs);  
+
+  hNPURunCObs = new TH1D("hNPURunCObs","hNPURunCObs",201, -0.5, 200.5);
+  AddOutput(hNPURunCObs);    
+  
+  hNPURunDObs = new TH1D("hNPURunDObs","hNPURunDObs",201, -0.5, 200.5);
+  AddOutput(hNPURunDObs);    
+  
+  hNPURunABTrue = new TH1D("hNPURunABTrue","hNPURunABTrue",2000, 0.0, 200.0);
+  AddOutput(hNPURunABTrue);  
+
+  hNPURunCTrue = new TH1D("hNPURunCTrue","hNPURunCTrue",2000, 0.0, 200.0);
+  AddOutput(hNPURunCTrue);    
+  
+  hNPURunDTrue = new TH1D("hNPURunDTrue","hNPURunDTrue",2000, 0.0, 200.0);
+  AddOutput(hNPURunDTrue);      
   
 }
 

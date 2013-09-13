@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: AnaFwkMod.h,v 1.10 2012/09/22 07:55:22 ceballos Exp $
+// $Id: AnaFwkMod.h,v 1.11 2013/08/26 22:43:59 bendavid Exp $
 //
 // AnaFwkMod
 //
@@ -65,7 +65,13 @@ namespace mithep
       const MCEventInfo *fMCEventInfo;        //!MC Event Info pointer
       TString          fMCEventInfoName;    //name of MC Event info branch
       TH1D             *hDTotalMCWeight;    //total monte carlo weight from mc event header
-
+      TH1D             *hNPURunABObs; //"observed" pileup distribution for Run dependent MC, run AB
+      TH1D             *hNPURunCObs; //"observed" pileup distribution for Run dependent MC, run C
+      TH1D             *hNPURunDObs; //"observed" pileup distribution for Run dependent MC, run D
+      TH1D             *hNPURunABTrue; //"true" pileup distribution for Run dependent MC, run AB
+      TH1D             *hNPURunCTrue; //"true" pileup distribution for Run dependent MC, run C
+      TH1D             *hNPURunDTrue; //"true" pileup distribution for Run dependent MC, run D
+      
     ClassDef(AnaFwkMod, 1) // Analysis framework module
   };
 }
