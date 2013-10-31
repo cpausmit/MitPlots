@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.27 2012/05/05 16:49:10 paus Exp $
+// $Id: SuperCluster.h,v 1.28 2013/07/01 20:18:00 paus Exp $
 //
 // SuperCluster
 //
@@ -32,7 +32,8 @@ namespace mithep
                      fXC(-99.), fXS(-99.), fXM(-99.), fXZ(-99.),
                      fYC(-99.), fYS(-99.), fYM(-99.), fYZ(-99.),
                      fPreshowerEnergyPlane1(0.), fPreshowerEnergyPlane2(0.),
-                     fPsEffWidthSigmaXX(-99.), fPsEffWidthSigmaYY(-99.) {}
+                     fPsEffWidthSigmaXX(-99.), fPsEffWidthSigmaYY(-99.),
+                     fRoundness(-99.), fAngle(-99.) {}
 
     void                   AddCluster(const BasicCluster *c)          { fClusters.Add(c);        }
     void                   AddPsClust(const PsCluster *c)             { fPsClusts.Add(c);        }
@@ -92,6 +93,8 @@ namespace mithep
     Double_t               SubLeadTimeSpan()       const { return fSubLeadTimeSpan;              }
     Double_t               PsEffWidthSigmaXX()     const { return fPsEffWidthSigmaXX;            }
     Double_t               PsEffWidthSigmaYY()     const { return fPsEffWidthSigmaYY;            }
+    Double_t               Roundness()             const { return fRoundness;                    }
+    Double_t               Angle()                 const { return fAngle;                        }
 
     void                   SetEnergy(Double_t energy)                 { fEnergy = energy;        }
     void                   SetEtaWidth(Double_t etaWidth)             { fEtaWidth = etaWidth;    }
@@ -124,48 +127,51 @@ namespace mithep
     void                   SetSubLeadTimeSpan(Double_t x)             { fSubLeadTimeSpan = x;    }
     void                   SetPsEffWidthSigmaXX(Double_t x)           { fPsEffWidthSigmaXX = x;  }
     void                   SetPsEffWidthSigmaYY(Double_t x)           { fPsEffWidthSigmaYY = x;  }
+    void                   SetRoundness(Double_t x)                   { fRoundness = x;          }
+    void                   SetAngle(Double_t x)                       { fAngle = x;              }
 
     // Some structural tools
     void                   Mark(UInt_t i=1)  const;
 
   protected:
-    Vect3C                  fPoint;               //centroid Position
-    Double32_t              fEnergy;              //[0,0,14]super cluster energy
-    Double32_t              fEtaWidth;            //[0,0,14]width in Phi
-    Double32_t              fPreshowerEnergy;     //[0,0,14]energy in the preshower
-    Double32_t              fPhiWidth;            //[0,0,14]width in Phi
-    Double32_t              fRawEnergy;           //[0,0,14]super cluster raw energy
-    Double32_t              fHcalDepth1Energy;    //[0,0,14] hcal depth1 over ECAL energy
-    Double32_t              fHcalDepth2Energy;    //[0,0,14] hcal depth2 over ECAL energy
-    RefArray<BasicCluster>  fClusters;            //assigned basic clusters
-    Ref<BasicCluster>       fSeedRef;             //seed cluster
-    RefArray<CaloTower>     fCaloTowers;          //calo towers (matched by detid)
-    Double32_t              fEtaC;                //local coordinates
-    Double32_t              fEtaS;                //local coordinates
-    Double32_t              fEtaM;                //local coordinates
-    Double32_t              fPhiC;                //local coordinates
-    Double32_t              fPhiS;                //local coordinates
-    Double32_t              fPhiM;                //local coordinates
-    Double32_t              fXC;                  //local coordinates
-    Double32_t              fXS;                  //local coordinates
-    Double32_t              fXM;                  //local coordinates
-    Double32_t              fXZ;                  //local coordinates
-    Double32_t              fYC;                  //local coordinates
-    Double32_t              fYS;                  //local coordinates
-    Double32_t              fYM;                  //local coordinates
-    Double32_t              fYZ;                  //local coordinates
-    Double32_t              fTime;                //ecal timing (weighted average)
-    Double32_t              fSeedTime;            //ecal timing (seed crystal)
-    Double32_t              fLeadTimeSpan;        //ecal supercluster max timespan (seed vs. any other xtal)
-    Double32_t              fSubLeadTimeSpan;     //ecal supercluster next-to-max timespan (seed vs. any other xtal)
+    Vect3C                  fPoint;                //centroid Position
+    Double32_t              fEnergy;               //[0,0,14]super cluster energy
+    Double32_t              fEtaWidth;             //[0,0,14]width in Phi
+    Double32_t              fPreshowerEnergy;      //[0,0,14]energy in the preshower
+    Double32_t              fPhiWidth;             //[0,0,14]width in Phi
+    Double32_t              fRawEnergy;            //[0,0,14]super cluster raw energy
+    Double32_t              fHcalDepth1Energy;     //[0,0,14] hcal depth1 over ECAL energy
+    Double32_t              fHcalDepth2Energy;     //[0,0,14] hcal depth2 over ECAL energy
+    RefArray<BasicCluster>  fClusters;             //assigned basic clusters
+    Ref<BasicCluster>       fSeedRef;              //seed cluster
+    RefArray<CaloTower>     fCaloTowers;           //calo towers (matched by detid)
+    Double32_t              fEtaC;                 //local coordinates
+    Double32_t              fEtaS;                 //local coordinates
+    Double32_t              fEtaM;                 //local coordinates
+    Double32_t              fPhiC;                 //local coordinates
+    Double32_t              fPhiS;                 //local coordinates
+    Double32_t              fPhiM;                 //local coordinates
+    Double32_t              fXC;                   //local coordinates
+    Double32_t              fXS;                   //local coordinates
+    Double32_t              fXM;                   //local coordinates
+    Double32_t              fXZ;                   //local coordinates
+    Double32_t              fYC;                   //local coordinates
+    Double32_t              fYS;                   //local coordinates
+    Double32_t              fYM;                   //local coordinates
+    Double32_t              fYZ;                   //local coordinates
+    Double32_t              fTime;                 //ecal timing (weighted average)
+    Double32_t              fSeedTime;             //ecal timing (seed crystal)
+    Double32_t              fLeadTimeSpan;         //ecal supercluster max timespan (seed vs. any other xtal)
+    Double32_t              fSubLeadTimeSpan;      //ecal supercluster next-to-max timespan (seed vs. any other xtal)
+    Double32_t              fPreshowerEnergyPlane1;//local coordinates
+    Double32_t              fPreshowerEnergyPlane2;//local coordinates
+    Double32_t              fPsEffWidthSigmaXX;    //preshower cluster width in x plane
+    Double32_t              fPsEffWidthSigmaYY;    //preshower cluster width in y plane
+    RefArray<PsCluster>     fPsClusts;             //assigned preshower clusters
+    Double32_t              fRoundness;            //smaller_SCaxis/larger_SCaxis: barrel only
+    Double32_t              fAngle;                //angle between SC axis and beam axis: barrel only
 
-    Double32_t              fPreshowerEnergyPlane1; //local coordinates
-    Double32_t              fPreshowerEnergyPlane2; //local coordinates
-    Double32_t              fPsEffWidthSigmaXX;       //preshower cluster width in x plane
-    Double32_t              fPsEffWidthSigmaYY;       //preshower cluster width in y plane
-    RefArray<PsCluster>     fPsClusts;              //assigned preshower clusters
-
-    ClassDef(SuperCluster, 6) // Super cluster class
+    ClassDef(SuperCluster, 7) // Super cluster class
   };
 }
 
