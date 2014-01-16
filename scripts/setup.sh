@@ -30,11 +30,16 @@ echo
 cd $CMSSW_BASE/src;
 
 if test $version -lt 5004000 -a $version -ge 5003000; then
+
+  # first git clone
   git clone -b hggpaperV6 https://github.com/bendavid/GBRLikelihood.git HiggsAnalysis/GBRLikelihood
-  addpkg RecoEcal/EgammaCoreTools  V05-08-21
+
+  # all the translated cvs one: make sure:
+  # export CVSROOT=":ext:${USER}@lxplus5.cern.ch:/afs/cern.ch/user/c/cvscmssw/public/CMSSW"
+  cvs co -r V05-08-21    RecoEcal/EgammaCoreTools  
   # not protected pointer of recHits (very often they are not there)
   patch  RecoEcal/EgammaCoreTools/src/EcalClusterLazyTools.cc MitAna/scripts/EcalClusterLazyTools.cc.patch
-  addpkg RecoEgamma/EgammaTools    EcalLocalFix
+  cvs co -r EcalLocalFix RecoEgamma/EgammaTools
 
   # for version 032 (special Mono Release)
   cvs co -r V00-00-13-01 RecoMET/METFilters
@@ -50,26 +55,25 @@ if test $version -lt 5004000 -a $version -ge 5003000; then
   cvs co -r V00-00-08    DataFormats/TrackerCommon
   cvs co -r V01-09-05    RecoLocalTracker/SubCollectionProducers
 
-  checkdeps -a
-#  git cms-addpkg RecoEcal/EgammaCoreTools 
-#  git cms-addpkg RecoEgamma/EgammaTools
-#  git cms-addpkg EcalLocalFix
-#
-#  # for version 032 (special Mono Release)
-#  git cms-addpkg RecoMET/METFilters
-#  # For CSC Beam Halo filter
-#  git cms-addpkg RecoMET/METAnalyzers
-#
-#  # For the HBHE filter
-#  git cms-addpkg CommonTools/RecoAlgos
-#
-#  # Additional packages for the tracking POG filters
-#  git cms-addpkg DPGAnalysis/Skims
-#  git cms-addpkg DPGAnalysis/SiStripTools
-#  git cms-addpkg DataFormats/TrackerCommon
-#  git cms-addpkg RecoLocalTracker/SubCollectionProducers
-#
-#  git cms-checkdeps -a
+  # seems not to work anymore as addpkg
+  ## checkdeps -a
+  git cms-checkdeps -a
+
+  ## for version 032 (special Mono Release)
+  #git cms-addpkg RecoMET/METFilters
+  ## For CSC Beam Halo filter
+  #git cms-addpkg RecoMET/METAnalyzers
+  #
+  ## For the HBHE filter
+  #git cms-addpkg CommonTools/RecoAlgos
+  #
+  ## Additional packages for the tracking POG filters
+  #git cms-addpkg DPGAnalysis/Skims
+  #git cms-addpkg DPGAnalysis/SiStripTools
+  #git cms-addpkg DataFormats/TrackerCommon
+  #git cms-addpkg RecoLocalTracker/SubCollectionProducers
+  #
+  #git cms-checkdeps -a
 fi
 
 if test $version -lt 5003000 -a $version -ge 5002000; then
