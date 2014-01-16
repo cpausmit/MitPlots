@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Photon.h,v 1.50 2012/06/07 14:43:24 bendavid Exp $
+// $Id: Photon.h,v 1.54 2013/12/09 17:55:49 bendavid Exp $
 //
 // Photon
 //
@@ -45,7 +45,7 @@ namespace mithep
       fMatchHePlusPos(ThreeVector(0.,0.,0.)),fMatchHePlusEn(-1.),fMatchHePlusTime(-1000.),
       fMatchHeMinusPos(ThreeVector(0.,0.,0.)),fMatchHeMinusEn(-1.),fMatchHeMinusTime(-1000.),
       fMatchHePlusPosDR15(ThreeVector(0.,0.,0.)),fMatchHePlusEnDR15(-1.),fMatchHePlusTimeDR15(-1000.),
-      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.) {}
+      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.), fEnergyErrSmearing(0.), fEnergyScale(1.) {}
     Photon(Double_t px, Double_t py, Double_t pz, Double_t e) :
       fMom(FourVector(px,py,pz,e)),
       fR9(0),fHadOverEm(0),fHcalDepth1OverEcal(0),
@@ -68,7 +68,7 @@ namespace mithep
       fMatchHePlusPos(ThreeVector(0.,0.,0.)),fMatchHePlusEn(-1.),fMatchHePlusTime(-1000.),
       fMatchHeMinusPos(ThreeVector(0.,0.,0.)),fMatchHeMinusEn(-1.),fMatchHeMinusTime(-1000.),
       fMatchHePlusPosDR15(ThreeVector(0.,0.,0.)),fMatchHePlusEnDR15(-1.),fMatchHePlusTimeDR15(-1000.),
-      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.) {}
+      fMatchHeMinusPosDR15(ThreeVector(0.,0.,0.)),fMatchHeMinusEnDR15(-1.),fMatchHeMinusTimeDR15(-1000.), fEnergyErrSmearing(0.), fEnergyScale(1.) {}
 
     // Contents of the Photons
     const Conversion    *ConvCand(UInt_t i)         const { return fConversions.At(i);  }
@@ -79,10 +79,12 @@ namespace mithep
     Double_t             EnergyErr()                const { return fEnergyErr;          }
     Double_t             EnergyErrSmeared()         const { return fEnergyErrSmeared;   }
     Double_t             EnergySmearing()           const { return fEnergySmearing;     }
+    Double_t             EnergyErrSmearing()        const { return fEnergyErrSmearing;  }
     Double_t             EnergyRegr()               const { return fEnergyRegr;         }
     Double_t             EnergyErrRegr()            const { return fEnergyErrRegr;      }
     Double_t             EnergyPhoFix()             const { return fEnergyPhoFix;       }
     Double_t             EnergyErrPhoFix()          const { return fEnergyErrPhoFix;    }
+    Double_t             EnergyScale()              const { return fEnergyScale;        }
     Double_t             HadOverEm()                const { return fHadOverEm;          }
     Double_t             HcalDepth1OverEcal()       const { return fHcalDepth1OverEcal; }
     Double_t             HcalDepth2OverEcal()       const { return fHcalDepth2OverEcal; }
@@ -175,10 +177,12 @@ namespace mithep
     void                 SetEnergyErr(Double_t x)                { fEnergyErr               = x; }
     void                 SetEnergyErrSmeared(Double_t x)         { fEnergyErrSmeared        = x; }
     void                 SetEnergySmearing(Double_t x)           { fEnergySmearing          = x; }
+    void                 SetEnergyErrSmearing(Double_t x)        { fEnergyErrSmearing       = x; }
     void                 SetEnergyRegr(Double_t x)               { fEnergyRegr              = x; }
     void                 SetEnergyErrRegr(Double_t x)            { fEnergyErrRegr           = x; }
     void                 SetEnergyPhoFix(Double_t x)             { fEnergyPhoFix            = x; }
     void                 SetEnergyErrPhoFix(Double_t x)          { fEnergyErrPhoFix         = x; }
+    void                 SetEnergyScale(Double_t x)              { fEnergyScale             = x; }
     void                 SetIsConverted(Bool_t b)                { fIsConverted             = b; }
     void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
     void                 SetSuperCluster(const SuperCluster* s)  { fSuperClusterRef         = s; }
@@ -351,8 +355,12 @@ namespace mithep
     Vect3                fMatchHeMinusPosDR15;   // phi matched HBHE- rechit pos - 15 cm DR match window
     Double32_t           fMatchHeMinusEnDR15;    // phi matched HBHE- energy - 15 cm DR match window
     Double32_t           fMatchHeMinusTimeDR15;  // phi matched HBHE- time - 15 cm DR match window
+    Double32_t           fEnergyErrSmearing;  //[0,0,14]addit. ene smearing applied to energy error wrt MC
+    Double32_t           fEnergyScale;  //[0,0,14]Energy scale applied to photon
+    
 
-    ClassDef(Photon,18) // Photon class
+
+    ClassDef(Photon,20) // Photon class
   };
 }
 
