@@ -1,8 +1,6 @@
 // $Id: HLTMod.cc,v 1.22 2011/11/18 00:02:02 bendavid Exp $
 
 #include "MitAna/TreeMod/interface/HLTMod.h"
-#include <TFile.h>
-#include <TTree.h>
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/TriggerMask.h"
@@ -48,7 +46,10 @@ void HLTMod::AddTrigger(const char *expr, UInt_t firstRun, UInt_t lastRun)
   // A "!" infront of a trigger name negates the bit. For example, valid expressions are: "A", "!A",
   // "A&B", "A&!B" or "A&B&C"
   //
-  // To add both "A" and "!A" at the same time specify "!+A"
+  // To add both "A" and "!A" at the same time specify "!+A". This is a commnon pattern when you
+  // need access to the Trigger objects of a particular trigger but do not want to reject the event.
+  // If you just pass the event the trigger objects would not be stored as potentially no trigger
+  // would fit, thus no trigger objects would eb written.
 
   string tname(expr);
 
