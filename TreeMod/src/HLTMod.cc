@@ -43,22 +43,38 @@ HLTMod::~HLTMod()
 //--------------------------------------------------------------------------------------------------
 void HLTMod::AddTrigger(const char *expr, UInt_t firstRun, UInt_t lastRun)
 {
-  // Add trigger search pattern to the list of patters. Each element of the list is logically 
-  // "ored". The given expression can contain several trigger names logically "anded" (using "&"). 
-  // A "!" infront of a trigger name negates the bit. For example, valid expressions are:
-  // "A", "!A", "A&B", "A&!B" or "A&B&C"  
+  // Add trigger search pattern to the list of patters. Each element of the list is logically
+  // "ored". The given expression can contain several trigger names logically "anded" (using "&").
+  // A "!" infront of a trigger name negates the bit. For example, valid expressions are: "A", "!A",
+  // "A&B", "A&!B" or "A&B&C"
+  //
+  // To add both "A" and "!A" at the same time specify "!+A"
 
   string tname(expr);
-  std::pair<std::string,std::pair<UInt_t,UInt_t> >
-    element(tname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
-  fTrigNames.push_back(element);
+
+  // deal with the special case
+  if (tname.compare(0,2,"!+") == 0) {
+    string subtname = tname.substr(2,tname.length()-2);  // stripping off the special characters
+    std::pair<std::string,std::pair<UInt_t,UInt_t> >
+      element1(subtname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+    fTrigNames.push_back(element1);
+    // add both, trigger and its negation
+    std::pair<std::string,std::pair<UInt_t,UInt_t> >
+      element2(string("!")+subtname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+    fTrigNames.push_back(element2);
+  }
+  else {
+    std::pair<std::string,std::pair<UInt_t,UInt_t> >
+      element(tname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+    fTrigNames.push_back(element);
+  }
+  return;
 }
 
 //--------------------------------------------------------------------------------------------------
 void HLTMod::AddTrigObjs(UInt_t tid)
 {
   // Add trigger objects corresponding to trigger id.
-
   const BitMask1024 &ba = fTrigBitsAnd.at(tid);
   const BitMask1024 &bm = fTrigBitsCmp.at(tid);
   for (UInt_t i=0; i<bm.Size(); ++i) {
@@ -74,7 +90,7 @@ void HLTMod::AddTrigObjs(UInt_t tid)
       TIter iter(list->MakeIterator());
       const TriggerObject *to = dynamic_cast<const TriggerObject*>(iter.Next());
       while (to) {
-        if ( (fObjMode == kAll)  ||
+        if (  (fObjMode == kAll)  ||
              ((fObjMode == kHlt) && (to->IsHLT())) ||
              ((fObjMode == kL1)  && (to->IsL1())) )
           fMyTrgObjs->Add(to);    
@@ -111,13 +127,14 @@ void HLTMod::BeginRun()
 	 ( runNumber<firstRun || runNumber>lastRun ) )
       continue;
     
-    BitMask1024 tmask; //trigger mask
-    BitMask1024 amask; //bitand mask
+    BitMask1024 tmask; // trigger mask
+    BitMask1024 amask; // bitand  mask
+
     TString names(fTrigNames.at(i).first.c_str());
 
     TObjArray *arr = names.Tokenize("&");
     if (arr) {
-      for(Int_t j=0; j<arr->GetEntries(); j++){
+      for (Int_t j=0; j<arr->GetEntries(); j++){
         TObjString *s = dynamic_cast<TObjString*>(arr->At(j));
         if (!s) 
           continue;
@@ -147,13 +164,14 @@ void HLTMod::BeginRun()
 
         UShort_t bit = tn->Id();
         if (amask.TestBit(bit)) {
-          if (tmask.TestBit(bit)==invert) {
+          if (tmask.TestBit(bit) == invert) {
             amask.ClearBit(bit);
             tmask.ClearBit(bit);
             Warning("BeginRun", "Trigger expression %s always false.", names.Data());
             break;
           }
-        } else { //always set and-mask bit 
+        }
+	else { //always set and-mask bit 
           amask.SetBit(bit); 
           if (!invert) 
             tmask.SetBit(bit); //set trigger bit
@@ -193,7 +211,7 @@ void HLTMod::Process()
   }
 
   // take action if failed
-  if (!accept) {
+  if (! accept) {
     ++fNFailed;
     OnFailed();
     delete fMyTrgObjs;
@@ -207,7 +225,9 @@ void HLTMod::Process()
   ++fNAccepted;
   IncNEventsProcessed();
   OnAccepted();
-  if (!AddObjThisEvt(fMyTrgObjs)) {
+  // here the trigger objects are attached to the event for further analysis
+  // -- NOTE: all trigger objects not just objects corresponding to your trigger(s)
+  if (! AddObjThisEvt(fMyTrgObjs)) {
     SendError(kAbortAnalysis, "Process", 
               "Could not add my trigger objects with name %s to event.",
               fMyTrgObjs->GetName());
@@ -229,7 +249,7 @@ void HLTMod::SlaveBegin()
     return;
   }
   fTrigObjs = GetHLTObjectsTable();
-  if (!fTrigObjs) {
+  if (! fTrigObjs) {
     SendError(kAbortAnalysis, "SlaveBegin", "Could not get HLT trigger objects table.");
     return;
   }
