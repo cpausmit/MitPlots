@@ -3,8 +3,8 @@
 //
 // DataBase
 //
-// This is the common base class for all objects in the tree that do not require the TObject
-// bits to be written out (as opposed to DataObject).
+// This is the common base class for all objects in the tree that do not require the TObject bits to
+// be written out (as opposed to DataObject).
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------

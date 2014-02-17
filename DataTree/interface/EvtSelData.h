@@ -8,7 +8,6 @@
 //
 // Authors: C.Loizides, L.Di Matteo
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATATREE_EVENTSELDATA_H
 #define MITANA_DATATREE_EVENTSELDATA_H
  
@@ -21,8 +20,8 @@ namespace mithep
     public:
       EvtSelData() : 
         fMetFiltersWord(0) {}
-      EvtSelData(Int_t metFiltersWord) :
-        fMetFiltersWord(metFiltersWord) {}
+    //      EvtSelData(Int_t metFiltersWord) :
+    //        fMetFiltersWord(metFiltersWord) {}
       ~EvtSelData() {}
 
       Int_t    metFiltersWord()           const { return fMetFiltersWord; }
