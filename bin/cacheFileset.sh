@@ -6,6 +6,10 @@ h=`basename $0`
 # start waiting time now
 startTime=$(date +%s)
 
+# this need to be fixed when setting up the package correctly
+source /usr/local/DynamicData/SmartCache/setup.sh
+export PATH="${PATH}:$SMARTCACHE_DIR/Client"
+
 catalogDir=$1
       book=$2
    dataset=$3
@@ -32,7 +36,14 @@ done
 # Enter the download requests into the database
 for file in `echo $files`
 do
-  ~cmsprod/SmartCache/addDownloadRequest.py --file=$file --dataset=$dataset --book=$book
+  echo " Testing: $SMARTCACHE_DATA/$book/$dataset/$file"
+
+  if [ -e "$SMARTCACHE_DATA/$book/$dataset/$file" ]
+  then
+    echo " File: $book/$dataset/$file already available."
+  else
+    addDownloadRequest.py --file=$file --dataset=$dataset --book=$book
+  fi
 done
 
 # Now check every now and then whether they have completed
@@ -46,7 +57,7 @@ do
   done=1
   for file in `echo $files`
   do
-    ~cmsprod/SmartCache/checkDownloadRequest.py --file=$file --dataset=$dataset --book=$book
+    checkDownloadRequest.py --file=$file --dataset=$dataset --book=$book
     if [ "$?" == "0" ]
     then
       done=0
