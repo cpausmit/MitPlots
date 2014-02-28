@@ -54,14 +54,18 @@ cp ~/.krb5/krb5cc_${id}  /tmp/krb5cc_${id}
 ls -lhrt /tmp/krb5cc_${id}
 export KRB5CCNAME=FILE:/tmp/krb5cc_${id}
 
-# check whether our files are in the smartcache or download them
-echo " "; echo "${h}: Check input file status"; echo " ";
-cacheFileset.sh $catalogDir $book $dataset $skim $fileset
-if [ "$?" != "0" ]
-then
-  echo "ERROR ($h) -- file caching failed. EXIT!"
-  exit 1
-fi
+#
+# THIS PIECE IS NOT NEEDED ANYMORE -- REMOVE ON NEXT CHECK-IN
+# --> caching now happens in the Catalog
+#
+## check whether our files are in the smartcache or download them
+#echo " "; echo "${h}: Check input file status"; echo " ";
+#cacheFileset.sh $catalogDir $book $dataset $skim $fileset
+#if [ "$?" != "0" ]
+#then
+#  echo "ERROR ($h) -- file caching failed. EXIT!"
+#  exit 1
+#fi
 
 # get ready to run
 echo " "; echo "${h}: Starting root job now"; echo " ";

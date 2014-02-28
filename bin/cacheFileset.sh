@@ -23,26 +23,47 @@ echo " "
 echo "      arguments: $*";
 echo " ";
 
+# Make sure catalog and book are compliant for download
+
+if [ "`echo $book | tr -d [a-zA-Z0-9\-_]`" == "//" ]
+then
+  newBook=`echo $book | cut -d/ -f2-3`
+  newCatalogDir=$catalogDir/`echo $book | cut -d/ -f1`
+else
+  newBook=$book
+  newCatalogDir=$catalogDir
+fi
+
 # First make the filelist
 files=""
-for line in `cat $catalogDir/$book/$dataset/Files | grep ^$fileset`
+nFiles=`cat $newCatalogDir/$newBook/$dataset/Files | grep ^$fileset | wc -l`
+echo " Number of files to cache: $nFiles"
+echo ""
+
+for line in `cat $newCatalogDir/$newBook/$dataset/Files | grep ^$fileset`
 do
   if [ "`echo $line | grep root`" != "" ]
   then
     files="$files $line"
+    if [ -z "$filesCheck" ]
+    then
+      filesCheck=$line
+    else
+      filesCheck="$filesCheck,$line"
+    fi
   fi
 done
 
 # Enter the download requests into the database
 for file in `echo $files`
 do
-  echo " Testing: $SMARTCACHE_DATA/$book/$dataset/$file"
+  echo " Testing: $SMARTCACHE_DATA/$newBook/$dataset/$file"
 
-  if [ -e "$SMARTCACHE_DATA/$book/$dataset/$file" ]
+  if [ -e "$SMARTCACHE_DATA/$newBook/$dataset/$file" ]
   then
-    echo " File: $book/$dataset/$file already available."
+    echo " File: $newBook/$dataset/$file already available."
   else
-    addDownloadRequest.py --file=$file --dataset=$dataset --book=$book
+    addDownloadRequest.py --file=$file --dataset=$dataset --book=$newBook
   fi
 done
 
@@ -55,15 +76,12 @@ do
   echo " Waiting time --> $duration sec"
   sleep 10
   done=1
-  for file in `echo $files`
-  do
-    checkDownloadRequest.py --file=$file --dataset=$dataset --book=$book
-    if [ "$?" == "0" ]
-    then
-      done=0
-      break
-    fi
-  done
+  echo "checkDownloadRequest.py --files=$filesCheck --dataset=$dataset --book=$newBook"
+  checkDownloadRequest.py --files=$filesCheck --dataset=$dataset --book=$newBook
+  if [ "$?" == "0" ]
+  then
+    done=0
+  fi
 done
 
 exit 0
