@@ -28,7 +28,7 @@ echo "  Process: dataset=$dataset, book=$book, catalog=$catalogDir"
 #echo " "
 workDir=/home/$USER/cms/condor
 mkdir -p $workDir
-cd $workDir
+cd       $workDir
 cp /home/$USER/cms/root/.rootlogon.C $workDir
 cp $MIT_ANA_DIR/bin/run.sh           $workDir
 cp $MIT_USER_DIR/macros/$runMacro    $workDir
@@ -50,16 +50,24 @@ else
   filesets=$catalogDir/$book/$dataset/$skim/Filesets
 fi
 
+
+condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
+
 for fileset in `cat $filesets | cut -d' ' -f1 `
 do
-  # check if the output already exists and whether it is complete
+
+  # determine the expected output
+
   rFile="$outputDir/$outputName/$book/$dataset"
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
+
+  # check if the output already exists and optional whether it is complete
 
   process=false
   if [ -f "$rFile" ]
   then
-     echo "  File: $rFile exists already."
+     echo "   File: $rFile exists already."
+     # file exists - optional to perfrom more checks
      dir=`dirname $rFile`
      file=`basename $rFile`
      # check whether the output file shows the expected number of events
@@ -77,14 +85,39 @@ do
          process=true
        fi
      fi
+     # make sure to move on if completed
+     if [ "$process" == "false" ] 
+     then
+       continue
+     fi
   else
     process=true
   fi
+
+  # check whether file is already submitted to condor
+
+  pattern="$script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
+  pattern=`echo $pattern| sed 's/ *$//'`
+  inQueue=`grep "$pattern" /tmp/condorQueue.$$`
+
+  if [ "$inQueue" != "" ]
+  then
+    echo " Queued: $rFile"
+    continue
+  fi
+
 
   if [ "$process" == "true" ]
   then
 
     echo "   $script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
+
+    if [ "$DEBUG" != "" ]
+    then
+      echo "  FOR NOW NOT RE-SUBMITTING -- check error/output at:"
+      echo "    cat $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}*"
+      continue
+    fi
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
@@ -111,4 +144,7 @@ EOF
 
 done
 
+rm -f /tmp/condorQueue.$$
+
 exit 0
+
