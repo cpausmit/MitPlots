@@ -22,14 +22,16 @@ echo "Script:    $h"
 echo "Arguments: $*"
 
 # some basic printing
-echo " "; echo "${h}: Show who and where we are";
-echo " "
+echo " ";
+echo "${h}: Show who and where we are";
+echo " start time    : "`date`
 echo " user executing: "`id`;
 echo " running on    : "`hostname`;
 echo " executing in  : "`pwd`;
 echo " submitted from: $HOSTNAME";
 echo " ";
 
+initialSeconds=`date +"%s"`
 
 # initialize the CMSSW environment
 echo " "; echo "${h}: Initialize CMSSW (in $CMSSW_BASE)"; echo " "
@@ -47,25 +49,13 @@ then
   cp /home/$USER/cms/condor/${runMacro}     ./
 fi
 
-# make sure to get the ticket
-id=`id -u`
-cp ~/.krb5/x509up_u${id} /tmp/
-cp ~/.krb5/krb5cc_${id}  /tmp/krb5cc_${id}
-ls -lhrt /tmp/krb5cc_${id}
-export KRB5CCNAME=FILE:/tmp/krb5cc_${id}
+# take care of the certificate
+if [ -e "./x509up_u`id -u`" ]
+then
+  export X509_USER_PROXY="./x509up_u`id -u`"
+fi
+echo " INFO -- using the x509 ticket: $X509_USER_PROXY"
 
-#
-# THIS PIECE IS NOT NEEDED ANYMORE -- REMOVE ON NEXT CHECK-IN
-# --> caching now happens in the Catalog
-#
-## check whether our files are in the smartcache or download them
-#echo " "; echo "${h}: Check input file status"; echo " ";
-#cacheFileset.sh $catalogDir $book $dataset $skim $fileset
-#if [ "$?" != "0" ]
-#then
-#  echo "ERROR ($h) -- file caching failed. EXIT!"
-#  exit 1
-#fi
 
 # get ready to run
 echo " "; echo "${h}: Starting root job now"; echo " ";
@@ -93,5 +83,10 @@ echo " "; echo "${h}: Checking the work area after copy"; echo " "
 ls -lhrt ./
 echo " "; echo "${h}: Checking the remote area ($outputDir/$outputName/$book/$dataset) after copy (only $dataset file)"; echo " "
 ls -lhrt $outputDir/$outputName/$book/$dataset
+
+finalSeconds=`date +"%s"`
+let duration=($finalSeconds-$initialSeconds)/60
+echo " end time      : "`date`
+echo " duration      : $duration min"
 
 exit $status

@@ -37,28 +37,8 @@ script=$workDir/run.sh
 # Create the directory for the results
 mkdir -p $MIT_PROD_LOGS/$outputName/$book/$dataset/
 
-# Make sure there are kerberos and globus tickets available
-id=`id -u`
-mkdir             -p  ~/.krb5/
-cp /tmp/x509up_u${id} ~/.krb5/
-KRB5CCNAME=`klist -5 | grep 'Ticket cache:' | cut -d' ' -f 3`
-if ! [ -z $KRB5CCNAME ]
-then
-  mkdir    -p  ~/.krb5/
-  chmod 0      ~/.krb5
-  chmod u=rwx  ~/.krb5
-  file=`echo $KRB5CCNAME | cut -d: -f2`
-  if [ -f "$file" ]
-  then
-    cp $file ~/.krb5/krb5cc_${id}
-  else
-    echo " ERROR -- missing kerberos ticket ($KRB5CCNAME)."
-    exit 1
-  fi
-else
-  echo " ERROR -- missing kerberos ticket ($KRB5CCNAME)."
-  exit 1
-fi
+# Make sure there is a globus tickets available
+x509File=/tmp/x509up_u`id -u`
 
 # Looping through each single fileset and submitting the condor jobs
 echo "  Submitting jobs to condor"
@@ -104,10 +84,6 @@ do
   if [ "$process" == "true" ]
   then
 
-    logFile=`echo $book/$dataset/$fileset | tr '/' '+'`
-    logFile=/tmp/$USER/$logFile
-    mkdir -p /tmp/$USER
-    rm    -f $logFile
     echo "   $script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
   
 cat > submit.cmd <<EOF
@@ -122,7 +98,8 @@ Initialdir              = $workDir
 Input                   = /dev/null
 Output                  = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
 Error                   = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
-Log                     = $logFile
+Log                     = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.log
+transfer_input_files    = $x509File
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
 Queue

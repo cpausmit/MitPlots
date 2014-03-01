@@ -55,6 +55,7 @@ do
 done
 
 # Enter the download requests into the database
+complete=1
 for file in `echo $files`
 do
   echo " Testing: $SMARTCACHE_DATA/$newBook/$dataset/$file"
@@ -63,9 +64,19 @@ do
   then
     echo " File: $newBook/$dataset/$file already available."
   else
+    complete=0
     addDownloadRequest.py --file=$file --dataset=$dataset --book=$newBook
   fi
 done
+
+# Prevent further checking if no download requests were made
+if [ "$complete" == "1" ]
+then
+  echo ""
+  echo " cacheFileset.sh -- all files are available. EXIT"
+  echo ""
+  exit 0
+fi
 
 # Now check every now and then whether they have completed
 done=0
