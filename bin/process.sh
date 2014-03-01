@@ -7,23 +7,23 @@
 echo " Config: ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt"
 
 # make clean copy of the config
-grep -v ^# ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt > /tmp/processHgg.$$
+grep -v ^# ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt > /tmp/process.$$
 nLine=0
 
-for dset in `cat /tmp/processHgg.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
+for dset in `cat /tmp/process.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
 do
 
   nLine=$(($nLine+1))
 
   # find the line to this dataset and do further analysis
-  line=`sed -n ${nLine}p /tmp/processHgg.$$`
+  line=`sed -n ${nLine}p /tmp/process.$$`
 
   # determine the input dataset
   BOOK_VERSION=`echo $line | tr -s ' ' | cut -d ' ' -f 1`
   DATASET=`     echo $line | tr -s ' ' | cut -d ' ' -f 2`
   SKIM=`        echo $line | tr -s ' ' | cut -d ' ' -f 3`
 
-  # adjust book / catalog dir
+  # adjust book / catalog dir (this is not needed anymore as the caching has become intelligent)
   BOOK=`echo $BOOK_VERSION | cut -d/ -f2-3`
   CEXT=`echo $BOOK_VERSION | cut -d/ -f1`
 
@@ -38,6 +38,6 @@ do
 
 done
 
-rm /tmp/processHgg.$$
+rm /tmp/process.$$
 
 exit 0
