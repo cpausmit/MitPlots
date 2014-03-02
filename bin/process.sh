@@ -40,7 +40,7 @@ do
 
   # now submit the sucker
   submit.sh $MIT_PROD_MACRO $MIT_CATALOG/$CEXT $BOOK $DATASET $SKIM \
-            $MIT_PROD_CFG   $MIT_PROD_HIST     " "   $CHECK_COMPLETE
+            $MIT_PROD_CFG   $MIT_PROD_HIST     ""    $CHECK_COMPLETE
 
 done
 

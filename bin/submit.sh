@@ -2,7 +2,12 @@
 #===================================================================================================
 # Submit a set of jobs to run over a given dataset, splitting the jobs according to the filesets.
 #
-# Version 1.0                                                                      November 14, 2008
+# Version 1.0                                                                           Nov 14, 2008
+#
+# Several hooks for reprocessing, checking and debugging have been added. Look for environment
+# variables DEBUG and the noStage variable that has been used. Ticket handling has been redone.
+#
+# Version 2.0                                                                           Mar 01, 2014
 #===================================================================================================
 # Read the arguments
 echo " "
@@ -49,7 +54,7 @@ else
   filesets=$catalogDir/$book/$dataset/$skim/Filesets
 fi
 
-
+# Store condor status for later inspection
 condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
 
 for fileset in `cat $filesets | cut -d' ' -f1 `
@@ -65,16 +70,18 @@ do
   process=false
   if [ -f "$rFile" ]
   then
-     echo "   File: $rFile exists already."
-     # file exists - optional to perfrom more checks
-     dir=`dirname $rFile`
-     file=`basename $rFile`
-     # check whether the output file shows the expected number of events
+     # File exists now see whether more checks are asked for
      if [ "$noStage" == "1" ] 
      then
+       # Check whether all events were processed
+       dir=`dirname $rFile`
+       file=`basename $rFile`
        root -l -b -q $MIT_ANA_DIR/macros/runSimpleFileCataloger.C+\(\"$dir\",\"$file\"\) >& /tmp/tmp.$$
+       # Get number of events processed from output file
        nEventsProcessed=`grep XX-CATALOG-XX /tmp/tmp.$$ | cut -d' ' -f3`
+       # Get number of events contained in the original input file
        nEventsInFileset=`grep ^$fileset     $catalogDir/$book/$dataset/Filesets | tr -s ' ' | cut -d' ' -f3`
+       # Compare whether we got what we asked for
        if [ "$nEventsProcessed" != "$nEventsInFileset" ]
        then
          echo " "
@@ -83,8 +90,16 @@ do
          echo " "
          process=true
        else
-         echo "   Complete with: $nEventsProcessed  events processed."
+         echo "   File: $rFile completed with  $nEventsProcessed  events processed."
        fi
+     elif [ "$noStage" == "2" ] 
+     then
+       # Show processing duration
+       duration=`tail -10 $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out | grep duration`
+       echo "   File: $rFile exists already. Processing $duration"
+     else
+       # Show that file was processed (fastest option and usually sufficient)
+       echo "   File: $rFile exists already."
      fi
      # make sure to move on if completed
      if [ "$process" == "false" ] 
@@ -100,17 +115,20 @@ do
   pattern="$script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
   pattern=`echo $pattern| sed 's/ *$//'`
   inQueue=`grep "$pattern" /tmp/condorQueue.$$`
-
   if [ "$inQueue" != "" ]
   then
     echo " Queued: $rFile"
     continue
   fi
 
+  # did we concluded this file needs processing? if yes let's do it!
+
   if [ "$process" == "true" ]
   then
 
     echo "   $script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
+
+    # An exit hook to avoid reprocessing without loocking at the log first
 
     if [ "$DEBUG" != "" ]
     then
@@ -121,7 +139,7 @@ do
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Requirements            = ((Arch == "X86_64") && (Machine != "t3btch112.mit.edu") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
+Requirements            = ((Arch == "X86_64") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
