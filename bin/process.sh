@@ -1,6 +1,12 @@
 #!/bin/bash
 #===================================================================================================
-# Script to process our complete analysis task.
+# Script to process our complete analysis task. The environment has to be defined before.
+#
+# There are two more environment variables that you can use to further the checks or debugging:
+#
+#  DEBUG - is set to anything it will tell you which jobs failed and tell you the err/out locations
+#
+#  CHECK_COMPLETE - if set to "1" will confirm that all events were processed.
 #
 #                                                                             Ch.Paus (Aug 15, 2010)
 #===================================================================================================
@@ -33,8 +39,8 @@ do
   echo " JSON: $MIT_PROD_JSON  Overlap: $MIT_PROD_OVERLAP"
 
   # now submit the sucker
-  submit.sh $MIT_PROD_MACRO $MIT_CATALOG/$CEXT $BOOK            $DATASET $SKIM \
-            $MIT_PROD_CFG   $MIT_PROD_HIST     $CHECK_COMPLETE
+  submit.sh $MIT_PROD_MACRO $MIT_CATALOG/$CEXT $BOOK $DATASET $SKIM \
+            $MIT_PROD_CFG   $MIT_PROD_HIST     " "   $CHECK_COMPLETE
 
 done
 

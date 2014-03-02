@@ -25,7 +25,6 @@ dataDir=`tail -1  $catalogDir/$book/$dataset/Filesets | cut -d' ' -f2`
 # Prepare environment
 echo " "
 echo "  Process: dataset=$dataset, book=$book, catalog=$catalogDir"
-#echo " "
 workDir=/home/$USER/cms/condor
 mkdir -p $workDir
 cd       $workDir
@@ -83,6 +82,8 @@ do
          echo "   Processed  $nEventsProcessed  of  $nEventsInFileset  total"
          echo " "
          process=true
+       else
+         echo "   Complete with: $nEventsProcessed  events processed."
        fi
      fi
      # make sure to move on if completed
@@ -105,7 +106,6 @@ do
     echo " Queued: $rFile"
     continue
   fi
-
 
   if [ "$process" == "true" ]
   then
@@ -147,4 +147,3 @@ done
 rm -f /tmp/condorQueue.$$
 
 exit 0
-
