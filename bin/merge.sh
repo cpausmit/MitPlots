@@ -29,6 +29,10 @@ do
 
   if [ "$PATTERN" == "" ] || [ "`echo $DATASET | grep $PATTERN`" != "" ]
   then
+    if [ "`echo $BOOK_VERSION | tr -d [a-zA-Z0-9\-_]`" == "//" ]
+    then
+      BOOK_VERSION=`echo $BOOK_VERSION | cut -d/ -f2-3`
+    fi
 
     # now merge the sucker
     mergeHist.py --Dataset=$DATASET \
@@ -37,7 +41,7 @@ do
                  --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged \
                  --FilenameHeader=$MIT_PROD_CFG
   fi
-  
+
 done
 
 rm /tmp/mergeHgg.$$

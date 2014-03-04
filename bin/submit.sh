@@ -30,11 +30,13 @@ dataDir=`tail -1  $catalogDir/$book/$dataset/Filesets | cut -d' ' -f2`
 # Prepare environment
 echo " "
 echo "  Process: dataset=$dataset, book=$book, catalog=$catalogDir"
+
 workDir=/home/$USER/cms/condor
-mkdir -p $workDir
-cd       $workDir
-cp /home/$USER/cms/root/.rootlogon.C $workDir
+mkdir -p                             $workDir
+cd                                   $workDir
+makeTgz.sh
 cp $MIT_ANA_DIR/bin/run.sh           $workDir
+cp /home/$USER/cms/root/.rootlogon.C $workDir
 cp $MIT_USER_DIR/macros/$runMacro    $workDir
 script=$workDir/run.sh
 
@@ -139,24 +141,26 @@ do
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Requirements            = ((Arch == "X86_64") && (Disk >= DiskUsage) && ((Memory * 1024) >= ImageSize) && (HasFileTransfer))
+Environment             = "MIT_DATA=/scratch/paus/cms/cmssw/033/CMSSW_5_3_14_patch2/src/MitPhysics/data HOME=$HOME MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
+Requirements            = Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
 Rank                    = Mips
-GetEnv                  = True
+GetEnv                  = False
 Initialdir              = $workDir
 Input                   = /dev/null
 Output                  = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
 Error                   = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
 Log                     = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.log
-transfer_input_files    = $x509File
+transfer_input_files    = $x509File,${CMSSW_VERSION}.tgz,$runMacro,.rootlogon.C
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
 Queue
 EOF
 
     condor_submit submit.cmd >& /dev/null;
+    exit 0
     rm submit.cmd
   fi
 

@@ -1,4 +1,3 @@
-// $Id: setRootEnv.C,v 1.7 2010/03/12 13:44:53 bendavid Exp $
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TEnv.h>
 #include <TString.h>

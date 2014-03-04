@@ -30,23 +30,30 @@ echo " running on    : "`hostname`;
 echo " executing in  : "`pwd`;
 echo " submitted from: $HOSTNAME";
 echo " ";
+env
 
 initialSeconds=`date +"%s"`
 
 # initialize the CMSSW environment
 echo " "; echo "${h}: Initialize CMSSW (in $CMSSW_BASE)"; echo " "
-workDir=`pwd`
-cd   $CMSSW_BASE
-eval `scram runtime -sh`
 
-# make sure to copy what we need locally if we are not in the original area (when in condor)
-pwd
-cd $workDir
+# make sure to setup what we need locally if we are not in the original area (when in condor)
+workDir=`pwd`
+ls -lhrt
 if [ "$workDir" != "/home/$USER/cms/root" ]
 then
-#  cp /home/$USER/cms/condor/.rootrc         ./
-  cp /home/$USER/cms/condor/.rootlogon.C    ./
-  cp /home/$USER/cms/condor/${runMacro}     ./
+  export VER=`echo CMSSW_*.tgz |cut -d. -f1`
+  export SCRAM_ARCH="slc5_amd64_gcc462"
+  source /cvmfs/cms.cern.ch/cmsset_default.sh
+  scram project CMSSW ${VER}
+  echo " untarring: CMSSW_5_3_14_patch2.tgz"
+  tar fzx ${VER}.tgz
+  echo " setting up environment"
+  cd ${VER}/src
+  eval `scram runtime -sh`
+  cd -
+else
+  echo " Everything is ready already. Let's go!"
 fi
 
 # take care of the certificate
@@ -55,7 +62,6 @@ then
   export X509_USER_PROXY="./x509up_u`id -u`"
 fi
 echo " INFO -- using the x509 ticket: $X509_USER_PROXY"
-
 
 # get ready to run
 echo " "; echo "${h}: Starting root job now"; echo " ";
@@ -70,7 +76,7 @@ echo \
 status=`echo $?`
 echo "${h}: Status - $status"
 
-# store the result
+# store the result (should int he future be done by condor
 echo " "; echo "${h}: Checking the work area before copy"; echo " "
 ls -lhrt ./
 echo " "; echo "${h}: Checking the remote area before copy (only $dataset file)"; echo " "
