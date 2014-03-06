@@ -46,12 +46,17 @@ then
   export SCRAM_ARCH="slc5_amd64_gcc462"
   source /cvmfs/cms.cern.ch/cmsset_default.sh
   scram project CMSSW ${VER}
+
   echo " untarring: CMSSW_5_3_14_patch2.tgz"
   tar fzx ${VER}.tgz
   echo " setting up environment"
   cd ${VER}/src
   eval `scram runtime -sh`
   cd -
+
+  tar fzx external.tgz
+  $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
+  
 else
   echo " Everything is ready already. Let's go!"
 fi

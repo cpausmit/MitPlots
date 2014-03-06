@@ -17,6 +17,8 @@ void setIncludes  ();
 void loadLibraries(const char *libpattern="libMitAna*.so");
 void loadmylib    (const char *name);
 void loadmylib    (const char *pkgname, const char *subpkgname);
+void loadextlib   (const char *name);
+void loadextlib   (const char *pkgname, const char *subpkgname);
 
 //__________________________________________________________________________________________________
 
@@ -39,12 +41,10 @@ void setRootEnv()
 void sayHello()
 {
   // have a friendly welcome message
-  if (gClassTable->GetID("mithep::Particle") >= 0) {
-    ::Info("setRootEnv", "Welcome to MITROOT! Loaded default libraries.\n");
-  }
-  else {
+  if (gClassTable->GetID("mithep::Particle") >= 0)
+    ::Info("setRootEnv", "Welcome to Bambu! Loaded default libraries.\n");
+  else
     ::Info("setRootEnv", "Ooops, at least one essential library did not load....\n");
-  }
 }
 
 void setIncludes()
@@ -56,6 +56,7 @@ void setIncludes()
       gSystem->SetMakeSharedLib(str);
     }
   }
+  printf(" Make Shared Library option: %s\n",gSystem->GetMakeSharedLib());
 
   gSystem->AddIncludePath("-I$CMSSW_BASE/src/");
   gSystem->AddIncludePath("-I$CMSSW_RELEASE_BASE/src/");
@@ -77,6 +78,7 @@ void loadLibraries(const char *libpattern)
   void *dir = gSystem->OpenDirectory(libstr.Data());
   TRegexp re(libpattern, kTRUE);
   TRegexp reignore("libMitAnalysis*.so", kTRUE);
+
   while (const char *direntry=gSystem->GetDirEntry(dir) ) {
     TString sdirentry(direntry);
     if (sdirentry.Index(re) == kNPOS)
@@ -90,33 +92,41 @@ void loadLibraries(const char *libpattern)
     for (Int_t i=0;i<len;i++)
       tmpstr[i]=direntry[i];
     tmpstr[len]='\0';
+
+    // Check whether already loaded
     if (gInterpreter->IsLoaded(tmpstr)) {
       if (gDebug)
         Warning("setRootEnv","Trying to load \"%s\", but it is already loaded", tmpstr);
-    } else {
-      if (gSystem->Load(tmpstr)<0) {
+    }
+    else {
+
+      // Here is where we load the library
+      if (gSystem->Load(tmpstr)<0)
         gROOT->Error("setRootEnv", "could not load \"%s\" for use in ACLiC", tmpstr);
-      } else {
-        if (gDebug)
-          Info("setRootEnv","Loaded \"%s\" for use in ACLiC", tmpstr);
+      else {
+	if (gDebug)
+	  Info("setRootEnv","Loaded \"%s\" for use in ACLiC", tmpstr);
       }
+
     }
     delete[] tmpstr;
   }
+
   gSystem->FreeDirectory(dir);
 }
 
 void loadmylib(const char *name)
 {
   TString libstr(Form("%s/lib/%s/%s",
-                      gSystem->Getenv("CMSSW_BASE"),
-                      gSystem->Getenv("SCRAM_ARCH"),
-                      name));
+		      gSystem->Getenv("CMSSW_BASE"),gSystem->Getenv("SCRAM_ARCH"),name));
 
-  Int_t slevel=gErrorIgnoreLevel;
-  gErrorIgnoreLevel=kFatal;
+  Int_t slevel = gErrorIgnoreLevel;
+  gErrorIgnoreLevel = kFatal;
+
+  // Load here
   Int_t suc = gSystem->Load(libstr);
-  gErrorIgnoreLevel=slevel;
+
+  gErrorIgnoreLevel = slevel;
   
   if (suc<0) {
     gROOT->Error("loadmylib", "could not load \"%s\" for use in ACLiC", libstr.Data());
@@ -129,4 +139,31 @@ void loadmylib(const char *name)
 void loadmylib(const char *pkgname, const char *subpkgname)
 {
   loadmylib(Form("lib%s%s.so", pkgname, subpkgname));
+}
+
+void loadextlib(const char *name)
+{
+  TString libstr(Form("%s/external/%s/lib/%s",
+		      gSystem->Getenv("CMSSW_BASE"),gSystem->Getenv("SCRAM_ARCH"),name));
+
+  Int_t slevel = gErrorIgnoreLevel;
+  gErrorIgnoreLevel = kFatal;
+
+  // Load here
+  Int_t suc = gSystem->Load(libstr);
+
+  gErrorIgnoreLevel = slevel;
+  
+  // Deal with errors and messages
+  if (suc<0) {
+    gROOT->Error("loadextlib", "could not load \"%s\" for use in ACLiC", libstr.Data());
+  } else {
+    if (gDebug)
+      Info("loadmylib","Loaded \"%s\" for use in ACLiC", name);
+  }
+}
+
+void loadextlib(const char *pkgname, const char *subpkgname)
+{
+  loadextlib(Form("lib%s%s.so", pkgname, subpkgname));
 }

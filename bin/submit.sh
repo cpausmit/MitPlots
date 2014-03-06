@@ -58,6 +58,14 @@ fi
 
 # Store condor status for later inspection
 condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
+if [ ]
+then
+  echo ""
+  echo " ERROR - condor_q command failed."
+  echo ' --> condor_q -global $USER -format "%s " Cmd -format "%s \n" Args '
+  echo ""
+fi
+
 
 for fileset in `cat $filesets | cut -d' ' -f1 `
 do
@@ -66,6 +74,7 @@ do
 
   rFile="$outputDir/$outputName/$book/$dataset"
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
+  output="$MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out"
 
   # check if the output already exists and optional whether it is complete
 
@@ -78,6 +87,7 @@ do
        # Check whether all events were processed
        dir=`dirname $rFile`
        file=`basename $rFile`
+       duration=`tail -10 $output | grep duration | tr -s ' '`
        root -l -b -q $MIT_ANA_DIR/macros/runSimpleFileCataloger.C+\(\"$dir\",\"$file\"\) >& /tmp/tmp.$$
        # Get number of events processed from output file
        nEventsProcessed=`grep XX-CATALOG-XX /tmp/tmp.$$ | cut -d' ' -f3`
@@ -92,12 +102,11 @@ do
          echo " "
          process=true
        else
-         echo "   File: $rFile completed with  $nEventsProcessed  events processed."
+         echo "   File: $rFile completed with  $nEventsProcessed  events processed ($duration)."
        fi
      elif [ "$noStage" == "2" ] 
      then
        # Show processing duration
-       duration=`tail -10 $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out | grep duration`
        echo "   File: $rFile exists already. Processing $duration"
      else
        # Show that file was processed (fastest option and usually sufficient)
@@ -153,14 +162,13 @@ Input                   = /dev/null
 Output                  = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
 Error                   = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
 Log                     = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.log
-transfer_input_files    = $x509File,${CMSSW_VERSION}.tgz,$runMacro,.rootlogon.C
+transfer_input_files    = $x509File,${CMSSW_VERSION}.tgz,external.tgz,$runMacro,.rootlogon.C
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
 Queue
 EOF
 
     condor_submit submit.cmd >& /dev/null;
-    exit 0
     rm submit.cmd
   fi
 
