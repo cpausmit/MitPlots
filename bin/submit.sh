@@ -26,27 +26,54 @@ runTypeIndex=$8
 
 jobId=`date +%j%m%d%k%M%S`
 dataDir=`tail -1  $catalogDir/$book/$dataset/Filesets | cut -d' ' -f2`
+runMacroTrunc=`echo $runMacro | sed 's#.C$##'`
 
 # Prepare environment
 echo " "
 echo "  Process: dataset=$dataset, book=$book, catalog=$catalogDir"
 
-workDir=/home/$USER/cms/condor
-mkdir -p                             $workDir
-cd                                   $workDir
-makeTgz.sh
-cp $MIT_ANA_DIR/bin/run.sh           $workDir
-cp /home/$USER/cms/root/.rootlogon.C $workDir
-cp $MIT_USER_DIR/macros/$runMacro    $workDir
-script=$workDir/run.sh
+# Create the directory for the log and root results
+logsDir=$MIT_PROD_LOGS/$outputName/$book/$dataset
+mkdir -p $logsDir
+globDir=$outputDir/$outputName
+mkdir -p $globDir
+workDir=$outputDir/$outputName/$book/$dataset
+mkdir -p $workDir
 
-# Create the directory for the results
-mkdir -p $MIT_PROD_LOGS/$outputName/$book/$dataset/
+# make general tgz for the production (this will only happen once, carefully cleanup before restarting)
+cd $outputDir/$outputName
+makeTgz.sh
+cp $MIT_ANA_DIR/bin/run.sh             $globDir
+cp /home/$USER/cms/root/.rootlogon.C   $globDir
+if ! [ -e "$globDir/$runMacro" ]
+then
+  cp $MIT_USER_DIR/macros/$runMacro    $globDir
+  cp $MIT_ANA_DIR/macros/compile.C     $globDir
+  root -l -b -q  compile.C"(\"$runMacro\")"
+  if [ "$?" != "0" ]
+  then
+    echo "  ERROR -- compilation of the run Macro failed. EXIT!"
+    exit 1
+  fi
+fi
+script=$globDir/run.sh
+
+# make the specific input catalog, the script and macros to run (they are made for every dataset)
+cd $catalogDir/..
+if ! [ -e "$workDir/catalog.tgz" ]
+then
+  echo "  tar fzc $workDir/catalog.tgz catalog/$book/$dataset"
+  tar fzc $workDir/catalog.tgz catalog/$book/$dataset
+  cd $workDir
+else
+  echo "  use existing catalog: $workDir/catalog.tgz"
+fi
 
 # Make sure there is a globus tickets available
 x509File=/tmp/x509up_u`id -u`
 
 # Looping through each single fileset and submitting the condor jobs
+echo ""
 echo "  Submitting jobs to condor"
 
 if [ "$skim" == "noskim" ]
@@ -58,12 +85,15 @@ fi
 
 # Store condor status for later inspection
 condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
-if [ ]
+if [ "$?" != "0" ]
 then
   echo ""
   echo " ERROR - condor_q command failed."
   echo ' --> condor_q -global $USER -format "%s " Cmd -format "%s \n" Args '
   echo ""
+  echo "  EXIT"
+  echo ""
+  exit 1
 fi
 
 
@@ -72,9 +102,9 @@ do
 
   # determine the expected output
 
-  rFile="$outputDir/$outputName/$book/$dataset"
+  rFile="$workDir"
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
-  output="$MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out"
+  output="$logsDir/${skim}_${runTypeIndex}_${fileset}.out"
 
   # check if the output already exists and optional whether it is complete
 
@@ -144,31 +174,32 @@ do
     if [ "$DEBUG" != "" ]
     then
       echo "  FOR NOW NOT RE-SUBMITTING -- check error/output at:"
-      echo "    cat $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}*"
+      echo "    cat $logsDir/${skim}_${runTypeIndex}_${fileset}*"
       continue
     fi
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Environment             = "MIT_DATA=/scratch/paus/cms/cmssw/033/CMSSW_5_3_14_patch2/src/MitPhysics/data HOME=$HOME MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
+Environment             = "HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
 Requirements            = Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
 Rank                    = Mips
 GetEnv                  = False
-Initialdir              = $workDir
 Input                   = /dev/null
-Output                  = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.out
-Error                   = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.err
-Log                     = $MIT_PROD_LOGS/$outputName/$book/$dataset/${skim}_${runTypeIndex}_${fileset}.log
-transfer_input_files    = $x509File,${CMSSW_VERSION}.tgz,external.tgz,$runMacro,.rootlogon.C
+Output                  = $logsDir/${skim}_${runTypeIndex}_${fileset}.out
+Error                   = $logsDir/${skim}_${runTypeIndex}_${fileset}.err
+Log                     = $logsDir/${skim}_${runTypeIndex}_${fileset}.log
+transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/external.tgz,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
+Initialdir              = $workDir
+transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
 Queue
 EOF
 
-    condor_submit submit.cmd >& /dev/null;
+    condor_submit submit.cmd #>& /dev/null;
     rm submit.cmd
   fi
 

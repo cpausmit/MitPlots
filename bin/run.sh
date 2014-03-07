@@ -11,7 +11,7 @@ catalogDir=$2
 outputName=$7
  outputDir=$8
  runTypeId=$9
-   nEvents=-1
+   nEvents=1000
 if [ ".${10}" != "." ]
 then
   nEvents=${10}
@@ -56,7 +56,22 @@ then
 
   tar fzx external.tgz
   $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
-  
+
+  # Copy and unpack up the MitPhysics/data
+  if ! [ -d "$MIT_DATA" ]
+  then
+    echo "  copy: cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz ./"
+    cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz ./
+    echo "  untaring: tar fzx MitPhysics_data.tgz"
+    time tar fzx MitPhysics_data.tgz
+    MIT_DATA=./MitPhysics/data
+    if ! [ -d "$MIT_DATA" ]
+    then
+      echo "  ERROR - could not find MitPhysics/data. EXIT"
+      echo " " 
+    fi
+  fi
+  echo "  found MitPhysics/data at: $MIT_DATA"
 else
   echo " Everything is ready already. Let's go!"
 fi
@@ -81,19 +96,19 @@ echo \
 status=`echo $?`
 echo "${h}: Status - $status"
 
-# store the result (should int he future be done by condor
-echo " "; echo "${h}: Checking the work area before copy"; echo " "
-ls -lhrt ./
-echo " "; echo "${h}: Checking the remote area before copy (only $dataset file)"; echo " "
-mkdir -p $outputDir/$outputName/$book/$dataset
-ls -lhrt $outputDir/$outputName/$book/$dataset
-mv       ${outputName}_${dataset}_${skim}_${fileset}*.root \
-         $outputDir/$outputName/$book/$dataset
-
-echo " "; echo "${h}: Checking the work area after copy"; echo " "
-ls -lhrt ./
-echo " "; echo "${h}: Checking the remote area ($outputDir/$outputName/$book/$dataset) after copy (only $dataset file)"; echo " "
-ls -lhrt $outputDir/$outputName/$book/$dataset
+# # store the result (should in the future be done by condor)
+# echo " "; echo "${h}: Checking the work area before copy"; echo " "
+# ls -lhrt ./
+# echo " "; echo "${h}: Checking the remote area before copy (only $dataset file)"; echo " "
+# mkdir -p $outputDir/$outputName/$book/$dataset
+# ls -lhrt $outputDir/$outputName/$book/$dataset
+# mv       ${outputName}_${dataset}_${skim}_${fileset}*.root \
+#          $outputDir/$outputName/$book/$dataset
+# 
+# echo " "; echo "${h}: Checking the work area after copy"; echo " "
+# ls -lhrt ./
+# echo " "; echo "${h}: Checking the remote area ($outputDir/$outputName/$book/$dataset) after copy (only $dataset file)"; echo " "
+# ls -lhrt $outputDir/$outputName/$book/$dataset
 
 finalSeconds=`date +"%s"`
 let duration=($finalSeconds-$initialSeconds)/60
