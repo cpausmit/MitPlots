@@ -11,7 +11,7 @@ catalogDir=$2
 outputName=$7
  outputDir=$8
  runTypeId=$9
-   nEvents=1000
+   nEvents=-1
 if [ ".${10}" != "." ]
 then
   nEvents=${10}
@@ -54,8 +54,12 @@ then
   eval `scram runtime -sh`
   cd -
 
+  echo "  untarring: external.tgz"
   tar fzx external.tgz
   $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
+
+  echo "  untarring: catalog.tgz"
+  tar fzx catalog.tgz
 
   # Copy and unpack up the MitPhysics/data
   if ! [ -d "$MIT_DATA" ]

@@ -180,8 +180,8 @@ do
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Environment             = "HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
-Requirements            = Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
+Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
+Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Notification            = Error
 Executable              = $script
 Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
@@ -196,10 +196,11 @@ Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
++AccountingGroup        = "group_cmsuser.paus"
 Queue
 EOF
 
-    condor_submit submit.cmd #>& /dev/null;
+    condor_submit submit.cmd >& /dev/null;
     rm submit.cmd
   fi
 
