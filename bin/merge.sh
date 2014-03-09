@@ -11,16 +11,16 @@ PATTERN="$1"
 echo " Config: ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt"
 
 # make clean copy of the config
-grep -v ^# ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt > /tmp/mergeHgg.$$
+grep -v ^# ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt > /tmp/merge-${USER}.$$
 nLine=0
 
-for dset in `cat /tmp/mergeHgg.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
+for dset in `cat /tmp/merge-${USER}.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
 do
 
   nLine=$(($nLine+1))
 
   # find the line to this dataset and do further analysis
-  line=`sed -n ${nLine}p /tmp/mergeHgg.$$`
+  line=`sed -n ${nLine}p /tmp/merge-${USER}.$$`
 
   # determine the input dataset
   BOOK_VERSION=`echo $line | tr -s ' ' | cut -d ' ' -f 1`
@@ -29,21 +29,18 @@ do
 
   if [ "$PATTERN" == "" ] || [ "`echo $DATASET | grep $PATTERN`" != "" ]
   then
-    if [ "`echo $BOOK_VERSION | tr -d [a-zA-Z0-9\-_]`" == "//" ]
-    then
-      BOOK_VERSION=`echo $BOOK_VERSION | cut -d/ -f2-3`
-    fi
-
     # now merge the sucker
-    mergeHist.py --Dataset=$DATASET \
-                 --Skim=$SKIM \
-                  --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION \
-                 --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged \
-                 --FilenameHeader=$MIT_PROD_CFG
+    echo "mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG
+             --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION
+             --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged"
+                 
+    mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG \
+	         --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION \
+                 --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged
   fi
 
 done
 
-rm /tmp/mergeHgg.$$
+rm /tmp/merge-${USER}.$$
 
 exit 0
