@@ -85,16 +85,16 @@ fi
 
 # Store condor status for later inspection
 condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
-if [ "$?" != "0" ]
-then
-  echo ""
-  echo " ERROR - condor_q command failed."
-  echo ' --> condor_q -global $USER -format "%s " Cmd -format "%s \n" Args '
-  echo ""
-  echo "  EXIT"
-  echo ""
-  exit 1
-fi
+# if [ "$?" != "0" ]
+# then
+#   echo ""
+#   echo " ERROR - condor_q command failed."
+#   echo ' --> condor_q -global $USER -format "%s " Cmd -format "%s \n" Args '
+#   echo ""
+#   echo "  EXIT"
+#   echo ""
+#   exit 1
+# fi
 
 
 for fileset in `cat $filesets | cut -d' ' -f1 `
@@ -137,6 +137,7 @@ do
      elif [ "$noStage" == "2" ] 
      then
        # Show processing duration
+       duration=`tail -10 $output | grep duration | tr -s ' '`
        echo "   File: $rFile exists already. Processing $duration"
      else
        # Show that file was processed (fastest option and usually sufficient)
