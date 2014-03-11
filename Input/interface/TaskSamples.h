@@ -35,11 +35,12 @@ namespace mithep
     const Sample           *GetSample(UInt_t i)     const; // return 'i'th Monte Carlo sample
     const Sample           *GetDataSample(UInt_t i) const; // return 'i'th data sample
 
+    void                    ReadFile     (const char* dir);
+
   private:
     Sample                 *AddDataSample(const char* name, const char* skimName, const char* file);
     Sample                 *AddSample    (const char* name, const char* skimName, const char* file,
                                           double xsec, double scale);
-    void                    ReadFile     (const char* dir);
 
     TString                 fName;         // location of production
     TString                 fNameTxt;      // location of configuration (usually same as prod.)

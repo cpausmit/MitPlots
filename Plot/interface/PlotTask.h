@@ -7,7 +7,6 @@
 //
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITPLOTS_PLOT_PLOTTASK_H
 #define MITPLOTS_PLOT_PLOTTASK_H
 
@@ -37,23 +36,26 @@ namespace mithep
     void                 SetNBins         (UInt_t n)   { fNBins = n;  }
     void                 SetDrawExp       (const char* draw, const char* sel);
     
-    void                 SetPuTarget(const TH1D *h) { fPuTarget = h; }
+    void                 SetPuTarget      (const TH1D *h) { fPuTarget = h; }
     
-    static float         PuWeight(Int_t npu);
+    static float         PuWeight         (Int_t npu);
     
     
-  private:
     // Overlay the contribution in a single histogram (no adding/stacking)
     void                 PlotContributions(const char* dir, const char* hist);
     void                 PlotStack        (const char* dir, const char* hist, bool rescale = kFALSE);
+
+  private:
     
     // Basic function to perfrom all reading and scaling operations
     void                 ScaleHistograms  (const char* dir, const char* hist);
 
     // Helper to set scale for a histogram
-    void                 FindHistMaximum  ();
-    void                 OverlayFrame     () const;
-    void                 OverlayEmptyHist () const;
+    void                 FindHistMaximum     ();
+    void                 FindStackHistMaximum();
+    void                 OverlayFrame        () const;
+    void                 OverlayStackFrame   () const;
+    void                 OverlayEmptyHist    () const;
 
     const TaskSamples   *fTask;         // analysis task to be plotted
     HistStyles          *fHistStyles;   // style for plotting

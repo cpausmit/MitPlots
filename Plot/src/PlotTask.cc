@@ -1,5 +1,3 @@
-// $Id: PlotTask.cc,v 1.8 2011/12/11 19:22:29 bendavid Exp $
-
 #include <vector>
 #include <TROOT.h>
 #include <TSystem.h>
@@ -85,6 +83,10 @@ void PlotTask::PlotContributions(const char* dir, const char* hist)
   ScaleHistograms(dir,hist);
   FindHistMaximum();
 
+  // ensure the histogram styles are ready
+  if (! fHistStyles)
+    fHistStyles = new HistStyles();
+
   // say what we are doing
   printf("\n ==== Plotting Contributions -- %s ====\n\n",fTask->Name()->Data());
   printf("  index of highest histogram %d (0-%d)\n\n",fIdxHistMax,int(fHists.size()-1));
@@ -93,38 +95,54 @@ void PlotTask::PlotContributions(const char* dir, const char* hist)
   if (fAxisTitleX == TString(""))
     fAxisTitleX = TString(hist);
 
-  // initialize the largest histogram properly and draw it
-  TH1D* hmax = 0;
-  if (fIdxHistMax == fHists.size())
-    hmax = fDataHist;
-  else
-    hmax = fHists[fHists.size()-1];
-  MitStyle::InitHist(hmax,fAxisTitleX.Data(),fAxisTitleY.Data(),kBlack);
-  hmax->GetXaxis()->SetNdivisions(505);
+  // set start values
+  fHistStyles->ResetStyle();
+
+  // Make sure to prepare a temporary histogram to stack contributions according to legend
+  TH1D *hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
+  MitStyle::InitHist(hTmp,fAxisTitleX.Data(),fAxisTitleY.Data(),kBlack);
   if (fHistMinimum != 0)
-    hmax->SetMinimum(fHistMinimum);
-  if (fIdxHistMax == fHists.size())
-    hmax->Draw("E");
-  else
-    hmax->Draw("hist");
+    hTmp->SetMinimum(fHistMinimum);
+  hTmp->SetMaximum(fHistMaximum*1.1);
+  // draw the frame large enough for the largest contribution (+10%)
+  hTmp->DrawCopy("hist");
+  hTmp->SetMaximum(0.);  
 
   // loop through samples and draw all histograms
-  int iCol  = (EColor) kBlack;
-  int iFill = 3001;
-  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
-    //const Sample *s = fTask->GetSample(i);
-    MitStyle::InitHist(fHists[i],hist,"Number of Events",(EColor) iCol);
+  Bool_t first  = kTRUE;
+  const HistStyle *hStyle = 0;
+  for (UInt_t i=0; i<fHists.size(); i++) {
+    const Sample *s = fTask->GetSample(i);
 
-    fHists[i]->SetLineColor(iCol);
-    //fHists[i]->SetFillColor(iCol);
-    //fHists[i]->SetFillStyle(iFill);
-    fHists[i]->Draw("same;Hist");
-
-    iFill++; iCol++;
+    // is this a histogram to plot
+    printf(" Legend: %s\n",(*s->Legend()).Data());
+    if (*s->Legend() != TString(" ")) {
+      if (! first) {
+	hStyle = fHistStyles->CurrentStyle();
+	MitStyle::InitHist(hTmp,hist,"Number of Events",(EColor) hStyle->Color());
+	hTmp->SetLineColor(hStyle->Color());
+	hTmp->DrawCopy("same;Hist");
+	fHistStyles->NextStyle();
+	hTmp->Reset();
+      }
+      first = kFALSE;
+    }
+    hTmp->Add(fHists[i]);
   }
+
+  // do not forget to draw the last one
+  hStyle = fHistStyles->CurrentStyle();
+  MitStyle::InitHist(hTmp,hist,"Number of Events",(EColor) hStyle->Color());
+  hTmp->SetLineColor(hStyle->Color());
+  hTmp->DrawCopy("same;Hist");
+  fHistStyles->NextStyle();
 
   // overlay a frame to put the text and boxes on
   OverlayFrame();
+
+  // and cleanup
+  if (hTmp)
+    delete hTmp;
 
   return;
 }
@@ -136,7 +154,7 @@ void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
 
   // scale the histograms
   ScaleHistograms(dir,hist);
-  FindHistMaximum();
+  FindStackHistMaximum();
 
   // ensure the histogram styles are ready
   if (! fHistStyles)
@@ -200,7 +218,9 @@ void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
   for (UInt_t i=fStackedHists.size(); i>0; i--) {
     const Sample *s = fTask->GetSample(i);
     MitStyle::InitHist(fStackedHists[i-1],fAxisTitleX.Data(),fAxisTitleY.Data());
-    if (rescale) fStackedHists[i-1]->Scale(scale);
+    if (rescale)
+      fStackedHists[i-1]->Scale(scale);
+
     if (i == fStackedHists.size()) {
       fHistStyles->ApplyCurrentStyle(fStackedHists[i-1]);
       fStackedHists[i-1]->Draw("same;Hist");
@@ -226,7 +246,7 @@ void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
   }
 
   // overlay a frame to put the text and boxes on
-  OverlayFrame();
+  OverlayStackFrame();
 
   return;
 }
@@ -258,6 +278,10 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
   //------------------------------------------------------------------------------------------------
   // loop through samples and determine maximum
   printf("\n Monte Carlo \n");
+  printf("    SampleName                                 Skim -        nEvents");
+  printf("            nEventsSelected    Cross Section        luminosity      Factor      Scale - pointer  \n");
+  printf(" ===================================================================");
+  printf("===================================================================================================\n");
   double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
   for (UInt_t i=0; i<*fTask->NSamples(); i++) {
     const Sample *s = fTask->GetSample(i);
@@ -280,17 +304,14 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
       continue;
     }
     
-    //set pileup weights
+    // set pileup weights -- adding pileup reweigthing
     if (fPuTarget) {
       if (sPuWeights) {
         delete sPuWeights;
       }
-      
       TH1D *pusource = (TH1D*)dirTmp->Get("hNPU")->Clone();
       pusource->Scale(1.0/pusource->GetSumOfWeights());
-      
       sPuWeights = new TH1D( (*fPuTarget) / (*pusource) );
-      
     }
       
     double nEvts   = hAllEvts->GetEntries();
@@ -314,9 +335,8 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     else {
       fid = fif;
     }
-        
-    
-    
+   
+    // First try to find the histogram explicitely (otherwise it is a variable of the tree)
     TH1D *h = dynamic_cast<TH1D*>(fid->FindObjectAny(histname));
     
     //histogram doesn't exist, try to find TTree instead
@@ -345,8 +365,12 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     double nEvtsSel    = nEvtsSelRaw * factor * scale;
     double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw) * factor * scale;
 
-    printf(" -> %-40s %-6s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f - %p)\n",
-           s->Name()->Data(),s->SkimName()->Data(),
+    TString tmp("->");
+    if (*s->Legend() == TString(" "))
+      tmp = "  ";
+
+    printf(" %s %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f - %p)\n",
+           tmp.Data(),s->Name()->Data(),s->SkimName()->Data(),
 	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale,(void*)h);
 
     nTotRaw += nEvts;
@@ -369,7 +393,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     }
   }
   // Monte Carlo summary
-  printf(" %-40s           - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f x %f)\n",
+  printf(" %-40s           - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
 	 "== Monte Carlo Total ==",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0,1.0);
 
 
@@ -443,7 +467,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
-	printf(" -> %-40s %-6s - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n",
+	printf(" -> %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n",
 	       s->Name()->Data(),s->SkimName()->Data(),
 	       nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
 
@@ -460,7 +484,7 @@ void PlotTask::ScaleHistograms(const char* dir, const char* hist)
     }
   }
   // Data summary
-  printf(" %-40s           - %14.0f %12.3f +- %8.3f %16.7f: %16.4f (x %f)\n\n",
+  printf(" %-40s           - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n\n",
 	 "== Data Total =========",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0);
 
   return;
@@ -475,13 +499,50 @@ void PlotTask::FindHistMaximum()
   if (fHistMaximum>0.)
     return;
   
-  // search through the single histograms
+  // Make sure to prepare a temporary histogram to stack contributions according to legend
+  TH1D *hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
+
+  Bool_t first  = kTRUE;
   for (UInt_t i=0; i<fHists.size(); i++) {
-    if (fHists[i]->GetMaximum() > fHistMaximum) {
-      fHistMaximum = fHists[i]->GetMaximum();
-      fIdxHistMax  = i;
+    const Sample *s = fTask->GetSample(i);
+    // is this a histogram to plot
+    if (*s->Legend() != TString(" ")) {
+      if (! first) {
+	if (hTmp->GetMaximum() > fHistMaximum)
+	  fHistMaximum = hTmp->GetMaximum();
+	hTmp->Reset();
+      }
+      first = kFALSE;
     }
+    hTmp->Add(fHists[i]);
   }
+  // check the last histogram
+  if (hTmp->GetMaximum() > fHistMaximum)
+    fHistMaximum = hTmp->GetMaximum();
+
+  // cleanup
+  if (hTmp)
+    delete hTmp;
+
+  // check the data histogram if present
+  if (fDataHist && fDataHist->GetMaximum() > fHistMaximum) {
+    fHistMaximum = fDataHist->GetMaximum();
+    fIdxHistMax  = fHists.size();
+  }
+
+  printf(" Histogram maximum (idx=%d) is set to be: %f\n",fIdxHistMax,fHistMaximum);
+
+  return;
+}
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::FindStackHistMaximum()
+{
+  // Find maximum of all histograms
+
+  // first check whether value was overwritten by hand
+  if (fHistMaximum>0.)
+    return;
 
   // search through the stacked histograms
   fHistMaximum = 0.;
@@ -496,7 +557,7 @@ void PlotTask::FindHistMaximum()
     fIdxHistMax  = fHists.size();
   }
 
-  printf(" Histogram maximum is set to be: %f\n",fHistMaximum);
+  printf(" Histogram maximum (idx=%d) is set to be: %f\n",fIdxHistMax,fHistMaximum);
 
   return;
 }
@@ -510,9 +571,144 @@ void PlotTask::OverlayEmptyHist() const
 
   return;
 }
-
 //--------------------------------------------------------------------------------------------------
 void PlotTask::OverlayFrame() const
+{
+  // Overlay a linear frame from user coordinates (0-100,0-100)
+
+  // create new transparent pad for the text
+  TPad *transPad = new TPad("transPad","Transparent Pad",0,0,1,1);
+  transPad->SetFillStyle(4000);
+  transPad->Draw();
+  transPad->cd();
+  // find out the right normalization to define the new range (histogram: 0,0 -> 100,100)
+  double xtot = 1./(1. - transPad->GetLeftMargin() - transPad->GetRightMargin());
+  double ytot = 1./(1. - transPad->GetBottomMargin() - transPad->GetTopMargin());
+  transPad->Range((xtot*transPad->GetLeftMargin()  *-100      ),
+                  (ytot*transPad->GetBottomMargin()*-100      ),
+                  (xtot*transPad->GetRightMargin() * 100 + 100),
+                  (ytot*transPad->GetTopMargin()   * 100 + 100));
+  MDB(kGeneral,1)
+    printf(" Range: %f %f %f %f\n",
+           (xtot*transPad->GetLeftMargin()  *-100      ),
+           (ytot*transPad->GetBottomMargin()*-100      ),
+           (xtot*transPad->GetRightMargin() * 100 + 100),
+           (ytot*transPad->GetTopMargin()   * 100 + 100) );
+
+  // define the basic text to be used
+  TLatex* text = new TLatex();
+  text->SetTextFont (42);
+  text->SetTextAlign(12);
+  text->SetTextSize (0.03);
+
+  // define the basic box to be used
+  TBox *box = new TBox();
+  box->SetLineWidth(2);
+  // base coordinates for the text/boxes
+  double xCorner = fXLegend, yCorner = fYLegend, yDelLine = 4.;
+  double xIndent = 1.5*yDelLine;
+  // count samples with non empty legend
+  int nLegends = 0;
+  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
+    // attach to the specific sample
+    const Sample *s = fTask->GetSample(i);
+    if (*s->Legend() != TString(" "))
+      nLegends++;
+  }
+  int iDat = 0;
+  if (fDataHist) {
+    iDat = 1;
+    nLegends++;
+  }
+
+  // set start values
+  fHistStyles->ResetStyle();
+  int iLeg  = 0;
+  // loop through the sampels
+  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
+    // attach to the specific sample
+    const Sample *s = fTask->GetSample(i);
+    // calculate corners for the text
+    double xText = xCorner+xIndent, yText = yCorner-float((iLeg+iDat)+0.5)*yDelLine;
+    // say what goes where
+    MDB(kGeneral,1)
+      printf(" Adding box at: (x1,y1,x2,y2) = (%6.2f,%6.2f,%6.2f,%6.2f)\n",
+             xCorner+0.15*xIndent,yText-0.3*yDelLine,
+             xCorner+0.85*xIndent,yText+0.4*yDelLine);
+    // plot the box
+    if (*s->Legend() != TString(" ")) {
+      const HistStyle *hStyle = fHistStyles->CurrentStyle();
+      box->SetFillStyle(0);
+      box->SetFillColor(hStyle->Color());
+      box->SetLineColor(hStyle->Color());
+      box->DrawBox(xCorner+0.15*xIndent,yText-0.3*yDelLine,
+                   xCorner+0.85*xIndent,yText+0.4*yDelLine);
+      box->SetFillStyle(hStyle->FillStyle());
+      box->DrawBox(xCorner+0.15*xIndent,yText-0.3*yDelLine,
+                   xCorner+0.85*xIndent,yText+0.4*yDelLine);
+
+      TString pText = *s->Legend();
+      MDB(kGeneral,1)
+        printf(" Adding text \"%s\" at: (x,y) = (%6.2f,%6.2f)\n",pText.Data(),xText,yText);
+      // set the proper text color
+      text->SetTextColor(hStyle->Color());
+      // plot the text
+      text->SetTextAlign(12);
+      text->DrawLatex(xText,yText,pText.Data());
+
+      fHistStyles->NextStyle();
+      // keep track of how many were printed
+      iLeg++;
+    }
+  }
+
+  // attach to the data sample
+  if (fDataHist) {
+    const Sample *s = fTask->GetDataSample(0);
+    // calculate corners for the text
+    double xText = xCorner+xIndent, yText = yCorner-float(1-0.7)*yDelLine;
+    // say what goes where
+    MDB(kGeneral,1)
+      printf(" Adding marker at: (x,y) = (%6.2f,%6.2f)\n",
+             xCorner+0.5*xIndent,yText);
+    // plot the marker
+    if (*s->Legend() != TString(" ")) {
+      const HistStyle *hStyle = fHistStyles->GetDataStyle();
+
+      // draw marker
+      TMarker *m = new TMarker(xCorner+0.5*xIndent,yText,20);
+      m->SetMarkerColor(hStyle->Color      ());
+      m->SetMarkerSize (hStyle->MarkerSize ());
+      m->SetMarkerStyle(hStyle->MarkerStyle());
+      m->Draw();
+      // draw text
+      char l[1024];
+      sprintf(l,"%4.2f",fTargetLumi);
+      //TString pText = *s->Legend() + TString(" (#int L = ") + TString(l) + TString("/pb)");
+      TString pText = *s->Legend() + TString(" (") + TString(l) + TString("/pb)");
+      MDB(kGeneral,1)
+        printf(" Adding text \"%s\" at: (x,y) = (%6.2f,%6.2f)\n",pText.Data(),xText,yText);
+      // set the proper text color
+      text->SetTextColor(hStyle->Color());
+      // plot the text
+      text->SetTextAlign(12);
+      text->DrawLatex(xText,yText,pText.Data());
+    }
+  }
+
+  // Make sure the histogram frame is nice
+  box->SetFillStyle(0);
+  box->SetLineColor(kBlack);
+  box->DrawBox(0,0,100,100);
+
+  delete text;
+  delete box;
+
+  return;
+}
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::OverlayStackFrame() const
 {
   // Overlay a linear frame from user coordinates (0-100,0-100)
 

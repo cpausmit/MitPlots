@@ -11,7 +11,7 @@ void MitStyle::Init()
   // Initialization with proper defaults is the start
 
   const char* author   = "$Author: paus $$";
-  const char* modified = "$Modified: Mon Aug 23 23:18:54 2010 by paus $$";
+  const char* modified = "$Modified: Mon Mar 10 20:47:53 2014 by paus $$";
   printf(" MIT root style (%s,%s).\n",author,modified);
   printf("\n");
   printf(" Use: MitStyle::MakeCanvas(name,title)\n");
