@@ -54,6 +54,15 @@ do
   fi
 done
 
+# Avoid caching if running on a T2 machine
+if [ "`hostname  | grep 'cmsaf' `" != "" ]  
+then
+  echo ""
+  echo " cacheFileset.sh -- running on a Tier-2 machine, no caching needed. EXIT"
+  echo ""
+  exit 0
+fi
+
 # Enter the download requests into the database
 complete=1
 for file in `echo $files`
@@ -94,5 +103,9 @@ do
     done=0
   fi
 done
+
+# Before exiting wait 3 minutes to ensure fuse is synchronized to hadoop fs status
+echo " INFO - File caching complete: waiting 3 minutes to ensure fuse synchronization with hadoop fs."
+sleep 180
 
 exit 0
