@@ -105,20 +105,20 @@ do
 done
 
 # Before exiting ensure fuse is synchronized to hadoop fs status
-# check the last file of the fileset as it is the latest to be cached
+# check the first file of the fileset as it is the first to be processed
 echo " INFO - File caching complete: waiting to ensure fuse synchronization with hadoop fs."
-lastFile=`cat $newCatalogDir/$newBook/$dataset/Files | grep ^$fileset | tail -1 | cut -d" " -f2`
-lastFileCheck=0
+firstFile=`cat $newCatalogDir/$newBook/$dataset/Files | grep ^$fileset | head -1 | cut -d" " -f2`
+firstFileCheck=0
 fuseCheckStartTime=$(date +%s)
-while [ "$lastFileCheck" == "0" ]
+while [ "$firstFileCheck" == "0" ]
 do
   nowTime=$(date +%s)
   duration=$(($nowTime - $fuseCheckStartTime))
   echo " Fuse check waiting time --> $duration sec"
   sleep 20
-  if [ -e "$SMARTCACHE_DATA/$newBook/$dataset/$lastFile" ]
+  if [ -e "$SMARTCACHE_DATA/$newBook/$dataset/$firstFile" ]
   then
-    lastFileCheck=1
+    firstFileCheck=1
   fi
 done
 
