@@ -30,9 +30,9 @@ do
   if [ "$PATTERN" == "" ] || [ "`echo $DATASET | grep $PATTERN`" != "" ]
   then
     # now merge the sucker
-    echo "mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG
-             --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION
-             --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged"
+    echo " mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG
+              --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION
+              --OutputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/merged"
                  
     mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG \
 	         --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION \

@@ -104,12 +104,14 @@ do
 
   rFile="$workDir"
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
+  rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root | cut -d' ' -f1`
+
   output="$logsDir/${skim}_${runTypeIndex}_${fileset}.out"
 
   # check if the output already exists and optional whether it is complete
 
   process=false
-  if [ -f "$rFile" ]
+  if [ -f "$rFile" ] && (( $rFileSize > 5 ))
   then
      # File exists now see whether more checks are asked for
      if [ "$noStage" == "1" ] 
@@ -163,6 +165,15 @@ do
     continue
   fi
 
+##  # check whether file is there but no condoer job is running and it is empty
+##
+##  if (( $rFileSize < 5 ))
+##  then
+##    echo "  Empty: $rFile -> remove, resubmit."
+##    rm $rFile
+##    process=true
+##  fi
+##
   # did we concluded this file needs processing? if yes let's do it!
 
   if [ "$process" == "true" ]
