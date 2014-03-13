@@ -16,39 +16,52 @@
 
 namespace mithep 
 {
+  enum PlotType {
+    Stacked,          // plot stacked results
+    Contributions,    // plot contributions
+    Normalized        // plot normalized contributiuons
+  };
+  
   class PlotTask
   {
   public:
-    PlotTask(const TaskSamples *taskSamples, const double lumi);
+    PlotTask(TaskSamples *taskSamples, const double lumi);
     ~PlotTask();
 
     // Define histogram ranges
-    void                 SetHistMinimum   (double min) { fHistMinimum = min; }
-    void                 SetHistMaximum   (double max) { fHistMaximum = max; }
-    void                 SetHistXMinimum  (double min) { fHistXMinimum = min; }
-    void                 SetHistXMaximum  (double max) { fHistXMaximum = max; }
+    void                 SetHistRanges    (double xmin,   double xmax,
+					   double ymin=0, double ymax=0) {
+                                           fHistXMinimum = xmin; fHistXMaximum = xmax;
+                                           fHistMinimum  = ymin; fHistMaximum  = ymax; }
+    void                 SetHistMinimum   (double min)     { fHistMinimum = min; }
+    void                 SetHistMaximum   (double max)     { fHistMaximum = max; }
+    void                 SetHistXMinimum  (double min)     { fHistXMinimum = min; }
+    void                 SetHistXMaximum  (double max)     { fHistXMaximum = max; }
+    void                 SetPngFileName   (const char *n)  { fPngFileName = n; }
     // Other plot parameters
     void                 SetHistStyles    (HistStyles *hS) { fHistStyles = hS; }
     void                 SetAxisTitles    (const char* xtit, const char* ytit = "Number of Events");
-    void                 SetXLegend       (double x)   { fXLegend = x; }
-    void                 SetYLegend       (double y)   { fYLegend = y; }
-    void                 SetNRebin        (UInt_t n)   { fNRebin = n; }
-    void                 SetNBins         (UInt_t n)   { fNBins = n;  }
+    void                 SetLogy          (bool b)         { fLogy = b; }
+    void                 SetXLegend       (double x)       { fXLegend = x; }
+    void                 SetYLegend       (double y)       { fYLegend = y; }
+    void                 SetNRebin        (UInt_t n)       { fNRebin = n; }
+    void                 SetNBins         (UInt_t n)       { fNBins = n;  }
     void                 SetDrawExp       (const char* draw, const char* sel);
     
-    void                 SetPuTarget      (const TH1D *h) { fPuTarget = h; }
+    void                 SetPuTarget      (const TH1D *h)  { fPuTarget = h; }
     
     static float         PuWeight         (Int_t npu);
     
     
     // Overlay the contribution in a single histogram (no adding/stacking)
-    void                 PlotContributions(const char* dir, const char* hist);
-    void                 PlotStack        (const char* dir, const char* hist, bool rescale = kFALSE);
+    void                 Plot             (PlotType pType, const char* obj, const char* draw, const char* cuts);
+    void                 PlotContributions(const char* hist);
+    void                 PlotStack        (const char* hist, bool rescale = kFALSE);
 
   private:
     
     // Basic function to perfrom all reading and scaling operations
-    void                 ScaleHistograms  (const char* dir, const char* hist);
+    void                 ScaleHistograms  (const char* hist);
 
     // Helper to set scale for a histogram
     void                 FindHistMaximum     ();
@@ -57,7 +70,7 @@ namespace mithep
     void                 OverlayStackFrame   () const;
     void                 OverlayEmptyHist    () const;
 
-    const TaskSamples   *fTask;         // analysis task to be plotted
+    TaskSamples         *fTask;         // analysis task to be plotted
     HistStyles          *fHistStyles;   // style for plotting
     const double         fTargetLumi;   // target luminosity for task
     
@@ -71,11 +84,13 @@ namespace mithep
     double               fHistXMaximum; // histogram x-axis minimum to be displayed
     TString              fAxisTitleX;   // x axis title
     TString              fAxisTitleY;   // y axis title
+    bool                 fLogy;         // use log scale on y axis?
     double               fXLegend;      // x position of upper left legend box
     double               fYLegend;      // y position of upper left legend box
     UInt_t               fNBins;        // number of bins for TTree-derived histograms
     TString              fDrawExp;      // draw expression for TTree::Draw
     TString              fSelExp;       // selection expression for TTree::Draw
+    TString              fPngFileName;  // name of the png file for the plos
     std::vector<TH1D*>   fHists;        // list of scaled histograms
     std::vector<TH1D*>   fStackedHists; // list of scaled histograms
 

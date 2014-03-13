@@ -10,6 +10,7 @@
 #include <TMarker.h>
 #include <TLatex.h>
 #include <TTree.h>
+#include "MitCommon/Utils/interface/Utils.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitPlots/Style/interface/MitStyle.h"
 #include "MitPlots/Plot/interface/PlotTask.h"
@@ -22,7 +23,7 @@ using namespace mithep;
 const TH1D *PlotTask::sPuWeights = 0;
 
 //--------------------------------------------------------------------------------------------------
-PlotTask::PlotTask(const TaskSamples *taskSamples, const double lumi) :
+PlotTask::PlotTask(TaskSamples *taskSamples, const double lumi) :
   fTask        (taskSamples),
   fHistStyles  (0),
   fTargetLumi  (lumi),
@@ -36,12 +37,29 @@ PlotTask::PlotTask(const TaskSamples *taskSamples, const double lumi) :
   fHistXMaximum(0),
   fAxisTitleX  (""),
   fAxisTitleY  ("Number of Events"),
+  fLogy        (false),
   fXLegend     (65.),
   fYLegend     (94.),
   fNBins       (100),
+  fPngFileName ("mitPlotTask.png"),
   fPuTarget    (0)
 {
   // Constructor
+
+  // If the task samples samples not yet already defined, do it now
+  if (!fTask) {
+    // read all environment variables
+    TString home     = Utils::GetEnv("HOME");
+    TString mitMyAna = Utils::GetEnv("MIT_USER_DIR");
+    TString hstDir   = Utils::GetEnv("MIT_ANA_HIST");
+    TString anaCfg   = Utils::GetEnv("MIT_ANA_CFG");
+    TString prdCfg   = Utils::GetEnv("MIT_PROD_CFG");
+    
+    // define sample
+    fTask = new TaskSamples(prdCfg.Data(),hstDir.Data());
+    fTask->SetNameTxt(anaCfg.Data());
+    fTask->ReadFile((mitMyAna + TString("/config")).Data());
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,6 +71,8 @@ PlotTask::~PlotTask()
     delete fEmptyHist;
   if (fDataHist)
     delete fDataHist;
+  if (fTask)
+    delete fTask;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,14 +93,33 @@ void PlotTask::SetDrawExp(const char* draw, const char* sel)
   return;
 }
 
+//--------------------------------------------------------------------------------------------------
+void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cut)
+{
+  // use logarithmic scale?
+  TCanvas *canvas = new TCanvas;
+  canvas->SetLogy(fLogy);
+
+  // define what we draw
+  SetDrawExp(draw,cut);
+
+  if      (pType == Stacked)
+    PlotStack(obj);
+  else if (pType == Contributions)
+    PlotContributions(obj);
+  else if (pType == Normalized)
+    PlotContributions(obj);
+
+  canvas->SaveAs(fPngFileName.Data());
+}
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::PlotContributions(const char* dir, const char* hist)
+void PlotTask::PlotContributions(const char* hist)
 {
   // Show present list of defined samples
 
   // scale the histograms
-  ScaleHistograms(dir,hist);
+  ScaleHistograms(hist);
   FindHistMaximum();
 
   // ensure the histogram styles are ready
@@ -148,12 +187,12 @@ void PlotTask::PlotContributions(const char* dir, const char* hist)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
+void PlotTask::PlotStack(const char* hist, bool rescale)
 {
   // Show present list of defined samples
 
   // scale the histograms
-  ScaleHistograms(dir,hist);
+  ScaleHistograms(hist);
   FindStackHistMaximum();
 
   // ensure the histogram styles are ready
@@ -252,7 +291,7 @@ void PlotTask::PlotStack(const char* dir, const char* hist, bool rescale)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::ScaleHistograms(const char* dir, const char* hist)
+void PlotTask::ScaleHistograms(const char* hist)
 {
   // Scale the histograms according to the cross section and the desired lumi and store them
   // for later use

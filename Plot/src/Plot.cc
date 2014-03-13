@@ -68,9 +68,9 @@ void plot(const char *name, const char *filename, const char* title, int logy,
   plotTask->SetAxisTitles(title,"Number of Events");
 
   if (stack)
-    plotTask->PlotStack("",name);
+    plotTask->PlotStack(name);
   else
-    plotTask->PlotContributions("",name);
+    plotTask->PlotContributions(name);
 
   canvas->SaveAs((TString(filename)+TString(".png")).Data());
 
