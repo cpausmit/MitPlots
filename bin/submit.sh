@@ -1,13 +1,20 @@
 #!/bin/bash
 #===================================================================================================
-# Submit a set of jobs to run over a given dataset, splitting the jobs according to the filesets.
+# Now the submitter will create a full record of the jobs in terms of all input (tgz files) and
+# even the file processed per dataset by storing the catalog with it. The jobs runs out of a
+# complete sandbox that it will carry with it. This allows for the jobs to flock smoothly over
+# to our Tier-2.
 #
-# Version 1.0                                                                           Nov 14, 2008
+# Version 3.0                                                                           Mar 13, 2014
 #
 # Several hooks for reprocessing, checking and debugging have been added. Look for environment
 # variables DEBUG and the noStage variable that has been used. Ticket handling has been redone.
 #
 # Version 2.0                                                                           Mar 01, 2014
+#
+# Submit a set of jobs to run over a given dataset, splitting the jobs according to the filesets.
+#
+# Version 1.0                                                                           Nov 14, 2008
 #===================================================================================================
 # Read the arguments
 echo " "
@@ -40,7 +47,7 @@ mkdir -p $globDir
 workDir=$outputDir/$outputName/$book/$dataset
 mkdir -p $workDir
 
-# make general tgz for the production (this will only happen once, carefully cleanup before restarting)
+# make general tgz for production (this will only happen once, carefully cleanup before restarting)
 cd $outputDir/$outputName
 makeTgz.sh
 cp $MIT_ANA_DIR/bin/run.sh             $globDir
@@ -104,7 +111,7 @@ do
 
   rFile="$workDir"
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
-  rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root | cut -d' ' -f1`
+  rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root | cut -d' ' -f1 2> /dev/null`
 
   output="$logsDir/${skim}_${runTypeIndex}_${fileset}.out"
 
@@ -162,6 +169,10 @@ do
   if [ "$inQueue" != "" ]
   then
     echo " Queued: $rFile"
+    #echo "$logsDir/${skim}_${runTypeIndex}_${fileset}.err"
+    #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${skim}_${runTypeIndex}_${fileset}.err
+    #grep "running on" $logsDir/${skim}_${runTypeIndex}_${fileset}.out
+    #tail -10 $logsDir/${skim}_${runTypeIndex}_${fileset}.err
     continue
   fi
 

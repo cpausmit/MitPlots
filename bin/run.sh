@@ -39,7 +39,7 @@ echo " "; echo "${h}: Initialize CMSSW (in $CMSSW_BASE)"; echo " "
 
 # make sure to setup what we need locally if we are not in the original area (when in condor)
 workDir=`pwd`
-ls -lhrt
+ls -alhrt
 if [ "$workDir" != "/home/$USER/cms/root" ]
 then
   export VER=`echo CMSSW_*.tgz |cut -d. -f1`

@@ -4,7 +4,7 @@
 # Merge root files from a given datasets together.
 #
 #===================================================================================================
-import sys, getopt, os, fnmatch, commands
+import sys, getopt, os, re, fnmatch, commands
 import string
 
 #===================================================================================================
@@ -40,30 +40,35 @@ def MergeFilesets(debug,dataset,skim,inputPath,outputPath,filenameHeader):
     print " Merging files for dataset: " + dataset + " (skim: " + skim + ")"
 
     # create the output directory in case it is not yet there
-    command              = 'mkdir -p ' + outputPath
-    os.system(command)
+    cmd              = 'mkdir -p ' + outputPath
+    os.system(cmd)
 
     # output name
     outputMergedFilename = filenameHeader + '_' + dataset + '_' + skim + '.root'
 
-    # input file pattern to create input list
-    inputFilenameRegExp  = filenameHeader + '_' + dataset + '_' + skim + '_????.root'
-    if (debug):
-        print " Input file data pattern: " + inputFilenameRegExp
+    # find all files that have some contents
+    inputFileString = ""
+    files = os.listdir(inputPath+'/'+dataset)
+    for file in files:
+        if not re.search('root',file):
+            continue
+        if os.path.getsize(inputPath+'/'+dataset+'/'+file) > 4:
+            inputFileString = inputFileString + ' ' + inputPath+'/'+dataset+'/'+file
+        else:
+            print ' WARNING -- empty root file skipped: ' + inputPath+'/'+dataset+'/'+file
 
-    command              = 'hadd -f7 ' + outputPath + outputMergedFilename \
-                           + ' ' + inputPath + '/' + dataset + '/' \
-                           + inputFilenameRegExp + ' >& ./merging.tmp'
+    cmd              = 'hadd -f7 ' + outputPath + '/' + outputMergedFilename \
+                       + inputFileString + ' >& ./merging.tmp'
         
-    if (filesExist(inputPath+'/'+dataset,inputFilenameRegExp) == True):
-        if (os.path.exists(outputPath+outputMergedFilename)):
-            print " Warning: merged file already exists. It will be deleted.\n " + \
-                  outputPath+outputMergedFilename
-            os.system('rm ' + outputPath+outputMergedFilename)
-        os.system(command)
-    else:
-        print " Warning: No files for dataset " + dataset + "\n at the location: " + inputPath \
-              + '/' + dataset + '/' + inputFilenameRegExp
+    if (debug):
+        print " CMD: " + cmd
+
+    if (os.path.exists(outputPath+'/'+outputMergedFilename)):
+        print " Warning: merged file already exists. It will be deleted.\n " + \
+              outputPath+'/'+outputMergedFilename
+        os.system('rm ' + outputPath+'/'+outputMergedFilename)
+
+    os.system(cmd)
 
 #===================================================================================================
 # Main Program
@@ -95,9 +100,9 @@ try:
         if o in   ("--debug"):
             debug = True
         elif o in ("-i", "--InputPath"):
-            inputPath = a + "/"
+            inputPath = a # + "/"
         elif o in ("-o", "--OutputPath"):
-            outputPath = a + "/"
+            outputPath = a # + "/"
         elif o in ("-f", "--FilenameHeader"):
             filenameHeader = a
         elif o in ("-d", "--Dataset"):
