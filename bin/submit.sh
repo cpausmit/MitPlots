@@ -200,6 +200,8 @@ do
       echo "    cat $logsDir/${skim}_${runTypeIndex}_${fileset}*"
       continue
     fi
+
+    cd $workDir
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
