@@ -94,23 +94,156 @@ void PlotTask::SetDrawExp(const char* draw, const char* sel)
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cut)
+void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts)
 {
   // use logarithmic scale?
   TCanvas *canvas = new TCanvas;
   canvas->SetLogy(fLogy);
 
   // define what we draw
-  SetDrawExp(draw,cut);
+  SetDrawExp(draw,cuts);
+
+  printf(" PlotTask::Plot -- Plotting\n\n");
+  printf("    source   : %s\n    variable : %s\n    with cuts: %s\n\n",obj,draw,cuts);
 
   if      (pType == Stacked)
     PlotStack(obj);
   else if (pType == Contributions)
     PlotContributions(obj);
   else if (pType == Normalized)
-    PlotContributions(obj);
+    PlotNormalized(obj);
 
   canvas->SaveAs(fPngFileName.Data());
+}
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::PlotNormalized(const char* hist)
+{
+  // Plot the histogram contribution by contribution each normalized to 1
+
+  std::vector<TH1D *> histList;
+
+  // scale the histograms
+  ScaleHistograms(hist);
+  FindHistMaximum();
+
+  // ensure the histogram styles are ready
+  if (! fHistStyles)
+    fHistStyles = new HistStyles();
+
+  // say what we are doing
+  printf("\n ==== Plotting Normalized Contributions -- %s ====\n\n",fTask->Name()->Data());
+  printf("  index of highest histogram %d (0-%d)\n\n",fIdxHistMax,int(fHists.size()-1));
+
+  // check x-axis title
+  if (fAxisTitleX == TString(""))
+    fAxisTitleX = TString(hist);
+
+  // set start values
+  fHistStyles->ResetStyle();
+
+  // loop through samples and collect all histograms
+  TH1D *hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
+  Bool_t first  = kTRUE;
+  const HistStyle *hStyle = 0;
+  for (UInt_t i=0; i<fHists.size(); i++) {
+    const Sample *s = fTask->GetSample(i);
+    if (*s->Legend() != TString(" ")) {
+      if (! first) {
+	histList.push_back(new TH1D(1/hTmp->Integral() * (*hTmp)));
+  	hTmp->Reset();
+      }
+      first = kFALSE;
+    }
+    hTmp->Add(fHists[i]);
+  }
+  // do not forget to push the last one
+  histList.push_back(new TH1D(1/hTmp->Integral() * (*hTmp)));
+  if (hTmp)
+    delete hTmp;
+
+  // find the maximum
+  double maximum = 0;
+  for(std::vector<TH1D *>::iterator it = histList.begin(); it != histList.end(); ++it) { 
+    TH1D *h = (*it);
+    if (h->GetMaximum() > maximum)
+      maximum = h->GetMaximum();
+  }
+
+  // draw the frame
+  hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
+  MitStyle::InitHist(hTmp,fAxisTitleX.Data(),fAxisTitleY.Data(),kBlack);
+  if (fHistMinimum != 0)
+    hTmp->SetMinimum(fHistMinimum);
+  hTmp->SetMaximum(maximum*1.1);
+  // draw the frame large enough for the largest contribution (+10%)
+  hTmp->DrawCopy("hist");
+  if (hTmp)
+    delete hTmp;
+
+
+  //// here we draw -- strangely enough though the first histogram is now drawn?!
+  //fHistStyles->ResetStyle();
+  //int i = 0 ;
+  //for (std::vector<TH1D *>::iterator it = histList.begin(); it != histList.end(); ++it) { 
+  //  TH1D *h = (*it);
+  //  //h->Dump();
+  //
+  //  printf(" Hist - %d %f - %p\n",i++,h->GetMaximum(),(void*)h);
+  //
+  //  hStyle = fHistStyles->CurrentStyle();
+  //  h->SetLineColor(hStyle->Color());
+  //  h->DrawCopy("same,hist");
+  //
+  //  fHistStyles->NextStyle();
+  //}
+
+
+  // loop through samples and collect all histograms
+  hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
+  first  = kTRUE;
+  fHistStyles->ResetStyle();
+  for (UInt_t i=0; i<fHists.size(); i++) {
+    const Sample *s = fTask->GetSample(i);
+    if (*s->Legend() != TString(" ")) {
+      if (! first) {
+	TH1D *hTmpN = new TH1D(1/hTmp->Integral() * (*hTmp));
+	hStyle = fHistStyles->CurrentStyle();
+	hTmpN->SetLineColor(hStyle->Color());
+	hTmpN->DrawCopy("same,hist");
+	delete hTmpN;
+	fHistStyles->NextStyle();
+	
+  	hTmp->Reset();
+      }
+      first = kFALSE;
+    }
+    hTmp->Add(fHists[i]);
+  }
+  // do not forget to push the last one
+  TH1D *hTmpN = new TH1D(1/hTmp->Integral() * (*hTmp));
+  hStyle = fHistStyles->CurrentStyle();
+  hTmpN->SetLineColor(hStyle->Color());
+  hTmpN->DrawCopy("same,hist");
+  delete hTmpN;
+  fHistStyles->NextStyle();
+
+  if (hTmp)
+    delete hTmp;
+  
+  // overlay a frame to put the text and boxes on
+  OverlayFrame();
+
+  // and cleanup (vector cleans itself?!)
+  //for (std::vector<TH1D *>::iterator it = histList.begin(); it != histList.end(); ++it) { 
+  //  TH1D *h = (*it);
+  //  if (h)
+  //    delete h;
+  //}
+  if (hTmp)
+    delete hTmp;
+
+  return;
 }
 
 //--------------------------------------------------------------------------------------------------

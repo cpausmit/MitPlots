@@ -54,7 +54,9 @@ namespace mithep
     
     
     // Overlay the contribution in a single histogram (no adding/stacking)
-    void                 Plot             (PlotType pType, const char* obj, const char* draw, const char* cuts);
+    void                 Plot             (PlotType pType, const char* obj, const char* draw,
+					   const char* cuts);
+    void                 PlotNormalized   (const char* hist);
     void                 PlotContributions(const char* hist);
     void                 PlotStack        (const char* hist, bool rescale = kFALSE);
 
