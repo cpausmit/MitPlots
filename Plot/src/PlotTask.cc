@@ -318,9 +318,9 @@ void PlotTask::ScaleHistograms(const char* hist)
   // loop through samples and determine maximum
   printf("\n Monte Carlo \n");
   printf("    SampleName                                 Skim -        nEvents");
-  printf("            nEventsSelected    Cross Section        luminosity      Factor      Scale - pointer  \n");
+  printf("            nEventsSelected    Cross Section        luminosity      Factor      Scale\n");
   printf(" ===================================================================");
-  printf("===================================================================================================\n");
+  printf("=======================================================================================\n");
   double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
   for (UInt_t i=0; i<*fTask->NSamples(); i++) {
     const Sample *s = fTask->GetSample(i);
@@ -408,9 +408,9 @@ void PlotTask::ScaleHistograms(const char* hist)
     if (*s->Legend() == TString(" "))
       tmp = "  ";
 
-    printf(" %s %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f - %p)\n",
+    printf(" %s %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
            tmp.Data(),s->Name()->Data(),s->SkimName()->Data(),
-	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale,(void*)h);
+	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale);
 
     nTotRaw += nEvts;
     nTot    += nEvtsSel;
