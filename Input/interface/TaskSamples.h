@@ -30,8 +30,8 @@ namespace mithep
     void                    SetNameTxt(const char* n)     { fNameTxt = TString(n); }
     const TString          *Dir       ()            const { return &fDir; }
     void                    Show      ()            const; // show list of task samples
-    const UInt_t           *NSamples  ()            const { return &fNMcSamples; }
-    const UInt_t           *NDataSamples()          const { return &fNDataSamples; }
+    UInt_t                  NSamples  ()            const { return fNMcSamples; }
+    UInt_t                  NDataSamples()          const { return fNDataSamples; }
     const Sample           *GetSample(UInt_t i)     const; // return 'i'th Monte Carlo sample
     const Sample           *GetDataSample(UInt_t i) const; // return 'i'th data sample
 

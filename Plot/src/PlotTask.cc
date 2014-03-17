@@ -96,16 +96,25 @@ void PlotTask::SetDrawExp(const char* draw, const char* sel)
 //--------------------------------------------------------------------------------------------------
 void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts)
 {
-  // use logarithmic scale?
-  TCanvas *canvas = new TCanvas;
-  canvas->SetLogy(fLogy);
-
   // define what we draw
   SetDrawExp(draw,cuts);
 
   printf(" PlotTask::Plot -- Plotting\n\n");
-  printf("    source   : %s\n    variable : %s\n    with cuts: %s\n\n",obj,draw,cuts);
+  printf("    source    : %s\n    variable  : %s\n    with cuts : %s\n\n",obj,draw,cuts);
+  printf("    MC samples: %d\n",fTask->NSamples());
+  printf("    data      : %d\n\n",fTask->NDataSamples());
 
+  // make sure there is something to do
+  if (fTask->NSamples() + fTask->NDataSamples() < 1) {
+    printf("    ERROR - no samples to plot. EXIT!\n\n");
+    return;
+  }
+
+  // use logarithmic scale?
+  TCanvas *canvas = new TCanvas;
+  canvas->SetLogy(fLogy);
+
+  // decide which plot to make
   if      (pType == Stacked)
     PlotStack(obj);
   else if (pType == Contributions)
@@ -455,7 +464,7 @@ void PlotTask::ScaleHistograms(const char* hist)
   printf(" ===================================================================");
   printf("=======================================================================================\n");
   double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
-  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
+  for (UInt_t i=0; i<fTask->NSamples(); i++) {
     const Sample *s = fTask->GetSample(i);
     // open file belonging to this sample
     TFile *fif = new TFile((*fTask->Dir()+slash+*s->File()).Data());
@@ -573,12 +582,12 @@ void PlotTask::ScaleHistograms(const char* hist)
   // go through the data samples
   //------------------------------------------------------------------------------------------------
   // loop through data samples and add them up, straight away
-  if (*fTask->NDataSamples() > 0)
+  if (fTask->NDataSamples() > 0)
     printf("\n Data \n");
   nTotRaw = 0.0;
   nTot    = 0.0;
   nTot2   = 0.0;
-  for (UInt_t i=0; i<*fTask->NDataSamples(); i++) {
+  for (UInt_t i=0; i<fTask->NDataSamples(); i++) {
     const Sample *s = fTask->GetDataSample(i);
     // open file belonging to the data sample
     TFile *fif = new TFile((*fTask->Dir()+slash+*s->File()).Data());
@@ -781,7 +790,7 @@ void PlotTask::OverlayFrame() const
   double xIndent = 1.5*yDelLine;
   // count samples with non empty legend
   int nLegends = 0;
-  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
+  for (UInt_t i=0; i<fTask->NSamples(); i++) {
     // attach to the specific sample
     const Sample *s = fTask->GetSample(i);
     if (*s->Legend() != TString(" "))
@@ -797,7 +806,7 @@ void PlotTask::OverlayFrame() const
   fHistStyles->ResetStyle();
   int iLeg  = 0;
   // loop through the sampels
-  for (UInt_t i=0; i<*fTask->NSamples(); i++) {
+  for (UInt_t i=0; i<fTask->NSamples(); i++) {
     // attach to the specific sample
     const Sample *s = fTask->GetSample(i);
     // calculate corners for the text
@@ -917,7 +926,7 @@ void PlotTask::OverlayStackFrame() const
   double xIndent = 1.5*yDelLine;
   // count samples with non empty legend
   int nLegends = 0;
-  for (UInt_t i=*fTask->NSamples(); i>0; i--) {
+  for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
     const Sample *s = fTask->GetSample(i-1);
     if (*s->Legend() != TString(" "))
@@ -933,7 +942,7 @@ void PlotTask::OverlayStackFrame() const
   fHistStyles->ResetStyle();
   int iLeg  = 0;
   // loop through the sampels
-  for (UInt_t i=*fTask->NSamples(); i>0; i--) {
+  for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
     const Sample *s = fTask->GetSample(i-1);
     // calculate corners for the text

@@ -100,9 +100,18 @@ void TaskSamples::ReadFile(const char* dir)
   char    vers[1024], dset[1024], skim[1024], legend[1024], json[1024];
   float   xsec,scale,overlap;
 
+  Long64_t size;
+  Long_t   id, flags, modtime;
+
   // construct name of the config file
   TString txtFile = TString(dir)+TString("/")+fNameTxt+TString(".txt");
   printf("\n Initializing analysis task from  %s\n\n",txtFile.Data());
+
+  // test whether file exists and say something if it does not 
+  if (gSystem->GetPathInfo(txtFile.Data(),&id,&size,&flags,&modtime) != 0) {
+    printf("\n TaskSamples::ReadFile() - ERROR - file does not exist. EXIT! %s\n\n",txtFile.Data());
+    return;
+  }
 
   // open file in a pipe (leaves options for filtering)
   FILE *f = gSystem->OpenPipe((TString("cat ")+txtFile+TString("| grep -v ^#")).Data(),"r");
