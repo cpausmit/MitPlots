@@ -54,6 +54,15 @@ do
   fi
 done
 
+# Avoid caching if running on a T2 machine
+if [ "`hostname  | grep 'cmsaf' `" != "" ]  
+then
+  echo ""
+  echo " cacheFileset.sh -- running on a Tier-2 machine, no caching needed. EXIT"
+  echo ""
+  exit 0
+fi
+
 # Enter the download requests into the database
 complete=1
 for file in `echo $files`
@@ -92,6 +101,24 @@ do
   if [ "$?" == "0" ]
   then
     done=0
+  fi
+done
+
+# Before exiting ensure fuse is synchronized to hadoop fs status
+# check the first file of the fileset as it is the first to be processed
+echo " INFO - File caching complete: waiting to ensure fuse synchronization with hadoop fs."
+firstFile=`cat $newCatalogDir/$newBook/$dataset/Files | grep ^$fileset | head -1 | cut -d" " -f2`
+firstFileCheck=0
+fuseCheckStartTime=$(date +%s)
+while [ "$firstFileCheck" == "0" ]
+do
+  nowTime=$(date +%s)
+  duration=$(($nowTime - $fuseCheckStartTime))
+  echo " Fuse check waiting time --> $duration sec"
+  sleep 20
+  if [ -e "$SMARTCACHE_DATA/$newBook/$dataset/$firstFile" ]
+  then
+    firstFileCheck=1
   fi
 done
 
