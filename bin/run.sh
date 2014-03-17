@@ -50,6 +50,7 @@ then
   echo " untarring: CMSSW_5_3_14_patch2.tgz"
   tar fzx ${VER}.tgz
   echo " setting up environment"
+
   cd ${VER}/src
   eval `scram runtime -sh`
   cd -
@@ -57,28 +58,35 @@ then
   echo "  untarring: external.tgz"
   tar fzx external.tgz
   $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
+  export EXTERNAL=./external
 
   echo "  untarring: catalog.tgz"
   tar fzx catalog.tgz
 
-  # Copy and unpack up the MitPhysics/data
+  # Copy and unpack the MitPhysics/data
+  echo "  copy: cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src"
+  cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src
+
+  cd $CMSSW_BASE/src
+  echo "  untaring: tar fzx MitPhysics_data.tgz"
+  time tar fzx MitPhysics_data.tgz
+  cd -
+
+  export MIT_DATA="$CMSSW_BASE/src/MitPhysics/data"
   if ! [ -d "$MIT_DATA" ]
   then
-    echo "  copy: cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz ./"
-    cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz ./
-    echo "  untaring: tar fzx MitPhysics_data.tgz"
-    time tar fzx MitPhysics_data.tgz
-    MIT_DATA=./MitPhysics/data
-    if ! [ -d "$MIT_DATA" ]
-    then
-      echo "  ERROR - could not find MitPhysics/data. EXIT"
-      echo " " 
-    fi
+    echo "  ERROR - could not find MitPhysics/data. EXIT"
+    echo " " 
+    exit 1
   fi
   echo "  found MitPhysics/data at: $MIT_DATA"
 else
   echo " Everything is ready already. Let's go!"
 fi
+
+ls -lhrt
+ls -lhrt $CMSSW_BASE/src
+ls -lhrt $CMSSW_BASE/src/MitPhysics
 
 # take care of the certificate
 if [ -e "./x509up_u`id -u`" ]
@@ -91,28 +99,14 @@ echo " INFO -- using the x509 ticket: $X509_USER_PROXY"
 echo " "; echo "${h}: Starting root job now"; echo " ";
 echo \
   root -b -l -q .rootlogon.C \
-  ${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
+  ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
   root -b -l -q .rootlogon.C \
-  ${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
+  ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
 # get the return code from the root job
 status=`echo $?`
 echo "${h}: Status - $status"
-
-# # store the result (should in the future be done by condor)
-# echo " "; echo "${h}: Checking the work area before copy"; echo " "
-# ls -lhrt ./
-# echo " "; echo "${h}: Checking the remote area before copy (only $dataset file)"; echo " "
-# mkdir -p $outputDir/$outputName/$book/$dataset
-# ls -lhrt $outputDir/$outputName/$book/$dataset
-# mv       ${outputName}_${dataset}_${skim}_${fileset}*.root \
-#          $outputDir/$outputName/$book/$dataset
-# 
-# echo " "; echo "${h}: Checking the work area after copy"; echo " "
-# ls -lhrt ./
-# echo " "; echo "${h}: Checking the remote area ($outputDir/$outputName/$book/$dataset) after copy (only $dataset file)"; echo " "
-# ls -lhrt $outputDir/$outputName/$book/$dataset
 
 finalSeconds=`date +"%s"`
 let duration=($finalSeconds-$initialSeconds)/60

@@ -29,13 +29,13 @@ fi
 
 if [ "$newer" != "" ]
 then
-  echo "  Make new tar ball."
-  echo "  found newer: $newer"
-  echo "  -> tar fzc ${CMSSW_VERSION}.tgz -h $CMSSW_VERSION/external $CMSSW_VERSION/lib $CMSSW_VERSION/src/Mit* \
-          --exclude ${CMSSW_VERSION}/src/MitPhysics/data"
   clean.sh backup-local
   clean.sh so-d
-  tar fzc ${CMSSW_VERSION}.tgz -h ${CMSSW_VERSION}/external ${CMSSW_VERSION}/lib ${CMSSW_VERSION}/src/Mit* \
+  echo "  Make new tar ball."
+  echo "  found newer: $newer"
+  echo "  -> tar fzc ${CMSSW_VERSION}.tgz $CMSSW_VERSION/external $CMSSW_VERSION/lib $CMSSW_VERSION/src \
+          --exclude ${CMSSW_VERSION}/src/MitPhysics/data"
+  tar fzc ${CMSSW_VERSION}.tgz ${CMSSW_VERSION}/external ${CMSSW_VERSION}/lib ${CMSSW_VERSION}/src \
           --exclude ${CMSSW_VERSION}/src/MitPhysics/data
 else
   echo "  Tar ball ${CMSSW_VERSION}.tgz is up to date."  
@@ -45,26 +45,23 @@ cp ${CMSSW_VERSION}.tgz $workDir
 
 # Make the tar of our own external packages tar
 
-cd $HOME/cms
+cd /home/cmsprod/cms
 
-if [ -e "external.tgz" ]
+if [ -e "$workDir/external.tgz" ]
 then
-  newer=`find ./external -newer ./external.tgz -print | tr '\n' ','`
+  newer=`find ./external -newer $workDir/external.tgz -print | tr '\n' ','`
 else
-  newer='external.tgz does not exist.'
+  newer="$workDir/external.tgz does not exist."
 fi
 
 if [ "$newer" != "" ]
 then
   echo "  Make new tar ball."
   echo "  found newer: $newer"
-  echo "  -> tar fzc external.tgz -h external"
-  clean.sh backup-local
-  tar fzc external.tgz -h external
+  echo "  -> tar fzc external.tgz external"
+  tar fzc $workDir/external.tgz external
 else
-  echo "  Tar ball external.tgz is up to date."  
+  echo "  Tar ball $workDir/external.tgz is up to date."  
 fi
-
-cp external.tgz $workDir
 
 exit 0

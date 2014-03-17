@@ -1,8 +1,8 @@
 #!/bin/bash
 #---------------------------------------------------------------------------------------------------------------------
 #
-# When CMSSW is setup in the conor area the external libraries are also copied but need to be setup with scram so they
-# appear in the right places for linking. We can assume that when this script this called CMSSW is already setup.
+# When CMSSW is setup in the condor area the external libraries are also copied but need to be setup with scram so
+# they appear in the right places for linking. We can assume that when this script this called CMSSW is already setup.
 #
 #                                                                                            C.Paus, V0 (Mar 05, 2014)
 #---------------------------------------------------------------------------------------------------------------------

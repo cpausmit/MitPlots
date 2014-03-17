@@ -56,6 +56,7 @@ if ! [ -e "$globDir/$runMacro" ]
 then
   cp $MIT_USER_DIR/macros/$runMacro    $globDir
   cp $MIT_ANA_DIR/macros/compile.C     $globDir
+  export EXTERNAL=/home/cmsprod/cms/external
   root -l -b -q  compile.C"(\"$runMacro\")"
   if [ "$?" != "0" ]
   then
@@ -110,8 +111,8 @@ do
   # determine the expected output
 
   rFile="$workDir"
-  rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root | cut -d' ' -f1 2> /dev/null`
-  rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root | cut -d' ' -f1 2> /dev/null`
+  rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root 2> /dev/null | cut -d' ' -f1`
+  rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root 2> /dev/null | cut -d' ' -f1`
 
   output="$logsDir/${skim}_${runTypeIndex}_${fileset}.out"
 
@@ -200,10 +201,13 @@ do
       echo "    cat $logsDir/${skim}_${runTypeIndex}_${fileset}*"
       continue
     fi
+
+    cd $workDir
   
 cat > submit.cmd <<EOF
 Universe                = vanilla
 Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
+# Only on Tier-2 # Requirements            = UidDomain == "cmsaf.mit.edu" && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Notification            = Error
 Executable              = $script
