@@ -1,11 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotTask.h,v 1.4 2011/12/11 19:22:29 bendavid Exp $
-//
 // PlotTask
 //
 // This class implements PlotTask which allows to plot the samples with various options.
 //
-// Authors: C.Paus
+// Authors: C.Paus, J.Bendavid
 //--------------------------------------------------------------------------------------------------
 #ifndef MITPLOTS_PLOT_PLOTTASK_H
 #define MITPLOTS_PLOT_PLOTTASK_H
@@ -54,16 +52,18 @@ namespace mithep
     
     
     // Overlay the contribution in a single histogram (no adding/stacking)
-    void                 Plot             (PlotType pType, const char* obj, const char* draw,
-					   const char* cuts);
-    void                 PlotNormalized   (const char* hist);
-    void                 PlotContributions(const char* hist);
-    void                 PlotStack        (const char* hist, bool rescale = kFALSE);
+    void                 Plot                (PlotType pType, const char* obj, const char* draw,
+					      const char* cuts);
 
   private:
+    void                 CollectNormalized   (const char* hist);
+    void                 CollectContributions(const char* hist);
+    void                 DrawFrame           ();
+    void                 DrawHistograms      ();
+    void                 PlotStack           (const char* hist, bool rescale = kFALSE);
     
     // Basic function to perfrom all reading and scaling operations
-    void                 ScaleHistograms  (const char* hist);
+    void                 ScaleHistograms     (const char* hist);
 
     // Helper to set scale for a histogram
     void                 FindHistMaximum     ();
@@ -73,7 +73,7 @@ namespace mithep
     void                 OverlayEmptyHist    () const;
 
     TaskSamples         *fTask;         // analysis task to be plotted
-    HistStyles          *fHistStyles;   // style for plotting
+    HistStyles          *fHistStyles;   // styles for plotting
     const double         fTargetLumi;   // target luminosity for task
     
     UInt_t               fIdxHistMax;   // index of histogram with maximum entry
@@ -95,6 +95,8 @@ namespace mithep
     TString              fPngFileName;  // name of the png file for the plos
     std::vector<TH1D*>   fHists;        // list of scaled histograms
     std::vector<TH1D*>   fStackedHists; // list of scaled histograms
+
+    std::vector<TH1D*>   fHistsToPlot;  // list histograms ready to plot
 
     const TH1D          *fPuTarget;
     static const TH1D   *sPuWeights;

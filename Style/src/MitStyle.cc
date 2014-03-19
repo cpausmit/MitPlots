@@ -11,7 +11,7 @@ void MitStyle::Init()
   // Initialization with proper defaults is the start
 
   const char* author   = "$Author: paus $$";
-  const char* modified = "$Modified: Mon Mar 10 20:47:53 2014 by paus $$";
+  const char* modified = "$Modified: Wed Mar 19 00:19:30 2014 by paus $$";
   printf(" MIT root style (%s,%s).\n",author,modified);
   printf("\n");
   printf(" Use: MitStyle::MakeCanvas(name,title)\n");
@@ -64,6 +64,12 @@ void MitStyle::InitSubPad(TPad* pad, int i)
   return;
 }
 
+void MitStyle::InitHistWide(TH1 *hist, const char *xtit, const char *ytit, EColor color)
+{
+  InitHist(hist,xtit,ytit,color);
+  hist->SetTitleOffset(1.100,"Y");
+}
+
 void MitStyle::InitHist(TH1 *hist, const char *xtit, const char *ytit, EColor color)
 {
   // Initializing a histogram
@@ -96,6 +102,19 @@ void MitStyle::InitHist(TH1 *hist, const char *xtit, const char *ytit, EColor co
   hist->SetTickLength (-0.01,"Y");
 
   return;
+}
+
+void MitStyle::SetStyleWide()
+{
+  SetStyle();
+  TStyle *MitStyle = gStyle;// new TStyle("MIT-Style","The Perfect Style for Plots ;-)");
+  MitStyle->SetCanvasDefW (1100);
+  MitStyle->SetPadLeftMargin(0.12);
+
+  //MitStyle->SetTitleOffset(1.200,"Y");
+
+  //MitStyle->SetPadRightMargin(0.20);
+  //MitStyle->SetPadLeftMargin (0.05);
 }
 
 void MitStyle::SetStyle()

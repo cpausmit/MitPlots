@@ -25,13 +25,18 @@ namespace mithep
     
     static void     Init();
 
-    static TCanvas* MakeCanvas(const char* name, const char *title);
-    static void     InitSubPad(TPad *pad, int i);
-    static void     InitHist  (TH1  *hist,
-			       const char *xtit,
-			       const char *ytit  = "Number of Entries",
-			       EColor color = kBlack);
-    static void     SetStyle  ();
+    static TCanvas* MakeCanvas  (const char* name, const char *title);
+    static void     InitSubPad  (TPad *pad, int i);
+    static void     InitHistWide(TH1  *hist,
+				 const char *xtit,
+				 const char *ytit  = "Number of Entries",
+				 EColor color = kBlack);
+    static void     InitHist    (TH1  *hist,
+				 const char *xtit,
+				 const char *ytit  = "Number of Entries",
+				 EColor color = kBlack);
+    static void     SetStyleWide();
+    static void     SetStyle    ();
 
     ClassDef(MitStyle, 0) // Interface to MitStyle
   };
