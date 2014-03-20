@@ -52,7 +52,7 @@ cd $outputDir/$outputName
 makeTgz.sh
 cp $MIT_ANA_DIR/bin/run.sh             $globDir
 cp /home/$USER/cms/root/.rootlogon.C   $globDir
-if ! [ -e "$globDir/$runMacro" ]
+if ! [ -e "$globDir/"*".so" ]
 then
   cp $MIT_USER_DIR/macros/$runMacro    $globDir
   cp $MIT_ANA_DIR/macros/compile.C     $globDir
@@ -223,7 +223,7 @@ Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
-+AccountingGroup        = "group_cmsuser.paus"
++AccountingGroup        = "group_cmsuser.$USER"
 Queue
 EOF
 
