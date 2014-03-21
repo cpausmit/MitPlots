@@ -1,9 +1,9 @@
 #!/bin/bash
 #===================================================================================================
-# Now the submitter will create a full record of the jobs in terms of all input (tgz files) and
-# even the file processed per dataset by storing the catalog with it. The jobs runs out of a
+# Now the submitter will use the full record of the jobs in terms of all input (tgz files) and
+# even the file processed per datasetthat were created before (process.sh). The jobs runs out of a
 # complete sandbox that it will carry with it. This allows for the jobs to flock smoothly over
-# to our Tier-2.
+# to our Tier-2 and the original files are all conveneintly storde with the production task.
 #
 # Version 3.0                                                                           Mar 13, 2014
 #
@@ -38,44 +38,58 @@ runMacroTrunc=`echo $runMacro | sed 's#.C$##'`
 # Prepare environment
 echo " "
 echo "  Process: dataset=$dataset, book=$book, catalog=$catalogDir"
+echo " "
 
-# Create the directory for the log and root results
 logsDir=$MIT_PROD_LOGS/$outputName/$book/$dataset
-mkdir -p $logsDir
 globDir=$outputDir/$outputName
-mkdir -p $globDir
 workDir=$outputDir/$outputName/$book/$dataset
-mkdir -p $workDir
 
-# make general tgz for production (this will only happen once, carefully cleanup before restarting)
-cd $outputDir/$outputName
-makeTgz.sh
-cp $MIT_ANA_DIR/bin/run.sh             $globDir
-cp /home/$USER/cms/root/.rootlogon.C   $globDir
-if ! [ -e "$globDir/"*".so" ]
+# Check the directory for the log and root results
+if ! [ -d "$logsDir" ] || ! [ -d "$globDir" ] || ! [ -d "$workDir" ]
 then
-  cp $MIT_USER_DIR/macros/$runMacro    $globDir
-  cp $MIT_ANA_DIR/macros/compile.C     $globDir
-  export EXTERNAL=/home/cmsprod/cms/external
-  root -l -b -q  compile.C"(\"$runMacro\")"
-  if [ "$?" != "0" ]
-  then
-    echo "  ERROR -- compilation of the run Macro failed. EXIT!"
-    exit 1
-  fi
+  echo " ERROR - one of the relevant production directories does not exist. EXIT."
+  echo " -> $logsDir $globDir $workDir"
+  exit 1
 fi
-script=$globDir/run.sh
 
-# make the specific input catalog, the script and macros to run (they are made for every dataset)
-cd $catalogDir/..
+# Check the relevant tar balls
+if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/external.tgz" ]
+then
+  echo " ERROR - one of the relevant production tar balls does not exist. EXIT."
+  echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/external.tgz"
+  exit 1
+else
+  echo "  Global directory structures exist."
+fi
+
+# Check the relevant run files exist
+if ! [ -e "$globDir/run.sh" ] || \
+   ! [ -e "$globDir/.rootlogon.C" ] || ! [ -e "$globDir/$runMacro" ] || \
+   ! [ -e "$globDir/${runMacroTrunc}_C.so" ] || ! [ -e "$globDir/${runMacroTrunc}_C.d" ]
+then
+  echo " ERROR - one of the relevant run files does not exist. EXIT."
+  echo " -> $globDir/run.sh $globDir/.rootlogon.C $globDir/$runMacro"
+  echo " -> $globDir/${runMacroTrunc}_C.so $globDir/${runMacroTrunc}_C.d"
+  exit 1
+else
+  echo "  Global run files exist."
+fi
+
+# Check the relevant catalog
 if ! [ -e "$workDir/catalog.tgz" ]
 then
-  echo "  tar fzc $workDir/catalog.tgz catalog/$book/$dataset"
-  tar fzc $workDir/catalog.tgz catalog/$book/$dataset
-  cd $workDir
+  echo " ERROR - relevant catalog tar balls does not exist. EXIT."
+  echo " -> $workDir/catalog.tgz"
+  exit 1
 else
-  echo "  use existing catalog: $workDir/catalog.tgz"
+  echo "  Catalog file exists. Untarring for submission."
+  cd      $workDir
+  tar fzx catalog.tgz
+  cd - >& /dev/null
 fi
+
+# set the script file
+script=$globDir/run.sh
 
 # Make sure there is a globus tickets available
 x509File=/tmp/x509up_u`id -u`
@@ -86,25 +100,18 @@ echo "  Submitting jobs to condor"
 
 if [ "$skim" == "noskim" ]
 then
-  filesets=$catalogDir/$book/$dataset/Filesets
+  filesets=$workDir/catalog/$book/$dataset/Filesets
 else
-  filesets=$catalogDir/$book/$dataset/$skim/Filesets
+  # needs to be reviewed if we work with skims
+  filesets=$workDir/catalog/$book/$dataset/$skim/Filesets
 fi
 
 # Store condor status for later inspection
+#echo "condor history"
 condor_q -global $USER -format "%s " Cmd -format "%s \n" Args > /tmp/condorQueue.$$
-# if [ "$?" != "0" ]
-# then
-#   echo ""
-#   echo " ERROR - condor_q command failed."
-#   echo ' --> condor_q -global $USER -format "%s " Cmd -format "%s \n" Args '
-#   echo ""
-#   echo "  EXIT"
-#   echo ""
-#   exit 1
-# fi
 
-
+# loop over the relevant filesets (hmmm... here we are using the old definitions)
+#echo "start loop"
 for fileset in `cat $filesets | cut -d' ' -f1 `
 do
 
@@ -132,7 +139,7 @@ do
        # Get number of events processed from output file
        nEventsProcessed=`grep XX-CATALOG-XX /tmp/tmp.$$ | cut -d' ' -f3`
        # Get number of events contained in the original input file
-       nEventsInFileset=`grep ^$fileset     $catalogDir/$book/$dataset/Filesets | tr -s ' ' | cut -d' ' -f3`
+       nEventsInFileset=`grep ^$fileset $workDir/catalog/$book/$dataset/Filesets | tr -s ' ' | cut -d' ' -f3`
        # Compare whether we got what we asked for
        if [ "$nEventsProcessed" != "$nEventsInFileset" ]
        then
@@ -170,6 +177,7 @@ do
   if [ "$inQueue" != "" ]
   then
     echo " Queued: $rFile"
+    # some useful debugging sequences one can switch on
     #echo "$logsDir/${skim}_${runTypeIndex}_${fileset}.err"
     #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${skim}_${runTypeIndex}_${fileset}.err
     #grep "running on" $logsDir/${skim}_${runTypeIndex}_${fileset}.out
@@ -177,15 +185,6 @@ do
     continue
   fi
 
-##  # check whether file is there but no condor job is running and it is empty
-##
-##  if (( $rFileSize < 5 ))
-##  then
-##    echo "  Empty: $rFile -> remove, resubmit."
-##    rm $rFile
-##    process=true
-##  fi
-##
   # did we concluded this file needs processing? if yes let's do it!
 
   if [ "$process" == "true" ]
@@ -204,7 +203,7 @@ do
     fi
 
     cd $workDir
-  
+
 cat > submit.cmd <<EOF
 Universe                = vanilla
 Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
@@ -212,13 +211,10 @@ Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_
 #Requirements            = UidDomain == "cmsaf.mit.edu" && \
 #                          Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize &&\
 #                          HasFileTransfer
-Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && \
-                          Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && \
-                          HasFileTransfer
+Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
 Notification            = Error
 Executable              = $script
-Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset \
-                          $outputName $outputDir $runTypeIndex
+Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
 Rank                    = Mips
 GetEnv                  = False
 Input                   = /dev/null
@@ -234,8 +230,19 @@ when_to_transfer_output = ON_EXIT
 Queue
 EOF
 
-    condor_submit submit.cmd >& /dev/null;
+    condor_submit submit.cmd >& /dev/null
+
+    # make sure it worked
+    if [ "$?" != "0" ]
+    then
+      # show what happened and exit with error and leave the submit file
+      condor_submit submit.cmd
+      exit 1
+    fi
+
+    # it worked, so clean up
     rm submit.cmd
+
   fi
 
 done
