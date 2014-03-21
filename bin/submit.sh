@@ -177,7 +177,7 @@ do
     continue
   fi
 
-##  # check whether file is there but no condoer job is running and it is empty
+##  # check whether file is there but no condor job is running and it is empty
 ##
 ##  if (( $rFileSize < 5 ))
 ##  then
@@ -191,7 +191,8 @@ do
   if [ "$process" == "true" ]
   then
 
-    echo "   $script $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex"
+    echo -n "   $script $runMacro $catalogDir $book $dataset $skim $fileset"
+    echo    " $outputName $outputDir $runTypeIndex"
 
     # An exit hook to avoid reprocessing without loocking at the log first
 
@@ -207,11 +208,17 @@ do
 cat > submit.cmd <<EOF
 Universe                = vanilla
 Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
-# Only on Tier-2 # Requirements            = UidDomain == "cmsaf.mit.edu" && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
-Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && HasFileTransfer
+# Only on Tier-2 #
+#Requirements            = UidDomain == "cmsaf.mit.edu" && \
+#                          Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize &&\
+#                          HasFileTransfer
+Requirements            = (UidDomain == "cmsaf.mit.edu" || UidDomain == "mit.edu") && \
+                          Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize && \
+                          HasFileTransfer
 Notification            = Error
 Executable              = $script
-Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex
+Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset \
+                          $outputName $outputDir $runTypeIndex
 Rank                    = Mips
 GetEnv                  = False
 Input                   = /dev/null
