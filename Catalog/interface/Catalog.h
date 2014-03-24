@@ -13,7 +13,6 @@
 //
 // Authors: C.Paus
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_CATALOG_CATALOG_H
 #define MITANA_CATALOG_CATALOG_H
 
@@ -29,9 +28,9 @@ namespace mithep
       Catalog(const char *location);
       virtual ~Catalog() {}
       
-      const TString           &Location()                            const { return fLocation; }
+      const TString           &Location() const { return fLocation; }
       Dataset                 *FindDataset(const char *book, const char *dataset,
-					   const char *fileset = "", bool local = false) const;
+					   const char *fileset = "", int local = 0) const;
       Bool_t                   CacheFileset(const char *book, const char *dataset,
 					    const char *fileset = "") const;
     private:

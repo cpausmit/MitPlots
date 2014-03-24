@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Analysis.h,v 1.27 2009/07/13 20:05:31 loizides Exp $
-//
 // Analysis
 //
 // This is the top-level analysis class used to hide the (little) differences between TAM standalone
@@ -24,7 +22,6 @@
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATAUTIL_ANALYSIS_H
 #define MITANA_DATAUTIL_ANALYSIS_H
 
@@ -100,6 +97,7 @@ namespace mithep
       void                      SetTreeName(const char *name)       { fTreeName       = name;     }
       void                      SetUseHLT(Bool_t hlt)               { fUseHLT         = hlt;      }
       void                      SetUseProof(Bool_t up)              { fUseProof       = up;       }
+      void                      SetUseCacher(Int_t i)               { fUseCacher      = i;        }
       void                      Terminate();
 
     protected:
@@ -119,6 +117,7 @@ namespace mithep
       };
 
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
+      Bool_t                    fUseCacher;       //=1 use file caching (def=0)
       Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
       Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
       Bool_t                    fDoProxy;         //=true if TRef branch autoload is used (def=0)

@@ -64,4 +64,25 @@ else
   echo "  Tar ball $workDir/external.tgz is up to date."  
 fi
 
+# Make the tar of json files
+
+cd /home/cmsprod/cms
+
+if [ -e "$workDir/json.tgz" ]
+then
+  newer=`find ./json -newer $workDir/json.tgz -print | tr '\n' ','`
+else
+  newer="$workDir/json.tgz does not exist."
+fi
+
+if [ "$newer" != "" ]
+then
+  echo "  Make new tar ball."
+  echo "  found newer: $newer"
+  echo "  -> tar fzc json.tgz json"
+  tar fzc $workDir/json.tgz json
+else
+  echo "  Tar ball $workDir/json.tgz is up to date."  
+fi
+
 exit 0

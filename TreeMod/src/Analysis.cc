@@ -1,5 +1,3 @@
-// $Id: Analysis.cc,v 1.45 2012/09/29 11:26:40 ceballos Exp $
-
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
 #include <Riostream.h>
@@ -29,25 +27,26 @@ ClassImp(mithep::Analysis)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Analysis::Analysis(Bool_t useproof) : 
-  fUseProof(useproof), 
+Analysis::Analysis(Bool_t useproof) :
+  fUseProof(useproof),
+  fUseCacher(0),
   fUseHLT(kTRUE),
-  fHierarchy(kTRUE), 
-  fDoProxy(kFALSE), 
+  fHierarchy(kTRUE),
+  fDoProxy(kFALSE),
   fDoObjTabClean(kTRUE),
   fParallel(kFALSE),
-  fState(kPristine), 
-  fNFriends(0), 
-  fList(new TList), 
-  fOutput(0), 
-  fPackages(new TList), 
+  fState(kPristine),
+  fNFriends(0),
+  fList(new TList),
+  fOutput(0),
+  fPackages(new TList),
   fLoaders(new TList),
-  fSuperMods(new TList), 
-  fSelector(0), 
-  fChain(0), 
-  fSet(0), 
+  fSuperMods(new TList),
+  fSelector(0),
+  fChain(0),
+  fSet(0),
   fDeleteList(new TList),
-  fCompLevel(7), 
+  fCompLevel(7),
   fProof(0),
   fDoNEvents(TChain::kBigNumber),
   fSkipNEvents(0),
@@ -117,15 +116,9 @@ Bool_t Analysis::AddFile(const char *pname)
     return kFALSE;
   }
 
-  ////================================================================================================
-  //// Please do not ask me why I need to do this but I have to?! (CP - Oct02, 2010)
-  //char   fileName[4096];
-  //strcpy(fileName,pname);
-  ////================================================================================================
-
   TString pnamestr(pname);
 
-  if (pnamestr.IsNull()) 
+  if (pnamestr.IsNull())
     return kFALSE;
 
   TString tok("|");
@@ -135,14 +128,14 @@ Bool_t Analysis::AddFile(const char *pname)
 
   TString msg;
   for (Int_t i=0; i<arr->GetEntries(); ++i) {
-  
+
     TObjString *dummy = dynamic_cast<TObjString*>(arr->At(i));
-    if (!dummy) 
+    if (!dummy)
       continue;
 
-    AddFile(dummy->GetName(),i);      
-    if (i==0) 
-      msg=dummy->GetName();
+    AddFile(dummy->GetName(),i);
+    if (i==0)
+      msg = dummy->GetName();
     else
       Info("AddFile", "Add file %s as friend to %s", dummy->GetName(), msg.Data());
   }
@@ -162,7 +155,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
 
   TList *l = 0;
   if (eventlist >= 0 && eventlist < fNFriends) {
-      
+
     l = dynamic_cast<TList*>(fList->At(eventlist));
     if (!l) {
       Fatal("AddFile", "Requested list %d not found!", eventlist);
@@ -170,7 +163,7 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     }
 
   } else if (eventlist == fNFriends) {
-      
+
     l = new TList;
     l->SetOwner();
     fList->Add(l);
@@ -180,15 +173,11 @@ void Analysis::AddFile(const char *pname, Int_t eventlist)
     Error("AddFile", "Specified list %d not in [0,%d]", eventlist, fNFriends);
     return;
   }
-   
+
   if (! IsValidName(pname))
     return;
 
   TString theFile(pname);
-  //if ( theFile.BeginsWith("castor:") )
-  //  theFile.ReplaceAll("castor:","rfio:");
-  //if ( theFile.BeginsWith("/castor/"))
-  //  theFile.ReplaceAll("/castor/","rfio:/castor/");
   if ( theFile.BeginsWith("castor:") )
     theFile.ReplaceAll("castor:","root://castorcms/");
   if ( theFile.BeginsWith("/castor/"))
@@ -230,7 +219,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
   while (in) {
     TString line;
     line.ReadLine(in);
-    if (!line.EndsWith(".root")) 
+    if (!line.EndsWith(".root"))
       continue;
 
     if (!AddFile(line)) {
@@ -243,7 +232,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
       Info("AddFiles", "Maximal number (%d) of files added", nmax);
       break;
     }
-  } 
+  }
 
   return kTRUE;
 }
@@ -257,17 +246,17 @@ void Analysis::AddList(TList *list, Int_t eventlist)
 
   MitAssert("AddList", list != 0);
 
-  TIter next(list);                           
-  while (TObject *obj = next())                                
+  TIter next(list);
+  while (TObject *obj = next())
     AddFile(obj->GetName(), eventlist);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Analysis::AddLoader(TAMVirtualLoader *l)      
-{ 
+void Analysis::AddLoader(TAMVirtualLoader *l)
+{
   // Add loader to the list of loaders.
 
-  fLoaders->Add(l); 
+  fLoaders->Add(l);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,10 +283,10 @@ void Analysis::AddPackages(TList *list)
 
 //--------------------------------------------------------------------------------------------------
 void Analysis::AddSuperModule(TAModule *mod)
-{ 
+{
   // Add a top-level module to list of top-level (super) modules.
 
-  fSuperMods->Add(mod);       
+  fSuperMods->Add(mod);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -314,7 +303,7 @@ void Analysis::FileInputFromEnv()
   if ((catalog.IsNull() || book.IsNull() || dataset.IsNull()) && files.IsNull()) {
       Warning("FileInputFromEnv", "Called to get file info from environment, but did not get"
               " consistent set of variables:\n\tMIT_CATALOG=%s\n\tMIT_BOOK=%s\n\t"
-              "MIT_DATASET=%s\n\tMIT_FILESETS=%s\n\tMIT_FILES=%s\n", 
+              "MIT_DATASET=%s\n\tMIT_FILESETS=%s\n\tMIT_FILES=%s\n",
               catalog.Data(), book.Data(), dataset.Data(), filesets.Data(), files.Data());
       return;
   }
@@ -328,7 +317,7 @@ void Analysis::FileInputFromEnv()
       for (Int_t i=0; i<arr->GetEntries(); ++i) {
         TObjString *dummy = dynamic_cast<TObjString*>(arr->At(i));
         if (!dummy) continue;
-        AddFile(dummy->GetName(),0);      
+        AddFile(dummy->GetName(),0);
       }
       delete arr;
     }
@@ -336,7 +325,7 @@ void Analysis::FileInputFromEnv()
   }
 
   Info("FileInputFromEnv", "Got from environment:\n"
-       "\tMIT_CATALOG=%s\n\tMIT_BOOK=%s\n\tMIT_DATASET=%s\n\tMIT_FILESETS=%s\n", 
+       "\tMIT_CATALOG=%s\n\tMIT_BOOK=%s\n\tMIT_DATASET=%s\n\tMIT_FILESETS=%s\n",
        catalog.Data(), book.Data(), dataset.Data(), filesets.Data());
 
   Catalog cat(catalog);
@@ -391,16 +380,16 @@ Bool_t Analysis::Init()
   }
 
   if (fUseProof) { // first init our PROOF session
-    if (!InitProof()) 
+    if (!InitProof())
       return kFALSE;
   }
 
-  // we do this here instead in Terminate() so that 
+  // we do this here instead in Terminate() so that
   // we can browse the output even after Terminate()
   delete fSelector;
   fSelector = 0;
 
-  fChain = new TChain(fTreeName); 
+  fChain = new TChain(fTreeName);
   fSet   = new TDSet("TTree",fTreeName);
 
   for (Int_t i=0; i<fNFriends; ++i) {
@@ -411,7 +400,7 @@ Bool_t Analysis::Init()
     }
 
     if (i == 0) {
-      TIter next(l);                           
+      TIter next(l);
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         fChain->Add(obj->GetName());
         fSet->Add(obj->GetName());
@@ -419,10 +408,10 @@ Bool_t Analysis::Init()
           fCacheSize = 64*1024*1024;
       }
     } else {
-      TChain *chain = new TChain(fTreeName); 
+      TChain *chain = new TChain(fTreeName);
       TDSet *set    = new TDSet("TTree",fTreeName);
 
-      TIter next(l);                           
+      TIter next(l);
       while (TObjString *obj = dynamic_cast<TObjString*>(next())) {
         chain->Add(obj->GetName());
         set->Add(obj->GetName());
@@ -444,8 +433,9 @@ Bool_t Analysis::Init()
   if (fParallel)
     TTreeCacheUnzip::SetParallelUnzip(TTreeCacheUnzip::kEnable);
 
-  //if (fCacheSize>=0) 
-  //  fChain->SetCacheSize(fCacheSize);    
+  // CP - Mar 22, 2014: why is this commented out?
+  //if (fCacheSize>=0)
+  //  fChain->SetCacheSize(fCacheSize);
 
   // create our customized loader plugin for TAM
   TreeLoader *bl = new TreeLoader;
@@ -454,6 +444,8 @@ Bool_t Analysis::Init()
 
   // create our ana framework module
   AnaFwkMod *anamod = new AnaFwkMod;
+  anamod->SetInputLists(fList);
+  anamod->SetUseCacher(fUseCacher);
   anamod->SetSkipNEvents(fSkipNEvents);
   anamod->SetPrintScale(fPrintScale);
   fDeleteList->Add(anamod);
@@ -470,7 +462,7 @@ Bool_t Analysis::Init()
   if (fUseProof) {
 
     fProof->AddInput(anamod);
-    if (hltmod) 
+    if (hltmod)
       fProof->AddInput(hltmod);
 
     TIter iter(fSuperMods->MakeIterator());
@@ -481,13 +473,13 @@ Bool_t Analysis::Init()
     }
 
     fLoaders->SetName("TAM_LOADERS");
-    fProof->AddInput(fLoaders);      
+    fProof->AddInput(fLoaders);
 
   } else {
 
     // when not running Proof, we must make a selector
-    Selector *sel = new Selector; 
-    sel->SetCacheSize(fCacheSize);  
+    Selector *sel = new Selector;
+    sel->SetCacheSize(fCacheSize);
     sel->SetDoProxy(fDoProxy);
     sel->SetDoObjTabClean(fDoObjTabClean);
     sel->SetDoRunInfo(kTRUE);
@@ -501,7 +493,7 @@ Bool_t Analysis::Init()
     sel->AddInput(anamod);
     fSelector = sel;
 
-    if (hltmod) 
+    if (hltmod)
       fSelector->AddInput(hltmod);
 
     TIter iter(fSuperMods->MakeIterator());
@@ -515,7 +507,7 @@ Bool_t Analysis::Init()
       fSelector->SetVerbosity(1);
 
     // pass loaders to selector
-    TIter next(fLoaders);                           
+    TIter next(fLoaders);
     while (TAMVirtualLoader *l = dynamic_cast<TAMVirtualLoader*>(next()))
       fSelector->AddLoader(l);
   }
@@ -529,7 +521,7 @@ Bool_t Analysis::InitProof()
 {
   // Initialize PROOF connection.
 
-  if (fProof && fProof->IsValid()) 
+  if (fProof && fProof->IsValid())
     return kTRUE;
 
   delete fProof;
@@ -601,6 +593,7 @@ Bool_t Analysis::Run(Bool_t browse)
 {
   // Execute analysis and open TBrowser if requested.
 
+  // do it
   if (Init()) {
     Run();
     Terminate();
@@ -616,10 +609,10 @@ Bool_t Analysis::Run(Bool_t browse)
 
 //--------------------------------------------------------------------------------------------------
 void Analysis::SetSuperModule(TAModule *mod)
-{ 
+{
   // Set the first top-level module in the list of top-level (super) modules.
 
-  fSuperMods->AddFirst(mod);       
+  fSuperMods->AddFirst(mod);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -651,7 +644,7 @@ void Analysis::Terminate()
       fOutput = fSelector->GetModOutput();
     }
 
-    
+
 
     if (fOutput && !fAnaOutput.IsNull()) {
       TDirectory::TContext context(0); // automatically restore gDirectory
@@ -663,9 +656,9 @@ void Analysis::Terminate()
         MDB(kAnalysis, 1)
           Info("Terminate", "Saving output to %s!", fAnaOutput.Data());
 
-        if (fHierarchy) 
+        if (fHierarchy)
           fOutput->Write(0,-99);
-        else 
+        else
           fOutput->Write();
       }
     }
@@ -687,7 +680,7 @@ Bool_t Analysis::UploadPackages(TList *packages)
 
   for (Int_t i=0; i<packages->GetEntries(); ++i) {
 
-    TObject* objstr = packages->At(i); 
+    TObject* objstr = packages->At(i);
     if (!objstr) {
       Error("InitProof", "Problem at package number %d!", i);
       return kFALSE;
@@ -695,7 +688,7 @@ Bool_t Analysis::UploadPackages(TList *packages)
 
     TString packname = objstr->GetName();
     Int_t   en       = 0;
-    if (packname.EndsWith("+")) { 
+    if (packname.EndsWith("+")) {
       en=1;
       packname.Resize(packname.Length()-1);
     }
@@ -714,7 +707,7 @@ Bool_t Analysis::UploadPackages(TList *packages)
     if (en == 1) {
       Int_t pos=packname.Last('/')+1;
       if (pos)
-	packname.Remove(0,pos);
+        packname.Remove(0,pos);
       if (fProof->EnablePackage(packname)<0) {
         Error("UploadPackage", "Enabling for %s failed!", packname.Data());
         return kFALSE;

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseMod.h,v 1.30 2009/11/25 15:13:16 loizides Exp $
-//
 // BaseMod
 //
 // This TAM module is the base module for all our TAM modules. It defines a couple of useful
@@ -9,7 +7,6 @@
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_TREEMOD_BASEMOD_H
 #define MITANA_TREEMOD_BASEMOD_H
 

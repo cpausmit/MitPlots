@@ -53,12 +53,15 @@ then
 
   cd ${VER}/src
   eval `scram runtime -sh`
-  cd -
+  cd - >& /dev/null
 
   echo "  untarring: external.tgz"
   tar fzx external.tgz
   $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
   export EXTERNAL=./external
+
+  echo "  untarring: json.tgz"
+  tar fzx json.tgz
 
   echo "  untarring: catalog.tgz"
   tar fzx catalog.tgz
@@ -70,7 +73,7 @@ then
   cd $CMSSW_BASE/src
   echo "  untaring: tar fzx MitPhysics_data.tgz"
   time tar fzx MitPhysics_data.tgz
-  cd -
+  cd - >& /dev/null
 
   export MIT_DATA="$CMSSW_BASE/src/MitPhysics/data"
   if ! [ -d "$MIT_DATA" ]

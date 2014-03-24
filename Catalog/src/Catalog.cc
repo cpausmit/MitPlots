@@ -18,13 +18,15 @@ Catalog::Catalog(const char *location) :
 
 //--------------------------------------------------------------------------------------------------
 Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char *fileset,
-			      bool local) const
+			      int local) const
 {
   // Try to find the given dataset in the catalog and return it properly filled.
   // Note that the caller must delete the returned dataset.
-
+  //
+  // local =0 - means we do not touch the file names and take them at face value
+  //       =1 - translate them into local files, and cache all the beginning of the job
+  //       >1 - translate them into local files, no caching wait for Cacher mechanism
   printf(" Catalog: %s, Book: %s, Dataset: %s, Fileset: %s",fLocation.Data(),book,dataset,fileset);
-
 
   TString slash        = "/";
   TString fullDir      = fLocation +slash+ TString(book) +slash+ TString(dataset);
@@ -55,11 +57,11 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
 	     nAllEvents,nEvents,//nLumiSecs,
 	     nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     TString dir = TString(location);
-    if (local) {
+    if (local > 0) {
       TString tmp = dir;
       dir.ReplaceAll("root://xrootd.cmsaf.mit.edu/","/mnt/hadoop/cms");
       // Test if files were at Tier-2
-      if (dir != tmp)
+      if (dir != tmp && local == 1)
 	cache = kTRUE;
     }
     FilesetMetaData *fs = new FilesetMetaData(fset,dir.Data());

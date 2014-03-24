@@ -1,5 +1,3 @@
-// $Id: AnaFwkMod.cc,v 1.24 2013/08/27 14:13:15 bendavid Exp $
-
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
@@ -19,6 +17,9 @@ AnaFwkMod::AnaFwkMod(const char *name, const char *title) :
   BaseMod(name,title),
   fAllHeadTreeName(Names::gkAllEvtTreeName),
   fAllHeadBrName(Names::gkAllEvtHeaderBrn),
+  fInputLists(0),
+  fUseCacher(0),
+  fCacher(0),
   fSkipNEvents(0),
   fPrintScale(1),
   fSWtotal(0),
@@ -68,10 +69,10 @@ void AnaFwkMod::BeginRun()
 
     // get all event header tree
     fAllHeadTree = dynamic_cast<TTree*>(file->Get(fAllHeadTreeName));
-    if (!fAllHeadTree) {
-      SendError(kWarning, "BeginRun",
-                "Cannot find tree '%s' in file '%s'", 
-                fAllHeadTreeName.Data(),file->GetName());
+    if (! fAllHeadTree) {
+      MDB(kTreeIO, 3)
+	Info("BeginRun",
+	     "Cannot find tree '%s' in file '%s'",fAllHeadTreeName.Data(),file->GetName());
       return;
     }
 
@@ -164,6 +165,10 @@ Bool_t AnaFwkMod::Notify()
 {
   // Make sure to get the new "AllEvents" tree when the file changes.
 
+  // make sure to keep files cached
+  if (fUseCacher > 0 && fCacher)
+    fCacher->NextCaching();
+
   fReload = kTRUE;
   return kTRUE;
 }
@@ -238,8 +243,10 @@ void AnaFwkMod::Process()
     
     UInt_t run = GetEventHeader()->RunNum();
     
-    //Josh: fill pileup histograms for 2012 run-dependent Monte Carlo which currently has one of three run numbers
-    //More generic solution to be implemented depending on future run/lumi dependent Monte Carlo production strategy
+    //Josh: fill pileup histograms for 2012 run-dependent Monte Carlo which currently has one of
+    //three run numbers More generic solution to be implemented depending on future run/lumi
+    //dependent Monte Carlo production strategy
+
     if (run==194533) {
       hNPURunABObs->Fill(npu[0],mcweight); 
       hNPURunABTrue->Fill(npu[3],mcweight); 
@@ -257,7 +264,6 @@ void AnaFwkMod::Process()
 
   }
 
-
   if (doPrint) {
     fSWevent->Stop();
     Info("Process", 
@@ -267,8 +273,12 @@ void AnaFwkMod::Process()
          fSWevent->CpuTime()/nProcessed);
     fSWevent->Start();
   }
-  
-    
+}
+
+//--------------------------------------------------------------------------------------------------
+void AnaFwkMod::SetInputLists(const TList *l) {
+  fInputLists = l;
+  fCacher = new Cacher(dynamic_cast<TList*>(fInputLists->At(0)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -276,6 +286,11 @@ void AnaFwkMod::SlaveBegin()
 {
   // Book our histogram and start the stop watches.
 
+  // perfrom initial caching before we get rolling
+  if (fUseCacher > 0 && fCacher)
+    fCacher->InitialCaching();
+
+  // set the stop watches
   fSWtotal = new TStopwatch;
   fSWevent = new TStopwatch;
 
@@ -285,6 +300,7 @@ void AnaFwkMod::SlaveBegin()
     return;
   }
   
+  // Prepare collection of pileup information
   ReqBranch(fPileupInfoName, fPileupInfo);
   ReqBranch(fMCEventInfoName, fMCEventInfo);
   

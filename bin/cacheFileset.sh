@@ -23,6 +23,9 @@ echo " "
 echo "      arguments: $*";
 echo " ";
 
+
+exit 0; # - TO FAKE IT
+
 # Make sure catalog and book are compliant for download
 
 if [ "`echo $book | tr -d [a-zA-Z0-9\-_]`" == "//" ]

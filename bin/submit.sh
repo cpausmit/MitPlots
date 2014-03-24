@@ -53,10 +53,11 @@ then
 fi
 
 # Check the relevant tar balls
-if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/external.tgz" ]
+if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/external.tgz" ] || \
+   ! [ -e "$globDir/json.tgz" ]
 then
   echo " ERROR - one of the relevant production tar balls does not exist. EXIT."
-  echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/external.tgz"
+  echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/external.tgz $globDir/json.tgz "
   exit 1
 else
   echo "  Global directory structures exist."
@@ -221,7 +222,7 @@ Input                   = /dev/null
 Output                  = $logsDir/${skim}_${runTypeIndex}_${fileset}.out
 Error                   = $logsDir/${skim}_${runTypeIndex}_${fileset}.err
 Log                     = $logsDir/${skim}_${runTypeIndex}_${fileset}.log
-transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/external.tgz,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
+transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/external.tgz,$globDir/json.tgz,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
 Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES

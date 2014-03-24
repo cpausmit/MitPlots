@@ -1,5 +1,6 @@
 #!/bin/bash
 #===================================================================================================
+#
 # Script to process our complete analysis task. The environment has to be defined before. The
 # newest addition is that the tar ball for the code and the other files needed for this production
 # will be created here and not in the submit script. This will ensure that all input to the job
@@ -16,6 +17,13 @@
 #
 #                                                                             Ch.Paus (Aug 15, 2010)
 #===================================================================================================
+# parameter $1 ($NEW) can have two special values:
+#
+#   new     - remove and start over
+#   update  - remake all required files with current configuration and submit what is missing
+#
+# for all other values the remaing jobs are submitted with the existing setup
+#
 NEW="$1"
 echo " Config: ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt --> $NEW"
 
@@ -23,9 +31,9 @@ echo " Config: ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt --> $NEW"
 grep -v ^# ${MIT_USER_DIR}/config/${MIT_PROD_CFG}.txt > /tmp/process.$$
 
 #--------------------------------------------------------------------------------------------------
-# check whether this is a new task where we have to create all the relevant files for the sandbox
+# check whether this is a new task where we have to delete all existing output
 #--------------------------------------------------------------------------------------------------
-
+# remove the existing files
 if [ "$NEW" == "new" ]
 then
   echo " You are requesting this to be a new production task. All existing files will be cleared."
@@ -39,62 +47,72 @@ then
     # setup relevant variables
     logsDir=$MIT_PROD_LOGS/$MIT_PROD_CFG
     globDir=$MIT_PROD_HIST/$MIT_PROD_CFG
-
     # remove the existing files
     echo " removing old files in: $globDir $logsDir"
     rm -rf $globDir $logsDir
-    
-    # re-make all required directories
-    echo " re-make the basic directory structure"
-    mkdir -p $globDir $logsDir
-    
-    # create the global tar balls and files
-    echo " generate tar balls and other files"
-    cd $MIT_PROD_HIST/$MIT_PROD_CFG
-    makeTgz.sh
-    cp $MIT_ANA_DIR/bin/run.sh              $globDir
-    cp /home/$USER/cms/root/.rootlogon.C    $globDir
-    cp $MIT_USER_DIR/macros/$MIT_PROD_MACRO $globDir
-    cp $MIT_ANA_DIR/macros/compile.C        $globDir
-    export EXTERNAL=/home/cmsprod/cms/external
-    root -l -b -q  compile.C"(\"$MIT_PROD_MACRO\")"
-    if [ "$?" != "0" ]
-    then
-      echo "  ERROR -- compilation of the run Macro failed. EXIT!"
-      exit 1
-    fi
-    
-    # loop through the requested datasets and make directory structure and the catalogs
-    
-    nLine=0
-    for dset in `cat /tmp/process.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
-    do
-      nLine=$(($nLine+1))
-      # find the line to this dataset and do further analysis
-      # -- please do not ask why I do this in a bit convoluted way, I do not know how to do it
-      line=`sed -n ${nLine}p /tmp/process.$$`
-      # determine the input dataset
-      BOOK_VERSION=`echo $line | tr -s ' ' | cut -d ' ' -f 1`
-      DATASET=`     echo $line | tr -s ' ' | cut -d ' ' -f 2`
-      SKIM=`        echo $line | tr -s ' ' | cut -d ' ' -f 3`
-      # make directories
-      logsDir=$MIT_PROD_LOGS/$MIT_PROD_CFG/$BOOK_VERSION/$DATASET
-      mkdir -p $logsDir
-      globDir=$MIT_PROD_HIST/$MIT_PROD_CFG
-      mkdir -p $globDir
-      workDir=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION/$DATASET
-      mkdir -p $workDir
-      # create the catalog for this dataset
-      cd $MIT_CATALOG/..
-      echo " making tar ball of the catalog: catalog/$BOOK_VERSION/$DATASET"
-      echo "  tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET"
-      tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET
-    done    
   fi
 fi
 
 #--------------------------------------------------------------------------------------------------
-# ready for the second step -- submit the task
+# check whether this is an update where the input have to be remade
+#--------------------------------------------------------------------------------------------------
+# Now remake what needs remaking
+if [ "$NEW" == "new" ] ||  [ "$NEW" == "update" ]
+then
+  # setup relevant variables
+  logsDir=$MIT_PROD_LOGS/$MIT_PROD_CFG
+  globDir=$MIT_PROD_HIST/$MIT_PROD_CFG
+  
+  # re-make all required directories
+  echo " re-make the basic directory structure"
+  mkdir -p $globDir $logsDir
+  
+  # create the global tar balls and files
+  echo " generate tar balls and other files"
+  cd $MIT_PROD_HIST/$MIT_PROD_CFG
+  makeTgz.sh
+  cp $MIT_ANA_DIR/bin/run.sh              $globDir
+  cp /home/$USER/cms/root/.rootlogon.C    $globDir
+  cp $MIT_USER_DIR/macros/$MIT_PROD_MACRO $globDir
+  cp $MIT_ANA_DIR/macros/compile.C        $globDir
+  export EXTERNAL=/home/cmsprod/cms/external
+  root -l -b -q  compile.C"(\"$MIT_PROD_MACRO\")"
+  if [ "$?" != "0" ]
+  then
+    echo "  ERROR -- compilation of the run Macro failed. EXIT!"
+    exit 1
+  fi
+  
+  # loop through the requested datasets and make directory structure and the catalogs
+  
+  nLine=0
+  for dset in `cat /tmp/process.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
+  do
+    nLine=$(($nLine+1))
+    # find the line to this dataset and do further analysis
+    # -- please do not ask why I do this in a bit convoluted way, I do not know how to do it
+    line=`sed -n ${nLine}p /tmp/process.$$`
+    # determine the input dataset
+    BOOK_VERSION=`echo $line | tr -s ' ' | cut -d ' ' -f 1`
+    DATASET=`     echo $line | tr -s ' ' | cut -d ' ' -f 2`
+    SKIM=`        echo $line | tr -s ' ' | cut -d ' ' -f 3`
+    # make directories
+    logsDir=$MIT_PROD_LOGS/$MIT_PROD_CFG/$BOOK_VERSION/$DATASET
+    mkdir -p $logsDir
+    globDir=$MIT_PROD_HIST/$MIT_PROD_CFG
+    mkdir -p $globDir
+    workDir=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION/$DATASET
+    mkdir -p $workDir
+    # create the catalog for this dataset
+    cd $MIT_CATALOG/..
+    echo " making tar ball of the catalog: catalog/$BOOK_VERSION/$DATASET"
+    echo "  tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET"
+    tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET
+  done    
+fi
+
+#--------------------------------------------------------------------------------------------------
+# ready for the submission step -- submit the task
 #--------------------------------------------------------------------------------------------------
 nLine=0
 for dset in `cat /tmp/process.$$|grep -v ^#|tr -s ' '|cut -d' ' -f 2`
