@@ -25,12 +25,14 @@ namespace mithep
     
     Bool_t               InitialCaching();
     Bool_t               NextCaching();
-    Bool_t               SubmitSmartCacheRequest(const char* file);
     Bool_t               Exists(const char* file);
     
   protected:
     
   private:
+    Bool_t               SubmitCacheRequest(const char* file);
+    void                 RemoveTemporaryFile();
+
     const TList         *fInputList;          //in bambu several input files can be handled in
                                               //parallel we do not (yet) implement this here
     Int_t                fCurrentFileIdx;     //index of currently processing file

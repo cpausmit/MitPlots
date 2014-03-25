@@ -16,7 +16,7 @@ Cacher::Cacher(const TList *list) :
 {
   // Constructor
 
-  //create the synchronized cache status vector
+  // create the synchronized cache status vector
   for (Int_t i=0; i<fInputList->GetEntries(); i++) {
     int status = 0;
     fCacheStatus.push_back(status);
@@ -33,7 +33,7 @@ Bool_t Cacher::InitialCaching()
     MDB(kTreeIO, 1)
       Info("Cacher::InitialCaching","cache file: %s",fInputList->At(i)->GetName());
     // here we need to submit the caching request
-    status = (status && SubmitSmartCacheRequest(fInputList->At(i)->GetName()));
+    status = (status && SubmitCacheRequest(fInputList->At(i)->GetName()));
     // keep track of the book keeping
     fCachedFileIdx++;
     fCacheStatus[i] = 1;
@@ -68,6 +68,11 @@ Bool_t Cacher::NextCaching()
   // Caching to be triggered after the job already started, checks and waits for completion of the
   // next-to-next file needed and submits the next caching request.
 
+  // keep track of which file is being worked on
+  fCurrentFileIdx++;
+  RemoveTemporaryFile();
+
+  // Start with a good completion
   Bool_t status = kTRUE;
 
   // Submit the next caching request first
@@ -75,7 +80,7 @@ Bool_t Cacher::NextCaching()
   if (fCachedFileIdx<fInputList->GetEntries()) {
     MDB(kTreeIO, 1)
       Info("Cacher::NextCaching","cache file: %s",fInputList->At(fCachedFileIdx)->GetName());
-    status = SubmitSmartCacheRequest(fInputList->At(fCachedFileIdx)->GetName());
+    status = SubmitCacheRequest(fInputList->At(fCachedFileIdx)->GetName());
     fCacheStatus[fCachedFileIdx] = 1;
   }
   else {
@@ -107,12 +112,12 @@ Bool_t Cacher::NextCaching()
 }
 
 //--------------------------------------------------------------------------------------------------
-Bool_t Cacher::SubmitSmartCacheRequest(const char* file)
+Bool_t Cacher::SubmitCacheRequest(const char* file)
 {
-  // Submit a SmartCache request for the specified file
+  // Submit a Cache request for the specified file
 
   MDB(kTreeIO, 1)
-    Info("Cacher::SubmitSmartCacheRequest","request file: %s",file);
+    Info("Cacher::SubmitCacheRequest","request file: %s",file);
 
   TString cmd = TString(gSystem->Getenv("CMSSW_BASE"))+TString("/src/MitAna/bin/requestFile.sh ")
                +TString(file);
@@ -135,4 +140,18 @@ Bool_t Cacher::Exists(const char* file)
 	 gSystem->GetPathInfo(file,id,size,flags,mt));
 
   return (gSystem->GetPathInfo(file,id,size,flags,mt) == 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Cacher::RemoveTemporaryFile()
+{
+  // Remove completed file if it was a temporary download
+  if (fCurrentFileIdx > 0) {
+    TString fileName = fInputList->At(fCurrentFileIdx-1)->GetName();
+    if (fileName.BeginsWith("./")) {
+      Info("Cacher::RemoveTemporaryFile","test: %s",fileName.Data());
+      gSystem->Exec((TString("rm -f ")+fileName).Data());
+    }
+  }
+  return;
 }

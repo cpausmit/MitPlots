@@ -1,6 +1,5 @@
-// $Id: Catalog.cc,v 1.8 2012/03/28 12:15:32 paus Exp $
-
 #include <TSystem.h>
+#include "MitCommon/Utils/interface/Utils.h"
 #include "MitAna/Catalog/interface/Catalog.h"
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/Catalog/interface/Dataset.h"
@@ -10,7 +9,7 @@ ClassImp(mithep::Catalog)
 using namespace mithep;
 
 //--------------------------------------------------------------------------------------------------
-Catalog::Catalog(const char *location) : 
+Catalog::Catalog(const char *location) :
   fLocation(location)
 {
   // Constructor
@@ -18,7 +17,7 @@ Catalog::Catalog(const char *location) :
 
 //--------------------------------------------------------------------------------------------------
 Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char *fileset,
-			      int local) const
+                              int local) const
 {
   // Try to find the given dataset in the catalog and return it properly filled.
   // Note that the caller must delete the returned dataset.
@@ -46,23 +45,29 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
 
   Dataset *ds = new Dataset(dataset);
 
+  // Determine domainname (on MIT Tier-3 and MIT Tier-2 we can use local files)
+  TString domainName = Utils::DomainName();
+  TString localLocation("./");
+  if (domainName == TString("mit.edu") || domainName == TString("cmsaf.mit.edu"))
+    localLocation = TString("/mnt/hadoop/cms");
+
   // Read the locations and parameters of the different filesets
   fHandle = gSystem->OpenPipe(cmdFilesets.Data(),"r");
   while (fscanf(fHandle,"%s %s %u %u %u %u %u %u",fset,location,
-		&nAllEvents,&nEvents,//&nLumiSecs,
-		&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
-	 != EOF) {
+                &nAllEvents,&nEvents,//&nLumiSecs,
+                &nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
+         != EOF) {
     MDB(kGeneral,1)
       printf(" --> %s %s %u %u %u %u %u %u\n",fset,location,
-	     nAllEvents,nEvents,//nLumiSecs,
-	     nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
+             nAllEvents,nEvents,//nLumiSecs,
+             nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     TString dir = TString(location);
     if (local > 0) {
       TString tmp = dir;
-      dir.ReplaceAll("root://xrootd.cmsaf.mit.edu/","/mnt/hadoop/cms");
-      // Test if files were at Tier-2
-      if (dir != tmp && local == 1)
-	cache = kTRUE;
+      dir.ReplaceAll("root://xrootd.cmsaf.mit.edu/",localLocation.Data());
+      // Test if files are requested to be cached
+      if (dir != tmp && local == 2)
+        cache = kTRUE;
     }
     FilesetMetaData *fs = new FilesetMetaData(fset,dir.Data());
     ds->AddFileset(fs);
@@ -73,15 +78,15 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
   // Read the parameters for each file
   fHandle = gSystem->OpenPipe(cmdFiles.Data(),"r");
   while (fscanf(fHandle,"%s %s %u %u %u %u %u %u",fset,file,
-		&nAllEvents,&nEvents,//&nLumiSecs,
-		&nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
-	 != EOF) {
+                &nAllEvents,&nEvents,//&nLumiSecs,
+                &nMaxRun,&nMaxLumiSecMaxRun,&nMinRun,&nMinLumiSecMinRun)
+         != EOF) {
     MDB(kGeneral,1)
       printf(" --> %s %s %u %u %u %u %u %u\n",fset,file,
-	     nAllEvents,nEvents,//nLumiSecs,
-	     nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
+             nAllEvents,nEvents,//nLumiSecs,
+             nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     BaseMetaData  b(nAllEvents,nEvents,nLumiSecs,
-		    nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
+                    nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     FileMetaData *f = new FileMetaData(file,&b);
     ds->AddFile(fset,f);
     delete f;
@@ -111,6 +116,6 @@ Bool_t Catalog::CacheFileset(const char *book, const char *dataset, const char *
 
   // Execute the system command
   int rc = gSystem->Exec(cmd.Data());
-  
+
   return (rc == 0);
 }
