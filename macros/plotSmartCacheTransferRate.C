@@ -69,7 +69,7 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
     
     // Show what we are reading
     if (nLines < 5)
-      printf("time=%d, rate=%8f\n",time, rate);
+      printf(" time=%d, rate=%8f nConnections=%d\n",time, rate, nConn);
 
     // Determine maximum
     if (rate > maxRate)
@@ -84,7 +84,11 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
   }
   input.close();
 
+  printf(" \n");
   printf(" Found %d measurements.\n",nLines);
+  printf(" Maximum tranfer rate at: %6.2f MB/sec\n",maxRate);
+  printf(" \n");
+
   if (nLines<1) {
     printf(" ERROR - no measurements selected.\n");
     return;
