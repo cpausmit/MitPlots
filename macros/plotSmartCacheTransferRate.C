@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include <TROOT.h>
+#include <TSystem.h>
 #include <TStyle.h>
 #include <TString.h>
 #include <TCanvas.h>
@@ -15,7 +16,36 @@
 using namespace std;
 using namespace mithep;
 
-void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
+void plot(long int xStart = 0, long int xEnd = 0, TString pngFileName = "transferRate.png");
+void plotFrame(Double_t xMin, Double_t xMax, Double_t maxRate = 0.95);
+
+//--------------------------------------------------------------------------------------------------
+void plotSmartCacheTransferRate()
+{
+  long int durationHour  =               3600;
+  long int durationDay   =          24 * 3600;
+  long int durationWeek  =      7 * 24 * 3600;
+  long int durationMonth = 28 * 7 * 24 * 3600;
+  long int xStart, xEnd;
+
+  // Plot SmartCache tranfers during the last 24 hours
+  time_t t;
+  time(&t);   
+
+  long int time = (long int) t;
+
+  // hour
+  xStart = time-durationHour;  xEnd = time; plot(xStart,xEnd,"transferRateLastHour.png");
+  // day
+  xStart = time-durationDay;   xEnd = time; plot(xStart,xEnd,"transferRateLastDay.png");
+  // week
+  xStart = time-durationWeek;  xEnd = time; plot(xStart,xEnd,"transferRateLastWeek.png");
+  // week
+  xStart = time-durationMonth; xEnd = time; plot(xStart,xEnd,"transferRateLastMonth.png");
+}
+
+//--------------------------------------------------------------------------------------------------
+void plot(long int xStart, long int xEnd, TString pngFileName)
 {
   // This would be the direct access but TMySQL it is not installed with the CMS root version
 
@@ -41,7 +71,7 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
   gROOT->ProcessLine(rmDbInfo.Data());
 
   // create fresh input file
-  TString getDbInfo = TString(".! ") + dbAccess + TString(" > /dev/null");
+  TString getDbInfo = TString(".! ") + dbAccess + TString(" -q");
   gROOT->ProcessLine(getDbInfo.Data());
 
   // Now open our database output
@@ -89,11 +119,17 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
   printf(" Maximum tranfer rate at: %6.2f MB/sec\n",maxRate);
   printf(" \n");
 
+  // Open a canvas
+  TCanvas *cv = new TCanvas();
+  cv->Draw();
+
   if (nLines<1) {
-    printf(" ERROR - no measurements selected.\n");
+    printf(" WARNING - no measurements selected.\n");
+    plotFrame(double(xStart),double(xEnd));
+    cv->SaveAs(pngFileName.Data());
     return;
   }
-  
+
   const int numVals = nLines;
   double xVals[numVals];
   double y1Vals[numVals];
@@ -123,16 +159,8 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
   }
   input.close();
 
-  // Open a canvas
-  TCanvas *cv = new TCanvas("TimeSeries","TimeSeries");
-  cv->Draw();
-
   // Make a good frame
-  TH1D * h = new TH1D("tmp","Time Series of Rates",1,xMin,xMax);
-  MitStyle::InitHistWide(h,"","",kBlack);  
-  h->SetTitle("; Epoch Time [sec]; SmartCache transfer rate [MB/sec]");
-  h->SetMaximum(maxRate*1.1);
-  h->Draw("hist");
+  plotFrame(xMin,xMax,maxRate);
 
   // Prepare our graphs
   TGraph* graph1 = new TGraph(numVals, xVals, y1Vals);
@@ -167,4 +195,17 @@ void plotSmartCacheTransferRate(Int_t xStart = 0, Int_t xEnd = 0)
   leg->AddEntry(graph2,"number of tranfers","lp");
   leg->AddEntry(graph1,"data tranfer rate","lp");
   leg->Draw();
+
+  cv->SaveAs(pngFileName);
+}
+
+//--------------------------------------------------------------------------------------------------
+void plotFrame(Double_t xMin, Double_t xMax, Double_t maxRate)
+{
+  // Make a good frame
+  TH1D * h = new TH1D("tmp","Time Series of Rates",1,xMin,xMax);
+  MitStyle::InitHistWide(h,"","",kBlack);  
+  h->SetTitle("; Epoch Time [sec]; SmartCache transfer rate [MB/sec]");
+  h->SetMaximum(maxRate*1.1);
+  h->Draw("hist");
 }
