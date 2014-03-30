@@ -25,6 +25,7 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
   // local =0 - means we do not touch the file names and take them at face value
   //       =1 - translate them into local files, and cache all the beginning of the job
   //       >1 - translate them into local files, no caching wait for Cacher mechanism
+
   printf(" Catalog: %s, Book: %s, Dataset: %s, Fileset: %s",fLocation.Data(),book,dataset,fileset);
 
   TString slash        = "/";
@@ -48,8 +49,9 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
   // Determine domainname (on MIT Tier-3 and MIT Tier-2 we can use local files)
   TString domainName = Utils::DomainName();
   TString localLocation("./");
-  if (domainName == TString("mit.edu") || domainName == TString("cmsaf.mit.edu"))
-    localLocation = TString("/mnt/hadoop/cms");
+  if ((domainName == TString("mit.edu") || domainName == TString("cmsaf.mit.edu")) &&
+      local < 3)
+    localLocation = TString("/mnt/hadoop/cms/");
 
   // Read the locations and parameters of the different filesets
   fHandle = gSystem->OpenPipe(cmdFilesets.Data(),"r");
@@ -62,11 +64,12 @@ Dataset *Catalog::FindDataset(const char *book, const char *dataset, const char 
              nAllEvents,nEvents,//nLumiSecs,
              nMaxRun,nMaxLumiSecMaxRun,nMinRun,nMinLumiSecMinRun);
     TString dir = TString(location);
+    // careful: 0- no touching, 1- replace, no fileset caching, 2- replace, fileset caching
     if (local > 0) {
       TString tmp = dir;
-      dir.ReplaceAll("root://xrootd.cmsaf.mit.edu/",localLocation.Data());
+      dir.ReplaceAll("root://xrootd.cmsaf.mit.edu//",localLocation.Data());
       // Test if files are requested to be cached
-      if (dir != tmp && local == 2)
+      if (dir != tmp && local == 2 && localLocation == TString("/mnt/hadoop/cms/"))
         cache = kTRUE;
     }
     FilesetMetaData *fs = new FilesetMetaData(fset,dir.Data());

@@ -14,13 +14,14 @@ cd $CMSSW_BASE/..
 # -----------------
 
 # move the old setup out of the way
+echo ' moving old config out of the way'
 mv $CMSSW_BASE/config/toolbox/$SCRAM_ARCH/tools/selected/fastjet.xml \
    $CMSSW_BASE/config/toolbox/$SCRAM_ARCH/tools/selected/fastjet.xml-last.$$
 
-# define the extrnal area
+# define the external area
 EXTERNAL=`pwd`/external
 
-# find out fastjest version
+# find out fastjet version
 FASTJET_VER=`ls -1 $EXTERNAL | grep fastjet | tail -1 |cut -d '-' -f2`
 
 # Generate fastjet file from modified template

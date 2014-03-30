@@ -21,23 +21,25 @@ namespace mithep
   {
   public:
     Cacher(const TList *list);
-    ~Cacher() {}
+    ~Cacher();
     
     Bool_t               InitialCaching();
     Bool_t               NextCaching();
     Bool_t               Exists(const char* file);
+    void                 CleanCache();
     
   protected:
     
   private:
     Bool_t               SubmitCacheRequest(const char* file);
-    void                 RemoveTemporaryFile();
+    void                 RemoveTemporaryFile(int idx);
 
     const TList         *fInputList;          //in bambu several input files can be handled in
                                               //parallel we do not (yet) implement this here
     Int_t                fCurrentFileIdx;     //index of currently processing file
     Int_t                fCachedFileIdx;      //index of last cached file
     Int_t                fNFilesAhead;        //number of files to cache ahead of running job
+    Int_t                fNSecWait;           //keep track how many seconds we were waiting
     std::vector<int>     fCacheStatus;        //0-nothing, 1-submitted, 2-complete
 
   ClassDef(Cacher, 0) // Cacher class

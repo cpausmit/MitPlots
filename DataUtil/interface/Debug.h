@@ -6,6 +6,7 @@
 // This class defines the debuging masks (EDebugMask), which are used with the MDB (MIT DeBug) 
 // macro together with the log levels to control the verbosity. For example you can do in 
 // your code:
+//
 //  MDB(kAnalysis, 2)
 //    Info("AddFile", "Added %s to list of files.", pname);
 // 
@@ -19,7 +20,6 @@
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATAUTIL_DEBUG_H
 #define MITANA_DATAUTIL_DEBUG_H
 

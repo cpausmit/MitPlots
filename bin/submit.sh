@@ -53,23 +53,24 @@ then
 fi
 
 # Check the relevant tar balls
-if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/external.tgz" ] || \
-   ! [ -e "$globDir/json.tgz" ]
+if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/${CMSSW_VERSION}-src.tgz" ] ||\
+   ! [ -e "$globDir/external.tgz" ] || ! [ -e "$globDir/json.tgz" ]
 then
   echo " ERROR - one of the relevant production tar balls does not exist. EXIT."
-  echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/external.tgz $globDir/json.tgz "
+  echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/${CMSSW_VERSION}-src.tgz"
+  echo " -> $globDir/external.tgz $globDir/json.tgz "
   exit 1
 else
   echo "  Global directory structures exist."
 fi
 
 # Check the relevant run files exist
-if ! [ -e "$globDir/run.sh" ] || \
+if ! [ -e "$workDir/setup.sh" ] || ! [ -e "$globDir/run.sh" ] || \
    ! [ -e "$globDir/.rootlogon.C" ] || ! [ -e "$globDir/$runMacro" ] || \
    ! [ -e "$globDir/${runMacroTrunc}_C.so" ] || ! [ -e "$globDir/${runMacroTrunc}_C.d" ]
 then
   echo " ERROR - one of the relevant run files does not exist. EXIT."
-  echo " -> $globDir/run.sh $globDir/.rootlogon.C $globDir/$runMacro"
+  echo " -> $workDir/setup.sh $globDir/run.sh $globDir/.rootlogon.C $globDir/$runMacro"
   echo " -> $globDir/${runMacroTrunc}_C.so $globDir/${runMacroTrunc}_C.d"
   exit 1
 else
@@ -207,7 +208,7 @@ do
 
 cat > submit.cmd <<EOF
 Universe                = vanilla
-Environment             = "HOSTNAME=$HOSTNAME HOME=$HOME MIT_DATA=$MIT_DATA MIT_PROD_JSON=$MIT_PROD_JSON MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP"
+Environment             = "HOSTNAME=$HOSTNAME"
 # Only on Tier-2 #
 #Requirements            = UidDomain == "cmsaf.mit.edu" && \
 #                          Arch == "X86_64" && Disk >= DiskUsage && (Memory * 1024) >= ImageSize &&\
@@ -222,7 +223,7 @@ Input                   = /dev/null
 Output                  = $logsDir/${skim}_${runTypeIndex}_${fileset}.out
 Error                   = $logsDir/${skim}_${runTypeIndex}_${fileset}.err
 Log                     = $logsDir/${skim}_${runTypeIndex}_${fileset}.log
-transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/external.tgz,$globDir/json.tgz,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
+transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/${CMSSW_VERSION}-src.tgz,$globDir/external.tgz,$globDir/json.tgz,setup.sh,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
 Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES
@@ -236,7 +237,7 @@ EOF
     # make sure it worked
     if [ "$?" != "0" ]
     then
-      # show what happened and exit with error and leave the submit file
+      # show what happened, exit with error and leave the submit file
       condor_submit submit.cmd
       exit 1
     fi

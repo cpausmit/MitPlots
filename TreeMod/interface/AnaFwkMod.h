@@ -4,7 +4,7 @@
 // This module collects interesting global information, like the overall number of processed
 // events and puts this information into the OutputList.
 //
-// Authors: C.Loizides
+// Authors: C.Loizides, C.Paus
 //--------------------------------------------------------------------------------------------------
 #ifndef MITANA_TREEEMOD_ANAFWKMOD_H
 #define MITANA_TREEEMOD_ANAFWKMOD_H

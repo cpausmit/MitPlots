@@ -3,7 +3,7 @@
 #
 # Make a tar ball that is up to date and can be used to start the analysis standalone on the worker.
 # There are two tar balls relevant: the CMSSW one and the external one in case you have external
-# packages like fastjet.
+# packages like fastjet and contributions.
 #
 #----------------------------------------------------------------------------------------------------
 if [ -z "$CMSSW_BASE" ]
@@ -15,14 +15,14 @@ fi
 workDir=`pwd`
 echo "  Working directory: $workDir"
 
-# Make the main CMSSW tar
+# Make the main CMSSW tar balls (split into external/libs and src)
 
 cd $CMSSW_BASE
 cd ..
 
 if [ -e "${CMSSW_VERSION}.tgz" ]
 then
-  newer=`find $CMSSW_VERSION -newer ./${CMSSW_VERSION}.tgz -print | tr '\n' ','`
+  newer=`find $CMSSW_VERSION/{external,lib} -newer ./${CMSSW_VERSION}.tgz -print | tr '\n' ','`
 else
   newer='${CMSSW_VERSION}.tgz does not exist.'
 fi
@@ -33,15 +33,35 @@ then
   clean.sh so-d
   echo "  Make new tar ball."
   echo "  found newer: $newer"
-  echo "  -> tar fzc ${CMSSW_VERSION}.tgz $CMSSW_VERSION/external $CMSSW_VERSION/lib $CMSSW_VERSION/src \
-          --exclude ${CMSSW_VERSION}/src/MitPhysics/data"
-  tar fzc ${CMSSW_VERSION}.tgz ${CMSSW_VERSION}/external ${CMSSW_VERSION}/lib ${CMSSW_VERSION}/src \
-          --exclude ${CMSSW_VERSION}/src/MitPhysics/data
+  echo "  -> tar fzc ${CMSSW_VERSION}.tgz $CMSSW_VERSION/{external,lib}"
+  tar fzc ${CMSSW_VERSION}.tgz $CMSSW_VERSION/{external,lib}
 else
   echo "  Tar ball ${CMSSW_VERSION}.tgz is up to date."  
 fi
 
 cp ${CMSSW_VERSION}.tgz $workDir
+
+if [ -e "${CMSSW_VERSION}-src.tgz" ]
+then
+  newer=`find ${CMSSW_VERSION}/src -newer ./${CMSSW_VERSION}-src.tgz -print | tr '\n' ','`
+else
+  newer='${CMSSW_VERSION}-src.tgz does not exist.'
+fi
+
+if [ "$newer" != "" ]
+then
+  clean.sh backup-local
+  clean.sh so-d
+  echo "  Make new tar ball."
+  echo "  found newer: $newer"
+  echo "  -> tar fzc ${CMSSW_VERSION}-src.tgz $CMSSW_VERSION/src \
+                     --exclude ${CMSSW_VERSION}/src/MitPhysics/data"
+  tar fzc ${CMSSW_VERSION}-src.tgz $CMSSW_VERSION/src --exclude ${CMSSW_VERSION}/src/MitPhysics/data
+else
+  echo "  Tar ball ${CMSSW_VERSION}-src.tgz is up to date."  
+fi
+
+cp ${CMSSW_VERSION}-src.tgz $workDir
 
 # Make the tar of our own external packages tar
 

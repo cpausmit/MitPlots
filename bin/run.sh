@@ -42,18 +42,23 @@ workDir=`pwd`
 ls -alhrt
 if [ "$workDir" != "/home/$USER/cms/root" ]
 then
-  export VER=`echo CMSSW_*.tgz |cut -d. -f1`
+  export VER=`echo CMSSW_*[0-9].tgz |cut -d. -f1`
   export SCRAM_ARCH="slc5_amd64_gcc462"
   source /cvmfs/cms.cern.ch/cmsset_default.sh
   scram project CMSSW ${VER}
 
-  echo " untarring: CMSSW_5_3_14_patch2.tgz"
+  echo " untarring: ${VER}.tgz"
   tar fzx ${VER}.tgz
-  echo " setting up environment"
+  echo " untarring: $VER}-src.tgz"
+  tar fzx ${VER}-src.tgz
 
+  echo " setting up CMSSW environment"
   cd ${VER}/src
   eval `scram runtime -sh`
   cd - >& /dev/null
+
+  echo " setting up MIT_PROD environment"
+  source ./setup.sh
 
   echo "  untarring: external.tgz"
   tar fzx external.tgz
@@ -86,9 +91,6 @@ then
 else
   echo " Everything is ready already. Let's go!"
 fi
-
-ls -lhrt
-ls -lhrt $CMSSW_BASE/src
 ls -lhrt $CMSSW_BASE/src/MitPhysics
 
 # take care of the certificate

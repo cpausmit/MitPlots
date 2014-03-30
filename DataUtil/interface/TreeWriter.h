@@ -14,7 +14,6 @@
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATAUTIL_TREEWRITER_H
 #define MITANA_DATAUTIL_TREEWRITER_H
 

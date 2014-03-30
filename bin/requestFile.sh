@@ -42,7 +42,8 @@ then
   rc="$?"
 else
   server="xrootd.cmsaf.mit.edu"
-  echo " $h - SmartCache not available or not requested.. trying xroot cp (xrdcp)."
+  echo " $h - SmartCache not available or not requested.. trying xrootd cp (xrdcp)."
+  echo " -> xrdcp from $server to ./store/user/paus/$book/$version/$dataset/$filename"
   mkdir -p ./store/user/paus/$book/$version/$dataset
   ( xrdcp -s root://${server}//store/user/paus/$book/$version/$dataset/$filename \
                             ./store/user/paus/$book/$version/$dataset/$filename.xrdcp && \

@@ -343,6 +343,12 @@ void AnaFwkMod::SlaveTerminate()
 
   RetractObj(fAllHeaders.GetName());
 
+  // Clean leftovers in cache
+  if (fUseCacher > 0 && fCacher) {
+    fCacher->CleanCache();
+    delete fCacher;
+  }
+
   SaveNEventsProcessed();
   TH1D *hDAllEvents = new TH1D("hDAllEvents","Sum of processed and skimmed events",1,-0.5,0.5);
   hDAllEvents->Fill(0.0,fNEventsSkimmed+GetNEventsProcessed());

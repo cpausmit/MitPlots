@@ -1,0 +1,50 @@
+Differences between local condor and crab submission
+====================================================
+
+Crab does a number of things that for condor you need to do by hand. On the other hand in condor
+there are a number of things you can do but you cannot do in crab. Ideally we would map our condor
+submission exactly into crab but that might not be what we want to do in the long run and with crab3
+looming it might be a waste. So here we are going to adjust what is needed and later see how to more
+coherently integrate.
+
+BOTH
+  $globDir/${CMSSW_VERSION}-src.tgz   # tar of $CMSSW_BASE/src excluding MitPhysics/data
+  $globDir/external.tgz
+  $globDir/json.tgz
+  catalog.tgz
+  $globDir/.rootlogon.C
+  $globDir/$runMacro
+  $globDir/${runMacroTrunc}_C.so
+  $globDir/${runMacroTrunc}_C.d
+
+CRAB
+  runCrab.sh                    # master script to call runCrabJob.sh with arguments
+  runCrabJob.sh                 # equivalent of run.sh in condor setup (maybe it should be a copy?)
+  arguments.list                # generated for each dataset to define arguments list for each job
+  setup.sh                      # generated for each dataset to define environment variables
+
+CONDOR
+  run.sh                        # master script to run the job
+  $x509File                     # take care of authentication ourselves (check condor options)
+  $globDir/${CMSSW_VERSION}.tgz # tar of $CMSSW_BASE/{external,lib}
+
+When we create an analysis task and process the various datasets for submission, all of the above
+files will be created so they are ready for packing up. Each task submission (crab or condor) will
+be able to pick the tasks it needs.
+
+Advantages/Diadvantages:
+
+CRAB
+  + any computing site is available
+  + will be properly tracked in dashboard (at least it should be, run summary might be inadequate)
+  - huge number of parallel jobs might affect the input at MIT as they have to be copied (caching or
+    read through xrootd)
+  - monitoring of jobs is painful
+  - completing started tasks has to wait for completion of last step
+  - logging information is not available in convenient format
+
+CONDOR
+  + convenient and powerful monitoring
+  + completion of started tasks are trivial and can be done on the fly
+  - limited resources (MIT Tier2 and Tier3 only)
+  - no dashboard tracking

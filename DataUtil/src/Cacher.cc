@@ -12,7 +12,8 @@ Cacher::Cacher(const TList *list) :
   fInputList(list), 
   fCurrentFileIdx(-1),
   fCachedFileIdx(-1),
-  fNFilesAhead(2)
+  fNFilesAhead(2),
+  fNSecWait(0)
 {
   // Constructor
 
@@ -21,6 +22,10 @@ Cacher::Cacher(const TList *list) :
     int status = 0;
     fCacheStatus.push_back(status);
   }
+}
+Cacher::~Cacher()
+{
+  // Destructor
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,6 +61,9 @@ Bool_t Cacher::InitialCaching()
 	Info("Cacher::InitialCaching","completed initial caching\n");
       break;
     }
+    MDB(kTreeIO, 2)
+      Info("Cacher::InitialCaching","waiting for completion (10 sec)");
+    fNSecWait += 10;
     sleep(10); // wait 10 seconds
   }
 
@@ -68,9 +76,10 @@ Bool_t Cacher::NextCaching()
   // Caching to be triggered after the job already started, checks and waits for completion of the
   // next-to-next file needed and submits the next caching request.
 
+  // remove file that was just completed
+  RemoveTemporaryFile(fCurrentFileIdx);
   // keep track of which file is being worked on
   fCurrentFileIdx++;
-  RemoveTemporaryFile();
 
   // Start with a good completion
   Bool_t status = kTRUE;
@@ -86,7 +95,6 @@ Bool_t Cacher::NextCaching()
   else {
     MDB(kTreeIO, 2)
       Info("Cacher::NextCaching","no more files to cache");
-    return status;
   }
 
   // Next: wait for download completion of last requested file (needs to be available to the job)
@@ -94,6 +102,11 @@ Bool_t Cacher::NextCaching()
   while (! complete) {                                  // potential deadlock - needs exist strategy
     complete = kTRUE;
 
+    // make sure we are not asking for too much ;-)
+    if (fCachedFileIdx-1 >= fInputList->GetEntries())
+      break;
+
+    // check download completion
     if (Exists(fInputList->At(fCachedFileIdx-1)->GetName())) {
       fCacheStatus[fCachedFileIdx-1] = 2;
       MDB(kTreeIO, 2)
@@ -105,6 +118,7 @@ Bool_t Cacher::NextCaching()
 
     MDB(kTreeIO, 2)
       Info("Cacher::NextCaching","waiting for completion (10 sec)");
+    fNSecWait += 10;
     sleep(10); // wait 10 seconds
   }
 
@@ -143,15 +157,30 @@ Bool_t Cacher::Exists(const char* file)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Cacher::RemoveTemporaryFile()
+void Cacher::RemoveTemporaryFile(int idx)
 {
   // Remove completed file if it was a temporary download
-  if (fCurrentFileIdx > 0) {
-    TString fileName = fInputList->At(fCurrentFileIdx-1)->GetName();
+  if (idx > -1 && idx < fInputList->GetEntries()) {
+    TString fileName = fInputList->At(idx)->GetName();
     if (fileName.BeginsWith("./")) {
-      Info("Cacher::RemoveTemporaryFile","test: %s",fileName.Data());
+      Info("Cacher::RemoveTemporaryFile","remove: %s",fileName.Data());
       gSystem->Exec((TString("rm -f ")+fileName).Data());
     }
   }
   return;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Cacher::CleanCache()
+{
+  // there is nothing really do delete in terms of objects but the potential local file
+  // copies need to be removed
+  for (Int_t i=0; i<fInputList->GetEntries(); i++) {
+    MDB(kTreeIO, 1)
+      Info("Cacher::CleanCache","check whether to remove leftovers %s",fInputList->At(i)->GetName());
+    RemoveTemporaryFile(i);
+  }
+  // Give a summary of the cache waiting time
+  Info("Cacher::CleanCache","\n         total waiting time for caching %d sec (%f min)\n\n",
+       fNSecWait,fNSecWait/60.);
 }
