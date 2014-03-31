@@ -79,7 +79,7 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
   input.open(timeSeriesFile.Data());
 
   Int_t time=0, nConn=0, nLines=0;
-  Double_t rate=0, xMin=0, xMax=0, maxRate=0;
+  Double_t rate=0, xMin=double(xStart), xMax=double(xEnd), maxRate=0;
 
   // First loop to determine the boundaries (could be done in one round, dynamically)
   while (1) {
@@ -101,14 +101,11 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
     if (nLines < 5)
       printf(" time=%d, rate=%8f nConnections=%d\n",time, rate, nConn);
 
-    // Determine maximum
+    // Determine plot maximum
     if (rate > maxRate)
       maxRate = rate;
-
-    if (xMin == 0.)
-      xMin = double(time);
-    
-    xMax = double(time);
+    if (nConn > maxRate)
+      maxRate = double(nConn);
 
     nLines++;
   }
