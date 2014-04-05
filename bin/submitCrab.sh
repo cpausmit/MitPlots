@@ -98,19 +98,19 @@ fi
 # Make list of all existing output files
 ls -s $workDir/${outputName}_${dataset}_${skim}_????.root 2> /dev/null \
       > /tmp/$USER_exisiting_${dataset}.$$
-rm -rf $workDir/arguments.list
-touch  $workDir/arguments.list
 
 # Loop through all datasets and only list missing filesets
+rm -rf $workDir/arguments.list
+touch  $workDir/arguments.list
 for fileset in `cat $filesets | cut -d' ' -f1 `
 do
   rFile=${outputName}_${dataset}_${skim}_${fileset}.root
   exists=`grep $rFile /tmp/$USER_exisiting_${dataset}.$$`
-  if [ "$exists" == "" ]
-  then
+  ##if [ "$exists" == "" ]
+  ##then
     echo "$runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex" \
          >> $workDir/arguments.list
-  fi
+  ##fi
 done
 
 # Cleanup

@@ -49,8 +49,9 @@ then
 
   echo " untarring: ${VER}.tgz"
   tar fzx ${VER}.tgz
-  echo " untarring: $VER}-src.tgz"
+  echo " untarring: ${VER}-src.tgz"
   tar fzx ${VER}-src.tgz
+  ls -lhrt ${VER}/
 
   echo " setting up CMSSW environment"
   cd ${VER}/src
@@ -59,6 +60,7 @@ then
 
   echo " setting up MIT_PROD environment"
   source ./setup.sh
+  env | grep MIT_
 
   echo "  untarring: external.tgz"
   tar fzx external.tgz
@@ -74,7 +76,6 @@ then
   # Copy and unpack the MitPhysics/data
   echo "  copy: cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src"
   cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src
-
   cd $CMSSW_BASE/src
   echo "  untaring: tar fzx MitPhysics_data.tgz"
   time tar fzx MitPhysics_data.tgz

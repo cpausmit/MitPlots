@@ -48,3 +48,22 @@ CONDOR
   + completion of started tasks are trivial and can be done on the fly
   - limited resources (MIT Tier2 and Tier3 only)
   - no dashboard tracking
+
+
+File input that can cause weird errors
+======================================
+
+ Error: Symbol #include is not defined in current scope  :0:
+ Error: Symbol exception is not defined in current scope  :0:
+ Syntax Error: #include <exception> :0:
+ Error: Symbol G__exception is not defined in current scope  :0:
+ Error: type G__exception not defined FILE: LINE:0
+ *** Interpreter error recovered ***
+
+Unfortunately this error is cryptic and only "G__exception not defined FILE: LINE:0" is relevant and
+tells you that a filed could not be read in root. We have a number of inputs to our jobs.
+
+ 1. JSON files if we are dealing with data
+ 2. catalog files
+ 3. files as read from $CMSSW_BASE/src/MitPhysics/data ($MIT_DATA)
+ 4. files as read from $CMSSW_BASE/src/MitPhysics/*

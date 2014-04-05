@@ -157,10 +157,10 @@ do
      then
        # Show processing duration
        duration=`tail -10 $output | grep duration | tr -s ' '`
-       echo "   File: $rFile exists already. Processing $duration"
+       echo " Exists: $rFile -- Processing $duration"
      else
        # Show that file was processed (fastest option and usually sufficient)
-       echo "   File: $rFile exists already."
+       echo " Exists: $rFile"
      fi
      # make sure to move on if completed
      if [ "$process" == "false" ] 
@@ -182,7 +182,7 @@ do
     # some useful debugging sequences one can switch on
     #echo "$logsDir/${skim}_${runTypeIndex}_${fileset}.err"
     #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${skim}_${runTypeIndex}_${fileset}.err
-    #grep "running on" $logsDir/${skim}_${runTypeIndex}_${fileset}.out
+    grep "running on" $logsDir/${skim}_${runTypeIndex}_${fileset}.out
     #tail -10 $logsDir/${skim}_${runTypeIndex}_${fileset}.err
     continue
   fi

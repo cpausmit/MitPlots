@@ -114,23 +114,23 @@ then
     # define all variables that need to be defined when running in queue
     export MIT_PROD_JSON=`   echo $line | tr -s ' ' | cut -d ' ' -f 8`
     export MIT_PROD_OVERLAP=`echo $line | tr -s ' ' | cut -d ' ' -f 7`
-    export MIT_PROD_SE="se01.cmsaf.mit.edu"
-    #export MIT_PROD_SE="t3serv006.mit.edu"
+    #export MIT_PROD_SE="se01.cmsaf.mit.edu"
+    export MIT_PROD_SE="t3serv006.mit.edu"
     export MIT_PROD_SDIR='/srm/v2/server?SFN=/mnt/hadoop/cms/store'
-    export MIT_PROD_RDIR="user/paus"
+    export MIT_PROD_RDIR="user/paus/bambu"
     #echo " JSON: $MIT_PROD_JSON  Overlap: $MIT_PROD_OVERLAP"
     rm -rf $workDir/setup.sh
     touch  $workDir/setup.sh
-    echo "export MIT_PROD_JSON=$MIT_PROD_JSON"       >> $workDir/setup.sh
+    echo "export MIT_PROD_JSON='$MIT_PROD_JSON'"     >> $workDir/setup.sh
     echo "export MIT_PROD_OVERLAP=$MIT_PROD_OVERLAP" >> $workDir/setup.sh
-    echo "export MIT_PROD_SE=$"                      >> $workDir/setup.sh
+    echo "export MIT_PROD_SE=$MIT_PROD_SE"           >> $workDir/setup.sh
     echo "export MIT_PROD_SDIR=$MIT_PROD_SDIR"       >> $workDir/setup.sh
     echo "export MIT_PROD_RDIR=$MIT_PROD_RDIR"       >> $workDir/setup.sh
 
     # create the catalog for this dataset
     cd $MIT_CATALOG/..
-    echo " making tar ball of the catalog: catalog/$BOOK_VERSION/$DATASET"
-    echo "  tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET"
+    echo "  making tar ball of the catalog: catalog/$BOOK_VERSION/$DATASET"
+    echo "  -> tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET"
     tar fzc $workDir/catalog.tgz catalog/$BOOK_VERSION/$DATASET
 
     # generate arguments list from the catalog file
@@ -176,21 +176,26 @@ do
   #echo " JSON: $MIT_PROD_JSON  Overlap: $MIT_PROD_OVERLAP"
 
   # now submit the sucker
-  submit.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST "" \
-            $CHECK_COMPLETE
+  #----------------------
 
-#
-# this is how to do it in crab (experimental)
-#
-#  submitCrab.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST ""
-
-  # make sure this worked
-  if [ "$?" != "0" ]
+  # standard condor submission
+  if [ "$MIT_CRAB" == "" ]
   then
-    echo "  ERROR -- submit failed. EXIT!"
-    rm /tmp/process.$$
-    exit 1
+    submit.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST "" \
+              $CHECK_COMPLETE
+    # make sure this worked
+    if [ "$?" != "0" ]
+    then
+      echo "  ERROR -- submit failed. EXIT!"
+      rm /tmp/process.$$
+      exit 1
+    fi
+  # or using CRAB
+  else
+    submitCrab.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST ""
+    exit          # for now just one prodcution
   fi
+
 
 done
 

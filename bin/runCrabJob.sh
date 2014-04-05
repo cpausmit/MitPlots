@@ -51,7 +51,10 @@ workDir=`pwd`
 ls -alhrt
 
 echo "  untarring: ${CMSSW_VERSION}-src.tgz"
-tar fzx ${CMSSW_VERSION}-src.tgz
+cd $CMSSW_BASE/..
+tar fzx $workDir/${CMSSW_VERSION}-src.tgz
+cd - >& /dev/null
+ls $CMSSW_BASE/src
 
 echo "  untarring: external.tgz"
 cd $CMSSW_BASE/..
@@ -67,8 +70,8 @@ echo "  untarring: catalog.tgz"
 tar fzx catalog.tgz
 
 # Copy and unpack the MitPhysics/data
-echo "  copy: xrdcp root://xrootd.cmsaf.mit.edu//store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src/MitPhysics_data.tgz"
-xrdcp root://xrootd.cmsaf.mit.edu//store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src/MitPhysics_data.tgz
+echo "  copy: xrdcp -s -d 1root://xrootd.cmsaf.mit.edu//store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src/MitPhysics_data.tgz"
+xrdcp -s -d 1 root://xrootd.cmsaf.mit.edu//store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src/MitPhysics_data.tgz
 
 cd $CMSSW_BASE/src
 echo "  untaring: tar fzx MitPhysics_data.tgz"
@@ -83,6 +86,8 @@ then
   exit 1
 fi
 echo "  found MitPhysics/data at: $MIT_DATA"
+
+ls -lhrt ./
 ls -lhrt $CMSSW_BASE/src/MitPhysics
 
 # get ready to run
@@ -101,6 +106,9 @@ echo "
 status=`echo $?`
 echo "${h}: Status - $status"
 
+echo " -- local area after job completion: "`pwd`
+ls -lhrt
+
 # take care of the output file
 output=${outputName}_${dataset}_${skim}_${fileset}.root
 
@@ -108,13 +116,13 @@ echo " -- goto runtime_area: $RUNTIME_AREA"
 cd $RUNTIME_AREA
 ls -lhrt
 echo "
-python cmscp.py  --destination srm://${MIT_PROD_SE}:8443${MIT_PROD_SDIR}/${MIT_PROD_RDIR}/ \
+python cmscp.py  --destination srm://${MIT_PROD_SE}:8443${MIT_PROD_SDIR}/${MIT_PROD_RDIR}/$book/$dataset \
                  --inputFileList $here/$output \
                  --middleware OSG \
                  --se_name ${MIT_PROD_SE} \
                  --for_lfn ${MIT_PROD_RDIR}    
 "
-python cmscp.py  --destination srm://${MIT_PROD_SE}:8443${MIT_PROD_SDIR}/${MIT_PROD_RDIR}/ \
+python cmscp.py  --destination srm://${MIT_PROD_SE}:8443${MIT_PROD_SDIR}/${MIT_PROD_RDIR}/$book/$dataset \
                  --inputFileList $here/$output \
                  --middleware OSG \
                  --se_name ${MIT_PROD_SE} \
