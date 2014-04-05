@@ -10,18 +10,23 @@
 #include <TMultiGraph.h>
 #include <TH1D.h>
 #include <TLegend.h>
+#include <TText.h>
 
 #include "MitPlots/Style/interface/MitStyle.h"
 
 using namespace std;
 using namespace mithep;
 
-void plot(long int xStart = 0, long int xEnd = 0, TString pngFileName = "transferRate.png");
+void plot(long int xStart = 0, long int xEnd = 0,
+	  TString text = "", TString pngFileName = "transferRate.png");
 void plotFrame(Double_t xMin, Double_t xMax, Double_t maxRate = 0.95);
 
 //--------------------------------------------------------------------------------------------------
 void plotSmartCacheTransferRate()
 {
+  TDatime date;
+  TString dateTime = date.AsSQLString();
+  TString text;
   long int durationHour  =               3600;
   long int durationDay   =          24 * 3600;
   long int durationWeek  =      7 * 24 * 3600;
@@ -35,17 +40,21 @@ void plotSmartCacheTransferRate()
   long int time = (long int) t;
 
   // hour
-  xStart = time-durationHour;  xEnd = time; plot(xStart,xEnd,"transferRateLastHour.png");
+  text = TString("Last Hour at ") + dateTime; 
+  xStart = time-durationHour;  xEnd = time; plot(xStart,xEnd,text,"transferRateLastHour.png");
   // day
-  xStart = time-durationDay;   xEnd = time; plot(xStart,xEnd,"transferRateLastDay.png");
+  text = TString("Last Day at ") + dateTime; 
+  xStart = time-durationDay;   xEnd = time; plot(xStart,xEnd,text,"transferRateLastDay.png");
   // week
-  xStart = time-durationWeek;  xEnd = time; plot(xStart,xEnd,"transferRateLastWeek.png");
+  text = TString("Last Week at ") + dateTime; 
+  xStart = time-durationWeek;  xEnd = time; plot(xStart,xEnd,text,"transferRateLastWeek.png");
   // week
-  xStart = time-durationMonth; xEnd = time; plot(xStart,xEnd,"transferRateLastMonth.png");
+  text = TString("Last Month at ") + dateTime; 
+  xStart = time-durationMonth; xEnd = time; plot(xStart,xEnd,text,"transferRateLastMonth.png");
 }
 
 //--------------------------------------------------------------------------------------------------
-void plot(long int xStart, long int xEnd, TString pngFileName)
+void plot(long int xStart, long int xEnd, TString text, TString pngFileName)
 {
   // This would be the direct access but TMySQL it is not installed with the CMS root version
 
@@ -79,9 +88,10 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
   input.open(timeSeriesFile.Data());
 
   Int_t time=0, nConn=0, nLines=0;
-  Double_t rate=0, xMin=double(xStart), xMax=double(xEnd), maxRate=0;
+  Double_t rate=0, xMin=double(xStart), xMax=double(xEnd), maxRate=1.0;
 
   // First loop to determine the boundaries (could be done in one round, dynamically)
+  //---------------------------------------------------------------------------------
   while (1) {
     // read in 
     input >> time >> rate >> nConn;
@@ -123,6 +133,12 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
   if (nLines<1) {
     printf(" WARNING - no measurements selected.\n");
     plotFrame(double(xStart),double(xEnd));
+    double dX = double(xEnd)-double(xStart);
+    TText *plotText = new TText(xMin-dX*0.14,0.-(maxRate*1.2*0.14),text.Data());
+    printf("Text size: %f\n",plotText->GetTextSize());
+    plotText->SetTextSize(0.04);
+    plotText->SetTextColor(kBlue);
+    plotText->Draw();
     cv->SaveAs(pngFileName.Data());
     return;
   }
@@ -134,6 +150,8 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
 
   input.open(timeSeriesFile.Data());
 
+  // Second loop to register the measured values
+  //--------------------------------------------
   Int_t i = 0;
   while (1) {
     // read in 
@@ -158,6 +176,11 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
 
   // Make a good frame
   plotFrame(xMin,xMax,maxRate);
+  double dX = double(xEnd)-double(xStart);
+  TText *plotText = new TText(xMin-dX*0.14,0.-(maxRate*1.2*0.14),text.Data());
+  plotText->SetTextSize(0.04);
+  plotText->SetTextColor(kBlue);
+  plotText->Draw();
 
   // Prepare our graphs
   TGraph* graph1 = new TGraph(numVals, xVals, y1Vals);
@@ -183,6 +206,7 @@ void plot(long int xStart, long int xEnd, TString pngFileName)
 
   // Add a nice legend to the picture
   TLegend *leg = new TLegend(0.4,0.6,0.89,0.89);
+  //leg->SetTextSize(0.036);
   leg->SetX1(0.15);
   leg->SetX2(0.30);
   leg->SetY1(0.95);
@@ -203,6 +227,6 @@ void plotFrame(Double_t xMin, Double_t xMax, Double_t maxRate)
   TH1D * h = new TH1D("tmp","Time Series of Rates",1,xMin,xMax);
   MitStyle::InitHistWide(h,"","",kBlack);  
   h->SetTitle("; Epoch Time [sec]; SmartCache transfer rate [MB/sec]");
-  h->SetMaximum(maxRate*1.1);
+  h->SetMaximum(maxRate*1.2);
   h->Draw("hist");
 }
