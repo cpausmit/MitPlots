@@ -41,6 +41,9 @@ do
     crab -status    -continue $dir
     crab -getoutput -continue $dir  
   
+
+    convertCrabOutput.sh $dir
+
   done
 
   

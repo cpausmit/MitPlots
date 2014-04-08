@@ -17,8 +17,6 @@ then
   nEvents=${10}
 fi
 
-nEvents=1000
-
 h=`basename $0`
 echo ""
 echo " START runCrabJob.sh"
@@ -111,6 +109,7 @@ ls -lhrt
 
 # take care of the output file
 output=${outputName}_${dataset}_${skim}_${fileset}.root
+chmod a+rwx $output
 
 echo " -- goto runtime_area: $RUNTIME_AREA"
 cd $RUNTIME_AREA

@@ -106,11 +106,11 @@ for fileset in `cat $filesets | cut -d' ' -f1 `
 do
   rFile=${outputName}_${dataset}_${skim}_${fileset}.root
   exists=`grep $rFile /tmp/$USER_exisiting_${dataset}.$$`
-  ##if [ "$exists" == "" ]
-  ##then
+  if [ "$exists" == "" ]
+  then
     echo "$runMacro $catalogDir $book $dataset $skim $fileset $outputName $outputDir $runTypeIndex" \
          >> $workDir/arguments.list
-  ##fi
+  fi
 done
 
 # Cleanup
@@ -119,6 +119,15 @@ rm -rf /tmp/$USER_exisiting_${dataset}.$$
 # Prepare the crab configuration file from our template
 #------------------------------------------------------
 nJobs=`wc -l $workDir/arguments.list | cut -d' ' -f1`
+if [ "$nJobs" == "0" ]
+then
+  echo ""
+  echo " All requested files are already available. EXIT!"  
+  echo "  --> $workDir/"
+  echo ""
+  exit 0
+fi
+
 cat $CMSSW_BASE/src/MitAna/config/crab.cfg \
   | sed "s#XX-NJOBS-XX#$nJobs#g" \
   | sed "s#XX-LOCAL_DIR-XX#$workDir#g" \
@@ -145,6 +154,9 @@ echo "crab -create -cfg crab_${dataset}.cfg -USER.ui_working_dir=crab_$jobId_${d
       crab -create -cfg crab_${dataset}.cfg -USER.ui_working_dir=crab_$jobId_${dataset}
 echo "crab -submit -continue crab_$jobId_${dataset}"
       crab -submit -continue crab_$jobId_${dataset}
+
+# make sure to keep a convenient copy of the arguments list for later unpacking
+cp $workDir/arguments.list crab_$jobId_${dataset}/share/
 
 # cleanup crab config
 rm  crab_${dataset}.cfg
