@@ -1,0 +1,37 @@
+#!/bin/bash -f
+#===================================================================================================
+# Interface to execute a script on the server as globus ticket mapped user.
+#===================================================================================================
+TIER2_USER=$USER
+GATEWAY=t3btch039.mit.edu
+TICKET=$X509_USER_PROXY
+TMP_TICKET=/tmp/tmpx509up_u`id -u`
+
+#echo " Generating script: sc.$$"
+SCRIPT=sc.$$
+echo "#!/bin/bash"  > sc.$$
+echo "$*"          >> sc.$$
+
+# Make sure it is executable
+chmod 755   $SCRIPT
+
+# Copy ticket and script
+scp $TICKET $TIER2_USER@${GATEWAY}:$TMP_TICKET 2> /dev/null
+scp $SCRIPT $TIER2_USER@${GATEWAY}:/tmp/       2> /dev/null
+
+#echo " Client certificate: $X509_USER_PROXY"
+
+# Execute the script
+ssh $TIER2_USER@${GATEWAY} \
+  "export X509_USER_PROXY=$TMP_TICKET; export GLEXEC_CLIENT_CERT=$TMP_TICKET; /usr/sbin/glexec /tmp/$SCRIPT"
+
+# Cleanup remotely
+ssh $TIER2_USER@${GATEWAY} "rm /tmp/$SCRIPT $TMP_TICKET"
+
+# Cleanup locally
+if [ -e sc.$$ ]
+then
+  rm sc.$$
+fi
+
+exit 0

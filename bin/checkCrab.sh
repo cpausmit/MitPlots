@@ -38,10 +38,11 @@ do
     echo " ==== Check crab task: $crabTask ===="
     echo ""
   
+    # iterate crab status
     crab -status    -continue $dir
     crab -getoutput -continue $dir  
-  
 
+    # convert the output files to our usual condor output
     convertCrabOutput.sh $dir
 
   done

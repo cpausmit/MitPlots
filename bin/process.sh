@@ -192,6 +192,10 @@ do
     fi
   # or using CRAB
   else
+    if [ -z "$LCG_LOCATION" ]
+    then
+      source /afs/cern.ch/cms/LCG/LCG-2/UI/cms_ui_env.sh
+    fi
     submitCrab.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST ""
     exit          # for now just one prodcution
   fi
