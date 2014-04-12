@@ -49,7 +49,7 @@ nJobs=`wc -l $DIR/share/arguments.list | cut -d' ' -f1`
 i=1
 
 # make sure the output is writeable
-echo "glexec chmod -R 777 $SOURCE"
+echo " glexec chmod -R 777 $SOURCE"
 glexec chmod -R 777 $SOURCE
 
 # loop through the outputs
@@ -62,15 +62,17 @@ do
   # move the logfiles
   if [ -e "$DIR/res/CMSSW_${i}.stdout" ]
   then
-    echo "mv $DIR/res/CMSSW_${i}.stderr $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.err"
+    echo " moving output/error files: CMSSW_${i}.stderr -> ${FILEBASE}"
+    #echo "mv $DIR/res/CMSSW_${i}.stderr $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.err"
     mv $DIR/res/CMSSW_${i}.stderr $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.err
-    echo "mv $DIR/res/CMSSW_${i}.stdout $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.out"
+    #echo "mv $DIR/res/CMSSW_${i}.stdout $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.out"
     mv $DIR/res/CMSSW_${i}.stdout $PROD_LOGS/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.out
   fi
   # move the root output
   if [ -e "$SOURCE/$BOOK/$DATASET/${FILEBASE}.root" ]
   then
-    echo "mv $SOURCE/$BOOK/$DATASET/${FILEBASE}.root $PROD_HIST/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.root"
+    echo " moving root files: ${FILEBASE}"
+    #echo "mv $SOURCE/$BOOK/$DATASET/${FILEBASE}.root $PROD_HIST/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.root"
     mv $SOURCE/$BOOK/$DATASET/${FILEBASE}.root $PROD_HIST/$PROD_CFG/$BOOK/$DATASET/${FILEBASE}.root
   fi
   # make sure we move on ;-)

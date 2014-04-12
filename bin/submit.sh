@@ -123,7 +123,7 @@ do
   rFile=`echo $rFile/${outputName}_${dataset}_${skim}_${fileset}*.root 2> /dev/null | cut -d' ' -f1`
   rFileSize=`ls -s $workDir/${outputName}_${dataset}_${skim}_${fileset}.root 2> /dev/null | cut -d' ' -f1`
 
-  output="$logsDir/${skim}_${runTypeIndex}_${fileset}.out"
+  output="$logsDir/${outputName}_${dataset}_${skim}_${fileset}.out"
 
   # check if the output already exists and optional whether it is complete
 
@@ -180,10 +180,10 @@ do
   then
     echo " Queued: $rFile"
     # some useful debugging sequences one can switch on
-    #echo "$logsDir/${skim}_${runTypeIndex}_${fileset}.err"
-    #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${skim}_${runTypeIndex}_${fileset}.err
-    grep "running on" $logsDir/${skim}_${runTypeIndex}_${fileset}.out
-    #tail -10 $logsDir/${skim}_${runTypeIndex}_${fileset}.err
+    #echo "$logsDir/${outputName}_${dataset}_${skim}_${fileset}.err"
+    #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
+    grep "running on" $logsDir/${outputName}_${dataset}_${skim}_${fileset}.out
+    #tail -10 $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
     continue
   fi
 
@@ -220,9 +220,9 @@ Arguments               = $runMacro $catalogDir $book $dataset $skim $fileset $o
 Rank                    = Mips
 GetEnv                  = False
 Input                   = /dev/null
-Output                  = $logsDir/${skim}_${runTypeIndex}_${fileset}.out
-Error                   = $logsDir/${skim}_${runTypeIndex}_${fileset}.err
-Log                     = $logsDir/${skim}_${runTypeIndex}_${fileset}.log
+Output                  = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.out
+Error                   = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
+Log                     = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.log
 transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/${CMSSW_VERSION}-src.tgz,$globDir/external.tgz,$globDir/json.tgz,setup.sh,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
 Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
