@@ -54,8 +54,8 @@ do
     mergeHist.py --Dataset=$DATASET --Skim=$SKIM --FilenameHeader=$MIT_PROD_CFG \
 	         --InputPath=$MIT_PROD_HIST/$MIT_PROD_CFG/$BOOK_VERSION \
                  --OutputPath=/tmp/$MIT_PROD_CFG/merged
-    # move output to hadoop scratch (merging into hadoop does not work!)
-    #                                root uses random writes that hadoop does not support)
+    # move output to hadoop scratch (merging into hadoop does not work!
+    #                                root uses random writes which hadoop does not support)
     mv /tmp/$MIT_PROD_CFG/merged/${MIT_PROD_CFG}_${DATASET}_${SKIM}.root \
        /mnt/hscratch/$USER/$MIT_PROD_CFG/merged/${MIT_PROD_CFG}_${DATASET}_${SKIM}.root
   fi
