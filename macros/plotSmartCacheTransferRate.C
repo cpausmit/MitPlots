@@ -17,8 +17,8 @@
 using namespace std;
 using namespace mithep;
 
-void plot(long int xStart = 0, long int xEnd = 0,
-	  TString text = "", TString pngFileName = "transferRate.png");
+void plot(long int xStart = 0, long int xEnd = 0, TString text = "",
+	  TString pngFileName = "transferRate.png");
 void plotFrame(Double_t xMin, Double_t xMax, Double_t maxRate = 0.95);
 
 //--------------------------------------------------------------------------------------------------
