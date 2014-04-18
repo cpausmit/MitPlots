@@ -29,7 +29,7 @@ namespace mithep
       ArrayElement        *At(UInt_t idx);
       const ArrayElement  *At(UInt_t idx)                       const;
       void                 Clear(Option_t */*opt*/="")                { fArray.~TClonesArray(); }
-      void                 Delete();
+      void                 Delete(Option_t *opt="");
       UInt_t               Entries()                            const { return fNumEntries; }
       UInt_t               GetEntries()                         const { return fNumEntries; }
       const char          *GetName()                            const { return fArray.GetName(); }
@@ -214,13 +214,17 @@ inline void mithep::Array<ArrayElement>::Reset()
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement>
-inline void mithep::Array<ArrayElement>::Delete()
+inline void mithep::Array<ArrayElement>::Delete(Option_t *opt)
 {
   // ROOT implementation for clearing the array, deleting all objects inside
 
   fArray.Delete();   //will call destructor for every element
   fNumEntries = 0;
   BaseCollection::Clear();
+
+  if (opt && opt[0] != 0) {
+  TObject::Warning("Delete","Delete option for Array class not implemented, using default implementation.");     
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

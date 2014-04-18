@@ -17,6 +17,8 @@
 #include "MitAna/DataTree/interface/JPTJet.h"
 #include "MitAna/DataTree/interface/PFJet.h"
 #include "MitAna/DataTree/interface/PFMet.h"
+#include "MitAna/DataTree/interface/Tau.h"
+#include "MitAna/DataTree/interface/PFTau.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
@@ -36,7 +38,6 @@
 #pragma link C++ class mithep::SkimMod<mithep::CaloMet>+;
 #pragma link C++ class mithep::SkimMod<mithep::CaloTower>+;
 #pragma link C++ class mithep::SkimMod<mithep::CompositeParticle>+;
-#pragma link C++ class mithep::SkimMod<mithep::CompoundParticle>+;
 #pragma link C++ class mithep::SkimMod<mithep::Conversion>+;
 #pragma link C++ class mithep::SkimMod<mithep::Electron>+;
 #pragma link C++ class mithep::SkimMod<mithep::GenJet>+;
@@ -47,6 +48,8 @@
 #pragma link C++ class mithep::SkimMod<mithep::PFMet>+;
 #pragma link C++ class mithep::SkimMod<mithep::Muon>+;
 #pragma link C++ class mithep::SkimMod<mithep::PFJet>+;
+#pragma link C++ class mithep::SkimMod<mithep::Tau>+;
+#pragma link C++ class mithep::SkimMod<mithep::PFTau>+;
 #pragma link C++ class mithep::SkimMod<mithep::Photon>+;
 #pragma link C++ class mithep::SkimMod<mithep::SuperCluster>+;
 #pragma link C++ class mithep::SkimMod<mithep::Track>+;

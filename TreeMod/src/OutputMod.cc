@@ -576,6 +576,21 @@ void OutputMod::SetupBranches()
 
     fTreeWriter->AddBranch(bname, cname, &fBranches[i], bsize);
   }
+
+  // deal here with additional published objects
+  for (UInt_t i=0; i<fAddList.size(); ++i) {
+    TString objname(fAddList.at(i));
+    TObject *obj = FindPublicObj(objname);
+    if (obj) {
+      fBranches[fNBranchesMax+i] = obj;
+      fTreeWriter->AddBranch(objname, obj->ClassName(), &fBranches[fNBranchesMax+i], fBranchSize);
+      Info("SlaveBegin", "Adding additional branch named '%s' as requested", objname.Data());
+    } else {
+      SendError(kAbortAnalysis, "SlaveBegin", 
+                "Object named '%s' for additional branch is NULL", objname.Data());
+    }
+  }
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -623,20 +638,6 @@ void OutputMod::SlaveBegin()
 
   // create TObject space for TAM
   fBranches = new TObject*[fNBranchesMax + fAddList.size()];       
-
-  // deal here with additional published objects
-  for (UInt_t i=0; i<fAddList.size(); ++i) {
-    TString objname(fAddList.at(i));
-    TObject *obj = FindPublicObj(objname);
-    if (obj) {
-      fBranches[fNBranchesMax+i] = obj;
-      fTreeWriter->AddBranch(objname, &fBranches[fNBranchesMax+i], 64*1024, 0);
-      Info("SlaveBegin", "Adding additional branch named '%s' as requested", objname.Data());
-    } else {
-      SendError(kAbortAnalysis, "SlaveBegin", 
-                "Object named '%s' for additional branch is NULL", objname.Data());
-    }
-  }
 
   // adjust checks for TAM branches
   if (fKeepTamBr)

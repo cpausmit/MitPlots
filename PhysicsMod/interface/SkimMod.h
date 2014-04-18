@@ -3,8 +3,8 @@
 //
 // SkimMod
 //
-// This module simply publishes an ObjArray and copies all marked data objects from the mother
-// branch into this published ObjArray. It assumes that all marking is completed and the references
+// This module simply publishes an Array/ObjArray and copies all marked data objects from the mother
+// branch into this published Array/ObjArray. It assumes that all marking is completed and the references
 // will thus all resolve properly.
 //
 // Authors: C.Paus
@@ -13,6 +13,7 @@
 #ifndef MITANA_PHYSICSMOD_SKIMMOD_H
 #define MITANA_PHYSICSMOD_SKIMMOD_H
 
+#include "MitAna/DataCont/interface/Array.h"
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 
@@ -28,18 +29,25 @@ namespace mithep
 
       const char              *GetBranchName()              const { return fBranchName; }
       void                     SetBranchName(const char *n)       { fBranchName = n;    }
+      void                     SetColFromBranch(bool b)           { fColFromBranch = b; }
+      void                     SetColMarkFilter(bool b)           { fColMarkFilter = b; }
+      void                     SetPublishArray(bool b)            { fPublishArray = b;  }
 
     protected:
       TString                  fBranchName;    //name of collection
-      
+      bool                     fColFromBranch; //in collection is branch?
+      bool                     fColMarkFilter; //in collection filter based on mark?
+      bool                     fPublishArray;  //out collection is Array?
+  
       const Collection<T>     *fCol;           //!pointer to collection (in - branch) 
       ObjArray<T>             *fColSkm;        //!pointer to collection (skm - published object)
+      Array<T>                *fArrSkm;        //!pointer to array (skm - published object)
 
       void                     Process();
       void                     SlaveBegin();
       void                     SlaveTerminate();
 
-      ClassDef(SkimMod, 1) // Skim module
+      ClassDef(SkimMod, 2) // Skim module
   };
 }
 
@@ -48,8 +56,12 @@ template<class T>
 mithep::SkimMod<T>::SkimMod(const char *name, const char *title) : 
   BaseMod    (name,title),
   fBranchName("SkmSetMe"),
+  fColFromBranch(kTRUE),
+  fColMarkFilter(kTRUE),
+  fPublishArray(kFALSE),
   fCol       (0),
-  fColSkm    (0)
+  fColSkm    (0),
+  fArrSkm    (0)
 {
   // Constructor.
 }
@@ -60,6 +72,9 @@ mithep::SkimMod<T>::~SkimMod()
   // Destructor.
   if (fColSkm)
     delete fColSkm;
+
+  if (fArrSkm)
+    delete fArrSkm;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,17 +82,32 @@ template<class T>
 void mithep::SkimMod<T>::Process()
 {
   // make sure the collection is empty before starting
-  fColSkm->Reset();
+  if (!fPublishArray)
+    fColSkm->Reset();
+  else
+    fArrSkm->Reset();
 
-  // load the branch with the properly marked objects
-  LoadBranch(GetBranchName());
+  // load the branch with the proper method
+  if (fColFromBranch)
+    LoadBranch(GetBranchName());
+  else 
+    LoadEventObject(GetBranchName(), fCol);
+
+  // loop on the input collection and apply the filter on mark if required
   const UInt_t entries = fCol->GetEntries();
 
   for (UInt_t i=0; i<entries; ++i) {
-    if (fCol->At(i)->IsMarked()) {
+    if (!fColMarkFilter || fCol->At(i)->IsMarked()) {
       // Make sure the mark is not written to file
       fCol->At(i)->UnmarkMe();
-      fColSkm->Add(fCol->At(i));
+
+      // fill the output Array/ObjArray
+      if (!fPublishArray)
+        fColSkm->Add(fCol->At(i));
+      else {        
+        TObject *obj = fArrSkm->Allocate();
+        new (obj) T(*fCol->At(i));
+      }
       //if (fCol->At(i)->GetUniqueID() == 0)
       //  printf(" SkimMod -- WARNING -- UID ZERO: %d %d %s\n",
       //	 fCol->At(i)->GetUniqueID(),
@@ -92,10 +122,19 @@ template<class T>
 void mithep::SkimMod<T>::SlaveBegin()
 {
   // Request the marked input branch
-  ReqBranch(GetBranchName(), fCol);
+  if (fColFromBranch)
+    ReqBranch(GetBranchName(), fCol);
+  else 
+    ReqEventObject(GetBranchName(), fCol, fColFromBranch);
   // Request the branch to be published
-  fColSkm = new mithep::ObjArray<T>(0,TString("Skm")+GetBranchName());
-  PublishObj(fColSkm);
+  if (!fPublishArray) {
+    fColSkm = new mithep::ObjArray<T>(0,TString("Skm")+GetBranchName());
+    PublishObj(fColSkm);
+  }
+  else {
+    fArrSkm = new mithep::Array<T>(0,TString("Skm")+GetBranchName());    
+    PublishObj(fArrSkm);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
