@@ -118,7 +118,6 @@ then
     export MIT_PROD_SE="t3serv006.mit.edu"
     export MIT_PROD_SDIR='/srm/v2/server?SFN=/mnt/hadoop/cms/store'
     export MIT_PROD_RDIR="user/paus/bambu"
-    #echo " JSON: $MIT_PROD_JSON  Overlap: $MIT_PROD_OVERLAP"
     rm -rf $workDir/setup.sh
     touch  $workDir/setup.sh
     echo "export MIT_PROD_JSON='$MIT_PROD_JSON'"     >> $workDir/setup.sh

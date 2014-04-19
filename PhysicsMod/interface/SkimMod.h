@@ -1,15 +1,12 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SkimMod.h,v 1.1 2012/03/28 12:15:35 paus Exp $
-//
 // SkimMod
 //
 // This module simply publishes an Array/ObjArray and copies all marked data objects from the mother
-// branch into this published Array/ObjArray. It assumes that all marking is completed and the references
-// will thus all resolve properly.
+// branch into this published Array/ObjArray. It assumes that all marking is completed and the
+// references will thus all resolve properly.
 //
-// Authors: C.Paus
+// Authors: L.DiMatteo, C.Paus
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_PHYSICSMOD_SKIMMOD_H
 #define MITANA_PHYSICSMOD_SKIMMOD_H
 
@@ -54,14 +51,14 @@ namespace mithep
 //--------------------------------------------------------------------------------------------------
 template<class T>
 mithep::SkimMod<T>::SkimMod(const char *name, const char *title) : 
-  BaseMod    (name,title),
+  BaseMod(name,title),
   fBranchName("SkmSetMe"),
   fColFromBranch(kTRUE),
   fColMarkFilter(kTRUE),
   fPublishArray(kFALSE),
-  fCol       (0),
-  fColSkm    (0),
-  fArrSkm    (0)
+  fCol(0),
+  fColSkm(0),
+  fArrSkm(0)
 {
   // Constructor.
 }

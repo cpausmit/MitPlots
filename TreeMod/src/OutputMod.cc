@@ -1,15 +1,12 @@
-// $Id: OutputMod.cc,v 1.19 2011/03/11 04:03:54 bendavid Exp $
-
-#include "MitAna/TreeMod/interface/OutputMod.h"
-#include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataUtil/interface/Debug.h"
+#include "MitAna/DataUtil/interface/TreeWriter.h"
+#include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/BranchTable.h"
 #include "MitAna/DataTree/interface/EventHeaderCol.h"
-#include "MitAna/DataTree/interface/Names.h"
-#include "MitAna/DataUtil/interface/TreeWriter.h"
-#include "MitAna/TreeMod/interface/TreeBranchLoader.h"
-
 #include "MitAna/DataTree/interface/PhotonCol.h"
+#include "MitAna/TreeMod/interface/TreeBranchLoader.h"
+#include "MitAna/TreeMod/interface/OutputMod.h"
+#include "MitAna/TreeMod/interface/HLTFwkMod.h"
 
 using namespace mithep;
 using namespace std;
@@ -91,7 +88,7 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
     for (UInt_t i=0; i<fCmdList.size(); ++i) {
       const char *ptr = fCmdList.at(i).c_str();
       fCmdReList.push_back(TRegexp(ptr+5,kTRUE));
-      if (ptr[0]=='k') 
+      if (ptr[0] == 'k') 
         fCmdDeList.push_back(kTRUE);
       else 
         fCmdDeList.push_back(kFALSE);
@@ -100,18 +97,18 @@ void OutputMod::CheckAndAddBranch(const char *bname, const char *cname)
 
   // decide whether given branch name should be kept or dropped
   TString brname(bname);
-  Bool_t  decision       = kFALSE;
-  Bool_t  decision_found = kFALSE;
+  Bool_t  decision      = kFALSE;
+  Bool_t  decisionFound = kFALSE;
 
   for (UInt_t i=0; i<fCmdList.size(); ++i) {
     TRegexp &re(fCmdReList.at(i));
     if (brname.Index(re) == kNPOS)
       continue;
     decision = fCmdDeList.at(i);
-    decision_found = kTRUE;
+    decisionFound = kTRUE;
   }
 
-  if (!decision_found) { // no decision found: still drop branch
+  if (!decisionFound) { // no decision found: still drop branch
     Warning("CheckAndAddBranch", 
             "No decision found for branch '%s' and class '%s'. Branch therefore dropped!",
             bname, cname);
@@ -180,7 +177,8 @@ Bool_t OutputMod::CheckAndResolveBranchDep()
       if (sht.FindObject(n->GetName())) {
         // dependent branch is already accepted
         fBranchTable->Add(new BranchName(brname,n->GetName()));
-      } else {
+      }
+      else {
         if (fUseBrDep) {
           const TObjArray *arr = GetSel()->GetTree()->GetTree()->GetListOfBranches();
           TBranch *br = dynamic_cast<TBranch*>(arr->FindObject(n->GetName()));
@@ -188,18 +186,19 @@ Bool_t OutputMod::CheckAndResolveBranchDep()
             Error("CheckAndResolveBranchDep", 
                   "Could not get branch '%s' to resolve dependency for branch '%s'", 
                n->GetName(), brname.Data());
-          } else {
-            Info("CheckAndResolveBranchDep", 
-                 "Adding branch '%s' to resolve dependency for branch '%s'", 
+          }
+	  else {
+            Info("CheckAndResolveBranchDep",
+		 "Adding branch '%s' to resolve dependency for branch '%s'", 
                  n->GetName(), brname.Data());
             fBrNameList .push_back(string(n->GetName()));
             fBrClassList.push_back(br->GetClassName());
             sht.Add(new TObjString(n->GetName()));
             fBranchTable->Add(new BranchName(brname,n->GetName()));
           } 
-        } else {
-          Warning("CheckAndResolveBranchDep", 
-                  "Unresolved dependency of branch '%s' and '%s' ",
+        }
+	else {
+          Warning("CheckAndResolveBranchDep", "Unresolved dependency of branch '%s' and '%s' ",
                   n->GetName(), brname.Data());
         }
       } 
@@ -251,7 +250,8 @@ void OutputMod::CheckAndResolveTAMDep(Bool_t solve)
       fBrClassList.push_back(string(cname));
       fBranches[GetNBranches()-1] = reinterpret_cast<TObject*>(loader->GetAddress());
 
-    } else {
+    }
+    else {
       Warning("CheckAndResolveTAMDep", 
               "Unresolved dependency for loaded branch '%s' and class '%s'",
               bname,cname);
@@ -290,7 +290,8 @@ void OutputMod::FillAllEventHeader(Bool_t isremoved)
   if (isremoved) {
     fAllEventHeader->SetRunEntry(-1);
     fAllEventHeader->SetSkimmed(eh->Skimmed()+1);
-  } else {
+  }
+  else {
     fAllEventHeader->SetRunEntry(eh->RunEntry());
     fAllEventHeader->SetSkimmed(eh->Skimmed());
   }
@@ -313,14 +314,16 @@ void OutputMod::FillHltInfo()
   Bool_t doCopy = kFALSE;
   if (fHLTTab->size()==0) {
     doCopy = kTRUE;
-  } else {
+  }
+  else {
     // check if existing table contains all necessary paths: 
     // if so keep it, otherwise store the new one  
 
     if ((fHLTTab->size() != trigtable->size()) || 
         (fHLTLab->size() != labels->size())) {
       doCopy = kTRUE;
-    } else {
+    }
+    else {
       // need to check more thoroughly
 
       for (UInt_t i=0; i<trigtable->size(); ++i) {
@@ -570,7 +573,8 @@ void OutputMod::SetupBranches()
     TString cnamestr(cname);
     if ((bsize<128*1024) && (cnamestr.Contains("mithep::MCParticle"))) {
       bsize=128*1024;
-    } else if ((bsize<32*1024) && (cnamestr.Contains("mithep::CaloTower"))) {
+    }
+    else if ((bsize<32*1024) && (cnamestr.Contains("mithep::CaloTower"))) {
       bsize=32*1024;
     }
 
@@ -585,7 +589,8 @@ void OutputMod::SetupBranches()
       fBranches[fNBranchesMax+i] = obj;
       fTreeWriter->AddBranch(objname, obj->ClassName(), &fBranches[fNBranchesMax+i], fBranchSize);
       Info("SlaveBegin", "Adding additional branch named '%s' as requested", objname.Data());
-    } else {
+    }
+    else {
       SendError(kAbortAnalysis, "SlaveBegin", 
                 "Object named '%s' for additional branch is NULL", objname.Data());
     }

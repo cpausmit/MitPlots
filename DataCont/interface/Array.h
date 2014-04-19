@@ -1,11 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Array.h,v 1.13 2009/03/12 18:19:47 loizides Exp $
-//
 // Array
 //
 // Implementation of Collection interface using TClonesArray class. 
 //
-// Authors: C.Loizides
+// Authors: L.DiMatteo, C.Loizides
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATACONT_ARRAY_H
@@ -218,12 +216,13 @@ inline void mithep::Array<ArrayElement>::Delete(Option_t *opt)
 {
   // ROOT implementation for clearing the array, deleting all objects inside
 
-  fArray.Delete();   //will call destructor for every element
+  fArray.Delete();   // will call destructor for every element
   fNumEntries = 0;
   BaseCollection::Clear();
 
   if (opt && opt[0] != 0) {
-  TObject::Warning("Delete","Delete option for Array class not implemented, using default implementation.");     
+    TObject::Warning("Delete",
+		     "Delete option for Array class not implemented, using default implementation.");     
   }
 }
 
