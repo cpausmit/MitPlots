@@ -182,6 +182,9 @@ do
   then
     submit.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST "" \
               $CHECK_COMPLETE
+
+    exit          # for now just one prodcution
+
     # make sure this worked
     if [ "$?" != "0" ]
     then

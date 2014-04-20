@@ -2,6 +2,11 @@
 #---------------------------------------------------------------------------------------------------
 # Execute one job (works interactively and when executed in condor)
 #---------------------------------------------------------------------------------------------------
+# do not ask me why I do this!
+home=$HOME; unset -v `env | sed -e 's/=.*//'`; export HOME=$home; export PATH=/bin:/usr/bin
+source $home/.bashrc
+# worst patch in a long time #
+
 h=`basename $0`
 # start waiting time now
 startTime=$(date +%s)

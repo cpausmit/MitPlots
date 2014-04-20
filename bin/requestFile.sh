@@ -2,16 +2,11 @@
 #---------------------------------------------------------------------------------------------------
 # Request one file to be downloaded using SmartCache queues or through local download with xrdcp. 
 #
+#                                                                           C.Paus (V0 Apr xx, 2014)
 #---------------------------------------------------------------------------------------------------
 h=`basename $0`
 # start waiting time now
 startTime=$(date +%s)
-
-if [ -e "/usr/local/DynamicData/SmartCache/setup.sh" ]
-then
-  source /usr/local/DynamicData/SmartCache/setup.sh
-  export PATH="${PATH}:$SMARTCACHE_DIR/Client"
-fi
 
 FILE="$1"
 
@@ -36,6 +31,14 @@ rc=0
 if [ -e "/usr/local/DynamicData/SmartCache/setup.sh" ] && \
    [ "`echo $FILE | grep ^/mnt/hadoop/cms`" != "" ]
 then
+  # do not ask me why I do this! PYTHON MADNESS
+  home=$HOME; unset -v `env | sed -e 's/=.*//'`; export HOME=$home; export PATH=/bin:/usr/bin
+  source $home/.bashrc
+  # worst patch in a long time #
+
+  source /usr/local/DynamicData/SmartCache/setup.sh
+  export PATH="${PATH}:$SMARTCACHE_DIR/Client"
+
   echo " Making request:"
   echo " -> addDownloadRequest.py --file=$filename --dataset=$dataset --book=$book/$version"
   addDownloadRequest.py --file=$filename --dataset=$dataset --book=$book/$version

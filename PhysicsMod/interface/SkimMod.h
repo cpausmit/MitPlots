@@ -32,9 +32,9 @@ namespace mithep
 
     protected:
       TString                  fBranchName;    //name of collection
-      bool                     fColFromBranch; //in collection is branch?
-      bool                     fColMarkFilter; //in collection filter based on mark?
-      bool                     fPublishArray;  //out collection is Array?
+      bool                     fColFromBranch; //input collection is branch?
+      bool                     fColMarkFilter; //input collection filter based on mark?
+      bool                     fPublishArray;  //output collection is Array?
   
       const Collection<T>     *fCol;           //!pointer to collection (in - branch) 
       ObjArray<T>             *fColSkm;        //!pointer to collection (skm - published object)
