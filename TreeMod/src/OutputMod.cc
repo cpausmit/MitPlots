@@ -27,7 +27,7 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fCheckBrDep    (kTRUE),
   fUseBrDep      (kTRUE),
   fCheckTamBr    (kTRUE),
-  fKeepTamBr     (kFALSE),
+  fKeepTamBr     (kTRUE),
   fTreeWriter    (0),
   fEventHeader   (0),
   fAllEventHeader(0),
@@ -48,8 +48,7 @@ OutputMod::OutputMod(const char *name, const char *title) :
   fFileNum       (-1),
   fLastWrittenEvt(-1),
   fLastSeenEvt   (-1),
-  fCounter       (0),
-  fGoodPhotons   (0)
+  fCounter       (0)
 {
   // Constructor.
 }

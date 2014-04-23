@@ -1,21 +1,18 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArray.h,v 1.8 2009/03/23 14:14:27 loizides Exp $
-//
 // FastArray
 //
-// Implementation of a "fast" array on the heap: Memory is dynamically allocated, 
-// but there is an optimization in the read streamer similar to the TClonesArray
-// where the heap memory of an existing object is reused.  
-// This class is meant to be used as a datamember for objects which are contained 
-// inside a TClonesArray. It is assumed that those classed do not use heap memory 
-// themselves.
-// For various reasons, the array cannot be written in split mode. 
-// Array is meant to store classes as opposed to FastArrayBasic which should be 
-// used to hold basic types.
+// Implementation of a "fast" array on the heap: Memory is dynamically allocated, but there is an
+// optimization in the read streamer similar to the TClonesArray where the heap memory of an
+// existing object is reused.
+//
+// This class is meant to be used as a datamember for objects which are contained inside a
+// TClonesArray. It is assumed that those classed do not use heap memory themselves.
+//
+// For various reasons, the array cannot be written in split mode.  Array is meant to store classes
+// as opposed to FastArrayBasic which should be used to hold basic types.
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATACONT_FASTARRAY_H
 #define MITANA_DATACONT_FASTARRAY_H
 

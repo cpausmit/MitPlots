@@ -46,6 +46,8 @@ namespace mithep
       void                        SetPathName(const char *n)    { fPathName   = n; }
       void                        SetTreeName(const char *n)    { fTreeName   = n; }
       void                        SetUseBrDep(Bool_t b)         { fUseBrDep   = b; }
+      void                        SetCheckTamBr(Bool_t b)       { fCheckTamBr = b; }
+      void                        SetKeepTamBr(Bool_t b)        { fKeepTamBr  = b; }
 
     protected:
       void                        BeginRun();
@@ -109,11 +111,6 @@ namespace mithep
       Long64_t                    fLastWrittenEvt;  //!entry of last written event
       Long64_t                    fLastSeenEvt;     //!entry of last seen event
       Long64_t                    fCounter;         //!count number of events
-
-      // --- hacking it
-      const PhotonCol            *fGoodPhotons;     //! hacking it
-      // ---
-
 
       friend class Selector;
 

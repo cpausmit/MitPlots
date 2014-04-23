@@ -1,13 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: BaseCollection.h,v 1.4 2009/03/06 13:52:54 loizides Exp $
-//
 // BaseCollection
 //
 // Base collection class (virtual) to allow efficient resetting in TAM.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATACONT_BASECOLLECTION_H
 #define MITANA_DATACONT_BASECOLLECTION_H
  

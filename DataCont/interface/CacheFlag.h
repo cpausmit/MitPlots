@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CacheFlag.h,v 1.1 2009/03/08 12:08:31 loizides Exp $
-//
 // CacheFlag
 //
 // Container for a transient Bool_t which is set by the reading streamer to kFALSE.  This meant to
@@ -8,7 +6,6 @@
 //
 // Authors: J.Bendavid
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATACONT_CACHEFLAG_H
 #define MITANA_DATACONT_CACHEFLAG_H
 
@@ -26,7 +23,7 @@ namespace mithep
       void               SetValid(Bool_t v = kTRUE) { fIsValid = v; }
       
     protected:
-      Bool_t             fIsValid; //!flag whether cache is valid
+      Bool_t             fIsValid;                   //!flag whether cache is valid
 
     ClassDef(CacheFlag, 1) // Implementation of a transient Bool_t container
   };

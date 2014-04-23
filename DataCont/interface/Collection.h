@@ -1,13 +1,10 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Collection.h,v 1.7 2009/03/02 12:34:00 loizides Exp $
-//
 // Collection
 //
 // Unification of read access to a collection of objects (ArrayElements).
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATACONT_COLLECTION_H
 #define MITANA_DATACONT_COLLECTION_H
  

@@ -1,15 +1,12 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataObject.h,v 1.23 2012/03/28 12:15:34 paus Exp $
-//
 // DataObject
 //
-// This is the common base class for all objects in the tree that do require the TObject
-// bits to be written out (as opposed to DataBase). Typically these are all objects that
-// can be persistently linked.
+// This is the common base class for all objects in the tree that do require the TObject bits to be
+// written out (as opposed to DataBase). Typically these are all objects that can be persistently
+// linked.
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATATREE_DATAOBJECT_H
 #define MITANA_DATATREE_DATAOBJECT_H
  
@@ -39,9 +36,12 @@ namespace mithep
       const Col           *ParentCol()      const;
 
       // Object marking
-      Bool_t               IsMarked()       const { return TestBit(16); }
+      Bool_t               IsMarked()       const { return fMarker == 1; }
       virtual void         Mark(UInt_t i=1) const;
-      void                 UnmarkMe()       const { const_cast<DataObject*>(this)->SetBit(16,0); }
+      void                 UnmarkMe()       const { fMarker = 0; }
+      //Bool_t               IsMarked()       const { return TestBit(17); }
+      //virtual void         Mark(UInt_t i=1) const;
+      //void                 UnmarkMe()       const { const_cast<DataObject*>(this)->SetBit(17,0); }
 
     protected:
       void                 ResetCacheBit()        { SetBit(23,0); }

@@ -1,15 +1,11 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjArray.h,v 1.16 2009/03/23 22:15:09 loizides Exp $
-//
 // ObjArray
 //
-// Implementation of Collection interface using TObjArray class. By default, the
-// array does not own its elements, and hence will not delete them. Use SetOwner(1)
-// to turn on ownership.
+// Implementation of Collection interface using TObjArray class. By default, the array does not own
+// its elements, and hence will not delete them. Use SetOwner(1) to turn on ownership.
 //
 // Authors: C.Loizides
 //--------------------------------------------------------------------------------------------------
-
 #ifndef MITANA_DATACONT_OBJARRAY_H
 #define MITANA_DATACONT_OBJARRAY_H
 

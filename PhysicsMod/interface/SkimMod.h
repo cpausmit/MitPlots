@@ -92,11 +92,16 @@ void mithep::SkimMod<T>::Process()
 
   // loop on the input collection and apply the filter on mark if required
   const UInt_t entries = fCol->GetEntries();
-
   for (UInt_t i=0; i<entries; ++i) {
+
+    // if marked or all objects requested
     if (!fColMarkFilter || fCol->At(i)->IsMarked()) {
-      // Make sure the mark is not written to file
-      fCol->At(i)->UnmarkMe();
+
+      // Make sure the mark is removed to avoid having the future objects already marked
+      // - collections that are not skimmed will have dangeling marks but that us fine
+      //   as marking is exclusively used by the skimmer
+      if (fColMarkFilter)
+	fCol->At(i)->UnmarkMe();
 
       // fill the output Array/ObjArray
       if (!fPublishArray)
@@ -105,11 +110,6 @@ void mithep::SkimMod<T>::Process()
         TObject *obj = fArrSkm->Allocate();
         new (obj) T(*fCol->At(i));
       }
-      //if (fCol->At(i)->GetUniqueID() == 0)
-      //  printf(" SkimMod -- WARNING -- UID ZERO: %d %d %s\n",
-      //	 fCol->At(i)->GetUniqueID(),
-      //	 fCol->At(i)->GetUniqueID()&0xfffff,
-      //	 fCol->GetName());
     }
   }
 }
@@ -123,6 +123,7 @@ void mithep::SkimMod<T>::SlaveBegin()
     ReqBranch(GetBranchName(), fCol);
   else 
     ReqEventObject(GetBranchName(), fCol, fColFromBranch);
+
   // Request the branch to be published
   if (!fPublishArray) {
     fColSkm = new mithep::ObjArray<T>(0,TString("Skm")+GetBranchName());
