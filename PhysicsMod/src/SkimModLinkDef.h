@@ -15,6 +15,7 @@
 #include "MitAna/DataTree/interface/MCParticle.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/JPTJet.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 #include "MitAna/DataTree/interface/PFJet.h"
 #include "MitAna/DataTree/interface/PFMet.h"
 #include "MitAna/DataTree/interface/Tau.h"
@@ -47,6 +48,7 @@
 #pragma link C++ class mithep::SkimMod<mithep::CaloMet>+;
 #pragma link C++ class mithep::SkimMod<mithep::PFMet>+;
 #pragma link C++ class mithep::SkimMod<mithep::Muon>+;
+#pragma link C++ class mithep::SkimMod<mithep::PFCandidate>+;
 #pragma link C++ class mithep::SkimMod<mithep::PFJet>+;
 #pragma link C++ class mithep::SkimMod<mithep::Tau>+;
 #pragma link C++ class mithep::SkimMod<mithep::PFTau>+;
