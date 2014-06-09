@@ -66,16 +66,6 @@ void plotSmartCacheTransferRate()
 //--------------------------------------------------------------------------------------------------
 void plot(long int xStart, long int xEnd, TString text, TString pngFileName)
 {
-  // This would be the direct access but TMySQL it is not installed with the CMS root version
-
-  //TSQLServer *db = TSQLServer::Connect("mysql://t3btch039.mit.edu/SmartCache","ssluser","MitSmartCache!");
-  //TSQLResult *result = db->Query("select * from CompletedDownloads");
-  //
-  //if (result)
-  //  printf(" Query was successful, continue!\n");
-  //else
-  //  printf(" Query failed, exit!\n");
-
   // Make sure we have the right styles
   MitStyle::Init();
   MitStyle::SetStyleWide();

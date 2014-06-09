@@ -37,12 +37,13 @@ void overlayFrame(TString text);
 //--------------------------------------------------------------------------------------------------
 void plotIntelRoccs()
 {
-  TString text     = "since July/2013";
-  TString fileName = "IntelRoccsAll";
+  //TString text     = "since July/2013";
+  //TString fileName = "IntelRoccsAll";
   //TString text     = "before 90 days";
   //TString fileName = "IntelRoccsOver90Days";
-  //TString text     = "last 90 days";
+  TString text     = "last 90 days";
   //TString fileName = "IntelRoccsLess90Days";
+  TString fileName = "IntelRoccsLast3Months";
 
   TString pngFileName = fileName + TString(".png");
   TString inputFile = fileName + TString(".txt");
