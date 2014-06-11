@@ -277,7 +277,7 @@ void plot(long int xStart, long int xStop, TString text, TString save)
   h1->GetXaxis()->SetTitle("Lag time [sec]");
   h1->GetYaxis()->SetTitle("Number of requests");
   h1->Draw();
-  overlayFrame(TString("t3 cluster"),1);
+  //overlayFrame(TString("t3 cluster"),1);
   overlayFrame(text,0);
   c1->SaveAs(sc1.Data());
 
