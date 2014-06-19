@@ -32,8 +32,8 @@ if [ -e "/usr/local/DynamicData/SmartCache/setup.sh" ] && \
    [ "`echo $FILE | grep ^/mnt/hadoop/cms`" != "" ]
 then
   # do not ask me why I do this! PYTHON MADNESS
-  home=$HOME; unset -v `env | sed -e 's/=.*//'`; export HOME=$home; export PATH=/bin:/usr/bin
-  source $home/.bashrc
+  user=$USER; unset -v `env | sed -e 's/=.*//'`; export USER=$user; export PATH=/bin:/usr/bin
+  source /home/$user/.bashrc
   # worst patch in a long time #
 
   source /usr/local/DynamicData/SmartCache/setup.sh
