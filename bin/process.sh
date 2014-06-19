@@ -183,15 +183,8 @@ do
     submit.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST "" \
               $CHECK_COMPLETE
 
-    exit          # for now just one prodcution
+    ## exit          # for now just one prodcution
 
-    # make sure this worked
-    if [ "$?" != "0" ]
-    then
-      echo "  ERROR -- submit failed. EXIT!"
-      rm /tmp/process.$$
-      exit 1
-    fi
   # or using CRAB
   else
     if [ -z "$LCG_LOCATION" ]
@@ -199,9 +192,16 @@ do
       source /afs/cern.ch/cms/LCG/LCG-2/UI/cms_ui_env.sh
     fi
     submitCrab.sh $MIT_PROD_MACRO $MIT_CATALOG $BOOK $DATASET $SKIM $MIT_PROD_CFG $MIT_PROD_HIST ""
-    exit          # for now just one prodcution
+    ## exit          # for now just one prodcution
   fi
 
+  # make sure the submit worked
+  if [ "$?" != "0" ]
+  then
+    echo "  ERROR -- submit failed. EXIT!"
+    rm /tmp/process.$$
+    exit 1
+  fi
 
 done
 
