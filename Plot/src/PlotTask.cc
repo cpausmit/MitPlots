@@ -156,7 +156,7 @@ void PlotTask::DrawHistograms()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts)
+void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts, const char* samp)
 {
   // Interface to producing all type of plots
 
@@ -188,7 +188,9 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
 
   // decide which histograms to make
   if      (pType == Stacked) {        // integrating the stackd contribution is for another day
+    DrawFrame();       // make a proper frame
     PlotStack(obj);
+    OverlayStackFrame();    // overlay a frame to put the text and boxes on
   }
   else {
     if (pType == Contributions)
@@ -202,6 +204,8 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
     OverlayFrame();    // overlay a frame to put the text and boxes on
   }
 
+  TString sample = samp;
+  if (sample.Sizeof()-1) SaveHistos(obj, samp, draw);
   canvas->SaveAs(fPngFileName.Data());
 
   // leave canvas up for display - this is of course a memory leak
@@ -232,6 +236,8 @@ void PlotTask::CollectNormalized(const char* hist)
   	hTmp->Reset();
       }
       first = kFALSE;
+      hTmp->SetName(*s->Legend());
+      hTmp->SetTitle(*s->Legend());
     }
     hTmp->Add(fHists[i]);
   }
@@ -270,6 +276,8 @@ void PlotTask::CollectContributions(const char* hist)
 	hTmp->Reset();
       }
       first = kFALSE;
+      hTmp->SetName(*s->Legend());
+      hTmp->SetTitle(*s->Legend());
     }
     hTmp->Add(fHists[i]);
   }
@@ -481,7 +489,7 @@ void PlotTask::ScaleHistograms(const char* hist)
       }
       
       TString histname("htempmc_");
-      histname += i;
+      histname += *s->Name();
       h = new TH1D(histname,histname,fNBins,fHistXMinimum,fHistXMaximum);
       TString drawexp = fDrawExp + TString(">>") + histname;
       htree->Draw(drawexp,fSelExp);
@@ -758,8 +766,9 @@ void PlotTask::OverlayFrame() const
   int iLeg  = 0;
   // loop through the sampels
   for (UInt_t i=0; i<fTask->NSamples(); i++) {
+  //for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
-    const Sample *s = fTask->GetSample(i);
+    const Sample *s = fTask->GetSample(i); //!!!
     // calculate corners for the text
     double xText = xCorner+xIndent, yText = yCorner-float((iLeg+iDat)+0.5)*yDelLine;
     // say what goes where
@@ -1018,3 +1027,36 @@ float PlotTask::PuWeight(Int_t npu)
   // 
   // if (hTmp)
   //   delete hTmp;
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::SaveHistos(const char* obj, const char* out, const char* obs)
+{
+
+  //Open new rootfile
+  TString outname = out;
+  TString obsname = obs;
+  TFile* tempout = new TFile(outname+"_"+obsname+".root", "RECREATE");
+  tempout->cd();
+
+  //Write data histogram to rootfile
+  if (fTask->NDataSamples())
+    {
+      fDataHist->Write();
+      printf("Wrote data histogram \n");
+    }
+  
+  //Read and write MC histograms
+  if (!fHistsToPlot.size()) CollectContributions(obj);
+  for (unsigned int i = 0; i < fHistsToPlot.size(); i++)
+    {
+      fHistsToPlot[i]->Write();
+      //printf("Wrote MC histo %i \n", i);
+    }
+  printf("Wrote all MC histograms \n");
+  
+  delete tempout;
+  return;
+}
+  
+
+
