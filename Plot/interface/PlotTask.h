@@ -53,7 +53,9 @@ namespace mithep
     
     // Overlay the contribution in a single histogram (no adding/stacking)
     void                 Plot                (PlotType pType, const char* obj, const char* draw,
-					      const char* cuts);
+					      const char* cuts, const char* samp); 
+                                              //last argument to specify sample name for saving histograms to rootfile
+                                              //if you don't want to save, put "" for this argument
 
   private:
     void                 CollectNormalized   (const char* hist);
@@ -64,6 +66,9 @@ namespace mithep
     
     // Basic function to perfrom all reading and scaling operations
     void                 ScaleHistograms     (const char* hist);
+
+    //Save temporary histograms from Plot to Rootfile
+    void                 SaveHistos          (const char* obj, const char* out, const char* obs);
 
     // Helper to set scale for a histogram
     void                 FindHistMaximum     ();
