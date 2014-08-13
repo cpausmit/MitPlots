@@ -11,17 +11,30 @@ export EXTERNAL=/home/cmsprod/cms/external
 # now we are ready to plot
 cd $HOME/cms/root/
 
+echo ""
+echo " = = = =  T R A N S F E R   R A T E S  = = = ="
+echo ""
 root -l -b -q \
   $HOME/cms/cmssw/033/CMSSW_5_3_14_patch2/src/MitPlots/macros/plotSmartCacheTransferRate.C+
+echo ""
+echo " = = = =  F A I L U R E S  = = = ="
+echo ""
 root -l -b -q \
   $HOME/cms/cmssw/033/CMSSW_5_3_14_patch2/src/MitPlots/macros/plotSmartCacheFailures.C+
+echo ""
+echo " = = = =  R E Q U E S T S  = = = ="
+echo ""
 root -l -b -q \
   $HOME/cms/cmssw/033/CMSSW_5_3_14_patch2/src/MitPlots/macros/plotSmartCacheRequests.C+
 
-#ls -l 
+# generate web page for the single machine performance
+
+## missing for now
 
 # move them into the foreseen place
-echo " Moving plots to the web page."
+echo ""
+echo " = = = = M o v i n g   p l o t s   t o    t h e   w e b   p a g e  = = = ="
+echo ""
 mkdir -p $HOME/public_html/plots/
 
 mv transferRateLast*.png $HOME/public_html/plots/

@@ -137,6 +137,7 @@ void plot(long int xStart, long int xStop, TString text, TString save)
 
     tLag  = tReceived - tRequest;
     tDown = tComplete - tReceived;
+
     rate  = size/double(tDown);
 
     if (tDown <= 0) {
