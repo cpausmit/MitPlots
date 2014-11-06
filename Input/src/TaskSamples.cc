@@ -129,7 +129,7 @@ void TaskSamples::ReadFile(const char* dir)
 	     vers,dset,legend,xsec,scale,overlap,json,skim);
     
     TString histFile = fName + TString("_") + TString(dset) + TString("_")
-      +                        TString(skim) + TString(".root");
+      +                        TString(skim) + TString("_flatntuple.root");
 
     Sample *tmpSample = 0;
     if (xsec < 0)                                                        // found 'the data sample'
