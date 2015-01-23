@@ -42,7 +42,7 @@ namespace mithep
       void                        SetDefCompression(UInt_t l)   { fCompLevel  = l; }
       void                        SetDefSplitLevel(UInt_t l)    { fSplitLevel = l; }
       void                        SetFileName(const char *n)    { fPrefix     = n; }
-      void                        SetMaxFileSize(UInt_t m)      { fMaxSize    = m; }
+      void                        SetMaxFileSize(Long64_t m)    { fMaxSize    = m; }
       void                        SetPathName(const char *n)    { fPathName   = n; }
       void                        SetTreeName(const char *n)    { fTreeName   = n; }
       void                        SetUseBrDep(Bool_t b)         { fUseBrDep   = b; }
@@ -61,7 +61,7 @@ namespace mithep
       TString                     fTreeName;       //tree name
       TString                     fPrefix;         //file prefix for filename
       TString                     fPathName;       //path name to be used
-      UInt_t                      fMaxSize;        //maximum file size [MB]
+      Long64_t                    fMaxSize;        //maximum file size [MB]
       UInt_t                      fCompLevel;      //compression levels
       UInt_t                      fSplitLevel;     //default split levels
       UInt_t                      fBranchSize;     //default branch sizes [Byte]
