@@ -102,7 +102,7 @@ namespace mithep
       void                 DoBranchRef(const char *tn);
       Bool_t               EndEvent(Bool_t doreset=kFALSE);
       const char          *GetBaseURL()                 const
-                             { return fBaseURL.IsNull()?".":fBaseURL; }  
+                             { return fBaseURL.IsNull()?".":fBaseURL.Data(); }  
       Int_t                GetCompressLevel()           const { return fCompressLevel;  }
       Int_t                GetDefaultBrSize()           const { return fDefBrSize;      }
       Int_t                GetDefaultSL()               const { return fDefSL;          }
