@@ -17,7 +17,8 @@ namespace mithep
   {
     public:
       CacheFlag() : fIsValid(kFALSE) {}
-
+      virtual ~CacheFlag() {}
+    
       void               ClearCache()               { fIsValid = kFALSE; }
       Bool_t             IsValid()            const { return fIsValid; }
       void               SetValid(Bool_t v = kTRUE) { fIsValid = v; }
