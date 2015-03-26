@@ -21,7 +21,7 @@ namespace mithep
   {
   public:
     Cacher(const TList *list);
-    virtual ~Cacher();
+    virtual ~Cacher() {}
     
     Bool_t               InitialCaching();
     Bool_t               NextCaching();

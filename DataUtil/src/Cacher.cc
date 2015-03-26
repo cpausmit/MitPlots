@@ -23,10 +23,6 @@ Cacher::Cacher(const TList *list) :
     fCacheStatus.push_back(status);
   }
 }
-Cacher::~Cacher()
-{
-  // Destructor
-}
 
 //--------------------------------------------------------------------------------------------------
 Bool_t Cacher::InitialCaching()
