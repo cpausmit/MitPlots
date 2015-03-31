@@ -24,7 +24,7 @@
 #pragma read                                               \
      sourceClass="mithep::DataObject"                      \
      version="[-2]"                                        \
-     source="dummysource"                                  \
+     source=""                                  \
      targetClass="mithep::DataObject"                      \
      target="fMarker"                                      \
   code="{ fMarker = 0; }"   \

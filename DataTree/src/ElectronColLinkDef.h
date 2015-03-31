@@ -25,7 +25,7 @@
 #pragma read                                              \
     sourceClass="mithep::Electron"                        \
     version="[-2]"                                        \
-    source="dummysource"                                  \
+    source=""                                  \
     targetClass="mithep::Electron"                        \
     target="fCharge"                                      \
     code="{ fCharge = -99; }"                             \
