@@ -1,6 +1,5 @@
 <use   name="MitAna/TreeMod"/>
 <use   name="boost"/>
-<use   root=""/>
 <export>
   <lib   name="1"/>
 </export>
