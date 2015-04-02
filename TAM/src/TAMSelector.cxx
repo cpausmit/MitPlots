@@ -1,3 +1,7 @@
+//
+// $Id: TAMSelector.cxx 5584 2009-07-16 21:00:34Z loizides $
+//
+
 #include "MitAna/TAM/interface/TAMSelector.h"
 
 
@@ -103,6 +107,7 @@ TAMSelector::BranchProxy::BranchProxy(TAMSelector *sel, Bool_t e) :
      Enable(); 
 }
 
+
 //______________________________________________________________________________
 TAMSelector::BranchProxy::~BranchProxy() 
 { 
@@ -113,6 +118,7 @@ TAMSelector::BranchProxy::~BranchProxy()
    fFake = 0; 
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::BranchProxy::Disable()
 {
@@ -121,6 +127,7 @@ void TAMSelector::BranchProxy::Disable()
    if (fOrig)
       TRefTable::SetRefTable(fOrig);
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::BranchProxy::Enable()
@@ -134,6 +141,7 @@ void TAMSelector::BranchProxy::Enable()
    }
 }
 
+
 //______________________________________________________________________________
 TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
 {
@@ -141,8 +149,6 @@ TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
    // use TAM. Branch loading via TAM is handled through the BranchProxy class.
    // Optimized loading is used if the object table cleaning has been 
    // enabled in TAM.
-
-  //  printf("enter TAMSelector::BranchProxy::GetObjectWithID: %d\n",uid);
   
    if (fSel->GetObjTabClean()) {
       // can trust that object table was cleaned
@@ -154,24 +160,17 @@ TObject *TAMSelector::BranchProxy::GetObjectWithID(UInt_t uid, TProcessID *pid)
    TBranchRef *br = fSel->GetTree()->GetTree()->GetBranchRef();
    if (!br) 
       return pid->GetObjectWithID(uid);
-
-   //printf(" br table loaded %p\n",(void*)br);
-   
+  
    TRefTable *table = br->GetRefTable();
    if (!table) 
       return pid->GetObjectWithID(uid);
-
-   //printf(" ref table loaded %p\n",(void*)table);
-
    table->SetUID(uid,pid);
 
-
-   //printf("loading\n");
    Load(uid,pid,br,table);
-   //printf(" loaded %p\n",(void*)pid->GetObjectWithID(uid));
 
    return pid->GetObjectWithID(uid);
 }
+
 
 //______________________________________________________________________________
 Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid, 
@@ -180,11 +179,16 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    // Find and load branch corresponding to given uid/pid.
 
    // read entry for this event
-   Long64_t readentry  = fSel->fCurEvt;
-   Long64_t chainentry = readentry + fSel->GetTree()->GetChainOffset();
+   Long64_t readentry = br->GetReadEntry();
+   Long64_t tamentry  = fSel->fCurEvt;
+   if (readentry!=tamentry) {
+      Fatal("Load", 
+            "Entries from BranchRef (%lld) differs from TAM current entry (%lld)",
+            readentry, tamentry);
+   }
 
    // read branchref if needed
-   if (fCurEntry != chainentry) {
+   if (fCurEntry != readentry) {
       Int_t bytes = br->GetEntry(readentry);
       if (bytes<0) {
          Fatal("Load", "Could not get entry %lld from %s branch",
@@ -200,7 +204,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
       if (friends) {
 
          // reset branch read flags if new entry to be read
-         if (fCurEntry != chainentry)
+         if (fCurEntry != readentry)
             memset(fBrRead, 0, 1024*sizeof(Bool_t));
 
          TObjLink *lnk = friends->FirstLink();
@@ -214,9 +218,9 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
                   bref->GetEntry(readentry);
                   fBrRead[nfriend] = kTRUE;
                }
-               TBranch *branch = dynamic_cast<TBranch*>
+               TBranch *bb = dynamic_cast<TBranch*>
                   (bref->GetRefTable()->GetParent(uid, pid));
-               if (branch) 
+               if (bb) 
                  break; // found branch
             }
             lnk = lnk->Next();
@@ -227,7 +231,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    }
 
    // cache last branch read attempt
-   fCurEntry = chainentry;
+   fCurEntry = readentry;
 
    if (!branch) {
       return kFALSE;
@@ -257,6 +261,7 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    return kTRUE;
 }
 
+
 //______________________________________________________________________________
 Bool_t TAMSelector::BranchProxy::Notify()
 {
@@ -284,8 +289,6 @@ Bool_t TAMSelector::BranchProxy::Notify()
 //______________________________________________________________________________
 TAMSelector::TAMSelector() :
    fTree(0),
-   fTreeCache(0),
-   fCacheSize(0),
    fBranchTable(TCollection::kInitHashTableCapacity, 1),
    fEventObjs(TCollection::kInitHashTableCapacity, 1),
    fAModules(new TAModule("TAMTopModule",
@@ -312,6 +315,7 @@ TAMSelector::TAMSelector() :
    fLoaders.SetName("TAM_LOADERS");
 }
 
+
 //______________________________________________________________________________
 TAMSelector::~TAMSelector() 
 {
@@ -323,6 +327,7 @@ TAMSelector::~TAMSelector()
    delete fAModules;
    delete fOwnInput;
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::AbortAnalysis() 
@@ -338,6 +343,7 @@ void TAMSelector::AbortAnalysis()
    fAnalysisAborted = kTRUE;
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::AbortEvent() 
 {
@@ -347,6 +353,7 @@ void TAMSelector::AbortEvent()
    fEventAborted = kTRUE;
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::AbortModule(TAModule *mod) 
 {
@@ -355,6 +362,7 @@ void TAMSelector::AbortModule(TAModule *mod)
    mod->DeactivateAll();
    fModAborted = kTRUE;
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::AddInput(TAModule *mod) 
@@ -381,6 +389,7 @@ Bool_t TAMSelector::AddObjThisEvt(TObject *obj)
       return kFALSE;
    }
 }
+
 
 //______________________________________________________________________________
 Bool_t TAMSelector::AddObjThisEvt(TObject *obj, const char *name) 
@@ -418,6 +427,7 @@ Bool_t TAMSelector::AddObjThisEvt(TObject *obj, const char *name)
    return kFALSE;
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::AddNewOutputLists() 
 {
@@ -427,6 +437,7 @@ void TAMSelector::AddNewOutputLists()
    
    fAModules->NewOutputList(GetOutputList());
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::Begin(TTree */*tree*/) 
@@ -467,6 +478,7 @@ void TAMSelector::Begin(TTree */*tree*/)
    fInput->AddLast(&fLoaders);
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
 {
@@ -490,6 +502,7 @@ void TAMSelector::CleanObjTable(TProcessID *pid, UInt_t lastKeptUID) const
     Error("TAMSelector::CleanObjTable",
           "Out of Bounds trying to clean object table from Process ID.");
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::ClearAllLoaders()
@@ -515,6 +528,7 @@ void TAMSelector::ClearAllLoaders()
    } 	 
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::CopyModsFromInput() 
 {
@@ -533,6 +547,7 @@ void TAMSelector::CopyModsFromInput()
       obj = tobj;
    }
 }
+
 
 //______________________________________________________________________________
 Bool_t TAMSelector::FindLoader(TAMBranchInfo *brInfo)
@@ -557,6 +572,7 @@ Bool_t TAMSelector::FindLoader(TAMBranchInfo *brInfo)
    return kFALSE;
 }
 
+
 //______________________________________________________________________________
 TAMOutput *TAMSelector::FindModOutput(const TAModule *mod) 
 {
@@ -571,6 +587,7 @@ TAMOutput *TAMSelector::FindModOutput(const TAModule *mod)
    return 0;
 }
 
+
 //______________________________________________________________________________
 TObject *TAMSelector::FindObjThisEvt(const Char_t *name) const 
 {
@@ -583,6 +600,7 @@ TObject *TAMSelector::FindObjThisEvt(const Char_t *name) const
    }
    return 0;
 }
+
 
 //______________________________________________________________________________
 TObject *TAMSelector::FindPublicObj(const Char_t *name) const 
@@ -609,6 +627,7 @@ TObject *TAMSelector::FindPublicObj(const Char_t *name) const
    return 0;
 }
 
+
 //______________________________________________________________________________
 const TFile *TAMSelector::GetCurrentFile() const
 {
@@ -616,6 +635,7 @@ const TFile *TAMSelector::GetCurrentFile() const
    
   return (fTree) ? (const_cast<const TFile *>(fTree->GetCurrentFile())) : 0;
 }
+
 
 //______________________________________________________________________________
 TFile *TAMSelector::GetCurrentFile()
@@ -625,6 +645,7 @@ TFile *TAMSelector::GetCurrentFile()
    return (fTree) ? (fTree->GetCurrentFile()) : 0;
 }
 
+
 //______________________________________________________________________________
 const TAMOutput *TAMSelector::GetModOutput() const
 {
@@ -633,6 +654,7 @@ const TAMOutput *TAMSelector::GetModOutput() const
    return fAModules->GetModOutput();
 }
 
+
 //______________________________________________________________________________
 TAMOutput *TAMSelector::GetModOutput() 
 {
@@ -640,6 +662,7 @@ TAMOutput *TAMSelector::GetModOutput()
 
    return fAModules->GetModOutput();
 }
+
 
 //______________________________________________________________________________
 TObject *TAMSelector::GetObjectWithID(UInt_t uid, TProcessID *pid)
@@ -652,12 +675,14 @@ TObject *TAMSelector::GetObjectWithID(UInt_t uid, TProcessID *pid)
   return fProxy.GetObjectWithID(uid,pid);
 }
 
-//__________________________________________________________________________________________________
-void TAMSelector::Init(TTree *tree)
-{
-   // Set the tree for this selector. The Init() function is called when the selector needs to
-   // initialize a new tree (or chain).  It will be called many times when running with PROOF. The
-   // list of requested branches must have been constructed already.
+
+//______________________________________________________________________________
+void TAMSelector::Init(TTree *tree) {
+   // Set the tree for this selector. The Init() function is called 
+   // when the selector needs to initialize a new tree (or chain). 
+   // It will be called many times when running with PROOF. The 
+   // list of requested branches must been constructed 
+   // already.
 
    if (tree==0) {
       Error("Init", "Specified tree is null.");
@@ -668,10 +693,11 @@ void TAMSelector::Init(TTree *tree)
 
    TIter nextBranch(fBranchTable.MakeIterator());
    while ( TAMBranchInfo *brInfo = 
-	   dynamic_cast<TAMBranchInfo*>(nextBranch()) ) {
-     brInfo->Init();
+             dynamic_cast<TAMBranchInfo*>(nextBranch()) ) {
+      brInfo->Init();
    }
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::LoadBranch(const Char_t *bname)
@@ -680,7 +706,7 @@ void TAMSelector::LoadBranch(const Char_t *bname)
   // TAMBranchInfo and then use it in the call of the protected LoadBranch 
   // function.
 
-   if (fCurEvt==-1) {
+   if(fCurEvt==-1) {
       Error("LoadBranch",
             "Can not load branch with name [%s] at this point (fCurEvt==-1).",
             bname);
@@ -698,6 +724,18 @@ void TAMSelector::LoadBranch(const Char_t *bname)
    }
    
    LoadBranch(brInfo); 
+}
+
+
+//______________________________________________________________________________
+void	TAMSelector::ListObjsThisEvt(Option_t* option /*= ""*/) const
+{
+   // List all objects in the event object table.
+   // Wildcarding supported, eg option="xxx*" lists only objects
+   // with names xxx*.
+   
+   Printf("Event object list for selector [%s] ...", GetName());
+   fEventObjs.ls(option);
 }
 
 //______________________________________________________________________________
@@ -732,14 +770,8 @@ void TAMSelector::LoadBranch(TAMBranchInfo* brInfo)
       //fObjCounter=TProcessID::GetObjectCount();
    }
 
-   // load the entry (using the cache)
-   if (fTreeCache)
-     GetCurrentFile()->SetCacheRead(fTreeCache);
+   // load the entry
    Int_t ret = brInfo->GetEntry(fCurEvt);
-   if (fTreeCache)
-     GetCurrentFile()->SetCacheRead(0);
-
-
    if(ret<0) {
       Error("LoadBranch",
             "Error in file [%s] when accessing branch with name [%s] in "
@@ -765,12 +797,8 @@ Bool_t TAMSelector::Notify()
    // can be either for a new TTree in a TChain or when a new TTree
    // is started when using PROOF.
 
-  Info("Notify",
-       "Opening file %s.",(GetCurrentFile()!=0) ? (GetCurrentFile()->GetName()) : "null");
-
    // we are just in Notify(), therefore we ignore this call
-   if (fActNotify)
-     return kTRUE;
+   if(fActNotify) return kTRUE;
    fActNotify = kTRUE; //"lock" to protect for recursive calls
 
 #if ROOT_VERSION_CODE >= ROOT_VERSION(5,0,0) && \
@@ -803,24 +831,6 @@ Bool_t TAMSelector::Notify()
    // status (return value) of notify
    Bool_t notifyStat = kTRUE;
 
-   // Set up the caching process
-   if (fCacheSize > 0) {
-     fTreeCache->SetLearnEntries(1);
-     fTree->SetCacheSize(128*1024*1024);
-     printf(" CurrentFile Name: %s\n",fTree->GetCurrentFile()->GetName());
-     if (fTreeCache)
-       delete fTreeCache;
-     fTreeCache = dynamic_cast<TTreeCache*>(fTree->GetCurrentFile()->GetCacheRead());
-     fTree->GetCurrentFile()->SetCacheRead(0);
-   
-     //// Read all data products (even if we don't use them).
-     //// Remove the below lines to read minimal sets of products.
-     //// Removing would cause many more I/O operations and slow the cluster.
-     //fTreeCache->StartLearningPhase();
-     //fTreeCache->AddBranch("*", kTRUE);
-     //fTreeCache->StopLearningPhase();
-   }
-
    // no event yet processed eg, no loaders assigned,
    // so that the notify is being delayed to LoadBranch()
    if(fCurEvt>=0) {
@@ -846,10 +856,6 @@ Bool_t TAMSelector::Notify()
 	    AbortAnalysis();
 	 }
       }
-
-      // status (return value) of notify
-      notifyStat = kTRUE;
-   
    }
 
    if (notifyStat && (fAnalysisAborted==kFALSE)) {
@@ -861,6 +867,7 @@ Bool_t TAMSelector::Notify()
 
    return notifyStat;
 }
+
 
 //______________________________________________________________________________
 Bool_t TAMSelector::Process(Long64_t entry) 
@@ -979,6 +986,7 @@ Bool_t TAMSelector::Process(Long64_t entry)
    return kTRUE;
 }
 
+
 //______________________________________________________________________________
 Bool_t TAMSelector::PublishObj(TObject *obj) 
 {
@@ -1028,6 +1036,7 @@ Bool_t TAMSelector::PublishObj(TObject *obj)
    return kFALSE;
 }
 
+
 //______________________________________________________________________________
 TObject *TAMSelector::RemoveObjThisEvt(const Char_t *name) 
 {
@@ -1046,6 +1055,7 @@ TObject *TAMSelector::RemoveObjThisEvt(const Char_t *name)
    return 0;
 }
 
+
 //______________________________________________________________________________
 TObject *TAMSelector::RetractObj(const Char_t *name) 
 {
@@ -1061,6 +1071,7 @@ TObject *TAMSelector::RetractObj(const Char_t *name)
    }
    return 0;
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::SlaveBegin(TTree *tree) 
@@ -1109,6 +1120,7 @@ void TAMSelector::SlaveBegin(TTree *tree)
    }
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::SlaveTerminate() 
 {
@@ -1128,6 +1140,7 @@ void TAMSelector::SlaveTerminate()
       if (fEventObjs.IsEmpty()==kFALSE) fEventObjs.Delete();
    }
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::TakeModsFromInput() 
@@ -1149,6 +1162,7 @@ void TAMSelector::TakeModsFromInput()
    }
 }
 
+
 //______________________________________________________________________________
 void TAMSelector::TakeLoadersFromInput() 
 {
@@ -1159,14 +1173,15 @@ void TAMSelector::TakeLoadersFromInput()
    TList *loaders = dynamic_cast<TList*>(fInput->FindObject("TAM_LOADERS"));   
    if (loaders != 0) {
       TIter next(loaders);
-      while (TAMVirtualLoader *l = dynamic_cast<TAMVirtualLoader*>(next())) {
-	if (loaders != &fLoaders)
-	  fLoaders.AddLast(l);
+      while ( TAMVirtualLoader *l = 
+                    dynamic_cast<TAMVirtualLoader*>(next()) ) {
+         if (loaders != &fLoaders) fLoaders.AddLast(l);
       }
    }
    
    fLoaders.AddLast(new TAMTreeLoader());
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::Terminate() 
@@ -1242,11 +1257,8 @@ void TAMSelector::Terminate()
       Error("Terminate",
             "Could not store output objects after terminate.");
    }
-
-   // Delete the tree cache
-   if (fTreeCache)
-      delete fTreeCache;
 }
+
 
 //______________________________________________________________________________
 void TAMSelector::ZeroAllBranches() 
@@ -1255,7 +1267,8 @@ void TAMSelector::ZeroAllBranches()
    // for each branch to zero.
    
    TIter nextBranch(fBranchTable.MakeIterator());
-   while (TAMBranchInfo *brInfo = dynamic_cast<TAMBranchInfo*>(nextBranch())) {
-     brInfo->ZeroUsrAddrs();
+   while (TAMBranchInfo *brInfo = 
+	  dynamic_cast<TAMBranchInfo*>(nextBranch())) {
+         brInfo->ZeroUsrAddrs();
    }
 }

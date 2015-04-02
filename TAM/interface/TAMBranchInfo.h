@@ -1,5 +1,5 @@
 //
-// $Id: TAMBranchInfo.h,v 1.3 2009/01/20 12:21:48 loizides Exp $
+// $Id: TAMBranchInfo.h 5584 2009-07-16 21:00:34Z loizides $
 //
 
 #ifndef ROOT_TAMBranchInfo
@@ -65,11 +65,12 @@ struct TAMBranchInfo : TNamed {
 
    template <typename T> Bool_t    AddPtr(T*& address);
    Int_t                           GetEntry(Long64_t entry);
-   TAMVirtualBranchLoader         *GetLoader()   const { return fLoader;   }
+         TAMVirtualBranchLoader   *GetLoader()         { return fLoader;   }
+   const TAMVirtualBranchLoader   *GetLoader()   const { return fLoader;   }
    const type_info&                GetType()     const;
    void                            Init();
    Bool_t                          IsLoaded()    const { return fIsLoaded; } 
-   using                  TObject::Notify;
+   virtual Bool_t                  Notify() { return Notify(0); }
    Bool_t                          Notify(TTree* tree);
    void                            SetUsrAddrs();
    void                            SetLoader(TAMVirtualBranchLoader *loader) 

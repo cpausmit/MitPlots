@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.cxx,v 1.6 2009/07/16 15:06:56 loizides Exp $
+// $Id: TAModule.cxx 5734 2009-09-29 19:28:39Z loizides $
 //
 
 #include "MitAna/TAM/interface/TAModule.h"
@@ -274,18 +274,39 @@ void TAModule::Exec(Option_t* option)
    R__ASSERT(option);
    
    if (option == &kExecBegin) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: Begin",GetName());
+      }
       Begin();
    } else if (option == &kExecSlaveBegin) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: SlaveBegin",GetName());
+      }
       SlaveBegin();
    } else if (option == &kExecProcess) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: Process",GetName());
+      }
       Process();
    } else if (option == &kExecBeginRun) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: BeginRun",GetName());
+      }
       BeginRun();
    } else if (option == &kExecEndRun) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: EndRun",GetName());
+      }
       EndRun();
    } else if (option == &kExecSlaveTerminate) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: SlaveTerminate",GetName());
+      }
       SlaveTerminate();
    } else if (option == &kExecTerminate) {
+      if (GetVerbosity()>999) {
+         Info("Exec","%s: Terminate",GetName());
+      }
       Terminate();
    } else {
       SendError(kAbortAnalysis,
@@ -351,7 +372,7 @@ void TAModule::ls(Option_t *option) const
    // usage of null string in TRegexp.
 
    TROOT::IndentLevel();
-   cout <<GetName()<<"\t"<<GetTitle()<<endl;
+   std::cout << GetName() << "\t" << GetTitle() << std::endl;
    TString opta = option;
    TString opt  = opta.Strip(TString::kBoth);
    if (opt.IsNull()) return;
@@ -368,6 +389,20 @@ void TAModule::ls(Option_t *option) const
    TROOT::DecreaseDirLevel();
 }
 
+//______________________________________________________________________________
+void TAModule::ListObjsThisEvt(Option_t* option /*= ""*/) const
+{
+   // List all objects in the event object table.
+   // Wildcarding supported, eg option="xxx*" lists only objects
+   // with names xxx*.
+   
+   if (fSelector!=0) {
+      fSelector->ListObjsThisEvt(option);
+   } else {
+      Error("FindPublicObj",
+            "No selector exists, so there is no list of event objects. ");
+   }
+}
 
 //______________________________________________________________________________
 void TAModule::LoadBranch(const Char_t* bname) 
@@ -704,3 +739,19 @@ const char *TAModule::Version()
 
    return TAM_RELEASE;
 }
+
+//______________________________________________________________________________
+void TAModule::SetAllVerbosity(UInt_t vb)
+{
+   // Set the verbosity for this module and all its submodules
+   
+   SetVerbosity(vb);
+   
+   TAModule* task=0;
+   TIter nextobj(fTasks);
+   while ( (task = dynamic_cast<TAModule*>(nextobj()))!=0 ) {
+      task->SetAllVerbosity(vb);
+   }
+
+}
+

@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h,v 1.4 2009/07/17 19:18:04 loizides Exp $
+// $Id: TAMOutput.h 5734 2009-09-29 19:28:39Z loizides $
 //
 
 #ifndef ROOT_TAMOutput
@@ -86,8 +86,8 @@ private:
    void              CallMerge(TObject* obj, TList& list);
    void              DeleteIterators(vector<TIterator*>& iters);
    TList            *GetCurOutputList()       { return &fCurOutput; }
-   using      TList::FindObject;
-   Long64_t          MergeOutput(TCollection* list);
+   //using      TList::FindObject;
+   void              MergeOutput(TCollection* list);
    void              NullObjInAddOutput() const;
    void              NullClassFor(void* adr, const Char_t* tid) const;
    void              WarnNameDuplicate(const TObject* obj) const;
@@ -110,10 +110,18 @@ public:
    TAModule         *GetMod()       { return fMod; }
    const TList      *GetOutputList() const { return &fOutput; }
    TList            *GetOutputList()       { return &fOutput; }
-   virtual Long64_t  Merge(TCollection* list);
+   Long64_t          Merge(TCollection *list);
    virtual void      ls(Option_t* option="") const;
-   using             TCollection::Print;
+   //using             TCollection::Print;
    virtual void      Print(Option_t* wildcard="") const;
+   virtual void      Print(Option_t* option, Int_t recurse) const
+      { return TList::Print(option, recurse); }
+   virtual void      Print(Option_t* option, const char* wildcard,
+                           Int_t recurse = 1) const
+      { return TList::Print(option, wildcard, recurse); }
+   virtual void      Print(Option_t* option, TPRegexp& regexp, 
+                           Int_t recurse = 1) const
+      { return TList::Print(option, regexp, recurse); }
    void              RemoveOutput(TObject* obj);
    void              SetAllOutputMembers(const Bool_t setAddresses);
    void              SetMod(TAModule* mod) { fMod = mod; }

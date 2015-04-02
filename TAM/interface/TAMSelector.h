@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h,v 1.14 2009/07/17 19:18:04 loizides Exp $
+// $Id: TAMSelector.h 5734 2009-09-29 19:28:39Z loizides $
 //
 
 #ifndef ROOT_TAMSelector
@@ -8,7 +8,6 @@
 // keep this for compatibility 
 #define TAM_TAMSelector
 
-#include <TTreeCache.h>
 
 #ifndef ROOT_Riostream
 #include <Riostream.h>
@@ -23,10 +22,10 @@
 #include "TList.h"
 #endif
 #ifndef ROOT_TAMBranchInfo
-#include "MitAna/TAM/interface/TAMBranchInfo.h"
+#include "TAMBranchInfo.h"
 #endif   
 #ifndef ROOT_TAMVirtualLoader
-#include "MitAna/TAM/interface/TAMVirtualLoader.h"
+#include "TAMVirtualLoader.h"
 #endif   
 
 
@@ -77,9 +76,6 @@ protected:
    };
 
    TTree            *fTree;            //!the tree or chain
-   TTreeCache       *fTreeCache;       //!tree cache
-   Int_t             fCacheSize;       //tree cache size
-
    THashTable        fBranchTable;     //!table of requested branches
    THashTable        fEventObjs;       //!table of objects available to any mod
                                        // while the current event is processed
@@ -151,6 +147,7 @@ public:
    Bool_t            IsAModAborted()     const { return fModAborted;      }
    Bool_t            IsEventAborted()    const { return fEventAborted;    }
    Bool_t            IsAnalysisAborted() const { return fAnalysisAborted; }
+   void              ListObjsThisEvt(Option_t* option = "") const;
    void              LoadBranch(const Char_t* bname);
    Bool_t            Notify();
    Bool_t            Process(Int_t entry) 
@@ -161,7 +158,6 @@ public:
    void              ReqBranch(const Char_t* bname, T*& address);
    virtual TObject  *RemoveObjThisEvt(const Char_t* name);
    virtual TObject  *RetractObj(const Char_t* name);
-   void              SetCacheSize(Int_t i)      { fCacheSize = i;     }
    void              SetDoProxy(Bool_t b)       { fDoProxy = b;       }
    void              SetDoObjTabClean(Bool_t b) { fDoObjTabClean = b; }
    void              SetVerbosity(UInt_t vb)    { fVerbosity = vb;    }
