@@ -455,6 +455,7 @@ void TreeWriter::OpenFile()
 void TreeWriter::Print(Option_t *option) const
 {
   // Print the contents of the tree writer.
+  using namespace std;
 
   if (option) {
     cout << ClassName() << " with members " << endl;

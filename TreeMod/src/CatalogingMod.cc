@@ -30,15 +30,18 @@ CatalogingMod::CatalogingMod(const char *name, const char *title) :
 void CatalogingMod::SlaveBegin()
 {
   // Print out cataloging module message.
+
+  using namespace std;
   
-  if (gDebugLevel > 0)
-    cout << " ============================\n"
-	 << " CatalogingMod::SlaveBegin -- Creating MetaInformation for the coming events\n"
-	 << " ============================\n";
+  if (gDebugLevel > 0){
+    cout << " ============================" << endl;
+    cout << " CatalogingMod::SlaveBegin -- Creating MetaInformation for the coming events" << endl;
+    cout << " ============================" << endl;
+  }
 
   fTriggers = GetHLTTable();
   if (! fTriggers) {
-    printf(" Has trigger table is: %d\n",HasHLTInfo());
+    cout << " Has trigger table is: " << HasHLTInfo() << endl;
     SendError(kAbortAnalysis, "SlaveBegin", "Could not get HLT trigger table.");
     return;
   }
@@ -57,7 +60,7 @@ Bool_t CatalogingMod::Notify()
   if (!file) 
     return kFALSE;
   else
-    printf(" Cataloging file: %s\n",file->GetName());
+    std::cout << " Cataloging file: " << file->GetName() << std::endl;
   
   // get all event header tree / or the Events tree
   fMyHeadTree = dynamic_cast<TTree*>(file->Get(fAllHeadTreeName));
@@ -90,7 +93,7 @@ Bool_t CatalogingMod::Notify()
   int  curEnt  = 0;
   uint lastRun = 999999999;
   const Int_t neMax = fMyHeadTree->GetEntries();
-  printf(" Looping over: %d events\n",neMax);
+  std::cout << " Looping over: " << neMax << " events" << std::endl;
   while (curEnt < neMax) {
     fMyHeadTree->GetEntry(curEnt++);                   // get all next records attached to branches
     EventHeader *eh = fMyEventHeader;
@@ -99,7 +102,7 @@ Bool_t CatalogingMod::Notify()
       lastRun = eh->RunNum();
     }
     if (curEnt >= neMax-1)
-      printf(" Last event: %d  RN: %d EN: %d\n",curEnt-1,eh->RunNum(),eh->EvtNum());
+      std::cout << " Last event: " << (curEnt-1) << "  RN: " << eh->RunNum() << " EN: " << eh->EvtNum() << std::endl;
     ProcessAll(eh);
   }
   
@@ -118,39 +121,38 @@ void CatalogingMod::Process()
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::BeginRun()
 {
-  printf(" New run number -- RunInfo: %d  EventHeader: %d\n",
-	 GetRunInfo()->RunNum(),GetEventHeader()->RunNum());
+  std::cout << " New run number -- RunInfo: " << GetRunInfo()->RunNum() << "  EventHeader: " << GetEventHeader()->RunNum() << std::endl;
 }
 
 //--------------------------------------------------------------------------------------------------
 void CatalogingMod::SlaveTerminate()
 {
   // Print cataloging module message.
+  using namespace std;
 
-  if (gDebugLevel > 0)
-    cout << "\n"
-	 << " ============================----\n"
-	 << " CatalogingMod::SlaveTerminate -- MetaInformation for analyzed events\n"
-	 << " ================================\n"
-	 << " Number of lumi sections: " << fMetaData.NLumiSecs() << endl
-	 << " Number of events       : " << fMetaData.NEvents()   << endl
-	 << " min(Run,LumiSec)       : ("
-	 << fMetaData.MinRun() << "," << fMetaData.MinLumiSecInMinRun() << ")\n"
-	 << " max(Run,LumiSec)       : ("
-	 << fMetaData.MaxRun() << "," << fMetaData.MaxLumiSecInMaxRun() << ")\n\n";
+  if (gDebugLevel > 0){
+    cout << endl;
+    cout << " ============================----" << endl;
+    cout << " CatalogingMod::SlaveTerminate -- MetaInformation for analyzed events" << endl;
+    cout << " ================================" << endl;
+    cout << " Number of lumi sections: " << fMetaData.NLumiSecs() << endl;
+    cout << " Number of events       : " << fMetaData.NEvents() << endl;
+    cout << " min(Run,LumiSec)       : (" << fMetaData.MinRun() << "," << fMetaData.MinLumiSecInMinRun() << ")" << endl;
+    cout << " max(Run,LumiSec)       : (" << fMetaData.MaxRun() << "," << fMetaData.MaxLumiSecInMaxRun() << ")" << endl;
+    cout << endl;
+  }
   
-  printf("%04d %-60s %9d %9d %9d %6d %9d %6d\n",
-	 fNFileSet                     ,
-	 fMetaDataString.Data        (),
-	 fMetaData.NAllEvents        (),
-	 fMetaData.NEvents           (),
-	 fMetaData.MinRun            (),
-	 fMetaData.MinLumiSecInMinRun(),
-	 fMetaData.MaxRun            (),
-	 fMetaData.MaxLumiSecInMaxRun() );
+  cout << TString::Format("%04d %-60s %9d %9d %9d %6d %9d %6d",
+                          fNFileSet                     ,
+                          fMetaDataString.Data        (),
+                          fMetaData.NAllEvents        (),
+                          fMetaData.NEvents           (),
+                          fMetaData.MinRun            (),
+                          fMetaData.MinLumiSecInMinRun(),
+                          fMetaData.MaxRun            (),
+                          fMetaData.MaxLumiSecInMaxRun()) << endl;
 
-  if (gDebugLevel > 0)
-    cout << "\n";
+  if (gDebugLevel > 0) cout << endl;
 }
 
 //--------------------------------------------------------------------------------------------------

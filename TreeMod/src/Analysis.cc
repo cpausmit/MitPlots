@@ -208,7 +208,7 @@ Bool_t Analysis::AddFiles(const char *pname, Int_t nmax)
 
   MitAssert("AddFiles", pname != 0);
 
-  ifstream in;
+  std::ifstream in;
   in.open(pname);
   if (!in) {
     Error("AddFiles", "Cannot open file with name %s", pname);
@@ -693,7 +693,7 @@ Bool_t Analysis::UploadPackages(TList *packages)
       packname.Resize(packname.Length()-1);
     }
 
-    ifstream ftest(gSystem->ExpandPathName(packname.Data()),ios_base::binary);
+    std::ifstream ftest(gSystem->ExpandPathName(packname.Data()),std::ios_base::binary);
     if (!ftest.good()) {
       Error("InitProof", "Could not open %s for upload!", packname.Data());
       return kFALSE;

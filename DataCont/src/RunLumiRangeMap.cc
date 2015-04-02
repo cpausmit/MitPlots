@@ -90,7 +90,7 @@ void mithep::RunLumiRangeMap::DumpJSONFile(const std::string &filepath)
     jsonTree.push_back(runPair);
   } 
 
-  ofstream os(filepath.c_str());
+  std::ofstream os(filepath.c_str());
   json_spirit::write(jsonTree,os);
  
 }
