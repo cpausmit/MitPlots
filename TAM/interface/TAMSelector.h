@@ -8,6 +8,7 @@
 // keep this for compatibility 
 #define TAM_TAMSelector
 
+#include <TTreeCache.h>
 
 #ifndef ROOT_Riostream
 #include <Riostream.h>
@@ -76,6 +77,9 @@ protected:
    };
 
    TTree            *fTree;            //!the tree or chain
+   TTreeCache       *fTreeCache;       //!tree cache
+   Int_t             fCacheSize;       //tree cache size
+
    THashTable        fBranchTable;     //!table of requested branches
    THashTable        fEventObjs;       //!table of objects available to any mod
                                        // while the current event is processed
@@ -158,6 +162,7 @@ public:
    void              ReqBranch(const Char_t* bname, T*& address);
    virtual TObject  *RemoveObjThisEvt(const Char_t* name);
    virtual TObject  *RetractObj(const Char_t* name);
+   void              SetCacheSize(Int_t i)      { fCacheSize = i;     }
    void              SetDoProxy(Bool_t b)       { fDoProxy = b;       }
    void              SetDoObjTabClean(Bool_t b) { fDoObjTabClean = b; }
    void              SetVerbosity(UInt_t vb)    { fVerbosity = vb;    }

@@ -3,7 +3,7 @@
 //
 
 #include "MitAna/TAM/interface/TAMOutput.h"
-
+#include "TTree.h"
 
 #if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
  #ifndef G__API_H
@@ -861,6 +861,12 @@ Int_t TAMOutput::WriteCol(const TCollection *col, const char* name,
          Warning("Write", "Renamed output object from \"%s\" to \"%s\"",
                  tmpname.Data(), oname.Data());
       }
+
+      // Why do we do this? Not in the original TAM implementation..
+      // (Y.I. 04/02/2015)
+      TTree *treeobj = dynamic_cast<TTree*>(obj);
+      if (treeobj && treeobj->GetDirectory()->GetFile())
+	obj = treeobj->CloneTree();
 
       nbytes += obj->Write(oname, option, bsize);
    }

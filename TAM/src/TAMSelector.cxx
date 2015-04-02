@@ -289,6 +289,8 @@ Bool_t TAMSelector::BranchProxy::Notify()
 //______________________________________________________________________________
 TAMSelector::TAMSelector() :
    fTree(0),
+   fTreeCache(0),
+   fCacheSize(0),
    fBranchTable(TCollection::kInitHashTableCapacity, 1),
    fEventObjs(TCollection::kInitHashTableCapacity, 1),
    fAModules(new TAModule("TAMTopModule",
@@ -770,8 +772,14 @@ void TAMSelector::LoadBranch(TAMBranchInfo* brInfo)
       //fObjCounter=TProcessID::GetObjectCount();
    }
 
-   // load the entry
+   // load the entry (using the cache)
+   if (fTreeCache)
+     GetCurrentFile()->SetCacheRead(fTreeCache);
    Int_t ret = brInfo->GetEntry(fCurEvt);
+   if (fTreeCache)
+     GetCurrentFile()->SetCacheRead(0);
+
+
    if(ret<0) {
       Error("LoadBranch",
             "Error in file [%s] when accessing branch with name [%s] in "
@@ -831,6 +839,24 @@ Bool_t TAMSelector::Notify()
    // status (return value) of notify
    Bool_t notifyStat = kTRUE;
 
+   // Set up the caching process
+   if (fCacheSize > 0) {
+     fTreeCache->SetLearnEntries(1);
+     fTree->SetCacheSize(128*1024*1024);
+     printf(" CurrentFile Name: %s\n",fTree->GetCurrentFile()->GetName());
+     if (fTreeCache)
+       delete fTreeCache;
+     fTreeCache = dynamic_cast<TTreeCache*>(fTree->GetCurrentFile()->GetCacheRead());
+     fTree->GetCurrentFile()->SetCacheRead(0);
+   
+     //// Read all data products (even if we don't use them).
+     //// Remove the below lines to read minimal sets of products.
+     //// Removing would cause many more I/O operations and slow the cluster.
+     //fTreeCache->StartLearningPhase();
+     //fTreeCache->AddBranch("*", kTRUE);
+     //fTreeCache->StopLearningPhase();
+   }
+
    // no event yet processed eg, no loaders assigned,
    // so that the notify is being delayed to LoadBranch()
    if(fCurEvt>=0) {
@@ -856,6 +882,12 @@ Bool_t TAMSelector::Notify()
 	    AbortAnalysis();
 	 }
       }
+
+      // Why force true? Not in original TAM implementation..
+      // (Y.I. 04/02/2015)
+      // status (return value) of notify
+      notifyStat = kTRUE;
+
    }
 
    if (notifyStat && (fAnalysisAborted==kFALSE)) {
@@ -1257,6 +1289,10 @@ void TAMSelector::Terminate()
       Error("Terminate",
             "Could not store output objects after terminate.");
    }
+
+   // Delete the tree cache
+   if (fTreeCache)
+      delete fTreeCache;
 }
 
 
