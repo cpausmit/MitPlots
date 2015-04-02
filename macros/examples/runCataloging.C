@@ -1,6 +1,6 @@
 // $Id: runCataloging.C,v 1.3 2008/07/28 23:13:43 paus Exp $
 
-#if !defined(__CINT__) || defined(__MAKECINT__)
+#if !defined(__CLING__) || defined(__ROOTCLING__)
 #include <TROOT.h>
 #include <TSystem.h>
 #include "MitAna/DataUtil/interface/Debug.h"

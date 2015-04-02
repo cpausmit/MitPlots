@@ -19,6 +19,6 @@
 
 #endif
 
-#ifdef __CINT__
+#ifdef __CLING__
 #include "MitAna/TAM/interface/LinkDef.h"
 #endif

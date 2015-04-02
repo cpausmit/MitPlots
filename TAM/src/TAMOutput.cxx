@@ -330,7 +330,7 @@ void TAMOutput::Browse(TBrowser* b)
 void TAMOutput::CallMerge(TObject* obj, TList& list) 
 {
    // For Root v5:
-   // Uses CINT to call merge on 'obj' given a list of all the
+   // Uses CLING to call merge on 'obj' given a list of all the
    // objects from the worker computers that correspond to 'obj'.
    // If no merge function exists for 'obj', it simply adds all the
    // objects in list to the output list of this module.

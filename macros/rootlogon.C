@@ -14,7 +14,7 @@
   // To see what is happening behind the scenes use this
   gDebug = kFALSE;
 
-#if defined(__CINT__) && !defined(__MAKECINT__)
+#if defined(__CLING__) && !defined(__ROOTCLING__)
   // Loads all default libraries
   gROOT->Macro("$CMSSW_BASE/src/MitAna/macros/setRootEnv.C+");
 #endif

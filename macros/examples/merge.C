@@ -1,6 +1,6 @@
 // $Id: runSkimmingExample.C,v 1.6 2009/08/11 15:32:46 loizides Exp $
 
-#if !defined(__CINT__) || defined(__MAKECINT__)
+#if !defined(__CLING__) || defined(__ROOTCLING__)
 #include <TSystem.h>
 #include <TRandom.h>
 #include <TParameter.h>
