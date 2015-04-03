@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
+// $Id: TAMTreeLoader.h 5584 2009-07-16 21:00:34Z loizides $
 //
 
 #ifndef ROOT_TAMTreeLoader
@@ -7,7 +7,7 @@
 
 
 #ifndef ROOT_TAMVirtualLoader
-#include "MitAna/TAM/interface/TAMVirtualLoader.h"
+#include "TAMVirtualLoader.h"
 #endif
 
 

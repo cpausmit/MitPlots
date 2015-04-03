@@ -1,6 +1,6 @@
 // $Id: runSimpleExample.C,v 1.11 2009/04/06 13:41:26 loizides Exp $
 
-#if !defined(__CINT__) || defined(__MAKECINT__)
+#if !defined(__CLING__) || defined(__ROOTCLING__)
 #include <TROOT.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/TreeMod/interface/Analysis.h"

@@ -1,13 +1,19 @@
 //
-// $Id: TAMOutput.cxx,v 1.8 2012/03/30 01:08:39 paus Exp $
+// $Id: TAMOutput.cxx 5583 2009-07-16 20:42:10Z loizides $
 //
 
 #include "MitAna/TAM/interface/TAMOutput.h"
 #include "TTree.h"
 
-#ifndef G__API_H
-#include "Api.h"
-#endif
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+ #ifndef G__API_H
+ #include "Api.h"
+ #endif
+#else
+ #ifndef ROOT_TClass
+ #include "TClass.h"
+ #endif
+#endif// ROOT version
 #ifndef ROOT_Riostream
 #include "Riostream.h"
 #endif
@@ -323,14 +329,23 @@ void TAMOutput::Browse(TBrowser* b)
 //______________________________________________________________________________
 void TAMOutput::CallMerge(TObject* obj, TList& list) 
 {
-   // Uses CINT to call merge on 'obj' given a list of all the
+   // For Root v5:
+   // Uses CLING to call merge on 'obj' given a list of all the
    // objects from the worker computers that correspond to 'obj'.
    // If no merge function exists for 'obj', it simply adds all the
    // objects in list to the output list of this module.
    // To be called only by MergeOutput(TCollection*)
+   //
+   // For Root v6:
+   // Uses the obj's TClass::GetMerge function to call the merge,
+   // if available. If not, simply add all the objects in list to
+   // the output list of this module.
+   // To be called only by MergeOutput(TCollection*)
 
    R__ASSERT(obj);
    
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+
    Long_t offset=0;
    G__ClassInfo ci(obj->ClassName());
    G__CallFunc cf;
@@ -341,12 +356,25 @@ void TAMOutput::CallMerge(TObject* obj, TList& list)
    if (cf.IsValid()) {
       cf.SetArg((Long_t)&list);
       cf.Exec(obj);
+
+#else // ROOT v6 has no 
+   
+   TClass* cls = obj->IsA();
+   R__ASSERT(cls!=0);
+   // ROOT::MergeFunc_t is a typedef in Rtypes.h
+   // typedef Long64_t (*MergeFunc_t)(void *, TCollection *, TFileMergeInfo *);
+   ROOT::MergeFunc_t mf = cls->GetMerge();
+   if (mf!=0) {
+      mf(obj, &list, 0);
+      
+#endif // ROOT version
+
    } else {
       // No Merge interface, return individual objects
-      TObject* obj=0;
-      while ( (obj = list.First()) ) {
-         fCurOutput.Add(obj);
-         list.Remove(obj);
+      TObject* oo=0;
+      while ( (oo = list.First()) ) {
+         fCurOutput.Add(oo);
+         list.Remove(oo);
       }
    }
 }
@@ -480,7 +508,7 @@ void TAMOutput::ls(Option_t* option) const
    // List the output objects inside this module and its submodules.
    
    TROOT::IndentLevel();
-   cout << "Output of " << GetName() << ":" << endl;
+   std::cout << "Output of " << GetName() << ":" << std::endl;
 
    fOutput.ls(option);
 
@@ -499,7 +527,11 @@ Long64_t TAMOutput::Merge(TCollection* list)
    // recursively proceed through the sub modules to merge their objects.
    
    // merge this module's output objects
-   Long64_t mergeCount = MergeOutput(list);
+   Long64_t ret = 0;
+   if (list) {
+     MergeOutput(list);
+     ret += list->GetEntries();
+   }
 
    // then merge its sub modules' objects:
    if (!IsEmpty()) { // (if we have any sub modules)
@@ -525,19 +557,18 @@ Long64_t TAMOutput::Merge(TCollection* list)
             subList.Add((*siter)->Next());
          }
          // merge the list of sub modules
-         out->Merge(&subList);
+         ret += out->Merge(&subList);
       }
       
       // cleanup
       DeleteIterators(slaveIters);
    }
-
-   return mergeCount;
+   return ret;
 }
 
 
 //______________________________________________________________________________
-Long64_t TAMOutput::MergeOutput(TCollection* list) 
+void TAMOutput::MergeOutput(TCollection* list) 
 {
    // Merges the actual output objects in fCurOutput given a list of
    // all the TAMOutput objects from the worker computers that
@@ -575,7 +606,6 @@ Long64_t TAMOutput::MergeOutput(TCollection* list)
       DeleteIterators(slaveIters);
    }
 
-   return list->GetEntries();
 }
 
 
@@ -604,7 +634,7 @@ void TAMOutput::Print(Option_t *wildcard) const
    // Print the output objects inside this module and its submodules.
    
    TROOT::IndentLevel();
-   cout << "Output of " << GetName() << ":" << endl;
+   std::cout << "Output of " << GetName() << ":" << std::endl;
 
    fOutput.Print(wildcard);
 
@@ -647,10 +677,14 @@ void TAMOutput::SetOutputMembers(const Bool_t setAddresses)
    
    R__ASSERT(fMod!=0);
    
+#if ROOT_VERSION_CODE <= ROOT_VERSION(5,27,5)
    // first update the addresses of the members
    Char_t parent[kParentStrLen];
    memset(parent, 0, kParentStrLen * sizeof(Char_t));
+   fMod->ShowMembers(fInspector, parent);
+#else
    fMod->ShowMembers(fInspector);
+#endif
    
    if (setAddresses) {
       // loop through output objects and set the corresponding members
@@ -764,7 +798,7 @@ Int_t TAMOutput::Write(const char* name, Int_t option, Int_t bsize)
             ++counter;
          }
          newdir = gDirectory->mkdir(dirname);
-         TDirectory::TContext context(newdir);	 
+         TDirectory::TContext context(newdir);
          nbytes += obj->Write(name, option, bsize);
       }
       return nbytes;
@@ -805,16 +839,21 @@ Int_t TAMOutput::WriteCol(const TCollection *col, const char* name,
       if (name)
         tmpname = name;
       TString oname(tmpname);
+      TString mname(GetName());
+      if ( (GetMod()!=0) && GetMod()->GetUseName() ) {
+         mname = GetMod()->GetName();
+      }
       Int_t counter = 0;
-      if (GetMod()->GetUseName()) { //if true always append module name
-        oname=Form("%s_%s",GetMod()->GetName(), tmpname.Data());
+      if ((GetMod()!=0) && 
+          GetMod()->GetUseName()) { //if true always append module name
+        oname=Form("%s_%s", mname.Data(), tmpname.Data());
         counter = 1;
       }
       while (gDirectory->GetListOfKeys()->FindObject(oname)) {
          if (counter==0) {
-            oname=Form("%s_%s",GetMod()->GetName(), tmpname.Data());
+            oname=Form("%s_%s", mname.Data(), tmpname.Data());
          } else {
-            oname=Form("%s_%s_%d",GetMod()->GetName(), tmpname.Data(), counter);
+            oname=Form("%s_%s_%d", mname.Data(), tmpname.Data(), counter);
          }
          ++counter;
       }
@@ -823,10 +862,12 @@ Int_t TAMOutput::WriteCol(const TCollection *col, const char* name,
                  tmpname.Data(), oname.Data());
       }
 
+      // Why do we do this? Not in the original TAM implementation..
+      // (Y.I. 04/02/2015)
       TTree *treeobj = dynamic_cast<TTree*>(obj);
       if (treeobj && treeobj->GetDirectory()->GetFile())
 	obj = treeobj->CloneTree();
-      
+
       nbytes += obj->Write(oname, option, bsize);
    }
    return nbytes;

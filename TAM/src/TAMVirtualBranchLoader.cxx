@@ -1,5 +1,5 @@
 //
-// $Id: TAMVirtualBranchLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
+// $Id: TAMVirtualBranchLoader.cxx 3191 2006-08-17 14:52:57Z loizides $
 //
 
 #include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"

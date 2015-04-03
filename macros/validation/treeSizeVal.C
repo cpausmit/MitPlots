@@ -1,6 +1,6 @@
 // $Id: treeSizeVal.C,v 1.1 2008/09/17 12:48:38 bendavid Exp $
 
-#if !defined(__CINT__) || defined(__MAKECINT__)
+#if !defined(__CLING__) || defined(__ROOTCLING__)
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>

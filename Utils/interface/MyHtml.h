@@ -19,8 +19,8 @@
 #ifndef MITANA_UTILS_MYHTML_H
 #define MITANA_UTILS_MYHTML_H
 
-#include "MitAna/Utils/interface/THtml.h"
-#include "MitAna/Utils/interface/TDocInfo.h"
+#include "THtml.h"
+#include "TDocInfo.h"
 
 class MyHtml : public THtml
 {

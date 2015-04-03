@@ -51,17 +51,17 @@ void HLTMod::AddTrigger(const char *expr, UInt_t firstRun, UInt_t lastRun)
   // If you just pass the event the trigger objects would not be stored as potentially no trigger
   // would fit, thus no trigger objects would eb written.
 
-  string tname(expr);
+  std::string tname(expr);
 
   // deal with the special case
   if (tname.compare(0,2,"!+") == 0) {
-    string subtname = tname.substr(2,tname.length()-2);  // stripping off the special characters
+    std::string subtname = tname.substr(2,tname.length()-2);  // stripping off the special characters
     std::pair<std::string,std::pair<UInt_t,UInt_t> >
       element1(subtname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
     fTrigNames.push_back(element1);
     // add both, trigger and its negation
     std::pair<std::string,std::pair<UInt_t,UInt_t> >
-      element2(string("!")+subtname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
+      element2(std::string("!")+subtname,std::pair<UInt_t,UInt_t>(firstRun,lastRun));
     fTrigNames.push_back(element2);
   }
   else {

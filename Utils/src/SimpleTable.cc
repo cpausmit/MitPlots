@@ -31,7 +31,7 @@ SimpleTable::SimpleTable(const char *input)
   if (ifile.IsNull())
     return;
 
-  ifstream in(ifile);
+  std::ifstream in(ifile);
   if (!in.good()) 
     return;
 

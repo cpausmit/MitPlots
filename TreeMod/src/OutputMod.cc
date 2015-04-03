@@ -218,11 +218,11 @@ void OutputMod::CheckAndResolveTAMDep(Bool_t solve)
   const THashTable &ht = GetSel()->GetBranchTable();
 
   TIter iter(ht.MakeIterator());
-  const TAMBranchInfo *next = dynamic_cast<const TAMBranchInfo*>(iter.Next());
+  TAMBranchInfo *next = dynamic_cast<TAMBranchInfo*>(iter.Next());
 
   while (next) {
-    const TAMBranchInfo *cur = next;
-    next = dynamic_cast<const TAMBranchInfo*>(iter.Next());
+    TAMBranchInfo *cur = next;
+    next = dynamic_cast<TAMBranchInfo*>(iter.Next());
     Bool_t isloaded = cur->IsLoaded();
     if (!isloaded)
       continue;
@@ -231,7 +231,7 @@ void OutputMod::CheckAndResolveTAMDep(Bool_t solve)
     if (IsAcceptedBranch(bname))
       continue;
 
-    TreeBranchLoader *loader = dynamic_cast<TreeBranchLoader*>(cur->GetLoader());
+    TreeBranchLoader* loader = dynamic_cast<TreeBranchLoader*>(cur->GetLoader());
     if (!loader) 
       continue;
 

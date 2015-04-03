@@ -42,7 +42,7 @@ void L1Mod::AddTrigger(const char *expr)
   // A "!" infront of a trigger name negates the bit. For example, valid expressions are:
   // "A", "!A", "A&B", "A&!B" or "A&B&C"  
 
-  string tname(expr);
+  std::string tname(expr);
   fTrigNames.push_back(tname);
 }
 

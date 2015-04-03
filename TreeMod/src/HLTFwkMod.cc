@@ -145,16 +145,16 @@ void HLTFwkMod::BeginRun()
 
     MDB(kAnalysis, 2) {
       Info("BeginRun", "Printing tables for run %u", runinfo->RunNum());
-      cout << " --- Trigger table ---" << endl;
+      std::cout << " --- Trigger table ---" << std::endl;
       fTriggers->Print();
-      cout << " --- Module lables ---" << endl;
+      std::cout << " --- Module lables ---" << std::endl;
       fLabels->Print();
       if (fL1Algos->GetEntries()) {
-        cout << " --- L1 Algos ---" << endl;
+        std::cout << " --- L1 Algos ---" << std::endl;
         fL1Algos->Print();
       }
       if (fL1Techs->GetEntries()) {
-        cout << " --- L1 Techs ---" << endl;
+        std::cout << " --- L1 Techs ---" << std::endl;
         fL1Techs->Print();
       }
     }
