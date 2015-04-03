@@ -1,5 +1,5 @@
 //
-// $Id: TAMVirtualLoader.cxx 2272 2006-01-08 17:16:44Z loizides $
+// $Id: TAMVirtualLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"

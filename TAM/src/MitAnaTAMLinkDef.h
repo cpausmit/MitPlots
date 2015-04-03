@@ -8,17 +8,14 @@
 
 #include "MitAna/TAM/interface/TAMBranchInfo.h"
 #include "MitAna/TAM/interface/TAModule.h"
-#include "MitAna/TAM/interface/TAMObjBranchLoader.h"
-#include "MitAna/TAM/interface/TAMObjLoader.h"
 #include "MitAna/TAM/interface/TAMOutput.h"
 #include "MitAna/TAM/interface/TAMSelector.h"
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 #include "MitAna/TAM/interface/TAMTreeLoader.h"
 #include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
 #include "MitAna/TAM/interface/TAMVirtualLoader.h"
-
 #endif
 
-#ifdef __CLING__
+#ifdef __CINT__
 #include "MitAna/TAM/interface/LinkDef.h"
 #endif

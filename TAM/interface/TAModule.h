@@ -1,5 +1,5 @@
 //
-// $Id: TAModule.h 5734 2009-09-29 19:28:39Z loizides $
+// $Id: TAModule.h,v 1.7 2009/07/13 19:18:38 loizides Exp $
 //
 
 #ifndef ROOT_TAModule
@@ -20,10 +20,10 @@
 #include "Varargs.h"
 #endif
 #ifndef ROOT_TAMSelector
-#include "TAMSelector.h"
+#include "MitAna/TAM/interface/TAMSelector.h"
 #endif
 #ifndef ROOT_TAMOutput
-#include "TAMOutput.h"
+#include "MitAna/TAM/interface/TAMOutput.h"
 #endif
 
 class TFile;
@@ -83,7 +83,6 @@ protected:
    Bool_t              IsEventAborted()      const;
    Bool_t              IsAnalysisAborted()   const;
    void                ls(Option_t *option)  const;
-   void                ListObjsThisEvt(Option_t* option = "") const;
    void                LoadBranch(const Char_t* bname);
    virtual TObject    *FindObjThisEvt(const Char_t* name) const;
    virtual Bool_t      Notify()                    { return kTRUE; }
@@ -138,7 +137,6 @@ public:
    void                SetSelector(TAMSelector* sel);
    void                SetUseName(Bool_t b)          { fUseName = b;     }
    void                SetVerbosity(UInt_t vb)       { fVerbose = vb;    }
-   void                SetAllVerbosity(UInt_t vb);
 
    static const char  *Version();
 
