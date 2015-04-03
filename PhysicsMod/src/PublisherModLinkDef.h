@@ -41,15 +41,13 @@
 #pragma link C++ class mithep::PublisherMod<mithep::CompoundParticle>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Conversion>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Electron>+;
+#pragma link C++ class mithep::PublisherMod<mithep::Muon>+;
 #pragma link C++ class mithep::PublisherMod<mithep::GenJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::MCParticle>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Met>+;
-#pragma link C++ class mithep::PublisherMod<mithep::CaloMet,mithep::Met>+;
-#pragma link C++ class mithep::PublisherMod<mithep::CaloMet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFMet,mithep::Met>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFMet>+;
-#pragma link C++ class mithep::PublisherMod<mithep::Muon>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFJet,mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Photon>+;

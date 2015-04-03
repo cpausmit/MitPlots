@@ -34,6 +34,7 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+
 #pragma link C++ class mithep::SkimMod<mithep::BasicCluster>+;
 #pragma link C++ class mithep::SkimMod<mithep::CaloJet>+;
 #pragma link C++ class mithep::SkimMod<mithep::CaloMet>+;

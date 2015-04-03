@@ -18,6 +18,7 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+
 #pragma link C++ class mithep::FullExampleMod+;
 #pragma link C++ class mithep::HLTExampleMod+;
 #pragma link C++ class mithep::SimpleExampleMod+;
