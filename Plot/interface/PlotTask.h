@@ -24,7 +24,7 @@ namespace mithep
   {
   public:
     PlotTask(TaskSamples *taskSamples, const double lumi);
-    ~PlotTask();
+    virtual ~PlotTask();
 
     // Define histogram ranges
     void                 SetHistRanges    (double xmin,   double xmax,

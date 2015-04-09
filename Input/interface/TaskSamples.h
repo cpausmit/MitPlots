@@ -23,7 +23,7 @@ namespace mithep
   {
   public:
     TaskSamples(const char* name, const char* dir);
-    ~TaskSamples() { }
+    virtual ~TaskSamples() {}
 
     const TString          *Name      ()            const { return &fName; }
     const TString          *NameTxt   ()            const { return &fNameTxt; }

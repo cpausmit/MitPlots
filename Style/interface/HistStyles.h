@@ -23,7 +23,7 @@ namespace mithep
   {
   public:
     HistStyles();
-    ~HistStyles() {}
+    virtual ~HistStyles() {}
     // access to the the style contents
     const UInt_t            *NStyles ()         const { return &fNStyles; }
     const HistStyle         *GetStyle(UInt_t i) const; // return 'i'th Monte Carlo style

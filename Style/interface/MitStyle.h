@@ -22,6 +22,7 @@ namespace mithep
   {
   public:
     MitStyle() { Init(); }
+    virtual ~MitStyle() {}
     
     static void     Init();
 
