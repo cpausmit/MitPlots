@@ -40,7 +40,6 @@ namespace mithep
     ClassDef(MergerMod, 1) // Generic collection merging module
   };
 }
-#endif
 
 //--------------------------------------------------------------------------------------------------
 template <class T>
@@ -104,3 +103,5 @@ void mithep::MergerMod<T>::SlaveBegin()
 
   SendError(kAbortModule, "SlaveBegin", "No output name given.");
 }
+
+#endif
