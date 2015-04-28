@@ -1,5 +1,3 @@
-// $Id: Names.cc,v 1.55 2012/01/31 15:39:49 rwolf Exp $
-
 #include "MitAna/DataTree/interface/Names.h"
 
 using namespace mithep;
@@ -24,7 +22,7 @@ const char *Names::gkGenMetBrn              = "GenMet";
 const char *Names::gkGsfTrackBrn            = "GsfTracks";
 const char *Names::gkHltBitBrn              = "HLTBits";
 const char *Names::gkHltObjBrn              = "HLTObjects";
-const char *Names::gkGenJetBrn              = "AKT5GenJets";
+const char *Names::gkGenJetBrn              = "AKT4GenJets";
 const char *Names::gkMCEvtInfoBrn           = "MCEventInfo";
 const char *Names::gkMCPartBrn              = "MCParticles";
 const char *Names::gkPileupInfoBrn          = "PileupInfo";
@@ -34,7 +32,7 @@ const char *Names::gkMvfConversionBrn       = "MergedConversions";
 const char *Names::gkL1TechBitsBrn          = "L1TechBits";
 const char *Names::gkL1AlgoBitsBrn          = "L1AlgoBits";
 const char *Names::gkPFCandidatesBrn        = "PFCandidates";
-const char *Names::gkPFJetBrn               = "AKt5PFJets";
+const char *Names::gkPFJetBrn               = "AKt4PFJets";
 const char *Names::gkPFTauBrn               = "ShrinkingConePFTaus";
 const char *Names::gkHPSTauBrn              = "HPSTaus";
 const char *Names::gkPhotonBrn              = "Photons";
