@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: StableParticle.h,v 1.13 2012/03/28 12:15:34 paus Exp $
-//
 // StableParticle
 //
 // Generic stable particle with track. Stores absolute pdg code and link to track.
@@ -39,7 +37,7 @@ namespace mithep
       UInt_t               fAbsPdgId;    //pdg identifier (absolute value)
       Ref<Track>           fTrackRef;    //tracker track reference
       
-    ClassDef(StableParticle, 1) // Stable particle class
+    ClassDef(StableParticle, 2) // Stable particle class
   };
 }
 

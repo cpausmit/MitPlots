@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFCandidate.h,v 1.10 2012/03/29 23:41:55 paus Exp $
-//
 // PFCandidate
 //
 // Particle-flow candidate class, for now mostly mirroring the PFCandidate from CMSSW.
@@ -177,7 +175,7 @@ namespace mithep
       Ref<Electron>       fElectron;         //reference to electron
       Ref<Photon>         fPhoton;           //reference to egamma photon
 
-    ClassDef(PFCandidate,2) // Particle-flow candidate class
+    ClassDef(PFCandidate,3) // Particle-flow candidate class
   };
 }
 

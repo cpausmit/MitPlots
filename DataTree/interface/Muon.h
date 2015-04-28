@@ -312,7 +312,7 @@ namespace mithep {
       Bool_t         fIsPFMuon;            //particle flow muon flag
       Bool_t         fIsCaloMuon;          //CaloMuon algo flag
 
-    ClassDef(Muon, 9) // Muon class
+    ClassDef(Muon, 10) // Muon class
   };
 }
 

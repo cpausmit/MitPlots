@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackJet.h,v 1.2 2012/03/28 12:15:34 paus Exp $
-//
 // TrackJet
 //
 // This class holds information about reconstructed jet based on tracks.
@@ -44,7 +42,7 @@ namespace mithep
       RefArray<Track>       fTracks;               //tracks in the jet
       Ref<Vertex>           fVertex;               //associated primary vertex
 
-    ClassDef(TrackJet, 1) // TrackJet class
+    ClassDef(TrackJet, 2) // TrackJet class
   };
 }
 

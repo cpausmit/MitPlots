@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Vertex.h,v 1.19 2012/03/28 12:15:35 paus Exp $
-//
 // Vertex
 //
 // Vertex class derived from BaseVertex holding additional fit information.
@@ -67,7 +65,7 @@ namespace mithep
     FArrDouble32        fTrkWeights;   //||array of track weights
     RefArray<Track>     fTracks;       //tracks associated with the PV
     
-    ClassDef(Vertex, 4) // Vertex class
+    ClassDef(Vertex, 5) // Vertex class
   };
 }
 

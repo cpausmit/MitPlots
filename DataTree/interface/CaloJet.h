@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloJet.h,v 1.7 2012/03/28 12:15:34 paus Exp $
-//
 // CaloJet
 //
 // This class holds information about reconstructed jet based on calorimeter towers.
@@ -136,7 +134,7 @@ namespace mithep
       Int_t               fNHitsRPC;
       RefArray<CaloTower> fTowers;            //calotowers in jet
 
-    ClassDef(CaloJet, 2) // CaloJet class
+    ClassDef(CaloJet, 3) // CaloJet class
   };
 }
 

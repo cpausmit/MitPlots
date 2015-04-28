@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Track.h,v 1.54 2012/03/28 12:15:34 paus Exp $
-//
 // Track
 //
 // We store the CMSSW track parameterization
@@ -308,7 +306,7 @@ namespace mithep
       mutable CacheFlag    fCacheMomFlag;        //||cache validity flag for momentum
       mutable ThreeVectorC fCachedMom;           //!cached momentum vector
 	      
-    ClassDef(Track, 6) // Track class
+    ClassDef(Track, 7) // Track class
   };
 }
 

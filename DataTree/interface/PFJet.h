@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFJet.h,v 1.7 2012/03/28 12:15:34 paus Exp $
-//
 // PFJet
 //
 // This class holds information about reconstructed jet based on pf candidates.
@@ -69,7 +67,7 @@ namespace mithep
       UInt_t                fMuonMultiplicity;     //number of muon constituents
       RefArray<PFCandidate> fPFCands;              //pf candidates in the jet
 
-    ClassDef(PFJet, 1) // PFJet class
+    ClassDef(PFJet, 2) // PFJet class
   };
 }
 

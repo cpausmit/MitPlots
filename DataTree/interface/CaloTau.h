@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CaloTau.h,v 1.5 2012/03/29 23:41:54 paus Exp $
-//
 // CaloTau
 //
 // This class holds information about reconstructed Taus based on calorimeter towers, ecal basic
@@ -89,7 +87,7 @@ namespace mithep
       RefArray<Track>        fIsoTracks;            //tracks in isolation annulus
       RefArray<BasicCluster> fNeutralBCs;           //neutral Ecal basic clusters
 
-    ClassDef(CaloTau, 1) // CaloTau class
+    ClassDef(CaloTau, 2) // CaloTau class
   };
 }
 

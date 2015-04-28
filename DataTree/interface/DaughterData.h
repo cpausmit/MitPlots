@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DaughterData.h,v 1.9 2012/03/28 12:15:34 paus Exp $
-//
 // DaughterData
 //
 // Daughter decay information: Keep reference to original particle.
@@ -34,7 +32,7 @@ namespace mithep
     protected:
       Ref<Particle>        fOriginal; //reference to original particle
 
-    ClassDef(DaughterData, 1) // Daughter data class
+    ClassDef(DaughterData, 2) // Daughter data class
   };
 }
 
