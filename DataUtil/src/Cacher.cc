@@ -43,9 +43,8 @@ Bool_t Cacher::InitialCaching()
   }
 
   // Need to wait for download completion of first two files to get going
-  Bool_t complete = kFALSE;
-  while (! complete) {                                  // potential deadlock - needs exist strategy
-    complete = kTRUE;
+  while (kTRUE) {                                  // potential deadlock - needs exist strategy
+    Bool_t complete = kTRUE;
     for (Int_t i=0; i<min(2,fInputList->GetEntries()); i++) {
       if (Exists(fInputList->At(i)->GetName()))
 	fCacheStatus[i] = 2;
@@ -94,10 +93,7 @@ Bool_t Cacher::NextCaching()
   }
 
   // Next: wait for download completion of last requested file (needs to be available to the job)
-  Bool_t complete = kFALSE;
-  while (! complete) {                                  // potential deadlock - needs exist strategy
-    complete = kTRUE;
-
+  while (kTRUE) {                                  // potential deadlock - needs exist strategy
     // make sure we are not asking for too much ;-)
     if (fCachedFileIdx-1 >= fInputList->GetEntries())
       break;
@@ -109,8 +105,6 @@ Bool_t Cacher::NextCaching()
 	Info("Cacher::NextCaching","completed");
       break;
     }
-    else
-      complete = kFALSE;
 
     MDB(kTreeIO, 2)
       Info("Cacher::NextCaching","waiting for completion (10 sec)");
