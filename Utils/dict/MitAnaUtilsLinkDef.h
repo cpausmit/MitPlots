@@ -4,6 +4,7 @@
 #define MITANA_UTILS_LINKDEF_H
 #include "MitAna/Utils/interface/MyHtml.h"
 #include "MitAna/Utils/interface/SimpleTable.h"
+#include "MitAna/Utils/interface/ConvertStreamer.h"
 #endif
 
 #ifdef __CLING__
@@ -18,4 +19,6 @@
 #pragma link C++ class MyHtml::MyModDef+;
 #pragma link C++ class mithep::SimpleTable+;
 #pragma link C++ class mithep::SimpleTable::MyParameter+;
+
+#pragma link C++ class mithep::StreamerConverter+;
 #endif
