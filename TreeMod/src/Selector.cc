@@ -16,6 +16,7 @@ ClassImp(mithep::Selector)
 //--------------------------------------------------------------------------------------------------
 Selector::Selector() : 
   fDoRunInfo     (kTRUE),
+  fMustConvertStreamer(kFALSE),
   fEvtHdrName    (Names::gkEvtHeaderBrn),
   fRunTreeName   (Names::gkRunTreeName),
   fRunInfoName   (Names::gkRunInfoBrn),

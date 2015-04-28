@@ -35,6 +35,7 @@ Analysis::Analysis(Bool_t useproof) :
   fDoProxy(kFALSE),
   fDoObjTabClean(kTRUE),
   fParallel(kFALSE),
+  fMustConvertStreamer(kFALSE),
   fState(kPristine),
   fNFriends(0),
   fList(new TList),
