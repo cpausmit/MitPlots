@@ -1,5 +1,5 @@
 //
-// $Id: TAMVirtualLoader.h 5584 2009-07-16 21:00:34Z loizides $
+// $Id: TAMVirtualLoader.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #ifndef ROOT_TAMVirtualLoader
@@ -12,7 +12,7 @@
 
 
 class TTree;
-struct TAMBranchInfo;
+class TAMBranchInfo;
 class TAMVirtualBranchLoader;
 
 

@@ -1,8 +1,3 @@
-//
-// $Id: MitAnaTAMLinkDef.h,v 1.1 2008/05/27 19:13:21 loizides Exp $
-//
-//
-
 #ifndef __MitAnaTreeModLinkDef__
 #define __MitAnaTreeModLinkDef__
 
@@ -38,7 +33,5 @@
 #pragma link C++ class TAMTreeBranchLoader+;
 #pragma link C++ class TAMVirtualLoader+;
 #pragma link C++ class TAMVirtualBranchLoader+;
-#pragma link C++ class TAMObjLoader+;
-#pragma link C++ class TAMObjBranchLoader+;
 
 #endif

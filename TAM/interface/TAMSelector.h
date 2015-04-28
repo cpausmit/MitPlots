@@ -1,5 +1,5 @@
 //
-// $Id: TAMSelector.h 5734 2009-09-29 19:28:39Z loizides $
+// $Id: TAMSelector.h,v 1.14 2009/07/17 19:18:04 loizides Exp $
 //
 
 #ifndef ROOT_TAMSelector
@@ -23,10 +23,10 @@
 #include "TList.h"
 #endif
 #ifndef ROOT_TAMBranchInfo
-#include "TAMBranchInfo.h"
+#include "MitAna/TAM/interface/TAMBranchInfo.h"
 #endif   
 #ifndef ROOT_TAMVirtualLoader
-#include "TAMVirtualLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualLoader.h"
 #endif   
 
 
@@ -151,7 +151,6 @@ public:
    Bool_t            IsAModAborted()     const { return fModAborted;      }
    Bool_t            IsEventAborted()    const { return fEventAborted;    }
    Bool_t            IsAnalysisAborted() const { return fAnalysisAborted; }
-   void              ListObjsThisEvt(Option_t* option = "") const;
    void              LoadBranch(const Char_t* bname);
    Bool_t            Notify();
    Bool_t            Process(Int_t entry) 
