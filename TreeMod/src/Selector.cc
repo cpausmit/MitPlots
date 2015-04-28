@@ -3,6 +3,7 @@
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TreeMod/interface/OutputMod.h"
+#include "MitAna/Utils/interface/StreamerCorrection.h"
 #include <TProcessID.h>
 #include <TFile.h>
 #include <TTree.h>
@@ -112,6 +113,16 @@ Bool_t Selector::Notify()
 
   if (!GetCurrentFile()) 
     return kTRUE;
+
+  if (fMustConvertStreamer) {
+    // Bambu files written in ROOT 5 had wrong type names for templated class members, e.g. in Electron class
+    //  mithep::Electron::Ref<Track> fGsfTrackRef
+    // where it has to be
+    //  mithep::Ref::<mithep::Track> fGsfTrackRef
+    // Correct streamer info using the information from the first file. This is a one-time operation.
+    StreamerCorrection::CorrectStreamerInfo(GetCurrentFile());
+    fMustConvertStreamer = kFALSE;
+  }
 
   if (fDoRunInfo) 
     UpdateRunInfoTree();

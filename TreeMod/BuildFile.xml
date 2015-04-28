@@ -3,8 +3,9 @@
 <use   name="MitAna/DataCont"/>
 <use   name="MitAna/DataUtil"/>
 <use   name="MitAna/Catalog"/>
+<use   name="MitAna/Utils"/>
 <use   name="MitCommon/MathTools"/>
-<use   root=""/>
+<use   name="root"/>
 <lib   name="Proof"/>
 <export>
   <lib   name="1"/>

@@ -490,6 +490,7 @@ Bool_t Analysis::Init()
     sel->SetLATreeName(GetLATreeName());
     sel->SetRunInfoName(GetRunInfoName());
     sel->SetRunTreeName(GetRunTreeName());
+    sel->SetMustConvertStreamer(fMustConvertStreamer);
     sel->AddInput(anamod);
     fSelector = sel;
 
