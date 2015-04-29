@@ -19,19 +19,23 @@ namespace mithep {
     TObjArrayIter inmItr(_inmemoryInfo->GetElements());
 
     TStreamerElement* inmemoryElem(0);
-    while((inmemoryElem = static_cast<TStreamerElement*>(inmItr())))
-      if(std::strcmp(inmemoryElem->GetName(), _elemName) == 0) break;
+    while ((inmemoryElem = static_cast<TStreamerElement*>(inmItr()))) {
+      if(std::strcmp(inmemoryElem->GetName(), _elemName) == 0)
+        break;
+    }
 
-    if(!inmemoryElem)
+    if (!inmemoryElem)
       throw std::logic_error(TString::Format("In-memory class %s has no member named %s", _inmemoryInfo->GetName(), _elemName).Data());
 
     TObjArrayIter onfItr(_onfileInfo->GetElements());
 
     TStreamerElement* onfileElem(0);
-    while((onfileElem = static_cast<TStreamerElement*>(onfItr())))
-      if(std::strcmp(onfileElem->GetName(), _elemName) == 0) break;
+    while ((onfileElem = static_cast<TStreamerElement*>(onfItr()))) {
+      if(std::strcmp(onfileElem->GetName(), _elemName) == 0)
+        break;
+    }
 
-    if(!onfileElem)
+    if (!onfileElem)
       throw std::logic_error(TString::Format("On-file class %s has no member named %s", _onfileInfo->GetName(), _elemName).Data());
 
     onfileElem->SetTypeName(inmemoryElem->GetTypeName());
@@ -50,9 +54,10 @@ namespace mithep {
 
     TList* infoList(_firstFile->GetStreamerInfoList());
 
-    for(int iI(0); iI != infoList->GetEntries(); ++iI){
+    for (int iI(0); iI != infoList->GetEntries(); ++iI) {
       TObject* obj(infoList->At(iI));
-      if(!obj || obj->IsA() != TStreamerInfo::Class()) continue;
+      if (!obj || obj->IsA() != TStreamerInfo::Class())
+        continue;
 
       Version_t onfileVersion(static_cast<TStreamerInfo*>(obj)->GetClassVersion());
 
@@ -64,7 +69,7 @@ namespace mithep {
       TStreamerInfo* onfileInfo(static_cast<TStreamerInfo*>(cl->GetStreamerInfos()->UncheckedAt(onfileVersion)));
 
       // If the current in-memory version and on-file version coincides, info is NULL (don't ask me why)
-      if(!onfileInfo) continue;
+      if (!onfileInfo) continue;
 
       TStreamerInfo* inmemoryInfo(static_cast<TStreamerInfo*>(cl->GetStreamerInfo()));
 
@@ -72,9 +77,9 @@ namespace mithep {
 
       TObjArray* elements(onfileInfo->GetElements());
 
-      for(int iE(0); iE != elements->GetEntries(); ++iE){
+      for (int iE(0); iE != elements->GetEntries(); ++iE) {
         TStreamerElement* elem(static_cast<TStreamerElement*>(elements->UncheckedAt(iE)));
-        if(re.MatchB(elem->GetTypeName()))
+        if (re.MatchB(elem->GetTypeName()))
           ReplaceStreamerElement(onfileInfo, inmemoryInfo, elem->GetName());
       }
     }
