@@ -22,7 +22,7 @@ namespace mithep
     Sample() {}
     Sample(const char* name,  const char* skimName, const char* file, const char* dir,
 	   const double xsec, const double scale);
-    ~Sample() {}
+    virtual ~Sample() {}
     
     const TString           *Name()                           const { return &fName; }
     const TString           *SkimName()                       const { return &fSkimName; }

@@ -20,7 +20,7 @@ namespace mithep
   {
   public:
     HistStyle();
-    ~HistStyle() {}
+    virtual ~HistStyle() {}
     // return the attribute
     int             Color()       const { return fColor; }
     float           LineWidth()   const { return fLineWidth; }
