@@ -47,7 +47,7 @@ public:
    void*                GetAddress() const;
    Int_t                GetEntry(Long64_t entry);
    using       TObject::Notify;
-   Bool_t               Notify(TTree *tree);
+   Bool_t               Notify(TTree *tree) override;
    
    ClassDef(TAMTreeBranchLoader,0)  // TAM plugin to load data from a branch
 };

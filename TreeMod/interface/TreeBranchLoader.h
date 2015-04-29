@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeBranchLoader.h,v 1.4 2008/12/10 14:20:27 loizides Exp $
-//
 // TreeBranchLoader
 //
 // TAM plugin that loads data from single tree branches
@@ -25,9 +23,10 @@ namespace mithep {
     public:
       TreeBranchLoader(TAMBranchInfo *binfo);
 
-      void                 Clear(Option_t *option="");
+      void                 Clear(Option_t *option="") override;
       TBranch             *GetBranch()                 { return fBranch; }
-      Bool_t               Notify(TTree *tree);
+      using TObject::Notify;
+      Bool_t               Notify(TTree *tree) override;
 
     ClassDef(TreeBranchLoader, 0)  // TAM plugin to load data from a single branch
   };

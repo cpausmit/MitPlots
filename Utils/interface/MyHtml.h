@@ -27,6 +27,7 @@ class MyHtml : public THtml
   public:
     class MyModDef: public TModuleDefinition {
     public:
+      using TModuleDefinition::GetModule;
       bool GetModule(TClass* cl, TString& out_modulename) const {
         TString cn(cl->GetName());
         if (!cn.BeginsWith("mithep") && !cn.BeginsWith("TAM")) {
@@ -48,8 +49,8 @@ class MyHtml : public THtml
       MyModDef m;
       SetModuleDefinition(m);
     }
-    void SetIncludePath(const char *p) { fPathInfo.fIncludePath=p; }
-    void GetModuleNameForClass(TString& module, TClass* cl) const
+
+    void GetModuleNameForClass(TString& module, TClass* cl) const override
     {
       module = "NOTUSED";
         TString cn(cl->GetName());

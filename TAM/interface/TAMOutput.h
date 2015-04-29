@@ -66,8 +66,9 @@ public:
       virtual ~TAMModInspector();
 
       void           AddOutput(TObject* obj, const void* adr);
+      using TMemberInspector::Inspect;
       virtual void   Inspect(TClass* cl, const Char_t* parent,
-                             const Char_t* name, const void* addr);
+                             const Char_t* name, const void* addr) override;
       TAMModMember  *FindModMemberWithAddr(const void* addr);
       TAMModMember  *FindModMemberWithMemberName(const Char_t* mn);
       void           RemoveOutput(TObject* obj);
@@ -99,7 +100,7 @@ public:
    
    template <class OC>
    void              AddOutput(OC* const & obj);
-   virtual void      Browse(TBrowser* b);
+   virtual void      Browse(TBrowser* b) override;
    static void       CheckHistDir(TObject* obj);
    TAMOutput        *FindModOutput(const TAModule* mod);
    TAMOutput        *FindModOutput(const Char_t* name);
@@ -110,19 +111,19 @@ public:
    TAModule         *GetMod()       { return fMod; }
    const TList      *GetOutputList() const { return &fOutput; }
    TList            *GetOutputList()       { return &fOutput; }
-   virtual Long64_t  Merge(TCollection* list);
-   virtual void      ls(Option_t* option="") const;
+   Long64_t          Merge(TCollection* list);
+   virtual void      ls(Option_t* option="") const override;
    using             TCollection::Print;
-   virtual void      Print(Option_t* wildcard="") const;
+   virtual void      Print(Option_t* wildcard="") const override;
    void              RemoveOutput(TObject* obj);
    void              SetAllOutputMembers(const Bool_t setAddresses);
    void              SetMod(TAModule* mod) { fMod = mod; }
    void              SetOutputMembers(const Bool_t setAddresses);
    void              StoreAllOutputObjs();
    void              StoreOutputObjs();
-   virtual Int_t     Write(const char* name=0, Int_t option=0, Int_t bsize=0);
+   virtual Int_t     Write(const char* name=0, Int_t option=0, Int_t bsize=0) override;
    virtual Int_t     Write(const char* name=0, Int_t option=0, 
-                           Int_t bsize=0) const;
+                           Int_t bsize=0) const override;
    Int_t             WriteCol(const TCollection *col, const char* name=0, 
                               Int_t option=0, Int_t bsize=0) const;
 
