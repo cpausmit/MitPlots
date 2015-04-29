@@ -27,6 +27,10 @@ namespace mithep
       enum ETrigType { kHLT, kL1A, kL1T };
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
 
+      Bool_t GetFillHist()         const { return fFillHist;    }
+      void   SetFillHist(Bool_t b)       { fFillHist = b;       }
+      Int_t  GetNEventsProcessed() const { return fNEventsProc; }
+
     private:
       class ObjType : public TObjString {
         public:
@@ -50,14 +54,12 @@ namespace mithep
                                          Int_t nbinsz, Double_t zmin, Double_t zmax);
       void                        AddToTrash(TObject *obj);
       const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
-      Bool_t                      GetFillHist()         const { return fFillHist;                  }
       const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod;                 }
       const TriggerObjectCol     *GetHLTObjects(const char *name) const;
       const TriggerObjectsTable  *GetHLTObjectsTable()            const;
       const TriggerTable         *GetHLTTable()                   const;
       const TriggerTable         *GetL1AlgoTable()                const;
       const TriggerTable         *GetL1TechTable()                const;
-      Int_t                       GetNEventsProcessed()           const { return fNEventsProc;     }
       template <class T> const T *GetColThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
       template <class T> T       *GetObjThisEvt(const char *name, Bool_t warn=1);
@@ -73,7 +75,6 @@ namespace mithep
       template <class T> void     ReqEventObject(const char *name, const T *&addr);
       template <class T> void     ReqEventObject(const char *name, const T *&addr, Bool_t fromBr);
       void                        SaveNEventsProcessed(const char *name="hDEvents");
-      void                        SetFillHist(Bool_t b)       { fFillHist = b;                     }
       Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   }
 
     private:
