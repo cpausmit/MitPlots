@@ -360,7 +360,7 @@ namespace mithep
     
 
 
-    ClassDef(Photon,20) // Photon class
+    ClassDef(Photon,21) // Photon class
   };
 }
 

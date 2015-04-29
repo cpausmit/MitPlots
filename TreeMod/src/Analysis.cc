@@ -35,7 +35,6 @@ Analysis::Analysis(Bool_t useproof) :
   fDoProxy(kFALSE),
   fDoObjTabClean(kTRUE),
   fParallel(kFALSE),
-  fMustConvertStreamer(kFALSE),
   fState(kPristine),
   fNFriends(0),
   fList(new TList),
@@ -491,7 +490,6 @@ Bool_t Analysis::Init()
     sel->SetLATreeName(GetLATreeName());
     sel->SetRunInfoName(GetRunInfoName());
     sel->SetRunTreeName(GetRunTreeName());
-    sel->SetMustConvertStreamer(fMustConvertStreamer);
     sel->AddInput(anamod);
     fSelector = sel;
 
