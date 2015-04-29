@@ -9,13 +9,14 @@
 #define MITANA_DATACONT_BASECOLLECTION_H
  
 #include <TObject.h>
+#include "TClass.h"
 
 namespace mithep 
 {
   class BaseCollection : public TObject 
   {
     public:
-      BaseCollection() : fEntries(-1) {}
+      BaseCollection();
 
       UInt_t                       Entries()                      const;
       virtual UInt_t               GetEntries()                   const = 0;
@@ -30,25 +31,42 @@ namespace mithep
 
       mutable Int_t                fEntries; //!cached number of entries
 
-    ClassDef(BaseCollection, 1) // Base class of all our collections
+    ClassDef(BaseCollection, 2) // Base class of all our collections
   };
-}
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::BaseCollection::Clear(Option_t */*opt*/)
-{ 
-  // Reset cache for entries.
+  inline
+  mithep::BaseCollection::BaseCollection() :
+  fEntries(-1)
+  {
+    static bool ignoreFlag(false);
+    if(!ignoreFlag){
+      // The static variable itself is not thread-safe,
+      // but there is a mutex lock within IgnoreTObjectStreamer
+      // function. Multiple threads assigning the same value
+      // "true" to ignoreFlag should not be a problem.
 
-  fEntries = -1; 
-}
+      mithep::BaseCollection::Class()->IgnoreTObjectStreamer(true);
+      ignoreFlag = true;
+    }
+  }
 
-//--------------------------------------------------------------------------------------------------
-inline UInt_t mithep::BaseCollection::Entries() const
-{
-  // Return cached number of entries.
+  //--------------------------------------------------------------------------------------------------
+  inline void mithep::BaseCollection::Clear(Option_t */*opt*/)
+  { 
+    // Reset cache for entries.
 
-  if (fEntries<0) 
-    fEntries = GetEntries();
-  return fEntries;
+    fEntries = -1; 
+  }
+
+  //--------------------------------------------------------------------------------------------------
+  inline UInt_t mithep::BaseCollection::Entries() const
+  {
+    // Return cached number of entries.
+
+    if (fEntries<0) 
+      fEntries = GetEntries();
+    return fEntries;
+  }
+
 }
 #endif

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RefArray.h,v 1.23 2010/09/19 23:46:08 bendavid Exp $
-//
 // RefArray
 //
 // Implementation of an efficient TRefArray using the FastArray.
@@ -61,7 +59,7 @@ namespace mithep
       FastArray<ProcIDRef>      fPIDs; //||process ids of referenced objects
       FastArrayBasic<UInt_t>    fUIDs; //||unique ids of referenced objects
 
-      ClassDef(RefArray, 1) // Implementation of our own TRefArray
+      ClassDef(RefArray, 2) // Implementation of our own TRefArray
   };
 }
 

@@ -1,5 +1,5 @@
 //
-// $Id: TAMOutput.h 5734 2009-09-29 19:28:39Z loizides $
+// $Id: TAMOutput.h,v 1.4 2009/07/17 19:18:04 loizides Exp $
 //
 
 #ifndef ROOT_TAMOutput
@@ -66,8 +66,9 @@ public:
       virtual ~TAMModInspector();
 
       void           AddOutput(TObject* obj, const void* adr);
+      using TMemberInspector::Inspect;
       virtual void   Inspect(TClass* cl, const Char_t* parent,
-                             const Char_t* name, const void* addr);
+                             const Char_t* name, const void* addr) override;
       TAMModMember  *FindModMemberWithAddr(const void* addr);
       TAMModMember  *FindModMemberWithMemberName(const Char_t* mn);
       void           RemoveOutput(TObject* obj);
@@ -86,8 +87,8 @@ private:
    void              CallMerge(TObject* obj, TList& list);
    void              DeleteIterators(vector<TIterator*>& iters);
    TList            *GetCurOutputList()       { return &fCurOutput; }
-   //using      TList::FindObject;
-   void              MergeOutput(TCollection* list);
+   using      TList::FindObject;
+   Long64_t          MergeOutput(TCollection* list);
    void              NullObjInAddOutput() const;
    void              NullClassFor(void* adr, const Char_t* tid) const;
    void              WarnNameDuplicate(const TObject* obj) const;
@@ -99,7 +100,7 @@ public:
    
    template <class OC>
    void              AddOutput(OC* const & obj);
-   virtual void      Browse(TBrowser* b);
+   virtual void      Browse(TBrowser* b) override;
    static void       CheckHistDir(TObject* obj);
    TAMOutput        *FindModOutput(const TAModule* mod);
    TAMOutput        *FindModOutput(const Char_t* name);
@@ -110,27 +111,19 @@ public:
    TAModule         *GetMod()       { return fMod; }
    const TList      *GetOutputList() const { return &fOutput; }
    TList            *GetOutputList()       { return &fOutput; }
-   Long64_t          Merge(TCollection *list);
-   virtual void      ls(Option_t* option="") const;
-   //using             TCollection::Print;
-   virtual void      Print(Option_t* wildcard="") const;
-   virtual void      Print(Option_t* option, Int_t recurse) const
-      { return TList::Print(option, recurse); }
-   virtual void      Print(Option_t* option, const char* wildcard,
-                           Int_t recurse = 1) const
-      { return TList::Print(option, wildcard, recurse); }
-   virtual void      Print(Option_t* option, TPRegexp& regexp, 
-                           Int_t recurse = 1) const
-      { return TList::Print(option, regexp, recurse); }
+   Long64_t          Merge(TCollection* list);
+   virtual void      ls(Option_t* option="") const override;
+   using             TCollection::Print;
+   virtual void      Print(Option_t* wildcard="") const override;
    void              RemoveOutput(TObject* obj);
    void              SetAllOutputMembers(const Bool_t setAddresses);
    void              SetMod(TAModule* mod) { fMod = mod; }
    void              SetOutputMembers(const Bool_t setAddresses);
    void              StoreAllOutputObjs();
    void              StoreOutputObjs();
-   virtual Int_t     Write(const char* name=0, Int_t option=0, Int_t bsize=0);
+   virtual Int_t     Write(const char* name=0, Int_t option=0, Int_t bsize=0) override;
    virtual Int_t     Write(const char* name=0, Int_t option=0, 
-                           Int_t bsize=0) const;
+                           Int_t bsize=0) const override;
    Int_t             WriteCol(const TCollection *col, const char* name=0, 
                               Int_t option=0, Int_t bsize=0) const;
 

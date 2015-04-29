@@ -1,10 +1,6 @@
-// $Id: MitAnaUtilsLinkDef.h,v 1.2 2009/08/11 23:09:28 loizides Exp $
-
-#ifndef MITANA_UTILS_LINKDEF_H
-#define MITANA_UTILS_LINKDEF_H
 #include "MitAna/Utils/interface/MyHtml.h"
 #include "MitAna/Utils/interface/SimpleTable.h"
-#endif
+#include "MitAna/Utils/interface/StreamerCorrection.h"
 
 #ifdef __CLING__
 #pragma link off all globals;
@@ -18,4 +14,6 @@
 #pragma link C++ class MyHtml::MyModDef+;
 #pragma link C++ class mithep::SimpleTable+;
 #pragma link C++ class mithep::SimpleTable::MyParameter+;
+
+#pragma link C++ class mithep::StreamerCorrection;
 #endif

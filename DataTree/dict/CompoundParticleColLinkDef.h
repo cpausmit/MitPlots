@@ -1,11 +1,7 @@
 // $Id: CompoundParticleColLinkDef.h,v 1.1 2009/06/15 15:00:14 loizides Exp $
 
-#ifndef MITANA_DATATREE_COMPOSITEPARTICLECOLLINKDEF_H
-#define MITANA_DATATREE_COMPOSITEPARTICLECOLLINKDEF_H
-
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompoundParticleCol.h"
-#endif
 
 #ifndef __CLING__
 #   define _R__UNIQUEIDENTIFIER_ CompoundParticleCol

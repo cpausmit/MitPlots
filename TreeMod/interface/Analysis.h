@@ -98,6 +98,7 @@ namespace mithep
       void                      SetUseHLT(Bool_t hlt)               { fUseHLT         = hlt;      }
       void                      SetUseProof(Bool_t up)              { fUseProof       = up;       }
       void                      SetUseCacher(Int_t i)               { fUseCacher      = i;        }
+      void                      SetReadingOldFile(Bool_t isOld)     { fMustConvertStreamer = isOld; }
       void                      Terminate();
 
     protected:
@@ -123,6 +124,7 @@ namespace mithep
       Bool_t                    fDoProxy;         //=true if TRef branch autoload is used (def=0)
       Bool_t                    fDoObjTabClean;   //=true if object table cleaning is used (def=1)
       Bool_t                    fParallel;        //=true if parellel tree unzipping is used (def=0)
+      Bool_t                    fMustConvertStreamer; //=true when reading ROOT 5 input from ROOT 6
       EState                    fState;           //status of analysis
       Int_t                     fNFriends;        //number of friend trees
       TList                    *fList;            //list of lists of path names

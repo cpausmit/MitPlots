@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCParticle.h,v 1.25 2012/03/29 23:41:55 paus Exp $
-//
 // MCParticle
 //
 // Stores MC information for both generated and simulated particles.
@@ -95,7 +93,7 @@ namespace mithep
       Bool_t              fIsGenerated;  //=true if generated particle
       Bool_t              fIsSimulated;  //=true if simulated particle
 
-    ClassDef(MCParticle,1) // Generated particle class
+    ClassDef(MCParticle,2) // Generated particle class
   };
 }
 

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: CompositeParticle.h,v 1.23 2012/03/28 12:15:34 paus Exp $
-//
 // CompositeParticle
 //
 // A composite particle class that holds other (daughter) particles.
@@ -42,7 +40,7 @@ namespace mithep
 
       RefArray<Particle>        fDaughters; //references to daughter particles
       
-    ClassDef(CompositeParticle, 1) // Composite particle class
+    ClassDef(CompositeParticle, 2) // Composite particle class
   };
 }
 

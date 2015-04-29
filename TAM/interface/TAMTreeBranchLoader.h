@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.h 5584 2009-07-16 21:00:34Z loizides $
+// $Id: TAMTreeBranchLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
 //
 
 #ifndef ROOT_TAMTreeBranchLoader
@@ -10,14 +10,14 @@
 
 
 #ifndef ROOT_TAMVirtualBranchLoader
-#include "TAMVirtualBranchLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
 #endif
 
 
 class TClass;
 class TBranch;
 class TTree;
-class TDataType;
+
 
 class TAMTreeBranchLoader : public TAMVirtualBranchLoader {
 protected:
@@ -27,14 +27,12 @@ protected:
    Bool_t               fLeafSizeConst; //if size of leaves in branch is const
    TBranch             *fBranch;        //the branch itself (not owned)
    TClass              *fClass;         //class information from dictionary 
-                                        // (not owned) (ptr=0 if fund type)
-   const TDataType     *fDataType;      //fundamental data type (ptr=0 if class)
+                                        // (not owned)
 
    void                 AllocateMemory();
    Bool_t               CheckBrClass(const type_info& ptrtype, 
                                      const TClass& cls);
    Bool_t               CheckBrStruct(TClass& cls);
-   Bool_t               CheckFundType(const type_info& ptrtype);
    Bool_t               CheckBrType(const type_info& ptrtype);
    Bool_t               CheckBrTypeAllModules();
    void                 DeleteMemory();
@@ -42,16 +40,14 @@ protected:
    void                 SetLeafAddresses();
 
 public:
-   TAMTreeBranchLoader() : fBAddr(0), fIsClass(kFALSE), 
-     fLeafSizeConst(kTRUE), fBranch(0), fClass(0), fDataType(0) {}
    TAMTreeBranchLoader(TAMBranchInfo *binfo);
    virtual ~TAMTreeBranchLoader();
 
    void                 Clear(Option_t *option="");
    void*                GetAddress() const;
    Int_t                GetEntry(Long64_t entry);
-   virtual Bool_t       Notify() { return Notify(0); }
-   Bool_t               Notify(TTree *tree);
+   using       TObject::Notify;
+   Bool_t               Notify(TTree *tree) override;
    
    ClassDef(TAMTreeBranchLoader,0)  // TAM plugin to load data from a branch
 };

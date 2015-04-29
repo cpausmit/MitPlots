@@ -1,5 +1,5 @@
 //
-// $Id: TAMTreeBranchLoader.cxx 5584 2009-07-16 21:00:34Z loizides $
+// $Id: TAMTreeBranchLoader.cxx,v 1.3 2009/07/13 19:20:25 loizides Exp $
 //
 
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
@@ -42,7 +42,6 @@
 #include "TClonesArray.h"
 #endif
 
-#include <cstdlib>
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -69,7 +68,7 @@ ClassImp(TAMTreeBranchLoader)
 //______________________________________________________________________________
 TAMTreeBranchLoader::TAMTreeBranchLoader(TAMBranchInfo *binfo)
    : TAMVirtualBranchLoader(binfo), fBAddr(0), fIsClass(kFALSE), 
-     fLeafSizeConst(kTRUE), fBranch(0), fClass(0), fDataType(0)
+     fLeafSizeConst(kTRUE), fBranch(0), fClass(0)
 {
    // Default constructor.
 }
@@ -91,23 +90,15 @@ void TAMTreeBranchLoader::AllocateMemory()
 {
    // Allocate memory on heap.
 
-   //R__ASSERT(fClass != 0);
+   R__ASSERT(fClass != 0);
 
    if(fBAddr!=0) {
       Fatal("AllocateMemory", 
             "Address already allocated! Must call DeleteMemory() first!");
       return;
-   } else {
-
-      if (fClass!=0) {
-         fBAddr = fClass->New();
-      } else {
-         // a fundamental type
-         fBAddr = malloc(fDataType->Size());
-      }
-
    }
 
+   fBAddr = fClass->New();
 }
 
 
@@ -206,47 +197,6 @@ Bool_t TAMTreeBranchLoader::CheckBrStruct(TClass& cls)
    return kFALSE;
 }
 
-//______________________________________________________________________________
-Bool_t TAMTreeBranchLoader::CheckFundType(const type_info& ptrtype)
-{
-   // Check that the specified type (of the user's pointer) corresponds
-   // with the fundamental type of the first, and only, leaf in this
-   // branch.
-   
-   R__ASSERT(gROOT!=0);
-   
-   // no class info for a fundamental type
-   fClass=0;
-   
-   // this only works if we have a single leaf. lists of leaves
-   // should get handled by the struct section
-   const TObjArray* ll = fBranch->GetListOfLeaves();
-   if (1==ll->GetEntriesFast()) {
-      const TLeaf* l = dynamic_cast<const TLeaf*>(ll->At(0));
-      if (l!=0) {
-         const TDataType* dt = gROOT->GetType(l->GetTypeName());
-         if (dt!=0) {
-            fDataType = dt;
-            return (dt->GetType() == TDataType::GetType(ptrtype));
-         } else {
-            Error("CheckFundType",
-                  "Could not get TDataType obj for type [%s], for banch [%s].",
-                  l->GetTypeName(), fBranch->GetName());
-         }
-      } else {
-         Error("CheckFundType",
-               "Could not get first leaf of branch [%s].",
-               fBranch->GetName());
-      }
-   } else {
-      Error("CheckFundType",
-            "Class sub-branch [%s] has [%d] leaves; expect only 1.",
-            fBranch->GetName(), ll->GetEntriesFast());
-   }
-   
-   return kFALSE;
-}
-
 
 //______________________________________________________________________________
 Bool_t TAMTreeBranchLoader::CheckBrType(const type_info& ptrtype) 
@@ -262,25 +212,10 @@ Bool_t TAMTreeBranchLoader::CheckBrType(const type_info& ptrtype)
    // first try the branch (works only for classes)
    TClass* cls = gROOT->GetClass(fBranch->GetClassName());
    if (cls!=0) {
-      // if it's an object, we must set the class.
-      // we don't want:
-      //   module A requests Event.fNum => allocate for int
-      //   module B requests Event.  => allocate Event, changing where
-      //                                Event.fNum will be read into
+      // known class
+      fIsClass = kTRUE;
       fClass = cls;
-      if ( fBranch==(fBranch->GetMother()) ) {
-         // known class and requesting the whole thing
-         fIsClass = kTRUE;
-         return CheckBrClass(ptrtype, *cls);
-      } else {
-         // known class but requesting a split, sub-branch
-         Error("CheckBrType",
-               "Reading single-variable branches like [%s] of split objects is "
-               "not supported. This is because no protection is provided "
-               "against a mix of modules requesting the full object and "
-               "modules requesting individual split branches.",
-               fBranch->GetName());
-      }
+      return CheckBrClass(ptrtype, *cls);
    } else {
       // pointer is a class/struct, branch is list of fundamentals
       cls = TClass::GetClass(ptrtype);
@@ -288,19 +223,13 @@ Bool_t TAMTreeBranchLoader::CheckBrType(const type_info& ptrtype)
 	 fClass = cls;
          return CheckBrStruct(*cls);
       } else {
-         const Bool_t fundok = CheckFundType(ptrtype);
-         if (fundok) {
-            return fundok;
-         } else {
-            // pointer is a fundamental type (or else unknown type)
-            Error("CheckBrType",
-                  "Pointer for branch [%s] is of unknown type "
-                  "[%d] (EDataType). Possibly "
-                  "a class/struct which is not in the TClass dictionary. "
-                  "This is not supported. See documentation.",
-                  fBranch->GetName(),
-                  static_cast<Int_t>(TDataType::GetType(ptrtype)));
-         }
+         // pointer is a fundamental type (or else unknown type)
+         Error("CheckBrType",
+               "Pointer for branch [%s] is of fundamental type [%d], or "
+               "is a class/struct which is not in the TClass dictionary. "
+               "This is not supported. See documentation.",
+               fBranch->GetName(),
+               static_cast<Int_t>(TDataType::GetType(ptrtype)));
       }
    }
    return kFALSE;
@@ -348,15 +277,10 @@ void TAMTreeBranchLoader::DeleteMemory()
 {
    // Delete (previously) allocated memory on heap.
 
-   if (fClass && fBAddr) {
+   if(fClass && fBAddr) {
       fClass->Destructor(fBAddr);
-   } else if (fDataType && fBAddr) {
-      // fundamental type
-      free(fBAddr);
+      fBAddr = 0;
    }
-
-   fBAddr = 0;
-
 }
 
 
@@ -430,10 +354,8 @@ Bool_t TAMTreeBranchLoader::Notify(TTree* tree)
    }
 
    // allocate memory on heap at fBAddr
-   //if(0&&!fBAddr)  why was this disabled? it prevents reading fund types
-   if (0==fBAddr) {
+   if(!fBAddr)
       AllocateMemory();
-   }
 
    // set the branch address to point to fBAddr
    SetBranchAddress();

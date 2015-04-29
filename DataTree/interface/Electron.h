@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Electron.h,v 1.59 2012/08/09 21:15:46 paus Exp $
-//
 // Electron
 //
 // This class holds information about reconstructed electrons from CMSSW.
@@ -422,7 +420,7 @@ namespace mithep
       Double32_t           fTrackMomentumError;        //track momentum error
       Ref<SuperCluster>    fPFSuperClusterRef;         //reference to Particle Flow SuperCluster
 
-    ClassDef(Electron, 15)                             // Electron class
+    ClassDef(Electron, 16)                             // Electron class
   };
 }
 

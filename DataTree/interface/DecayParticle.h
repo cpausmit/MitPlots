@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DecayParticle.h,v 1.37 2012/03/28 12:15:34 paus Exp $
-//
 // DecayParticle
 //
 // The decay particle class is for use in vertexing based analyses. It
@@ -134,7 +132,7 @@ namespace mithep
       mutable CacheFlag         fCachePosFlag; //||cache validity flag for position
       mutable ThreeVector       fCachedPos;    //!cached momentum vector (filled by derived classes)
       
-      ClassDef(DecayParticle, 5) // Decay particle class
+      ClassDef(DecayParticle, 6) // Decay particle class
   };
 }
 

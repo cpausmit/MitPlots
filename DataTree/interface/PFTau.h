@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PFTau.h,v 1.12 2012/03/29 23:41:55 paus Exp $
-//
 // PFTau
 //
 // This class holds information about reconstructed tau based on PFCandidates.
@@ -318,7 +316,7 @@ namespace mithep
       RefArray<PFCandidate> fSignalPFGammaCands;       //signal pf gamma candidates
       RefArray<PFCandidate> fIsoPFCands;               //selected pf candidates in isolation annulus
 
-    ClassDef(PFTau, 6) // PFTau class
+    ClassDef(PFTau, 7) // PFTau class
   };
 }
 

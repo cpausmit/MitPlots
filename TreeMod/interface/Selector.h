@@ -47,6 +47,7 @@ namespace mithep {
       void                 SetLATreeName(const char *n)     { fLATreeName     = n; }
       void                 SetRunInfoName(const char *n)    { fRunInfoName    = n; }
       void                 SetRunTreeName(const char *n)    { fRunTreeName    = n; }
+      void                 SetMustConvertStreamer(Bool_t doConv) { fMustConvertStreamer = doConv; }
 
     protected:
       Bool_t               BeginRun();
@@ -59,6 +60,7 @@ namespace mithep {
       void                 UpdateRunInfoTree();
 
       Bool_t               fDoRunInfo;      //=true then get RunInfo (def=1)
+      Bool_t               fMustConvertStreamer; //=true when reading ROOT 5 input from ROOT 6
       TString              fEvtHdrName;     //name of event header branch
       TString              fRunTreeName;    //name of run info tree
       TString              fRunInfoName;    //name of run info branch

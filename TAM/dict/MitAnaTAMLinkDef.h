@@ -1,7 +1,16 @@
-//
-// $Id: LinkDef.h 5395 2009-01-20 12:18:42Z loizides $
-//
-//
+#ifndef __MitAnaTreeModLinkDef__
+#define __MitAnaTreeModLinkDef__
+
+#include "MitAna/TAM/interface/TAMBranchInfo.h"
+#include "MitAna/TAM/interface/TAModule.h"
+#include "MitAna/TAM/interface/TAMOutput.h"
+#include "MitAna/TAM/interface/TAMSelector.h"
+#include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
+#include "MitAna/TAM/interface/TAMTreeLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
+#include "MitAna/TAM/interface/TAMVirtualLoader.h"
+
+#endif
 
 #ifdef __CLING__
 
@@ -22,7 +31,5 @@
 #pragma link C++ class TAMTreeBranchLoader+;
 #pragma link C++ class TAMVirtualLoader+;
 #pragma link C++ class TAMVirtualBranchLoader+;
-#pragma link C++ class TAMObjLoader+;
-#pragma link C++ class TAMObjBranchLoader+;
 
 #endif

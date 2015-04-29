@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SuperCluster.h,v 1.28 2013/07/01 20:18:00 paus Exp $
-//
 // SuperCluster
 //
 // This class holds the super cluster information.
@@ -171,7 +169,7 @@ namespace mithep
     Double32_t              fRoundness;            //smaller_SCaxis/larger_SCaxis: barrel only
     Double32_t              fAngle;                //angle between SC axis and beam axis: barrel only
 
-    ClassDef(SuperCluster, 7) // Super cluster class
+    ClassDef(SuperCluster, 8) // Super cluster class
   };
 }
 

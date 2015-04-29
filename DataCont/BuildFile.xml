@@ -2,6 +2,7 @@
 <use   name="boost"/>
 <use   name="MitCommon/JSONSpirit"/>
 <use   name="MitAna/TAM"/>
+<use   name="MitAna/Utils"/>
 <export>
   <lib   name="1"/>
 </export>

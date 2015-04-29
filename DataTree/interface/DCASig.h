@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DCASig.h,v 1.3 2012/03/29 23:41:55 paus Exp $
-//
 // DCA Significance
 //
 // This class holds information about the significance of the DCA for various particle assumptions.
@@ -91,7 +89,7 @@ namespace mithep
     Ref<Electron> f2ndElectronRef;  // Electron reference
     Ref<Muon>     f2ndMuonRef;      // Muon reference
 
-    ClassDef(DCASig,1) // DCA Significance reference
+    ClassDef(DCASig,2) // DCA Significance reference
   };
 }
 #endif

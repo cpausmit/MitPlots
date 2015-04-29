@@ -1,5 +1,5 @@
 //
-// $Id: TAMBranchInfo.cxx 3115 2006-07-30 22:10:47Z loizides $
+// $Id: TAMBranchInfo.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
 //
 
 #include "MitAna/TAM/interface/TAMBranchInfo.h"

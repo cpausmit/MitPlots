@@ -14,13 +14,14 @@
  
 #include "MitAna/DataTree/interface/ObjTypes.h"
 #include <TObject.h>
+#include "TClass.h"
 
 namespace mithep
 {
   class DataBase : public TObject
   {
     public:
-      DataBase() {}
+      DataBase();
 
       Bool_t               Is(EObjType t) const { return (ObjType()==t); }
       Bool_t               IsCached()     const { return TestBit(23);    }
@@ -35,7 +36,23 @@ namespace mithep
       void                 SetClearBit()        { SetBit(14);            }
       void                 SetDeleteBit()       { SetBit(15);            }
 
-    ClassDef(DataBase, 1) // Common base for objects that do not get referenced
+    ClassDef(DataBase, 2) // Common base for objects that do not get referenced
   };
+
+  inline
+  DataBase::DataBase()
+  {
+    static bool ignoreFlag(false);
+    if(!ignoreFlag){
+      // The static variable itself is not thread-safe,
+      // but there is a mutex lock within IgnoreTObjectStreamer
+      // function. Multiple threads assigning the same value
+      // "true" to ignoreFlag should not be a problem.
+
+      DataBase::Class()->IgnoreTObjectStreamer(true);
+      ignoreFlag = true;
+    }
+  }
+
 }
 #endif
