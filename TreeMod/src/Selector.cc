@@ -16,7 +16,6 @@ ClassImp(mithep::Selector)
 //--------------------------------------------------------------------------------------------------
 Selector::Selector() : 
   fDoRunInfo     (kTRUE),
-  fMustConvertStreamer(kFALSE),
   fEvtHdrName    (Names::gkEvtHeaderBrn),
   fRunTreeName   (Names::gkRunTreeName),
   fRunInfoName   (Names::gkRunInfoBrn),
@@ -115,14 +114,15 @@ Bool_t Selector::Notify()
   if (!GetCurrentFile()) 
     return kTRUE;
 
-  if (fMustConvertStreamer) {
+  if (GetCurrentFile()->GetVersion() < 60000) {
     // Bambu files written in ROOT 5 had wrong type names for templated class members, e.g. in Electron class
     //  mithep::Electron::Ref<Track> fGsfTrackRef
     // where it has to be
     //  mithep::Ref::<mithep::Track> fGsfTrackRef
-    // Correct streamer info using the information from the first file. This is a one-time operation.
+    // Correct streamer info using the information from the first file. This is a one-time operation,
+    // i.e. in principle doing this on the first file is sufficient. Nevertheless we call the function
+    // in each Notify() in the interest of avoiding introducing another flag data member to the class.
     StreamerCorrection::CorrectStreamerInfo(GetCurrentFile());
-    fMustConvertStreamer = kFALSE;
   }
 
   if (fDoRunInfo) 
