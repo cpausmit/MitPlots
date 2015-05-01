@@ -45,13 +45,14 @@ namespace mithep
       void                     ProcessAll (EventHeader *eh);
 
     private:
-      TString                  fAllHeadTreeName;     //all events tree name
-      TString                  fAllHeadBrName;       //all event headers branch name
+      TString                  fAllHeadTreeName;     // all events tree name
+      TString                  fAllHeadBrName;       // all event headers branch name
       TTree                   *fMyHeadTree;          //!my event headers tree in current file
       EventHeader             *fMyEventHeader;       //!my event header
 
-      TString                  fMetaDataString;      //metadata description
-      Int_t                    fNFileSet;            //number of fileset
+      TString                  fMetaDataString;      // metadata description
+      Int_t                    fNFileSet;            // number of fileset
+      Bool_t                   fCurrentFileIsSkim;   // the file currently considered is a skim
       UInt_t                   fLastLumiSec;         //!last active lumi section
       BaseMetaData             fMetaData;            //!meta data info
 
