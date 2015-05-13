@@ -317,7 +317,7 @@ namespace mithep
       Ref<Track>           fGsfTrackRef;               //gsf track reference
       Ref<Track>           fTrackerTrackRef;           //tracker track reference
       Ref<Track>           fConvPartnerTrackRef;       //conversion partner track reference
-      Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster
+      Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster (refined unbiased PF supercluster in >= 7XY)
       Double32_t           fESuperClusterOverP;        //[0,0,14]super cluster e over p ratio
       Double32_t           fESeedClusterOverPout;      //[0,0,14]seed cluster e over p mom
       Double32_t           fDeltaEtaSuperClTrkAtVtx;   //[0,0,14]delta eta of super cluster with trk
@@ -418,7 +418,7 @@ namespace mithep
       Double32_t           fEcalEnergy;                //[0,0,14]corrected Ecal energy
       Double32_t           fEcalEnergyError;           //[0,0,14]corrected Ecal energy error
       Double32_t           fTrackMomentumError;        //track momentum error
-      Ref<SuperCluster>    fPFSuperClusterRef;         //reference to Particle Flow SuperCluster
+      Ref<SuperCluster>    fPFSuperClusterRef;         //reference to Particle Flow SuperCluster (assoc by ref/geom in <= 5XY, parentSuperCluster (ECAL-only PF mustache SC) in >= 7XY)
 
     ClassDef(Electron, 16)                             // Electron class
   };

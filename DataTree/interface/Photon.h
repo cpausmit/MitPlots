@@ -314,7 +314,7 @@ namespace mithep
     Bool_t               fIsTightPhoton;      //if tight photon cuts are passed
     Bool_t               fIsConverted;        //if photon converted
     RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*
-    Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster
+    Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster (refined unbiased PF supercluster in >= 7XY)
     Ref<Vertex>          fPVRef;              //ref to associated primary vertex
     Double32_t           fEnergyErr;          //[0,0,14]ene uncer. from var. regr.
     Double32_t           fEnergyErrSmeared;   //[0,0,14]ene uncer. from var. regr., smeared
@@ -327,7 +327,7 @@ namespace mithep
     Double32_t           fIdMva;              //[0,0,14]output of photon id mva
     Double32_t           fEtaWidth;           //[0,0,14]output of photon id mva
     Double32_t           fPhiWidth;           //[0,0,14]output of photon id mva
-    Ref<SuperCluster>    fPFSuperClusterRef;    //ref to associated PF super cluster
+    Ref<SuperCluster>    fPFSuperClusterRef;    //ref to associated PF super cluster (association by geom in <=5XY, parentSuperCluster (ECAL-only PF mustache SC) in >=7XY)
     Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
     Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
     Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
