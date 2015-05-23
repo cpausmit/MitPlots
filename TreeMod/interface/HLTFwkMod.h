@@ -18,6 +18,7 @@
 #include <TString.h>
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 #include "MitAna/DataTree/interface/TriggerObjectBaseFwd.h"
+#include "MitAna/DataTree/interface/TriggerObjectFwd.h"
 #include "MitAna/DataTree/interface/TriggerObjectRelFwd.h"
 
 namespace mithep 
@@ -77,6 +78,7 @@ namespace mithep
       Int_t                       fCurEnt;        //!current entry in HLT tree (-2 for unset)
       TriggerTable               *fTriggers;      //!exported published HLT trigger table
       TriggerTable               *fLabels;        //!exported published HLT module label table
+      TriggerObjectArr           *fTrigObjArr;    //!buffer of published HLT trigger objects
       TriggerObjectsTable        *fTrigObjs;      //!exported published HLT trigger objects table
       TriggerTable               *fL1Algos;       //!exported published L1 algorithm triggers table
       TriggerTable               *fL1Techs;       //!exported published L1 technical triggers table

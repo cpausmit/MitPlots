@@ -1,5 +1,3 @@
-// $Id: HLTFwkMod.cc,v 1.15 2011/03/11 04:03:54 bendavid Exp $
-
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
 #include <TTree.h>
@@ -40,6 +38,7 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fCurEnt(-2),
   fTriggers(new TriggerTable(fNMaxTriggers)),
   fLabels(new TriggerTable(fNMaxTriggers*16)),
+  fTrigObjArr(new TriggerObjectArr),
   fTrigObjs(new TriggerObjectsTable(fTriggers,fNMaxTriggers)),
   fL1Algos(new TriggerTable(fNMaxTriggers)),
   fL1Techs(new TriggerTable(fNMaxTriggers))
@@ -50,8 +49,8 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fTriggers->SetOwner();
   fLabels->SetName(fHLTLabNamePub);
   fLabels->SetOwner();
+  fTrigObjArr->SetName(Form("%sCont",fObjsName.Data()));
   fTrigObjs->SetName(fObjsNamePub);
-  fTrigObjs->SetOwner();
   fL1Algos->SetName(fL1ATabNamePub);
   fL1Algos->SetOwner();
   fL1Techs->SetName(fL1TTabNamePub);
@@ -63,17 +62,10 @@ HLTFwkMod::~HLTFwkMod()
 {
   // Destructor.
 
-  fReload  =  0;
-  fHLTTree =  0;
-  fHLTTab  =  0;
-  fHLTLab  =  0;
-  fCurEnt  = -2;
   delete fTriggers;
-  fTriggers = 0;
   delete fLabels;
-  fLabels   = 0;
+  delete fTrigObjArr;
   delete fTrigObjs;
-  fTrigObjs = 0;
   delete fL1Algos;
 
 }
@@ -242,7 +234,8 @@ void HLTFwkMod::Process()
 {
   // Read trigger objects and relation branch and fill our object table.
 
-  fTrigObjs->Delete();
+  fTrigObjs->Clear();
+  fTrigObjArr->Reset();
 
   LoadBranch(fObjsName);
   LoadBranch(fRelsName);
@@ -255,13 +248,15 @@ void HLTFwkMod::Process()
     const TriggerObjectBase *ob = fObjs->At(rel->ObjInd());
     if (!ob) continue;
 
-    TriggerObject *obj = new TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
-                                           ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
+    TriggerObject *obj = fTrigObjArr->Allocate();
+    new (obj) TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
+                            ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
 
+    obj->SetTagInd(ob->TagInd());
     obj->SetTrigName(fHLTTab->at(rel->TrgId()).c_str());
     obj->SetModuleName(fHLTLab->at(rel->ModInd()).c_str());
     obj->SetFilterName(fHLTLab->at(rel->FilterInd()).c_str());
-    if (obj->TagInd()>=0) 
+    if (obj->TagInd() >= 0)
       obj->SetTagName(fHLTLab->at(obj->TagInd()).c_str());
     else
       obj->SetTagName("Unknown");
