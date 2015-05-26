@@ -49,7 +49,7 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fTriggers->SetOwner();
   fLabels->SetName(fHLTLabNamePub);
   fLabels->SetOwner();
-  fTrigObjArr->SetName(Form("%sCont",fObjsName.Data()));
+  fTrigObjArr->SetName(Form("%sArr", fObjsName.Data()));
   fTrigObjs->SetName(fObjsNamePub);
   fL1Algos->SetName(fL1ATabNamePub);
   fL1Algos->SetOwner();
@@ -281,6 +281,11 @@ void HLTFwkMod::SlaveBegin()
               "Could not publish HLT trigger table with name %s.", fTriggers->GetName());
     return;
   }
+  if (!PublishObj(fTrigObjArr)) {
+    SendError(kAbortAnalysis, "SlaveBegin", 
+              "Could not publish HLT trigger objects array with name %s.", fTrigObjArr->GetName());
+    return;
+  }
   if (!PublishObj(fTrigObjs)) {
     SendError(kAbortAnalysis, "SlaveBegin", 
               "Could not publish HLT trigger objects table with name %s.", fTrigObjs->GetName());
@@ -310,6 +315,7 @@ void HLTFwkMod::SlaveTerminate()
 
   RetractObj(fTriggers->GetName());
   RetractObj(fLabels->GetName());
+  RetractObj(fTrigObjArr->GetName());
   RetractObj(fTrigObjs->GetName());
   RetractObj(fL1Algos->GetName());
   RetractObj(fL1Techs->GetName());
