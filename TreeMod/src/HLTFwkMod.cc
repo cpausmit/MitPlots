@@ -4,11 +4,9 @@
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
-#include "MitAna/DataTree/interface/TriggerTable.h"
 #include "MitAna/DataTree/interface/TriggerObjectBaseCol.h"
 #include "MitAna/DataTree/interface/TriggerObjectRelCol.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
-#include "MitAna/DataTree/interface/TriggerObjectsTable.h"
 
 using namespace mithep;
 
@@ -23,11 +21,6 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fHLTLabName(Names::gkHltLabelBrn),
   fObjsName(Names::gkHltObjBrn),
   fRelsName(Form("%sRelation",fObjsName.Data())),
-  fHLTTabNamePub(Form("%sFwk",fHLTTabName.Data())),
-  fHLTLabNamePub(Form("%sFwk",fHLTLabName.Data())),
-  fObjsNamePub(Form("%sFwk",fObjsName.Data())),
-  fL1ATabNamePub("L1AlgoTableFwk"),
-  fL1TTabNamePub("L1TechTableFwk"),
   fNMaxTriggers(1024),
   fObjs(0),
   fRels(0),
@@ -45,15 +38,15 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
 {
   // Constructor.
 
-  fTriggers->SetName(fHLTTabNamePub);
+  fTriggers->SetName(fHLTTabName + "Fwk");
   fTriggers->SetOwner();
-  fLabels->SetName(fHLTLabNamePub);
+  fLabels->SetName(fHLTLabName + "Fwk");
   fLabels->SetOwner();
-  fTrigObjArr->SetName(Form("%sArr", fObjsName.Data()));
-  fTrigObjs->SetName(fObjsNamePub);
-  fL1Algos->SetName(fL1ATabNamePub);
+  fTrigObjArr->SetName(fObjsName + "Arr");
+  fTrigObjs->SetName(fObjsName + "Fwk");
+  fL1Algos->SetName("L1AlgoTableFwk");
   fL1Algos->SetOwner();
-  fL1Techs->SetName(fL1TTabNamePub);
+  fL1Techs->SetName("L1TechTableFwk");
   fL1Techs->SetOwner();
 }
 

@@ -20,34 +20,35 @@
 #include "MitAna/DataTree/interface/TriggerObjectBaseFwd.h"
 #include "MitAna/DataTree/interface/TriggerObjectFwd.h"
 #include "MitAna/DataTree/interface/TriggerObjectRelFwd.h"
+#include "MitAna/DataTree/interface/TriggerTable.h"
+#include "MitAna/DataTree/interface/TriggerObjectsTable.h"
 
 namespace mithep 
 {
-  class TriggerTable;
-  class TriggerObjectsTable;
-
   class HLTFwkMod : public BaseMod {
     public:
       HLTFwkMod(const char *name="HLTFwkMod", const char *title="HLT framework module");
       ~HLTFwkMod();
 
-      const char                 *L1ATabNamePub()  const { return fL1ATabNamePub; }
-      const char                 *L1TTabNamePub()  const { return fL1TTabNamePub; }
+      const char                 *L1ATabNamePub()  const { return fL1Algos->GetName(); }
+      const char                 *L1TTabNamePub()  const { return fTriggers->GetName(); }
       const char                 *HLTLabName()     const { return fHLTLabName;    }
-      const char                 *HLTLabNamePub()  const { return fHLTLabNamePub; }
+      const char                 *HLTLabNamePub()  const { return fLabels->GetName(); }
       const char                 *HLTObjsName()    const { return fObjsName;      }
-      const char                 *HLTObjsNamePub() const { return fObjsNamePub;   }
+      const char                 *HLTObjArrNamePub() const { return fTrigObjArr->GetName(); }
+      const char                 *HLTObjsNamePub() const { return fTrigObjs->GetName(); }
       const char                 *HLTTabName()     const { return fHLTTabName;    }
-      const char                 *HLTTabNamePub()  const { return fHLTTabNamePub; }
+      const char                 *HLTTabNamePub()  const { return fL1Techs->GetName(); }
       const char                 *HLTTreeName()    const { return fHLTTreeName;   }
-      void                        SetL1ATabName(const char *n)     { fL1ATabNamePub = n; }
-      void                        SetL1TTabName(const char *n)     { fL1TTabNamePub = n; }
+      void                        SetL1ATabName(const char *n)     { fL1Algos->SetName(n); }
+      void                        SetL1TTabName(const char *n)     { fL1Techs->SetName(n); }
       void                        SetHLTLabName(const char *n)     { fHLTLabName    = n; }
-      void                        SetHLTLabNamePub(const char *n)  { fHLTLabNamePub = n; }
+      void                        SetHLTLabNamePub(const char *n)  { fLabels->SetName(n); }
       void                        SetHLTObjsName(const char *n)    { fObjsName      = n; }
-      void                        SetHLTObjsNamePub(const char *n) { fObjsNamePub   = n; }
+      void                        SetHLTObjArrNamePub(const char *n) { fTrigObjArr->SetName(n); }
+      void                        SetHLTObjsNamePub(const char *n) { fTrigObjs->SetName(n); }
       void                        SetHLTTabName(const char *n)     { fHLTTabName    = n; }
-      void                        SetHLTTabNamePub(const char *n)  { fHLTTabNamePub = n; }
+      void                        SetHLTTabNamePub(const char *n)  { fTriggers->SetName(n); }
       void                        SetHLTTreeName(const char *n)    { fHLTTreeName   = n; }
 
     protected:
@@ -63,11 +64,6 @@ namespace mithep
       TString                     fHLTLabName;    //HLT module labels branch name
       TString                     fObjsName;      //trigger objects branch name
       TString                     fRelsName;      //trigger to objects relation branch name
-      TString                     fHLTTabNamePub; //HLT trigger names published qname
-      TString                     fHLTLabNamePub; //HLT module labels published name
-      TString                     fObjsNamePub;   //trigger objects published name
-      TString                     fL1ATabNamePub; //L1 algorithm trigger names published name
-      TString                     fL1TTabNamePub; //L1 technical trigger names published name
       const UInt_t                fNMaxTriggers;  //maximum number of triggers
       const TriggerObjectBaseArr *fObjs;          //!trigger objects branch
       const TriggerObjectRelArr  *fRels;          //!trigger to objects relation branch
