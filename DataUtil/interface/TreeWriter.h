@@ -32,7 +32,7 @@ namespace mithep
   {
     public:
       MyTree(const char* name, const char* title, Int_t splitlevel = 99) :
-	TTree(name,title, splitlevel), fAutoFill(1) {}
+	TTree(name,title, splitlevel), fAutoFill(true) {}
 	Bool_t GetAutoFill() const   { return fAutoFill; }
 	void   SetAutoFill(Bool_t b) { fAutoFill = b; }
 

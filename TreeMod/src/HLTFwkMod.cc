@@ -1,16 +1,12 @@
-// $Id: HLTFwkMod.cc,v 1.15 2011/03/11 04:03:54 bendavid Exp $
-
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include <TFile.h>
 #include <TTree.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
-#include "MitAna/DataTree/interface/TriggerTable.h"
 #include "MitAna/DataTree/interface/TriggerObjectBaseCol.h"
 #include "MitAna/DataTree/interface/TriggerObjectRelCol.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
-#include "MitAna/DataTree/interface/TriggerObjectsTable.h"
 
 using namespace mithep;
 
@@ -25,11 +21,6 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fHLTLabName(Names::gkHltLabelBrn),
   fObjsName(Names::gkHltObjBrn),
   fRelsName(Form("%sRelation",fObjsName.Data())),
-  fHLTTabNamePub(Form("%sFwk",fHLTTabName.Data())),
-  fHLTLabNamePub(Form("%sFwk",fHLTLabName.Data())),
-  fObjsNamePub(Form("%sFwk",fObjsName.Data())),
-  fL1ATabNamePub("L1AlgoTableFwk"),
-  fL1TTabNamePub("L1TechTableFwk"),
   fNMaxTriggers(1024),
   fObjs(0),
   fRels(0),
@@ -40,21 +31,22 @@ HLTFwkMod::HLTFwkMod(const char *name, const char *title) :
   fCurEnt(-2),
   fTriggers(new TriggerTable(fNMaxTriggers)),
   fLabels(new TriggerTable(fNMaxTriggers*16)),
+  fTrigObjArr(new TriggerObjectArr),
   fTrigObjs(new TriggerObjectsTable(fTriggers,fNMaxTriggers)),
   fL1Algos(new TriggerTable(fNMaxTriggers)),
   fL1Techs(new TriggerTable(fNMaxTriggers))
 {
   // Constructor.
 
-  fTriggers->SetName(fHLTTabNamePub);
+  fTriggers->SetName(fHLTTabName + "Fwk");
   fTriggers->SetOwner();
-  fLabels->SetName(fHLTLabNamePub);
+  fLabels->SetName(fHLTLabName + "Fwk");
   fLabels->SetOwner();
-  fTrigObjs->SetName(fObjsNamePub);
-  fTrigObjs->SetOwner();
-  fL1Algos->SetName(fL1ATabNamePub);
+  fTrigObjArr->SetName(fObjsName + "Arr");
+  fTrigObjs->SetName(fObjsName + "Fwk");
+  fL1Algos->SetName("L1AlgoTableFwk");
   fL1Algos->SetOwner();
-  fL1Techs->SetName(fL1TTabNamePub);
+  fL1Techs->SetName("L1TechTableFwk");
   fL1Techs->SetOwner();
 }
 
@@ -63,17 +55,10 @@ HLTFwkMod::~HLTFwkMod()
 {
   // Destructor.
 
-  fReload  =  0;
-  fHLTTree =  0;
-  fHLTTab  =  0;
-  fHLTLab  =  0;
-  fCurEnt  = -2;
   delete fTriggers;
-  fTriggers = 0;
   delete fLabels;
-  fLabels   = 0;
+  delete fTrigObjArr;
   delete fTrigObjs;
-  fTrigObjs = 0;
   delete fL1Algos;
 
 }
@@ -242,7 +227,8 @@ void HLTFwkMod::Process()
 {
   // Read trigger objects and relation branch and fill our object table.
 
-  fTrigObjs->Delete();
+  fTrigObjs->Clear();
+  fTrigObjArr->Reset();
 
   LoadBranch(fObjsName);
   LoadBranch(fRelsName);
@@ -255,13 +241,15 @@ void HLTFwkMod::Process()
     const TriggerObjectBase *ob = fObjs->At(rel->ObjInd());
     if (!ob) continue;
 
-    TriggerObject *obj = new TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
-                                           ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
+    TriggerObject *obj = fTrigObjArr->Allocate();
+    new (obj) TriggerObject(rel->TrgId(), rel->Type(), ob->Id(), 
+                            ob->Pt(), ob->Eta(), ob->Phi(), ob->Mass());
 
+    obj->SetTagInd(ob->TagInd());
     obj->SetTrigName(fHLTTab->at(rel->TrgId()).c_str());
     obj->SetModuleName(fHLTLab->at(rel->ModInd()).c_str());
     obj->SetFilterName(fHLTLab->at(rel->FilterInd()).c_str());
-    if (obj->TagInd()>=0) 
+    if (obj->TagInd() >= 0)
       obj->SetTagName(fHLTLab->at(obj->TagInd()).c_str());
     else
       obj->SetTagName("Unknown");
@@ -284,6 +272,11 @@ void HLTFwkMod::SlaveBegin()
   if (!PublishObj(fTriggers)) {
     SendError(kAbortAnalysis, "SlaveBegin", 
               "Could not publish HLT trigger table with name %s.", fTriggers->GetName());
+    return;
+  }
+  if (!PublishObj(fTrigObjArr)) {
+    SendError(kAbortAnalysis, "SlaveBegin", 
+              "Could not publish HLT trigger objects array with name %s.", fTrigObjArr->GetName());
     return;
   }
   if (!PublishObj(fTrigObjs)) {
@@ -315,6 +308,7 @@ void HLTFwkMod::SlaveTerminate()
 
   RetractObj(fTriggers->GetName());
   RetractObj(fLabels->GetName());
+  RetractObj(fTrigObjArr->GetName());
   RetractObj(fTrigObjs->GetName());
   RetractObj(fL1Algos->GetName());
   RetractObj(fL1Techs->GetName());

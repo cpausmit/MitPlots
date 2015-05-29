@@ -28,6 +28,7 @@
 #include "MitAna/DataTree/interface/Particle.h"
 #include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
+#include "MitAna/DataTree/interface/PFTau.h"
 #include "MitAna/DataTree/interface/Tau.h"
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/TriggerObject.h"
