@@ -82,7 +82,8 @@ namespace mithep
     UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
     UInt_t               NConversionsS()              const { return fConversionsS.Entries(); }
     EObjType             ObjType()                    const { return kPhoton;                }
-    const SuperCluster  *ECALOnlySCluster()           const { return fECALOnlySuperClusterRef.Obj(); }
+    const SuperCluster  *ECALOnlySCluster()           const { return fPFSuperClusterRef.Obj(); }
+    const SuperCluster  *PFSCluster()                 const { return ECALOnlySCluster(); } // backward compatibility
     Double_t             R9()                         const { return fR9;                    }
     const SuperCluster  *SCluster()                   const { return fSuperClusterRef.Obj(); }
     Double_t             SolidConeTrkIsoDr03()        const { return fSolidConeTrkIsoDr03;   }
@@ -193,7 +194,7 @@ namespace mithep
     { fCaloPos.SetXYZ(x,y,z); }
     void                 SetPV(const Vertex *v)                  { fPVRef                   = v; }
     void                 SetECALOnlySuperCluster(const SuperCluster *s)
-    { fECALOnlySuperClusterRef = s;      }
+    { fPFSuperClusterRef = s;      }
     void                 SetVtxProb(Double_t x)                  { fVtxProb                 = x; }
     void                 SetIdMva(Double_t x)                    { fIdMva                   = x; }
     void                 SetEtaWidth(Double_t x)                 { fEtaWidth                = x; }
@@ -280,7 +281,7 @@ namespace mithep
     Double32_t           fIdMva;              //[0,0,14]output of photon id mva
     Double32_t           fEtaWidth;           //[0,0,14]output of photon id mva
     Double32_t           fPhiWidth;           //[0,0,14]output of photon id mva
-    Ref<SuperCluster>    fECALOnlySuperClusterRef;    //ref to associated ECAL-only super cluster (PF cluster associated by geom in <=5XY, parentSuperCluster (ECAL-only PF mustache SC) in >=7XY)
+    Ref<SuperCluster>    fPFSuperClusterRef;  //ref to associated ECAL-only super cluster (PF cluster associated by geom in <=5XY, parentSuperCluster (ECAL-only PF mustache SC) in >=7XY) see below
     Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
     Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
     Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
@@ -314,6 +315,10 @@ namespace mithep
     //    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*    
     //    Bool_t               fIsLooseEM;          //if loose em cuts are passed *DEPRECATED* always true
     //    Double32_t           fHcalRecHitIso;            //[0,0,14]hcal rechit bsd isodR 0.4 *DEPR*
+    // fPFSuperClusterRef: member object name is kept the same as <7XY so that old files can be read
+    // Should in principle be possible to use schema evolution to convert it to something like fECALOnlySuperClusterRef
+    // The problem is that process ID seems to be not set at the point where conversion rules are applied
+    // which is strange since process ID is set in ProcIDRef::Streamer..
 
     ClassDef(Photon,22) // Photon class
   };
@@ -329,6 +334,8 @@ inline void mithep::Photon::Mark(UInt_t ib) const
     fPVRef.Obj()->Mark(ib);
   if (fSuperClusterRef.IsValid())
     fSuperClusterRef.Obj()->Mark(ib);
+  if (fPFSuperClusterRef.IsValid())
+    fPFSuperClusterRef.Obj()->Mark(ib);
   //  fConversions.Mark(ib);
   fConversionsD.Mark(ib);
   fConversionsS.Mark(ib);

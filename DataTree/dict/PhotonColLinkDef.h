@@ -23,17 +23,9 @@
 #pragma read \
   sourceClass="mithep::Photon" \
   version="[-21]" \
-  source="fPFSuperClusterRef" \
+  source="fCoviEtaiEta" \
   targetClass="mithep::Photon" \
-  target="fECALOnlySuperClusterRef"
-
-#pragma read \
-  sourceClass="mithep::Photon" \
-  version="[-21]" \
-  source="" \
-  targetClass="mithep::Photon" \
-  target="fCoviEtaiEta5x5" \
-  code="{ fCoviEtaiEta5x5 = 0.; }"
+  target="fCoviEtaiEta5x5"
 
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;
