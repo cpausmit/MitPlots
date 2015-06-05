@@ -24,8 +24,8 @@ namespace mithep {
         break;
     }
 
-    if (!inmemoryElem)
-      throw std::logic_error(TString::Format("In-memory class %s has no member named %s", _inmemoryInfo->GetName(), _elemName).Data());
+    if (!inmemoryElem) // version change removed the element
+      return;
 
     TObjArrayIter onfItr(_onfileInfo->GetElements());
 
