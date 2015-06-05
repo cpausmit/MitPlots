@@ -1,5 +1,3 @@
-// $Id: PileupEnergyDensityColLinkDef.h,v 1.1 2011/03/01 14:23:28 mzanetti Exp $
-
 #ifndef MITANA_DATATREE_PILEUPENERGYDENSITYCOLLINKDEF_H
 #define MITANA_DATATREE_PILEUPENERGYDENSITYCOLLINKDEF_H
 
@@ -21,6 +19,25 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+
+#pragma read \
+    sourceClass="mithep::PileupEnergyDensity" \
+    version="[-4]" \
+    source="Double32_t fRho; Double32_t fRhoHighEta; Double32_t fRhoRandom;\
+            Double32_t fRhoRandomLowEta; Double32_t fRhoFixedGridAll;\
+            Double32_t fRhoFixedGridFastjetAll; Double32_t fRhoKt6CaloJets;\
+            Double32_t fRhoKt6CaloJetsCentral; Double32_t fRhoKt6PFJets;\
+            Double32_t fRhoKt6PFJetsCentralChargedPileUp; Double32_t fRhoKt6PFJetsCentralNeutral;\
+            Double32_t fRhoKt6PFJetsCentralNeutralTight;" \
+    targetClass="mithep::PileupEnergyDensity" \
+    target="fRho" \
+    code="{ fRho[kHighEta] = fRho; fRho[kLowEta] = fRhoHighEta; fRho[kRandom] = fRhoRandom;\
+            fRho[kRandomLowEta] = fRhoRandomLowEta; fRho[kFixedGridAll] = fRhoFixedGridAll;\
+            fRho[kFixedGridFastjetAll] = fRhoFixedGridFastjetAll; fRho[kKt6CaloJets] = fRhoKt6CaloJets;\
+            fRho[kKt6CaloJetsCentral] = fRhoKt6CaloJetsCentral; fRho[kKt6PFJets] = fRhoKt6PFJets;\
+            fRho[kKt6PFJetsCentralChargedPileUp] = fRhoKt6PFJetsCentralChargedPileUp;\
+            fRho[kKt6PFJetsCentralNeutral] = fRhoKt6PFJetsCentralNeutral;\
+            fRho[kKt6PFJetsCentralNeutralTight] = fRhoKt6PFJetsCentralNeutralTight; }" \
 
 #pragma link C++ class mithep::PileupEnergyDensity+;
 #pragma link C++ class mithep::Collection<mithep::PileupEnergyDensity>+;
