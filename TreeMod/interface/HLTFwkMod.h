@@ -31,14 +31,14 @@ namespace mithep
       ~HLTFwkMod();
 
       const char                 *L1ATabNamePub()  const { return fL1Algos->GetName(); }
-      const char                 *L1TTabNamePub()  const { return fTriggers->GetName(); }
+      const char                 *L1TTabNamePub()  const { return fL1Techs->GetName(); }
       const char                 *HLTLabName()     const { return fHLTLabName;    }
       const char                 *HLTLabNamePub()  const { return fLabels->GetName(); }
       const char                 *HLTObjsName()    const { return fObjsName;      }
       const char                 *HLTObjArrNamePub() const { return fTrigObjArr->GetName(); }
       const char                 *HLTObjsNamePub() const { return fTrigObjs->GetName(); }
       const char                 *HLTTabName()     const { return fHLTTabName;    }
-      const char                 *HLTTabNamePub()  const { return fL1Techs->GetName(); }
+      const char                 *HLTTabNamePub()  const { return fTriggers->GetName(); }
       const char                 *HLTTreeName()    const { return fHLTTreeName;   }
       void                        SetL1ATabName(const char *n)     { fL1Algos->SetName(n); }
       void                        SetL1TTabName(const char *n)     { fL1Techs->SetName(n); }
