@@ -20,6 +20,7 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
+// below onfile.LowEta is filled to kHighEta - this is not a typo!
 #pragma read \
     sourceClass="mithep::PileupEnergyDensity" \
     version="[-4]" \
@@ -31,15 +32,21 @@
             Double32_t fRhoKt6PFJetsCentralNeutralTight;" \
     targetClass="mithep::PileupEnergyDensity" \
     target="fRho" \
-    code="{ fRho[kHighEta] = fRho; fRho[kLowEta] = fRhoHighEta; fRho[kRandom] = fRhoRandom;\
-            fRho[kRandomLowEta] = fRhoRandomLowEta; fRho[kFixedGridAll] = fRhoFixedGridAll;\
-            fRho[kFixedGridFastjetAll] = fRhoFixedGridFastjetAll; fRho[kKt6CaloJets] = fRhoKt6CaloJets;\
-            fRho[kKt6CaloJetsCentral] = fRhoKt6CaloJetsCentral; fRho[kKt6PFJets] = fRhoKt6PFJets;\
-            fRho[kKt6PFJetsCentralChargedPileUp] = fRhoKt6PFJetsCentralChargedPileUp;\
-            fRho[kKt6PFJetsCentralNeutral] = fRhoKt6PFJetsCentralNeutral;\
-            fRho[kKt6PFJetsCentralNeutralTight] = fRhoKt6PFJetsCentralNeutralTight; }" \
+    code="{ fRho[mithep::PileupEnergyDensity::kHighEta] = onfile.fRho;\
+      fRho[mithep::PileupEnergyDensity::kLowEta] = onfile.fRhoHighEta;\
+      fRho[mithep::PileupEnergyDensity::kRandom] = onfile.fRhoRandom;\
+      fRho[mithep::PileupEnergyDensity::kRandomLowEta] = onfile.fRhoRandomLowEta;\
+      fRho[mithep::PileupEnergyDensity::kFixedGridAll] = onfile.fRhoFixedGridAll;\
+      fRho[mithep::PileupEnergyDensity::kFixedGridFastjetAll] = onfile.fRhoFixedGridFastjetAll;\
+      fRho[mithep::PileupEnergyDensity::kKt6CaloJets] = onfile.fRhoKt6CaloJets;\
+      fRho[mithep::PileupEnergyDensity::kKt6CaloJetsCentral] = onfile.fRhoKt6CaloJetsCentral;\
+      fRho[mithep::PileupEnergyDensity::kKt6PFJets] = onfile.fRhoKt6PFJets;\
+      fRho[mithep::PileupEnergyDensity::kKt6PFJetsCentralChargedPileUp] = onfile.fRhoKt6PFJetsCentralChargedPileUp;\
+      fRho[mithep::PileupEnergyDensity::kKt6PFJetsCentralNeutral] = onfile.fRhoKt6PFJetsCentralNeutral;\
+      fRho[mithep::PileupEnergyDensity::kKt6PFJetsCentralNeutralTight] = onfile.fRhoKt6PFJetsCentralNeutralTight; }" \
 
 #pragma link C++ class mithep::PileupEnergyDensity+;
+#pragma link C++ enum mithep::PileupEnergyDensity::Algo;
 #pragma link C++ class mithep::Collection<mithep::PileupEnergyDensity>+;
 #pragma link C++ class mithep::Array<mithep::PileupEnergyDensity>+;
 #pragma link C++ class mithep::ObjArray<mithep::PileupEnergyDensity>+;

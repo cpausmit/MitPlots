@@ -17,7 +17,7 @@ namespace mithep
 {
   class PileupEnergyDensity : public DataBase {
   public:
-    enum Type {
+    enum Algo {
       kHighEta,
       kLowEta,
       kRandom,
@@ -28,9 +28,9 @@ namespace mithep
       kKt6CaloJetsCentral,
       kKt6PFJets,
       kKt6PFJetsCentralChargedPileUp,
-      kKt6PFJetsCentralNeutralToken,
+      kKt6PFJetsCentralNeutral,
       kKt6PFJetsCentralNeutralTight,
-      nTypes
+      nAlgos
     };
 
     PileupEnergyDensity() :
@@ -39,12 +39,12 @@ namespace mithep
     }
 
     Double_t RhoDefault()                       const { return fRho[kRandom]; }
+    Double_t Rho(UInt_t a = kHighEta)           const { return fRho[a]; }
 
-    Double_t Rho(Type t = kHighEta)             const { return fRho[t]; }
     Double_t RhoHighEta()                       const { return fRho[kHighEta]; }
     Double_t RhoLowEta()                        const { return fRho[kLowEta]; }
     Double_t RhoRandom()                        const { return fRho[kRandom]; }
-    Double_t RhoRandomLowEta()                  const { return fRho[kRandomLowEta]]; }
+    Double_t RhoRandomLowEta()                  const { return fRho[kRandomLowEta]; }
     Double_t RhoFixedGridAll()                  const { return fRho[kFixedGridAll]; }
     Double_t RhoFixedGridFastjetAll()           const { return fRho[kFixedGridFastjetAll]; }
     Double_t RhoKt6CaloJets()                   const { return fRho[kKt6CaloJets]; }
@@ -54,9 +54,9 @@ namespace mithep
     Double_t RhoKt6PFJetsCentralNeutral()       const { return fRho[kKt6PFJetsCentralNeutral]; }
     Double_t RhoKt6PFJetsCentralNeutralTight()  const { return fRho[kKt6PFJetsCentralNeutralTight]; }
 
-    virtual PileupEnergyDensity *MakeCopy()      const { return new PileupEnergyDensity(*this);   }
+    virtual PileupEnergyDensity *MakeCopy()     const { return new PileupEnergyDensity(*this);   }
     
-    void SetRho(Double_t r, Type t = kHighEta) { fRho[t] = r; }
+    void SetRho(Double_t r, UInt_t a = kHighEta) { fRho[a] = r; }
     void SetRhoHighEta(Double_t r) { fRho[kHighEta] = r; }
     void SetRhoLowEta(Double_t r) { fRho[kLowEta] = r; }
     void SetRhoRandom(Double_t r) { fRho[kRandom] = r; }
@@ -69,9 +69,12 @@ namespace mithep
     void SetRhoKt6PFJetsCentralChargedPileUp(Double_t r) { fRho[kKt6PFJetsCentralChargedPileUp] = r; }
     void SetRhoKt6PFJetsCentralNeutral(Double_t r) { fRho[kKt6PFJetsCentralNeutral] = r; }
     void SetRhoKt6PFJetsCentralNeutralTight(Double_t r) { fRho[kKt6PFJetsCentralNeutralTight] = r; }
+
+    static char const* AlgoName(UInt_t);
+    static UInt_t AlgoIndex(char const*);
     
   protected:
-    Double32_t fRho[nTypes]; //rho from various fastjet algos
+    Double32_t fRho[nAlgos]; //rho from various fastjet algos
 
     ClassDef(PileupEnergyDensity, 5) // Pileup Energy Density class
   };
