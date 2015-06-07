@@ -242,6 +242,7 @@ namespace mithep
     Double32_t           fCoviEtaiEta;              //[0,0,14]covariance eta-eta (in crystals)
     Double32_t           fCoviEtaiEta5x5;           //[0,0,14]"full 5x5" covariance eta-eta (in crystals)
     Double32_t           fEcalRecHitIso;            //[0,0,14]ecal rechit bsd isodR 0.4 *RENAME*
+    Double32_t           fHcalRecHitIso;            //[0,0,14]hcal rechit bsd isodR 0.4 *DEPR*
     Double32_t           fHcalTowerSumEtDr04;       //[0,0,14]hcal tower bsd isodR 0.4
     Double32_t           fHcalDepth1TowerSumEtDr04; //[0,0,14]hcal dp1 tw bsd isodR 0.4
     Double32_t           fHcalDepth2TowerSumEtDr04; //[0,0,14]hcal dp2 tw bsd isodR 0.4
@@ -266,9 +267,11 @@ namespace mithep
     Bool_t               fIsEBGap;            //photon is in ECAL barrel crystal gap
     Bool_t               fIsEEGap;            //photon is in ECAL endcap crystal gap
     Bool_t               fIsEBEEGap;          //photon is in boundary between EB/EE
+    Bool_t               fIsLooseEM;          //if loose em cuts are passed *DEPRECATED* always true
     Bool_t               fIsLoosePhoton;      //if loose photon cuts are passed
     Bool_t               fIsTightPhoton;      //if tight photon cuts are passed
     Bool_t               fIsConverted;        //if photon converted
+    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*    
     Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster (refined unbiased PF supercluster in >= 7XY)
     Ref<Vertex>          fPVRef;              //ref to associated primary vertex
     Double32_t           fEnergyErr;          //[0,0,14]ene uncer. from var. regr.
@@ -313,6 +316,8 @@ namespace mithep
     Double32_t           fEnergyErrSmearing;  //[0,0,14]addit. ene smearing applied to energy error wrt MC
     Double32_t           fEnergyScale;  //[0,0,14]Energy scale applied to photon
 
+    // The following members are deprecated but removing them will cause backward incompatibility
+    // (Cannot use pragma read for schema evolution when some members are missing? Causes seg fault at read..)
     //    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*    
     //    Bool_t               fIsLooseEM;          //if loose em cuts are passed *DEPRECATED* always true
     //    Double32_t           fHcalRecHitIso;            //[0,0,14]hcal rechit bsd isodR 0.4 *DEPR*

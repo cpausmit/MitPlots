@@ -23,9 +23,10 @@
 #pragma read \
   sourceClass="mithep::Photon" \
   version="[-21]" \
-  source="fCoviEtaiEta" \
+  source="Double32_t fCoviEtaiEta" \
   targetClass="mithep::Photon" \
-  target="fCoviEtaiEta5x5"
+  target="fCoviEtaiEta5x5" \
+  code="{ fCoviEtaiEta5x5 = onfile.fCoviEtaiEta; }" \
 
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;
