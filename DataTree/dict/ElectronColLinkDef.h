@@ -31,7 +31,7 @@
 #pragma read \
     sourceClass="mithep::Electron" \
     version="[-16]" \
-    source="Double_t fCoviEtaiEta" \
+    source="Double32_t fCoviEtaiEta" \
     targetClass="mithep::Electron" \
     target="fCoviEtaiEta5x5" \
     code="{ fCoviEtaiEta5x5 = onfile.fCoviEtaiEta; }" \
