@@ -1,5 +1,7 @@
 #include "MitAna/DataTree/interface/Jet.h"
 
+#include <cstring>
+
 ClassImp(mithep::Jet)
 
 mithep::Jet::Jet() :
@@ -30,36 +32,45 @@ mithep::Jet::Jet(Double_t px, Double_t py, Double_t pz, Double_t e) :
 {
 }
 
-Double_t
-mithep::Jet::BJetTagsDisc(UInt_t a) const
+/*static*/
+char const*
+mithep::Jet::BTagAlgoName(UInt_t idx)
 {
-  if (a < nBTagAlgos)
-    return fBJetTagsDisc[a];
-  else if (a < nAllBTagAlgos)
-    return fBJetTagsLegacyDisc[a - nBTagAlgos];
-  else
-    return -9999.;
-}
-
-void
-mithep::Jet::SetBJetTagsDisc(Double_t d, UInt_t a)
-{
-  if (a < nBTagAlgos)
-    fBJetTagsDisc[a] = d;
-  else if (a < nAllBTagAlgos)
-    fBJetTagsLegacyDisc[a - nBTagAlgos] = d;
-}
-
-Double_t
-mithep::Jet::CombinedCorrectionScale() const
-{
-  // compute combined correction scale from all enabled corrections
-  Double_t scale = 1.0;
-
-  for (unsigned iC = 0; iC != nECorrs; ++iC) {
-    if (CorrectionActive(iC))
-      scale *= fCorrectionScale[iC];
+  switch(idx) {
+  case kJetProbability:
+    return "JetProbability";
+  case kJetBProbability:
+    return "JetBProbability";
+  case kSimpleSecondaryVertexHighEff:
+    return "SimpleSecondaryVertexHighEff";
+  case kSimpleSecondaryVertexHighPur:
+    return "SimpleSecondaryVertexHighPur";
+  case kCombinedSecondaryVertex:
+    return "CombinedSecondaryVertex";
+  case kCombinedSecondaryVertexV2:
+    return "CombinedSecondaryVertexV2";
+  case kCombinedSecondaryVertexSoftLepton:
+    return "CombinedSecondaryVertexSoftLepton";
+  case kCombinedInclusiveSecondaryVertexV2:
+    return "CombinedInclusiveSecondaryVertexV2";
+  case kCombinedMVA:
+    return "CombinedMVA";
+  case kTrackCountingHighEff:
+    return "TrackCountingHighEff";
+  case kTrackCountingHighPur:
+    return "TrackCountingHighPur";
+  default:
+    return "";
   }
+}
 
-  return scale;
+/*static*/
+UInt_t
+mithep::Jet::BTagAlgoIndex(char const* name)
+{
+  for (unsigned idx = 0; idx != nBTagAlgos; ++idx) {
+    if (std::strcmp(name, BTagAlgoName(idx)) == 0)
+      return idx;
+  }
+  return nBTagAlgos;
 }

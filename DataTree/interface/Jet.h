@@ -65,25 +65,6 @@ namespace mithep {
     Double_t SigmaEta() const { return fSigmaEta; }
     Double_t SigmaPhi() const { return fSigmaPhi; }
     Double_t BJetTagsDisc(UInt_t) const;
-    Double_t JetProbabilityBJetTagsDisc() const { return BJetTagsDisc(kJetProbability); }
-    Double_t JetBProbabilityBJetTagsDisc() const { return BJetTagsDisc(kJetBProbability); }
-    Double_t SimpleSecondaryVertexHighEffBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertexHighEff); }
-    Double_t SimpleSecondaryVertexHighPurBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertexHighPur); } 
-    Double_t CombinedSecondaryVertexBJetTagsDisc() const { return BJetTagsDisc(kCombinedSecondaryVertex); } 
-    Double_t CombinedSecondaryVertexV2BJetTagsDisc() const { return BJetTagsDisc(kCombinedSecondaryVertexV2); } 
-    Double_t CombinedSecondaryVertexSoftLeptonBJetTagsDisc() const { return BJetTagsDisc(kCombinedSecondaryVertexSoftLepton); } 
-    Double_t CombinedInclusiveSecondaryVertexV2BJetTagsDisc() const { return BJetTagsDisc(kCombinedInclusiveSecondaryVertexV2); } 
-    Double_t CombinedMVABJetTagsDisc() const { return BJetTagsDisc(kCombinedMVA); }
-    Double_t CombinedSecondaryVertexMVABJetTagsDisc() const { return BJetTagsDisc(kCombinedMVA); } // backward compatibility
-    Double_t TrackCountingHighEffBJetTagsDisc() const { return BJetTagsDisc(kTrackCountingHighEff); }
-    Double_t TrackCountingHighPurBJetTagsDisc() const { return BJetTagsDisc(kTrackCountingHighPur); }
-    Double_t SimpleSecondaryVertexBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertex); }
-    Double_t SoftMuonBJetTagsDisc() const { return BJetTagsDisc(kSoftMuon); }
-    Double_t SoftMuonByIP3dBJetTagsDisc() const { return BJetTagsDisc(kSoftMuonByIP3d); }
-    Double_t SoftMuonByPtBJetTagsDisc() const { return BJetTagsDisc(kSoftMuonByPt); }
-    Double_t SoftElectronByIP3dBJetTagsDisc() const { return BJetTagsDisc(kSoftElectronByIP3d); }
-    Double_t SoftElectronByPtBJetTagsDisc() const { return BJetTagsDisc(kSoftElectronByPt); }
-    Double_t GhostTrackBJetTagsDisc() const { return BJetTagsDisc(kGhostTrack); }
     Double_t CombinedCorrectionScale() const;
     Double_t CorrectionScale(UInt_t c) const { return fCorrectionScale[c]; }
     Double_t L1OffsetCorrectionScale() const { return fCorrectionScale[L1]; }
@@ -109,23 +90,6 @@ namespace mithep {
     void SetSigmaEta(Double_t val) { fSigmaEta = val; }
     void SetSigmaPhi(Double_t val) { fSigmaPhi = val; }
     void SetBJetTagsDisc(Double_t, UInt_t);
-    void SetJetProbabilityBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kJetProbability); }
-    void SetJetBProbabilityBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kJetBProbability); }
-    void SetSimpleSecondaryVertexHighEffBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertexHighEff); }
-    void SetSimpleSecondaryVertexHighPurBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertexHighPur); } 
-    void SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedSecondaryVertex); }
-    void SetCombinedSecondaryVertexV2BJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedSecondaryVertexV2); }
-    void SetCombinedMVABJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedMVA); }
-    void SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedMVA); } // backward compatibility
-    void SetTrackCountingHighEffBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kTrackCountingHighEff); }
-    void SetTrackCountingHighPurBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kTrackCountingHighPur); }
-    void SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertex); }
-    void SetSoftMuonBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuon); }
-    void SetSoftMuonByIP3dBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuonByIP3d); }
-    void SetSoftMuonByPtBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuonByPt); }
-    void SetSoftElectronByIP3dBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftElectronByIP3d); }
-    void SetSoftElectronByPtBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftElectronByPt); }
-    void SetGhostTrackBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kGhostTrack); }
     void SetCorrectionScale(Double_t s, UInt_t l) { fCorrectionScale[l] = s; ClearMom(); }
     void SetL1OffsetCorrectionScale(Double_t s) { fCorrectionScale[L1] = s; ClearMom(); }
     void SetL2RelativeCorrectionScale(Double_t s) { fCorrectionScale[L2] = s; ClearMom(); }
@@ -145,6 +109,41 @@ namespace mithep {
     EObjType ObjType() const override { return kJet; } 
     virtual Jet* MakeCopy() const { return new Jet(*this); }
 
+    // backward compatibility
+    Double_t JetProbabilityBJetTagsDisc() const { return BJetTagsDisc(kJetProbability); }
+    Double_t JetBProbabilityBJetTagsDisc() const { return BJetTagsDisc(kJetBProbability); }
+    Double_t SimpleSecondaryVertexHighEffBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertexHighEff); }
+    Double_t SimpleSecondaryVertexHighPurBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertexHighPur); } 
+    Double_t CombinedSecondaryVertexBJetTagsDisc() const { return BJetTagsDisc(kCombinedSecondaryVertex); } 
+    Double_t CombinedSecondaryVertexMVABJetTagsDisc() const { return BJetTagsDisc(kCombinedMVA); }
+    Double_t TrackCountingHighEffBJetTagsDisc() const { return BJetTagsDisc(kTrackCountingHighEff); }
+    Double_t TrackCountingHighPurBJetTagsDisc() const { return BJetTagsDisc(kTrackCountingHighPur); }
+    Double_t SimpleSecondaryVertexBJetTagsDisc() const { return BJetTagsDisc(kSimpleSecondaryVertex); }
+    Double_t SoftMuonBJetTagsDisc() const { return BJetTagsDisc(kSoftMuon); }
+    Double_t SoftMuonByIP3dBJetTagsDisc() const { return BJetTagsDisc(kSoftMuonByIP3d); }
+    Double_t SoftMuonByPtBJetTagsDisc() const { return BJetTagsDisc(kSoftMuonByPt); }
+    Double_t SoftElectronByIP3dBJetTagsDisc() const { return BJetTagsDisc(kSoftElectronByIP3d); }
+    Double_t SoftElectronByPtBJetTagsDisc() const { return BJetTagsDisc(kSoftElectronByPt); }
+    Double_t GhostTrackBJetTagsDisc() const { return BJetTagsDisc(kGhostTrack); }
+    void SetCombinedSecondaryVertexBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedSecondaryVertex); }
+    void SetCombinedSecondaryVertexMVABJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kCombinedMVA); }
+    void SetJetProbabilityBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kJetProbability); }
+    void SetJetBProbabilityBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kJetBProbability); }
+    void SetSimpleSecondaryVertexBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertex); }
+    void SetSimpleSecondaryVertexHighEffBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertexHighEff); }
+    void SetSimpleSecondaryVertexHighPurBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSimpleSecondaryVertexHighPur); }
+    void SetSoftMuonBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuon); }
+    void SetSoftMuonByIP3dBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuonByIP3d); }
+    void SetSoftMuonByPtBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftMuonByPt); }
+    void SetSoftElectronByIP3dBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftElectronByIP3d); }
+    void SetSoftElectronByPtBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kSoftElectronByPt); }
+    void SetTrackCountingHighEffBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kTrackCountingHighEff); }
+    void SetTrackCountingHighPurBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kTrackCountingHighPur); }
+    void SetGhostTrackBJetTagsDisc(Double_t d) { SetBJetTagsDisc(d, kGhostTrack); }
+
+    static char const* BTagAlgoName(UInt_t);
+    static UInt_t BTagAlgoIndex(char const*);
+
   protected:
     void GetMom() const override;
 
@@ -155,7 +154,7 @@ namespace mithep {
     Double32_t fSigmaEta; //[0,0,14]sqrt(etaetaMoment)
     Double32_t fSigmaPhi; //[0,0,14]sqrt(phiphiMoment)
     Double32_t fBJetTagsDisc[nBTagAlgos]; //b-tag discriminators
-    Double32_t fBJetTagsLegacyDisc[nBTagLegacyAlgos]; //! legacy b-tag algos (only when reading old files)
+    Double_t fBJetTagsLegacyDisc[nBTagLegacyAlgos]; //! legacy b-tag algos (only when reading old files)
     Double32_t fCorrectionScale[nECorrs]; //jet energy correction scales
     Double32_t fJetArea; //[0,0,14]infrared safe jet area
     BitMask8 fCorrections; //mask of corrections to be applied
@@ -175,4 +174,42 @@ mithep::Jet::GetMom() const
   fCachedMom *= CombinedCorrectionScale();
 
 }
+
+inline
+Double_t
+mithep::Jet::BJetTagsDisc(UInt_t a) const
+{
+  if (a < nBTagAlgos)
+    return fBJetTagsDisc[a];
+  else if (a < nAllBTagAlgos)
+    return fBJetTagsLegacyDisc[a - nBTagAlgos];
+  else
+    return -9999.;
+}
+
+inline
+Double_t
+mithep::Jet::CombinedCorrectionScale() const
+{
+  // compute combined correction scale from all enabled corrections
+  Double_t scale = 1.0;
+
+  for (unsigned iC = 0; iC != nECorrs; ++iC) {
+    if (CorrectionActive(iC))
+      scale *= fCorrectionScale[iC];
+  }
+
+  return scale;
+}
+
+inline
+void
+mithep::Jet::SetBJetTagsDisc(Double_t d, UInt_t a)
+{
+  if (a < nBTagAlgos)
+    fBJetTagsDisc[a] = d;
+  else if (a < nAllBTagAlgos)
+    fBJetTagsLegacyDisc[a - nBTagAlgos] = d;
+}
+
 #endif
