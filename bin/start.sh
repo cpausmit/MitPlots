@@ -27,4 +27,4 @@ ls -l
 
 echo "python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --libs=libs.list --pickle analysis.pkl"
 echo ""
-python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --libs=libs.list --pickle --nentries=10 analysis.pkl
+python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --libs=libs.list --pickle analysis.pkl

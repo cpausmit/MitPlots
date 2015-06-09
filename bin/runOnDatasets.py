@@ -8,6 +8,7 @@ import subprocess
 import glob
 import shutil
 import pickle
+import socket
 from argparse import ArgumentParser
 
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
@@ -210,14 +211,19 @@ if newTask:
         packLastUpdate = 0
     
     for package in os.listdir(cmsswbase + '/src'):
+        if not os.path.isdir(cmsswbase + '/src/' + package):
+            continue
+
         for module in os.listdir(cmsswbase + '/src/' + package):
-            if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
-                for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
-                    if os.path.getmtime(header) > packLastUpdate:
-                        remakeIncPack = True
-                        break
-    
-                headerPaths.append('src/' + package + '/' + module + '/interface')
+            if not os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
+                continue
+
+            for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
+                if os.path.getmtime(header) > packLastUpdate:
+                    remakeIncPack = True
+                    break
+
+            headerPaths.append('src/' + package + '/' + module + '/interface')
     
     if remakeIncPack:
         print 'Creating headers tarball.'
@@ -296,8 +302,8 @@ for (book, dataset), filesets in allFilesets.items():
         else:
             print 'Ignoring invalid environment parameter in condor configuration.'
 
-    if 'HOSTNAME=' + os.environ['HOSTNAME'] not in envs:
-        envs.append('HOSTNAME=' + os.environ['HOSTNAME'])
+    if 'HOSTNAME=' + socket.gethostname() not in envs:
+        envs.append('HOSTNAME=' + socket.gethostname())
 
     condorConfig['environment'] = '"' + ' '.join(envs) + '"'
 
