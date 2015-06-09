@@ -118,7 +118,7 @@ with open(envFileName, 'w') as envFile:
     envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
     envFile.write('export CMSSW_RELEASE="' + release + '"\n')
 
-libDirName = os.path.basename(cmsswbase) + '/lib/' + scramArch
+libDirName = cmsswbase + '/lib/' + scramArch
 libDirCont = os.listdir(libDirName)
 # PCM files needed until ROOT 6 libraries become position independent
 libraries = map(os.path.basename, glob.glob(libDirName + '/*_rdict.pcm')) + ['libMitAnaTreeMod.so']
@@ -135,6 +135,8 @@ with open(analysisCfgName, 'w') as analysisCfg:
                 lib = 'lib' + matches.group(1) + '.so'
             else:
                 matches = re.search('gSystem.Load("(.*)")', line.strip())
+                if not matches:
+                    continue
                 lib = matches.group(1)
 
             if lib in libDirCont:
@@ -147,19 +149,21 @@ catalogPackName = taskDirName + '/catalogs.tar.gz'
 runSubproc(['tar', 'czf', catalogPackName, '-C', catalogDirName] + catalogs)
 
 headerPackName = cmsswbase + '.headers'
-packLastUpdate = os.path.getmtime(headerPackName)
-remakeHeaderPack = False
+remakeHeaderPack = not os.path.exists(headerPackName)
 headerPaths = []
 if os.path.exists(headerPackName):
     packLastUpdate = os.path.getmtime(headerPackName)
-    for package in os.listdir(cmsswbase + '/src'):
-        for module in os.listdir(cmsswbase + '/src/' + package):
-            if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
-                for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
-                    if os.path.getmtime(header) > packLastUpdate:
-                        remakeHeaderPack = True
+else:
+    packLastUpdate = 0
 
-                headerPaths.append('src/' + package + '/' + module + '/interface')
+for package in os.listdir(cmsswbase + '/src'):
+    for module in os.listdir(cmsswbase + '/src/' + package):
+        if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
+            for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
+                if os.path.getmtime(header) > packLastUpdate:
+                    remakeHeaderPack = True
+
+            headerPaths.append('src/' + package + '/' + module + '/interface')
 
 if remakeHeaderPack:
     runSubproc(['tar', 'czf', headerPackName, '-C', cmsswbase] + headerPaths)
@@ -170,17 +174,20 @@ out, err = proc.communicate()
 running = []
 
 for line in out.split('\n'):
-    matches = re.match('Iwd = (.*) +Args = ([^ ]+) ([^ ]+) ([^ ]+)')
-    running.append((os.path.basename(matches.group(1)), matches.group(2), matches.group(3), matches.group(4)))
+    matches = re.match('Iwd = (.*) +Args = ([^ ]+) ([^ ]+) ([^ ]+)', line.strip())
+    if matches:
+        running.append((os.path.basename(matches.group(1)), matches.group(2), matches.group(3), matches.group(4)))
+    else:
+        print line
 
 condorConfig = {}
 with open(args.condorTemplateName) as condorTemplate:
     for line in condorTemplate:
         if not re.match('#', line.strip()):
-            key, value = line.split('=')
-            condorConfig[key.strip().tolower()] = value.strip()
+            key, eq, value = line.partition('=')
+            condorConfig[key.strip().lower()] = value.strip()
 
-inputFilesList = 'run.py,'
+inputFilesList = cmsswbase + '/src/MitAna/bin/run.py,'
 if x509File:
     inputFilesList += ' ' + x509File + ','
 inputFilesList += ' ' + analysisCfgName + ','
