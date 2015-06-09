@@ -5,7 +5,6 @@ import os
 
 argParser = ArgumentParser(description = 'Run BAMBU analysis')
 argParser.add_argument('config', metavar = 'CONFIG')
-
 argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book')
 argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
 argParser.add_argument('--fileset', '-s', metavar = 'FILESET', dest = 'fileset')
