@@ -6,6 +6,7 @@ import re
 import time
 import subprocess
 import glob
+import shutil
 from argparse import ArgumentParser
 
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
@@ -16,6 +17,7 @@ argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
 argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*')
 
 argParser.add_argument('--name', '-n', metavar = 'NAME', dest = 'taskName')
+argParser.add_argument('--overwrite', '-R', action = 'store_true', dest = 'overwrite')
 
 argParser.add_argument('--condor-template', '-t', metavar = 'FILE', dest = 'condorTemplateName', default = os.environ['CMSSW_BASE'] + '/src/MitAna/config/condor_template.jdl')
 argParser.add_argument('--stageout-dir', '-o', metavar = 'DIR', dest = 'stageoutDirName')
@@ -84,10 +86,10 @@ if not os.path.exists(x509File):
     print 'x509 proxy missing. You will not be able to download files from T2 in case T3 cache does not exist.'
     print 'Continue? [y/n]:'
     while True:
-        response = sys.stdin.readline()
-        if response.strip() == 'y':
+        response = sys.stdin.readline().strip()
+        if response == 'y':
             break
-        elif response.strip() == 'n':
+        elif response == 'n':
             sys.exit(0)
         else:
             print '[y/n]:'
@@ -101,72 +103,99 @@ if not taskName:
     else:
         taskName = str(int(time.time()))
 
-print 'Creating task', taskName
-
-logDirName = os.environ['MIT_PROD_LOGS'] + '/' + taskName
-os.mkdir(logDirName)
-
 taskDirName = os.environ['MIT_PROD_HIST'] + '/' + taskName
-os.mkdir(taskDirName)
+logDirName = os.environ['MIT_PROD_LOGS'] + '/' + taskName
 
 scramArch = os.environ['SCRAM_ARCH']
 cmsswbase = os.environ['CMSSW_BASE']
 release = os.path.basename(os.environ['CMSSW_RELEASE_BASE'])
 
-envFileName = taskDirName + '/taskenv.sh'
-with open(envFileName, 'w') as envFile:
-    envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
-    envFile.write('export CMSSW_RELEASE="' + release + '"\n')
+if os.path.isdir(taskDirName):
+    if args.overwrite:
+        print ' Task ' + taskName + ' already exists.'
+        print ' You are requesting this to be a new production task. All existing files will be cleared.'
+        print ' Wanna save existing task? Do like:  moveOutput.sh', taskName, taskName + '-last.'
+        print ' Do you wish to continue? [N/y]'
+        while True:
+            response = sys.stdin.readline().strip()
+            if response == 'y':
+                newTask = True
+                break
+            elif response == 'N':
+                print ' Nothing done. EXIT.'
+                sys.exit(0)
+            else:
+                print '[N/y]'
 
-libDirName = cmsswbase + '/lib/' + scramArch
-libDirCont = os.listdir(libDirName)
-# PCM files needed until ROOT 6 libraries become position independent
-libraries = map(os.path.basename, glob.glob(libDirName + '/*_rdict.pcm')) + ['libMitAnaTreeMod.so']
+        shutil.rmtree(taskDirName)
+        shutil.rmtree(logDirName)
+
+    else:
+        newTask = False
+
+else:
+    newTask = True
 
 analysisCfgName = taskDirName + '/analysis.py'
-with open(analysisCfgName, 'w') as analysisCfg:
-    with open(args.analysisCfg) as source:
-        for line in source:
-            if not re.search('MitAna.TreeMod.bambu', line.strip()):
-                analysisCfg.write(line)
+envFileName = taskDirName + '/taskenv.sh'
+catalogPackName = taskDirName + '/catalog.tar.gz'
+libPackName = cmsswbase + '.lib.tar.gz'
+incPackName = cmsswbase + '.inc.tar.gz'
 
-            matches = re.search('mithep.LoadLib("(.*)")', line.strip())
-            if matches:
-                lib = 'lib' + matches.group(1) + '.so'
-            else:
-                matches = re.search('gSystem.Load("(.*)")', line.strip())
-                if not matches:
-                    continue
-                lib = matches.group(1)
+if newTask:
+    print 'Creating task', taskName
+    os.mkdir(taskDirName)
+    os.mkdir(logDirName)
 
-            if lib in libDirCont:
-                libraries.append(lib)
+    with open(envFileName, 'w') as envFile:
+        envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
+        envFile.write('export CMSSW_RELEASE="' + release + '"\n')
+    
+    with open(analysisCfgName, 'w') as analysisCfg:
+        with open(args.analysisCfg) as source:
+            for line in source:
+                if not re.search('MitAna.TreeMod.bambu', line.strip()):
+                    analysisCfg.write(line)
+    
+    runSubproc(['tar', 'czf', catalogPackName, '-C', catalogDirName] + catalogs)
+    
+    remakeLibPack = not os.path.exists(libPackName)
+    if os.path.exists(libPackName):
+        packLastUpdate = os.path.getmtime(libPackName)
+    else:
+        packLastUpdate = 0
+    
+    for lib in glob.glob(cmsswbase + '/lib/' + scramArch + '/*'):
+        if os.path.getmtime(lib) > packLastUpdate:
+            remakeLibPack = True
+            break
+    
+    if remakeLibPack:
+        print 'Creating library tarball.'
+        runSubproc(['tar', 'czf', libPackName, '-C', cmsswbase, 'lib'])
 
-libPackName = taskDirName + '/libraries.tag.gz'
-runSubproc(['tar', 'czf', libPackName, '-C', libDirName] + libraries)
+    # Include files needed until ROOT 6 libraries become position independent
+    remakeIncPack = not os.path.exists(incPackName)
+    headerPaths = []
+    if os.path.exists(incPackName):
+        packLastUpdate = os.path.getmtime(incPackName)
+    else:
+        packLastUpdate = 0
+    
+    for package in os.listdir(cmsswbase + '/src'):
+        for module in os.listdir(cmsswbase + '/src/' + package):
+            if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
+                for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
+                    if os.path.getmtime(header) > packLastUpdate:
+                        remakeIncPack = True
+    
+                headerPaths.append('src/' + package + '/' + module + '/interface')
+    
+    if remakeIncPack:
+        print 'Creating headers tarball.'
+        runSubproc(['tar', 'czf', incPackName, '-C', cmsswbase] + headerPaths)
 
-catalogPackName = taskDirName + '/catalogs.tar.gz'
-runSubproc(['tar', 'czf', catalogPackName, '-C', catalogDirName] + catalogs)
-
-headerPackName = cmsswbase + '.headers'
-remakeHeaderPack = not os.path.exists(headerPackName)
-headerPaths = []
-if os.path.exists(headerPackName):
-    packLastUpdate = os.path.getmtime(headerPackName)
-else:
-    packLastUpdate = 0
-
-for package in os.listdir(cmsswbase + '/src'):
-    for module in os.listdir(cmsswbase + '/src/' + package):
-        if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
-            for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
-                if os.path.getmtime(header) > packLastUpdate:
-                    remakeHeaderPack = True
-
-            headerPaths.append('src/' + package + '/' + module + '/interface')
-
-if remakeHeaderPack:
-    runSubproc(['tar', 'czf', headerPackName, '-C', cmsswbase] + headerPaths)
+print 'Checking running jobs..'
 
 proc = subprocess.Popen(['condor_q', '-submitter', os.environ['USER'], '-autoformat', 'Iwd', 'Args'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 out, err = proc.communicate()
@@ -175,10 +204,13 @@ running = []
 
 for line in out.split('\n'):
     matches = re.match('Iwd = (.*) +Args = ([^ ]+) ([^ ]+) ([^ ]+)', line.strip())
-    if matches:
-        running.append((os.path.basename(matches.group(1)), matches.group(2), matches.group(3), matches.group(4)))
-    else:
-        print line
+    if matches and os.path.basename(matches.group(1)) == taskName:
+        running.append((matches.group(2), matches.group(3), matches.group(4)))
+
+if newTask and len(running) != 0:
+    print 'New task was requested but some jobs are running.'
+    print 'Job kill is not implemented yet.'
+    sys.exit(1)
 
 condorConfig = {}
 with open(args.condorTemplateName) as condorTemplate:
@@ -193,20 +225,31 @@ if x509File:
 inputFilesList += ' ' + analysisCfgName + ','
 inputFilesList += ' ' + envFileName + ','
 inputFilesList += ' ' + libPackName + ','
-inputFilesList += ' ' + headerPackName + ','
+inputFilesList += ' ' + incPackName + ','
 inputFilesList += ' ' + catalogPackName
 
 for book, dataset, filesetId in filesets:
-    if (taskName, book, dataset, filesetId) in running:
+    if (book, dataset, filesetId) in running:
+        print 'Running: ', book, dataset, filesetId
         continue
 
     jobDirName = taskDirName + '/' + book + '/' + dataset
     outputName = filesetId + '.root'
 
-    try:
+    if not os.path.exists(jobDirName):
         os.makedirs(jobDirName)
-    except:
-        pass
+
+    if args.stageoutDirName:
+        dest = args.stageoutDirName + '/' + taskName + '/' + book + '/' + dataset
+        if not os.path.exists(dest):
+            os.makedirs(dest)
+        outputPath = dest + '/' + outputName
+    else:
+        outputPath = jobDirName + '/' + outputName
+
+    if os.path.exists(outputPath):
+        print 'Output exists: ', book, dataset, filesetId
+        continue
 
     if 'arguments' not in condorConfig:
         condorConfig['arguments'] = '"' + book + ' ' + dataset + ' ' + filesetId + '"'
@@ -218,9 +261,6 @@ for book, dataset, filesetId in filesets:
         condorConfig['transfer_output_files'] = outputName
 
     if args.stageoutDirName:
-        dest = args.stageoutDirName + '/' + taskName + '/' + book + '/' + dataset
-        if not os.path.exists(dest):
-            os.makedir(dest)
         condorConfig['transfer_output_remaps'] = '"' + outputName + ' = ' + dest + '/' + outputName
 
     condorConfig['output'] = logDirName + '/' + filesetId + '.out'
