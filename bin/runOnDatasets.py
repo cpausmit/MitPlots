@@ -5,6 +5,7 @@ import os
 import re
 import time
 import subprocess
+import glob
 from argparse import ArgumentParser
 
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
@@ -17,6 +18,7 @@ argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'fileset
 argParser.add_argument('--name', '-n', metavar = 'NAME', dest = 'taskName')
 
 argParser.add_argument('--condor-template', '-t', metavar = 'FILE', dest = 'condorTemplateName', default = os.environ['CMSSW_BASE'] + '/src/MitAna/config/condor_template.jdl')
+argParser.add_argument('--stageout-dir', '-o', metavar = 'DIR', dest = 'stageoutDirName')
 argParser.add_argument('--no-hierarchy', '-a', action = 'store_true', dest = 'anarchy')
 
 args = argParser.parse_args()
@@ -27,6 +29,17 @@ if not os.path.exists(args.analysisCfg):
 
 if args.configFileName and not os.path.exists(args.configFileName):
     raise RuntimeError('Task configuration file ' + args.configFileName + ' does not exist')
+
+if args.stageoutDirName and not os.path.isdir(args.stageoutDirName):
+    raise RuntimeError('Cannot write to stageout directory ' + args.stageoutDirName)
+
+def runSubproc(*args):
+    proc = subprocess.Popen(*args, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    out, err = proc.communicate()
+    print out
+    if err.strip():
+        sys.stderr.write(err)
+        sys.stderr.flush()
 
 catalogDirName = os.environ['MIT_CATALOG']
 
@@ -96,10 +109,19 @@ os.mkdir(logDirName)
 taskDirName = os.environ['MIT_PROD_HIST'] + '/' + taskName
 os.mkdir(taskDirName)
 
+scramArch = os.environ['SCRAM_ARCH']
+cmsswbase = os.environ['CMSSW_BASE']
+release = os.path.basename(os.environ['CMSSW_RELEASE_BASE'])
+
 envFileName = taskDirName + '/taskenv.sh'
 with open(envFileName, 'w') as envFile:
-    envFile.write('export SCRAM_ARCH="' + os.environ['SCRAM_ARCH'] + '"\n')
-    envFile.write('export CMSSW_RELEASE="' + os.path.basename(os.environ['CMSSW_RELEASE_BASE']) + '"\n')
+    envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
+    envFile.write('export CMSSW_RELEASE="' + release + '"\n')
+
+libDirName = os.path.basename(cmsswbase) + '/lib/' + scramArch
+libDirCont = os.listdir(libDirName)
+# PCM files needed until ROOT 6 libraries become position independent
+libraries = map(os.path.basename, glob.glob(libDirName + '/*_rdict.pcm')) + ['libMitAnaTreeMod.so']
 
 analysisCfgName = taskDirName + '/analysis.py'
 with open(analysisCfgName, 'w') as analysisCfg:
@@ -108,39 +130,39 @@ with open(analysisCfgName, 'w') as analysisCfg:
             if not re.search('MitAna.TreeMod.bambu', line.strip()):
                 analysisCfg.write(line)
 
+            matches = re.search('mithep.LoadLib("(.*)")', line.strip())
+            if matches:
+                lib = 'lib' + matches.group(1) + '.so'
+            else:
+                matches = re.search('gSystem.Load("(.*)")', line.strip())
+                lib = matches.group(1)
+
+            if lib in libDirCont:
+                libraries.append(lib)
+
+libPackName = taskDirName + '/libraries.tag.gz'
+runSubproc(['tar', 'czf', libPackName, '-C', libDirName] + libraries)
+
 catalogPackName = taskDirName + '/catalogs.tar.gz'
-proc = subprocess.Popen(['tar', 'czf', catalogPackName, '-C', catalogDirName] + catalogs, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-out, err = proc.communicate()
-print out
-if err.strip():
-    sys.stderr.write(err)
-    sys.stderr.flush()
+runSubproc(['tar', 'czf', catalogPackName, '-C', catalogDirName] + catalogs)
 
-cmsswbase = os.environ['CMSSW_BASE']
-libTarballName = os.path.dirname(cmsswbase) + '/libraries.tar.gz'
-remakeTarball = True
-if os.path.exists(libTarballName):
-    tarballLastUpdate = os.path.getmtime(libTarballName)
-    libDirName = cmsswbase + '/lib/' + os.environ['SCRAM_ARCH']
-    for lib in os.listdir(libDirName):
-        if os.path.getmtime(libDirName) > tarballLastUpdate:
-            break
-    else:
-        remakeTarball = False
-        
-if remakeTarball:
-    proc = subprocess.Popen(['tar', 'czf', libTarballName, '-C', os.path.dirname(cmsswbase), os.path.basename(cmsswbase) + '/lib/' + os.environ['SCRAM_ARCH']], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    out, err = proc.communicate()
-    print out
-    if err.strip():
-        sys.stderr.write(err)
-        sys.stderr.flush()
+headerPackName = cmsswbase + '.headers'
+packLastUpdate = os.path.getmtime(headerPackName)
+remakeHeaderPack = False
+headerPaths = []
+if os.path.exists(headerPackName):
+    packLastUpdate = os.path.getmtime(headerPackName)
+    for package in os.listdir(cmsswbase + '/src'):
+        for module in os.listdir(cmsswbase + '/src/' + package):
+            if os.path.isdir(cmsswbase + '/src/' + package + '/' + module + '/interface'):
+                for header in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/interface/*'):
+                    if os.path.getmtime(header) > packLastUpdate:
+                        remakeHeaderPack = True
 
-condorStr = ''
-with open(args.condorTemplateName) as condorTemplate:
-    for line in condorTemplate:
-        if not re.match('#', line.strip()):
-            condorStr += line
+                headerPaths.append('src/' + package + '/' + module + '/interface')
+
+if remakeHeaderPack:
+    runSubproc(['tar', 'czf', headerPackName, '-C', cmsswbase] + headerPaths)
 
 proc = subprocess.Popen(['condor_q', '-submitter', os.environ['USER'], '-autoformat', 'Iwd', 'Args'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 out, err = proc.communicate()
@@ -151,53 +173,59 @@ for line in out.split('\n'):
     matches = re.match('Iwd = (.*) +Args = ([^ ]+) ([^ ]+) ([^ ]+)')
     running.append((os.path.basename(matches.group(1)), matches.group(2), matches.group(3), matches.group(4)))
 
+condorConfig = {}
+with open(args.condorTemplateName) as condorTemplate:
+    for line in condorTemplate:
+        if not re.match('#', line.strip()):
+            key, value = line.split('=')
+            condorConfig[key.strip().tolower()] = value.strip()
+
+inputFilesList = 'run.py,'
+if x509File:
+    inputFilesList += ' ' + x509File + ','
+inputFilesList += ' ' + analysisCfgName + ','
+inputFilesList += ' ' + envFileName + ','
+inputFilesList += ' ' + libPackName + ','
+inputFilesList += ' ' + headerPackName + ','
+inputFilesList += ' ' + catalogPackName
+
 for book, dataset, filesetId in filesets:
     if (taskName, book, dataset, filesetId) in running:
         continue
 
     jobDirName = taskDirName + '/' + book + '/' + dataset
+    outputName = filesetId + '.root'
 
     try:
         os.makedirs(jobDirName)
     except:
         pass
 
+    if 'arguments' not in condorConfig:
+        condorConfig['arguments'] = '"' + book + ' ' + dataset + ' ' + filesetId + '"'
+
+    if 'transfer_input_files' not in condorConfig:
+        condorConfig['transfer_input_files'] = inputFilesList
+
+    if 'transfer_output_files' not in condorConfig:
+        condorConfig['transfer_output_files'] = outputName
+
+    if args.stageoutDirName:
+        dest = args.stageoutDirName + '/' + taskName + '/' + book + '/' + dataset
+        if not os.path.exists(dest):
+            os.makedir(dest)
+        condorConfig['transfer_output_remaps'] = '"' + outputName + ' = ' + dest + '/' + outputName
+
+    condorConfig['output'] = logDirName + '/' + filesetId + '.out'
+    condorConfig['error'] = logDirName + '/' + filesetId + '.err'
+    condorConfig['log'] = logDirName + '/' + filesetId + '.log'
+    condorConfig['initialdir'] = jobDirName
+
     jdlFileName = jobDirName + '/' + filesetId + '.jdl'
     with open(jdlFileName, 'w') as jdlFile:
-        jdlFile.write(condorStr + '\n')
-        
-        line = 'Arguments = ' + book + ' ' + dataset + ' ' + filesetId
-        jdlFile.write(line + '\n')
-
-        line = 'Output = ' + logDirName + '/' + filesetId + '.out'
-        jdlFile.write(line + '\n')
-
-        line = 'Error = ' + logDirName + '/' + filesetId + '.err'
-        jdlFile.write(line + '\n')
-
-        line = 'Log = ' + logDirName + '/' + filesetId + '.log'
-        jdlFile.write(line + '\n')
-
-        line = 'transfer_input_files = run.py,'
-        if x509File:
-            line += ' ' + x509File + ','
-        line += ' ' + analysisCfgName + ','
-        line += ' ' + envFileName + ','
-        line += ' ' + libTarballName + ','
-        line += ' ' + catalogPackName
-        jdlFile.write(line + '\n')
-
-        line = 'transfer_output_files = ' + dataset + '_' + filesetId + '.root'
-        jdlFile.write(line + '\n')
-
-        line = 'Initialdir = ' + jobDirName
-        jdlFile.write(line + '\n')
+        for key, value in condorConfig.items():
+            jdlFile.write(key + ' = ' + value + '\n')
 
         jdlFile.write('Queue\n')
 
-    proc = subprocess.Popen(['condor_submit', jdlFileName], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    out, err = proc.communicate()
-    print out
-    if err.strip():
-        sys.stderr.write(err)
-        sys.stderr.flush()
+    runSubproc(['condor_submit', jdlFileName])

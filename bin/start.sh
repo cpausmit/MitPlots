@@ -11,7 +11,9 @@ source taskenv.sh
 
 scram project CMSSW $CMSSW_RELEASE
 
-tar xzf libraries.tar.gz
+tar xzf libraries.tar.gz -C $CMSSW_RELEASE/lib/$SCRAM_ARCH
+
+tar xzf *.headers -C $CMSSW_RELEASE
 
 mkdir catalog
 tar xzf catalogs.tar.gz -C catalog

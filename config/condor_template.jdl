@@ -1,7 +1,7 @@
 Universe                = vanilla
 Requirements            = UidDomain == "mit.edu" && Arch == "X86_64" && HasFileTransfer
 Notification            = Error
-Executable              = runRun.sh
+Executable              = start.sh
 Rank                    = Mips
 GetEnv                  = False
 Input                   = /dev/null
