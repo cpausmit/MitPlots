@@ -1,7 +1,7 @@
 Universe                = vanilla
-Requirements            = UidDomain == "mit.edu" && Arch == "X86_64" && OpSysAndVer == "SL6" && HasFileTransfer
+Requirements            = UidDomain == "mit.edu" && Arch == "X86_64" && HasFileTransfer
 Notification            = Error
-Executable              = run.py
+Executable              = runRun.sh
 Rank                    = Mips
 GetEnv                  = False
 Input                   = /dev/null
