@@ -21,6 +21,14 @@ mithep::PileupEnergyDensity::AlgoName(UInt_t a)
     return "FixedGridAll";
   case kFixedGridFastjetAll:
     return "FixedGridFastjetAll";
+  case kFixedGridFastjetAllCalo:
+    return "FixedGridFastjetAllCalo";
+  case kFixedGridFastjetCentralCalo:
+    return "FixedGridFastjetCentralCalo";
+  case kFixedGridFastjetCentralChargedPileUp:
+    return "FixedGridFastjetCentralChargedPileUp";
+  case kFixedGridFastjetCentralNeutral:
+    return "FixedGridFastjetCentralNeutral";
   case kKt6CaloJets:
     return "Kt6CaloJets";
   case kKt6CaloJetsCentral:
@@ -42,9 +50,9 @@ mithep::PileupEnergyDensity::AlgoName(UInt_t a)
 UInt_t
 mithep::PileupEnergyDensity::AlgoIndex(char const* name)
 {
-  for (unsigned idx = 0; idx != nAlgos; ++idx) {
+  for (unsigned idx = 0; idx != nAllAlgos; ++idx) {
     if (std::strcmp(name, AlgoName(idx)) == 0)
       return idx;
   }
-  return nAlgos;
+  return nAllAlgos;
 }

@@ -24,21 +24,30 @@ namespace mithep
       kRandomLowEta,
       kFixedGridAll,
       kFixedGridFastjetAll,
-      kKt6CaloJets,
+      kFixedGridFastjetAllCalo,
+      kFixedGridFastjetCentralCalo,
+      kFixedGridFastjetCentralChargedPileUp,
+      kFixedGridFastjetCentralNeutral,
+      nAlgos
+    };
+
+    enum LegacyAlgo {
+      kKt6CaloJets = nAlgos,
       kKt6CaloJetsCentral,
       kKt6PFJets,
       kKt6PFJetsCentralChargedPileUp,
       kKt6PFJetsCentralNeutral,
       kKt6PFJetsCentralNeutralTight,
-      nAlgos
+      nAllAlgos,
+      nLegacyAlgos = nAllAlgos - nAlgos
     };
 
-  PileupEnergyDensity() :
-    fRho{}
+    PileupEnergyDensity() :
+      fRho{}
     {
     }
 
-    Double_t RhoDefault() const { return fRho[kRandom]; }
+    Double_t RhoDefault() const { return Rho(kRandom); }
     Double_t Rho(UInt_t = kHighEta) const;
 
     void SetRho(Double_t, UInt_t = kHighEta);
@@ -46,24 +55,25 @@ namespace mithep
     virtual PileupEnergyDensity *MakeCopy() const { return new PileupEnergyDensity(*this); }
 
     // backward compatibility
-    Double_t RhoHighEta() const { return fRho[kHighEta]; }
-    Double_t RhoLowEta() const { return fRho[kLowEta]; }
-    Double_t RhoRandom() const { return fRho[kRandom]; }
-    Double_t RhoRandomLowEta() const { return fRho[kRandomLowEta]; }
-    Double_t RhoFixedGridAll() const { return fRho[kFixedGridAll]; }
-    Double_t RhoFixedGridFastjetAll() const { return fRho[kFixedGridFastjetAll]; }
-    Double_t RhoKt6CaloJets() const { return fRho[kKt6CaloJets]; }
-    Double_t RhoKt6CaloJetsCentral() const { return fRho[kKt6CaloJetsCentral]; }
-    Double_t RhoKt6PFJets() const { return fRho[kKt6PFJets]; }
-    Double_t RhoKt6PFJetsCentralChargedPileUp() const { return fRho[kKt6PFJetsCentralChargedPileUp]; }
-    Double_t RhoKt6PFJetsCentralNeutral() const { return fRho[kKt6PFJetsCentralNeutral]; }
-    Double_t RhoKt6PFJetsCentralNeutralTight() const { return fRho[kKt6PFJetsCentralNeutralTight]; }
+    Double_t RhoHighEta() const { return Rho(kHighEta); }
+    Double_t RhoLowEta() const { return Rho(kLowEta); }
+    Double_t RhoRandom() const { return Rho(kRandom); }
+    Double_t RhoRandomLowEta() const { return Rho(kRandomLowEta); }
+    Double_t RhoFixedGridAll() const { return Rho(kFixedGridAll); }
+    Double_t RhoFixedGridFastjetAll() const { return Rho(kFixedGridFastjetAll); }
+    Double_t RhoKt6CaloJets() const { return Rho(kKt6CaloJets); }
+    Double_t RhoKt6CaloJetsCentral() const { return Rho(kKt6CaloJetsCentral); }
+    Double_t RhoKt6PFJets() const { return Rho(kKt6PFJets); }
+    Double_t RhoKt6PFJetsCentralChargedPileUp() const { return Rho(kKt6PFJetsCentralChargedPileUp); }
+    Double_t RhoKt6PFJetsCentralNeutral() const { return Rho(kKt6PFJetsCentralNeutral); }
+    Double_t RhoKt6PFJetsCentralNeutralTight() const { return Rho(kKt6PFJetsCentralNeutralTight); }
 
     static char const* AlgoName(UInt_t);
     static UInt_t AlgoIndex(char const*);
  
   protected:
     Double32_t fRho[nAlgos]; //rho from various fastjet algos
+    Double_t   fRhoLegacy[nLegacyAlgos]; //! only for reading old files
 
     ClassDef(PileupEnergyDensity, 5) // Pileup Energy Density class
   };
@@ -75,6 +85,8 @@ mithep::PileupEnergyDensity::Rho(UInt_t a/* = mithep::PileupEnergyDensity::kHigh
 {
   if (a < nAlgos)
     return fRho[a];
+  else if (a < nAllAlgos)
+    return fRhoLegacy[a - nAlgos];
   else
     return 0.;
 }
@@ -85,6 +97,8 @@ mithep::PileupEnergyDensity::SetRho(Double_t r, UInt_t a/* = mithep::PileupEnerg
 {
   if (a < nAlgos)
     fRho[a] = r;
+  else if (a < nAllAlgos)
+    fRhoLegacy[a - nAlgos] = r;
 }
 
 #endif
