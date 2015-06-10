@@ -50,6 +50,7 @@ const char *Names::gkDCASigBrn              = "DCASig";
 const char *Names::gkRunTreeName            = "Runs";
 const char *Names::gkRunInfoBrn             = "RunInfo";
 const char *Names::gkMCRunInfoBrn           = "MCRunInfo";
+const char *Names::gkMCRunInfoFullBrn       = "MCRunInfoFull";
 
 const char *Names::gkLATreeName             = "FWMetaData";
 const char *Names::gkLAHeaderBrn            = "LAHeader";
