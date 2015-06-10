@@ -32,7 +32,7 @@ namespace mithep
       using TCollection::Print;
       void               Print(Option_t *opt="")   const;
 
-    ClassDef(TriggerTable, 0) // A convenient trigger table
+    ClassDef(TriggerTable, 1) // A convenient trigger table
   };
 }
 

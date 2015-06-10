@@ -157,7 +157,7 @@ namespace mithep
       TString                   fAllEvtTreeName;  //name of all-event tree
       TString                   fHLTObjsName;     //trigger objects branch name
 
-    ClassDef(Analysis, 0) // Top-level analysis class 
+    ClassDef(Analysis, 1) // Top-level analysis class 
   };
 }
 #endif

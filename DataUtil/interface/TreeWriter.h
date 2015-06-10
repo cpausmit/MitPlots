@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TreeWriter.h,v 1.14 2009/03/15 11:17:04 loizides Exp $
-//
 // TreeWriter
 //
 // Class implementing a tree writing infrastructure. The class creates and maintaines
@@ -38,6 +36,8 @@ namespace mithep
 
     protected:
       Bool_t fAutoFill; //!=true then fill automatically in TreeWriter (def=1)
+
+      ClassDef(MyTree, 0)
   };
   
   class TreeWriter : public TNamed 

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Debug.h,v 1.7 2008/07/08 05:51:29 loizides Exp $
-//
 // Debug - detailed logging / debug scheme
 //
 // This class defines the debuging masks (EDebugMask), which are used with the MDB (MIT DeBug) 
@@ -43,8 +41,6 @@ namespace mithep
      Debug();
      virtual ~Debug() {}
      Debug(const Debug &cpy);
-
-   ClassDef(Debug, 0) // Defines different debug masks
   }; 
 }
 

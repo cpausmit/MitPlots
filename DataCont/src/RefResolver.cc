@@ -1,5 +1,3 @@
-// $Id: RefResolver.cc,v 1.1 2009/03/02 12:33:37 loizides Exp $
-
 #include "MitAna/DataCont/interface/RefResolver.h"
 
 #include <TObject.h>
@@ -7,8 +5,6 @@
 #include <TProcessID.h>
 #include <TROOT.h>
 #include "MitAna/TAM/interface/TAMSelector.h"
-
-ClassImp(mithep::RefResolver)
 
 using namespace mithep;
 

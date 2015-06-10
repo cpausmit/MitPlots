@@ -5,8 +5,6 @@
 using namespace std;
 using namespace mithep;
 
-ClassImp(mithep::Cacher)
-
 //--------------------------------------------------------------------------------------------------
 Cacher::Cacher(const TList *list) :
   fInputList(list), 
