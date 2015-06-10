@@ -8,7 +8,6 @@
 
 using namespace mithep;
 
-ClassImp(mithep::MyTree)
 ClassImp(mithep::TreeWriter)
 
 //__________________________________________________________________________________________________
