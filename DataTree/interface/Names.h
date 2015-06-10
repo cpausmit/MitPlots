@@ -63,6 +63,7 @@ namespace mithep
       static const char *gkRunTreeName;
       static const char *gkRunInfoBrn;
       static const char *gkMCRunInfoBrn;
+      static const char *gkMCRunInfoFullBrn;
 
       static const char *gkLATreeName;
       static const char *gkLAHeaderBrn;

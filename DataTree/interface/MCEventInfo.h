@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCEventInfo.h,v 1.10 2009/07/06 15:09:10 sixie Exp $
-//
 // MCEventInfo
 //
 // This class holds monte-carle generation specific information, as for example stored
