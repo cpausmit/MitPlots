@@ -144,7 +144,7 @@ else:
     newTask = True
 
 #analysisCfgName = taskDirName + '/analysis.pkl'
-analysisCfgName = taskDirName + 'analysisCfg.py' # shipping the actual python script until pickling works
+analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until pickling works
 envFileName = taskDirName + '/taskenv.sh'
 #libListName = taskDirName + '/libs.list'
 libPackName = cmsswbase + '.lib.tar.gz'
@@ -202,12 +202,15 @@ if newTask:
         if not os.path.isdir(cmsswbase + '/python/' + package):
             continue
 
-        for module in os.listdir(cmsswbase + '/src/' + package):
-            if not os.path.isdir(cmsswbase + '/src/' + package + '/' + module):
+        for module in os.listdir(cmsswbase + '/python/' + package):
+            if not os.path.isdir(cmsswbase + '/python/' + package + '/' + module):
                 continue
 
-            for link in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/*'):
-                if os.path.getmtime(os.readlink(link)) > packLastUpdate:
+            for path in glob.glob(cmsswbase + '/python/' + package + '/' + module + '/*'):
+                if os.path.islink(path):
+                    path = os.readlink(path)
+
+                if os.path.getmtime(path) > packLastUpdate:
                     remakePyPack = True
                     break
             else:
