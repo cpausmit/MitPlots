@@ -66,6 +66,7 @@ namespace mithep
       template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
       template <class T> T       *GetPublicObj(const char *name, Bool_t warn=1);
       const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo();     }
+      const MCRunInfo            *GetMCRunInfo()        const { return GetSel()->GetMCRunInfo();   }
       const TriggerTable         *GetTriggerTable(ETrigType t)    const;
       const Selector             *GetSel()              const;
       Bool_t                      HasHLTInfo()          const;
@@ -76,6 +77,7 @@ namespace mithep
       template <class T> void     ReqEventObject(const char *name, const T *&addr, Bool_t fromBr);
       void                        SaveNEventsProcessed(const char *name="hDEvents");
       Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   }
+      Bool_t                      ValidMCRunInfo()      const { return GetSel()->ValidMCRunInfo(); }
 
     private:
       Bool_t                      fFillHist;            //=true then fill histos (def=0)

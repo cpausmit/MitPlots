@@ -20,6 +20,7 @@
 #include "MitAna/TreeMod/interface/TreeLoader.h"
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
+#include "MitAna/TreeMod/interface/MCFwkMod.h"
 #include "MitAna/Catalog/interface/Catalog.h"
 #include "MitAna/Catalog/interface/Dataset.h"
 
@@ -32,6 +33,7 @@ Analysis::Analysis(Bool_t useproof) :
   fUseProof(useproof),
   fUseCacher(0),
   fUseHLT(kTRUE),
+  fUseMC(kTRUE),
   fHierarchy(kTRUE),
   fDoProxy(kFALSE),
   fDoObjTabClean(kTRUE),
@@ -62,7 +64,8 @@ Analysis::Analysis(Bool_t useproof) :
   fLAHdrName(Names::gkLAHeaderBrn),
   fHLTTreeName(Names::gkHltTreeName),
   fAllEvtTreeName(Names::gkAllEvtTreeName),
-  fHLTObjsName(Names::gkHltObjBrn)
+  fHLTObjsName(Names::gkHltObjBrn),
+  fMCEventInfoName(Names::gkMCEvtInfoBrn)
 {
   // Default constructor.
 
@@ -460,11 +463,20 @@ Bool_t Analysis::Init()
     fDeleteList->Add(hltmod);
   }
 
+  MCFwkMod* mcmod = 0;
+  if (fUseMC) {
+    mcmod = new MCFwkMod;
+    mcmod->SetEventInfoName(GetMCEventInfoName());
+    fDeleteList->Add(mcmod);
+  }
+
   if (fUseProof) {
 
     fProof->AddInput(anamod);
     if (hltmod)
       fProof->AddInput(hltmod);
+    if (mcmod)
+      fProof->AddInput(mcmod);
 
     TIter iter(fSuperMods->MakeIterator());
     while (1) {
@@ -496,6 +508,8 @@ Bool_t Analysis::Init()
 
     if (hltmod)
       fSelector->AddInput(hltmod);
+    if (mcmod)
+      fSelector->AddInput(mcmod);
 
     TIter iter(fSuperMods->MakeIterator());
     while (1) {
