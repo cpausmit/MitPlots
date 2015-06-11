@@ -7,7 +7,7 @@ import time
 import subprocess
 import glob
 import shutil
-import pickle
+#import pickle
 import socket
 from argparse import ArgumentParser
 
@@ -143,11 +143,13 @@ if os.path.isdir(taskDirName):
 else:
     newTask = True
 
-analysisCfgName = taskDirName + '/analysis.pkl'
+#analysisCfgName = taskDirName + '/analysis.pkl'
+analysisCfgName = taskDirName + 'analysisCfg.py' # shipping the actual python script until pickling works
 envFileName = taskDirName + '/taskenv.sh'
-libListName = taskDirName + '/libs.list'
+#libListName = taskDirName + '/libs.list'
 libPackName = cmsswbase + '.lib.tar.gz'
 incPackName = cmsswbase + '.inc.tar.gz'
+pyPackName = cmsswbase + '.python.tar.gz'
 binPackName = cmsswbase + '.MitAna-bin.tar.gz'
 
 if newTask:
@@ -164,27 +166,64 @@ if newTask:
         envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
         envFile.write('export CMSSW_RELEASE="' + release + '"\n')
 
-    import ROOT
-    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
-    execfile(args.analysisCfg)
-    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
+#    import ROOT
+#    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
+#    execfile(args.analysisCfg)
+#    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
+#
+#    with open(libListName, 'w') as libList:
+#        for lib in loadedLibs:
+#            libList.write(os.path.basename(lib) + '\n')
+#
+#    def listSubtasks(task):
+#        subtasks = []
+#        for subtask in task.GetListOfTasks():
+#            subtasks.append((subtask, listSubtasks(subtask)))
+#
+#        return subtasks
+#
+#    superMods = list(analysis.GetSuperMods())
+#
+#    with open(analysisCfgName, 'wb') as analysisCfg:
+#        pickle.dump((mithep, analysis, superMods), analysisCfg)
 
-    def listSubtasks(task):
-        subtasks = []
-        for subtask in task.GetListOfTasks():
-            subtasks.append((subtask, listSubtasks(subtask)))
+    ### TEMPORARY
+    # NOT COOL BUT NECESSARY UNTIL PROPER USAGE OF PICKLE IS FIGURED OUT
+    shutil.copy(args.analysisCfg, analysisCfgName)
 
-        return subtasks
+    remakePyPack = not os.path.exists(pyPackName)
 
-    superMods = list(analysis.GetSuperMods())
+    if os.path.exists(pyPackName):
+        packLastUpdate = os.path.getmtime(pyPackName)
+    else:
+        packLastUpdate = 0
+    
+    for package in os.listdir(cmsswbase + '/python'):
+        if not os.path.isdir(cmsswbase + '/python/' + package):
+            continue
 
-    with open(analysisCfgName, 'wb') as analysisCfg:
-        pickle.dump((mithep, analysis, superMods), analysisCfg)
+        for module in os.listdir(cmsswbase + '/src/' + package):
+            if not os.path.isdir(cmsswbase + '/src/' + package + '/' + module):
+                continue
 
-    with open(libListName, 'w') as libList:
-        for lib in loadedLibs:
-            libList.write(os.path.basename(lib) + '\n')
-   
+            for link in glob.glob(cmsswbase + '/src/' + package + '/' + module + '/*'):
+                if os.path.getmtime(os.readlink(link)) > packLastUpdate:
+                    remakePyPack = True
+                    break
+            else:
+                continue
+
+            break
+        else:
+            continue
+
+        break
+    
+    if remakePyPack:
+        print 'Creating python tarball.'
+        runSubproc('tar', 'chzf', pyPackName, '-C', cmsswbase, 'python')
+    ### TEMPORARY
+  
     remakeLibPack = not os.path.exists(libPackName)
 
     if os.path.exists(libPackName):
@@ -313,9 +352,10 @@ for (book, dataset), filesets in allFilesets.items():
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','
         inputFilesList += ' ' + envFileName + ','
-        inputFilesList += ' ' + libListName + ','
+#        inputFilesList += ' ' + libListName + ','
         inputFilesList += ' ' + libPackName + ','
         inputFilesList += ' ' + incPackName + ','
+        inputFilesList += ' ' + pyPackName + ','
         inputFilesList += ' ' + binPackName + ','
         inputFilesList += ' ' + catalogPackName
 
