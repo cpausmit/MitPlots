@@ -15,7 +15,7 @@ argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
 argParser.add_argument('--cfg', '-c', metavar = 'FILE', dest = 'configFileName')
 argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book')
 argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
-argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*')
+argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*', default = [])
 
 argParser.add_argument('--analysis', '-a', metavar = 'ANALYSIS', dest = 'analysisCfg')
 
