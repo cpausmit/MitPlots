@@ -60,6 +60,7 @@ namespace mithep
       const char               *GetEvtHdrName()               const { return fEvtHdrName;         }
       const char               *GetHLTObjsName()              const { return fHLTObjsName;        }
       const char               *GetHLTTreeName()              const { return fHLTTreeName;        }
+      const char               *GetMCEventInfoName()          const { return fMCEventInfoName;    }
       const char               *GetLATreeName()               const { return fLATreeName;         }
       const char               *GetLAHdrName()                const { return fLAHdrName;          }
       const char               *GetRunTreeName()              const { return fRunTreeName;        }
@@ -84,6 +85,7 @@ namespace mithep
       void                      SetEvtHdrName(const char *n)        { fEvtHdrName     = n;        }
       void                      SetHLTObjsName(const char *n)       { fHLTObjsName    = n;        }
       void                      SetHLTTreeName(const char *n)       { fHLTTreeName    = n;        }
+      void                      SetMCEventInfoName(const char *n)   { fMCEventInfoName = n;       }
       void                      SetKeepHierarchy(Bool_t b)          { fHierarchy      = b;        }
       void                      SetLAHdrName(const char *n)         { fLAHdrName      = n;        }
       void                      SetLATreeName(const char *n)        { fLATreeName     = n;        }
@@ -97,6 +99,7 @@ namespace mithep
       void                      SetSuperModule(TAModule *mod);
       void                      SetTreeName(const char *name)       { fTreeName       = name;     }
       void                      SetUseHLT(Bool_t hlt)               { fUseHLT         = hlt;      }
+      void                      SetUseMC(Bool_t mc)                 { fUseMC          = mc;       }
       void                      SetUseProof(Bool_t up)              { fUseProof       = up;       }
       void                      SetUseCacher(Int_t i)               { fUseCacher      = i;        }
       void                      Terminate();
@@ -121,7 +124,8 @@ namespace mithep
 
       Bool_t                    fUseProof;        //=true if PROOF is to be used (def=0)
       Bool_t                    fUseCacher;       //=1 use file caching (def=0)
-      Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=1)
+      Bool_t                    fUseHLT;          //=true if HLT module is to be used (def=true)
+      Bool_t                    fUseMC;           //=true if MC module is to be used (def=true)
       Bool_t                    fHierarchy;       //=true if module hierachy to be stored (def=1)
       Bool_t                    fDoProxy;         //=true if TRef branch autoload is used (def=0)
       Bool_t                    fDoObjTabClean;   //=true if object table cleaning is used (def=1)
@@ -156,6 +160,7 @@ namespace mithep
       TString                   fHLTTreeName;     //name of HLT tree
       TString                   fAllEvtTreeName;  //name of all-event tree
       TString                   fHLTObjsName;     //trigger objects branch name
+      TString                   fMCEventInfoName; //name of MC event info
 
     ClassDef(Analysis, 1) // Top-level analysis class 
   };

@@ -1,5 +1,3 @@
-// $Id: MitAnaDataContLinkDef.h,v 1.13 2011/03/11 04:02:39 bendavid Exp $
-
 #ifndef MITANA_DATACONT_LINKDEF_H
 #define MITANA_DATACONT_LINKDEF_H
 
@@ -38,6 +36,7 @@
 #pragma link C++ class mithep::BitMaskT<UInt_t>+;
 #pragma link C++ class mithep::BitMask<6>+;
 #pragma link C++ class mithep::BitMaskT<ULong64_t>+;
+#pragma link C++ class mithep::BitMask<2>+;
 #pragma link C++ class mithep::BitMask<16>+;
 #pragma link C++ class mithep::BitMask<32>+;
 #pragma link C++ class mithep::BitMask<128>+;

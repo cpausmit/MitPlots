@@ -1,5 +1,3 @@
-// $Id: Selector.cc,v 1.15 2011/03/21 15:58:37 paus Exp $
-
 #include "MitAna/TreeMod/interface/Selector.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/TreeMod/interface/OutputMod.h"
@@ -19,6 +17,7 @@ Selector::Selector() :
   fEvtHdrName    (Names::gkEvtHeaderBrn),
   fRunTreeName   (Names::gkRunTreeName),
   fRunInfoName   (Names::gkRunInfoBrn),
+  fMCRunInfoName (Names::gkMCRunInfoBrn),
   fAllEvtHdrBrn  (Names::gkAllEvtHeaderBrn),
   fLATreeName    (Names::gkLATreeName),
   fLAHdrName     (Names::gkLAHeaderBrn),
@@ -26,6 +25,7 @@ Selector::Selector() :
   fRunTree       (0),
   fEventHeader   (0),
   fRunInfo       (0),
+  fMCRunInfo     (0),
   fLATree        (0),
   fLAHeader      (0),
   fCurRunNum     (UInt_t(-1)),
@@ -43,12 +43,6 @@ Selector::~Selector()
 {
   // Destructor.
 
-  fRunTree     = 0;
-  fEventHeader = 0;
-  fRunInfo     = 0;
-  fLATree      = 0;
-  fLAHeader    = 0;
-  fCurRunNum   = UInt_t(-1);
   gROOT->GetListOfSpecials()->Remove(this);
 }
 
@@ -172,9 +166,8 @@ void Selector::SlaveBegin(TTree *tree)
   // The SlaveBegin() function is called after the Begin() function and can be used to setup
   // analysis on the slaves. Here, we request the event header branch.
 
-  if (fDoRunInfo) {
+  if (fDoRunInfo)
     ReqBranch(fEvtHdrName, fEventHeader);
-  }
 
   SearchOutputMods(GetTopModule());
 
@@ -187,6 +180,7 @@ void Selector::UpdateRunInfo()
   // Update the run info to be consistent with the information from the event header.
 
   fRunInfo   = 0;
+  fMCRunInfo = 0;
 
   if (!fRunTree) 
     return;
@@ -214,6 +208,7 @@ void Selector::UpdateRunInfoTree()
   // first erase previous entries
   fRunTree   = 0;
   fRunInfo   = 0;
+  fMCRunInfo = 0;
   fCurRunNum = UInt_t(-1);
   fLATree    = 0;
   fLAHeader  = 0;
@@ -237,6 +232,9 @@ void Selector::UpdateRunInfoTree()
   } else {
     Fatal("UpdateRunInfoTree", "Cannot find run info branch with name %s", fRunInfoName.Data());
   }
+
+  if (fRunTree->GetBranch(fMCRunInfoName))
+    fRunTree->SetBranchAddress(fMCRunInfoName, &fMCRunInfo);
 
   // look-ahead tree
   fLATree = dynamic_cast<TTree*>(f->Get(fLATreeName));

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Names.h,v 1.54 2012/01/31 15:39:49 rwolf Exp $
-//
 // Names
 //
 // This class defines the standard names for branches,
@@ -63,7 +61,6 @@ namespace mithep
       static const char *gkRunTreeName;
       static const char *gkRunInfoBrn;
       static const char *gkMCRunInfoBrn;
-      static const char *gkMCRunInfoFullBrn;
 
       static const char *gkLATreeName;
       static const char *gkLAHeaderBrn;
