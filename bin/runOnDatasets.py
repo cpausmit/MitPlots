@@ -303,17 +303,35 @@ if newTask and len(running) != 0:
     print 'Job kill is not implemented yet.'
     sys.exit(1)
 
-condorConfig = {}
+condorTemplate = {}
 with open(args.condorTemplateName) as condorTemplate:
     for line in condorTemplate:
         if not re.match('#', line.strip()):
             key, eq, value = line.partition('=')
-            condorConfig[key.strip().lower()] = value.strip()
+            condorTemplate[key.strip().lower()] = value.strip()
+
+envs = []
+if 'environment' in condorTemplate:
+    if re.match('(?:[^;]+;?)+', condorTemplate['environment']): # old format
+        envs = condorTemplate['environment'].split(';')
+    elif re.match('".*"', condorTemplate['environment']): # new format
+        envs = condorTemplate.strip('"').split()
+    else:
+        print 'Ignoring invalid environment parameter in condor configuration.'
+
+if 'HOSTNAME=' + socket.gethostname() not in envs:
+    envs.append('HOSTNAME=' + socket.gethostname())
+
+condorTemplate['environment'] = '"' + ' '.join(envs) + '"'
+
+# loop over datasets to submit
 
 for (book, dataset), filesets in allFilesets.items():
     jobDirName = taskDirName + '/' + book + '/' + dataset
     jobOutDirName = outDirName + '/' + book + '/' + dataset
     jobLogDirName = logDirName + '/' + book + '/' + dataset
+
+    condorTemplate['initialdir'] = jobOutDirName
 
     if not os.path.exists(jobDirName):
         os.makedirs(jobDirName)
@@ -333,23 +351,7 @@ for (book, dataset), filesets in allFilesets.items():
     if not os.path.exists(catalogPackName):
         runSubproc('tar', 'czf', catalogPackName, '-C', catalogDirName, book + '/' + dataset)
 
-    condorConfig['initialdir'] = jobOutDirName
-
-    envs = []
-    if 'environment' in condorConfig:
-        if re.match('(?:[^;]+;?)+', condorConfig['environment']): # old format
-            envs = condorConfig['environment'].split(';')
-        elif re.match('".*"', condorConfig['environment']): # new format
-            envs = condorConfig.strip('"').split()
-        else:
-            print 'Ignoring invalid environment parameter in condor configuration.'
-
-    if 'HOSTNAME=' + socket.gethostname() not in envs:
-        envs.append('HOSTNAME=' + socket.gethostname())
-
-    condorConfig['environment'] = '"' + ' '.join(envs) + '"'
-
-    if 'transfer_input_files' not in condorConfig:
+    if 'transfer_input_files' not in condorTemplate:
         inputFilesList = cmsswbase + '/src/MitAna/macros/analysis.py,'
         if x509File:
             inputFilesList += ' ' + x509File + ','
@@ -361,9 +363,10 @@ for (book, dataset), filesets in allFilesets.items():
         inputFilesList += ' ' + pyPackName + ','
         inputFilesList += ' ' + binPackName + ','
         inputFilesList += ' ' + catalogPackName
+    else:
+        inputFilesList = condorTemplate['transfer_input_files']
 
-        condorConfig['transfer_input_files'] = inputFilesList
-    
+    # loop over filesets and do actual submission   
     for fileset in filesets:
         if (book, dataset, fileset) in running:
             print 'Running: ', book, dataset, fileset
@@ -379,6 +382,9 @@ for (book, dataset), filesets in allFilesets.items():
         if os.path.exists(outputPath):
             print 'Output exists: ', book, dataset, fileset
             continue
+
+        condorConfig = {}
+        condorConfig.update(condorTemplate)
     
         if 'arguments' not in condorConfig:
             condorConfig['arguments'] = '"' + book + ' ' + dataset + ' ' + fileset + '"'
@@ -392,6 +398,7 @@ for (book, dataset), filesets in allFilesets.items():
         condorConfig['output'] = jobLogDirName + '/' + fileset + '.out'
         condorConfig['error'] = jobLogDirName + '/' + fileset + '.err'
         condorConfig['log'] = jobLogDirName + '/' + fileset + '.log'
+        condorConfig['transfer_input_files'] = inputFilesList
     
         jdlFileName = jobDirName + '/' + fileset + '.jdl'
         with open(jdlFileName, 'w') as jdlFile:
