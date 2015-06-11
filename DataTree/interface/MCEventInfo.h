@@ -39,7 +39,7 @@ namespace mithep {
     Double_t Scale(UInt_t idx) const { return fScales.at(idx); }
     UShort_t NPartonsLO() const { return fNPartonsLO; }
     UShort_t NPartonsNLO() const { return fNPartonsNLO; }
-    UShort_t NPartons() const { return fNPartons; }
+    UInt_t NPartons() const { return fNPartons; }
     Double_t AlphaQED() const { return fAlphaQED; }
     Double_t AlphaQCD() const { return fAlphaQCD; }
     Int_t PartonId(UInt_t iP) const { return iP < fNPartons ? fPartonId[iP] : 0; }
@@ -55,7 +55,7 @@ namespace mithep {
     char const* LHEComment(UInt_t iL) const { return fLHEComments.at(iL).Data(); }
 
     // Using HEPEUP speak
-    UShort_t NUP() const { return NPartons(); }
+    UInt_t NUP() const { return NPartons(); }
     Int_t IDPRUP() const { return ProcessId(); }
     Double_t XWGTUP() const { return Weight(); }
     Double_t SCALUP() const { return Scale(); }
@@ -87,7 +87,7 @@ namespace mithep {
     void AddScale(Double_t s) { fScales.push_back(s); }
     void SetNPartonsLO(UShort_t n) { fNPartonsLO = n; }
     void SetNPartonsNLO(UShort_t n) { fNPartonsNLO = n; }
-    void SetNPartons(UShort_t);
+    void SetNPartons(UInt_t);
     void SetAlphaQED(Double_t a) { fAlphaQED = a; }
     void SetAlphaQCD(Double_t a) { fAlphaQCD = a; }
     void SetPartonId(UShort_t iP, Int_t id) { fPartonId[iP] = id; }
@@ -121,7 +121,7 @@ namespace mithep {
     std::vector<Double32_t> fScales; // scale value used to exclude EWK-produced partons from matching
     UShort_t fNPartonsLO; // number of partons for LO process (used to steer matching/merging)
     UShort_t fNPartonsNLO; // number of partons for NLO process (used to steer matching/merging)
-    UShort_t fNPartons; // number of partons excluding the first two
+    UInt_t fNPartons; // number of partons excluding the first two
     UShort_t fPartonsSize; //! only for bookkeeping array size
     Double32_t fAlphaQED; // value of QED coupling used in the event
     Double32_t fAlphaQCD; // value of QCD coupling used in the event

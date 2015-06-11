@@ -50,7 +50,7 @@ mithep::MCEventInfo::~MCEventInfo()
 }
 
 void
-mithep::MCEventInfo::SetNPartons(UShort_t n)
+mithep::MCEventInfo::SetNPartons(UInt_t n)
 {
   if (n > fPartonsSize) {
     fPartonsSize = n * 2;
