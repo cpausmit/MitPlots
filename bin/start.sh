@@ -34,4 +34,4 @@ ls -l
 
 echo "python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root analysisCfg.py"
 echo ""
-python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --nentries=10 analysisCfg.py
+python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root analysisCfg.py
