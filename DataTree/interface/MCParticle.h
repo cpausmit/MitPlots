@@ -14,6 +14,7 @@
 #include "MitCommon/DataFormats/interface/Vect3.h"
 #include "MitCommon/DataFormats/interface/Vect4M.h"
 #include "MitAna/DataCont/interface/Ref.h"
+#include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 
 namespace mithep 
@@ -70,11 +71,13 @@ namespace mithep
       TParticlePDG       *PdgEntry()               const;
       Int_t               PdgId()                  const { return fPdgId;  }
       Double_t            PdgMass()                const;
+      Bool_t              StatusFlag(UInt_t i)     const { return fStatusFlags.TestBit(i); }
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(const MCParticle *p) { fMother = p;    }
       void                SetStatus(Int_t s)             { fStatus = s;    }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
       void                SetPdgId(Int_t s)              {  fPdgId = s;    }
+      void                SetStatusFlag(UInt_t i, Bool_t b) { fStatusFlags.SetBit(i, b); }
       Int_t               Status()                 const { return fStatus; }
       void                Print(Option_t *opt="")  const;
 
@@ -92,8 +95,9 @@ namespace mithep
       Ref<MCParticle>     fMother;       //reference to mother
       Bool_t              fIsGenerated;  //=true if generated particle
       Bool_t              fIsSimulated;  //=true if simulated particle
+      mithep::BitMask<2>  fStatusFlags;  //pythia8 status flags
 
-    ClassDef(MCParticle,2) // Generated particle class
+    ClassDef(MCParticle,3) // Generated particle class
   };
 }
 
