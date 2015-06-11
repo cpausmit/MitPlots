@@ -9,7 +9,6 @@
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/RunInfo.h"
 #include "MitAna/DataTree/interface/MCRunInfo.h"
-#include "MitAna/DataTree/interface/MCRunInfoFull.h"
 #include "MitAna/DataTree/interface/TriggerName.h"
 #include "MitAna/DataTree/interface/TriggerTable.h"
 #include "MitAna/DataTree/interface/TriggerObjectsTable.h"
@@ -38,7 +37,6 @@
 #pragma link C++ class mithep::Names+;
 #pragma link C++ class mithep::RunInfo+;
 #pragma link C++ class mithep::MCRunInfo-;
-#pragma link C++ class mithep::MCRunInfoFull-;
 #pragma link C++ class mithep::TriggerName+;
 #pragma link C++ class mithep::TriggerObjectsTable+;
 #pragma link C++ class mithep::TriggerTable+;
