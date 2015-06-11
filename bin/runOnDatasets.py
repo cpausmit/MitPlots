@@ -7,7 +7,7 @@ import time
 import subprocess
 import glob
 import shutil
-import pickle
+#import pickle
 import socket
 from argparse import ArgumentParser
 
@@ -15,7 +15,7 @@ argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
 argParser.add_argument('--cfg', '-c', metavar = 'FILE', dest = 'configFileName')
 argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book')
 argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
-argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*')
+argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*', default = [])
 
 argParser.add_argument('--analysis', '-a', metavar = 'ANALYSIS', dest = 'analysisCfg')
 
@@ -54,7 +54,7 @@ datasets = []
 if args.configFileName:
     with open(args.configFileName) as configFile:
         for line in configFile:
-            matches = re.match('([ ^]+) +([ ^]+) +', line.strip())
+            matches = re.match('([^ ]+) +([^ ]+)', line.strip())
             if not matches:
                 continue
 
@@ -143,11 +143,13 @@ if os.path.isdir(taskDirName):
 else:
     newTask = True
 
-analysisCfgName = taskDirName + '/analysis.pkl'
+#analysisCfgName = taskDirName + '/analysis.pkl'
+analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until pickling works
 envFileName = taskDirName + '/taskenv.sh'
-libListName = taskDirName + '/libs.list'
+#libListName = taskDirName + '/libs.list'
 libPackName = cmsswbase + '.lib.tar.gz'
 incPackName = cmsswbase + '.inc.tar.gz'
+pyPackName = cmsswbase + '.python.tar.gz'
 binPackName = cmsswbase + '.MitAna-bin.tar.gz'
 
 if newTask:
@@ -164,27 +166,67 @@ if newTask:
         envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
         envFile.write('export CMSSW_RELEASE="' + release + '"\n')
 
-    import ROOT
-    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
-    execfile(args.analysisCfg)
-    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
+#    import ROOT
+#    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
+#    execfile(args.analysisCfg)
+#    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
+#
+#    with open(libListName, 'w') as libList:
+#        for lib in loadedLibs:
+#            libList.write(os.path.basename(lib) + '\n')
+#
+#    def listSubtasks(task):
+#        subtasks = []
+#        for subtask in task.GetListOfTasks():
+#            subtasks.append((subtask, listSubtasks(subtask)))
+#
+#        return subtasks
+#
+#    superMods = list(analysis.GetSuperMods())
+#
+#    with open(analysisCfgName, 'wb') as analysisCfg:
+#        pickle.dump((mithep, analysis, superMods), analysisCfg)
 
-    def listSubtasks(task):
-        subtasks = []
-        for subtask in task.GetListOfTasks():
-            subtasks.append((subtask, listSubtasks(subtask)))
+    ### TEMPORARY
+    # NOT COOL BUT NECESSARY UNTIL PROPER USAGE OF PICKLE IS FIGURED OUT
+    shutil.copy(args.analysisCfg, analysisCfgName)
 
-        return subtasks
+    remakePyPack = not os.path.exists(pyPackName)
 
-    superMods = list(analysis.GetSuperMods())
+    if os.path.exists(pyPackName):
+        packLastUpdate = os.path.getmtime(pyPackName)
+    else:
+        packLastUpdate = 0
+    
+    for package in os.listdir(cmsswbase + '/python'):
+        if not os.path.isdir(cmsswbase + '/python/' + package):
+            continue
 
-    with open(analysisCfgName, 'wb') as analysisCfg:
-        pickle.dump((mithep, analysis, superMods), analysisCfg)
+        for module in os.listdir(cmsswbase + '/python/' + package):
+            if not os.path.isdir(cmsswbase + '/python/' + package + '/' + module):
+                continue
 
-    with open(libListName, 'w') as libList:
-        for lib in loadedLibs:
-            libList.write(os.path.basename(lib) + '\n')
-   
+            for path in glob.glob(cmsswbase + '/python/' + package + '/' + module + '/*'):
+                if os.path.islink(path):
+                    path = os.readlink(path)
+
+                if os.path.getmtime(path) > packLastUpdate:
+                    remakePyPack = True
+                    break
+            else:
+                continue
+
+            break
+        else:
+            continue
+
+        break
+    
+    if remakePyPack:
+        print 'Creating python tarball.'
+        runSubproc('tar', 'chzf', pyPackName, '-C', cmsswbase, 'python')
+    ### TEMPORARY
+  
     remakeLibPack = not os.path.exists(libPackName)
 
     if os.path.exists(libPackName):
@@ -261,17 +303,35 @@ if newTask and len(running) != 0:
     print 'Job kill is not implemented yet.'
     sys.exit(1)
 
-condorConfig = {}
-with open(args.condorTemplateName) as condorTemplate:
-    for line in condorTemplate:
+condorTemplate = {}
+with open(args.condorTemplateName) as condorTemplateFile:
+    for line in condorTemplateFile:
         if not re.match('#', line.strip()):
             key, eq, value = line.partition('=')
-            condorConfig[key.strip().lower()] = value.strip()
+            condorTemplate[key.strip().lower()] = value.strip()
+
+envs = []
+if 'environment' in condorTemplate:
+    if re.match('(?:[^;]+;?)+', condorTemplate['environment']): # old format
+        envs = condorTemplate['environment'].split(';')
+    elif re.match('".*"', condorTemplate['environment']): # new format
+        envs = condorTemplate.strip('"').split()
+    else:
+        print 'Ignoring invalid environment parameter in condor configuration.'
+
+if 'HOSTNAME=' + socket.gethostname() not in envs:
+    envs.append('HOSTNAME=' + socket.gethostname())
+
+condorTemplate['environment'] = '"' + ' '.join(envs) + '"'
+
+# loop over datasets to submit
 
 for (book, dataset), filesets in allFilesets.items():
     jobDirName = taskDirName + '/' + book + '/' + dataset
     jobOutDirName = outDirName + '/' + book + '/' + dataset
     jobLogDirName = logDirName + '/' + book + '/' + dataset
+
+    condorTemplate['initialdir'] = jobOutDirName
 
     if not os.path.exists(jobDirName):
         os.makedirs(jobDirName)
@@ -291,36 +351,22 @@ for (book, dataset), filesets in allFilesets.items():
     if not os.path.exists(catalogPackName):
         runSubproc('tar', 'czf', catalogPackName, '-C', catalogDirName, book + '/' + dataset)
 
-    condorConfig['initialdir'] = jobOutDirName
-
-    envs = []
-    if 'environment' in condorConfig:
-        if re.match('(?:[^;]+;?)+', condorConfig['environment']): # old format
-            envs = condorConfig['environment'].split(';')
-        elif re.match('".*"', condorConfig['environment']): # new format
-            envs = condorConfig.strip('"').split()
-        else:
-            print 'Ignoring invalid environment parameter in condor configuration.'
-
-    if 'HOSTNAME=' + socket.gethostname() not in envs:
-        envs.append('HOSTNAME=' + socket.gethostname())
-
-    condorConfig['environment'] = '"' + ' '.join(envs) + '"'
-
-    if 'transfer_input_files' not in condorConfig:
+    if 'transfer_input_files' not in condorTemplate:
         inputFilesList = cmsswbase + '/src/MitAna/macros/analysis.py,'
         if x509File:
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','
         inputFilesList += ' ' + envFileName + ','
-        inputFilesList += ' ' + libListName + ','
+#        inputFilesList += ' ' + libListName + ','
         inputFilesList += ' ' + libPackName + ','
         inputFilesList += ' ' + incPackName + ','
+        inputFilesList += ' ' + pyPackName + ','
         inputFilesList += ' ' + binPackName + ','
         inputFilesList += ' ' + catalogPackName
+    else:
+        inputFilesList = condorTemplate['transfer_input_files']
 
-        condorConfig['transfer_input_files'] = inputFilesList
-    
+    # loop over filesets and do actual submission   
     for fileset in filesets:
         if (book, dataset, fileset) in running:
             print 'Running: ', book, dataset, fileset
@@ -336,6 +382,9 @@ for (book, dataset), filesets in allFilesets.items():
         if os.path.exists(outputPath):
             print 'Output exists: ', book, dataset, fileset
             continue
+
+        condorConfig = {}
+        condorConfig.update(condorTemplate)
     
         if 'arguments' not in condorConfig:
             condorConfig['arguments'] = '"' + book + ' ' + dataset + ' ' + fileset + '"'
@@ -349,6 +398,7 @@ for (book, dataset), filesets in allFilesets.items():
         condorConfig['output'] = jobLogDirName + '/' + fileset + '.out'
         condorConfig['error'] = jobLogDirName + '/' + fileset + '.err'
         condorConfig['log'] = jobLogDirName + '/' + fileset + '.log'
+        condorConfig['transfer_input_files'] = inputFilesList
     
         jdlFileName = jobDirName + '/' + fileset + '.jdl'
         with open(jdlFileName, 'w') as jdlFile:

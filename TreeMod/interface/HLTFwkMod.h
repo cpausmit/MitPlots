@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTFwkMod.h,v 1.8 2009/08/11 15:24:39 loizides Exp $
-//
 // HLTFwkMod
 //
 // This TAM module reads the trigger and trigger objects information whenever it changes
