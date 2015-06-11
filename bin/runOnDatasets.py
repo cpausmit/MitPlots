@@ -54,7 +54,7 @@ datasets = []
 if args.configFileName:
     with open(args.configFileName) as configFile:
         for line in configFile:
-            matches = re.match('([ ^]+) +([ ^]+) +', line.strip())
+            matches = re.match('([^ ]+) +([^ ]+)', line.strip())
             if not matches:
                 continue
 
@@ -304,8 +304,8 @@ if newTask and len(running) != 0:
     sys.exit(1)
 
 condorTemplate = {}
-with open(args.condorTemplateName) as condorTemplate:
-    for line in condorTemplate:
+with open(args.condorTemplateName) as condorTemplateFile:
+    for line in condorTemplateFile:
         if not re.match('#', line.strip()):
             key, eq, value = line.partition('=')
             condorTemplate[key.strip().lower()] = value.strip()
