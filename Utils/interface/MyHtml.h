@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleTable.h,v 1.1 2009/01/23 07:34:34 loizides Exp $
-//
 // MyHtml
 //
 // Simple extension to THtml class. To be able to bugfix THtml a copy of all files from ROOT 

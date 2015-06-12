@@ -65,6 +65,7 @@ namespace mithep
       const char               *GetRunTreeName()              const { return fRunTreeName;        }
       const char               *GetRunInfoName()              const { return fRunInfoName;        }
       const TList              *GetOutput()                   const { return fOutput;             }
+      const TList              *GetSuperMods()                const { return fSuperMods;          }
       Bool_t                    GetUseProof()                 const { return fUseProof;           }
       Bool_t                    Init();
       Bool_t                    IsInit()                      const { return fState==kInit;       }
@@ -99,6 +100,8 @@ namespace mithep
       void                      SetUseProof(Bool_t up)              { fUseProof       = up;       }
       void                      SetUseCacher(Int_t i)               { fUseCacher      = i;        }
       void                      Terminate();
+
+      void                      PrintModuleTree() const; // for debugging
 
     protected:
       void                      AddFile(const char *pname, Int_t eventlist);
@@ -154,7 +157,7 @@ namespace mithep
       TString                   fAllEvtTreeName;  //name of all-event tree
       TString                   fHLTObjsName;     //trigger objects branch name
 
-    ClassDef(Analysis, 0) // Top-level analysis class 
+    ClassDef(Analysis, 1) // Top-level analysis class 
   };
 }
 #endif

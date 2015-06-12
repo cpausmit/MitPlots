@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Ref.h,v 1.7 2010/09/19 23:46:08 bendavid Exp $
-//
 // Ref
 //
 // Templated implementation of our own TRef.
@@ -21,29 +19,35 @@
 namespace mithep 
 {
   template<class ArrayElement>
-  class Ref
-  {
-    public:
-      Ref() : fPID(0), fUID(0)    {}
-      Ref(const ArrayElement *ae) { SetObject(ae); }
-      virtual ~Ref()              {}
-
-      Bool_t                       IsNull()        const { return fUID==0 ? kTRUE : kFALSE; }
-      Bool_t                       IsValid()       const { return !IsNull();                }
-      const ArrayElement          *Obj()           const;
-      ArrayElement                *Obj();
-      Bool_t                       RefsObject(const ArrayElement *ae) const;
-      void                         SetObject(const ArrayElement *ae);
-      
-      void                         operator= (const ArrayElement *ae) { SetObject(ae);         }
-      Bool_t                       operator==(const ArrayElement *ae) { return RefsObject(ae); }
-
+  class Ref {
+  public:
+    Ref() : fPID(0), fUID(0) {}
+    Ref(Ref<ArrayElement> const& orig) : fPID(orig.fPID), fUID(orig.fUID) {}
+    Ref(const ArrayElement *ae) { SetObject(ae); }
+    virtual ~Ref() {}
+  
+    Ref<ArrayElement>& operator=(Ref<ArrayElement> const& rhs) {
+      fPID = rhs.fPID;
+      fUID = rhs.fUID;
+      return *this;
+    }
+  
+    Bool_t IsNull() const { return fUID==0 ? kTRUE : kFALSE; }
+    Bool_t IsValid() const { return !IsNull(); }
+    ArrayElement const* Obj() const;
+    ArrayElement* Obj();
+    Bool_t RefsObject(ArrayElement const*) const;
+    void SetObject(ArrayElement const*);
+    
+    Ref<ArrayElement>& operator=(ArrayElement const* ae) { SetObject(ae); return *this; }
+    Bool_t operator==(ArrayElement const* ae) { return RefsObject(ae); }
+  
     protected:
-      TObject                     *GetObject()     const;
-
-      ProcIDRef                    fPID;     //||process id corresponding to referenced object
-      UInt_t                       fUID;     //unique id of the referenced object
-
+    TObject *GetObject() const;
+  
+    ProcIDRef fPID;     //||process id corresponding to referenced object
+    UInt_t fUID;     //unique id of the referenced object
+  
     ClassDef(Ref, 1) // Templated implementation of our own TRef
   };
 }

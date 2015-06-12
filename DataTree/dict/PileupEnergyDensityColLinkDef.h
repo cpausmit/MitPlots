@@ -1,5 +1,3 @@
-// $Id: PileupEnergyDensityColLinkDef.h,v 1.1 2011/03/01 14:23:28 mzanetti Exp $
-
 #ifndef MITANA_DATATREE_PILEUPENERGYDENSITYCOLLINKDEF_H
 #define MITANA_DATATREE_PILEUPENERGYDENSITYCOLLINKDEF_H
 
@@ -22,7 +20,44 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
+// below onfile.LowEta is filled to kHighEta - this is not a typo!
+#pragma read \
+    sourceClass="mithep::PileupEnergyDensity" \
+    version="[-4]" \
+    source="Double32_t fRho; Double32_t fRhoHighEta; Double32_t fRhoRandom;\
+            Double32_t fRhoRandomLowEta; Double32_t fRhoFixedGridAll;\
+            Double32_t fRhoFixedGridFastjetAll; Double32_t fRhoKt6CaloJets;\
+            Double32_t fRhoKt6CaloJetsCentral; Double32_t fRhoKt6PFJets;\
+            Double32_t fRhoKt6PFJetsCentralChargedPileUp; Double32_t fRhoKt6PFJetsCentralNeutral;\
+            Double32_t fRhoKt6PFJetsCentralNeutralTight;" \
+    targetClass="mithep::PileupEnergyDensity" \
+    target="fRho" \
+    code="{ fRho[mithep::PileupEnergyDensity::kHighEta] = onfile.fRho;\
+      fRho[mithep::PileupEnergyDensity::kLowEta] = onfile.fRhoHighEta;\
+      fRho[mithep::PileupEnergyDensity::kRandom] = onfile.fRhoRandom;\
+      fRho[mithep::PileupEnergyDensity::kRandomLowEta] = onfile.fRhoRandomLowEta;\
+      fRho[mithep::PileupEnergyDensity::kFixedGridAll] = onfile.fRhoFixedGridAll;\
+      fRho[mithep::PileupEnergyDensity::kFixedGridFastjetAll] = onfile.fRhoFixedGridFastjetAll; }" \
+
+#pragma read \
+    sourceClass="mithep::PileupEnergyDensity" \
+    version="[-4]" \
+    source="Double32_t fRhoKt6CaloJets;\
+            Double32_t fRhoKt6CaloJetsCentral; Double32_t fRhoKt6PFJets;\
+            Double32_t fRhoKt6PFJetsCentralChargedPileUp; Double32_t fRhoKt6PFJetsCentralNeutral;\
+            Double32_t fRhoKt6PFJetsCentralNeutralTight;" \
+    targetClass="mithep::PileupEnergyDensity" \
+    target="fRhoLegacy" \
+    code="{ unsigned const aOffset = mithep::PileupEnergyDensity::nAlgos;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6CaloJets - aOffset] = onfile.fRhoKt6CaloJets;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6CaloJetsCentral - aOffset] = onfile.fRhoKt6CaloJetsCentral;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6PFJets - aOffset] = onfile.fRhoKt6PFJets;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6PFJetsCentralChargedPileUp - aOffset] = onfile.fRhoKt6PFJetsCentralChargedPileUp;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6PFJetsCentralNeutral - aOffset] = onfile.fRhoKt6PFJetsCentralNeutral;\
+      fRhoLegacy[mithep::PileupEnergyDensity::kKt6PFJetsCentralNeutralTight - aOffset] = onfile.fRhoKt6PFJetsCentralNeutralTight; }" \
+
 #pragma link C++ class mithep::PileupEnergyDensity+;
+#pragma link C++ enum mithep::PileupEnergyDensity::Algo;
 #pragma link C++ class mithep::Collection<mithep::PileupEnergyDensity>+;
 #pragma link C++ class mithep::Array<mithep::PileupEnergyDensity>+;
 #pragma link C++ class mithep::ObjArray<mithep::PileupEnergyDensity>+;

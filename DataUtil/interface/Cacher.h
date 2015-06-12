@@ -41,8 +41,6 @@ namespace mithep
     Int_t                fNFilesAhead;        //number of files to cache ahead of running job
     Int_t                fNSecWait;           //keep track how many seconds we were waiting
     std::vector<int>     fCacheStatus;        //0-nothing, 1-submitted, 2-complete
-
-  ClassDef(Cacher, 0) // Cacher class
   };
 }
 #endif

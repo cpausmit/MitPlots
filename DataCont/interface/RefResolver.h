@@ -20,8 +20,6 @@ namespace mithep
       virtual ~RefResolver() {}
 
       static TObject *GetObjectWithID(UInt_t uid, TProcessID *pid);
-
-    ClassDef(RefResolver, 0) // Reference resolver
   };
 }
 #endif

@@ -1,5 +1,3 @@
-// $Id: TreeWriter.cc,v 1.17 2009/07/13 20:04:13 loizides Exp $
-
 #include "MitAna/DataUtil/interface/TreeWriter.h"
 #include <Riostream.h>
 #include <TObject.h>

@@ -1,5 +1,6 @@
 #include "MitAna/TreeMod/interface/Analysis.h"
 #include <memory>
+#include <sstream>
 #include <Riostream.h>
 #include <TFile.h>
 #include <TList.h>
@@ -716,4 +717,71 @@ Bool_t Analysis::UploadPackages(TList *packages)
   }
 
   return kTRUE;
+}
+
+void
+Analysis::PrintModuleTree() const
+{
+  unsigned indent = 0;
+
+  std::function<std::string(TTask&, unsigned)> print =
+    [&indent, &print](TTask& mod, unsigned cat)->std::string {
+    std::stringstream ss;
+    if (cat == 1)
+      ss << "-+-";
+    else if (cat == 2) {
+      for (unsigned iS = 0; iS != indent; ++iS) {
+        if (iS > 8 && (iS - 8) % 11 == 1)
+          ss << "|";
+        else
+          ss << " ";
+      }
+      ss << " +-";
+    }
+
+    TString name(mod.GetName());
+    while (name.Length() < 8)
+      name += " ";
+    if (name.Length() > 8)
+      name = name(0, 8);
+
+    ss << name;
+
+    indent += 8;
+    if (cat != 0)
+      indent += 3;
+
+    TIter tItr(mod.GetListOfTasks());
+    TObject* obj = 0;
+    unsigned nsub = 0;
+    cat = 1;
+    while ((obj = tItr())) {
+      if (!obj)
+        continue;
+      auto* subtask = dynamic_cast<TTask*>(obj);
+      if (!subtask)
+        continue;
+
+      ss << print(*subtask, cat);
+      ++nsub;
+      cat = 2;
+    }
+
+    indent -= 8;
+    if (cat != 0)
+      indent -= 3;
+
+    if (nsub == 0)
+      ss << std::endl;
+
+    return ss.str();
+  };
+
+  TIter mItr(fSuperMods);
+  TObject* obj = 0;
+  while ((obj = mItr())) {
+    TTask* task = dynamic_cast<TTask*>(obj);
+
+    std::cout << print(*task, 0);
+  }
 }

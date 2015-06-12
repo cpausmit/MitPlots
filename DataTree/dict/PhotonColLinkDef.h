@@ -1,5 +1,3 @@
-// $Id: PhotonColLinkDef.h,v 1.1 2009/06/15 15:00:15 loizides Exp $
-
 #ifndef MITANA_DATATREE_PHOTONCOLLINKDEF_H
 #define MITANA_DATATREE_PHOTONCOLLINKDEF_H
 
@@ -21,6 +19,14 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
+
+#pragma read \
+  sourceClass="mithep::Photon" \
+  version="[-21]" \
+  source="Double32_t fCoviEtaiEta" \
+  targetClass="mithep::Photon" \
+  target="fCoviEtaiEta5x5" \
+  code="{ fCoviEtaiEta5x5 = onfile.fCoviEtaiEta; }" \
 
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;

@@ -41,7 +41,7 @@ namespace mithep
     protected:
       const TriggerTable  *fTriggers; //!trigger table
 
-    ClassDef(TriggerObjectsTable, 0) // Hash table for trigger objects
+    ClassDef(TriggerObjectsTable, 1) // Hash table for trigger objects
   };
 }
 
