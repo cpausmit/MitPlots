@@ -54,19 +54,21 @@ def MergeFilesets(inputPath, outputPath, filenameHeader, datasets = [], skim = '
     for dataset in datasets:
         # output name
         if skim:
-            outputMergedFilename = writePath + '/' + filenameHeader + '_' + dataset + '_' + skim + '.root'
+            outputName = outputPath + '/' + filenameHeader + '_' + dataset + '_' + skim + '.root'
+            tmpOutputName = writePath + '/' + filenameHeader + '_' + dataset + '_' + skim + '.root'
         else:
-            outputMergedFilename = writePath + '/' + filenameHeader + '_' + dataset + '.root'
+            outputName = outputPath + '/' + filenameHeader + '_' + dataset + '.root'
+            tmpOutputName = writePath + '/' + filenameHeader + '_' + dataset + '.root'
 
-        if os.path.exists(outputMergedFilename):
+        if os.path.exists(outputName):
             delete = False
             if overwrite:
                 print " Overwriting existing output "
-                print " " + outputMergedFilename
+                print "  " + outputName
                 delete = True
             else:
                 print " Output file "
-                print " " + outputMergedFilename
+                print "  " + outputName
                 print " already exists. Do you wish to overwrite? [y/N]:"
                 while True:
                     response = sys.stdin.readline()
@@ -75,14 +77,14 @@ def MergeFilesets(inputPath, outputPath, filenameHeader, datasets = [], skim = '
                     elif response.strip() == 'N':
                         break
                     else:
-                        print '[y/N]:'
+                        print ' [y/N]:'
                         continue
 
-                if delete:
-                    os.remove(outputMergedFilename)
-                else:
-                    print 'Skipping dataset ' + dataset
-                    continue
+            if delete:
+                os.remove(outputName)
+            else:
+                print ' Skipping dataset ' + dataset
+                continue
     
         # find all files that have some contents
         inputPaths = []
@@ -98,12 +100,16 @@ def MergeFilesets(inputPath, outputPath, filenameHeader, datasets = [], skim = '
             else:
                 print ' WARNING -- empty root file skipped: ' + fullPath
 
-        print 'Merging files from dataset ' + dataset
+        print ' Merging files from dataset ' + dataset
         if debug:
-            print ' Files:'
-            print '  ' + ' '.join(sorted(inputFiles))
+            print '  Files:'
+            print '   ' + ' '.join(sorted(inputFiles))
+        
+        command = ['hadd', '-f7', tmpOutputName] + inputPaths
+        if debug:
+            print ' '.join(command)
 
-        proc = subprocess.Popen(['hadd', '-f7', outputMergedFilename] + inputPaths, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        proc = subprocess.Popen(command, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         out, err = proc.communicate()
 
         if debug and out.strip():
@@ -112,12 +118,17 @@ def MergeFilesets(inputPath, outputPath, filenameHeader, datasets = [], skim = '
             sys.stderr.write(err)
             sys.stderr.flush()
 
-        if not os.path.exists(outputMergedFilename):
-            print 'Failed to create ' + outputMergedFilename
+        if not os.path.exists(tmpOutputName):
+            print ' Failed to create ' + tmpOutputName
             continue
 
         if not local:
-            shutil.copy(outputMergedFilename, outputMergedFilename.replace(writePath, outputPath, 1))
+            shutil.copy(tmpOutputName, outputName)
+            os.remove(tmpOutputName)
+
+    if not local:
+        os.rmdir(writePath)
+
 
 if __name__ == '__main__':
     #===================================================================================================
