@@ -41,7 +41,7 @@ namespace mithep {
     char const* WeightId(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightId[iW].Data() : ""; };
     char const* WeightDefinition(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightDefinition[iW].Data() : ""; }
     char const* WeightDefinition(char const*) const;
-    UChar_t WeightGroup(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightGroup[iW] : -1; }
+    UShort_t WeightGroup(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightGroup[iW] : -1; }
     UShort_t WeightPositionInEvent(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightPositionInEvent[iW] : -1; }
     UInt_t NLHECommentLines() const { return fLHEComments.GetEntries(); }
     char const* LHEComment(UInt_t iL) const { return fLHEComments.At(iL)->GetName(); }
