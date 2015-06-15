@@ -23,8 +23,12 @@ mithep::MCRunInfo::MCRunInfo() :
   fWeightGroupsSize(8),
   fWeightGroupCombination(new TString[fWeightGroupsSize]),
   fWeightGroupType(new TString[fWeightGroupsSize]),
-  fWeightData(new IdValuePairVector[fWeightGroupsSize]),
-  fWeightPositionInEvent(new std::vector<UShort_t>[fWeightGroupsSize]),
+  fNWeightDefinitions(0),
+  fWeightDefinitionsSize(64),
+  fWeightId(new TString[fWeightDefinitionsSize]),
+  fWeightDefinition(new TString[fWeightDefinitionsSize]),
+  fWeightGroup(new UChar_t[fWeightDefinitionsSize]),
+  fWeightPositionInEvent(new UShort_t[fWeightDefinitionsSize]),
   fLHEComments()
 {
 }
@@ -39,7 +43,9 @@ mithep::MCRunInfo::~MCRunInfo()
   delete [] fHeaderBlockContent;
   delete [] fWeightGroupCombination;
   delete [] fWeightGroupType;
-  delete [] fWeightData;
+  delete [] fWeightId;
+  delete [] fWeightDefinition;
+  delete [] fWeightGroup;
   delete [] fWeightPositionInEvent;
 }
 
@@ -80,21 +86,43 @@ mithep::MCRunInfo::SetNWeightGroups(UInt_t n)
 
     mithep::Utils::Reallocate(fWeightGroupCombination, fNWeightGroups, fWeightGroupsSize);
     mithep::Utils::Reallocate(fWeightGroupType, fNWeightGroups, fWeightGroupsSize);
-    mithep::Utils::Reallocate(fWeightData, fNWeightGroups, fWeightGroupsSize);
-    mithep::Utils::Reallocate(fWeightPositionInEvent, fNWeightGroups, fWeightGroupsSize);
   }
 
   fNWeightGroups = n;
 }
 
 void
-mithep::MCRunInfo::ClearWeightData()
+mithep::MCRunInfo::SetNWeightDefinitions(UInt_t n)
 {
-  fNWeightGroups = 0;
-  for (unsigned iD = 0; iD != fWeightGroupsSize; ++iD) {
-    fWeightData[iD].clear();
-    fWeightPositionInEvent[iD].clear();
+  if (n > fWeightDefinitionsSize) {
+    fWeightDefinitionsSize = n * 2;
+
+    mithep::Utils::Reallocate(fWeightId, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightDefinition, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightGroup, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightPositionInEvent, fNWeightDefinitions, fWeightDefinitionsSize);
   }
+
+  fNWeightDefinitions = n;
+}
+
+void
+mithep::MCRunInfo::AddWeightDefinition(char const* id, char const* def, UChar_t iG, UShort_t idx)
+{
+  if (fNWeightDefinitions >= fWeightDefinitionsSize) {
+    fWeightDefinitionsSize *= 2;
+
+    mithep::Utils::Reallocate(fWeightId, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightDefinition, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightGroup, fNWeightDefinitions, fWeightDefinitionsSize);
+    mithep::Utils::Reallocate(fWeightPositionInEvent, fNWeightDefinitions, fWeightDefinitionsSize);
+  }
+
+  fWeightId[fNWeightDefinitions] = id;
+  fWeightDefinition[fNWeightDefinitions] = def;
+  fWeightGroup[fNWeightDefinitions] = iG;
+  fWeightPositionInEvent[fNWeightDefinitions] = idx;
+  ++fNWeightDefinitions;
 }
 
 void

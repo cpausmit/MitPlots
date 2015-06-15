@@ -10,14 +10,12 @@
 #define MITANA_DATATREE_MCRUNINFO_H
  
 #include "MitAna/DataTree/interface/DataBase.h"
+#include "MitAna/DataCont/interface/Types.h"
 
 namespace mithep {
 
   class MCRunInfo : public DataBase {
   public:
-    typedef std::pair<TString, TString> IdValuePair;
-    typedef std::vector<IdValuePair> IdValuePairVector;
-
     MCRunInfo();
     virtual ~MCRunInfo();
 
@@ -39,13 +37,14 @@ namespace mithep {
     UInt_t NWeightGroups() const { return fNWeightGroups; }
     char const* WeightGroupCombination(UInt_t iG) const { return iG < fNWeightGroups ? fWeightGroupCombination[iG].Data() : ""; }
     char const* WeightGroupType(UInt_t iG) const { return iG < fNWeightGroups ? fWeightGroupType[iG].Data() : ""; }
-    UInt_t NWeights(UInt_t iG) const { return iG < fNWeightGroups ? fWeightData[iG].size() : 0; }
-    char const* WeightId(UInt_t iG, UInt_t iW) const { return iG < fNWeightGroups ? fWeightData[iG].at(iW).first : ""; };
-    char const* WeightData(UInt_t iG, UInt_t iW) const { return iG < fNWeightGroups ? fWeightData[iG].at(iW).second : ""; }
-    char const* WeightData(UInt_t, char const*) const;
-    UShort_t WeightPositionInEvent(UInt_t iG, UInt_t iW) const { return iG < fNWeightGroups ? fWeightPositionInEvent[iG].at(iW) : -1; }
-    UInt_t NLHECommentLines() const { return fLHEComments.size(); }
-    char const* LHEComment(UInt_t iL) const { return fLHEComments.at(iL).Data(); }
+    UInt_t NWeights(UInt_t = -1) const;
+    char const* WeightId(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightId[iW].Data() : ""; };
+    char const* WeightDefinition(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightDefinition[iW].Data() : ""; }
+    char const* WeightDefinition(char const*) const;
+    UChar_t WeightGroup(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightGroup[iW] : -1; }
+    UShort_t WeightPositionInEvent(UInt_t iW) const { return iW < fNWeightDefinitions ? fWeightPositionInEvent[iW] : -1; }
+    UInt_t NLHECommentLines() const { return fLHEComments.GetEntries(); }
+    char const* LHEComment(UInt_t iL) const { return fLHEComments.At(iL)->GetName(); }
 
     // Using HEPRUP speak
     Double_t EBMUP() const { return BeamEnergy(); }
@@ -71,14 +70,13 @@ namespace mithep {
     void SetNHeaderBlocks(UInt_t);
     void SetHeaderBlockTag(UInt_t iB, char const* s) { fHeaderBlockTag[iB] = s; }
     void SetHeaderBlockContent(UInt_t iB, char const* s) { fHeaderBlockContent[iB] = s; }
-    void ClearWeightData();
     void SetNWeightGroups(UInt_t);
     void SetWeightGroupCombination(UInt_t iG, char const* s) { fWeightGroupCombination[iG] = s; }
     void SetWeightGroupType(UInt_t iG, char const* s) { fWeightGroupType[iG] = s; }
-    void AddWeightData(UInt_t iG, char const* id, char const* d, UShort_t idx)
-    { fWeightData[iG].push_back(IdValuePair(id, d)); fWeightPositionInEvent[iG].push_back(idx); }
-    void ClearLHEComments() { fLHEComments.clear(); }
-    void AddLHECommentLine(TString const& c) { fLHEComments.push_back(c); }
+    void SetNWeightDefinitions(UInt_t);
+    void AddWeightDefinition(char const* id, char const* def, UChar_t iG, UShort_t idx);
+    void ClearLHEComments() { fLHEComments.Reset(); }
+    void AddLHECommentLine(char const* c) { new (fLHEComments.Allocate()) TObjString(c); }
 
   protected:
     Bool_t fHasLHEInfo; // Everything below comes from LHE
@@ -100,9 +98,13 @@ namespace mithep {
     UInt_t fWeightGroupsSize; //! to keep track of the array size
     TString* fWeightGroupCombination; //[fNWeightGroups]
     TString* fWeightGroupType; //[fNWeightGroups]
-    IdValuePairVector* fWeightData; //[fNWeightGroups]
-    std::vector<UShort_t>* fWeightPositionInEvent; //[fNWeightGroups] position of the reweighting factor in the events
-    std::vector<TString> fLHEComments;
+    UInt_t fNWeightDefinitions;
+    UInt_t fWeightDefinitionsSize; //! to keep track of the array size
+    TString* fWeightId; //[fNWeightDefinitions] ID of the weight
+    TString* fWeightDefinition; //[fNWeightDefinitions] Definition of the weight
+    UChar_t* fWeightGroup; //[fNWeightDefinitions] Group index the weight belongs to
+    UShort_t* fWeightPositionInEvent; //[fNWeightDefinitions] position of the reweighting factor in the events
+    FArrObjString fLHEComments; //|| LHE header comment lines
 
     ClassDef(MCRunInfo, 1) // MC Run info class
   };
@@ -110,15 +112,28 @@ namespace mithep {
 }
 
 inline
-char const*
-mithep::MCRunInfo::WeightData(UInt_t iG, char const* id) const
+UInt_t
+mithep::MCRunInfo::NWeights(UInt_t iG/* = -1*/) const
 {
-  if (iG >= fNWeightGroups)
-    return "";
+  if (iG > fNWeightGroups)
+    return fNWeightDefinitions;
+  else {
+    UInt_t result = 0;
+    for (UInt_t iD = 0; iD != fNWeightDefinitions; ++iD) {
+      if (fWeightGroup[iD == iG])
+        ++result;
+    }
+    return result;
+  }
+}
 
-  for (IdValuePair& idValue : fWeightData[iG]) {
-    if (idValue.first == id)
-      return idValue.second;
+inline
+char const*
+mithep::MCRunInfo::WeightDefinition(char const* id) const
+{
+  for (UInt_t iD = 0; iD != fNWeightDefinitions; ++iD) {
+    if (fWeightId[iD] == id)
+      return fWeightDefinition[iD].Data();
   }
 
   return "";

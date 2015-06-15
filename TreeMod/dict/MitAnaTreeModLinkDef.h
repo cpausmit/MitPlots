@@ -1,5 +1,3 @@
-// $Id: MitAnaTreeModLinkDef.h,v 1.15 2008/12/10 14:20:11 loizides Exp $
-
 #ifndef MITANA_TREEMOD_LINKDEF_H
 #define MITANA_TREEMOD_LINKDEF_H
 #include "MitAna/TreeMod/interface/AnaFwkMod.h"

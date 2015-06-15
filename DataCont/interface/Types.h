@@ -15,6 +15,7 @@
 #include "MitCommon/DataFormats/interface/Types.h"
 #include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
+#include "MitAna/DataCont/interface/FastArray.h"
 
 namespace mithep
 {
@@ -33,5 +34,7 @@ namespace mithep
   typedef FastArrayBasic<Double32_t,kTRUE> FArrDouble32;
   typedef FastArrayBasic<Int_t>            FArrInt;
   typedef FastArrayBasic<UInt_t>           FArrUInt;
+
+  typedef FastArray<TObjString>            FArrObjString;
 }
 #endif

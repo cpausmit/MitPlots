@@ -45,6 +45,7 @@ namespace mithep
       Bool_t                    IsOwner()                          const { return kTRUE;        }
       TObject                  *ObjAt(UInt_t idx);
       const TObject            *ObjAt(UInt_t idx)                  const;
+      void                      Resize(UInt_t);
       void                      Reset();
       void                      Trim()                                   { Expand(fSize);       }
       ArrayElement             *UncheckedAt(UInt_t idx);                 
@@ -265,6 +266,28 @@ inline const TObject *mithep::FastArray<ArrayElement>::ObjAt(UInt_t idx) const
   // Return object at given index.
 
   return static_cast<const TObject*>(At(idx));
+}
+
+//-------------------------------------------------------------------------------------------------
+template<class ArrayElement>
+void mithep::FastArray<ArrayElement>::Resize(UInt_t s)
+{
+  if (!fArray)
+    Init(s);
+  else {
+    if (s < fSize) {
+      for (UInt_t i = s; i != fSize; ++i)
+        fArray[i].~ArrayElement();
+    }
+
+    fSize = s;
+
+    if (fSize >= fCapacity)
+      Expand(TMath::Max(16, 2 * fSize));
+
+    BaseCollection::Clear();
+    fNObjects = TMath::Max(fNObjects, fSize);
+  }
 }
 
 //-------------------------------------------------------------------------------------------------

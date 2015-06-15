@@ -14,6 +14,8 @@
 #include "MitAna/DataCont/interface/Types.h"
 #endif
 
+#include "TObjString.h"
+
 
 // typedef UInt_t unsignedint;
 // typedef UChar_t unsignedchar;
@@ -56,6 +58,11 @@
 
 #pragma link C++ class mithep::Collection<mithep::ProcIDRef>+;
 #pragma link C++ class mithep::FastArray<mithep::ProcIDRef>-;
+
+#pragma link C++ class mithep::Collection<TObjString>+;
+#pragma link C++ class mithep::FastArray<TObjString>-;
+#pragma link C++ typedef mithep::FArrObjString;
+
 #pragma link C++ class mithep::FastArrayBasic<Double_t>-;
 #pragma link C++ class mithep::FastArrayBasic<Double32_t,kTRUE>-;
 #pragma link C++ class mithep::FastArrayBasic<Int_t>-;

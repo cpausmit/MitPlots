@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FastArrayBasic.h,v 1.10 2009/04/06 13:44:08 loizides Exp $
-//
 // FastArrayBasic
 //
 // Implementation of a "fast" array on the heap: Memory is dynamically allocated, 
@@ -43,8 +41,8 @@ namespace mithep
       ~FastArrayBasic() { Init(0); }
 
       Int_t                     Add(const ArrayElement &ae);
-      ArrayElement              At(UInt_t idx);
-      const ArrayElement        At(UInt_t idx)                     const;
+      ArrayElement&             At(UInt_t idx);
+      const ArrayElement&       At(UInt_t idx)                     const;
       void                      Clear(Option_t */*opt*/="")              { fSize=0; Init(0);    }
       UInt_t                    Entries()                          const { return fSize;        }
       UInt_t                    GetEntries()                       const { return fSize;        }
@@ -52,6 +50,7 @@ namespace mithep
       Bool_t                    IsOwner()                          const { return kTRUE;        }
       TObject                  *ObjAt(UInt_t /*idx*/)                    { return 0;            }
       const TObject            *ObjAt(UInt_t /*idx*/)              const { return 0;            }
+      void                      Resize(UInt_t);
       void                      Reset();
       void                      Trim()                                   { Expand(fSize);       }
       ArrayElement              UncheckedAt(UInt_t idx);                 
@@ -116,7 +115,7 @@ Int_t mithep::FastArrayBasic<ArrayElement, IsDouble32>::Add(const ArrayElement &
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
-inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx)
+inline ArrayElement& mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx)
 {
   // Return entry at given index. 
 
@@ -125,13 +124,14 @@ inline ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t 
 
   ArrayElement tmp;
   TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
-                 idx, fSize, this->GetName(), typeid(tmp).name()); 
-  return 0;
+                 idx, fSize, this->GetName(), typeid(tmp).name());
+
+  throw std::out_of_range(std::string("ArrayElement<") + typeid(tmp).name() + ">::At(UInt_t)");
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class ArrayElement, Bool_t IsDouble32>
-inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx) const
+inline const ArrayElement& mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(UInt_t idx) const
 {
   // Return entry at given index.
 
@@ -140,8 +140,9 @@ inline const ArrayElement mithep::FastArrayBasic<ArrayElement, IsDouble32>::At(U
 
   ArrayElement tmp;
   TObject::Fatal("At","Index too large: (%u < %u violated) for %s containing %s",
-                 idx, fSize, this->GetName(), typeid(tmp).name()); 
-  return 0;
+                 idx, fSize, this->GetName(), typeid(tmp).name());
+
+  throw std::out_of_range(std::string("ArrayElement<") + typeid(tmp).name() + ">::At(UInt_t)");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,6 +186,22 @@ inline void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Init(UShort_t s)
   
   if (!fArray && fCapacity > 0)
     fArray = static_cast<ArrayElement*>(TStorage::Alloc(fCapacity*sizeof(ArrayElement)));
+}
+
+//-------------------------------------------------------------------------------------------------
+template<class ArrayElement, Bool_t IsDouble32>
+void mithep::FastArrayBasic<ArrayElement, IsDouble32>::Resize(UInt_t s)
+{
+  if (!fArray)
+    Init(s);
+  else {
+    fSize = s;
+
+    if (fSize >= fCapacity)
+      Expand(TMath::Max(16, 2 * fSize));
+
+    BaseCollection::Clear();
+  }
 }
 
 //-------------------------------------------------------------------------------------------------

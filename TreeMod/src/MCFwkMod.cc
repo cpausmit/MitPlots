@@ -27,26 +27,25 @@ mithep::MCFwkMod::BeginRun()
   if (!runInfo)
     return;
 
-  unsigned nTotalW = 0;
-  for (unsigned iG = 0; iG != runInfo->NWeightGroups(); ++iG)
-    nTotalW += runInfo->NWeights(iG);
-    
-  fWeightGroupCombination.resize(nTotalW);
-  fWeightGroupType.resize(nTotalW);
-  fWeightId.resize(nTotalW);
-  fWeightDef.resize(nTotalW);
+  fWeightGroupCombination.resize(runInfo->NWeights());
+  fWeightGroupType.resize(runInfo->NWeights());
+  fWeightId.resize(runInfo->NWeights());
+  fWeightDef.resize(runInfo->NWeights());
 
   for (unsigned iG = 0; iG != runInfo->NWeightGroups(); ++iG) {
     TString const& comb = runInfo->WeightGroupCombination(iG);
     TString const& type = runInfo->WeightGroupType(iG);
 
-    for (unsigned iW = 0; iW != runInfo->NWeights(iG); ++iW) {
-      unsigned pos = runInfo->WeightPositionInEvent(iG, iW);
+    for (unsigned iW = 0; iW != runInfo->NWeights(); ++iW) {
+      if (runInfo->WeightGroup(iW) != iG)
+        continue;
+
+      unsigned pos = runInfo->WeightPositionInEvent(iW);
 
       fWeightGroupCombination[pos] = comb;
       fWeightGroupType[pos] = type;
-      fWeightId[pos] = runInfo->WeightId(iG, iW);
-      fWeightDef[pos] = runInfo->WeightData(iG, iW);
+      fWeightId[pos] = runInfo->WeightId(iW);
+      fWeightDef[pos] = runInfo->WeightDefinition(iW);
     }
   }
 }
