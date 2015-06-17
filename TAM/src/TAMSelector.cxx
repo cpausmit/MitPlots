@@ -242,14 +242,11 @@ Bool_t TAMSelector::BranchProxy::Load(UInt_t uid, TProcessID *pid,
    // check if TAMBranchInfo already exists
    // and if not add it
    const char *brname = readbranch->GetName();
-   TObject *brInfo = fSel->fBranchTable.FindObject(brname);
-   TAMBranchInfo *branchInfo;
-   if (brInfo==0) {
+   TAMBranchInfo* branchInfo = static_cast<TAMBranchInfo*>(fSel->fBranchTable.FindObject(brname));
+   if (!branchInfo) {
      branchInfo = new TAMBranchInfo(brname);
      fSel->fBranchTable.Add(branchInfo);
    }
-   else
-     branchInfo = dynamic_cast<TAMBranchInfo*>(brInfo);
 
    // load the branch
    fSel->LoadBranch(branchInfo);

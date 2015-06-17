@@ -1,5 +1,3 @@
-// $Id: ProcIDRef.cc,v 1.1 2008/10/31 18:56:14 bendavid Exp $
-
 #include "MitAna/DataCont/interface/ProcIDRef.h"
 
 ClassImp(mithep::ProcIDRef)
@@ -14,7 +12,8 @@ void mithep::ProcIDRef::Streamer(TBuffer &b)
     b >> pidf;
     pidf += b.GetPidOffset();
     fProcID = b.ReadProcessID(pidf);
-  } else { /*writing*/
+  }
+  else { /*writing*/
     UShort_t pidf;
     pidf = b.WriteProcessID(fProcID);
     b << pidf;
