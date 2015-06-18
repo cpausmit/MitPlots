@@ -70,8 +70,8 @@ if args.useCacher:
 if args.anarchy:
     analysis.SetKeepHierarchy(False)
 
-print '+++++ ANALYSIS FLOW +++++\n'
+print '\n+++++ ANALYSIS FLOW +++++\n'
 analysis.PrintModuleTree()
-print '\n+++++++++++++++++++++++++'
+print '\n+++++++++++++++++++++++++\n'
 
 analysis.Run(False)
