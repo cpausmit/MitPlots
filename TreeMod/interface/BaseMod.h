@@ -25,21 +25,12 @@ namespace mithep
   class BaseMod : public TAModule {
     public:
       enum ETrigType { kHLT, kL1A, kL1T };
+
       BaseMod(const char *name="BaseMod", const char *title="Base analysis module");
 
-      Bool_t GetFillHist()         const { return fFillHist;    }
-      void   SetFillHist(Bool_t b)       { fFillHist = b;       }
-      Int_t  GetNEventsProcessed() const { return fNEventsProc; }
-
-    private:
-      class ObjType : public TObjString {
-        public:
-          ObjType(const char *name="", Bool_t br=kTRUE) : TObjString(name), fBr(br) {}
-          ~ObjType() {}
-          Bool_t  IsBranch() const { return fBr; }
-        protected:
-          Bool_t  fBr; //=true then object is from branch
-      };
+      Bool_t                      GetFillHist() const { return fFillHist; }
+      void                        SetFillHist(Bool_t b) { fFillHist = b; }
+      Int_t                       GetNEventsProcessed() const { return fNEventsProc; }
 
     protected:
       void                        AddEventObject(const char *name, Bool_t fromBr=kTRUE);
@@ -53,31 +44,40 @@ namespace mithep
                                          Int_t nbinsy, Double_t ymin, Double_t ymax,
                                          Int_t nbinsz, Double_t zmin, Double_t zmax);
       void                        AddToTrash(TObject *obj);
-      const EventHeader          *GetEventHeader()      const { return GetSel()->GetEventHeader(); }
-      const HLTFwkMod            *GetHltFwkMod()        const { return fHltFwkMod;                 }
+      const EventHeader          *GetEventHeader() const { return GetSel()->GetEventHeader(); }
+      const HLTFwkMod            *GetHltFwkMod() const { return fHltFwkMod; }
       const TriggerObjectCol     *GetHLTObjects(const char *name) const;
-      const TriggerObjectsTable  *GetHLTObjectsTable()            const;
-      const TriggerTable         *GetHLTTable()                   const;
-      const TriggerTable         *GetL1AlgoTable()                const;
-      const TriggerTable         *GetL1TechTable()                const;
+      const TriggerObjectsTable  *GetHLTObjectsTable() const;
+      const TriggerTable         *GetHLTTable() const;
+      const TriggerTable         *GetL1AlgoTable() const;
+      const TriggerTable         *GetL1TechTable() const;
       template <class T> const T *GetColThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetObjThisEvt(const char *name, Bool_t warn=1) const;
       template <class T> T       *GetObjThisEvt(const char *name, Bool_t warn=1);
       template <class T> const T *GetPublicObj(const char *name, Bool_t warn=1)  const;
       template <class T> T       *GetPublicObj(const char *name, Bool_t warn=1);
-      const RunInfo              *GetRunInfo()          const { return GetSel()->GetRunInfo();     }
-      const TriggerTable         *GetTriggerTable(ETrigType t)    const;
-      const Selector             *GetSel()              const;
-      Bool_t                      HasHLTInfo()          const;
-      void                        IncNEventsProcessed()       { ++fNEventsProc;                    }
+      const RunInfo              *GetRunInfo() const { return GetSel()->GetRunInfo(); }
+      const TriggerTable         *GetTriggerTable(ETrigType t) const;
+      const Selector             *GetSel() const;
+      Bool_t                      HasHLTInfo() const;
+      void                        IncNEventsProcessed() { ++fNEventsProc; }
       template <class T> Bool_t   LoadEventObject(const char *name, const T *&addr, Bool_t warn=1);
       template <class T> void     ReqBranch(const char *bname, const T *&addr);
       template <class T> void     ReqEventObject(const char *name, const T *&addr);
       template <class T> void     ReqEventObject(const char *name, const T *&addr, Bool_t fromBr);
       void                        SaveNEventsProcessed(const char *name="hDEvents");
-      Bool_t                      ValidRunInfo()        const { return GetSel()->ValidRunInfo();   }
+      Bool_t                      ValidRunInfo() const { return GetSel()->ValidRunInfo(); }
 
     private:
+      class ObjType : public TObjString {
+        public:
+          ObjType(const char *name="", Bool_t br=kTRUE) : TObjString(name), fBr(br) {}
+          ~ObjType() {}
+          Bool_t  IsBranch() const { return fBr; }
+        protected:
+          Bool_t  fBr; //=true then object is from branch
+      };
+
       Bool_t                      fFillHist;            //=true then fill histos (def=0)
       THashTable                  fEvtObjBrNames;       //names of per-event objects
       mutable const HLTFwkMod    *fHltFwkMod;           //!pointer to HLTFwdMod

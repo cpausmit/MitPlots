@@ -1,7 +1,3 @@
-//
-// $Id: TAModule.cxx,v 1.6 2009/07/16 15:06:56 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAModule.h"
 
 
@@ -176,13 +172,13 @@ Bool_t TAModule::AddObjThisEvt(TObject* obj)
    // Add this object to the list of objects stored for this event.
    // See further description below.
 
-   if(obj)
-      return AddObjThisEvt(obj,obj->GetName());
-   else {
-      Error("AddObjThisEvt",
-            "Can not add null object to event.");
-      return kFALSE;
-   }
+  if (obj)
+    return AddObjThisEvt(obj,obj->GetName());
+  else {
+    Error("AddObjThisEvt",
+	  "Can not add null object to event.");
+    return kFALSE;
+  }
 }
 
 
@@ -526,7 +522,7 @@ void TAModule::ResetAllActiveFlags()
    // Recursively reset the activity flag of this and all sub modules
    // to their fDefActv values.
    
-   if(fStopped) // this module is permanently aborted
+   if (fStopped) // this module is permanently aborted
       return;
 
    SetActive(fDefActv);
