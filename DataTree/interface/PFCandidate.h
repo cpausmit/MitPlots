@@ -16,12 +16,12 @@
 #include "MitAna/DataTree/interface/Track.h"
 #include "MitAna/DataTree/interface/Muon.h"
 #include "MitAna/DataTree/interface/Electron.h"
+#include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/Conversion.h"
 
 namespace mithep 
 {
-  class Photon;
   class PFCandidate : public CompositeParticle
   {
     public:

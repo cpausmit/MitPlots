@@ -1,5 +1,3 @@
-// $Id: MuonColLinkDef.h,v 1.2 2010/03/22 18:40:17 bendavid Exp $
-
 #ifndef MITANA_DATATREE_MUONCOLLINKDEF_H
 #define MITANA_DATATREE_MUONCOLLINKDEF_H
 
@@ -21,15 +19,6 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
-
-#pragma read                                              \
-    sourceClass="mithep::Muon"                            \
-    version="[-1]"                                        \
-    source=""                                  \
-    targetClass="mithep::Muon"                            \
-    target="fCharge"                                      \
-    code="{ fCharge = -99; }"                             \
-
 
 #pragma link C++ class mithep::Muon+;
 #pragma link C++ enum mithep::Muon::EClassType;

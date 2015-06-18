@@ -65,7 +65,7 @@
 namespace mithep {
   class Muon : public ChargedParticle {
     public:
-      Muon();
+      Muon() {}
 
       enum EClassType {
         kNone,              //no track assigned
@@ -246,7 +246,7 @@ namespace mithep {
       void           GetMom()                        const;
 
       Vect3C         fMom;                 //stored three-momentum
-      Char_t         fCharge;              //stored charge - filled with -99 when reading old files
+      Char_t         fCharge = -99;        //stored charge - filled with -99 when reading old files
       Ref<Track>     fGlobalTrkRef;        //global combined track reference
       Ref<Track>     fStaTrkRef;           //standalone muon track reference
       Ref<Track>     fTrkTrkRef;           //tracker track reference
@@ -306,11 +306,11 @@ namespace mithep {
       Double32_t     fTrackDist[8];        //[0,0,14]dist. to track in trans. plane in muon chamber
       Double32_t     fTrackDistErr[8];     //[0,0,14]error of dist. to track in trans. plane
       Int_t          fNSegments[8];        //number of segments in given muon chamber
-      Bool_t         fIsGlobalMuon;        //GlobalMuon algo flag
-      Bool_t         fIsTrackerMuon;       //TrackerMuon algo flag
-      Bool_t         fIsStandaloneMuon;    //StandaloneMuon algo flag
-      Bool_t         fIsPFMuon;            //particle flow muon flag
-      Bool_t         fIsCaloMuon;          //CaloMuon algo flag
+      Bool_t         fIsGlobalMuon = kFALSE;      //GlobalMuon algo flag
+      Bool_t         fIsTrackerMuon = kFALSE;     //TrackerMuon algo flag
+      Bool_t         fIsStandaloneMuon = kFALSE;  //StandaloneMuon algo flag
+      Bool_t         fIsPFMuon = kFALSE;          //particle flow muon flag
+      Bool_t         fIsCaloMuon = kFALSE;        //CaloMuon algo flag
 
     ClassDef(Muon, 10) // Muon class
   };

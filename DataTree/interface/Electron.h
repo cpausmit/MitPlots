@@ -18,7 +18,7 @@ namespace mithep
   class Electron : public ChargedParticle
   {
   public:
-    Electron();
+    Electron() {}
 
     const Track         *BestTrk()                     const;
     Double_t             D0PV()                        const { return fD0PV; }
@@ -77,7 +77,6 @@ namespace mithep
     Double_t             ConvPartnerDist()             const { return fConvPartnerDist; }
     Double_t             ConvPartnerRadius()           const { return fConvPartnerRadius; }
     Int_t                ConvFlag()                    const { return fConvFlag; }
-    Double_t             CaloIsolation()               const { return fCaloIsolation; } // *DEPRECATED*
     Int_t                Classification()              const { return fClassification; }
     Double_t             CovEtaEta()                   const { return fCovEtaEta; }
     Double_t             CoviEtaiEta()                 const { return fCoviEtaiEta; }
@@ -103,7 +102,6 @@ namespace mithep
     Bool_t               HasGsfTrk()                      const { return fGsfTrackRef.IsValid(); }
     Bool_t               HasTrackerTrk()                  const { return fTrackerTrackRef.IsValid(); }
     Bool_t               HasSuperCluster()                const { return fSuperClusterRef.IsValid(); }
-    Double_t             HcalIsolation()                  const { return fHcalJurassicIsolation; } // *DEPRECATED*
     Double_t             IDLikelihood()                   const { return fIDLikelihood; }
     Bool_t               IsEnergyScaleCorrected()         const { return fIsEnergyScaleCorrected; }
     Bool_t               IsMomentumCorrected()            const { return fIsMomentumCorrected; }
@@ -127,7 +125,6 @@ namespace mithep
     const SuperCluster  *ECALOnlySCluster()               const { return fPFSuperClusterRef.Obj(); }
     const SuperCluster  *PFSCluster()                     const { return ECALOnlySCluster(); } // backward compatibility
     Double_t             ScPixCharge()                    const { return fScPixCharge; }
-      						            
     Double_t             EcalRecHitIsoDr04()              const { return fEcalJurassicIsolation; }
     Double_t             HcalTowerSumEtDr04()             const
     { return HcalDepth1TowerSumEtDr04() + HcalDepth2TowerSumEtDr04(); }
@@ -280,125 +277,130 @@ namespace mithep
     void                 Mark(UInt_t i=1)        const;
 
   protected:
-    Double_t             GetCharge()             const;
-    Double_t             GetMass()               const { return 0.51099892e-3; }
-    void                 GetMom()                const;
+    Double_t          GetCharge()             const;
+    Double_t          GetMass()               const { return 0.51099892e-3; }
+    void              GetMom()                const;
 
-    Vect3C               fMom;                       //stored three-momentum
-    Char_t               fCharge;                    //stored charge - filled with -99 when reading old files
-    Char_t               fScPixCharge;               //charge from supercluster-pixel matching
-    Ref<Track>           fGsfTrackRef;               //gsf track reference
-    Ref<Track>           fTrackerTrackRef;           //tracker track reference
-    Ref<Track>           fConvPartnerTrackRef;       //conversion partner track reference
-    Ref<SuperCluster>    fSuperClusterRef;           //reference to SuperCluster (refined unbiased PF supercluster in >= 7XY)
-    Double32_t           fESuperClusterOverP;        //[0,0,14]super cluster e over p ratio
-    Double32_t           fESeedClusterOverPout;      //[0,0,14]seed cluster e over p mom
-    Double32_t           fDeltaEtaSuperClTrkAtVtx;   //[0,0,14]delta eta of super cluster with trk
-    Double32_t           fDeltaEtaSeedClTrkAtCalo;   //[0,0,14]delta eta of seeed cluster with trk
-    Double32_t           fDeltaPhiSuperClTrkAtVtx;   //[0,0,14]delta phi of super cluster with trk
-    Double32_t           fDeltaPhiSeedClTrkAtCalo;   //[0,0,14]delta phi of seeed cluster with trk
-    Double32_t           fFBrem;                     //[0,0,14]brem fraction
-    Double32_t           fHadronicOverEm;            //[0,0,14]hadronic over em fraction *DEPRECATED*
-    Double32_t           fHcalDepth1OverEcal;        //[0,0,14]hadronic over em fraction depth1
-    Double32_t           fHcalDepth2OverEcal;        //[0,0,14]hadronic over em fraction depth2
-    Double32_t           fNumberOfClusters;          //[0,0,14]number of associated clusters
-    Double32_t           fE15;                       //[0,0,14]1x5 crystal energy
-    Double32_t           fE25Max;                    //[0,0,14]2x5 crystal energy (max of two possible sums)
-    Double32_t           fE55;                       //[0,0,14]5x5 crystal energy
-    Double32_t           fCovEtaEta;                 //[0,0,14]variance eta-eta
-    Double32_t           fCoviEtaiEta;               //[0,0,14]covariance eta-eta (in crystals)
-    Double32_t           fCoviEtaiEta5x5;            //[0,0,14]covariance eta-eta (in crystals, full5x5)
-    Double32_t           fCaloIsolation;             //[0,0,14](non-jura) ecal isolation based on rechits dR 0.3 *DEPRECATED*
-    Double32_t           fHcalJurassicIsolation;     //[0,0,14]hcal jura iso dR 0.4 *DEPRECATED*
-    Double32_t           fHcalDepth1TowerSumEtDr04;  //[0,0,14]hcal depth1 tower based isolation dR 0.4
-    Double32_t           fHcalDepth2TowerSumEtDr04;  //[0,0,14]hcal depth2 tower based isolation dR 0.4
-    Double32_t           fEcalJurassicIsolation;     //[0,0,14]ecal jura iso dR 0.4 *RENAMING*
-    Double32_t           fTrackIsolationDr04;        //[0,0,14]isolation based on tracks dR 0.4
-    Double32_t           fCaloTowerIsolation;        //[0,0,14]hcal tower based isolation dR 0.3 *DEPRECATED*
-    Double32_t           fHcalDepth1TowerSumEtDr03;  //[0,0,14]hcal depth1 tower based isolation dR 0.3
-    Double32_t           fHcalDepth2TowerSumEtDr03;  //[0,0,14]hcal depth2 tower based isolation dR 0.3
-    Double32_t           fEcalRecHitSumEtDr03;       //[0,0,14]ecal jura iso dR 0.3
-    Double32_t           fTrackIsolation;            //[0,0,14]isolation based on tracks dR 0.3 *RENAMING*
-    Double32_t           fPassLooseID;               //[0,0,14]pass loose id
-    Double32_t           fPassTightID;               //[0,0,14]pass tight id
-    Double32_t           fIDLikelihood;              //[0,0,14]likelihood value
-    Double32_t           fPIn;                       //[0,0,14]momentum at vtx
-    Double32_t           fPOut;                      //[0,0,14]momentum at ecal surface
-    Double32_t           fFracSharedHits;            //[0,0,14]fraction of shared hits btw gsf and std. track
-    Double32_t           fMva;                       //[0,0,14] pflow mva output
-    Double32_t           fD0PV;                      //[0,0,14]transverse impact parameter to signal PV (gsf track)
-    Double32_t           fD0PVErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV (gsf track)
-    Double32_t           fIp3dPV;                    //[0,0,14]3d impact parameter to signal PV (gsf track)
-    Double32_t           fIp3dPVErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV (gsf track)
-    Double32_t           fD0PVBS;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (gsf track)
-    Double32_t           fD0PVBSErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
-    Double32_t           fIp3dPVBS;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (gsf track)
-    Double32_t           fIp3dPVBSErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
-    Double32_t           fD0PVCkf;                   //[0,0,14]transverse impact parameter to signal PV (ckf track)
-    Double32_t           fD0PVCkfErr;                //[0,0,14]transverse impact parameter uncertainty to signal PV (ckf track)
-    Double32_t           fIp3dPVCkf;                 //[0,0,14]3d impact parameter to signal PV (ckf track)
-    Double32_t           fIp3dPVCkfErr;              //[0,0,14]3d impact parameter uncertainty to signal PV (ckf track)
-    Double32_t           fD0PVBSCkf;                 //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (ckf track)
-    Double32_t           fD0PVBSCkfErr;              //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
-    Double32_t           fIp3dPVBSCkf;               //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
-    Double32_t           fIp3dPVBSCkfErr;            //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
-    Double32_t           fD0PVUB;                    //[0,0,14]transverse impact parameter to signal PVUB (gsf track)
-    Double32_t           fD0PVUBErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB (gsf track)
-    Double32_t           fIp3dPVUB;                  //[0,0,14]3d impact parameter to signal PVUB (gsf track)
-    Double32_t           fIp3dPVUBErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB (gsf track)
-    Double32_t           fD0PVUBBS;                  //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (gsf track)
-    Double32_t           fD0PVUBBSErr;               //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
-    Double32_t           fIp3dPVUBBS;                //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (gsf track)
-    Double32_t           fIp3dPVUBBSErr;             //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
-    Double32_t           fD0PVUBCkf;                 //[0,0,14]transverse impact parameter to signal PVUB (ckf track)
-    Double32_t           fD0PVUBCkfErr;              //[0,0,14]transverse impact parameter uncertainty to signal PVUB (ckf track)
-    Double32_t           fIp3dPVUBCkf;               //[0,0,14]3d impact parameter to signal PVUB (ckf track)
-    Double32_t           fIp3dPVUBCkfErr;            //[0,0,14]3d impact parameter uncertainty to signal PVUB (ckf track)
-    Double32_t           fD0PVUBBSCkf;               //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (ckf track)
-    Double32_t           fD0PVUBBSCkfErr;            //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
-    Double32_t           fIp3dPVUBBSCkf;             //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (ckf track)
-    Double32_t           fIp3dPVUBBSCkfErr;          //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
-    Double32_t           fGsfPVCompatibility;        //[0,0,14]gsf compatibility with signal PV
-    Double32_t           fGsfPVBSCompatibility;      //[0,0,14]gsf compatibility with signal PV w/ bs constraint
-    Double32_t           fGsfPVCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
-    Double32_t           fGsfPVBSCompatibilityMatched; //[0,0,14]gsf compatibility with signal PV w/ bs constraint (matching ckf track excluded from vertex)
-    Double32_t           fConvPartnerDCotTheta;      //[0,0,14]delta cot theta to nearest conversion partner track
-    Double32_t           fConvPartnerDist;           //[0,0,14]distance in x-y plane to nearest conversion partner track
-    Double32_t           fConvPartnerRadius;         //[0,0,14]radius of helix intersection with conversion partner track
-    Double32_t           fPFChargedHadronIso;        //[0,0,14]pf isolation, charged hadrons
-    Double32_t           fPFNeutralHadronIso;        //[0,0,14]pf isolation, neutral hadrons
-    Double32_t           fPFPhotonIso;               //[0,0,14]pf isolation, photons
-    Int_t                fConvFlag;                  //conversion flag indicating which track combination was used
-    Vect3C               fConvPosition;
-    Bool_t               fIsEnergyScaleCorrected;    //class dependent escale correction
-    Bool_t               fIsMomentumCorrected;       //class dependent E-p combination 
-    Int_t                fClassification;            //classification (see GsfElectron.h)
-    Bool_t               fIsEB;                      //is ECAL barrel
-    Bool_t               fIsEE;                      //is ECAL Endcap
-    Bool_t               fIsEBEEGap;                 //is in barrel-endcap gap
-    Bool_t               fIsEBEtaGap;                //is in EB eta module gap
-    Bool_t               fIsEBPhiGap;                //is in EB phi module gap
-    Bool_t               fIsEEDeeGap;                //is in EE dee gap
-    Bool_t               fIsEERingGap;               //is in EE ring gap
-    Bool_t               fIsEcalDriven;              //is std. egamma electron
-    Bool_t               fIsTrackerDriven;           //is pflow track-seeded electron
-    Bool_t               fMatchesVertexConversion;
-    RefArray<Track>      fAmbiguousGsfTracks;        //ambiguous gsf tracks for this electron
-    Double_t             fEEleClusterOverPout;       //energy of the electron cluster
-    Int_t                fCTFTrkNLayersWithMeasurement; //number of tracker layers from associated ctf trk
-    Double32_t           fHadOverEmTow;              //[0,0,14]per-tower definition of hadronic/em energy fraction
-    Double32_t           fHCalIsoTowDr03;            //[0,0,14]hcal isolation matched to per tower h/e definition
-    Double32_t           fHCalIsoTowDr04;            //[0,0,14]hcal isolation matched to per tower h/e definition
-    Double32_t           fEcalEnergy;                //[0,0,14]corrected Ecal energy
-    Double32_t           fEcalEnergyError;           //[0,0,14]corrected Ecal energy error
-    Double32_t           fTrackMomentumError;        //track momentum error
-    Ref<SuperCluster>    fPFSuperClusterRef;         //reference to ECAL-only SuperCluster
-                                                     //(PF SC associated by ref/geom in <= 5XY,
-                                                     //parentSuperCluster (ECAL-only PF mustache SC) in >= 7XY)
-                                                     //For backward compatibility, the member data name is kept
-                                                     //the same (can someone work out schema evolution please)
+    Vect3C            fMom;                          //stored three-momentum
+    Char_t            fCharge = -99;                 //stored charge - filled with -99 when reading old files
+    Char_t            fScPixCharge;                  //charge from supercluster-pixel matching
+    Ref<Track>        fGsfTrackRef;                  //gsf track reference
+    Ref<Track>        fTrackerTrackRef;              //tracker track reference
+    Ref<Track>        fConvPartnerTrackRef;          //conversion partner track reference
+    Ref<SuperCluster> fSuperClusterRef;              //reference to SuperCluster (refined unbiased PF supercluster in >= 7XY)
+    Double32_t        fESuperClusterOverP;           //[0,0,14]super cluster e over p ratio
+    Double32_t        fESeedClusterOverPout;         //[0,0,14]seed cluster e over p mom
+    Double32_t        fDeltaEtaSuperClTrkAtVtx;      //[0,0,14]delta eta of super cluster with trk
+    Double32_t        fDeltaEtaSeedClTrkAtCalo;      //[0,0,14]delta eta of seeed cluster with trk
+    Double32_t        fDeltaPhiSuperClTrkAtVtx;      //[0,0,14]delta phi of super cluster with trk
+    Double32_t        fDeltaPhiSeedClTrkAtCalo;      //[0,0,14]delta phi of seeed cluster with trk
+    Double32_t        fFBrem;                        //[0,0,14]brem fraction
+    Double32_t        fHadronicOverEm;               //[0,0,14]hadronic over em fraction
+    Double32_t        fHcalDepth1OverEcal;           //[0,0,14]hadronic over em fraction depth1
+    Double32_t        fHcalDepth2OverEcal;           //[0,0,14]hadronic over em fraction depth2
+    Double32_t        fNumberOfClusters;             //[0,0,14]number of associated clusters
+    Double32_t        fE15;                          //[0,0,14]1x5 crystal energy
+    Double32_t        fE25Max;                       //[0,0,14]2x5 crystal energy (max of two possible sums)
+    Double32_t        fE55;                          //[0,0,14]5x5 crystal energy
+    Double32_t        fCovEtaEta;                    //[0,0,14]variance eta-eta
+    Double32_t        fCoviEtaiEta;                  //[0,0,14]covariance eta-eta (in crystals)
+    Double32_t        fCoviEtaiEta5x5 = -1.;         //[0,0,14]covariance eta-eta (in crystals, full5x5)
+    Double32_t        fHcalDepth1TowerSumEtDr04;     //[0,0,14]hcal depth1 tower based isolation dR 0.4
+    Double32_t        fHcalDepth2TowerSumEtDr04;     //[0,0,14]hcal depth2 tower based isolation dR 0.4
+    Double32_t        fEcalJurassicIsolation;        //[0,0,14]ecal jura iso dR 0.4 *RENAMING*
+    Double32_t        fTrackIsolationDr04;           //[0,0,14]isolation based on tracks dR 0.4
+    Double32_t        fCaloTowerIsolation;           //[0,0,14]hcal tower based isolation dR 0.3
+    Double32_t        fHcalDepth1TowerSumEtDr03;     //[0,0,14]hcal depth1 tower based isolation dR 0.3
+    Double32_t        fHcalDepth2TowerSumEtDr03;     //[0,0,14]hcal depth2 tower based isolation dR 0.3
+    Double32_t        fEcalRecHitSumEtDr03;          //[0,0,14]ecal jura iso dR 0.3
+    Double32_t        fTrackIsolation;               //[0,0,14]isolation based on tracks dR 0.3 *RENAMING*
+    Double32_t        fPassLooseID;                  //[0,0,14]pass loose id
+    Double32_t        fPassTightID;                  //[0,0,14]pass tight id
+    Double32_t        fIDLikelihood;                 //[0,0,14]likelihood value
+    Double32_t        fPIn;                          //[0,0,14]momentum at vtx
+    Double32_t        fPOut;                         //[0,0,14]momentum at ecal surface
+    Double32_t        fFracSharedHits;               //[0,0,14]fraction of shared hits btw gsf and std. track
+    Double32_t        fMva;                          //[0,0,14] pflow mva output
+    Double32_t        fD0PV;                         //[0,0,14]transverse impact parameter to signal PV (gsf track)
+    Double32_t        fD0PVErr;                      //[0,0,14]transverse impact parameter uncertainty to signal PV (gsf track)
+    Double32_t        fIp3dPV;                       //[0,0,14]3d impact parameter to signal PV (gsf track)
+    Double32_t        fIp3dPVErr;                    //[0,0,14]3d impact parameter uncertainty to signal PV (gsf track)
+    Double32_t        fD0PVBS;                       //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (gsf track)
+    Double32_t        fD0PVBSErr;                    //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
+    Double32_t        fIp3dPVBS;                     //[0,0,14]3d impact parameter to signal PV w/ bs constraint (gsf track)
+    Double32_t        fIp3dPVBSErr;                  //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (gsf track)
+    Double32_t        fD0PVCkf;                      //[0,0,14]transverse impact parameter to signal PV (ckf track)
+    Double32_t        fD0PVCkfErr;                   //[0,0,14]transverse impact parameter uncertainty to signal PV (ckf track)
+    Double32_t        fIp3dPVCkf;                    //[0,0,14]3d impact parameter to signal PV (ckf track)
+    Double32_t        fIp3dPVCkfErr;                 //[0,0,14]3d impact parameter uncertainty to signal PV (ckf track)
+    Double32_t        fD0PVBSCkf;                    //[0,0,14]transverse impact parameter to signal PV w/ bs constraint (ckf track)
+    Double32_t        fD0PVBSCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+    Double32_t        fIp3dPVBSCkf;                  //[0,0,14]3d impact parameter to signal PV w/ bs constraint (ckf track)
+    Double32_t        fIp3dPVBSCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PV w/ bs constraint (ckf track)
+    Double32_t        fD0PVUB;                       //[0,0,14]transverse impact parameter to signal PVUB (gsf track)
+    Double32_t        fD0PVUBErr;                    //[0,0,14]transverse impact parameter uncertainty to signal PVUB (gsf track)
+    Double32_t        fIp3dPVUB;                     //[0,0,14]3d impact parameter to signal PVUB (gsf track)
+    Double32_t        fIp3dPVUBErr;                  //[0,0,14]3d impact parameter uncertainty to signal PVUB (gsf track)
+    Double32_t        fD0PVUBBS;                     //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (gsf track)
+    Double32_t        fD0PVUBBSErr;                  //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+    Double32_t        fIp3dPVUBBS;                   //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (gsf track)
+    Double32_t        fIp3dPVUBBSErr;                //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (gsf track)
+    Double32_t        fD0PVUBCkf;                    //[0,0,14]transverse impact parameter to signal PVUB (ckf track)
+    Double32_t        fD0PVUBCkfErr;                 //[0,0,14]transverse impact parameter uncertainty to signal PVUB (ckf track)
+    Double32_t        fIp3dPVUBCkf;                  //[0,0,14]3d impact parameter to signal PVUB (ckf track)
+    Double32_t        fIp3dPVUBCkfErr;               //[0,0,14]3d impact parameter uncertainty to signal PVUB (ckf track)
+    Double32_t        fD0PVUBBSCkf;                  //[0,0,14]transverse impact parameter to signal PVUB w/ bs constraint (ckf track)
+    Double32_t        fD0PVUBBSCkfErr;               //[0,0,14]transverse impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
+    Double32_t        fIp3dPVUBBSCkf;                //[0,0,14]3d impact parameter to signal PVUB w/ bs constraint (ckf track)
+    Double32_t        fIp3dPVUBBSCkfErr;             //[0,0,14]3d impact parameter uncertainty to signal PVUB w/ bs constraint (ckf track)
+    Double32_t        fGsfPVCompatibility;           //[0,0,14]gsf compatibility with signal PV
+    Double32_t        fGsfPVBSCompatibility;         //[0,0,14]gsf compatibility with signal PV w/ bs constraint
+    Double32_t        fGsfPVCompatibilityMatched;    //[0,0,14]gsf compatibility with signal PV (matching ckf track excluded from vertex)
+    Double32_t        fGsfPVBSCompatibilityMatched;  //[0,0,14]gsf compatibility with signal PV w/ bs constraint (matching ckf track excluded from vertex)
+    Double32_t        fConvPartnerDCotTheta;         //[0,0,14]delta cot theta to nearest conversion partner track
+    Double32_t        fConvPartnerDist;              //[0,0,14]distance in x-y plane to nearest conversion partner track
+    Double32_t        fConvPartnerRadius;            //[0,0,14]radius of helix intersection with conversion partner track
+    Double32_t        fPFChargedHadronIso;           //[0,0,14]pf isolation, charged hadrons
+    Double32_t        fPFNeutralHadronIso;           //[0,0,14]pf isolation, neutral hadrons
+    Double32_t        fPFPhotonIso;                  //[0,0,14]pf isolation, photons
+    Int_t             fConvFlag;                     //conversion flag indicating which track combination was used
+    Vect3C            fConvPosition;
+    Bool_t            fIsEnergyScaleCorrected = kFALSE; //class dependent escale correction
+    Bool_t            fIsMomentumCorrected = kFALSE;    //class dependent E-p combination 
+    Int_t             fClassification;               //classification (see GsfElectron.h)
+    Bool_t            fIsEB = kFALSE;                         //is ECAL barrel
+    Bool_t            fIsEE = kFALSE;                         //is ECAL Endcap
+    Bool_t            fIsEBEEGap = kFALSE;                    //is in barrel-endcap gap
+    Bool_t            fIsEBEtaGap = kFALSE;                   //is in EB eta module gap
+    Bool_t            fIsEBPhiGap = kFALSE;                   //is in EB phi module gap
+    Bool_t            fIsEEDeeGap = kFALSE;                   //is in EE dee gap
+    Bool_t            fIsEERingGap = kFALSE;                  //is in EE ring gap
+    Bool_t            fIsEcalDriven = kFALSE;                 //is std. egamma electron
+    Bool_t            fIsTrackerDriven = kFALSE;              //is pflow track-seeded electron
+    Bool_t            fMatchesVertexConversion = kFALSE;      
+    RefArray<Track>   fAmbiguousGsfTracks;           //ambiguous gsf tracks for this electron
+    Double_t          fEEleClusterOverPout;          //energy of the electron cluster
+    Int_t             fCTFTrkNLayersWithMeasurement; //number of tracker layers from associated ctf trk
+    Double32_t        fHadOverEmTow;                 //[0,0,14]per-tower definition of hadronic/em energy fraction
+    Double32_t        fHCalIsoTowDr03;               //[0,0,14]hcal isolation matched to per tower h/e definition
+    Double32_t        fHCalIsoTowDr04;               //[0,0,14]hcal isolation matched to per tower h/e definition
+    Double32_t        fEcalEnergy;                   //[0,0,14]corrected Ecal energy
+    Double32_t        fEcalEnergyError;              //[0,0,14]corrected Ecal energy error
+    Double32_t        fTrackMomentumError;           //track momentum error
+    Ref<SuperCluster> fPFSuperClusterRef;            //reference to ECAL-only SuperCluster
 
-    ClassDef(Electron, 17)                             // Electron class
+    // The following members are deprecated
+    //    Double32_t        fCaloIsolation;                //[0,0,14](non-jura) ecal isolation based on rechits dR 0.3
+    //    Double32_t        fHcalJurassicIsolation;        //[0,0,14]hcal jura iso dR 0.4
+    // Accessors
+    //    Double_t             CaloIsolation()               const { return fCaloIsolation; }
+    //    Double_t             HcalIsolation()                  const { return fHcalJurassicIsolation; }
+    // fPFSuperClusterRef: member object name is kept the same as <7XY so that old files can be read
+    // Should in principle be possible to use schema evolution to convert it to something like fECALOnlySuperClusterRef
+    // The problem is that process ID seems to be not set at the point where conversion rules are applied
+    // which is strange since process ID is set in ProcIDRef::Streamer..
+
+    ClassDef(Electron, 18)                             // Electron class
   };
 }
 
