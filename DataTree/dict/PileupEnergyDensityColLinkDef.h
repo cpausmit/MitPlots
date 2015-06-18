@@ -26,10 +26,7 @@
     version="[-4]" \
     source="Double32_t fRho; Double32_t fRhoHighEta; Double32_t fRhoRandom;\
             Double32_t fRhoRandomLowEta; Double32_t fRhoFixedGridAll;\
-            Double32_t fRhoFixedGridFastjetAll; Double32_t fRhoKt6CaloJets;\
-            Double32_t fRhoKt6CaloJetsCentral; Double32_t fRhoKt6PFJets;\
-            Double32_t fRhoKt6PFJetsCentralChargedPileUp; Double32_t fRhoKt6PFJetsCentralNeutral;\
-            Double32_t fRhoKt6PFJetsCentralNeutralTight;" \
+            Double32_t fRhoFixedGridFastjetAll;" \
     targetClass="mithep::PileupEnergyDensity" \
     target="fRho" \
     code="{ fRho[mithep::PileupEnergyDensity::kHighEta] = onfile.fRho;\
