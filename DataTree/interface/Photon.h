@@ -48,8 +48,8 @@ namespace mithep
     Double_t             E55()                        const { return fE55;                }
     ThreeVectorC         CaloPos()                    const;
     Double_t             CovEtaEta()                  const { return fCovEtaEta;          }
-    Double_t             CoviEtaiEta(Bool_t force5x5 = kFALSE) const
-    { return !force5x5 && fCoviEtaiEta5x5 < 0. ? fCoviEtaiEta : fCoviEtaiEta5x5; }
+    Double_t             CoviEtaiEta(Bool_t force = kFALSE) const
+    { return force || fCoviEtaiEta5x5 < 0. ? fCoviEtaiEta : fCoviEtaiEta5x5; }
     Double_t             CoviEtaiEta5x5()             const { return fCoviEtaiEta5x5;     }
     Bool_t               HasPixelSeed()               const { return fHasPixelSeed;       }
     Double_t             HcalDepth1TowerSumEtDr03()   const { return fHcalDepth1TowerSumEtDr03; }
