@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------------------------
 // ProcIDRef
 //
-// Implementation of a process id that can be stored in the
-// FastArray (and then used in the RefArray).
+// Implementation of a process id that can be stored in the FastArray (and then used in the
+// RefArray).
 //
 // Authors: C.Loizides, J.Bendavid
 //--------------------------------------------------------------------------------------------------

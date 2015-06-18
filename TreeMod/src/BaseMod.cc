@@ -83,6 +83,7 @@ Bool_t BaseMod::HasHLTInfo() const
   fHltFwkMod = dynamic_cast<const HLTFwkMod*>(tasks->FindObject(fHltFwkModName));
   if (fHltFwkMod)
     return kTRUE;
+
   return kFALSE;
 }
 
@@ -93,7 +94,7 @@ const TriggerTable *BaseMod::GetTriggerTable(ETrigType t) const
 
   if (t==kL1A)
     return GetL1AlgoTable();
-   else if (t==kL1T)
+  else if (t==kL1T)
     return GetL1TechTable();
   return GetHLTTable();
 }

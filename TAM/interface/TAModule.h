@@ -1,17 +1,11 @@
-//
-// $Id: TAModule.h,v 1.7 2009/07/13 19:18:38 loizides Exp $
-//
-
 #ifndef ROOT_TAModule
 #define ROOT_TAModule
 
 // keep this for compatibility 
 #define TAM_TAModule
 
-
 // typeid include
 #include <typeinfo>
-
 
 #ifndef ROOT_TTask
 #include "TTask.h"
@@ -28,7 +22,6 @@
 
 class TFile;
 class TStopwatch;
-
 
 class TAModule : public TTask {
 public:
