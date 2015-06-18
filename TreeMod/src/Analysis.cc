@@ -431,6 +431,9 @@ Bool_t Analysis::Init()
     }
   }
 
+  //// CP -- Print chain
+  //fChain->Print();
+
   if (fParallel)
     TTreeCacheUnzip::SetParallelUnzip(TTreeCacheUnzip::kEnable);
 
@@ -469,7 +472,8 @@ Bool_t Analysis::Init()
     TIter iter(fSuperMods->MakeIterator());
     while (1) {
       TAModule *next = dynamic_cast<TAModule*>(iter.Next());
-      if (!next) break;
+      if (!next)
+	break;
       fProof->AddInput(next);
     }
 
@@ -500,7 +504,8 @@ Bool_t Analysis::Init()
     TIter iter(fSuperMods->MakeIterator());
     while (1) {
       TAModule *next = dynamic_cast<TAModule*>(iter.Next());
-      if (!next) break;
+      if (!next)
+	break;
       fSelector->AddInput(next);
     }
 
@@ -569,18 +574,15 @@ void Analysis::Run()
   }
 
   if (fUseProof) {
-
     MDB(kAnalysis, 1)
-      Info("Run", "Start processing with PROOF...");
-
+      Info("Run", "Start processing with PROOF....");
     fSet->Process("Selector","",fDoNEvents);
-
-  } else {
-
+  }
+  else {
     MDB(kAnalysis, 1)
-      Info("Run", "Start processing (no PROOF)...");
-
+      Info("Run", "Start processing....");
     fChain->Process(fSelector,"",fDoNEvents);
+    printf(" Analysis::Run -- processing complete\n");
   }
 
   MDB(kAnalysis, 1)
@@ -621,6 +623,8 @@ void Analysis::Terminate()
 {
   // Terminate current analysis run.
 
+  printf(" Analysis::Terminate -- enter\n");
+
   if (fState == kPristine || fState == kTerminate) {
     Error("Terminate", "Terminate in state %d is not possible! Call Init() first.",
           Int_t(fState));
@@ -645,8 +649,6 @@ void Analysis::Terminate()
       fOutput = fSelector->GetModOutput();
     }
 
-
-
     if (fOutput && !fAnaOutput.IsNull()) {
       TDirectory::TContext context(0); // automatically restore gDirectory
 
@@ -667,9 +669,16 @@ void Analysis::Terminate()
     fState = kTerminate;
   }
 
-  delete fChain;
-  delete fSet;
+  printf(" Analysis::Terminate -- TEMPORARY PRINT -- Memory issue!\n");
+  printf(" Analysis::Terminate -- before delete\n");
+  //if (fChain)
+  //  delete fChain;
+  printf(" Analysis::Terminate -- after 1\n");
+  if (fSet)
+    delete fSet;
+  printf(" Analysis::Terminate -- after 2\n");
   fDeleteList->Delete();
+  printf(" Analysis::Terminate -- exit\n");
 }
 
 //--------------------------------------------------------------------------------------------------
