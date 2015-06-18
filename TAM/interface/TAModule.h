@@ -41,7 +41,7 @@ public:
       kAbortAnalysis //a problem requiring the analysis to stop
    };
 
-private:
+protected:
    TAMSelector        *fSelector; //!the selector processing the tree
    TAMOutput          *fOutput;   //the list of output objects for this mod
    Bool_t              fDefActv;  //!copy of fActive so that TAMSelector can 
@@ -71,8 +71,6 @@ private:
    void                SetModOutput(TAMOutput* o);
    void                StopModule();
 
-protected:
-  
    // utility functions to be used by derived classes
    void                AbortEvent();
    virtual Bool_t      AddObjThisEvt(TObject* obj);
@@ -80,6 +78,7 @@ protected:
    template <class OC>
    void                AddOutput(OC* const & obj);
    const TAMSelector  *GetSelector()         const { return fSelector; }
+   TAMSelector        *GetSelector()               { return fSelector; }
    Bool_t              IsEventAborted()      const;
    Bool_t              IsAnalysisAborted()   const;
    void                ls(Option_t *option)  const;

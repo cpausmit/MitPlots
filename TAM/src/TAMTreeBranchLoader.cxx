@@ -1,7 +1,3 @@
-//
-// $Id: TAMTreeBranchLoader.cxx,v 1.3 2009/07/13 19:20:25 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 
 
@@ -242,10 +238,8 @@ Bool_t TAMTreeBranchLoader::CheckBrTypeAllModules()
    // for the data contained in this branch.
    
    Bool_t isok=kTRUE;
-   vector<TAMBranchInfo::BranchPtr_t*>::const_iterator end = 
-      GetBInfo()->fUsrAddresses.end();
-   for (vector<TAMBranchInfo::BranchPtr_t*>::const_iterator ptr = 
-           GetBInfo()->fUsrAddresses.begin(); (ptr!=end) && isok; ptr++) {
+   auto end = GetBInfo()->fUsrAddresses.end();
+   for (auto ptr = GetBInfo()->fUsrAddresses.begin(); (ptr!=end) && isok; ptr++) {
       isok &= CheckBrType((*ptr)->GetType());
    }
    return isok;

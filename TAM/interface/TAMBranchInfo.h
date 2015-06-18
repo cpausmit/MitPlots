@@ -1,15 +1,8 @@
-//
-// $Id: TAMBranchInfo.h,v 1.3 2009/01/20 12:21:48 loizides Exp $
-//
-
 #ifndef ROOT_TAMBranchInfo
 #define ROOT_TAMBranchInfo
 
 
 #include <vector>
-using std::vector;
-
-
 #include <typeinfo>
 
 
@@ -57,7 +50,7 @@ struct TAMBranchInfo : TNamed {
    Bool_t                          fIsLoaded;     //if branch is loaded 
                                                   // for current event
    TAMVirtualBranchLoader         *fLoader;       //our data (tree) loader
-   vector<BranchPtr_t*>            fUsrAddresses; //list of pointers to each 
+   std::vector<BranchPtr_t*>            fUsrAddresses; //list of pointers to each 
                                                   // mod's ptr to branch object
 
    TAMBranchInfo(const Char_t* branchName=0);

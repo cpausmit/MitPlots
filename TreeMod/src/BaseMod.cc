@@ -1,5 +1,3 @@
-// $Id: BaseMod.cc,v 1.10 2009/11/24 14:27:33 loizides Exp $
-
 #include "MitAna/TreeMod/interface/HLTFwkMod.h"
 #include "MitAna/DataTree/interface/TriggerObjectsTable.h"
 #include <TH1D.h>

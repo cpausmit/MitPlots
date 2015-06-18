@@ -1,7 +1,3 @@
-//
-// $Id: TAMBranchInfo.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAMBranchInfo.h"
 
 
@@ -41,8 +37,8 @@ TAMBranchInfo::~TAMBranchInfo()
 {
    // Destructor.
 
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
+  auto bEnd = fUsrAddresses.end();
+  for (auto bIter = fUsrAddresses.begin();
         bIter!=bEnd; bIter++) {
       delete (*bIter);
    }
@@ -104,8 +100,8 @@ void TAMBranchInfo::SetUsrAddrs()
 {
    // Set all user pointers for this branch to point to the data address.
 
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
+   auto bEnd  = fUsrAddresses.end();
+   for (auto bIter = fUsrAddresses.begin();
         bIter!=bEnd; bIter++) {
       (*((*bIter)->fPtr)) = fLoader->GetAddress();
    }
@@ -119,8 +115,8 @@ void TAMBranchInfo::ZeroUsrAddrs()
 {
    // Set all user pointers for this branch to zero.
 
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
+   auto bEnd  = fUsrAddresses.end();
+   for (auto bIter = fUsrAddresses.begin();
         bIter!=bEnd; bIter++) {
       (*((*bIter)->fPtr)) = 0;
    }
