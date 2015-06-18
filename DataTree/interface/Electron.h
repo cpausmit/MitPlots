@@ -79,7 +79,8 @@ namespace mithep
     Int_t                ConvFlag()                    const { return fConvFlag; }
     Int_t                Classification()              const { return fClassification; }
     Double_t             CovEtaEta()                   const { return fCovEtaEta; }
-    Double_t             CoviEtaiEta()                 const { return fCoviEtaiEta; }
+    Double_t             CoviEtaiEta(Bool_t force5x5 = kFALSE) const
+    { return !force5x5 && fCoviEtaiEta5x5 < 0. ? fCoviEtaiEta : fCoviEtaiEta5x5; }
     Double_t             CoviEtaiEta5x5()              const { return fCoviEtaiEta5x5; }
     Double_t             DeltaEtaSuperClusterTrackAtVtx() const { return fDeltaEtaSuperClTrkAtVtx; }
     Double_t             DeltaEtaSeedClusterTrackAtCalo() const { return fDeltaEtaSeedClTrkAtCalo; }

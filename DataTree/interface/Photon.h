@@ -48,7 +48,8 @@ namespace mithep
     Double_t             E55()                        const { return fE55;                }
     ThreeVectorC         CaloPos()                    const;
     Double_t             CovEtaEta()                  const { return fCovEtaEta;          }
-    Double_t             CoviEtaiEta()                const { return fCoviEtaiEta;        }
+    Double_t             CoviEtaiEta(Bool_t force5x5 = kFALSE) const
+    { return !force5x5 && fCoviEtaiEta5x5 < 0. ? fCoviEtaiEta : fCoviEtaiEta5x5; }
     Double_t             CoviEtaiEta5x5()             const { return fCoviEtaiEta5x5;     }
     Bool_t               HasPixelSeed()               const { return fHasPixelSeed;       }
     Double_t             HcalDepth1TowerSumEtDr03()   const { return fHcalDepth1TowerSumEtDr03; }
@@ -329,8 +330,9 @@ namespace mithep
   };
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::Mark(UInt_t ib) const
+inline
+void
+mithep::Photon::Mark(UInt_t ib) const
 {
   // mark myself
   mithep::DataObject::Mark(ib);
@@ -348,8 +350,9 @@ inline void mithep::Photon::Mark(UInt_t ib) const
   //  fPFPhotonsOutOfMustache.Mark(ib);
 }
 
-//--------------------------------------------------------------------------------------------------
-inline mithep::ThreeVectorC mithep::Photon::CaloPos() const
+inline
+mithep::ThreeVectorC
+mithep::Photon::CaloPos() const
 {
   // Get caloposition
   mithep::ThreeVectorC calopos = fCaloPos.V();
@@ -359,16 +362,18 @@ inline mithep::ThreeVectorC mithep::Photon::CaloPos() const
     return SCluster()->Point();
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::GetMom() const
+inline
+void
+mithep::Photon::GetMom() const
 {
   // Get momentum values from stored values.
 
   fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M());
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
+inline
+void
+mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
 {
   // Set momentum vector.
 
@@ -376,8 +381,9 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   ClearMom();
 }
 
-//--------------------------------------------------------------------------------------------------
-inline mithep::FourVectorM mithep::Photon::MomVtx(const ThreeVector &vtx) const
+inline
+mithep::FourVectorM
+mithep::Photon::MomVtx(ThreeVector const& vtx) const
 {
   // Get momentum values from stored values.
   ThreeVector momv = Mom3(vtx);
