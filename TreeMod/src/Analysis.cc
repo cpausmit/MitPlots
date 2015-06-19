@@ -637,8 +637,6 @@ void Analysis::Terminate()
 {
   // Terminate current analysis run.
 
-  printf(" Analysis::Terminate -- enter\n");
-
   if (fState == kPristine || fState == kTerminate) {
     Error("Terminate", "Terminate in state %d is not possible! Call Init() first.",
           Int_t(fState));

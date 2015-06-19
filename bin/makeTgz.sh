@@ -63,25 +63,27 @@ fi
 
 cp ${CMSSW_VERSION}-src.tgz $workDir
 
-# Make the tar of our own external packages tar
-
-cd /home/cmsprod/cms
-
-if [ -e "$workDir/external.tgz" ]
+if [ $EXTERNAL != "/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/external" ]
 then
-  newer=`find ./external -newer $workDir/external.tgz -print | tr '\n' ','`
-else
-  newer="$workDir/external.tgz does not exist."
-fi
-
-if [ "$newer" != "" ]
-then
-  echo "  Make new tar ball."
-  echo "  found newer: $newer"
-  echo "  -> tar fzc external.tgz external"
-  tar fzc $workDir/external.tgz external
-else
-  echo "  Tar ball $workDir/external.tgz is up to date."  
+  # Make the tar of our own external packages tar
+  cd /home/cmsprod/cms
+  
+  if [ -e "$workDir/external.tgz" ]
+  then
+    newer=`find ./external -newer $workDir/external.tgz -print | tr '\n' ','`
+  else
+    newer="$workDir/external.tgz does not exist."
+  fi
+  
+  if [ "$newer" != "" ]
+  then
+    echo "  Make new tar ball."
+    echo "  found newer: $newer"
+    echo "  -> tar fzc external.tgz external"
+    tar fzc $workDir/external.tgz external
+  else
+    echo "  Tar ball $workDir/external.tgz is up to date."  
+  fi
 fi
 
 # Make the tar of json files

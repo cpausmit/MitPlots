@@ -54,16 +54,30 @@ fi
 
 # Check the relevant tar balls
 if ! [ -e "$globDir/${CMSSW_VERSION}.tgz" ] || ! [ -e "$globDir/${CMSSW_VERSION}-src.tgz" ] ||\
-   ! [ -e "$globDir/external.tgz" ] || ! [ -e "$globDir/json.tgz" ]
+   ! [ -e "$globDir/json.tgz" ]
 then
   echo " ERROR - one of the relevant production tar balls does not exist. EXIT."
   echo " -> $globDir/${CMSSW_VERSION}.tgz $globDir/${CMSSW_VERSION}-src.tgz"
-  echo " -> $globDir/external.tgz $globDir/json.tgz "
+  echo " -> $globDir/json.tgz"
   exit 1
-else
-  echo "  Global directory structures exist."
 fi
 
+echo "  Global directory structures exist."
+inputFiles="$globDir/${CMSSW_VERSION}.tgz,$globDir/${CMSSW_VERSION}-src.tgz"
+inputFiles=$inputFiles",$globDir/json.tgz"
+
+if [ $EXTERNAL != "/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/external" ]
+then
+  if ! [ -e "$globDir/external.tgz" ]
+  then
+    echo " ERROR - set up to use local external package but tar ball does not exist. EXIT."
+    echo " -> $globDir/external.tgz"
+    exit 1
+  fi
+
+  inputFiles=$inputFiles",$globDir/external.tgz"
+fi
+  
 # Check the relevant run files exist
 if ! [ -e "$workDir/setup.sh" ] || ! [ -e "$globDir/run.sh" ] || \
    ! [ -e "$globDir/.rootlogon.C" ] || ! [ -e "$globDir/$runMacro" ] || \
@@ -73,9 +87,11 @@ then
   echo " -> $workDir/setup.sh $globDir/run.sh $globDir/.rootlogon.C $globDir/$runMacro"
   echo " -> $globDir/${runMacroTrunc}_C.so $globDir/${runMacroTrunc}_C.d"
   exit 1
-else
-  echo "  Global run files exist."
 fi
+
+echo "  Global run files exist."
+inputFiles=$inputFiles",$workDir/setup.sh,$globDir/.rootlogon.C,$globDir/$runMacro"
+inputFiles=$inputFiles",$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d"
 
 # Check the relevant catalog
 if ! [ -e "$workDir/catalog.tgz" ]
@@ -83,18 +99,21 @@ then
   echo " ERROR - relevant catalog tar balls does not exist. EXIT."
   echo " -> $workDir/catalog.tgz"
   exit 1
-else
-  echo "  Catalog file exists. Untarring for submission."
-  cd      $workDir
-  tar fzx catalog.tgz
-  cd - >& /dev/null
 fi
+
+echo "  Catalog file exists. Untarring for submission."
+cd      $workDir
+tar fzx catalog.tgz
+cd - >& /dev/null
+inputFiles=$inputFiles",$workDir/catalog.tgz"
 
 # set the script file
 script=$globDir/run.sh
 
 # Make sure there is a globus tickets available
 x509File=/tmp/x509up_u`id -u`
+
+inputFiles=$inputFiles",$x509File"
 
 # Looping through each single fileset and submitting the condor jobs
 echo ""
@@ -223,7 +242,7 @@ Input                   = /dev/null
 Output                  = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.out
 Error                   = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
 Log                     = $logsDir/${outputName}_${dataset}_${skim}_${fileset}.log
-transfer_input_files    = $x509File,$globDir/${CMSSW_VERSION}.tgz,$globDir/${CMSSW_VERSION}-src.tgz,$globDir/external.tgz,$globDir/json.tgz,setup.sh,catalog.tgz,$globDir/.rootlogon.C,$globDir/$runMacro,$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d
+transfer_input_files    = $inputFiles
 Initialdir              = $workDir
 transfer_output_files   = ${outputName}_${dataset}_${skim}_${fileset}.root
 should_transfer_files   = YES
@@ -246,6 +265,8 @@ EOF
     rm submit.cmd
 
   fi
+
+  exit
 
 done
 
