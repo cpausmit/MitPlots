@@ -683,16 +683,12 @@ void Analysis::Terminate()
     fState = kTerminate;
   }
 
-  printf(" Analysis::Terminate -- TEMPORARY PRINT -- Memory issue!\n");
-  printf(" Analysis::Terminate -- before delete\n");
-  //if (fChain)
-  //  delete fChain;
-  printf(" Analysis::Terminate -- after 1\n");
+  if (fChain)
+    delete fChain;
   if (fSet)
     delete fSet;
-  printf(" Analysis::Terminate -- after 2\n");
+
   fDeleteList->Delete();
-  printf(" Analysis::Terminate -- exit\n");
 }
 
 //--------------------------------------------------------------------------------------------------

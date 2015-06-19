@@ -75,4 +75,4 @@ print '\n+++++ ANALYSIS FLOW +++++\n'
 analysis.PrintModuleTree()
 print '\n+++++++++++++++++++++++++\n'
 
-#analysis.Run(False)
+analysis.Run(False)

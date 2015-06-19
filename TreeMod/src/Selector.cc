@@ -166,8 +166,6 @@ void Selector::SlaveBegin(TTree *tree)
   // The SlaveBegin() function is called after the Begin() function and can be used to setup
   // analysis on the slaves. Here, we request the event header branch.
 
-  std::cout << "Selector::SlaveBegin" << std::endl;
-
   if (fDoRunInfo)
     ReqBranch(fEvtHdrName, fEventHeader);
 

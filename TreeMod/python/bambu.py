@@ -33,6 +33,11 @@ class _Module(_Sequenceable):
         for key, value in kwargs.items():
             getattr(self._core, 'Set' + key)(value)
 
+    def __getattr__(self, name):
+        attr = getattr(self._core, name)
+        setattr(self, name, attr)
+        return attr
+
     def build(self, modlist = []):
         if self._core in modlist:
             raise RuntimeError('Module ' + self._core.GetName() + ' used multiple times')
@@ -159,8 +164,11 @@ class _mithep(object):
             except:
                 raise RuntimeError('No class "' + name + '" found in namespace mithep. Perhaps a missing library?')
 
-        if cls.Class().InheritsFrom(ROOT.mithep.BaseMod.Class()):
-            cls = _ModClass(cls)
+        try:
+            if cls.Class().InheritsFrom(ROOT.mithep.BaseMod.Class()):
+                cls = _ModClass(cls)
+        except:
+            pass
 
         setattr(self, name, cls)
 
@@ -177,6 +185,7 @@ class _Analysis(object):
 
     def __init__(self):
         self._core = ROOT.mithep.Analysis()
+        self._core.SetKeepHierarchy(False)
 
     def setSequence(self, seq):
         for mod in seq.build()[0]:
