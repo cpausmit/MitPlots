@@ -100,7 +100,7 @@ namespace mithep {
     Bool_t               EndRun() override;
     Bool_t               Notify() override;
     Bool_t               Process(Long64_t entry) override;
-    void                 SlaveBegin(TTree* tree);
+    void                 SlaveBegin(TTree* tree) override;
     void                 UpdateRunInfo();
     void                 UpdateRunInfoTree();
 

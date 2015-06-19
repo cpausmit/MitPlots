@@ -33,7 +33,7 @@ Analysis::Analysis(Bool_t useproof) :
   fUseProof(useproof),
   fUseCacher(0),
   fUseHLT(kTRUE),
-  fUseMC(kTRUE),
+  fUseMC(kFALSE),
   fHierarchy(kTRUE),
   fDoProxy(kFALSE),
   fDoObjTabClean(kTRUE),
@@ -775,16 +775,10 @@ Analysis::PrintModuleTree() const
       indent += 3;
 
     TIter tItr(mod.GetListOfTasks());
-    TObject* obj = 0;
+    TTask* subtask = 0;
     unsigned nsub = 0;
     cat = 1;
-    while ((obj = tItr())) {
-      if (!obj)
-        continue;
-      auto* subtask = dynamic_cast<TTask*>(obj);
-      if (!subtask)
-        continue;
-
+    while ((subtask = static_cast<TTask*>(tItr()))) {
       ss << print(*subtask, cat);
       ++nsub;
       cat = 2;
@@ -801,10 +795,7 @@ Analysis::PrintModuleTree() const
   };
 
   TIter mItr(fSuperMods);
-  TObject* obj = 0;
-  while ((obj = mItr())) {
-    TTask* task = dynamic_cast<TTask*>(obj);
-
+  TTask* task = 0;
+  while ((task = static_cast<TTask*>(mItr())))
     std::cout << print(*task, 0);
-  }
 }

@@ -13,7 +13,7 @@ from argparse import ArgumentParser
 
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
 argParser.add_argument('--cfg', '-c', metavar = 'FILE', dest = 'configFileName')
-argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book')
+argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book', default = 't2mit/filefi/040')
 argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
 argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*', default = [])
 
