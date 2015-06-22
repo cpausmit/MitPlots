@@ -201,7 +201,7 @@ mithep::Selector::GetObject(char const* name, Bool_t warn)
         newBranchInfo = true;
       }
 
-      if (!branchInfo->GetLoader() && !FindLoader(branchInfo)) {
+      if (!branchInfo->GetLoader() && (!FindLoader(branchInfo) || !branchInfo->Notify(fTree))) {
         // warning already issued by FindLoader
         delete info;
         if (newBranchInfo)
