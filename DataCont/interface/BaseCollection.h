@@ -25,6 +25,7 @@ namespace mithep
       virtual Bool_t               IsOwner()                      const = 0;
       virtual void                 Reset()                              = 0;
       virtual void                 Trim()                               = 0;
+      virtual void                 SetName(char const*) {}
 
     protected:
       void                         Clear(Option_t */*opt*/="");
