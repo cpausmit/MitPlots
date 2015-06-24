@@ -14,6 +14,7 @@
 #include "MitAna/DataTree/interface/Conversion.h"
 #include "MitAna/DataTree/interface/DecayParticle.h"
 #include "MitAna/DataTree/interface/Vertex.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 #include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep
@@ -25,6 +26,8 @@ namespace mithep
     Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(px, py, pz, e) {}
 
     // Contents of the Photons
+    UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
+    UInt_t               NConversionsS()              const { return fConversionsS.Entries(); }
     DecayParticle const* ConversionD(UInt_t i)        const { return fConversionsD.At(i); }
     DecayParticle const* ConversionS(UInt_t i)        const { return fConversionsS.At(i); }
     Double_t             EcalRecHitIsoDr03()          const { return fEcalRecHitIsoDr03;  }
@@ -76,11 +79,11 @@ namespace mithep
     ThreeVector          Mom3(ThreeVector const& v)   const
     { return E() * (ThreeVector(CaloPos()) - v).Unit(); }
     FourVectorM          MomVtx(ThreeVector const& v) const;
-    UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
-    UInt_t               NConversionsS()              const { return fConversionsS.Entries(); }
     EObjType             ObjType()                    const { return kPhoton;                }
-    SuperCluster const* ECALOnlySCluster()            const { return fPFSuperClusterRef.Obj(); }
-    SuperCluster const* PFSCluster()                  const { return ECALOnlySCluster(); } // backward compatibility
+    SuperCluster const*  ECALOnlySCluster()           const { return fPFSuperClusterRef.Obj(); }
+    SuperCluster const*  PFSCluster()                 const { return ECALOnlySCluster(); } // backward compatibility
+    UInt_t               NFootprintCandidates()       const { return fFootprintCandidates.Entries(); }
+    PFCandidate const*   FootprintCandidate(UInt_t i) const { return fFootprintCandidates.At(i); }
     Double_t             R9()                         const { return fR9;                    }
     SuperCluster const*  SCluster()                   const { return fSuperClusterRef.Obj(); }
     Double_t             SolidConeTrkIsoDr03()        const { return fSolidConeTrkIsoDr03;   }
@@ -181,6 +184,8 @@ namespace mithep
     void                 SetPV(Vertex const* v)                  { fPVRef                   = v; }
     void                 SetECALOnlySuperCluster(SuperCluster const* s)
     { fPFSuperClusterRef = s;      }
+    void                 AddFootprintCandidate(PFCandidate const* c)
+    { fFootprintCandidates.Add(c); }
     void                 SetVtxProb(Double_t x)                  { fVtxProb                 = x; }
     void                 SetIdMva(Double_t x)                    { fIdMva                   = x; }
     void                 SetEtaWidth(Double_t x)                 { fEtaWidth                = x; }
@@ -272,6 +277,7 @@ namespace mithep
     Double32_t           fEtaWidth = -99.;           //[0,0,14]output of photon id mva
     Double32_t           fPhiWidth = -99.;           //[0,0,14]output of photon id mva
     Ref<SuperCluster>    fPFSuperClusterRef;  //ref to associated ECAL-only super cluster (PF cluster associated by geom in <=5XY, parentSuperCluster (ECAL-only PF mustache SC) in >=7XY) see below
+    RefArray<PFCandidate> fFootprintCandidates; //ref to PF candidates in the footprint, association made by ParticleBasedIsolation algorithm
     Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
     Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
     Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
@@ -326,7 +332,7 @@ namespace mithep
     // The problem is that process ID seems to be not set at the point where conversion rules are applied
     // which is strange since process ID is set in ProcIDRef::Streamer..
 
-    ClassDef(Photon,22) // Photon class
+    ClassDef(Photon, 23) // Photon class
   };
 }
 
@@ -343,11 +349,9 @@ mithep::Photon::Mark(UInt_t ib) const
     fSuperClusterRef.Obj()->Mark(ib);
   if (fPFSuperClusterRef.IsValid())
     fPFSuperClusterRef.Obj()->Mark(ib);
-  //  fConversions.Mark(ib);
   fConversionsD.Mark(ib);
   fConversionsS.Mark(ib);
-  //  fPFPhotonsInMustache.Mark(ib);
-  //  fPFPhotonsOutOfMustache.Mark(ib);
+  fFootprintCandidates.Mark(ib);
 }
 
 inline

@@ -14,14 +14,15 @@
 #include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/CompositeParticle.h"
 #include "MitAna/DataTree/interface/Track.h"
-#include "MitAna/DataTree/interface/Muon.h"
-#include "MitAna/DataTree/interface/Electron.h"
-#include "MitAna/DataTree/interface/Photon.h"
 #include "MitAna/DataTree/interface/SuperCluster.h"
-#include "MitAna/DataTree/interface/Conversion.h"
 
 namespace mithep 
 {
+  class Muon;
+  class Electron;
+  class Photon;
+  class Conversion;
+
   class PFCandidate : public CompositeParticle
   {
     public:
@@ -71,7 +72,7 @@ namespace mithep
       void		  AddDaughter(const PFCandidate *p) { fDaughters.Add(p);                  }
       void                ClearFlag(EPFFlags f)             { fPFFlags.ClearBit(f);               }
       void                ClearFlags()                      { fPFFlags.Clear();                   }
-      const Conversion   *Conv()                   const    { return fConversion.Obj();           }
+      const Conversion   *Conv()                   const;
       const PFCandidate  *Daughter(UInt_t i)       const;
       Double_t            EECal()                  const    { return fEECal;                      }
       Double_t            EHCal()                  const    { return fEHCal;                      }
@@ -89,7 +90,7 @@ namespace mithep
       Double_t            EtaECal()                const    { return fEtaECal;                    }
       Double_t            PhiECal()                const    { return fPhiECal;                    }
       Bool_t              Flag(EPFFlags f)         const    { return fPFFlags.TestBit(f);         }
-      Bool_t              HasConversion()          const    { return fConversion.IsValid();       }
+      Bool_t              HasConversion()          const;
       Bool_t              HasMother()              const    { return fMother.IsValid();           }
       Bool_t              HasMother(const PFCandidate *m) const;
       Bool_t              HasTrackerTrk()          const    { return fTrackerTrack.IsValid();     }
@@ -98,9 +99,9 @@ namespace mithep
                             { return (HasTrackerTrk() || HasGsfTrk()); }
       Bool_t              HasSCluster()            const    { return fSCluster.IsValid();         }
       const PFCandidate  *Mother()                 const    { return fMother.Obj();               }
-      const Muon         *Mu()                     const    { return fMuon.Obj();                 }
-      const Electron     *Ele()                    const    { return fElectron.Obj();             }
-      const Photon       *Pho()                    const    { return fPhoton.Obj();               }
+      const Muon         *Mu()                     const;
+      const Electron     *Ele()                    const;
+      const Photon       *Pho()                    const;
       EObjType            ObjType()                const    { return kPFCandidate;                }
       EPFType             PFType()                 const    { return fPFType;                     }
       const SuperCluster *SCluster()               const    { return fSCluster.Obj();             }
@@ -126,11 +127,10 @@ namespace mithep
       void		  SetMother(const PFCandidate *p)   { fMother = p;                        }
       void                SetTrackerTrk(const Track *t)     { fTrackerTrack = t;                  }
       void                SetGsfTrk(const Track *t)         { fGsfTrack = t;                      }
-      void                SetMuon(const Muon *m)            { fMuon = m;                          }
-      void                SetElectron(const Electron *e)    { fElectron = e;                      }
-      void                SetPhoton(const Photon *p)        { fPhoton = p;                        }
-      void                SetConversion(const Conversion *c) 
-                            { fConversion = c; }
+      void                SetMuon(const Muon *);
+      void                SetElectron(const Electron *);
+      void                SetPhoton(const Photon *);
+      void                SetConversion(const Conversion *);
       void                SetSCluster(const SuperCluster *s) { fSCluster = s;                     }
       void                SetVertex(Double_t x, Double_t y, Double_t z);
       const ThreeVector   SourceVertex()           const    { return fSourceVertex.V();           }
@@ -177,26 +177,6 @@ namespace mithep
 
     ClassDef(PFCandidate,3) // Particle-flow candidate class
   };
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void mithep::PFCandidate::Mark(UInt_t ib) const
-{
-  // mark myself
-  mithep::DataObject::Mark(ib);
-  // mark my dependencies if they are there
-  if (fMother.IsValid())
-    fMother.Obj()->Mark(ib);
-  if (fTrackerTrack.IsValid())
-    fTrackerTrack.Obj()->Mark(ib);
-  if (fGsfTrack.IsValid())
-    fGsfTrack.Obj()->Mark(ib);
-  if (fMuon.IsValid())
-    fMuon.Obj()->Mark(ib);
-  if (fConversion.IsValid())
-    fConversion.Obj()->Mark(ib);
-  if (fSCluster.IsValid())
-    fSCluster.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -11,7 +11,9 @@
  
 #include "MitAna/DataTree/interface/SuperCluster.h"
 #include "MitAna/DataTree/interface/ChargedParticle.h"
+#include "MitAna/DataTree/interface/PFCandidate.h"
 #include "MitAna/DataCont/interface/Ref.h"
+#include "MitAna/DataCont/interface/RefArray.h"
 
 namespace mithep 
 {
@@ -125,6 +127,8 @@ namespace mithep
     const SuperCluster  *SCluster()                       const { return fSuperClusterRef.Obj(); }
     const SuperCluster  *ECALOnlySCluster()               const { return fPFSuperClusterRef.Obj(); }
     const SuperCluster  *PFSCluster()                     const { return ECALOnlySCluster(); } // backward compatibility
+    UInt_t               NFootprintCandidates()           const { return fFootprintCandidates.Entries(); }
+    PFCandidate const*   FootprintCandidate(UInt_t i)     const { return fFootprintCandidates.At(i); }
     Double_t             ScPixCharge()                    const { return fScPixCharge; }
     Double_t             EcalRecHitIsoDr04()              const { return fEcalJurassicIsolation; }
     Double_t             HcalTowerSumEtDr04()             const
@@ -233,6 +237,8 @@ namespace mithep
     { fSuperClusterRef = sc; }
     void	         SetECALOnlySuperCluster(const SuperCluster* sc) 
     { fPFSuperClusterRef = sc; }                             
+    void                 AddFootprintCandidate(PFCandidate const* c)
+    { fFootprintCandidates.Add(c); }
     void	         SetTrackerTrk(const Track* t)                 
     { fTrackerTrackRef = t; ClearCharge(); }
     void                 SetConvPartnerTrk(const Track *t)
@@ -389,6 +395,7 @@ namespace mithep
     Double32_t        fEcalEnergyError;              //[0,0,14]corrected Ecal energy error
     Double32_t        fTrackMomentumError;           //track momentum error
     Ref<SuperCluster> fPFSuperClusterRef;            //reference to ECAL-only SuperCluster
+    RefArray<PFCandidate> fFootprintCandidates; //ref to PF candidates in the footprint, association made by ParticleBasedIsolation algorithm
 
     // The following members are deprecated
     //    Double32_t        fCaloIsolation;                //[0,0,14](non-jura) ecal isolation based on rechits dR 0.3
@@ -401,7 +408,7 @@ namespace mithep
     // The problem is that process ID seems to be not set at the point where conversion rules are applied
     // which is strange since process ID is set in ProcIDRef::Streamer..
 
-    ClassDef(Electron, 18)                             // Electron class
+    ClassDef(Electron, 19)                             // Electron class
   };
 }
 
@@ -423,6 +430,7 @@ inline void mithep::Electron::Mark(UInt_t ib) const
     fPFSuperClusterRef.Obj()->Mark(ib);
 
   fAmbiguousGsfTracks.Mark(ib);
+  fFootprintCandidates.Mark(ib);
 }
   
 //--------------------------------------------------------------------------------------------------
