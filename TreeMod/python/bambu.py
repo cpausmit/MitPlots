@@ -143,7 +143,9 @@ class _mithep(object):
                             continue
     
                         with open(libdir + '/' + libname, 'rb') as lib:
-                            if lib.read().find(mangled) < 0:
+                            cont = lib.read()
+                            if cont.find(mangled) < 0 and cont.find('mithep::' + name) < 0:
+                                # second condition: typedef names are not mangled
                                 continue
                       
                             print '(mithep): Auto-loading library', libname
