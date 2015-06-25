@@ -56,8 +56,6 @@ namespace mithep {
  
     Jet();
 
-    Jet(Double_t, Double_t, Double_t, Double_t);
-
     FourVectorM RawMom() const { return fRawMom.V(); }
     Double_t Alpha() const { return fAlpha; }
     Double_t Beta() const { return fBeta; }
@@ -83,7 +81,8 @@ namespace mithep {
     virtual UInt_t NConstituents() const { return 0; }
     UInt_t N() const { return NConstituents(); }
 
-    void SetRawMom( const FourVectorM &mom) { fRawMom = mom; ClearMom(); }
+    void SetRawPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+    { fRawMom.Set(pt, eta, phi, m); ClearMom(); }
     void SetAlpha(Double_t val) { fAlpha = val; }
     void SetBeta(Double_t val) { fBeta = val; } 
     void SetMatchedMCFlavor(Int_t flavor) { fMatchedMCFlavor = flavor; }

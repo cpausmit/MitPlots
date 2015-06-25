@@ -21,10 +21,6 @@ namespace mithep
     public:
       GenJet() : fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0), 
                  fAuxiliaryEnergy(0), fMatchedMCFlavor(0) {}
-      GenJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-        fMom(FourVector(px,py,pz,e)), 
-        fHadEnergy(0), fEmEnergy(0), fInvisibleEnergy(0),
-        fAuxiliaryEnergy(0), fMatchedMCFlavor(0)  {}
 
       Double_t          AuxiliaryEnergy()             const { return fAuxiliaryEnergy;           }
       Double_t          Charge()                      const { return 0;                          }
@@ -33,6 +29,7 @@ namespace mithep
       Double_t          InvisibleEnergy()             const { return fInvisibleEnergy;           }
       Int_t             MatchedMCFlavor()             const { return fMatchedMCFlavor;           }
       EObjType          ObjType()                     const { return kGenJet;                    }
+      void              SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m);
       void              SetHadEnergy(Double_t val)          { fHadEnergy        = val;           } 
       void              SetEmEnergy(Double_t val)           { fEmEnergy         = val;           }
       void              SetInvisibleEnergy(Double_t val)    { fInvisibleEnergy  = val;           }
@@ -60,4 +57,13 @@ inline void mithep::GenJet::GetMom() const
 
   fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M()); 
 }
+
+inline void mithep::GenJet::SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+{ 
+  // Set momentum vector.
+
+  fMom.Set(pt, eta, phi, m);
+  ClearMom();
+}
+
 #endif

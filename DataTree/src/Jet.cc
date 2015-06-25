@@ -18,20 +18,6 @@ mithep::Jet::Jet() :
 {
 }
 
-mithep::Jet::Jet(Double_t px, Double_t py, Double_t pz, Double_t e) :
-  fRawMom(px, py, pz, e),
-  fAlpha(0.),
-  fBeta(0.),
-  fMatchedMCFlavor(0),
-  fSigmaEta(0.),
-  fSigmaPhi(0.),
-  fBJetTagsDisc{},
-  fCorrectionScale{},
-  fJetArea(0.),
-  fCorrections()
-{
-}
-
 /*static*/
 char const*
 mithep::Jet::BTagAlgoName(UInt_t idx)

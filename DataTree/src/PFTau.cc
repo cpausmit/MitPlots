@@ -37,39 +37,6 @@ mithep::PFTau::PFTau() :
 {
 }
 
-mithep::PFTau::PFTau(Double_t px, Double_t py, Double_t pz, Double_t e) :
-  Tau(px, py, pz, e),
-  fCharge(0),
-  fLeadPFCandSignD0Sig(0.),
-  fHCalTotalEOverP(0.),
-  fHCalMaxEOverP(0.),
-  fHCal3x3EOverP(0.),
-  fIsoChargedHadronPtSum(0.),
-  fIsoGammaEtSum(0.),
-  fMaxHCalPFClusterEt(0.),
-  fEMFraction(0.),
-  fECalStripSumEOverP(0.),
-  fBremRecoveryEOverP(0.),
-  fElectronPreIDOutput(0.),
-  fCaloCompatibility(0.),
-  fSegmentCompatibility(0.),
-  fElectronPreIDDecision(kFALSE),
-  fMuonDecision(kFALSE),
-  fPFTauDiscriminator{},
-  fPFTauLegacyDiscriminator{},
-  fLeadPFCand(),
-  fLeadChargedHadPFCand(),
-  fLeadNeutralPFCand(),
-  fPFJet(),
-  fElectronTrack(),
-  fSignalPFCands(),
-  fSignalPFChargedHadrCands(),
-  fSignalPFNeutrHadrCands(),
-  fSignalPFGammaCands(),
-  fIsoPFCands()
-{
-}
-
 /*static*/
 char const*
 mithep::PFTau::PFTauDiscriminatorName(UInt_t idx)

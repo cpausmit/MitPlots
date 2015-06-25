@@ -78,7 +78,6 @@ namespace mithep {
     };
 
     PFTau();
-    PFTau(Double_t, Double_t, Double_t, Double_t);
 
     Double_t LeadPFCandSignD0Sig() const { return fLeadPFCandSignD0Sig; }
     Double_t HCalTotalEOverP() const { return fHCalTotalEOverP; }

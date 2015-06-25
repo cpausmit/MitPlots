@@ -23,7 +23,6 @@ namespace mithep
   {
   public:
     Photon() {}
-    Photon(Double_t px, Double_t py, Double_t pz, Double_t e) : fMom(px, py, pz, e) {}
 
     // Contents of the Photons
     UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
@@ -126,6 +125,8 @@ namespace mithep
     // Some structural tools
     void                 Mark(UInt_t i=1)             const override;
 
+    void                 SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
+    void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
     void                 AddConversionD(const DecayParticle *c)  { fConversionsD.Add(c); }
     void                 AddConversionS(const DecayParticle *c)  { fConversionsS.Add(c); }
     void                 SetEnergyErr(Double_t x)                { fEnergyErr               = x; }
@@ -138,7 +139,6 @@ namespace mithep
     void                 SetEnergyErrPhoFix(Double_t x)          { fEnergyErrPhoFix         = x; }
     void                 SetEnergyScale(Double_t x)              { fEnergyScale             = x; }
     void                 SetIsConverted(Bool_t b)                { fIsConverted             = b; }
-    void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
     void                 SetSuperCluster(const SuperCluster* s)  { fSuperClusterRef         = s; }
     void                 SetR9(Double_t x)                       { fR9                      = x; }
     void                 SetHadOverEm(Double_t x)                { fHadOverEm               = x; }
@@ -373,6 +373,14 @@ mithep::Photon::GetMom() const
   // Get momentum values from stored values.
 
   fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M());
+}
+
+inline
+void
+mithep::Photon::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
+{
+  fMom.Set(pt, eta, phi, 0.);
+  ClearMom();
 }
 
 inline

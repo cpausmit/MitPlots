@@ -20,8 +20,6 @@ namespace mithep
   {
     public:
       TrackJet() {}
-      TrackJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                Jet(px,py,pz,e) {}
 
       void                  AddTrack(const Track *t)              { fTracks.Add(t); ClearCharge(); }
       Bool_t                HasTrack(const Track *t)        const { return fTracks.HasObject(t);   }

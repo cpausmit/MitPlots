@@ -22,12 +22,12 @@ namespace mithep
   {
     public:
       Tau() {}
-      Tau(Double_t px, Double_t py, Double_t pz, Double_t e) :    
-        fMom(FourVector(px,py,pz,e)) {}
 
       FourVectorM         MomAlt()                const { return fMomAlt.V(); }
-      EObjType            ObjType()               const { return kTau;        }  
+      EObjType            ObjType()               const { return kTau;        }
+      void                SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m);
       void                SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
+      void                SetPtEtaPhiMAlt(Double_t pt, Double_t eta, Double_t phi, Double_t m);
       void                SetMomAlt(Double_t px, Double_t py, Double_t pz, Double_t e);
       virtual const Jet  *SourceJet()             const { return 0;           }
 
@@ -52,11 +52,28 @@ inline void mithep::Tau::GetMom() const
 }
 
 //--------------------------------------------------------------------------------------------------
+inline void mithep::Tau::SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+{ 
+  // Set momentum vector.
+
+  fMom.Set(pt, eta, phi, m);
+  ClearMom();
+}
+
 inline void mithep::Tau::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
 { 
   // Set momentum vector.
 
   fMom.SetXYZT(px, py, pz, e);
+  ClearMom();
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::Tau::SetPtEtaPhiMAlt(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+{ 
+  // Set momentum vector.
+
+  fMomAlt.Set(pt, eta, phi, m);
   ClearMom();
 }
 

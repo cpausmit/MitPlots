@@ -36,9 +36,6 @@ namespace mithep
       };
 
       MCParticle() : fPdgId(0), fStatus(0), fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
-      MCParticle(Double_t px, Double_t py, Double_t pz, Double_t e, Int_t id, Int_t s) : 
-        fPdgId(id), fStatus(s), fMom(FourVector(px,py,pz,e)),
-        fIsGenerated(kFALSE), fIsSimulated(kFALSE) {}
 
       Int_t               AbsPdgId()               const   { return (fPdgId<0 ? -fPdgId:fPdgId); }
       void		  AddDaughter(const MCParticle *p) { fDaughters.Add(p);                  }
@@ -72,6 +69,7 @@ namespace mithep
       Int_t               PdgId()                  const { return fPdgId;  }
       Double_t            PdgMass()                const;
       Bool_t              StatusFlag(UInt_t i)     const { return fStatusFlags.TestBit(i); }
+      void		  SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m);
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(const MCParticle *p) { fMother = p;    }
       void                SetStatus(Int_t s)             { fStatus = s;    }
@@ -296,6 +294,15 @@ inline Double_t mithep::MCParticle::PdgMass() const
   if (pdg)
     return pdg->Mass();
   return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::MCParticle::SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+{ 
+  // Set four vector.
+
+  fMom.Set(pt, eta, phi, m);
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------

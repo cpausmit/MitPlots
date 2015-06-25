@@ -22,13 +22,7 @@ namespace mithep
   class CaloTau : public Tau
   {
     public:
-      CaloTau() : fLeadTrackSignD0Sig(0), fLeadTrack3x3HCalEt(0),
-                  fLeadTrack3x3HCalDEta(0), fSignalTracksMass(0),
-                  fTracksMass(0), fIsoTrackPtSum(0), fIsoECalEtSum(0),
-                  fMaxHCalHitEt(0) {}
-      CaloTau(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                  Tau(px,py,pz,e),
-                  fLeadTrackSignD0Sig(0), fLeadTrack3x3HCalEt(0),
+      CaloTau() : Tau(), fLeadTrackSignD0Sig(0), fLeadTrack3x3HCalEt(0),
                   fLeadTrack3x3HCalDEta(0), fSignalTracksMass(0),
                   fTracksMass(0), fIsoTrackPtSum(0), fIsoECalEtSum(0),
                   fMaxHCalHitEt(0) {}

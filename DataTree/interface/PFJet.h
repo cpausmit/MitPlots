@@ -21,11 +21,6 @@ namespace mithep
       PFJet() : fChargedHadronEnergy(0), fNeutralHadronEnergy(0), fChargedEmEnergy(0),
                 fNeutralEmEnergy(0), fMuonEnergy(0), fChargedMultiplicity(0),
                 fNeutralMultiplicity(0), fMuonMultiplicity(0) {}
-      PFJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                Jet(px,py,pz,e),
-                fChargedHadronEnergy(0), fNeutralHadronEnergy(0), fChargedEmEnergy(0),
-                fNeutralEmEnergy(0), fMuonEnergy(0), fChargedMultiplicity(0),
-                fNeutralMultiplicity(0), fMuonMultiplicity(0) {}
 
       void                  AddPFCand(const PFCandidate *p)       { fPFCands.Add(p); ClearCharge();}
       Double_t              ChargedEmEnergy()               const { return fChargedEmEnergy;       }

@@ -62,12 +62,6 @@ namespace mithep
                       fEPS1(0), fEPS2(0), fPError(0),fMvaEPi(0), fMvaEMu(0),
                       fMvaPiMu(0), fMvaGamma(0), fMvaNeutralH(0), fMvaGammaNeutralH(0),
                       fEtaECal(0), fPhiECal(0), fPFType(eX) {}
-      PFCandidate(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                      fMom(FourVector(px,py,pz,e)),
-                      fCharge(0), fEECal(0), fEHCal(0), fEECalRaw(0), fEHCalRaw(0),
-                      fEPS1(0), fEPS2(0), fPError(0),fMvaEPi(0), fMvaEMu(0),
-                      fMvaPiMu(0), fMvaGamma(0), fMvaNeutralH(0), fMvaGammaNeutralH(0),
-                      fEtaECal(0), fPhiECal(0), fPFType(eX) {}
 
       void		  AddDaughter(const PFCandidate *p) { fDaughters.Add(p);                  }
       void                ClearFlag(EPFFlags f)             { fPFFlags.ClearBit(f);               }
@@ -123,6 +117,7 @@ namespace mithep
       void                SetPhiECal(Double_t phi)          { fPhiECal = phi;                     }
       void                SetPFType(EPFType t)              { fPFType = t;                        }
       void                SetFlag(EPFFlags f, Bool_t b=1)   { fPFFlags.SetBit(f,b);               }
+      void                SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m);
       void		  SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
       void		  SetMother(const PFCandidate *p)   { fMother = p;                        }
       void                SetTrackerTrk(const Track *t)     { fTrackerTrack = t;                  }
@@ -234,6 +229,15 @@ inline Bool_t mithep::PFCandidate::HasMother(const PFCandidate *m) const
   if (mother) 
     return kTRUE;
   return kFALSE;
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void mithep::PFCandidate::SetPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+{ 
+  // Set four vector.
+
+  fMom.Set(pt, eta, phi, m);
+  ClearMom();
 }
 
 //--------------------------------------------------------------------------------------------------
