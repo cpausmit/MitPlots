@@ -129,6 +129,8 @@ namespace mithep
     const SuperCluster  *PFSCluster()                     const { return ECALOnlySCluster(); } // backward compatibility
     UInt_t               NFootprintCandidates()           const { return fFootprintCandidates.Entries(); }
     PFCandidate const*   FootprintCandidate(UInt_t i)     const { return fFootprintCandidates.At(i); }
+    Bool_t               IsInFootprint(PFCandidate const* cand) const
+    { return fFootprintCandidates.HasObject(cand); }
     Double_t             ScPixCharge()                    const { return fScPixCharge; }
     Double_t             EcalRecHitIsoDr04()              const { return fEcalJurassicIsolation; }
     Double_t             HcalTowerSumEtDr04()             const

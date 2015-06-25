@@ -83,6 +83,8 @@ namespace mithep
     SuperCluster const*  PFSCluster()                 const { return ECALOnlySCluster(); } // backward compatibility
     UInt_t               NFootprintCandidates()       const { return fFootprintCandidates.Entries(); }
     PFCandidate const*   FootprintCandidate(UInt_t i) const { return fFootprintCandidates.At(i); }
+    Bool_t               IsInFootprint(PFCandidate const* cand) const
+    { return fFootprintCandidates.HasObject(cand); }
     Double_t             R9()                         const { return fR9;                    }
     SuperCluster const*  SCluster()                   const { return fSuperClusterRef.Obj(); }
     Double_t             SolidConeTrkIsoDr03()        const { return fSolidConeTrkIsoDr03;   }
