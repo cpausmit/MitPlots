@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PublisherMod.h,v 1.10 2009/06/17 11:50:27 loizides Exp $
-//
 // PublisherMod
 //
 // This module simply loads a branch and publishes its content into an ObjArray. 
@@ -17,71 +15,74 @@
 #include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
 
-namespace mithep 
-{
-  template<class TIn, class TOut=TIn>
-  class PublisherMod : public BaseMod 
-  {
-    public:
-      PublisherMod(const char *name="PublisherMod", 
-                   const char *title="Publisher module");
+#include <type_traits>
 
-      const char              *GetBranchName()              const { return fBranchName;     }
-      const char              *GetInputName()               const { return GetBranchName(); }
-      const char              *GetOutputName()              const { return GetPublicName(); }
-      const char              *GetPublicName()              const { return fPublicName;     }
-      Bool_t                   GetPubPerEvent()             const { return fPubPerEvent;    }
-      void                     SetBranchName(const char *n)       { fBranchName=n;          }
-      void                     SetInputName(const char *n)        { SetBranchName(n);       }
-      void                     SetOutputName(const char *n)       { SetPublicName(n);       }
-      void                     SetPublicName(const char *n)       { fPublicName=n;          }
-      void                     PublishPerEvent(Bool_t b)          { fPubPerEvent = b;       }
+namespace mithep {
 
-    protected:
-      TString                  fBranchName;    //name of collection
-      TString                  fPublicName;    //name of collection
-      Bool_t                   fPubPerEvent;   //=true then publish per event (def=1)
-      const Collection<TIn>   *fColIn;         //!pointer to collection (in) 
-      ObjArray<TOut>          *fColOut;        //!pointer to collection (out)
+  template<class TIn, class TOut = TIn>
+  class PublisherMod : public BaseMod {
+  public:
+    PublisherMod(const char *name="PublisherMod", const char *title="Publisher module");
 
-      void                     Process();
-      void                     SlaveBegin();
-      void                     SlaveTerminate();
+    const char* GetInputName()               const { return fInputName;      }
+    const char* GetBranchName()              const { return GetInputName();  }
+    const char* GetOutputName()              const { return fOutputName;     }
+    const char* GetPublicName()              const { return GetOutputName(); }
+    Bool_t      GetPubPerEvent()             const { return fPubPerEvent;    }
+    void        SetBranchName(const char *n)       { fInputName = n;         }
+    void        SetInputName(const char *n)        { SetBranchName(n);       }
+    void        SetOutputName(const char *n)       { fOutputName = n;        }
+    void        SetPublicName(const char *n)       { SetOutputName(n);       }
+    void        SetPublishPerEvent(Bool_t b)       { fPubPerEvent = b;       }
+    void        PublishPerEvent(Bool_t b)          { SetPublishPerEvent(b);  }
 
-      ClassDef(PublisherMod, 1) // Publisher module
+  protected:
+    typedef mithep::Collection<TIn> InputColType;
+    // this class is instantiatable only when TOut is a base class of TIn
+    typedef std::enable_if<std::is_base_of<TOut, TIn>::value, mithep::ObjArray<TOut>> Instantiable;
+    typedef typename Instantiable::type OutputColType;
+
+    TString fInputName;    //name of collection
+    TString fOutputName;    //name of collection
+    Bool_t  fPubPerEvent;   //=true then publish per event (def=1)
+
+    OutputColType* fColOut;  //!pointer to collection (out)
+  
+    void Process() override;
+    void SlaveBegin() override;
+    void SlaveTerminate() override;
+
+    ClassDef(PublisherMod, 1) // Publisher module
   };
+
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class TIn, class TOut>
 mithep::PublisherMod<TIn, TOut>::PublisherMod(const char *name, const char *title) : 
-  BaseMod(name,title),
-  fBranchName("SetMe"),
-  fPublicName(""),
+  BaseMod(name, title),
+  fInputName(""),
+  fOutputName(""),
   fPubPerEvent(kTRUE),
-  fColIn(0),
   fColOut(0)
 {
-  // Constructor.
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class TIn, class TOut>
-void mithep::PublisherMod<TIn, TOut>::Process()
+void
+mithep::PublisherMod<TIn, TOut>::Process()
 {
   // Load the branch, add pointers to the object array. Publish object array if needed.
-
-  LoadBranch(GetBranchName());
-
-  const UInt_t entries = fColIn->GetEntries();
+  auto* input = GetObject<InputColType>(fInputName);
 
   if (fPubPerEvent)
-    fColOut = new mithep::ObjArray<TOut>(entries, GetPublicName());
+    fColOut = new OutputColType(input->GetEntries(), fOutputName);
   else
     fColOut->Reset();
 
-  for(UInt_t i=0; i<entries; ++i)
-    fColOut->Add(fColIn->At(i));
+  for (UInt_t iO = 0; iO != input->GetEntries(); ++iO)
+    fColOut->Add(input->At(iO));
 
   if (fPubPerEvent) 
     AddObjThisEvt(fColOut);
@@ -89,30 +90,32 @@ void mithep::PublisherMod<TIn, TOut>::Process()
 
 //--------------------------------------------------------------------------------------------------
 template<class TIn, class TOut>
-void mithep::PublisherMod<TIn, TOut>::SlaveBegin()
+void
+mithep::PublisherMod<TIn, TOut>::SlaveBegin()
 {
-  // Request the branch to be published. Depending on the user's decision publish the array.
+  if (fInputName.IsNull())
+    SendError(kAbortAnalysis, "SlaveBegin", "Input name is null.");
 
-  ReqBranch(GetBranchName(), fColIn);
+  if (fOutputName.IsNull())
+    SendError(kAbortAnalysis, "SlaveBegin", "Output name is null.");
 
-  if (fPublicName.IsNull())
-    fPublicName = GetBranchName();
-
-  if (!GetPubPerEvent()) {
-    fColOut = new mithep::ObjArray<TOut>(0, GetPublicName());
+  if (!fPubPerEvent) {
+    fColOut = new OutputColType(0, fOutputName);
     PublishObj(fColOut);
   }
 }
 
 //--------------------------------------------------------------------------------------------------
 template<class TIn, class TOut>
-void mithep::PublisherMod<TIn, TOut>::SlaveTerminate()
+void
+mithep::PublisherMod<TIn, TOut>::SlaveTerminate()
 {
   // Cleanup in case objects are published only once.
 
   if (!fPubPerEvent) {
-    RetractObj(GetPublicName());
+    RetractObj(fOutputName);
     delete fColOut;
   }
 }
+
 #endif
