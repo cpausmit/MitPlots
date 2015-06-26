@@ -75,6 +75,7 @@ namespace mithep
       Double_t            EPS1()                   const    { return fEPS1;                       }
       Double_t            EPS2()                   const    { return fEPS2;                       }
       Double_t            PError()                 const    { return fPError;                     }
+      PFCandidate*        MakeCopy()               const    { return new PFCandidate(*this);      }
       Double_t            MvaEPi()                 const    { return fMvaEPi;                     }
       Double_t            MvaEMu()                 const    { return fMvaEMu;                     }
       Double_t            MvaPiMu()                const    { return fMvaPiMu;                    }
