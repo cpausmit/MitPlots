@@ -72,14 +72,24 @@ namespace mithep {
         kGlobal,            //"Global"
         kTracker,           //"Tracker"
         kSta,               //"Standalone"
+        kTrackerPlusFirstStation, //"TPFMS"
+        kPicky,             //"Picky"
+        kDYT,               //"DYT"
         kAny                //any "best" of the above
       };
 
+      UInt_t         BestTrkType()                   const { return fBestTrkType;              }
+      UInt_t         TunePBestTrkType()              const { return fTunePBestTrkType;         }
       const Track   *BestTrk()                       const;
+      const Track   *TunePBestTrk()                  const;
       const Track   *GlobalTrk()                     const { return fGlobalTrkRef.Obj();       }
       const Track   *StandaloneTrk()                 const { return fStaTrkRef.Obj();          }
-      const Track   *TrackerTrk()                    const { return fTrkTrkRef.Obj();          }
-      const Track   *Trk()                           const { return BestTrk();                 }
+      const Track   *TrackerTrk()           const override { return fTrkTrkRef.Obj();          }
+      const Track   *TrackerPlusFirstStationTrk()    const { return fTPFMSTrkRef.Obj();        }
+      const Track   *PickyTrk()                      const { return fPickyTrkRef.Obj();        }
+      const Track   *DYTTrk()                        const { return fDYTTrkRef.Obj();          }
+      const Track   *Trk()                  const override { return BestTrk();                 }
+      const Track   *TrkOfType(EClassType)           const;
       Double_t       D0PV()                          const { return fD0PV;                     }
       Double_t       D0PVErr()                       const { return fD0PVErr;                  }
       Double_t       D0PVSignificance()              const { return fD0PV/fD0PVErr;            }
@@ -118,10 +128,13 @@ namespace mithep {
       Double_t       GetTrackDistErr(Int_t iStation) const;
       Int_t          GetNSegments(Int_t iStation)    const;
       Bool_t         Has(EClassType type)            const;
-      Bool_t         HasTrk()                        const;
+      Bool_t         HasTrk(Bool_t checkRefit = kFALSE) const;
       Bool_t         HasGlobalTrk()                  const { return fGlobalTrkRef.IsValid();   }
       Bool_t         HasStandaloneTrk()              const { return fStaTrkRef.IsValid();      }
       Bool_t         HasTrackerTrk()                 const { return fTrkTrkRef.IsValid();      }
+      Bool_t         HasTrackerPlusFirstStationTrk() const { return fTPFMSTrkRef.IsValid();    }
+      Bool_t         HasPickyTrk()                   const { return fPickyTrkRef.IsValid();    }
+      Bool_t         HasDYTTrk()                     const { return fDYTTrkRef.IsValid();      }
       Double_t       HadEnergy()                     const { return fHadEnergy;                }
       Double_t       HadS9Energy()                   const { return fHadS9Energy;              }
       Double_t       HoEnergy()                      const { return fHoEnergy;                 }
@@ -169,12 +182,20 @@ namespace mithep {
       Bool_t         TMOneStation(Double_t iDYMin = 3, Double_t iPYMin = 3,
                                   Double_t iDXMin = 3, Double_t iPXMin = 3,UInt_t iN = 1)  const;
       void           SetCharge(Char_t x)                   { fCharge = x; ClearCharge();       }
+      void           SetBestTrkType(UChar_t t)             { fBestTrkType = t;                 }
+      void           SetTunePBestTrkType(UChar_t t)        { fTunePBestTrkType = t;            }
       void           SetGlobalTrk(const Track *t)
-                       { fGlobalTrkRef = t; ClearMom(); ClearCharge(); }
+      { fGlobalTrkRef = t; ClearMom(); ClearCharge(); }
       void           SetStandaloneTrk(const Track *t)
-                       { fStaTrkRef = t;    ClearMom(); ClearCharge(); }
+      { fStaTrkRef = t; ClearMom(); ClearCharge(); }
       void           SetTrackerTrk(const Track *t)
-                       { fTrkTrkRef = t;    ClearMom(); ClearCharge(); }
+      { fTrkTrkRef = t; ClearMom(); ClearCharge(); }
+      void           SetTrackerPlusFirstStationTrk(const Track *t)
+      { fTPFMSTrkRef = t; ClearMom(); ClearCharge(); }
+      void           SetPickyTrk(const Track *t)
+      { fPickyTrkRef = t; ClearMom(); ClearCharge(); }
+      void           SetDYTTrk(const Track *t)
+      { fDYTTrkRef = t; ClearMom(); ClearCharge(); }
       void           SetDX(Int_t iStation, Double_t iDX);
       void           SetDY(Int_t iStation, Double_t iDY);
       void           SetD0PV(Double_t x)                   { fD0PV = x;                        }
@@ -238,18 +259,23 @@ namespace mithep {
       void           SetTrackDistErr(Int_t iStation, Double_t iDistErr);
 
       // Some structural tools
-      void           Mark(UInt_t i=1)                const;
+      void           Mark(UInt_t i=1)                const override;
 
     protected:
-      Double_t       GetCharge()                     const;
+      Double_t       GetCharge()                     const override;
       Double_t       GetMass()                       const { return 105.658369e-3;             }
-      void           GetMom()                        const;
+      void           GetMom()                        const override;
 
       Vect3C         fMom;                 //stored three-momentum
       Char_t         fCharge = -99;        //stored charge - filled with -99 when reading old files
+      UChar_t        fBestTrkType = kNone;//type of best track as given by CMSSW
+      UChar_t        fTunePBestTrkType = kNone; //type of best track for high-pT muons
       Ref<Track>     fGlobalTrkRef;        //global combined track reference
       Ref<Track>     fStaTrkRef;           //standalone muon track reference
       Ref<Track>     fTrkTrkRef;           //tracker track reference
+      Ref<Track>     fTPFMSTrkRef;         //tracker plus first muon station (for showring high-pT muons)
+      Ref<Track>     fPickyTrkRef;         //picky fit
+      Ref<Track>     fDYTTrkRef;           //DYT fit
       Double32_t     fIsoR03SumPt;         //[0,0,14]isolation size R=0.3 sum pt
       Double32_t     fIsoR03EmEt;          //[0,0,14]isolation size R=0.3 em  trans energy
       Double32_t     fIsoR03HadEt;         //[0,0,14]isolation size R=0.3 had trans energy
@@ -312,12 +338,14 @@ namespace mithep {
       Bool_t         fIsPFMuon = kFALSE;          //particle flow muon flag
       Bool_t         fIsCaloMuon = kFALSE;        //CaloMuon algo flag
 
-    ClassDef(Muon, 10) // Muon class
+    ClassDef(Muon, 11) // Muon class
   };
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void mithep::Muon::Mark(UInt_t ib) const
+inline
+void
+mithep::Muon::Mark(UInt_t ib) const
 {
   // mark myself
   mithep::DataObject::Mark(ib);
@@ -328,21 +356,71 @@ inline void mithep::Muon::Mark(UInt_t ib) const
     fStaTrkRef.Obj()->Mark(ib);
   if (fTrkTrkRef.IsValid())
     fTrkTrkRef.Obj()->Mark(ib);
+  if (fTPFMSTrkRef.IsValid())
+    fTPFMSTrkRef.Obj()->Mark(ib);
+  if (fPickyTrkRef.IsValid())
+    fPickyTrkRef.Obj()->Mark(ib);
+  if (fDYTTrkRef.IsValid())
+    fDYTTrkRef.Obj()->Mark(ib);
 }
 
 //--------------------------------------------------------------------------------------------------
-inline const mithep::Track *mithep::Muon::BestTrk() const
+inline
+mithep::Track const*
+mithep::Muon::BestTrk() const
 {
   // Return "best" track.
-
-  if (HasTrackerTrk())
-    return TrackerTrk();
-  else if (HasGlobalTrk())
-    return GlobalTrk();
-  else if (HasStandaloneTrk())
-    return StandaloneTrk();
+  if (fBestTrkType == kNone || fBestTrkType == kAny || !Has(EClassType(fBestTrkType))) {
+    // backward compatibility
+    if (HasTrackerTrk())
+      return TrackerTrk();
+    else if (HasGlobalTrk())
+      return GlobalTrk();
+    else if (HasStandaloneTrk())
+      return StandaloneTrk();
+  }
+  else
+    return TrkOfType(EClassType(fBestTrkType));
 
   Error("BestTrk", "No track reference found, returning NULL pointer.");
+  return 0;
+}
+
+inline
+mithep::Track const*
+mithep::Muon::TunePBestTrk() const
+{
+  // Return "best" track.
+  if (fTunePBestTrkType == kNone || fTunePBestTrkType == kAny || !Has(EClassType(fTunePBestTrkType)))
+    return BestTrk();
+  else
+    return TrkOfType(EClassType(fBestTrkType));
+}
+
+inline
+mithep::Track const*
+mithep::Muon::TrkOfType(mithep::Muon::EClassType type) const
+{
+  switch (type) {
+  case kGlobal:
+    return GlobalTrk();
+  case kTracker:
+    return TrackerTrk();
+  case kSta:
+    return StandaloneTrk();
+  case kTrackerPlusFirstStation:
+    return TrackerPlusFirstStationTrk();
+  case kPicky:
+    return PickyTrk();
+  case kDYT:
+    return DYTTrk();
+  case kAny:
+    return BestTrk();
+  default:
+    break;
+  }
+
+  Error("TrkOfType", "No track reference found, returning NULL pointer.");
   return 0;
 }
 
@@ -442,43 +520,44 @@ inline Bool_t mithep::Muon::Has(EClassType type) const
   // Return true if the muon has a track of given class.
 
   switch (type) {
-    case kAny:
-      if (HasTrk())
-        return kTRUE;
-      break;
-    case kGlobal:
-      if (HasGlobalTrk())
-        return kTRUE;
-      break;
-    case kTracker:
-      if (HasTrackerTrk())
-        return kTRUE;
-      break;
-    case kSta:
-      if (HasStandaloneTrk())
-        return kTRUE;
-      break;
-    case kNone:
-      if (!HasTrk())
-        return kTRUE;
-      break;
-    default:
-      break;
+  case kAny:
+    return HasTrk();
+  case kGlobal:
+    return HasGlobalTrk();
+  case kTracker:
+    return HasTrackerTrk();
+  case kSta:
+    return HasStandaloneTrk();
+  case kTrackerPlusFirstStation:
+    return HasTrackerPlusFirstStationTrk();
+  case kPicky:
+    return HasPickyTrk();
+  case kDYT:
+    return HasDYTTrk();
+  case kNone:
+    return !HasTrk(kTRUE);
+  default:
+    return kFALSE;
   }
-
-  return kFALSE;
 }
 
 //--------------------------------------------------------------------------------------------------
-inline Bool_t mithep::Muon::HasTrk() const
+inline
+Bool_t
+mithep::Muon::HasTrk(Bool_t checkRefit/* = kFALSE*/) const
 {
   // Return true if the muon has assigned any kind of track.
+  Bool_t ret = (HasGlobalTrk() || HasTrackerTrk() || HasStandaloneTrk());
+  if (!ret && checkRefit)
+    ret = ret && (HasTrackerPlusFirstStationTrk() || HasPickyTrk() || HasDYTTrk());
 
-  return (HasGlobalTrk() || HasTrackerTrk() || HasStandaloneTrk());
+  return ret;
 }
 
 //--------------------------------------------------------------------------------------------------
-inline mithep::Muon::EClassType mithep::Muon::Is() const
+inline
+mithep::Muon::EClassType
+mithep::Muon::Is() const
 {
   // Return the "best" classification of the muon according to the assigned tracks.
 
