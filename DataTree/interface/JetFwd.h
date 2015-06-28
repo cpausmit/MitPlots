@@ -1,5 +1,3 @@
-// $Id:$
-
 #ifndef MITANA_DATATREE_JETFWD_H
 #define MITANA_DATATREE_JETFWD_H
 

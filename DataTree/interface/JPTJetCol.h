@@ -1,5 +1,3 @@
-// $Id: PFJetCol.h,v 1.1 2009/06/15 15:00:13 loizides Exp $
-
 #ifndef MITANA_DATATREE_JPTJETCOL_H
 #define MITANA_DATATREE_JPTJETCOL_H
  
