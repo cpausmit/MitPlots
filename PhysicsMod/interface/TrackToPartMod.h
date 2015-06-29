@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TrackToPartMod.h,v 1.10 2009/06/17 11:50:27 loizides Exp $
-//
 // TrackToPartMod
 //
 // This module converts a given track particle branch (or collection) into
@@ -42,7 +40,6 @@ namespace mithep
       TString                  fPublicName;    //name of collection
       Bool_t                   fPubPerEvent;   //=true then publish per event (def=1)
       UInt_t                   fAbsPdgId;      //pdg identifier (absolute value)
-      const TrackCol          *fColIn;         //!pointer to collection (in) 
       StableParticleOArr      *fColOut;        //!pointer to collection (out)
 
       void                     Process();

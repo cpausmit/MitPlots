@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.12 2009/06/17 11:50:27 loizides Exp $
-//
 // PlotKineMod
 // 
 // This module allows one to quickly plot eta and pt distribution of a given particle.
@@ -49,7 +47,6 @@ namespace mithep
       Double_t                 fEtaMin;     //minimum eta
       Double_t                 fEtaMax;     //maximum eta 
       Int_t                    fEntriesMax;  //maximum number of entries
-      const Collection<T>     *fCol;        //!pointer to collection 
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
       TH1D                    *fEntHist;    //!entries histogram
@@ -68,7 +65,6 @@ mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) :
   fEtaMin(-10),
   fEtaMax(10),
   fEntriesMax(250),
-  fCol(0),
   fPtHist(0),
   fEtaHist(0),
   fEntHist(0)
@@ -84,7 +80,8 @@ void mithep::PlotKineMod<T>::Process()
 {
   // Process entries of the tree: Just load the branch and fill the histograms.
 
-  if (!LoadEventObject(GetColName(), fCol)) {
+  auto* collection = GetObject<mithep::Collection<T>>(GetColName());
+  if (!collection) {
     SendError(kAbortModule, "Process", "Could not load data!");
     return;
   }
@@ -92,10 +89,10 @@ void mithep::PlotKineMod<T>::Process()
   if (!GetFillHist())
     return;
     
-  const UInt_t ents=fCol->GetEntries();
+  const UInt_t ents=collection->GetEntries();
   fEntHist->Fill(ents);
   for(UInt_t i=0;i<ents;++i) {
-     const T *p = fCol->At(i);
+     const T *p = collection->At(i);
      Double_t pt = p->Pt();
      if (pt<fPtMin) 
        continue;
@@ -117,8 +114,6 @@ void mithep::PlotKineMod<T>::SlaveBegin()
 {
   // Request a branch and create the histograms.
   
-  ReqEventObject(GetColName(), fCol);
-
   if (GetFillHist()) {
     Int_t ptbins = (Int_t)((fPtMax-fPtMin)/2.5);
     AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",ptbins,fPtMin,fPtMax);

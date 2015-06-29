@@ -1,5 +1,3 @@
-// $Id: MCProcessSelectionMod.cc,v 1.1 2010/01/18 14:35:43 bendavid Exp $
-
 #include "MitAna/PhysicsMod/interface/MCProcessSelectionMod.h"
 #include <TFile.h>
 #include <TTree.h>
@@ -18,7 +16,6 @@ MCProcessSelectionMod::MCProcessSelectionMod(const char *name, const char *title
   fNEvents(0),
   fNAcceped(0),
   fNFailed(0),
-  fMCEventInfo(0),
   hProcessId(0)
 {
   // Constructor. 
@@ -51,9 +48,10 @@ void MCProcessSelectionMod::Process()
     OnAccepted();
     return;
   }
+
+  auto* mcEventInfo = GetObject<MCEventInfo>(fMCEventInfoName);
   
-  LoadBranch(fMCEventInfoName);
-  Int_t processid = fMCEventInfo->ProcessId();
+  Int_t processid = mcEventInfo->ProcessId();
   hProcessId->Fill(processid);
   
   Bool_t accepted = kFALSE;
@@ -101,9 +99,6 @@ void MCProcessSelectionMod::SlaveBegin()
 
   hProcessId = new TH1F("hProcessId","hProcessId",501,-0.5,500.5);
   AddOutput(hProcessId);
-  
-  if (! (fDefaultAccept && fExcludedProcessIds.size()==0) )
-    ReqBranch(fMCEventInfoName,fMCEventInfo);
 }
 
 //--------------------------------------------------------------------------------------------------

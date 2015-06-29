@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunSelectionMod.h,v 1.3 2009/12/02 20:27:42 loizides Exp $
-//
 // RunSelectionMod
 //
 // This module selects or excludes a list or runs/ranges.  A list of accepted and excluded runs

@@ -1,5 +1,3 @@
-// $Id: RunSelectionMod.cc,v 1.4 2009/12/02 20:27:42 loizides Exp $
-
 #include "MitAna/PhysicsMod/interface/RunSelectionMod.h"
 #include <TFile.h>
 #include <TTree.h>

@@ -1,5 +1,3 @@
-// $Id: HLTExampleMod.cc,v 1.4 2009/06/15 15:00:16 loizides Exp $
-
 #include "MitAna/PhysicsMod/interface/HLTExampleMod.h"
 #include "MitAna/DataTree/interface/TriggerObjectCol.h"
 #include <TH1D.h>
