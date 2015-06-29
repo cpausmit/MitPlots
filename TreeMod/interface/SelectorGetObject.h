@@ -13,13 +13,13 @@ namespace mithep {
     typedef O ArrayElement;
     typedef mithep::Collection<O> ReturnType;
 
-    static ReturnType const* Get(mithep::Selector&, char const* name, Bool_t warn);
+    static ReturnType* Get(mithep::Selector&, char const* name, Bool_t warn);
   };
 }
 
 /*static*/
 template<class T>
-T const*
+T*
 mithep::Selector::GetObjectHelper<T>::Get(mithep::Selector& selector, char const* name, Bool_t warn)
 {
   // Find object of the given name from the list of event objects,
@@ -108,7 +108,7 @@ mithep::Selector::GetObjectHelper<T>::Get(mithep::Selector& selector, char const
 
 /*static*/
 template<class O>
-mithep::Collection<O> const*
+mithep::Collection<O>*
 mithep::Selector::GetObjectHelper<mithep::Collection<O>>::Get(mithep::Selector& selector, char const* name, Bool_t warn)
 {
   // Find object of the given name from the list of event objects,
@@ -155,7 +155,7 @@ mithep::Selector::GetObjectHelper<mithep::Collection<O>>::Get(mithep::Selector& 
   }
 
   // lambda for casting obj to ReturnType
-  auto CastCollection = [&selector, warn](TObject* obj, mithep::Selector::ObjInfo* info) -> ReturnType const* {
+  auto CastCollection = [&selector, warn](TObject* obj, mithep::Selector::ObjInfo* info) -> ReturnType* {
     // First try direct cast    
     if (obj->IsA()->InheritsFrom(ReturnType::Class()))
       return static_cast<ReturnType*>(obj);
@@ -206,7 +206,7 @@ mithep::Selector::GetObjectHelper<mithep::Collection<O>>::Get(mithep::Selector& 
     }
   };
 
-  ReturnType const* ret = 0;
+  ReturnType* ret = 0;
 
   if (obj) {
     // information of the object exists, but the product is not cached yet as ReturnType
@@ -276,7 +276,7 @@ mithep::Selector::GetObjectHelper<mithep::Collection<O>>::Get(mithep::Selector& 
 }
 
 template<class T>
-T const*
+T*
 mithep::Selector::GetObject(char const* name, Bool_t warn)
 {
   return GetObjectHelper<T>::Get(*this, name, warn);

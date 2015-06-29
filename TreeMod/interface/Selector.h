@@ -29,32 +29,32 @@ namespace mithep {
     ~Selector();
 
     void                 AddToTrash(TObject *obj)         { fTrash.AddLast(obj);           }
-    const char          *GetAllEvtTreeName()        const { return fAllEvtTreeName;        }
-    const char          *GetAllEvtHdrBrn()          const { return fAllEvtHdrBrn;          }
-    const THashTable    &GetBranchTable()           const { return fBranchTable;           }
-    const char          *GetEvtHdrName()            const { return fEvtHdrName;            }
-    const EventHeader   *GetEventHeader()           const { return fEventHeader;           }
-    const char          *GetLATreeName()            const { return fLATreeName;            }
-    const char          *GetLAHdrName()             const { return fLAHdrName;             }
-    const char          *GetRunTreeName()           const { return fRunTreeName;           }
-    const char          *GetRunInfoName()           const { return fRunInfoName;           }
-    const char          *GetMCRunInfoName()         const { return fMCRunInfoName;         }
-    const RunInfo       *GetRunInfo()               const { return fRunInfo;               }
-    const MCRunInfo     *GetMCRunInfo()             const { return fMCRunInfo;             }
+    const char*          GetAllEvtTreeName()        const { return fAllEvtTreeName;        }
+    const char*          GetAllEvtHdrBrn()          const { return fAllEvtHdrBrn;          }
+    const THashTable&    GetBranchTable()           const { return fBranchTable;           }
+    const char*          GetEvtHdrName()            const { return fEvtHdrName;            }
+    const EventHeader*   GetEventHeader()           const { return fEventHeader;           }
+    const char*          GetLATreeName()            const { return fLATreeName;            }
+    const char*          GetLAHdrName()             const { return fLAHdrName;             }
+    const char*          GetRunTreeName()           const { return fRunTreeName;           }
+    const char*          GetRunInfoName()           const { return fRunInfoName;           }
+    const char*          GetMCRunInfoName()         const { return fMCRunInfoName;         }
+    const RunInfo*       GetRunInfo()               const { return fRunInfo;               }
+    const MCRunInfo*     GetMCRunInfo()             const { return fMCRunInfo;             }
     template <class T>
-    T const*             GetObject(char const* name, Bool_t warn);
+    T*                   GetObject(char const* name, Bool_t warn);
     Bool_t               ValidRunInfo()             const;
     Bool_t               ValidMCRunInfo()           const { return fMCRunInfo != 0;        }
     Bool_t               ValidRunNum()              const { return fCurRunNum!=UInt_t(-1); }
-    void                 SetAllEvtHdrBrn(const char *n)   { fAllEvtHdrBrn   = n; }
-    void                 SetAllEvtTreeName(const char *n) { fAllEvtTreeName = n; }
+    void                 SetAllEvtHdrBrn(const char* n)   { fAllEvtHdrBrn   = n; }
+    void                 SetAllEvtTreeName(const char* n) { fAllEvtTreeName = n; }
     void                 SetDoRunInfo(Bool_t b)           { fDoRunInfo      = b; }
-    void                 SetEvtHdrName(const char *n)     { fEvtHdrName     = n; }
-    void                 SetLAHdrName(const char *n)      { fLAHdrName      = n; }
-    void                 SetLATreeName(const char *n)     { fLATreeName     = n; }
-    void                 SetRunInfoName(const char *n)    { fRunInfoName    = n; }
-    void                 SetMCRunInfoName(const char *n)  { fMCRunInfoName  = n; }
-    void                 SetRunTreeName(const char *n)    { fRunTreeName    = n; }
+    void                 SetEvtHdrName(const char* n)     { fEvtHdrName     = n; }
+    void                 SetLAHdrName(const char* n)      { fLAHdrName      = n; }
+    void                 SetLATreeName(const char* n)     { fLATreeName     = n; }
+    void                 SetRunInfoName(const char* n)    { fRunInfoName    = n; }
+    void                 SetMCRunInfoName(const char* n)  { fMCRunInfoName  = n; }
+    void                 SetRunTreeName(const char* n)    { fRunTreeName    = n; }
 
     class ObjInfo : public TNamed {
     // Helper class to associate an object name with its source type and class type.
@@ -96,7 +96,7 @@ namespace mithep {
     template<class T>
     class GetObjectHelper {
     public:
-      static T const* Get(mithep::Selector&, char const* name, Bool_t warn);
+      static T* Get(mithep::Selector&, char const* name, Bool_t warn);
     };
 
   protected:
@@ -118,19 +118,19 @@ namespace mithep {
     TString              fLATreeName;     //name of look-ahead tree
     TString              fLAHdrName;      //name of look-ahead event header branch
     TString              fAllEvtTreeName; //name of all-event tree
-    TTree               *fRunTree;        //!run info tree in current file
-    EventHeader         *fEventHeader;    //!event header for current event
-    RunInfo             *fRunInfo;        //!run information for current run
-    MCRunInfo           *fMCRunInfo;      //!MC run information for current run
-    TTree               *fLATree;         //!look-ahead tree in current file
-    LAHeader            *fLAHeader;       //!event header for next event
+    TTree*               fRunTree;        //!run info tree in current file
+    EventHeader*         fEventHeader;    //!event header for current event
+    RunInfo*             fRunInfo;        //!run information for current run
+    MCRunInfo*           fMCRunInfo;      //!MC run information for current run
+    TTree*               fLATree;         //!look-ahead tree in current file
+    LAHeader*            fLAHeader;       //!event header for next event
     UInt_t               fCurRunNum;      //!current run number
     TList                fOutputMods;     //!pointer(s) to output modules
     TObjArray            fTrash;          //!pointers to trashed objects
     THashTable           fObjInfoStore;   //!single-point pointer store for GetObject function
 
   private:
-    void                 SearchOutputMods(const TAModule *mod);
+    void                 SearchOutputMods(const TAModule* mod);
 
     friend class OutputMod;
 

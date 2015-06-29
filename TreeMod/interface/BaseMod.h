@@ -61,7 +61,7 @@ namespace mithep
     const Selector             *GetSel()              const;
     Bool_t                      HasHLTInfo()          const;
     void                        IncNEventsProcessed()       { ++fNEventsProc;                    }
-    template <class T> T const* GetObject(char const* name, Bool_t warn = kTRUE);
+    template <class T> T*       GetObject(char const* name, Bool_t warn = kTRUE);
     template <class T> Bool_t   LoadEventObject(char const* name, T const*&, Bool_t warn = kTRUE);
     template <class T> void     ReqBranch(char const* bname, const T *&addr);
     template <class T> void     ReqEventObject(char const* name, T const*&);
@@ -147,55 +147,10 @@ inline void mithep::BaseMod::AddToTrash(TObject *obj)
 
 //--------------------------------------------------------------------------------------------------
 template <class T> 
-const T *mithep::BaseMod::GetColThisEvt(const char *name, Bool_t warn)
+const T *mithep::BaseMod::GetColThisEvt(const char*, Bool_t)
 {
-  //Returns a collection of the specified type with the given name from the event.
-  //If a collection is present in the event with the given name but a different type, attempt
-  //to create an ObjArray of the appropriate type and fill it with the applicable objects
-  //using the dynamic type information.  This ObjArray will then be cached in the event for
-  //repeated calls to this function with the same type and name.
-
-  // Get published object for the current event.
-  TObject *inObj = FindObjThisEvt(name);
-
-  //check if type is already correct
-  T *ret = dynamic_cast<T*>(inObj);
-  if (ret)
-    return ret;
-
-  //construct modified name for new collection
-  TString outName(name);
-  outName.Append("_GetColThisEvt_");
-  outName.Append(T::Class_Name());
-
-  //check if new collection was already added to the event
-  ret = dynamic_cast<T*>(FindObjThisEvt(outName));
-  if (ret)
-    return ret;
-
-  //cast to base collection interface
-  mithep::BaseCollection *inCol = dynamic_cast<mithep::BaseCollection*>(inObj);
-
-  if (!inCol && warn) {
-    SendError(kWarning, Form("GetColThisEvt (\"%s\")",GetName()), 
-              "Could not obtain collection with name \"%s\" and type \"%s\" for current event!",
-              name, T::Class_Name());
-  }
-
-  //create and fill output ObjArray with the requested type
-  mithep::ObjArray<typename T::element_type> *newRet = 
-    new mithep::ObjArray<typename T::element_type>;
-  newRet->SetName(outName);
-  for (UInt_t i=0; i<inCol->GetEntries(); ++i) {
-    const typename T::element_type *outElement = 
-      dynamic_cast<typename T::element_type*>(inCol->ObjAt(i));
-    if (outElement)
-      newRet->Add(outElement);
-  }
-  
-  //add new obj array to the event and return
-  AddObjThisEvt(newRet);
-  return newRet;
+  SendError(kWarning, "GetColThisEvt", "This function is deprecated. Use GetObject instead.");
+  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,7 +232,7 @@ inline const mithep::TriggerObjectCol *mithep::BaseMod::GetHLTObjects(const char
 
 template <class T>
 inline
-T const*
+T*
 mithep::BaseMod::GetObject(char const* name, Bool_t warn/* = kTRUE*/)
 {
   if (GetSelector())
