@@ -44,13 +44,14 @@ struct TAMBranchInfo : TNamed {
    struct TAMTypedBrPtr : BranchPtr_t {
       TAMTypedBrPtr(BranchAddr_t* ptr) : BranchPtr_t(ptr) {}
       virtual ~TAMTypedBrPtr() {}
-      virtual const type_info& GetType() const   { return typeid(T); }
+      virtual const type_info& GetType() const { return typeid(T); }
+      T* CastTo(BranchAddr_t addr) const { return reinterpret_cast<T*>(addr); }
    };
 
    Bool_t                          fIsLoaded;     //if branch is loaded 
                                                   // for current event
    TAMVirtualBranchLoader         *fLoader;       //our data (tree) loader
-   std::vector<BranchPtr_t*>            fUsrAddresses; //list of pointers to each 
+   std::vector<BranchPtr_t*>       fUsrAddresses; //list of pointers to each 
                                                   // mod's ptr to branch object
 
    TAMBranchInfo(const Char_t* branchName=0);

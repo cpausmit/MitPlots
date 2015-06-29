@@ -132,6 +132,17 @@ Bool_t Selector::Process(Long64_t entry)
 
   Bool_t ret = TAMSelector::Process(entry);
   fTrash.Delete();
+
+  // clear collections cached through GetObject<Collection<O>>
+  auto* sItr = fObjInfoStore.MakeIterator();
+  ObjInfo* info = 0;
+  while ((info = static_cast<ObjInfo*>(sItr->Next()))) {
+    if (info->fCollection)
+      info->fCollection->Reset();
+
+    info->fCollectionCached = kFALSE;
+  }
+
   return ret;
 }
 

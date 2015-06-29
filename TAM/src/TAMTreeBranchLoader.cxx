@@ -236,13 +236,13 @@ Bool_t TAMTreeBranchLoader::CheckBrTypeAllModules()
 {
    // Loop over each user address and check that it's of the correct type
    // for the data contained in this branch.
-   
-   Bool_t isok=kTRUE;
-   auto end = GetBInfo()->fUsrAddresses.end();
-   for (auto ptr = GetBInfo()->fUsrAddresses.begin(); (ptr!=end) && isok; ptr++) {
-      isok &= CheckBrType((*ptr)->GetType());
-   }
-   return isok;
+
+  for (auto&& addr : GetBInfo()->fUsrAddresses) {
+    if (!CheckBrType(addr->GetType()))
+      return false;
+  }
+
+  return true;
 }
 
 //______________________________________________________________________________

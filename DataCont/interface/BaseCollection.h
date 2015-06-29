@@ -20,12 +20,14 @@ namespace mithep
 
       UInt_t                       Entries()                      const;
       virtual UInt_t               GetEntries()                   const = 0;
+      virtual UInt_t               GetSize()                      const = 0;
       virtual TObject             *ObjAt(UInt_t idx)                    = 0;
       virtual const TObject       *ObjAt(UInt_t idx)              const = 0;
       virtual Bool_t               IsOwner()                      const = 0;
       virtual void                 Reset()                              = 0;
       virtual void                 Trim()                               = 0;
-      virtual void                 SetName(char const*) {}
+      virtual void                 SetName(char const*)                 {}
+      virtual TClass*              ElementClass()                 const { return 0; }
 
     protected:
       void                         Clear(Option_t */*opt*/="");

@@ -1,7 +1,3 @@
-//
-// $Id: TAMVirtualBranchLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
-//
-
 #ifndef ROOT_TAMVirtualBranchLoader
 #define ROOT_TAMVirtualBranchLoader
 

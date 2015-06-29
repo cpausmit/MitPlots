@@ -3,7 +3,7 @@
 // TAMSelector it determines the begin and end of a run and does the necessary bookkeeping. 
 // Modules can ask the selector to provide the run information.
 //
-// Authors: C.Loizides
+// Authors: C.Loizides, Y.Iiyama
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_TREEMOD_SELECTOR_H
@@ -12,6 +12,7 @@
 #include "MitAna/TAM/interface/TAModule.h" 
 #include "MitAna/TAM/interface/TAMSelector.h" 
 #include "MitAna/TAM/interface/TAMVirtualBranchLoader.h" 
+#include "MitAna/DataCont/interface/BaseCollection.h"
 #include "MitAna/DataTree/interface/EventHeader.h" 
 #include "MitAna/DataTree/interface/LAHeader.h" 
 #include "MitAna/DataTree/interface/RunInfo.h" 
@@ -55,7 +56,7 @@ namespace mithep {
     void                 SetMCRunInfoName(const char *n)  { fMCRunInfoName  = n; }
     void                 SetRunTreeName(const char *n)    { fRunTreeName    = n; }
 
-    class ObjInfo : public TObjString {
+    class ObjInfo : public TNamed {
     // Helper class to associate an object name with its source type and class type.
     // BaseMod traditional interfaces (e.g. ReqEventObject) use only the source type.
     public:
@@ -67,31 +68,35 @@ namespace mithep {
       };
 
       ObjInfo() :
-        TObjString("")
+        TNamed("", "")
       {}
       ObjInfo(char const* name, SrcType type = nSrcTypes) :
-        TObjString(name),
+        TNamed(name, ""),
         fSourceType(type)
       {}
       ~ObjInfo()
-      {}
-      SrcType SourceType() const { return fSourceType; }
+      {
+        delete fCollection;
+      }
+
       Bool_t IsEvtObject() const { return fSourceType == kEvtObject; }
       Bool_t IsPublic() const { return fSourceType == kPublic && fAddr != 0; }
       Bool_t IsBranch() const { return fSourceType == kBranch && fBranchInfo != 0; }
-      TClass const* ObjType() const { return fObjType; }
-      BranchAddr_t& Addr() { return fAddr; }
-      TAMBranchInfo* BranchInfo() { return fBranchInfo; }
 
-      void SetSourceType(SrcType type) { fSourceType = type; }
-      void SetObjType(TClass* type) { fObjType = type; }
-      void SetBranchInfo(TAMBranchInfo* info) { fBranchInfo = info; }
-      
-    protected:
       SrcType fSourceType = nSrcTypes;
       TClass const* fObjType = 0;
       BranchAddr_t fAddr = 0;
+      BaseCollection* fCollection = 0; //pointer array when a collection is requested
+      Bool_t fCollectionCached = kFALSE;
       TAMBranchInfo* fBranchInfo = 0;
+    };
+
+    // Helper class implementing the GetObject function.
+    // Needed to perform partial template specialization for the case of Collection<O>
+    template<class T>
+    class GetObjectHelper {
+    public:
+      static T const* Get(mithep::Selector&, char const* name, Bool_t warn);
     };
 
   protected:
@@ -145,90 +150,6 @@ inline Bool_t mithep::Selector::ValidRunInfo() const
   return (fRunInfo && fCurRunNum==fRunInfo->RunNum());
 }
 
-template<class T>
-T const*
-mithep::Selector::GetObject(char const* name, Bool_t warn)
-{
-  // Find object of the given name from the list of event objects,
-  // public objects, and branches in this order.
-
-  auto* info = static_cast<ObjInfo*>(fObjInfoStore.FindObject(name));
-
-  if (info) {
-    if (warn && !info->ObjType()->InheritsFrom(T::Class())) {
-      Warning("GetObject", "Type mismatch (%s != %s) for requested object %s.", T::Class()->GetName(), info->ObjType()->GetName(), name);
-      return 0;
-    }
-
-    if (info->IsEvtObject()) {
-      auto* obj = dynamic_cast<T*>(FindObjThisEvt(name));
-
-      if (warn && !obj)
-        Warning("GetObject", "Object %s of type %s is registered as an event object but was not found in the current event.", name, T::Class()->GetName());
-      return obj;
-    }
-    else if (info->IsPublic()) {
-      return reinterpret_cast<T*>(info->Addr());
-    }
-    else if (info->IsBranch()) {
-      LoadBranch(info->BranchInfo());
-      return reinterpret_cast<T*>(info->Addr());
-    }
-
-    // Info is somehow broken. Delete and create a new one
-    fObjInfoStore.Remove(info);
-    delete info;
-  }
-
-  info = new ObjInfo(name);
-
-  auto* obj = dynamic_cast<T*>(FindObjThisEvt(name));
-
-  if (obj) {
-    info->SetSourceType(ObjInfo::kEvtObject);
-  }
-  else {
-    obj = dynamic_cast<T*>(FindPublicObj(name));
-    if (obj) {
-      info->SetSourceType(ObjInfo::kPublic);
-      info->Addr() = reinterpret_cast<BranchAddr_t>(obj);
-    }
-    else {
-      auto* branchInfo = static_cast<TAMBranchInfo*>(fBranchTable.FindObject(name));
-      bool newBranchInfo = false;
-      if (!branchInfo) {
-        branchInfo = new TAMBranchInfo(name);
-        newBranchInfo = true;
-      }
-
-      if (!branchInfo->GetLoader() && (!FindLoader(branchInfo) || !branchInfo->Notify(fTree))) {
-        // warning already issued by FindLoader
-        delete info;
-        if (newBranchInfo)
-          delete branchInfo;
-        return 0;
-      }
-
-      info->SetSourceType(ObjInfo::kBranch);
-
-      if (newBranchInfo)
-        fBranchTable.Add(branchInfo);
-
-      info->SetBranchInfo(branchInfo);
-      branchInfo->AddPtr(reinterpret_cast<T*&>(info->Addr()));
-      if (branchInfo->IsLoaded())
-        info->Addr() = branchInfo->GetLoader()->GetAddress();
-      else
-        LoadBranch(branchInfo);
-
-      obj = reinterpret_cast<T*>(info->Addr());
-    }
-  }
-
-  info->SetObjType(obj->IsA());
-  fObjInfoStore.Add(info);
-
-  return obj;
-}
+#include "SelectorGetObject.h"
 
 #endif

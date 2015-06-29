@@ -297,7 +297,7 @@ inline Bool_t mithep::BaseMod::LoadEventObject(const char *name, const T *&addr,
 
   TString type("event");
   auto* info = static_cast<Selector::ObjInfo*>(fEvtObjBrNames.FindObject(name));
-  if (info && info->SourceType() == Selector::ObjInfo::kBranch) {
+  if (info && info->fSourceType == Selector::ObjInfo::kBranch) {
     type = "branch";
     LoadBranch(name);
   }
@@ -336,7 +336,7 @@ inline void mithep::BaseMod::ReqEventObject(const char *name, const T *&addr)
   // will be read from a branch to the address specified.
 
   auto* info = static_cast<Selector::ObjInfo*>(fEvtObjBrNames.FindObject(name));
-  if (!info || info->SourceType() != Selector::ObjInfo::kBranch)
+  if (!info || info->fSourceType != Selector::ObjInfo::kBranch)
     return;
 
   ReqBranch(name, addr);
