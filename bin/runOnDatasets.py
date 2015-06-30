@@ -7,7 +7,6 @@ import time
 import subprocess
 import glob
 import shutil
-#import pickle
 import socket
 from argparse import ArgumentParser
 
@@ -37,9 +36,16 @@ if args.configFileName and not os.path.exists(args.configFileName):
 if args.stageoutDirName and not os.path.isdir(args.stageoutDirName):
     raise RuntimeError('Cannot write to stageout directory ' + args.stageoutDirName)
 
-def runSubproc(*args):
-    proc = subprocess.Popen(list(args), stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    out, err = proc.communicate()
+def runSubproc(*args, **kwargs):
+    proc = subprocess.Popen(list(args), stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
+
+    if 'stdin' in kwargs and type(kwargs['stdin']) is str:
+        stdin = kwargs['stdin']
+    else:
+        stdin = None
+            
+    out, err = proc.communicate(stdin)
+
     if out.strip():
         print out
 
@@ -143,10 +149,8 @@ if os.path.isdir(taskDirName):
 else:
     newTask = True
 
-#analysisCfgName = taskDirName + '/analysis.pkl'
-analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until pickling works
+analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until module export works
 envFileName = taskDirName + '/taskenv.sh'
-#libListName = taskDirName + '/libs.list'
 libPackName = cmsswbase + '.lib.tar.gz'
 incPackName = cmsswbase + '.inc.tar.gz'
 pyPackName = cmsswbase + '.python.tar.gz'
@@ -166,29 +170,8 @@ if newTask:
         envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
         envFile.write('export CMSSW_RELEASE="' + release + '"\n')
 
-#    import ROOT
-#    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
-#    execfile(args.analysisCfg)
-#    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
-#
-#    with open(libListName, 'w') as libList:
-#        for lib in loadedLibs:
-#            libList.write(os.path.basename(lib) + '\n')
-#
-#    def listSubtasks(task):
-#        subtasks = []
-#        for subtask in task.GetListOfTasks():
-#            subtasks.append((subtask, listSubtasks(subtask)))
-#
-#        return subtasks
-#
-#    superMods = list(analysis.GetSuperMods())
-#
-#    with open(analysisCfgName, 'wb') as analysisCfg:
-#        pickle.dump((mithep, analysis, superMods), analysisCfg)
-
     ### TEMPORARY
-    # NOT COOL BUT NECESSARY UNTIL PROPER USAGE OF PICKLE IS FIGURED OUT
+    # NOT COOL BUT NECESSARY UNTIL INTRA-PYTHON MODULE PACKING IS FIGURED OUT
     shutil.copy(args.analysisCfg, analysisCfgName)
 
     remakePyPack = not os.path.exists(pyPackName)
@@ -357,7 +340,6 @@ for (book, dataset), filesets in allFilesets.items():
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','
         inputFilesList += ' ' + envFileName + ','
-#        inputFilesList += ' ' + libListName + ','
         inputFilesList += ' ' + libPackName + ','
         inputFilesList += ' ' + incPackName + ','
         inputFilesList += ' ' + pyPackName + ','
@@ -379,9 +361,11 @@ for (book, dataset), filesets in allFilesets.items():
         else:
             outputPath = jobOutDirName + '/' + outputName
     
-        if os.path.exists(outputPath):
+        if os.path.exists(outputPath) and os.stat(outputPath).st_size != 0:
             print 'Output exists: ', book, dataset, fileset
             continue
+
+        print book, dataset, fileset
 
         condorConfig = {}
         condorConfig.update(condorTemplate)
@@ -400,12 +384,6 @@ for (book, dataset), filesets in allFilesets.items():
         condorConfig['log'] = jobLogDirName + '/' + fileset + '.log'
         condorConfig['transfer_input_files'] = inputFilesList
     
-        jdlFileName = jobDirName + '/' + fileset + '.jdl'
-        with open(jdlFileName, 'w') as jdlFile:
-            for key, value in condorConfig.items():
-                jdlFile.write(key + ' = ' + value + '\n')
-    
-            jdlFile.write('Queue\n')
+        jdlCommand = '\n'.join([key + ' = ' + value for key, value in condorConfig.items()]) + '\nqueue\n'
 
-        print book, dataset, fileset
-        runSubproc('condor_submit', jdlFileName)
+        runSubproc('condor_submit', stdin = jdlCommand)
