@@ -335,7 +335,7 @@ for (book, dataset), filesets in allFilesets.items():
         runSubproc('tar', 'czf', catalogPackName, '-C', catalogDirName, book + '/' + dataset)
 
     if 'transfer_input_files' not in condorTemplate:
-        inputFilesList = cmsswbase + '/src/MitAna/macros/analysis.py,'
+        inputFilesList = cmsswbase + '/src/MitAna/bin/analysis.py,'
         if x509File:
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','
