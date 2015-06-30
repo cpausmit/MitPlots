@@ -13,6 +13,7 @@
 #include "MitAna/TAM/interface/TAMSelector.h" 
 #include "MitAna/TAM/interface/TAMVirtualBranchLoader.h" 
 #include "MitAna/DataCont/interface/BaseCollection.h"
+#include "MitAna/DataCont/interface/ObjArray.h"
 #include "MitAna/DataTree/interface/EventHeader.h" 
 #include "MitAna/DataTree/interface/LAHeader.h" 
 #include "MitAna/DataTree/interface/RunInfo.h" 
@@ -76,7 +77,8 @@ namespace mithep {
       {}
       ~ObjInfo()
       {
-        delete fCollection;
+        for (auto&& col : fCollections)
+          delete col.first;
       }
 
       Bool_t IsEvtObject() const { return fSourceType == kEvtObject; }
@@ -86,7 +88,7 @@ namespace mithep {
       SrcType fSourceType = nSrcTypes;
       TClass const* fObjType = 0;
       BranchAddr_t fAddr = 0;
-      BaseCollection* fCollection = 0; //pointer array when a collection is requested
+      std::vector<std::pair<BaseCollection*, bool>> fCollections = {}; //array of downcasted collections
       Bool_t fCollectionCached = kFALSE;
       TAMBranchInfo* fBranchInfo = 0;
     };
@@ -100,6 +102,8 @@ namespace mithep {
     };
 
   protected:
+    typedef void (*FillObjArray)(BaseCollection const* source, BaseCollection*& targ);
+
     Bool_t               BeginRun() override;
     Bool_t               ConsistentRunNum() const;
     Bool_t               EndRun() override;
@@ -108,6 +112,10 @@ namespace mithep {
     void                 SlaveBegin(TTree* tree) override;
     void                 UpdateRunInfo();
     void                 UpdateRunInfoTree();
+    TObject*             GetObjectImpl(TClass const*, char const* name, Bool_t warn);
+    BaseCollection*      GetCollectionImpl(TClass const* elemCl, TClass const* colCl,
+                                           FillObjArray,
+                                           char const* name, Bool_t warn);
 
     Bool_t               fDoRunInfo;      //=true then get RunInfo (def=1)
     TString              fEvtHdrName;     //name of event header branch
@@ -150,6 +158,50 @@ inline Bool_t mithep::Selector::ValidRunInfo() const
   return (fRunInfo && fCurRunNum==fRunInfo->RunNum());
 }
 
-#include "SelectorGetObject.h"
+namespace mithep {
+  // partial template specialization for Collection<O> request, where O derives from TObject
+  template<class O>
+  class mithep::Selector::GetObjectHelper<mithep::Collection<O>> {
+  public:
+    typedef O ArrayElement;
+    typedef mithep::Collection<O> ReturnType;
+
+    static ReturnType* Get(mithep::Selector&, char const* name, Bool_t warn);
+  };
+}
+
+/*static*/
+template<class T>
+T*
+mithep::Selector::GetObjectHelper<T>::Get(mithep::Selector& selector, char const* name, Bool_t warn)
+{
+  return static_cast<T*>(selector.GetObjectImpl(T::Class(), name, warn));
+}
+
+/*static*/
+template<class O>
+mithep::Collection<O>*
+mithep::Selector::GetObjectHelper<mithep::Collection<O>>::Get(mithep::Selector& selector, char const* name, Bool_t warn)
+{
+  auto fillObjArray = [] (BaseCollection const* source, BaseCollection*& targ) {
+    if (!targ)
+      targ = new ObjArray<O>(source->GetSize());
+
+    ObjArray<O>* objArray = static_cast<ObjArray<O>*>(targ);
+
+    objArray->Reset();
+    for (UInt_t iO = 0; iO != source->GetEntries(); ++iO)
+      objArray->Add(static_cast<O const*>(source->ObjAt(iO)));
+  };
+
+  return static_cast<mithep::Collection<O>*>(selector.GetCollectionImpl(O::Class(), mithep::Collection<O>::Class(), fillObjArray, name, warn));
+}
+
+template<class T>
+T*
+mithep::Selector::GetObject(char const* name, Bool_t warn)
+{
+  return GetObjectHelper<T>::Get(*this, name, warn);
+}
 
 #endif
