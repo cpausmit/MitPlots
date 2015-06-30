@@ -62,40 +62,6 @@
 #pragma link C++ typedef mithep::ParticleMergerMod;
 #pragma link C++ typedef mithep::SuperClusterMergerMod;
 
-#pragma link C++ class mithep::PlotKineMod<mithep::CaloJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CaloMet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CompositeParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CompoundParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Conversion>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Electron>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::GenJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Jet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::MCParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Met>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Muon>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::PFJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Particle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Photon>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Track>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::TriggerObject>+;
-
-#pragma link C++ typedef mithep::CaloJetPlotKineMod;
-#pragma link C++ typedef mithep::CaloMetPlotKineMod;
-#pragma link C++ typedef mithep::CompositeParticlePlotKineMod;
-#pragma link C++ typedef mithep::CompoundParticlePlotKineMod;
-#pragma link C++ typedef mithep::ConversionPlotKineMod;
-#pragma link C++ typedef mithep::ElectronPlotKineMod;
-#pragma link C++ typedef mithep::GenJetPlotKineMod;
-#pragma link C++ typedef mithep::JetPlotKineMod;
-#pragma link C++ typedef mithep::MCParticlePlotKineMod;
-#pragma link C++ typedef mithep::MetPlotKineMod;
-#pragma link C++ typedef mithep::MuonPlotKineMod;
-#pragma link C++ typedef mithep::PFJetPlotKineMod;
-#pragma link C++ typedef mithep::ParticlePlotKineMod;
-#pragma link C++ typedef mithep::PhotonPlotKineMod;
-#pragma link C++ typedef mithep::TrackPlotKineMod;
-#pragma link C++ typedef mithep::TriggerObjectPlotKineMod;
-
 #pragma link C++ class mithep::PublisherMod<mithep::BasicCluster>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloJet, mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloJet>+;

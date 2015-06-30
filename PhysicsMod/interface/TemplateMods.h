@@ -3,7 +3,6 @@
 
 #include "MitAna/PhysicsMod/interface/FilterMod.h"
 #include "MitAna/PhysicsMod/interface/MergerMod.h"
-#include "MitAna/PhysicsMod/interface/PlotKineMod.h"
 #include "MitAna/PhysicsMod/interface/PublisherMod.h"
 #include "MitAna/PhysicsMod/interface/SkimMod.h"
 
@@ -61,23 +60,6 @@ namespace mithep {
   typedef MergerMod<GenericParticle> GenericParticleMergerMod;
   typedef MergerMod<Particle> ParticleMergerMod;
   typedef MergerMod<SuperCluster> SuperClusterMergerMod;
-
-  typedef PlotKineMod<CaloJet> CaloJetPlotKineMod;
-  typedef PlotKineMod<CaloMet> CaloMetPlotKineMod;
-  typedef PlotKineMod<CompositeParticle> CompositeParticlePlotKineMod;
-  typedef PlotKineMod<CompoundParticle> CompoundParticlePlotKineMod;
-  typedef PlotKineMod<Conversion> ConversionPlotKineMod;
-  typedef PlotKineMod<Electron> ElectronPlotKineMod;
-  typedef PlotKineMod<GenJet> GenJetPlotKineMod;
-  typedef PlotKineMod<Jet> JetPlotKineMod;
-  typedef PlotKineMod<MCParticle> MCParticlePlotKineMod;
-  typedef PlotKineMod<Met> MetPlotKineMod;
-  typedef PlotKineMod<Muon> MuonPlotKineMod;
-  typedef PlotKineMod<PFJet> PFJetPlotKineMod;
-  typedef PlotKineMod<Particle> ParticlePlotKineMod;
-  typedef PlotKineMod<Photon> PhotonPlotKineMod;
-  typedef PlotKineMod<Track> TrackPlotKineMod;
-  typedef PlotKineMod<TriggerObject> TriggerObjectPlotKineMod;
 
   typedef PublisherMod<BasicCluster> BasicClusterPublisherMod;
   typedef PublisherMod<CaloJet, Jet> CaloJetToJetPublisherMod;
