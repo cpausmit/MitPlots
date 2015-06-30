@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 def setSequence(sequenceFile):
     execfile(sequenceFile)
 
