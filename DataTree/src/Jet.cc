@@ -14,8 +14,10 @@ mithep::Jet::Jet() :
   fBJetTagsDisc{},
   fCorrectionScale{},
   fJetArea(0.),
-  fCorrections()
+  fCorrections{}
 {
+  for (unsigned iC = 0; iC != nECorrs; ++iC)
+    fCorrectionScale[iC] = -1.;
 }
 
 /*static*/
