@@ -6,7 +6,11 @@ BOOK=$1
 DATASET=$2
 FILESET=$3
 
-WD=$PWD
+if ! [ -d /cvmfs/cms.cern.ch ] || ! [ -d /cvmfs/cvmfs.cmsaf.mit.edu ]
+then
+  echo "CVMFS not visible from "$(hostname)
+  exit 1
+fi
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 source taskenv.sh
@@ -23,6 +27,14 @@ tar xzf *.MitAna-bin.tar.gz -C $CMSSW_RELEASE
 
 mkdir catalog
 tar xzf catalog.tar.gz -C catalog
+
+export MIT_CATALOG=catalog
+export MIT_DATA=/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/MitPhysics/data
+export MIT_JSON_DIR=/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/json
+
+export HOSTNAME=$(hostname)
+
+echo $HOSTNAME
 
 eval $(cd $CMSSW_RELEASE; scram runtime -sh)
 

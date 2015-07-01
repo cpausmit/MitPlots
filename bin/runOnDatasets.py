@@ -10,6 +10,10 @@ import shutil
 import socket
 from argparse import ArgumentParser
 
+if 'CMSSW_BASE' not in os.environ:
+    print 'CMSSW_BASE not set.'
+    sys.exit(1)
+
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
 argParser.add_argument('--cfg', '-c', metavar = 'FILE', dest = 'configFileName')
 argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book', default = 't2mit/filefi/040')
@@ -53,7 +57,11 @@ def runSubproc(*args, **kwargs):
         sys.stderr.write(err)
         sys.stderr.flush()
 
-catalogDirName = os.environ['MIT_CATALOG']
+try:
+    catalogDirName = os.environ['MIT_CATALOG']
+except KeyError:
+    print 'MIT_CATALOG environment not set.'
+    sys.exit(1)
 
 datasets = []
 
@@ -293,20 +301,6 @@ with open(args.condorTemplateName) as condorTemplateFile:
             key, eq, value = line.partition('=')
             condorTemplate[key.strip().lower()] = value.strip()
 
-envs = []
-if 'environment' in condorTemplate:
-    if re.match('(?:[^;]+;?)+', condorTemplate['environment']): # old format
-        envs = condorTemplate['environment'].split(';')
-    elif re.match('".*"', condorTemplate['environment']): # new format
-        envs = condorTemplate.strip('"').split()
-    else:
-        print 'Ignoring invalid environment parameter in condor configuration.'
-
-if 'HOSTNAME=' + socket.gethostname() not in envs:
-    envs.append('HOSTNAME=' + socket.gethostname())
-
-condorTemplate['environment'] = '"' + ' '.join(envs) + '"'
-
 # loop over datasets to submit
 
 for (book, dataset), filesets in allFilesets.items():
@@ -335,7 +329,7 @@ for (book, dataset), filesets in allFilesets.items():
         runSubproc('tar', 'czf', catalogPackName, '-C', catalogDirName, book + '/' + dataset)
 
     if 'transfer_input_files' not in condorTemplate:
-        inputFilesList = cmsswbase + '/src/MitAna/macros/analysis.py,'
+        inputFilesList = cmsswbase + '/src/MitAna/bin/analysis.py,'
         if x509File:
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','

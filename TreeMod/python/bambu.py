@@ -1,4 +1,5 @@
 import os
+import sys
 
 import ROOT
 ROOT.gROOT.SetBatch(True)
@@ -31,7 +32,11 @@ class _Module(_Sequenceable):
         self._core = cls(*args)
 
         for key, value in kwargs.items():
-            getattr(self._core, 'Set' + key)(value)
+            try:
+                getattr(self._core, 'Set' + key)(value)
+            except AttributeError:
+                print 'No function Set' + key + ' defined for class ' + self._core.IsA().GetName()
+                sys.exit(1)
 
     def __getattr__(self, name):
         attr = getattr(self._core, name)
@@ -40,7 +45,8 @@ class _Module(_Sequenceable):
 
     def build(self, modlist = []):
         if self._core in modlist:
-            raise RuntimeError('Module ' + self._core.GetName() + ' used multiple times')
+            print 'Module ' + self._core.GetName() + ' used multiple times in the analysis sequence'
+            sys.exit(1)
 
         modlist.append(self._core)
         return ([self._core], [self._core])
@@ -80,7 +86,8 @@ class _Bundle(_Sequenceable):
         self._chains = list(chains)
 
     def __mul__(self, next):
-        raise RuntimeError("Cannot make a module dependent on two parallel chains")
+        print 'Cannot make a module dependent on two parallel chains'
+        sys.exit(1)
 
     def build(self, modlist = []):
         head = []
@@ -164,7 +171,8 @@ class _mithep(object):
                     raise Exception()
 
             except:
-                raise RuntimeError('No class "' + name + '" found in namespace mithep. Perhaps a missing library?')
+                print 'No class "' + name + '" found in namespace mithep. Perhaps a missing library?'
+                sys.exit(1)
 
         try:
             if cls.Class().InheritsFrom(ROOT.mithep.BaseMod.Class()):
@@ -188,10 +196,10 @@ class _Analysis(object):
     def __init__(self):
         self._core = ROOT.mithep.Analysis()
         self._core.SetKeepHierarchy(False)
+        self._sequence = None
 
     def setSequence(self, seq):
-        for mod in seq.build()[0]:
-            self._core.AddSuperModule(mod)
+        self._sequence = seq
 
     def __getattr__(self, name):
         attr = getattr(self._core, name)
