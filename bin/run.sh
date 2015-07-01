@@ -43,7 +43,6 @@ ls -alhrt
 if [ "$workDir" != "/home/$USER/cms/root" ]
 then
   export VER=`echo CMSSW_*[0-9].tgz |cut -d. -f1`
-  export SCRAM_ARCH="slc5_amd64_gcc462"
   source /cvmfs/cms.cern.ch/cmsset_default.sh
   scram project CMSSW ${VER}
 
@@ -61,11 +60,15 @@ then
   echo " setting up MIT_PROD environment"
   source ./setup.sh
   env | grep MIT_
+  env | grep EXTERNAL
 
-  echo "  untarring: external.tgz"
-  tar fzx external.tgz
-  $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
-  export EXTERNAL=./external
+  if [ $EXTERNAL != "/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/external" ]
+  then
+    echo "  untarring: external.tgz"
+    tar fzx external.tgz
+    $CMSSW_BASE/src/MitAna/bin/setupExternal.sh
+    export EXTERNAL=./external
+  fi
 
   echo "  untarring: json.tgz"
   tar fzx json.tgz
@@ -73,21 +76,6 @@ then
   echo "  untarring: catalog.tgz"
   tar fzx catalog.tgz
 
-  # Copy and unpack the MitPhysics/data
-  echo "  copy: cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src"
-  cp /mnt/hadoop/cms/store/user/paus/MitPhysics_data.tgz $CMSSW_BASE/src
-  cd $CMSSW_BASE/src
-  echo "  untaring: tar fzx MitPhysics_data.tgz"
-  time tar fzx MitPhysics_data.tgz
-  cd - >& /dev/null
-
-  export MIT_DATA="$CMSSW_BASE/src/MitPhysics/data"
-  if ! [ -d "$MIT_DATA" ]
-  then
-    echo "  ERROR - could not find MitPhysics/data. EXIT"
-    echo " " 
-    exit 1
-  fi
   echo "  found MitPhysics/data at: $MIT_DATA"
 else
   echo " Everything is ready already. Let's go!"
@@ -104,10 +92,10 @@ echo " INFO -- using the x509 ticket: $X509_USER_PROXY"
 # get ready to run
 echo " "; echo "${h}: Starting root job now"; echo " ";
 echo \
-  root -b -l -q .rootlogon.C \
+  root -b -l -q -n .rootlogon.C \
   ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
-  root -b -l -q .rootlogon.C \
+  root -b -l -q -n .rootlogon.C \
   ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
 # get the return code from the root job

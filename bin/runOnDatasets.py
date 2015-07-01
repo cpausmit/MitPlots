@@ -7,15 +7,21 @@ import time
 import subprocess
 import glob
 import shutil
-#import pickle
 import socket
 from argparse import ArgumentParser
 
+if 'CMSSW_BASE' not in os.environ:
+    print 'CMSSW_BASE not set.'
+    sys.exit(1)
+
 argParser = ArgumentParser(description = 'Submit BAMBU analysis to cluster')
 argParser.add_argument('--cfg', '-c', metavar = 'FILE', dest = 'configFileName')
-argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book')
+
+argParser.add_argument('--book', '-b', metavar = 'BOOK', dest = 'book', default = 't2mit/filefi/040')
 argParser.add_argument('--dataset', '-d', metavar = 'DATASET', dest = 'dataset')
 argParser.add_argument('--filesets', '-s', metavar = 'FILESETS', dest = 'filesets', nargs = '*', default = [])
+
+argParser.add_argument('--goodlumi', '-j', metavar = 'FILE', dest = 'goodlumiFiles', nargs = '+')
 
 argParser.add_argument('--analysis', '-a', metavar = 'ANALYSIS', dest = 'analysisCfg')
 
@@ -29,17 +35,27 @@ args = argParser.parse_args()
 sys.argv = []
 
 if args.analysisCfg and not os.path.exists(args.analysisCfg):
-    raise RuntimeError('Analysis configuration file ' + args.analysisCfg + ' does not exist')
+    print 'Analysis configuration file ' + args.analysisCfg + ' does not exist'
+    sys.exit(1)
 
 if args.configFileName and not os.path.exists(args.configFileName):
-    raise RuntimeError('Task configuration file ' + args.configFileName + ' does not exist')
+    print 'Task configuration file ' + args.configFileName + ' does not exist'
+    sys.exit(1)
 
 if args.stageoutDirName and not os.path.isdir(args.stageoutDirName):
-    raise RuntimeError('Cannot write to stageout directory ' + args.stageoutDirName)
+    print 'Cannot write to stageout directory ' + args.stageoutDirName
+    sys.exit(1)
 
-def runSubproc(*args):
-    proc = subprocess.Popen(list(args), stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    out, err = proc.communicate()
+def runSubproc(*args, **kwargs):
+    proc = subprocess.Popen(list(args), stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
+
+    if 'stdin' in kwargs and type(kwargs['stdin']) is str:
+        stdin = kwargs['stdin']
+    else:
+        stdin = None
+            
+    out, err = proc.communicate(stdin)
+
     if out.strip():
         print out
 
@@ -47,21 +63,38 @@ def runSubproc(*args):
         sys.stderr.write(err)
         sys.stderr.flush()
 
-catalogDirName = os.environ['MIT_CATALOG']
+try:
+    catalogDirName = os.environ['MIT_CATALOG']
+except KeyError:
+    print 'MIT_CATALOG environment not set.'
+    sys.exit(1)
 
+# list of pairs (book, dataset)
 datasets = []
+
+# json is usually a single file per dataset, but handling as a list since the filter module can
+# accept multiple
+jsonLists = {}
 
 if args.configFileName:
     with open(args.configFileName) as configFile:
         for line in configFile:
-            matches = re.match('([^ ]+) +([^ ]+)', line.strip())
+            matches = re.match('([^ ]+) +([^ ]+)( +[^ ]+)*', line.strip())
             if not matches:
                 continue
 
-            datasets.append((matches.group(1), matches.group(2)))
+            book = matches.group(1)
+            dataset = matches.group(2)
+            datasets.append((book, dataset))
+
+            # third paren captures the last column, which is currently assigned to JSON
+            if matches.group(3):
+                jsonLists[(book, dataset)] = [matches.group(3).strip()]
 
 elif args.book and args.dataset:
     datasets.append((args.book, args.dataset))
+    if args.goodlumiFiles:
+        jsonLists[(args.book, args.dataset)] = args.goodlumiFiles
 
 if len(datasets) == 0:
     print 'No valid dataset found.'
@@ -108,13 +141,17 @@ if not taskName:
     else:
         taskName = str(int(time.time()))
 
-taskDirName = os.environ['HOME'] + '/cms/condor/' + taskName
-outDirName = os.environ['MIT_PROD_HIST'] + '/' + taskName
-logDirName = os.environ['MIT_PROD_LOGS'] + '/' + taskName
-
-scramArch = os.environ['SCRAM_ARCH']
-cmsswbase = os.environ['CMSSW_BASE']
-release = os.path.basename(os.environ['CMSSW_RELEASE_BASE'])
+try:
+    taskDirName = os.environ['HOME'] + '/cms/condor/' + taskName
+    outDirName = os.environ['MIT_PROD_HIST'] + '/' + taskName
+    logDirName = os.environ['MIT_PROD_LOGS'] + '/' + taskName
+    
+    scramArch = os.environ['SCRAM_ARCH']
+    cmsswbase = os.environ['CMSSW_BASE']
+    release = os.path.basename(os.environ['CMSSW_RELEASE_BASE'])
+except KeyError, err:
+    print 'Environment', err.args[0], ' not set'
+    sys.exit(1)
 
 if os.path.isdir(taskDirName):
     if args.overwrite:
@@ -143,10 +180,8 @@ if os.path.isdir(taskDirName):
 else:
     newTask = True
 
-#analysisCfgName = taskDirName + '/analysis.pkl'
-analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until pickling works
+analysisCfgName = taskDirName + '/analysisCfg.py' # shipping the actual python script until module export works
 envFileName = taskDirName + '/taskenv.sh'
-#libListName = taskDirName + '/libs.list'
 libPackName = cmsswbase + '.lib.tar.gz'
 incPackName = cmsswbase + '.inc.tar.gz'
 pyPackName = cmsswbase + '.python.tar.gz'
@@ -166,29 +201,8 @@ if newTask:
         envFile.write('export SCRAM_ARCH="' + scramArch + '"\n')
         envFile.write('export CMSSW_RELEASE="' + release + '"\n')
 
-#    import ROOT
-#    defaultLibs = set(ROOT.gSystem.GetLibraries().split())
-#    execfile(args.analysisCfg)
-#    loadedLibs = set(ROOT.gSystem.GetLibraries().split()) - defaultLibs
-#
-#    with open(libListName, 'w') as libList:
-#        for lib in loadedLibs:
-#            libList.write(os.path.basename(lib) + '\n')
-#
-#    def listSubtasks(task):
-#        subtasks = []
-#        for subtask in task.GetListOfTasks():
-#            subtasks.append((subtask, listSubtasks(subtask)))
-#
-#        return subtasks
-#
-#    superMods = list(analysis.GetSuperMods())
-#
-#    with open(analysisCfgName, 'wb') as analysisCfg:
-#        pickle.dump((mithep, analysis, superMods), analysisCfg)
-
     ### TEMPORARY
-    # NOT COOL BUT NECESSARY UNTIL PROPER USAGE OF PICKLE IS FIGURED OUT
+    # NOT COOL BUT NECESSARY UNTIL INTRA-PYTHON MODULE PACKING IS FIGURED OUT
     shutil.copy(args.analysisCfg, analysisCfgName)
 
     remakePyPack = not os.path.exists(pyPackName)
@@ -310,20 +324,6 @@ with open(args.condorTemplateName) as condorTemplateFile:
             key, eq, value = line.partition('=')
             condorTemplate[key.strip().lower()] = value.strip()
 
-envs = []
-if 'environment' in condorTemplate:
-    if re.match('(?:[^;]+;?)+', condorTemplate['environment']): # old format
-        envs = condorTemplate['environment'].split(';')
-    elif re.match('".*"', condorTemplate['environment']): # new format
-        envs = condorTemplate.strip('"').split()
-    else:
-        print 'Ignoring invalid environment parameter in condor configuration.'
-
-if 'HOSTNAME=' + socket.gethostname() not in envs:
-    envs.append('HOSTNAME=' + socket.gethostname())
-
-condorTemplate['environment'] = '"' + ' '.join(envs) + '"'
-
 # loop over datasets to submit
 
 for (book, dataset), filesets in allFilesets.items():
@@ -352,12 +352,11 @@ for (book, dataset), filesets in allFilesets.items():
         runSubproc('tar', 'czf', catalogPackName, '-C', catalogDirName, book + '/' + dataset)
 
     if 'transfer_input_files' not in condorTemplate:
-        inputFilesList = cmsswbase + '/src/MitAna/macros/analysis.py,'
+        inputFilesList = cmsswbase + '/src/MitAna/bin/analysis.py,'
         if x509File:
             inputFilesList += ' ' + x509File + ','
         inputFilesList += ' ' + analysisCfgName + ','
         inputFilesList += ' ' + envFileName + ','
-#        inputFilesList += ' ' + libListName + ','
         inputFilesList += ' ' + libPackName + ','
         inputFilesList += ' ' + incPackName + ','
         inputFilesList += ' ' + pyPackName + ','
@@ -379,15 +378,21 @@ for (book, dataset), filesets in allFilesets.items():
         else:
             outputPath = jobOutDirName + '/' + outputName
     
-        if os.path.exists(outputPath):
+        if os.path.exists(outputPath) and os.stat(outputPath).st_size != 0:
             print 'Output exists: ', book, dataset, fileset
             continue
+
+        print book, dataset, fileset
 
         condorConfig = {}
         condorConfig.update(condorTemplate)
     
         if 'arguments' not in condorConfig:
-            condorConfig['arguments'] = '"' + book + ' ' + dataset + ' ' + fileset + '"'
+            arguments = book + ' ' + dataset + ' ' + fileset
+            if (book, dataset) in jsonLists:
+                arguments += ' ' + ' '.join(jsonLists[(book, dataset)])
+
+            condorConfig['arguments'] = '"' + arguments + '"'
     
         if 'transfer_output_files' not in condorConfig:
             condorConfig['transfer_output_files'] = outputName
@@ -400,12 +405,6 @@ for (book, dataset), filesets in allFilesets.items():
         condorConfig['log'] = jobLogDirName + '/' + fileset + '.log'
         condorConfig['transfer_input_files'] = inputFilesList
     
-        jdlFileName = jobDirName + '/' + fileset + '.jdl'
-        with open(jdlFileName, 'w') as jdlFile:
-            for key, value in condorConfig.items():
-                jdlFile.write(key + ' = ' + value + '\n')
-    
-            jdlFile.write('Queue\n')
+        jdlCommand = '\n'.join([key + ' = ' + value for key, value in condorConfig.items()]) + '\nqueue\n'
 
-        print book, dataset, fileset
-        runSubproc('condor_submit', jdlFileName)
+        runSubproc('condor_submit', stdin = jdlCommand)

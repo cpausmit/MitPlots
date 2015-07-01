@@ -19,16 +19,7 @@ namespace mithep
   class JPTJet : public Jet
   {
     public:
-      JPTJet() : fZSPCor(0), fChargedHadronEnergy(0), fNeutralHadronEnergy(0),
-                fChargedEmEnergy(0), fNeutralEmEnergy(0), fResponseOfChargedWithEff(0),
-                fResponseOfChargedWithoutEff(0), fSumPtOfChargedWithEff(0),
-                fSumPtOfChargedWithoutEff(0), fSumEnergyOfChargedWithEff(0),
-                fSumEnergyOfChargedWithoutEff(0), fR2momtr(0), fEta2momtr(0),
-                fPhi2momtr(0), fPout(0), fZch(0), fChargedMultiplicity(0), fMuonMultiplicity(0),
-                fElectronMultiplicity(0) {}
-      JPTJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                Jet(px,py,pz,e),
-                fZSPCor(0), fChargedHadronEnergy(0), fNeutralHadronEnergy(0),
+      JPTJet() : Jet(), fZSPCor(0), fChargedHadronEnergy(0), fNeutralHadronEnergy(0),
                 fChargedEmEnergy(0), fNeutralEmEnergy(0), fResponseOfChargedWithEff(0),
                 fResponseOfChargedWithoutEff(0), fSumPtOfChargedWithEff(0),
                 fSumPtOfChargedWithoutEff(0), fSumEnergyOfChargedWithEff(0),

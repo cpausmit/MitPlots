@@ -1,7 +1,3 @@
-//
-// $Id: TAMBranchInfo.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAMBranchInfo.h"
 
 
@@ -32,20 +28,14 @@ ClassImp(TAMBranchInfo)
 TAMBranchInfo::TAMBranchInfo(const Char_t* branchName) :
    TNamed(branchName,0), fIsLoaded(kFALSE), fLoader(0), fUsrAddresses()
 {
-   // Default constructor.
 }
 
 
 //______________________________________________________________________________
 TAMBranchInfo::~TAMBranchInfo() 
 {
-   // Destructor.
-
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
-        bIter!=bEnd; bIter++) {
-      delete (*bIter);
-   }
+  for (auto&& addr : fUsrAddresses)
+    delete addr;
 
    delete fLoader;
 }
@@ -70,6 +60,16 @@ Int_t TAMBranchInfo::GetEntry(Long64_t entry)
    return ret;
 }
 
+//______________________________________________________________________________
+TClass*
+TAMBranchInfo::GetClass() const 
+{ 
+  // Return type of user address.
+  if (!fLoader)
+    return 0;
+
+  return fLoader->GetClass();
+}
 
 //______________________________________________________________________________
 void TAMBranchInfo::Init() 
@@ -104,11 +104,8 @@ void TAMBranchInfo::SetUsrAddrs()
 {
    // Set all user pointers for this branch to point to the data address.
 
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
-        bIter!=bEnd; bIter++) {
-      (*((*bIter)->fPtr)) = fLoader->GetAddress();
-   }
+  for (auto&& addr : fUsrAddresses)
+    *addr->fPtr = fLoader->GetAddress();
 
    fIsLoaded = kTRUE;
 }
@@ -119,11 +116,8 @@ void TAMBranchInfo::ZeroUsrAddrs()
 {
    // Set all user pointers for this branch to zero.
 
-   vector<BranchPtr_t*>::const_iterator bEnd  = fUsrAddresses.end();
-   for (vector<BranchPtr_t*>::iterator  bIter = fUsrAddresses.begin();
-        bIter!=bEnd; bIter++) {
-      (*((*bIter)->fPtr)) = 0;
-   }
+  for (auto&& addr : fUsrAddresses)
+    *addr->fPtr = 0;
 
    fIsLoaded = kFALSE;
 }

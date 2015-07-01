@@ -1,5 +1,3 @@
-// $Id: FullExampleMod.cc,v 1.5 2009/07/10 14:17:08 loizides Exp $
-
 #include "MitAna/PhysicsMod/interface/FullExampleMod.h"
 #include <TH1D.h>
 #include "MitAna/DataTree/interface/Names.h"
@@ -21,10 +19,6 @@ FullExampleMod::FullExampleMod(const char *name, const char *title) :
   fElectronName(Names::gkElectronBrn),
   fMuonsFromBranch(kTRUE),
   fElectronsFromBranch(kTRUE),
-  fParticles(0),
-  fTracks(0),
-  fMuons(0),
-  fElectrons(0),
   fMCPtHist(0),
   fMCEtaHist(0),
   fTrackPtHist(0),
@@ -50,30 +44,34 @@ void FullExampleMod::Process()
   // Process entries of the tree. For this module, we just load the branches and
   // fill the histograms.
 
-  LoadEventObject(fMCPartName,fParticles);
-  for (UInt_t i=0; i<fParticles->GetEntries(); ++i) {
-    const MCParticle *p = fParticles->At(i);
+  auto* particles = GetObject<MCParticleCol>(fMCPartName);
+
+  for (UInt_t i=0; i<particles->GetEntries(); ++i) {
+    const MCParticle *p = particles->At(i);
     fMCPtHist->Fill(p->Pt());
     fMCEtaHist->Fill(p->Eta());
   }
+
+  auto* tracks = GetObject<TrackCol>(fTrackName);
   
-  LoadEventObject(fTrackName,fTracks);
-  for (UInt_t i=0; i<fTracks->GetEntries(); ++i) {
-    const Track *p = fTracks->At(i);
+  for (UInt_t i=0; i<tracks->GetEntries(); ++i) {
+    const Track *p = tracks->At(i);
     fTrackPtHist->Fill(p->Pt());
     fTrackEtaHist->Fill(p->Eta());
   }
-  
-  LoadEventObject(fMuonName,fMuons);
-  for (UInt_t i=0; i<fMuons->GetEntries(); ++i) {
-    const Muon *p = fMuons->At(i);
+
+  auto* muons = GetObject<MuonCol>(fMuonName);
+
+  for (UInt_t i=0; i<muons->GetEntries(); ++i) {
+    const Muon *p = muons->At(i);
     fMuonPtHist->Fill(p->Pt());
     fMuonEtaHist->Fill(p->Eta());
   }
+
+  auto* electrons = GetObject<ElectronCol>(fElectronName);
   
-  LoadEventObject(fElectronName,fElectrons);
-  for (UInt_t i=0; i<fElectrons->GetEntries(); ++i) {
-    const Electron *p = fElectrons->At(i);
+  for (UInt_t i=0; i<electrons->GetEntries(); ++i) {
+    const Electron *p = electrons->At(i);
     fElectronPtHist->Fill(p->Pt());
     fElectronEtaHist->Fill(p->Eta());
   }
@@ -85,11 +83,6 @@ void FullExampleMod::SlaveBegin()
   // Run startup code on the computer (slave) doing the actual analysis. Here,
   // we typically initialize histograms and other analysis objects and request
   // branches. For this module, we request a branch of the MitTree.
-
-  ReqEventObject(fMCPartName,   fParticles, kTRUE);
-  ReqEventObject(fTrackName,    fTracks, kTRUE);
-  ReqEventObject(fMuonName,     fMuons, fMuonsFromBranch);
-  ReqEventObject(fElectronName, fElectrons, fElectronsFromBranch);
 
   AddTH1(fMCPtHist,"hMCPtHist",";p_{t} [GeV];#",100,0.,250.);
   AddTH1(fMCEtaHist,"hMCEtaHist",";#eta;#",160,-8.,8.);

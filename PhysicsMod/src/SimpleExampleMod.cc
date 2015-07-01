@@ -1,5 +1,3 @@
-// $Id: SimpleExampleMod.cc,v 1.5 2009/06/15 15:00:16 loizides Exp $
-
 #include "MitAna/PhysicsMod/interface/SimpleExampleMod.h"
 #include "MitAna/DataTree/interface/Names.h"
 #include "MitAna/DataTree/interface/MCParticleCol.h"
@@ -13,7 +11,6 @@ ClassImp(mithep::SimpleExampleMod)
 SimpleExampleMod::SimpleExampleMod(const char *name, const char *title) : 
   BaseMod(name,title),
   fPartName(Names::gkMCPartBrn),
-  fParticles(0),
   fPtHist(0),
   fEtaHist(0)
 {
@@ -47,11 +44,11 @@ void SimpleExampleMod::Process()
   // Process entries of the tree. For this module, we just load
   // the branch and fill the histograms.
 
-  LoadBranch(GetPartName());
+  auto* particles = GetObject<mithep::MCParticleCol>(GetPartName());
 
-  Int_t ents=fParticles->GetEntries();
+  Int_t ents=particles->GetEntries();
   for(Int_t i=0;i<ents;++i) {
-     const MCParticle *p = fParticles->At(i);
+     const MCParticle *p = particles->At(i);
      fPtHist->Fill(p->Pt());
      fEtaHist->Fill(p->Eta());
   }
@@ -65,8 +62,6 @@ void SimpleExampleMod::SlaveBegin()
   // analysis. Here, we typically initialize histograms and 
   // other analysis objects and request branches. For this module,
   // we request a branch of the MitTree.
-
-  ReqBranch(GetPartName(), fParticles);
 
   AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",100,0.,25.);
   AddTH1(fEtaHist,"hEtaHist",";#eta;#",160,-8.,8.);

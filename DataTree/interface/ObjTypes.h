@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: ObjTypes.h,v 1.21 2012/03/11 22:32:00 pharris Exp $
-//
 // ObjTypes
 //
 // Here we define an enum for each data class.
@@ -43,6 +41,7 @@ namespace mithep
     kJet,
     kJPTJet,
     kLAHeader,
+    kMCRunInfo,
     kMCEventInfo,
     kMCParticle,
     kMet,

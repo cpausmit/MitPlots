@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: SimpleExampleMod.h,v 1.6 2009/05/12 18:41:41 loizides Exp $
-//
 // SimpleExampleMod
 //
 // This TAM module shows how to use TAM. It takes the MCParticle branch
@@ -45,7 +43,6 @@ namespace mithep
       void                     Terminate();
 
       TString                  fPartName;   //branch name of MCParticle collection
-      const MCParticleCol     *fParticles;  //!pointer to generated particle branch
       TH1D                    *fPtHist;     //!pt histogram
       TH1D                    *fEtaHist;    //!eta histogram
 

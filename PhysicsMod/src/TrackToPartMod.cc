@@ -1,5 +1,3 @@
-// $Id: PublisherMod.cc,v 1.2 2009/03/11 18:13:11 bendavid Exp $
-
 #include "MitAna/PhysicsMod/interface/TrackToPartMod.h"
 #include "MitAna/DataTree/interface/StableParticleCol.h"
 #include "MitAna/DataTree/interface/TrackCol.h"
@@ -13,7 +11,6 @@ TrackToPartMod::TrackToPartMod(const char *name, const char *title) :
   fPublicName(""),
   fPubPerEvent(kTRUE),
   fAbsPdgId(22),
-  fColIn(0),
   fColOut(0)
 {
   // Constructor.
@@ -24,12 +21,14 @@ void TrackToPartMod::Process()
 {
   // Load the branch, add pointers to the object array. Publish object array if needed.
 
-  if (!LoadEventObject(GetBranchName(), fColIn)) {
+  auto* colIn = GetObject<mithep::TrackCol>(GetBranchName());
+
+  if (!colIn) {
     SendError(kAbortModule, "Process", "Could not load data!");
     return;
   }
 
-  const UInt_t entries = fColIn->GetEntries();
+  const UInt_t entries = colIn->GetEntries();
 
   if (fPubPerEvent) {
     fColOut = new StableParticleOArr(entries, GetPublicName());
@@ -39,7 +38,7 @@ void TrackToPartMod::Process()
     fColOut->Reset();
 
   for(UInt_t i=0; i<entries; ++i)
-    fColOut->AddOwned(new StableParticle(fAbsPdgId,fColIn->At(i)));
+    fColOut->AddOwned(new StableParticle(fAbsPdgId,colIn->At(i)));
 
   if (fPubPerEvent) 
     AddObjThisEvt(fColOut);
@@ -48,10 +47,6 @@ void TrackToPartMod::Process()
 //--------------------------------------------------------------------------------------------------
 void TrackToPartMod::SlaveBegin()
 {
-  // Request the branch to be published. Depending on the user's decision publish the array.
-
-  ReqEventObject(GetBranchName(), fColIn);
-
   if (fPublicName.IsNull())
     fPublicName = GetBranchName();
 

@@ -56,8 +56,6 @@ namespace mithep {
  
     Jet();
 
-    Jet(Double_t, Double_t, Double_t, Double_t);
-
     FourVectorM RawMom() const { return fRawMom.V(); }
     Double_t Alpha() const { return fAlpha; }
     Double_t Beta() const { return fBeta; }
@@ -79,11 +77,13 @@ namespace mithep {
 
     BitMask8 const& Corrections() const { return fCorrections; }
     Bool_t CorrectionActive(UInt_t c) const { return fCorrections.TestBit(c); }
+    Bool_t CorrectionAvailable(UInt_t c) const { return fCorrectionScale[c] >= 0.; }
 
     virtual UInt_t NConstituents() const { return 0; }
     UInt_t N() const { return NConstituents(); }
 
-    void SetRawMom( const FourVectorM &mom) { fRawMom = mom; ClearMom(); }
+    void SetRawPtEtaPhiM(Double_t pt, Double_t eta, Double_t phi, Double_t m)
+    { fRawMom.Set(pt, eta, phi, m); ClearMom(); }
     void SetAlpha(Double_t val) { fAlpha = val; }
     void SetBeta(Double_t val) { fBeta = val; } 
     void SetMatchedMCFlavor(Int_t flavor) { fMatchedMCFlavor = flavor; }
@@ -155,7 +155,7 @@ namespace mithep {
     Double32_t fSigmaPhi; //[0,0,14]sqrt(phiphiMoment)
     Double32_t fBJetTagsDisc[nBTagAlgos]; //b-tag discriminators
     Double_t fBJetTagsLegacyDisc[nBTagLegacyAlgos]; //! legacy b-tag algos (only when reading old files)
-    Double32_t fCorrectionScale[nECorrs]; //jet energy correction scales
+    Double32_t fCorrectionScale[nECorrs]; //jet energy correction scales, default to -1
     Double32_t fJetArea; //[0,0,14]infrared safe jet area
     BitMask8 fCorrections; //mask of corrections to be applied
 

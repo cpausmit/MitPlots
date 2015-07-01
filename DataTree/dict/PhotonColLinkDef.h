@@ -1,7 +1,5 @@
 #ifndef MITANA_DATATREE_PHOTONCOLLINKDEF_H
 #define MITANA_DATATREE_PHOTONCOLLINKDEF_H
-
-#include "MitAna/DataCont/interface/Ref.h"
 #include "MitAna/DataTree/interface/PhotonCol.h"
 #endif
 
@@ -19,14 +17,6 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
-
-#pragma read \
-  sourceClass="mithep::Photon" \
-  version="[-21]" \
-  source="Double32_t fCoviEtaiEta" \
-  targetClass="mithep::Photon" \
-  target="fCoviEtaiEta5x5" \
-  code="{ fCoviEtaiEta5x5 = onfile.fCoviEtaiEta; }" \
 
 #pragma link C++ class mithep::Photon+;
 #pragma link C++ class mithep::Collection<mithep::Photon>+;

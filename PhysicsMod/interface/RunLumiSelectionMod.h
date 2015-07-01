@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: RunLumiSelectionMod.h,v 1.4 2010/06/29 15:51:53 bendavid Exp $
-//
 // RunLumiSelectionMod
 //
 // This module selects or excludes a list or runs/ranges.  A list of accepted and excluded runs

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: FullExampleMod.h,v 1.6 2009/09/29 19:16:58 loizides Exp $
-//
 // FullExampleMod
 //
 // This TAM module shows how to use TAM. It takes a couple of branches
@@ -50,10 +48,6 @@ namespace mithep
       TString                  fElectronName;       //name of electron collection
       Bool_t                   fMuonsFromBranch;    //muons are loaded from a branch
       Bool_t                   fElectronsFromBranch; //electrons are loaded from a branch
-      const MCParticleCol     *fParticles;          //!MCParticle branch
-      const TrackCol          *fTracks;	            //!Track branch
-      const MuonCol	      *fMuons;              //!Muon branch
-      const ElectronCol	      *fElectrons;          //!Electron branch
       TH1D                    *fMCPtHist;           //!MCParticle pt histogram
       TH1D                    *fMCEtaHist;          //!MCParticle eta histogram
       TH1D                    *fTrackPtHist;        //!Track pt histogram

@@ -1,11 +1,9 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Types.h,v 1.4 2009/03/08 12:08:31 loizides Exp $
-//
 // Types
 //
 // Here we define additional types.
 //
-// Authors: C.Loizides
+// Authors: C.Loizides, Y.Iiyama
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_DATACONT_TYPES_H
@@ -15,6 +13,8 @@
 #include "MitCommon/DataFormats/interface/Types.h"
 #include "MitAna/DataCont/interface/BitMask.h"
 #include "MitAna/DataCont/interface/FastArrayBasic.h"
+#include "MitAna/DataCont/interface/NamedFastArrayBasic.h"
+#include "MitAna/DataCont/interface/FastArray.h"
 
 namespace mithep
 {
@@ -33,5 +33,22 @@ namespace mithep
   typedef FastArrayBasic<Double32_t,kTRUE> FArrDouble32;
   typedef FastArrayBasic<Int_t>            FArrInt;
   typedef FastArrayBasic<UInt_t>           FArrUInt;
+  typedef FastArrayBasic<Short_t>          FArrShort;
+  typedef FastArrayBasic<UShort_t>         FArrUShort;
+  typedef FastArrayBasic<Char_t>           FArrChar;
+  typedef FastArrayBasic<UChar_t>          FArrUChar;
+  typedef FastArrayBasic<Bool_t>           FArrBool;
+
+  typedef NamedFastArrayBasic<Double_t>         NFArrDouble;
+  typedef NamedFastArrayBasic<Double32_t,kTRUE> NFArrDouble32;
+  typedef NamedFastArrayBasic<Int_t>            NFArrInt;
+  typedef NamedFastArrayBasic<UInt_t>           NFArrUInt;
+  typedef NamedFastArrayBasic<Short_t>          NFArrShort;
+  typedef NamedFastArrayBasic<UShort_t>         NFArrUShort;
+  typedef NamedFastArrayBasic<Char_t>           NFArrChar;
+  typedef NamedFastArrayBasic<UChar_t>          NFArrUChar;
+  typedef NamedFastArrayBasic<Bool_t>           NFArrBool;
+
+  typedef FastArray<TObjString>            FArrObjString;
 }
 #endif

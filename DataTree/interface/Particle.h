@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Particle.h,v 1.33 2009/07/13 11:00:30 loizides Exp $
-//
 // Particle
 //
 // General particle class. It provides an abstract interface to kinematical quantities

@@ -22,13 +22,13 @@ namespace mithep
   class Photon : public Particle
   {
   public:
-    Photon();
-    Photon(Double_t px, Double_t py, Double_t pz, Double_t e);
+    Photon() {}
 
     // Contents of the Photons
-    //    const Conversion    *ConvCand(UInt_t i)           const { return fConversions.At(i);  } *DEPRECATED*
-    const DecayParticle *ConversionD(UInt_t i)        const { return fConversionsD.At(i); }
-    const DecayParticle *ConversionS(UInt_t i)        const { return fConversionsS.At(i); }
+    UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
+    UInt_t               NConversionsS()              const { return fConversionsS.Entries(); }
+    DecayParticle const* ConversionD(UInt_t i)        const { return fConversionsD.At(i); }
+    DecayParticle const* ConversionS(UInt_t i)        const { return fConversionsS.At(i); }
     Double_t             EcalRecHitIsoDr03()          const { return fEcalRecHitIsoDr03;  }
     Double_t             EcalRecHitIsoDr04()          const { return fEcalRecHitIso;      }
     Double_t             EnergyErr()                  const { return fEnergyErr;          }
@@ -50,14 +50,14 @@ namespace mithep
     Double_t             E55()                        const { return fE55;                }
     ThreeVectorC         CaloPos()                    const;
     Double_t             CovEtaEta()                  const { return fCovEtaEta;          }
-    Double_t             CoviEtaiEta()                const { return fCoviEtaiEta;        }
+    Double_t             CoviEtaiEta(Bool_t force = kFALSE) const
+    { return force || fCoviEtaiEta5x5 < 0. ? fCoviEtaiEta : fCoviEtaiEta5x5; }
     Double_t             CoviEtaiEta5x5()             const { return fCoviEtaiEta5x5;     }
     Bool_t               HasPixelSeed()               const { return fHasPixelSeed;       }
     Double_t             HcalDepth1TowerSumEtDr03()   const { return fHcalDepth1TowerSumEtDr03; }
     Double_t             HcalDepth1TowerSumEtDr04()   const { return fHcalDepth1TowerSumEtDr04; }
     Double_t             HcalDepth2TowerSumEtDr03()   const { return fHcalDepth2TowerSumEtDr03; }
     Double_t             HcalDepth2TowerSumEtDr04()   const { return fHcalDepth2TowerSumEtDr04; }
-    //    Double_t             HcalRecHitIso()              const { return 0.;         } //DEPR
     Double_t             HcalTowerSumEtDr03()         const { return fHcalTowerSumEtDr03;    }
     Double_t             HcalTowerSumEtDr04()         const { return fHcalTowerSumEtDr04;    }
     UShort_t             HollowConeNTrkDr03()         const { return fHollowConeNTrkDr03;    }
@@ -72,21 +72,21 @@ namespace mithep
     Bool_t               IsEBGap()                    const { return fIsEBGap;               }
     Bool_t               IsEEGap()                    const { return fIsEEGap;               }
     Bool_t               IsEBEEGap()                  const { return fIsEBEEGap;             }
-    //    Bool_t               IsLooseEM()                  const { return true;             } //DEPR
     Bool_t               IsLoosePhoton()              const { return fIsLoosePhoton;         }
     Bool_t               IsTightPhoton()              const { return fIsTightPhoton;         }
     Bool_t               IsConverted()                const { return fIsConverted;           }
-    ThreeVector          Mom3(const ThreeVector &v)   const
-    { return E()*(ThreeVector(CaloPos())-v).Unit(); }
-    FourVectorM          MomVtx(const ThreeVector &v) const;
-    //    UInt_t               NConversions()               const { return fConversions.Entries(); } *DEPRECATED*
-    UInt_t               NConversionsD()              const { return fConversionsD.Entries(); }
-    UInt_t               NConversionsS()              const { return fConversionsS.Entries(); }
+    ThreeVector          Mom3(ThreeVector const& v)   const
+    { return E() * (ThreeVector(CaloPos()) - v).Unit(); }
+    FourVectorM          MomVtx(ThreeVector const& v) const;
     EObjType             ObjType()                    const { return kPhoton;                }
-    const SuperCluster  *ECALOnlySCluster()           const { return fPFSuperClusterRef.Obj(); }
-    const SuperCluster  *PFSCluster()                 const { return ECALOnlySCluster(); } // backward compatibility
+    SuperCluster const*  ECALOnlySCluster()           const { return fPFSuperClusterRef.Obj(); }
+    SuperCluster const*  PFSCluster()                 const { return ECALOnlySCluster(); } // backward compatibility
+    UInt_t               NFootprintCandidates()       const { return fFootprintCandidates.Entries(); }
+    PFCandidate const*   FootprintCandidate(UInt_t i) const { return fFootprintCandidates.At(i); }
+    Bool_t               IsInFootprint(PFCandidate const* cand) const
+    { return fFootprintCandidates.HasObject(cand); }
     Double_t             R9()                         const { return fR9;                    }
-    const SuperCluster  *SCluster()                   const { return fSuperClusterRef.Obj(); }
+    SuperCluster const*  SCluster()                   const { return fSuperClusterRef.Obj(); }
     Double_t             SolidConeTrkIsoDr03()        const { return fSolidConeTrkIsoDr03;   }
     Double_t             SolidConeTrkIsoDr04()        const { return fSolidConeTrkIso;       }
     UShort_t             SolidConeNTrkDr03()          const { return fSolidConeNTrkDr03;     }
@@ -98,17 +98,10 @@ namespace mithep
     Double_t             HadOverEmTow()               const { return fHadOverEmTow;       }
     Double_t             HcalIsoTowDr03()             const { return fHCalIsoTowDr03;    }
     Double_t             HcalIsoTowDr04()             const { return fHCalIsoTowDr04;    } 
-    UInt_t               NPFPhotonsInMustache()       const { return fPFPhotonsInMustache.Entries(); }
-    UInt_t               NPFPhotonsOutOfMustache()    const
-    { return fPFPhotonsOutOfMustache.Entries(); }
-    const PFCandidate   *PFPhotonInMustache(UInt_t i) const
-    { return fPFPhotonsInMustache.At(i); }
-    const PFCandidate   *PFPhotonOutOfMustache(UInt_t i) const
-    { return fPFPhotonsOutOfMustache.At(i); }
     Double_t             S4Ratio()                    const
-    { return fS4Ratio >= 0. ? fS4Ratio : SCluster()->Seed()->E2x2()/SCluster()->Seed()->E5x5(); }
+    { return fS4Ratio >= 0. ? fS4Ratio : SCluster()->Seed()->E2x2() / SCluster()->Seed()->E5x5(); }
     Double_t             EffSigmaRR()                 const
-    { return fEffSigmaRR >= 0. ? fEffSigmaRR : sqrt((SCluster()->PsEffWidthSigmaXX())*(SCluster()->PsEffWidthSigmaXX())+(SCluster()->PsEffWidthSigmaYY())*(SCluster()->PsEffWidthSigmaYY())); }
+    { return fEffSigmaRR >= 0. ? fEffSigmaRR : sqrt(SCluster()->PsEffWidthSigmaXX() * SCluster()->PsEffWidthSigmaXX() + SCluster()->PsEffWidthSigmaYY() * SCluster()->PsEffWidthSigmaYY()); }
     Double_t             MipChi2()                    const { return fMipChi2;               }
     Double_t             MipTotEnergy()               const { return fMipTotEnergy;          }
     Double_t             MipSlope()                   const { return fMipSlope;              }
@@ -132,13 +125,12 @@ namespace mithep
     Double_t             VtxProb()                    const { return fVtxProb;              }
     Double_t             IdMva()                      const { return fIdMva;                }
     // Some structural tools
-    void                 Mark(UInt_t i=1)             const;
+    void                 Mark(UInt_t i=1)             const override;
 
-    //void                 AddConversion(const Conversion *c)      { fConversions.Add(c); } *DEPRECATED*
+    void                 SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi);
+    void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
     void                 AddConversionD(const DecayParticle *c)  { fConversionsD.Add(c); }
     void                 AddConversionS(const DecayParticle *c)  { fConversionsS.Add(c); }
-    void                 AddPFPhotonInMustache(const PFCandidate *c) { fPFPhotonsInMustache.Add(c); }
-    void                 AddPFPhotonOutOfMustache(const PFCandidate *c) { fPFPhotonsOutOfMustache.Add(c); }
     void                 SetEnergyErr(Double_t x)                { fEnergyErr               = x; }
     void                 SetEnergyErrSmeared(Double_t x)         { fEnergyErrSmeared        = x; }
     void                 SetEnergySmearing(Double_t x)           { fEnergySmearing          = x; }
@@ -149,7 +141,6 @@ namespace mithep
     void                 SetEnergyErrPhoFix(Double_t x)          { fEnergyErrPhoFix         = x; }
     void                 SetEnergyScale(Double_t x)              { fEnergyScale             = x; }
     void                 SetIsConverted(Bool_t b)                { fIsConverted             = b; }
-    void                 SetMom(Double_t px, Double_t py, Double_t pz, Double_t e);
     void                 SetSuperCluster(const SuperCluster* s)  { fSuperClusterRef         = s; }
     void                 SetR9(Double_t x)                       { fR9                      = x; }
     void                 SetHadOverEm(Double_t x)                { fHadOverEm               = x; }
@@ -188,14 +179,15 @@ namespace mithep
     void                 SetIsEBGap(Bool_t x)                    { fIsEBGap                 = x; }
     void                 SetIsEEGap(Bool_t x)                    { fIsEEGap                 = x; }
     void                 SetIsEBEEGap(Bool_t x)                  { fIsEBEEGap               = x; }
-    //    void                 SetIsLooseEM(Bool_t x)                  { fIsLooseEM               = x; }
     void                 SetIsLoosePhoton(Bool_t x)              { fIsLoosePhoton           = x; }
     void                 SetIsTightPhoton(Bool_t x)              { fIsTightPhoton           = x; }
     void                 SetCaloPosXYZ(Double_t x, Double_t y, Double_t z)
     { fCaloPos.SetXYZ(x,y,z); }
-    void                 SetPV(const Vertex *v)                  { fPVRef                   = v; }
-    void                 SetECALOnlySuperCluster(const SuperCluster *s)
+    void                 SetPV(Vertex const* v)                  { fPVRef                   = v; }
+    void                 SetECALOnlySuperCluster(SuperCluster const* s)
     { fPFSuperClusterRef = s;      }
+    void                 AddFootprintCandidate(PFCandidate const* c)
+    { fFootprintCandidates.Add(c); }
     void                 SetVtxProb(Double_t x)                  { fVtxProb                 = x; }
     void                 SetIdMva(Double_t x)                    { fIdMva                   = x; }
     void                 SetEtaWidth(Double_t x)                 { fEtaWidth                = x; }
@@ -211,21 +203,25 @@ namespace mithep
     void                 SetMipIntercept(Double_t x)             { fMipIntercept = x;         }
     void                 SetMipNhitCone(Int_t x)                 { fMipNHitCone = x;          }
     void                 SetMipIsHalo(Bool_t x)                  { fMipIsHalo = x;            } 
-    void                 SetMatchHePlusPos(Double_t x, Double_t y, Double_t z)     {  fMatchHePlusPos.SetXYZ(x,y,z);     }
-    void                 SetMatchHePlusEn(Double_t x)                              {  fMatchHePlusEn = x;                }
-    void                 SetMatchHePlusTime(Double_t x)                            {  fMatchHePlusTime = x;              }
-    void                 SetMatchHeMinusPos(Double_t x, Double_t y, Double_t z)    {  fMatchHeMinusPos.SetXYZ(x,y,z);    }
-    void                 SetMatchHeMinusEn(Double_t x)                             {  fMatchHeMinusEn = x;               }
-    void                 SetMatchHeMinusTime(Double_t x)                           {  fMatchHeMinusTime = x;             }
-    void                 SetMatchHePlusPosDR15(Double_t x, Double_t y, Double_t z) {  fMatchHePlusPosDR15.SetXYZ(x,y,z); }
-    void                 SetMatchHePlusEnDR15(Double_t x)                          {  fMatchHePlusEnDR15 = x;            }
-    void                 SetMatchHePlusTimeDR15(Double_t x)                        {  fMatchHePlusTimeDR15 = x;          }
-    void                 SetMatchHeMinusPosDR15(Double_t x, Double_t y, Double_t z){  fMatchHeMinusPosDR15.SetXYZ(x,y,z);}
-    void                 SetMatchHeMinusEnDR15(Double_t x)                         {  fMatchHeMinusEnDR15 = x;           }
-    void                 SetMatchHeMinusTimeDR15(Double_t x)                       {  fMatchHeMinusTimeDR15 = x;         }
+    void                 SetMatchHePlusPos(Double_t x, Double_t y, Double_t z)
+    {  fMatchHePlusPos.SetXYZ(x,y,z);     }
+    void                 SetMatchHePlusEn(Double_t x)            { fMatchHePlusEn = x;                }
+    void                 SetMatchHePlusTime(Double_t x)          { fMatchHePlusTime = x;              }
+    void                 SetMatchHeMinusPos(Double_t x, Double_t y, Double_t z)
+    {  fMatchHeMinusPos.SetXYZ(x,y,z);    }
+    void                 SetMatchHeMinusEn(Double_t x)           { fMatchHeMinusEn = x;               }
+    void                 SetMatchHeMinusTime(Double_t x)         { fMatchHeMinusTime = x;             }
+    void                 SetMatchHePlusPosDR15(Double_t x, Double_t y, Double_t z)
+    {  fMatchHePlusPosDR15.SetXYZ(x,y,z); }
+    void                 SetMatchHePlusEnDR15(Double_t x)        { fMatchHePlusEnDR15 = x;            }
+    void                 SetMatchHePlusTimeDR15(Double_t x)      { fMatchHePlusTimeDR15 = x;          }
+    void                 SetMatchHeMinusPosDR15(Double_t x, Double_t y, Double_t z)
+    {  fMatchHeMinusPosDR15.SetXYZ(x,y,z);}
+    void                 SetMatchHeMinusEnDR15(Double_t x)       { fMatchHeMinusEnDR15 = x;           }
+    void                 SetMatchHeMinusTimeDR15(Double_t x)     { fMatchHeMinusTimeDR15 = x;         }
 
   protected:
-    void                 GetMom() const;
+    void                 GetMom() const override;
 
     Vect4M               fMom;                      //four momentum vector
     Vect3C               fCaloPos;                  //shower position
@@ -240,9 +236,8 @@ namespace mithep
     Double32_t           fE55;                      //[0,0,14]5x5 crystal energy
     Double32_t           fCovEtaEta;                //[0,0,14]variance eta-eta
     Double32_t           fCoviEtaiEta;              //[0,0,14]covariance eta-eta (in crystals)
-    Double32_t           fCoviEtaiEta5x5;           //[0,0,14]"full 5x5" covariance eta-eta (in crystals)
+    Double32_t           fCoviEtaiEta5x5 = -1.;     //[0,0,14]"full 5x5" covariance eta-eta (in crystals)
     Double32_t           fEcalRecHitIso;            //[0,0,14]ecal rechit bsd isodR 0.4 *RENAME*
-    Double32_t           fHcalRecHitIso;            //[0,0,14]hcal rechit bsd isodR 0.4 *DEPR*
     Double32_t           fHcalTowerSumEtDr04;       //[0,0,14]hcal tower bsd isodR 0.4
     Double32_t           fHcalDepth1TowerSumEtDr04; //[0,0,14]hcal dp1 tw bsd isodR 0.4
     Double32_t           fHcalDepth2TowerSumEtDr04; //[0,0,14]hcal dp2 tw bsd isodR 0.4
@@ -261,77 +256,91 @@ namespace mithep
     Double32_t           fPFChargedHadronIso;       //[0,0,14]pf iso, charged hadrons
     Double32_t           fPFNeutralHadronIso;       //[0,0,14]pf iso, neutral hadrons
     Double32_t           fPFPhotonIso;              //[0,0,14]pf iso, photons
-    Bool_t               fHasPixelSeed;       //if super cluster has matched seed
-    Bool_t               fIsEB;               //if photon is ECal barrel
-    Bool_t               fIsEE;               //if photon is ECAL endcap
-    Bool_t               fIsEBGap;            //photon is in ECAL barrel crystal gap
-    Bool_t               fIsEEGap;            //photon is in ECAL endcap crystal gap
-    Bool_t               fIsEBEEGap;          //photon is in boundary between EB/EE
-    Bool_t               fIsLooseEM;          //if loose em cuts are passed *DEPRECATED* always true
-    Bool_t               fIsLoosePhoton;      //if loose photon cuts are passed
-    Bool_t               fIsTightPhoton;      //if tight photon cuts are passed
-    Bool_t               fIsConverted;        //if photon converted
-    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*    
+    Bool_t               fHasPixelSeed = kFALSE;       //if super cluster has matched seed
+    Bool_t               fIsEB = kFALSE;               //if photon is ECal barrel
+    Bool_t               fIsEE = kFALSE;               //if photon is ECAL endcap
+    Bool_t               fIsEBGap = kFALSE;            //photon is in ECAL barrel crystal gap
+    Bool_t               fIsEEGap = kFALSE;            //photon is in ECAL endcap crystal gap
+    Bool_t               fIsEBEEGap = kFALSE;          //photon is in boundary between EB/EE
+    Bool_t               fIsLoosePhoton = kFALSE;      //if loose photon cuts are passed
+    Bool_t               fIsTightPhoton = kFALSE;      //if tight photon cuts are passed
+    Bool_t               fIsConverted = kFALSE;        //if photon converted
     Ref<SuperCluster>    fSuperClusterRef;    //ref to associated super cluster (refined unbiased PF supercluster in >= 7XY)
     Ref<Vertex>          fPVRef;              //ref to associated primary vertex
-    Double32_t           fEnergyErr;          //[0,0,14]ene uncer. from var. regr.
-    Double32_t           fEnergyErrSmeared;   //[0,0,14]ene uncer. from var. regr., smeared
+    Double32_t           fEnergyErr = -99.;          //[0,0,14]ene uncer. from var. regr.
+    Double32_t           fEnergyErrSmeared = -99.;   //[0,0,14]ene uncer. from var. regr., smeared
     Double32_t           fEnergySmearing;     //[0,0,14]addit. ene smearing applied wrt MC
     Double32_t           fEnergyRegr;         //[0,0,14]regr. ene (filler time)
     Double32_t           fEnergyErrRegr;      //[0,0,14]regr. ene uncertainty (filler time)
     Double32_t           fEnergyPhoFix;       //[0,0,14]PhotonFix energy (filler time)
     Double32_t           fEnergyErrPhoFix;    //[0,0,14]PhotonFix energy uncertainty (filler time)
     Double32_t           fVtxProb;            //[0,0,14]Probability linked PV is correct
-    Double32_t           fIdMva;              //[0,0,14]output of photon id mva
-    Double32_t           fEtaWidth;           //[0,0,14]output of photon id mva
-    Double32_t           fPhiWidth;           //[0,0,14]output of photon id mva
+    Double32_t           fIdMva = -99.;              //[0,0,14]output of photon id mva
+    Double32_t           fEtaWidth = -99.;           //[0,0,14]output of photon id mva
+    Double32_t           fPhiWidth = -99.;           //[0,0,14]output of photon id mva
     Ref<SuperCluster>    fPFSuperClusterRef;  //ref to associated ECAL-only super cluster (PF cluster associated by geom in <=5XY, parentSuperCluster (ECAL-only PF mustache SC) in >=7XY) see below
+    RefArray<PFCandidate> fFootprintCandidates; //ref to PF candidates in the footprint, association made by ParticleBasedIsolation algorithm
     Double32_t           fHadOverEmTow;       //[0,0,14]per-tower definition of hadronic/em energy fraction
     Double32_t           fHCalIsoTowDr03;     //[0,0,14]hcal isolation matched to per tower h/e definition
     Double32_t           fHCalIsoTowDr04;     //[0,0,14]hcal isolation matched to per tower h/e definition
     RefArray<DecayParticle> fConversionsD;        //refs to associated conversion candidates (using newer DecayParticle format)
     RefArray<DecayParticle> fConversionsS;        //refs to associated conversion candidates (using newer DecayParticle format) - single leg conversions
-    RefArray<PFCandidate> fPFPhotonsInMustache; //refs to photon-type PFCandidates inside of mustache region
-    RefArray<PFCandidate> fPFPhotonsOutOfMustache; //refs to photon-type PFCandidates outside of mustache region
-    Double32_t           fS4Ratio;           //[0,0,14]S4 ratio
-    Double32_t           fEffSigmaRR;        //[0,0,14]preshower width variable
-    Double32_t           fMipChi2;               // mip fitted track chi2
-    Double32_t           fMipTotEnergy;          // mip fitted track energy
-    Double32_t           fMipSlope;              // mip fitted track slope
-    Double32_t           fMipIntercept;          // mip fitted track intercept
-    Int_t                fMipNHitCone;           // mip fitted track nhits
-    Bool_t               fMipIsHalo;             // mip fitted track is halo decision
+    Double32_t           fS4Ratio = -99.;           //[0,0,14]S4 ratio
+    Double32_t           fEffSigmaRR = -99.;        //[0,0,14]preshower width variable
+    Double32_t           fMipChi2 = -999.;               // mip fitted track chi2
+    Double32_t           fMipTotEnergy = 999.;          // mip fitted track energy
+    Double32_t           fMipSlope = 999.;              // mip fitted track slope
+    Double32_t           fMipIntercept = 999.;          // mip fitted track intercept
+    Int_t                fMipNHitCone = -1;           // mip fitted track nhits
+    Bool_t               fMipIsHalo = kFALSE;             // mip fitted track is halo decision
     Vect3                fMatchHePlusPos;        // phi matched HBHE+ rechit pos
-    Double32_t           fMatchHePlusEn;         // phi matched HBHE+ energy
-    Double32_t           fMatchHePlusTime;       // phi matched HBHE+ time
+    Double32_t           fMatchHePlusEn = -1.;         // phi matched HBHE+ energy
+    Double32_t           fMatchHePlusTime = -1000.;       // phi matched HBHE+ time
     Vect3                fMatchHeMinusPos;       // phi matched HBHE- rechit pos
-    Double32_t           fMatchHeMinusEn;        // phi matched HBHE- energy
-    Double32_t           fMatchHeMinusTime;      // phi matched HBHE- time
+    Double32_t           fMatchHeMinusEn = -1.;        // phi matched HBHE- energy
+    Double32_t           fMatchHeMinusTime = -1000.;      // phi matched HBHE- time
     Vect3                fMatchHePlusPosDR15;    // phi matched HBHE+ rechit pos - 15 cm DR match window
-    Double32_t           fMatchHePlusEnDR15;     // phi matched HBHE+ energy - 15 cm DR match window
-    Double32_t           fMatchHePlusTimeDR15;   // phi matched HBHE+ time - 15 cm DR match window
+    Double32_t           fMatchHePlusEnDR15 = -1.;     // phi matched HBHE+ energy - 15 cm DR match window
+    Double32_t           fMatchHePlusTimeDR15 = -1000.;   // phi matched HBHE+ time - 15 cm DR match window
     Vect3                fMatchHeMinusPosDR15;   // phi matched HBHE- rechit pos - 15 cm DR match window
-    Double32_t           fMatchHeMinusEnDR15;    // phi matched HBHE- energy - 15 cm DR match window
-    Double32_t           fMatchHeMinusTimeDR15;  // phi matched HBHE- time - 15 cm DR match window
+    Double32_t           fMatchHeMinusEnDR15 = -1.;    // phi matched HBHE- energy - 15 cm DR match window
+    Double32_t           fMatchHeMinusTimeDR15 = -1000.;  // phi matched HBHE- time - 15 cm DR match window
     Double32_t           fEnergyErrSmearing;  //[0,0,14]addit. ene smearing applied to energy error wrt MC
-    Double32_t           fEnergyScale;  //[0,0,14]Energy scale applied to photon
+    Double32_t           fEnergyScale = 1.;  //[0,0,14]Energy scale applied to photon
 
-    // The following members are deprecated but removing them will cause backward incompatibility
+    // The following members are deprecated
     // (Cannot use pragma read for schema evolution when some members are missing? Causes seg fault at read..)
-    //    RefArray<Conversion> fConversions;        //refs to associated conversion candidates  *DEPRECATED*    
-    //    Bool_t               fIsLooseEM;          //if loose em cuts are passed *DEPRECATED* always true
-    //    Double32_t           fHcalRecHitIso;            //[0,0,14]hcal rechit bsd isodR 0.4 *DEPR*
+    //    RefArray<Conversion> fConversions;        //refs to associated conversion candidates
+    //    Bool_t               fIsLooseEM;          //if loose em cuts are passed
+    //    Double32_t           fHcalRecHitIso;      //[0,0,14]hcal rechit bsd isodR 0.4
+    //    RefArray<PFCandidate> fPFPhotonsInMustache; //refs to photon-type PFCandidates inside of mustache region
+    //    RefArray<PFCandidate> fPFPhotonsOutOfMustache; //refs to photon-type PFCandidates outside of mustache region
+    // Accessors
+    //    const Conversion    *ConvCand(UInt_t i)           const { return fConversions.At(i);  }
+    //    Double_t             HcalRecHitIso()              const { return 0.;         }
+    //    Bool_t               IsLooseEM()                  const { return true;             }
+    //    UInt_t               NConversions()               const { return fConversions.Entries(); }
+    //    UInt_t               NPFPhotonsInMustache()       const { return fPFPhotonsInMustache.Entries(); }
+    //    UInt_t               NPFPhotonsOutOfMustache()    const { return fPFPhotonsOutOfMustache.Entries(); }
+    //    const PFCandidate   *PFPhotonInMustache(UInt_t i) const { return fPFPhotonsInMustache.At(i); }
+    //    const PFCandidate   *PFPhotonOutOfMustache(UInt_t i) const { return fPFPhotonsOutOfMustache.At(i); }
+    //    void                 AddConversion(const Conversion *c)    { fConversions.Add(c); }
+    //    void                 AddPFPhotonInMustache(const PFCandidate *c) { fPFPhotonsInMustache.Add(c); }
+    //    void                 AddPFPhotonOutOfMustache(const PFCandidate *c) { fPFPhotonsOutOfMustache.Add(c); }
+    //    void                 SetIsLooseEM(Bool_t x)                  { fIsLooseEM               = x; }
+
     // fPFSuperClusterRef: member object name is kept the same as <7XY so that old files can be read
     // Should in principle be possible to use schema evolution to convert it to something like fECALOnlySuperClusterRef
     // The problem is that process ID seems to be not set at the point where conversion rules are applied
     // which is strange since process ID is set in ProcIDRef::Streamer..
 
-    ClassDef(Photon,22) // Photon class
+    ClassDef(Photon, 23) // Photon class
   };
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::Mark(UInt_t ib) const
+inline
+void
+mithep::Photon::Mark(UInt_t ib) const
 {
   // mark myself
   mithep::DataObject::Mark(ib);
@@ -342,15 +351,14 @@ inline void mithep::Photon::Mark(UInt_t ib) const
     fSuperClusterRef.Obj()->Mark(ib);
   if (fPFSuperClusterRef.IsValid())
     fPFSuperClusterRef.Obj()->Mark(ib);
-  //  fConversions.Mark(ib);
   fConversionsD.Mark(ib);
   fConversionsS.Mark(ib);
-  fPFPhotonsInMustache.Mark(ib);
-  fPFPhotonsOutOfMustache.Mark(ib);
+  fFootprintCandidates.Mark(ib);
 }
 
-//--------------------------------------------------------------------------------------------------
-inline mithep::ThreeVectorC mithep::Photon::CaloPos() const
+inline
+mithep::ThreeVectorC
+mithep::Photon::CaloPos() const
 {
   // Get caloposition
   mithep::ThreeVectorC calopos = fCaloPos.V();
@@ -360,16 +368,26 @@ inline mithep::ThreeVectorC mithep::Photon::CaloPos() const
     return SCluster()->Point();
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::GetMom() const
+inline
+void
+mithep::Photon::GetMom() const
 {
   // Get momentum values from stored values.
 
   fCachedMom.SetCoordinates(fMom.Pt(),fMom.Eta(),fMom.Phi(),fMom.M());
 }
 
-//--------------------------------------------------------------------------------------------------
-inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
+inline
+void
+mithep::Photon::SetPtEtaPhi(Double_t pt, Double_t eta, Double_t phi)
+{
+  fMom.Set(pt, eta, phi, 0.);
+  ClearMom();
+}
+
+inline
+void
+mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double_t e)
 {
   // Set momentum vector.
 
@@ -377,8 +395,9 @@ inline void mithep::Photon::SetMom(Double_t px, Double_t py, Double_t pz, Double
   ClearMom();
 }
 
-//--------------------------------------------------------------------------------------------------
-inline mithep::FourVectorM mithep::Photon::MomVtx(const ThreeVector &vtx) const
+inline
+mithep::FourVectorM
+mithep::Photon::MomVtx(ThreeVector const& vtx) const
 {
   // Get momentum values from stored values.
   ThreeVector momv = Mom3(vtx);

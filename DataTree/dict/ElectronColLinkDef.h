@@ -20,22 +20,6 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
-#pragma read \
-    sourceClass="mithep::Electron" \
-    version="[-2]" \
-    source="" \
-    targetClass="mithep::Electron" \
-    target="fCharge" \
-    code="{ fCharge = -99; }" \
-
-#pragma read \
-    sourceClass="mithep::Electron" \
-    version="[-16]" \
-    source="Double32_t fCoviEtaiEta" \
-    targetClass="mithep::Electron" \
-    target="fCoviEtaiEta5x5" \
-    code="{ fCoviEtaiEta5x5 = onfile.fCoviEtaiEta; }" \
-
 #pragma link C++ class mithep::Electron+;
 #pragma link C++ class mithep::Collection<mithep::Electron>+;
 #pragma link C++ class mithep::Array<mithep::Electron>+;

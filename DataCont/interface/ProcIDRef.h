@@ -18,7 +18,7 @@ namespace mithep
   class ProcIDRef : public TObject {
   public:
     ProcIDRef() : fProcID(0) {}
-    ProcIDRef(ProcIDRef const& orig) : fProcID(orig.fProcID) {}
+    ProcIDRef(ProcIDRef const& orig) : TObject(orig), fProcID(orig.fProcID) {}
     ProcIDRef(TProcessID *pid) : fProcID(pid) {}
     ~ProcIDRef() {}
 

@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: DataBase.h,v 1.5 2009/03/03 17:04:09 loizides Exp $
-//
 // DataBase
 //
 // This is the common base class for all objects in the tree that do not require the TObject bits to

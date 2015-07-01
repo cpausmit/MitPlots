@@ -1,5 +1,3 @@
-// $Id: RunLumiSelectionMod.cc,v 1.4 2010/06/29 15:51:53 bendavid Exp $
-
 #include "MitAna/PhysicsMod/interface/RunLumiSelectionMod.h"
 #include <TTree.h>
 #include "MitAna/DataTree/interface/Names.h"

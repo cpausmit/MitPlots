@@ -14,22 +14,10 @@ mithep::Jet::Jet() :
   fBJetTagsDisc{},
   fCorrectionScale{},
   fJetArea(0.),
-  fCorrections()
+  fCorrections{}
 {
-}
-
-mithep::Jet::Jet(Double_t px, Double_t py, Double_t pz, Double_t e) :
-  fRawMom(px, py, pz, e),
-  fAlpha(0.),
-  fBeta(0.),
-  fMatchedMCFlavor(0),
-  fSigmaEta(0.),
-  fSigmaPhi(0.),
-  fBJetTagsDisc{},
-  fCorrectionScale{},
-  fJetArea(0.),
-  fCorrections()
-{
+  for (unsigned iC = 0; iC != nECorrs; ++iC)
+    fCorrectionScale[iC] = -1.;
 }
 
 /*static*/

@@ -1,39 +1,4 @@
-// $Id: MitAnaPhysicsModLinkDef.h,v 1.15 2009/06/15 15:00:16 loizides Exp $
-
-#ifndef MITANA_PHYSICSMOD_FILTERMODLINKDEF_H
-#define MITANA_PHYSICSMOD_FILTERMODLINKDEF_H
-#include "MitAna/PhysicsMod/interface/FilterMod.h"
-#include "MitAna/PhysicsMod/interface/MergerMod.h"
-#include "MitAna/PhysicsMod/interface/PlotKineMod.h"
-#include "MitAna/PhysicsMod/interface/PublisherMod.h"
-#include "MitAna/PhysicsMod/interface/SkimMod.h"
-
-#include "MitAna/DataTree/interface/BasicCluster.h"
-#include "MitAna/DataTree/interface/CaloJet.h"
-#include "MitAna/DataTree/interface/CaloMet.h"
-#include "MitAna/DataTree/interface/CaloTower.h"
-#include "MitAna/DataTree/interface/CompositeParticle.h"
-#include "MitAna/DataTree/interface/CompoundParticle.h"
-#include "MitAna/DataTree/interface/Conversion.h"
-#include "MitAna/DataTree/interface/DataBase.h"
-#include "MitAna/DataTree/interface/DataObject.h"
-#include "MitAna/DataTree/interface/Electron.h"
-#include "MitAna/DataTree/interface/GenJet.h"
-#include "MitAna/DataTree/interface/GenericParticle.h"
-#include "MitAna/DataTree/interface/JPTJet.h"
-#include "MitAna/DataTree/interface/MCParticle.h"
-#include "MitAna/DataTree/interface/Muon.h"
-#include "MitAna/DataTree/interface/PFJet.h"
-#include "MitAna/DataTree/interface/PFMet.h"
-#include "MitAna/DataTree/interface/Particle.h"
-#include "MitAna/DataTree/interface/Photon.h"
-#include "MitAna/DataTree/interface/SuperCluster.h"
-#include "MitAna/DataTree/interface/PFTau.h"
-#include "MitAna/DataTree/interface/Tau.h"
-#include "MitAna/DataTree/interface/Track.h"
-#include "MitAna/DataTree/interface/TriggerObject.h"
-#include "MitAna/DataTree/interface/Vertex.h"
-#endif
+#include "MitAna/PhysicsMod/interface/TemplateMods.h"
 
 #ifdef __CLING__
 #pragma link off all globals;
@@ -43,9 +8,9 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
-#pragma link C++ class mithep::FilterMod<mithep::CaloJet,mithep::Jet>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloJet, mithep::Jet>+;
 #pragma link C++ class mithep::FilterMod<mithep::CaloJet>+;
-#pragma link C++ class mithep::FilterMod<mithep::CaloMet,mithep::Met>+;
+#pragma link C++ class mithep::FilterMod<mithep::CaloMet, mithep::Met>+;
 #pragma link C++ class mithep::FilterMod<mithep::CaloMet>+;
 #pragma link C++ class mithep::FilterMod<mithep::CaloTower>+;
 #pragma link C++ class mithep::FilterMod<mithep::CompositeParticle>+;
@@ -62,6 +27,25 @@
 #pragma link C++ class mithep::FilterMod<mithep::Track>+;
 #pragma link C++ class mithep::FilterMod<mithep::TriggerObject>+;
 
+#pragma link C++ typedef mithep::CaloJetToJetFilterMod;
+#pragma link C++ typedef mithep::CaloJetFilterMod;
+#pragma link C++ typedef mithep::CaloMetToMetFilterMod;
+#pragma link C++ typedef mithep::CaloMetFilterMod;
+#pragma link C++ typedef mithep::CaloTowerFilterMod;
+#pragma link C++ typedef mithep::CompositeParticleFilterMod;
+#pragma link C++ typedef mithep::CompoundParticleFilterMod;
+#pragma link C++ typedef mithep::ConversionFilterMod;
+#pragma link C++ typedef mithep::ElectronFilterMod;
+#pragma link C++ typedef mithep::GenJetFilterMod;
+#pragma link C++ typedef mithep::JetFilterMod;
+#pragma link C++ typedef mithep::MCParticleFilterMod;
+#pragma link C++ typedef mithep::MetFilterMod;
+#pragma link C++ typedef mithep::MuonFilterMod;
+#pragma link C++ typedef mithep::PFJetFilterMod;
+#pragma link C++ typedef mithep::PhotonFilterMod;
+#pragma link C++ typedef mithep::TrackFilterMod;
+#pragma link C++ typedef mithep::TriggerObjectFilterMod;
+
 #pragma link C++ class mithep::MergerMod<TObject>+;
 #pragma link C++ class mithep::MergerMod<mithep::BasicCluster>+;
 #pragma link C++ class mithep::MergerMod<mithep::DataBase>+;
@@ -70,27 +54,18 @@
 #pragma link C++ class mithep::MergerMod<mithep::Particle>+;
 #pragma link C++ class mithep::MergerMod<mithep::SuperCluster>+;
 
-#pragma link C++ class mithep::PlotKineMod<mithep::CaloJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CaloMet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CompositeParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::CompoundParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Conversion>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Electron>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::GenJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Jet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::MCParticle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Met>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Muon>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::PFJet>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Particle>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Photon>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::Track>+;
-#pragma link C++ class mithep::PlotKineMod<mithep::TriggerObject>+;
+#pragma link C++ typedef mithep::TObjectMergerMod;
+#pragma link C++ typedef mithep::BasicClusterMergerMod;
+#pragma link C++ typedef mithep::DataBaseMergerMod;
+#pragma link C++ typedef mithep::DataObjectMergerMod;
+#pragma link C++ typedef mithep::GenericParticleMergerMod;
+#pragma link C++ typedef mithep::ParticleMergerMod;
+#pragma link C++ typedef mithep::SuperClusterMergerMod;
 
 #pragma link C++ class mithep::PublisherMod<mithep::BasicCluster>+;
-#pragma link C++ class mithep::PublisherMod<mithep::CaloJet,mithep::Jet>+;
+#pragma link C++ class mithep::PublisherMod<mithep::CaloJet, mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloJet>+;
-#pragma link C++ class mithep::PublisherMod<mithep::CaloMet,mithep::Met>+;
+#pragma link C++ class mithep::PublisherMod<mithep::CaloMet, mithep::Met>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloMet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CaloTower>+;
 #pragma link C++ class mithep::PublisherMod<mithep::CompositeParticle>+;
@@ -102,15 +77,40 @@
 #pragma link C++ class mithep::PublisherMod<mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::MCParticle>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Met>+;
-#pragma link C++ class mithep::PublisherMod<mithep::PFMet,mithep::Met>+;
+#pragma link C++ class mithep::PublisherMod<mithep::PFMet, mithep::Met>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFMet>+;
-#pragma link C++ class mithep::PublisherMod<mithep::PFJet,mithep::Jet>+;
+#pragma link C++ class mithep::PublisherMod<mithep::PFJet, mithep::Jet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::PFJet>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Photon>+;
 #pragma link C++ class mithep::PublisherMod<mithep::SuperCluster>+;
 #pragma link C++ class mithep::PublisherMod<mithep::Track>+;
 #pragma link C++ class mithep::PublisherMod<mithep::TriggerObject>+;
 #pragma link C++ class mithep::PublisherMod<mithep::JPTJet, mithep::Jet>+;
+
+#pragma link C++ typedef mithep::BasicClusterPublisherMod;
+#pragma link C++ typedef mithep::CaloJetToJetPublisherMod;
+#pragma link C++ typedef mithep::CaloJetPublisherMod;
+#pragma link C++ typedef mithep::CaloMetToMetPublisherMod;
+#pragma link C++ typedef mithep::CaloMetPublisherMod;
+#pragma link C++ typedef mithep::CaloTowerPublisherMod;
+#pragma link C++ typedef mithep::CompositeParticlePublisherMod;
+#pragma link C++ typedef mithep::CompoundParticlePublisherMod;
+#pragma link C++ typedef mithep::ConversionPublisherMod;
+#pragma link C++ typedef mithep::ElectronPublisherMod;
+#pragma link C++ typedef mithep::MuonPublisherMod;
+#pragma link C++ typedef mithep::GenJetPublisherMod;
+#pragma link C++ typedef mithep::JetPublisherMod;
+#pragma link C++ typedef mithep::MCParticlePublisherMod;
+#pragma link C++ typedef mithep::MetPublisherMod;
+#pragma link C++ typedef mithep::PFMetToMetPublisherMod;
+#pragma link C++ typedef mithep::PFMetPublisherMod;
+#pragma link C++ typedef mithep::PFJetToJetPublisherMod;
+#pragma link C++ typedef mithep::PFJetPublisherMod;
+#pragma link C++ typedef mithep::PhotonPublisherMod;
+#pragma link C++ typedef mithep::SuperClusterPublisherMod;
+#pragma link C++ typedef mithep::TrackPublisherMod;
+#pragma link C++ typedef mithep::TriggerObjectPublisherMod;
+#pragma link C++ typedef mithep::JPTJetToJetPublisherMod;
 
 #pragma link C++ class mithep::SkimMod<mithep::BasicCluster>+;
 #pragma link C++ class mithep::SkimMod<mithep::CaloJet>+;
@@ -135,4 +135,29 @@
 #pragma link C++ class mithep::SkimMod<mithep::Track>+;
 #pragma link C++ class mithep::SkimMod<mithep::TriggerObject>+;
 #pragma link C++ class mithep::SkimMod<mithep::Vertex>+;
+
+#pragma link C++ typedef mithep::BasicClusterSkimMod;
+#pragma link C++ typedef mithep::CaloJetSkimMod;
+#pragma link C++ typedef mithep::CaloMetSkimMod;
+#pragma link C++ typedef mithep::CaloTowerSkimMod;
+#pragma link C++ typedef mithep::CompositeParticleSkimMod;
+#pragma link C++ typedef mithep::ConversionSkimMod;
+#pragma link C++ typedef mithep::ElectronSkimMod;
+#pragma link C++ typedef mithep::GenJetSkimMod;
+#pragma link C++ typedef mithep::JetSkimMod;
+#pragma link C++ typedef mithep::MCParticleSkimMod;
+#pragma link C++ typedef mithep::MetSkimMod;
+#pragma link C++ typedef mithep::CaloMetSkimMod;
+#pragma link C++ typedef mithep::PFMetSkimMod;
+#pragma link C++ typedef mithep::MuonSkimMod;
+#pragma link C++ typedef mithep::PFCandidateSkimMod;
+#pragma link C++ typedef mithep::PFJetSkimMod;
+#pragma link C++ typedef mithep::TauSkimMod;
+#pragma link C++ typedef mithep::PFTauSkimMod;
+#pragma link C++ typedef mithep::PhotonSkimMod;
+#pragma link C++ typedef mithep::SuperClusterSkimMod;
+#pragma link C++ typedef mithep::TrackSkimMod;
+#pragma link C++ typedef mithep::TriggerObjectSkimMod;
+#pragma link C++ typedef mithep::VertexSkimMod;
+
 #endif

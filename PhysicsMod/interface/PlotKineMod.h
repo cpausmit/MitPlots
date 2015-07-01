@@ -1,130 +1,68 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: PlotKineMod.h,v 1.12 2009/06/17 11:50:27 loizides Exp $
-//
 // PlotKineMod
 // 
 // This module allows one to quickly plot eta and pt distribution of a given particle.
 //
-// Authors: C.Loizides
+// Authors: C.Loizides, Y.Iiyama
 //--------------------------------------------------------------------------------------------------
 
 #ifndef MITANA_PHYSICSMOD_PLOTKINEMOD_H
 #define MITANA_PHYSICSMOD_PLOTKINEMOD_H
 
-#include "MitAna/DataCont/interface/Collection.h"
 #include "MitAna/TreeMod/interface/BaseMod.h" 
+#include "MitAna/DataTree/interface/ParticleCol.h"
+
 #include <TH1D.h>
 
-namespace mithep 
-{
-  template<class T>
-  class PlotKineMod : public BaseMod 
-  {
-    public:
-      PlotKineMod(const char *name="PlotKineMod", 
-                  const char *title="Plot kinematics module");
+namespace mithep {
 
-      const char              *GetColName()              const { return fColName;     }
-      Double_t                 GetEtaMin()               const { return fEtaMin;      }
-      Double_t                 GetEtaMax()               const { return fEtaMax;      }
-      const char              *GetInputName()            const { return GetColName(); }
-      Double_t                 GetPtMin()                const { return fPtMin;       }
-      Double_t                 GetPtMax()                const { return fPtMax;       }
-      void                     SetColName(const char *n)       { fColName=n;          }
-      void                     SetEntriesMax(Int_t e)          { fEntriesMax = e;     }
-      void                     SetEtaMin(Double_t e)           { fEtaMin = e;         }
-      void                     SetEtaMax(Double_t e)           { fEtaMax = e;         }
-      void                     SetInputName(const char *n)     { SetColName(n);       }
-      void                     SetPtMin(Double_t pt)           { fPtMin = pt;         }
-      void                     SetPtMax(Double_t pt)           { fPtMax = pt;         }
+  class PlotKineMod : public BaseMod {
+  public:
+    PlotKineMod(char const* name = "PlotKineMod", 
+                char const* title = "Plot kinematics module");
 
-    protected:
-      Bool_t                   Load();
-      void                     Process();
-      void                     SlaveBegin();
+    char const* GetColName() const   { return fColName; }
+    char const* GetInputName() const { return GetColName(); }
 
-      TString                  fColName;    //name of collection
-      Double_t                 fPtMin;      //minimum pt
-      Double_t                 fPtMax;      //maximum pt
-      Double_t                 fEtaMin;     //minimum eta
-      Double_t                 fEtaMax;     //maximum eta 
-      Int_t                    fEntriesMax;  //maximum number of entries
-      const Collection<T>     *fCol;        //!pointer to collection 
-      TH1D                    *fPtHist;     //!pt histogram
-      TH1D                    *fEtaHist;    //!eta histogram
-      TH1D                    *fEntHist;    //!entries histogram
+    Double_t GetPtMin() const     { return fPtMin; }
+    Double_t GetPtMax() const     { return fPtMax; }
+    Double_t GetEtaMin() const    { return fEtaMin; }
+    Double_t GetEtaMax() const    { return fEtaMax; }
+    Double_t GetAbsEtaMin() const { return fAbsEtaMin; }
+    Double_t GetAbsEtaMax() const { return fAbsEtaMax; }
 
-      ClassDef(PlotKineMod, 1) // Plot kinematics module
+    void SetColName(char const* n)   { fColName = n; }
+    void SetInputName(char const* n) { SetColName(n); }
+
+    void SetEtaMin(Double_t e)    { fEtaMin = e; }
+    void SetEtaMax(Double_t e)    { fEtaMax = e; }
+    void SetPtMin(Double_t pt)    { fPtMin = pt; }
+    void SetPtMax(Double_t pt)    { fPtMax = pt; }
+    void SetAbsEtaMin(Double_t e) { fAbsEtaMin = e; }
+    void SetAbsEtaMax(Double_t e) { fAbsEtaMax = e; }
+
+  protected:
+    void Process() override;
+    void SlaveBegin() override;
+
+    TString  fColName = "";    //name of collection
+    Double_t fPtMin = 0.;      //minimum pt
+    Double_t fPtMax = 1000.;      //maximum pt
+    Double_t fEtaMin = -5.;     //minimum eta
+    Double_t fEtaMax = 5.;     //maximum eta
+    Double_t fAbsEtaMin = 0.;
+    Double_t fAbsEtaMax = 1000.;
+
+    TH1D* fPtHist = 0;     //!pt histogram
+    TH1D* fEtaHist = 0;    //!eta histogram
+    TH1D* fPhiHist = 0;    //!phi histogram
+    TH1D* fLeadPtHist = 0;  //!pt histogram (leading object)
+    TH1D* fLeadEtaHist = 0; //!eta histogram (leading object)
+    TH1D* fMultHist = 0;   //!multiplicity histogram
+
+    ClassDef(PlotKineMod, 1) // Plot kinematics module
   };
+
 }
 
-//--------------------------------------------------------------------------------------------------
-template<class T>
-mithep::PlotKineMod<T>::PlotKineMod(const char *name, const char *title) : 
-  BaseMod(name,title),
-  fColName("SetMe"),
-  fPtMin(1),
-  fPtMax(5000),
-  fEtaMin(-10),
-  fEtaMax(10),
-  fEntriesMax(250),
-  fCol(0),
-  fPtHist(0),
-  fEtaHist(0),
-  fEntHist(0)
-{
-  // Constructor.
-
-  SetFillHist(kTRUE);
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class T>
-void mithep::PlotKineMod<T>::Process()
-{
-  // Process entries of the tree: Just load the branch and fill the histograms.
-
-  if (!LoadEventObject(GetColName(), fCol)) {
-    SendError(kAbortModule, "Process", "Could not load data!");
-    return;
-  }
-
-  if (!GetFillHist())
-    return;
-    
-  const UInt_t ents=fCol->GetEntries();
-  fEntHist->Fill(ents);
-  for(UInt_t i=0;i<ents;++i) {
-     const T *p = fCol->At(i);
-     Double_t pt = p->Pt();
-     if (pt<fPtMin) 
-       continue;
-     if (pt>fPtMax)
-       continue;
-     Double_t eta = p->Eta();
-     if (eta<fEtaMin)
-       continue;
-     if (eta>fEtaMax)
-       continue;
-     fPtHist->Fill(pt);
-     fEtaHist->Fill(eta);
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
-template<class T>
-void mithep::PlotKineMod<T>::SlaveBegin()
-{
-  // Request a branch and create the histograms.
-  
-  ReqEventObject(GetColName(), fCol);
-
-  if (GetFillHist()) {
-    Int_t ptbins = (Int_t)((fPtMax-fPtMin)/2.5);
-    AddTH1(fPtHist,"hPtHist",";p_{t} [GeV];#",ptbins,fPtMin,fPtMax);
-    Int_t etabins = (Int_t)((fEtaMax-fEtaMin)/0.1);
-    AddTH1(fEtaHist,"hEtaHist",";#eta;#",etabins,fEtaMin,fEtaMax);
-    AddTH1(fEntHist,"hEntriesHist",";#entries;#",fEntriesMax,-0.5,fEntriesMax-0.5);
-  }
-}
 #endif

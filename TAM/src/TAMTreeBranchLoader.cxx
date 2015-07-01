@@ -1,7 +1,3 @@
-//
-// $Id: TAMTreeBranchLoader.cxx,v 1.3 2009/07/13 19:20:25 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAMTreeBranchLoader.h"
 
 
@@ -68,7 +64,7 @@ ClassImp(TAMTreeBranchLoader)
 //______________________________________________________________________________
 TAMTreeBranchLoader::TAMTreeBranchLoader(TAMBranchInfo *binfo)
    : TAMVirtualBranchLoader(binfo), fBAddr(0), fIsClass(kFALSE), 
-     fLeafSizeConst(kTRUE), fBranch(0), fClass(0)
+     fLeafSizeConst(kTRUE), fBranch(0)
 {
    // Default constructor.
 }
@@ -80,7 +76,6 @@ TAMTreeBranchLoader::~TAMTreeBranchLoader()
    // Destructor.
 
    DeleteMemory();
-   fClass  = 0;
    fBranch = 0;
 }
 
@@ -100,46 +95,6 @@ void TAMTreeBranchLoader::AllocateMemory()
 
    fBAddr = fClass->New();
 }
-
-
-//______________________________________________________________________________
-Bool_t TAMTreeBranchLoader::CheckBrClass(const type_info& ptrtype, 
-                                         const TClass& cls) 
-{
-   // Check if the tree stores a class of the specified type
-   // ptrtype is user type and cls is type found in branch.
-
-   // check for equality
-   const type_info *clt = cls.GetTypeInfo();
-
-   if (clt!=0) {
-      if ( (*clt) == ptrtype ) return kTRUE;
-   } else {
-      Error("CheckBrClass",
-            "Could not get type_info for first leaf in branch [%s] "
-            "of type [%s].",fBranch->GetName(), fBranch->GetClassName());
-      return kFALSE;
-   }
-
-   // check for inheritance hierachy
-   const TClass *ptrcls = gROOT->GetClass(ptrtype);
-
-   if ( ptrcls!=0 ) {
-      if ( cls.InheritsFrom(ptrcls) ) return kTRUE;
-   } else {
-      Error("CheckBrClass",
-            "Could not get pointer to TClass for first leaf in branch [%s] "
-            "of type [%s].",fBranch->GetName(), fBranch->GetClassName());
-      return kFALSE;
-   } 
-
-   Error("CheckBrClass",
-         "Class of first leaf in branch [%s] is [%s], "
-         "different (not equal/derived) from pointer type [%s].",
-         fBranch->GetName(), clt->name(), ptrtype.name());
-   return kFALSE;
-}
-
 
 //______________________________________________________________________________
 Bool_t TAMTreeBranchLoader::CheckBrStruct(TClass& cls) 
@@ -199,7 +154,7 @@ Bool_t TAMTreeBranchLoader::CheckBrStruct(TClass& cls)
 
 
 //______________________________________________________________________________
-Bool_t TAMTreeBranchLoader::CheckBrType(const type_info& ptrtype) 
+Bool_t TAMTreeBranchLoader::CheckBrType(TClass& cl) 
 {
    // Check that the specified type (of the user's pointer) corresponds with
    // what is in the tree:
@@ -207,32 +162,30 @@ Bool_t TAMTreeBranchLoader::CheckBrType(const type_info& ptrtype)
    // 2. Check the specified type is a class/struct (that is in the TClass
    //    dictionary!!) whose members correspond to the leaves in the branch.
 
-   R__ASSERT(gROOT!=0);
+   R__ASSERT(gROOT);
    
    // first try the branch (works only for classes)
-   TClass* cls = gROOT->GetClass(fBranch->GetClassName());
-   if (cls!=0) {
+   TClass* onfile = gROOT->GetClass(fBranch->GetClassName());
+   if (onfile) {
       // known class
       fIsClass = kTRUE;
-      fClass = cls;
-      return CheckBrClass(ptrtype, *cls);
-   } else {
-      // pointer is a class/struct, branch is list of fundamentals
-      cls = TClass::GetClass(ptrtype);
-      if (cls!=0) {
-	 fClass = cls;
-         return CheckBrStruct(*cls);
-      } else {
-         // pointer is a fundamental type (or else unknown type)
-         Error("CheckBrType",
-               "Pointer for branch [%s] is of fundamental type [%d], or "
-               "is a class/struct which is not in the TClass dictionary. "
-               "This is not supported. See documentation.",
-               fBranch->GetName(),
-               static_cast<Int_t>(TDataType::GetType(ptrtype)));
+      fClass = onfile;
+
+      if (onfile->InheritsFrom(&cl))
+        return kTRUE;
+      else {
+        Error("CheckBrType",
+              "Class of first leaf in branch [%s] is [%s], "
+              "different (not equal/derived) from pointer type [%s].",
+              fBranch->GetName(), onfile->GetName(), cl.GetName());
+        return kFALSE;
       }
    }
-   return kFALSE;
+   else {
+     // pointer is a class/struct, branch is list of fundamentals
+     fClass = &cl;
+     return CheckBrStruct(cl);
+   }
 }
 
 //______________________________________________________________________________
@@ -240,15 +193,22 @@ Bool_t TAMTreeBranchLoader::CheckBrTypeAllModules()
 {
    // Loop over each user address and check that it's of the correct type
    // for the data contained in this branch.
-   
-   Bool_t isok=kTRUE;
-   vector<TAMBranchInfo::BranchPtr_t*>::const_iterator end = 
-      GetBInfo()->fUsrAddresses.end();
-   for (vector<TAMBranchInfo::BranchPtr_t*>::const_iterator ptr = 
-           GetBInfo()->fUsrAddresses.begin(); (ptr!=end) && isok; ptr++) {
-      isok &= CheckBrType((*ptr)->GetType());
-   }
-   return isok;
+
+  for (auto&& addr : GetBInfo()->fUsrAddresses) {
+    TClass* cl = addr->GetClass();
+    if (!cl) {
+      Error("CheckBrType",
+            "Pointer for branch [%s] does not have a defined TClass, or "
+            "is a class/struct which is not in the TClass dictionary. "
+            "This is not supported. See documentation.",
+            fBranch->GetName());
+      return false;
+    }
+    if (!CheckBrType(*cl))
+      return false;
+  }
+
+  return true;
 }
 
 //______________________________________________________________________________
@@ -347,7 +307,7 @@ Bool_t TAMTreeBranchLoader::Notify(TTree* tree)
    } else {
       // zero usr addresses (only possible for autoloading)
       TClass* cls = gROOT->GetClass(fBranch->GetClassName());
-      if (cls!=0) { // known class
+      if (cls != 0) { // known class
          fIsClass = kTRUE;
          fClass = cls;
       }
@@ -395,45 +355,44 @@ void TAMTreeBranchLoader::SetLeafAddresses()
    // is organized in the same way as any other module.
    // CheckBrStruct() assures that this really is the case.
    
-   const type_info& usrAdrType = GetBInfo()->GetType();
-   TClass* cls = TClass::GetClass(usrAdrType);
-   if (cls!=0) {
-      TList* members = cls->GetListOfDataMembers();
-      if ( (members!=0) && (members->IsEmpty()==kFALSE) ) {
-         TObjArray* lvs = fBranch->GetListOfLeaves();
-         if (lvs!=0) {
-            if (members->GetSize() == lvs->GetEntriesFast()) {
-               TIter nextlf(lvs);
-               TIter nextmem(members);
-               TDataMember* dm = dynamic_cast<TDataMember*>(nextmem());
-               TLeaf* lf = dynamic_cast<TLeaf*>(nextlf());
-               for (; ( (lf!=0) && (dm!=0) );
-                    dm = dynamic_cast<TDataMember*>(nextmem()),
-                    lf = dynamic_cast<TLeaf*>(nextlf()) ) {
-                  // the cast is just to prevent compiler warnings
-                  lf->SetAddress( static_cast<Char_t*>(fBAddr)
-                                  + dm->GetOffset() );
-               }
-            } else {
-               Error("SetLeafAddresses",
-                     "Class [%s] has [%d] members, while branch [%s] "
-                     "has [%d] leaves.",
-                     cls->GetName(), members->GetSize(),
-                     fBranch->GetName(), lvs->GetEntriesFast());
-            }
-         } else {
-            Error("SetLeafAddresses",
-                  "Could not get list of leaves for branch [%s].",
-                  fBranch->GetName());
-         }
+  TClass* cls = GetBInfo()->GetClass();
+  if (cls!=0) {
+    TList* members = cls->GetListOfDataMembers();
+    if ( (members!=0) && (members->IsEmpty()==kFALSE) ) {
+      TObjArray* lvs = fBranch->GetListOfLeaves();
+      if (lvs!=0) {
+        if (members->GetSize() == lvs->GetEntriesFast()) {
+          TIter nextlf(lvs);
+          TIter nextmem(members);
+          TDataMember* dm = dynamic_cast<TDataMember*>(nextmem());
+          TLeaf* lf = dynamic_cast<TLeaf*>(nextlf());
+          for (; ( (lf!=0) && (dm!=0) );
+               dm = dynamic_cast<TDataMember*>(nextmem()),
+                 lf = dynamic_cast<TLeaf*>(nextlf()) ) {
+            // the cast is just to prevent compiler warnings
+            lf->SetAddress( static_cast<Char_t*>(fBAddr)
+                            + dm->GetOffset() );
+          }
+        } else {
+          Error("SetLeafAddresses",
+                "Class [%s] has [%d] members, while branch [%s] "
+                "has [%d] leaves.",
+                cls->GetName(), members->GetSize(),
+                fBranch->GetName(), lvs->GetEntriesFast());
+        }
       } else {
-         Error("SetLeafAddresses",
-               "Could not get list of data members for class [%s].",
-               cls->GetName());
+        Error("SetLeafAddresses",
+              "Could not get list of leaves for branch [%s].",
+              fBranch->GetName());
       }
-   } else {
+    } else {
       Error("SetLeafAddresses",
-            "Could not get class for pointer of type [%s].",
-            usrAdrType.name());
-   }
+            "Could not get list of data members for class [%s].",
+            cls->GetName());
+    }
+  } else {
+    Error("SetLeafAddresses",
+          "Could not get class for branch %s.",
+          GetBInfo()->GetName());
+  }
 }

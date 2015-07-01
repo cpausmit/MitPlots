@@ -1,7 +1,3 @@
-//
-// $Id: TAMTreeBranchLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
-//
-
 #ifndef ROOT_TAMTreeBranchLoader
 #define ROOT_TAMTreeBranchLoader
 
@@ -26,14 +22,10 @@ protected:
                                         // (as opposed to a struct)
    Bool_t               fLeafSizeConst; //if size of leaves in branch is const
    TBranch             *fBranch;        //the branch itself (not owned)
-   TClass              *fClass;         //class information from dictionary 
-                                        // (not owned)
 
    void                 AllocateMemory();
-   Bool_t               CheckBrClass(const type_info& ptrtype, 
-                                     const TClass& cls);
-   Bool_t               CheckBrStruct(TClass& cls);
-   Bool_t               CheckBrType(const type_info& ptrtype);
+   Bool_t               CheckBrStruct(TClass&);
+   Bool_t               CheckBrType(TClass&);
    Bool_t               CheckBrTypeAllModules();
    void                 DeleteMemory();
    void                 SetBranchAddress();

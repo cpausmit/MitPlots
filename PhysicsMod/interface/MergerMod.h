@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MergerMod.h,v 1.1 2009/10/22 18:44:14 loizides Exp $
-//
 // MergerMod
 //
 // This templated module merges arbitrarily many collections of objects. It puts them into an 

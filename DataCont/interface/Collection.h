@@ -33,6 +33,7 @@ namespace mithep
       virtual const ArrayElement  *UncheckedAt(UInt_t idx)            const = 0;
       virtual ArrayElement        *operator[](UInt_t idx)                   = 0;
       virtual const ArrayElement  *operator[](UInt_t idx)             const = 0;
+      TClass*                      ElementClass()                     const { return ArrayElement::Class(); }
 
     ClassDef(Collection, 1) // Generic access to a collection of ArrayElements
   };

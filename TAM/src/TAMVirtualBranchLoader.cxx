@@ -1,7 +1,3 @@
-//
-// $Id: TAMVirtualBranchLoader.cxx,v 1.1 2008/05/27 19:13:21 loizides Exp $
-//
-
 #include "MitAna/TAM/interface/TAMVirtualBranchLoader.h"
 
 
@@ -30,7 +26,7 @@ ClassImp(TAMVirtualBranchLoader)
 
 //______________________________________________________________________________
 TAMVirtualBranchLoader::TAMVirtualBranchLoader(TAMBranchInfo *binfo)
-  : fBInfo(binfo)
+  : fBInfo(binfo), fClass(0)
 {
    // Default constructor.
 }

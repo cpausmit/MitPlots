@@ -23,33 +23,30 @@ namespace mithep
 {
   class DataObject : public TObject
   {
-    public:
-    DataObject() : fMarker(0) {}
+  public:
+    DataObject() {}
 
-      Bool_t               Is(EObjType t)   const { return (ObjType()==t); }
-      Bool_t               IsCached()       const { return TestBit(23); }
-      Bool_t               MustClear()      const { return TestBit(14); }
-      Bool_t               MustDelete()     const { return TestBit(15); }
-      virtual Int_t        ObjId()          const { return ObjType()*1000; }
-      virtual EObjType     ObjType()        const { return kDataObject; }
-      template <class Col> 
-      const Col           *ParentCol()      const;
+    Bool_t               Is(EObjType t)   const { return (ObjType()==t); }
+    Bool_t               IsCached()       const { return TestBit(23); }
+    Bool_t               MustClear()      const { return TestBit(14); }
+    Bool_t               MustDelete()     const { return TestBit(15); }
+    virtual Int_t        ObjId()          const { return ObjType()*1000; }
+    virtual EObjType     ObjType()        const { return kDataObject; }
+    template <class Col> 
+    Col const*           ParentCol()      const;
 
-      // Object marking
-      Bool_t               IsMarked()       const { return fMarker == 1; }
-      virtual void         Mark(UInt_t i=1) const;
-      void                 UnmarkMe()       const { fMarker = 0; }
-      //Bool_t               IsMarked()       const { return TestBit(17); }
-      //virtual void         Mark(UInt_t i=1) const;
-      //void                 UnmarkMe()       const { const_cast<DataObject*>(this)->SetBit(17,0); }
+    // Object marking
+    Bool_t               IsMarked()       const { return fMarker == 1; }
+    virtual void         Mark(UInt_t i=1) const;
+    void                 UnmarkMe()       const { fMarker = 0; }
 
-    protected:
-      void                 ResetCacheBit()        { SetBit(23,0); }
-      void                 SetCacheBit()          { SetBit(23); }
-      void                 SetClearBit()          { SetBit(14); }
-      void                 SetDeleteBit()         { SetBit(15); }
+  protected:
+    void                 ResetCacheBit()        { SetBit(23,0); }
+    void                 SetCacheBit()          { SetBit(23); }
+    void                 SetClearBit()          { SetBit(14); }
+    void                 SetDeleteBit()         { SetBit(15); }
 
-      mutable UInt_t       fMarker;             //!  marker uses custom streamer
+    mutable UInt_t       fMarker = 0;             //!  marker uses custom streamer
 
     ClassDef(DataObject, 1) // Common base for objects that do get referenced
   };
@@ -57,7 +54,8 @@ namespace mithep
 
 //--------------------------------------------------------------------------------------------------
 template <class Col>
-const Col* mithep::DataObject::ParentCol() const
+Col const*
+mithep::DataObject::ParentCol() const
 {
   // Return pointer to parent collection. SLOW, but faster than looping over collections!
   // Also note this function will only work for objects which were referenced prior to being 
@@ -83,7 +81,7 @@ const Col* mithep::DataObject::ParentCol() const
   if (!trackParent)
     return 0;
 
-  const Col *colObj=0;
+  Col const* colObj=0;
 
   while (!colObj) {
     if (!trackParent)

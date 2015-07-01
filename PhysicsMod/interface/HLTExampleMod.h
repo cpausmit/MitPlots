@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: HLTExampleMod.h,v 1.3 2009/05/12 18:41:39 loizides Exp $
-//
 // HLTExampleAnaMod
 //
 // This TAM module shows how to use the HLTMod module. It produces the pt- and 

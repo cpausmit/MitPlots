@@ -25,15 +25,6 @@ namespace mithep
                   fSubDetector3(0), fSubDetector4(0), fRestrictedEMF(0), fNHCalTowers(0),
                   fNECalTowers(0), fApproximatefHPD(0), fApproximatefRBX(0), fHitsInN90(0),
                   fNHits2RPC(0), fNHits3RPC(0), fNHitsRPC(0) {}
-      CaloJet(Double_t px, Double_t py, Double_t pz, Double_t e) : 
-                  Jet(px,py,pz,e),
-                  fMaxEInEmTowers(0), fMaxEInHadTowers(0), fEnergyFractionH(0),
-                  fEnergyFractionEm(0), fHadEnergyInHB(0), fHadEnergyInHO(0), fHadEnergyInHE(0),
-                  fHadEnergyInHF(0), fEmEnergyInEB(0), fEmEnergyInEE(0), fEmEnergyInHF(0),
-                  fTowersArea(0), fHPD(0), fRBX(0), fN90Hits(0), fSubDetector1(0), fSubDetector2(0),
-                  fSubDetector3(0), fSubDetector4(0), fRestrictedEMF(0), fNHCalTowers(0),
-                  fNECalTowers(0), fApproximatefHPD(0), fApproximatefRBX(0), fHitsInN90(0),
-                  fNHits2RPC(0), fNHits3RPC(0), fNHitsRPC(0) {}
 
       void                AddTower(const CaloTower *t)        { fTowers.Add(t);                  }
       Bool_t              HasTower(const CaloTower *t)  const { return fTowers.HasObject(t);     }

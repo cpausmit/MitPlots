@@ -1,7 +1,3 @@
-//
-// $Id: TAMVirtualBranchLoader.h,v 1.2 2009/07/13 19:20:24 loizides Exp $
-//
-
 #ifndef ROOT_TAMVirtualBranchLoader
 #define ROOT_TAMVirtualBranchLoader
 
@@ -18,7 +14,10 @@ class TTree;
 
 
 class TAMVirtualBranchLoader : public TObject {
+protected:
    TAMBranchInfo       *fBInfo; //corresponding TAMBranchInfo (not owned)
+   TClass              *fClass;         //class information from dictionary 
+                                        // (not owned)
 
 public:
    TAMVirtualBranchLoader(TAMBranchInfo *binfo);
@@ -27,7 +26,8 @@ public:
    virtual void         Clear(Option_t *option="");
    virtual void*        GetAddress()                const;
    TAMBranchInfo       *GetBInfo()                  const { return fBInfo; }
-   virtual Int_t        GetEntry(Long64_t entry);
+   TClass              *GetClass()                  const { return fClass; }
+   virtual Int_t        GetEntry(Long64_t entry); 
    using       TObject::Notify;
    virtual Bool_t       Notify(TTree *tree);
    

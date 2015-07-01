@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: MCProcessSelectionMod.h,v 1.1 2010/01/18 14:35:43 bendavid Exp $
-//
 // MCProcessSelectionMod
 //
 // This module selects or excludes a list or runs/ranges.  A list of accepted and excluded runs
@@ -51,7 +49,6 @@ namespace mithep
       Int_t                       fNFailed;       //!number of failed events
       std::vector<Int_t>          fAcceptedProcessIds; //list of process ids accept
       std::vector<Int_t>          fExcludedProcessIds; //list of process ids to exclude
-      const MCEventInfo          *fMCEventInfo;        //!MC Event Info pointer
       TH1F                       *hProcessId;     //histogram of process id's
 
     ClassDef(MCProcessSelectionMod, 1) // L1 TAM module
