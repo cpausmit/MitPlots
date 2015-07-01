@@ -5,6 +5,8 @@
 BOOK=$1
 DATASET=$2
 FILESET=$3
+shift 3
+JSONLIST="$@"
 
 if ! [ -d /cvmfs/cms.cern.ch ] || ! [ -d /cvmfs/cvmfs.cmsaf.mit.edu ]
 then
@@ -40,6 +42,11 @@ eval $(cd $CMSSW_RELEASE; scram runtime -sh)
 
 ls -l
 
-echo "python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --nentries=-1 analysisCfg.py"
+if [ "$JSONLIST" ]
+then
+  JSONARG="--goodlumi $JSONLIST"
+fi
+
+echo "python analysis.py analysisCfg.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --nentries=-1 $JSONARG"
 echo ""
-python analysis.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --nentries=-1 analysisCfg.py
+python analysis.py analysisCfg.py --book=$BOOK --dataset=$DATASET --fileset=$FILESET --output=${FILESET}.root --nentries=-1 $JSONARG

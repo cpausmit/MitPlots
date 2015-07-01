@@ -31,6 +31,6 @@ def goodLumiFilter(fileName, jsonDir = None):
             sys.exit(1)
 
         print 'Adding JSON file', fullPath
-        mod.AddJSONFile(fillPath)
+        mod.AddJSONFile(fullPath)
 
     return mod
