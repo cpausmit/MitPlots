@@ -92,10 +92,10 @@ echo " INFO -- using the x509 ticket: $X509_USER_PROXY"
 # get ready to run
 echo " "; echo "${h}: Starting root job now"; echo " ";
 echo \
-  root -b -l -q -n .rootlogon.C \
+  root -b -l -q -n rootlogon.C \
   ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
-  root -b -l -q -n .rootlogon.C \
+  root -b -l -q -n rootlogon.C \
   ./${runMacro}+\(\"$fileset\",\"$skim\",\"$dataset\",\"$book\",\"$catalogDir\"\,\"$outputName\",$nEvents\)
 
 # get the return code from the root job
