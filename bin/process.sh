@@ -74,13 +74,13 @@ then
   cp $MIT_ANA_DIR/bin/run.sh              $globDir
   cp $MIT_ANA_DIR/bin/runCrab.sh          $globDir
   cp $MIT_ANA_DIR/bin/runCrabJob.sh       $globDir
-  cp /home/$USER/cms/root/.rootlogon.C    $globDir
+  cp /home/$USER/cms/root/rootlogon.C     $globDir
   cp $MIT_USER_DIR/macros/$MIT_PROD_MACRO $globDir
   cp $MIT_ANA_DIR/macros/compile.C        $globDir
   # define our external path variable
   export EXTERNAL=/cvmfs/cvmfs.cmsaf.mit.edu/hidsk0001/cmsprod/cms/external
   # compile the bare run macro
-  root -l -b -q  compile.C"(\"$MIT_PROD_MACRO\")"
+  root -l -b -q -n rootlogon.C compile.C"(\"$MIT_PROD_MACRO\")"
   if [ "$?" != "0" ]
   then
     echo "  ERROR -- compilation of the run Macro failed. EXIT!"

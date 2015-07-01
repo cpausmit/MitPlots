@@ -80,17 +80,17 @@ fi
   
 # Check the relevant run files exist
 if ! [ -e "$workDir/setup.sh" ] || ! [ -e "$globDir/run.sh" ] || \
-   ! [ -e "$globDir/.rootlogon.C" ] || ! [ -e "$globDir/$runMacro" ] || \
+   ! [ -e "$globDir/rootlogon.C" ] || ! [ -e "$globDir/$runMacro" ] || \
    ! [ -e "$globDir/${runMacroTrunc}_C.so" ] || ! [ -e "$globDir/${runMacroTrunc}_C.d" ]
 then
   echo " ERROR - one of the relevant run files does not exist. EXIT."
-  echo " -> $workDir/setup.sh $globDir/run.sh $globDir/.rootlogon.C $globDir/$runMacro"
+  echo " -> $workDir/setup.sh $globDir/run.sh $globDir/rootlogon.C $globDir/$runMacro"
   echo " -> $globDir/${runMacroTrunc}_C.so $globDir/${runMacroTrunc}_C.d"
   exit 1
 fi
 
 echo "  Global run files exist."
-inputFiles=$inputFiles",$workDir/setup.sh,$globDir/.rootlogon.C,$globDir/$runMacro"
+inputFiles=$inputFiles",$workDir/setup.sh,$globDir/rootlogon.C,$globDir/$runMacro"
 inputFiles=$inputFiles",$globDir/${runMacroTrunc}_C.so,$globDir/${runMacroTrunc}_C.d"
 
 # Check the relevant catalog
@@ -201,7 +201,7 @@ do
     # some useful debugging sequences one can switch on
     #echo "$logsDir/${outputName}_${dataset}_${skim}_${fileset}.err"
     #grep 'SysError in <TFile::ReadBuffer>'  $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
-    grep "running on" $logsDir/${outputName}_${dataset}_${skim}_${fileset}.out
+    #grep "running on" $logsDir/${outputName}_${dataset}_${skim}_${fileset}.out
     #tail -10 $logsDir/${outputName}_${dataset}_${skim}_${fileset}.err
     continue
   fi
@@ -265,8 +265,6 @@ EOF
     rm submit.cmd
 
   fi
-
-  exit
 
 done
 
