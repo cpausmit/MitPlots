@@ -36,6 +36,8 @@ void setRootEnv()
   setIncludes();
   loadLibraries();
   loadmylib("libMitCommonMathTools.so");
+
+  sayHello();
 }
 
 void sayHello()
