@@ -3,6 +3,7 @@
 #ifndef MITPLOTS_PLOT_LINKDEF_H
 #define MITPLOTS_PLOT_LINKDEF_H
 #include "MitPlots/Plot/interface/PlotTask.h"
+#include "MitPlots/Plot/interface/PlotResolution.h"
 #endif
 
 #ifdef __CINT__
@@ -14,4 +15,5 @@
 #pragma link C++ namespace mithep;
 
 #pragma link C++ class mithep::PlotTask+;
+#pragma link C++ class mithep::PlotResolution+;
 #endif
