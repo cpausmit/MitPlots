@@ -12,7 +12,7 @@ ClassImp(mithep::TreeContainer)
 
 //--------------------------------------------------------------------
 TreeContainer::TreeContainer() :
-  fPrinting(false),
+  fPrinting(true),
   tempFile(0),
   tempTree(0),
   fTreeName("events"),
@@ -49,13 +49,14 @@ TreeContainer::AddFile(TString fileName){
 //--------------------------------------------------------------------
 void
 TreeContainer::AddDirectory(TString directoryName,TString searchFor){
-
   TString tempName;
   TSystemDirectory *dir = new TSystemDirectory(directoryName,directoryName);
   TList *fileNameList = dir->GetListOfFiles();
   for(Int_t i0 = 0; i0 < fileNameList->GetEntries(); i0++){
-    TString tempName = TString(fileNameList->At(i0)->GetName());
+    TNamed *tempMember = (TNamed*) fileNameList->At(i0);
+    TString tempName = TString(tempMember->GetName());
     if(tempName.Contains(searchFor)){
+      if(fPrinting) std::cout << "Opening " << tempName << std::endl;
       tempFile = TFile::Open(directoryName+"/"+tempName);
       if(tempFile != NULL)
         fFileList.push_back(tempFile);
@@ -79,7 +80,28 @@ TreeContainer::ReturnTree(TString Name){
 
   gROOT->cd();
 
-  fTree = TTree::MergeTrees(treeList);
+  if(treeList->GetEntries() > 1) fTree = TTree::MergeTrees(treeList);
+  else if(treeList->GetEntries() == 1) fTree = tempTree;
+  else fTree = NULL;
+
   return fTree;
+
+}
+
+//--------------------------------------------------------------------
+std::vector<TTree*>
+TreeContainer::ReturnTreeList(TString Name){
+
+  if(Name != "") SetTreeName(Name);
+  fTreeList.resize(0);
+
+  for(UInt_t i0 = 0; i0 < fFileList.size(); i0++){
+    if(fTreeName.Contains("/")) tempTree = (TTree*) fFileList[i0]->Get(fTreeName);
+    else tempTree = (TTree*) fFileList[i0]->FindObjectAny(fTreeName);
+    if(fPrinting) std::cout << "Getting " << fTreeName << " from " << fFileList[i0]->GetName() << std::endl;
+    fTreeList.push_back(tempTree);
+  }
+
+  return fTreeList;
 
 }

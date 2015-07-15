@@ -56,7 +56,7 @@ PlotResolution::AddLine(TTree *tree, TString cut, TString expr_res){
 
 //--------------------------------------------------------------------
 void
-PlotResolution::AddTreeCut(TTree *tree, TString cut){
+PlotResolution::AddTreeWeight(TTree *tree, TString cut){
   if(fDefaultTree != NULL){
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
@@ -96,7 +96,7 @@ PlotResolution::AddTreeExprRes(TTree *tree, TString expr_res){
 
 //--------------------------------------------------------------------
 void
-PlotResolution::AddCutExprRes(TString cut, TString expr_res){
+PlotResolution::AddWeightExprRes(TString cut, TString expr_res){
   if(fDefaultTree == NULL){
     std::cout << "Please set default tree first!" << std::endl;
     exit(1);
@@ -156,7 +156,14 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
 
   TF1 *fitFunc = new TF1("func","[0]*TMath::Gaus(x,[1],[2])",MinY,MaxY);
 
+  fitFunc->SetParLimits(0,0,1e8);
+  fitFunc->SetParLimits(1,MinY,MaxY);
+  fitFunc->SetParLimits(2,0,MaxY-MinY);
+
+  std::cout <<  fNumPlots << " lines will be made." << std::endl;
+
   for(UInt_t i0 = 0; i0 < fNumPlots; i0++){
+    std::cout << fNumPlots - i0 << " more to go." << std::endl;
     if(fInTrees.size()   != 0) inTree = fInTrees[i0];
     if(fInCuts.size()    != 0) inCut  = fInCuts[i0];
     if(fInExprRes.size() != 0) inExpr = fInExprRes[i0];

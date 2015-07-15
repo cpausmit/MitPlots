@@ -30,15 +30,16 @@ namespace mithep
 
     void        SetExprX              ( TString expr )                                { fInExprX = expr;            }
     void        SetDefaultTree        ( TTree *tree )                                 { fDefaultTree = tree;        }
-    void        SetDefaultCut         ( TString cut )                                 { fDefaultCut = cut;          }
+    void        SetDefaultWeight      ( TString cut )                                 { fDefaultCut = cut;          }
     void        SetDefaultExprRes     ( TString expr_res )                            { fDefaultExprRes = expr_res; }
 
+    void        SetTreeList           ( std::vector<TTree*> treelist )                { fInTrees = treelist;        }
     void        AddTree               ( TTree *tree )                                 { fInTrees.push_back(tree);   }
-    void        AddCut                ( TString cut )                                 { fInCuts.push_back(cut);     }
+    void        AddWeight             ( TString cut )                                 { fInCuts.push_back(cut);     }
     void        AddExprRes            ( TString expr )                                { fInExprRes.push_back(expr); }
-    void        AddTreeCut            ( TTree *tree, TString cut );
+    void        AddTreeWeight         ( TTree *tree, TString cut );
     void        AddTreeExprRes        ( TTree *tree, TString expr_res );
-    void        AddCutExprRes         ( TString cut, TString expr_res );
+    void        AddWeightExprRes      ( TString cut, TString expr_res );
 
     void        SetLegendLimits       ( Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4 );
 

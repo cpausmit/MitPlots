@@ -23,11 +23,12 @@ namespace mithep
     TreeContainer();
     virtual ~TreeContainer();
 
-    void     AddFile        ( TString fileName );
-    void     AddDirectory   ( TString directoryName, TString searchFor = ".root" );
-    void     SetTreeName    ( TString TreeName )                              { fTreeName = TreeName; }
-    TTree*   ReturnTree     ( TString Name = "" );
-    void     SetPrinting    ( bool printing )                                 { fPrinting = printing; }
+    void                   AddFile          ( TString fileName );
+    void                   AddDirectory     ( TString directoryName, TString searchFor = ".root" );
+    void                   SetTreeName      ( TString TreeName )         { fTreeName = TreeName; }
+    TTree*                 ReturnTree       ( TString Name = "" );
+    std::vector<TTree*>    ReturnTreeList   ( TString Name = "" );
+    void                   SetPrinting      ( bool printing )            { fPrinting = printing; }
 
   private:
 
@@ -36,6 +37,7 @@ namespace mithep
     TTree*                 tempTree;                                // Pointer to Tree
     TString                fTreeName;                               // Name of Trees looking for
     std::vector<TFile*>    fFileList;                               // List of files
+    std::vector<TTree*>    fTreeList;                               // List of trees
     TTree*                 fTree;                                   // Merged Tree gets merged during GetTree
     
     ClassDef(TreeContainer,1)
