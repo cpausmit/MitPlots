@@ -22,11 +22,15 @@ PlotResolution::PlotResolution() :
   l1(0.6),
   l2(0.7),
   l3(0.9),
-  l4(0.9)
+  l4(0.9),
+  fLineWidth(2)
 {
   fInTrees.resize(0);
   fInCuts.resize(0);
   fInExprRes.resize(0);
+  fParams.resize(0);
+  fParamLows.resize(0);
+  fParamHighs.resize(0);
 }
 
 //--------------------------------------------------------------------
@@ -123,6 +127,14 @@ PlotResolution::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Dou
   l4 = lim4;
 }
 
+//--------------------------------------------------------------------
+void
+PlotResolution::SetParameterLimits(Int_t param, Double_t low, Double_t high){
+  fParams.push_back(param);
+  fParamLows.push_back(low);
+  fParamHighs.push_back(high);
+}
+
 
 //--------------------------------------------------------------------
 TCanvas*
@@ -160,6 +172,10 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
   fitFunc->SetParLimits(1,MinY,MaxY);
   fitFunc->SetParLimits(2,0,MaxY-MinY);
 
+  for(UInt_t i0 = 0; i0 < fParams.size(); i0++){
+      fitFunc->SetParLimits(fParams[i0],fParamLows[i0],fParamHighs[i0]);
+  }
+
   std::cout <<  fNumPlots << " lines will be made." << std::endl;
 
   for(UInt_t i0 = 0; i0 < fNumPlots; i0++){
@@ -179,12 +195,13 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
       tempGraph->SetPoint(i1,tempHist->GetXaxis()->GetBinCenter(i1+1),fitFunc->GetParameter(ParamNumber));
     }
     theGraphs.push_back(tempGraph);
+    delete tempHist;
   }
 
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
   TLegend *theLegend = new TLegend(l1,l2,l3,l4);
   for(UInt_t i0 = 0; i0 < fNumPlots; i0++){
-    theGraphs[i0]->SetLineWidth(2);
+    theGraphs[i0]->SetLineWidth(fLineWidth);
     theGraphs[i0]->SetLineColor(theLegendContainer->ReturnColor(i0));
     theLegend->AddEntry(theGraphs[i0],theLegendContainer->ReturnLegendEntry(i0),"l");
   }
