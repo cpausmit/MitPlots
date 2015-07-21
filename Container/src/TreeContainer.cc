@@ -12,15 +12,18 @@ ClassImp(mithep::TreeContainer)
 
 //--------------------------------------------------------------------
 TreeContainer::TreeContainer() :
-  fPrinting(true),
+  fPrinting(false),
   tempFile(0),
   tempTree(0),
   fTreeName("events"),
-  fTree(0)
+  fTree(0),
+  fOutputFileName("output.root"),
+  fSkimmingTrees(false)
 {
 
   // Constructor
   fFileList.resize(0);
+  fKeepBranches.resize(0);
 
 }
 
@@ -66,7 +69,19 @@ TreeContainer::AddDirectory(TString directoryName,TString searchFor){
 
 //--------------------------------------------------------------------
 TTree*
-TreeContainer::ReturnTree(TString Name){
+TreeContainer::SkimTree(TTree *tree, Bool_t inFile){
+  tree->SetBranchStatus("*",0);
+  for(UInt_t i0 = 0; i0 < fKeepBranches.size(); i0++){
+    tree->SetBranchStatus(fKeepBranches[i0],1);
+  }
+  if(not inFile) gROOT->cd();
+  TTree *outTree = tree->CloneTree();
+  return outTree;
+}
+
+//--------------------------------------------------------------------
+TTree*
+TreeContainer::ReturnTree(TString Name, Bool_t inFile){
 
   if(Name != "") SetTreeName(Name);
   TList *treeList = new TList;
@@ -75,6 +90,7 @@ TreeContainer::ReturnTree(TString Name){
     if(fTreeName.Contains("/")) tempTree = (TTree*) fFileList[i0]->Get(fTreeName);
     else tempTree = (TTree*) fFileList[i0]->FindObjectAny(fTreeName);
     if(fPrinting) std::cout << "Getting " << fTreeName << " from " << fFileList[i0]->GetName() << std::endl;
+    if(fSkimmingTrees) tempTree = SkimTree(tempTree,false);
     treeList->Add(tempTree);
   }
 
@@ -99,9 +115,22 @@ TreeContainer::ReturnTreeList(TString Name){
     if(fTreeName.Contains("/")) tempTree = (TTree*) fFileList[i0]->Get(fTreeName);
     else tempTree = (TTree*) fFileList[i0]->FindObjectAny(fTreeName);
     if(fPrinting) std::cout << "Getting " << fTreeName << " from " << fFileList[i0]->GetName() << std::endl;
+    if(fSkimmingTrees) tempTree = SkimTree(tempTree,false);
     fTreeList.push_back(tempTree);
   }
 
   return fTreeList;
 
+}
+
+//--------------------------------------------------------------------
+void
+TreeContainer::MakeFile(TString fileName, TString treeName){
+  if(fileName != "") SetOutputFileName(fileName);
+  if(treeName != "") SetTreeName(treeName);
+  TFile *outFile = new TFile(fOutputFileName,"RECREATE");
+  TTree *outTree = ReturnTree(fTreeName,true);
+  outFile->cd();
+  outTree->Write();
+  outFile->Close();
 }

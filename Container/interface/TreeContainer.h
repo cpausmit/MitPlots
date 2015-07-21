@@ -23,14 +23,22 @@ namespace mithep
     TreeContainer();
     virtual ~TreeContainer();
 
-    void                   AddFile          ( TString fileName );
-    void                   AddDirectory     ( TString directoryName, TString searchFor = ".root" );
-    void                   SetTreeName      ( TString TreeName )         { fTreeName = TreeName; }
-    TTree*                 ReturnTree       ( TString Name = "" );
-    std::vector<TTree*>    ReturnTreeList   ( TString Name = "" );
-    void                   SetPrinting      ( bool printing )            { fPrinting = printing; }
+    void                   AddFile             ( TString fileName );
+    void                   AddDirectory        ( TString directoryName, TString searchFor = ".root" );
+    void                   SetTreeName         ( TString TreeName )         { fTreeName = TreeName; }
+    TTree*                 ReturnTree          ( TString Name = "", Bool_t inFile = false );
+    std::vector<TTree*>    ReturnTreeList      ( TString Name = "" );
+    void                   SetPrinting         ( Bool_t printing )          { fPrinting = printing; }
+
+    void                   AddKeepBranch       ( TString name )             { fKeepBranches.push_back(name); }
+    void                   SetOutputFileName   ( TString name )             { fOutputFileName = name;        }
+    void                   SetSkimmingTrees    ( Bool_t skim )              { fSkimmingTrees = skim;         }
+
+    void                   MakeFile            ( TString fileName = "", TString treeName = "");
 
   private:
+
+    TTree*                 SkimTree            ( TTree *tree, Bool_t inFile );
 
     Bool_t                 fPrinting;                               // Printer for debugging
     TFile*                 tempFile;                                // Pointer to File
@@ -39,6 +47,10 @@ namespace mithep
     std::vector<TFile*>    fFileList;                               // List of files
     std::vector<TTree*>    fTreeList;                               // List of trees
     TTree*                 fTree;                                   // Merged Tree gets merged during GetTree
+
+    std::vector<TString>   fKeepBranches;                           // Branches kept in the event of skimming
+    TString                fOutputFileName;                         // Potential output file name of skim
+    Bool_t                 fSkimmingTrees;                          // Bool to determine if skimming is happening
     
     ClassDef(TreeContainer,1)
   };
