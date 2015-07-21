@@ -13,7 +13,6 @@ ClassImp(mithep::PlotResolution)
 
 //--------------------------------------------------------------------
 PlotResolution::PlotResolution() :
-  fNumPlots(0),
   fCanvasName("canvas"),
   fDefaultTree(0),
   fDefaultCut(""),
@@ -55,7 +54,6 @@ PlotResolution::AddLine(TTree *tree, TString cut, TString expr_res){
   fInTrees.push_back(tree);
   fInCuts.push_back(cut);
   fInExprRes.push_back(expr_res);
-  fNumPlots++;
 }
 
 //--------------------------------------------------------------------
@@ -75,7 +73,6 @@ PlotResolution::AddTreeWeight(TTree *tree, TString cut){
   }
   fInTrees.push_back(tree);
   fInCuts.push_back(cut);
-  fNumPlots++;
 }
 
 //--------------------------------------------------------------------
@@ -95,7 +92,6 @@ PlotResolution::AddTreeExprRes(TTree *tree, TString expr_res){
   }
   fInTrees.push_back(tree);
   fInExprRes.push_back(expr_res);
-  fNumPlots++;
 }
 
 //--------------------------------------------------------------------
@@ -115,7 +111,6 @@ PlotResolution::AddWeightExprRes(TString cut, TString expr_res){
   }
   fInCuts.push_back(cut);
   fInExprRes.push_back(expr_res);
-  fNumPlots++;
 }
 
 //--------------------------------------------------------------------
@@ -137,24 +132,63 @@ PlotResolution::SetParameterLimits(Int_t param, Double_t low, Double_t high){
 
 
 //--------------------------------------------------------------------
-TCanvas*
-PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
-                           TString XLabel, TString YLabel,
-                           Int_t NumXBins, Double_t MinX, Double_t MaxX,
-                           Int_t NumYBins, Double_t MinY, Double_t MaxY,
-                           Int_t ParamNumber, Double_t FinalMin, Double_t FinalMax,Bool_t logY){
+std::vector<TGraph*>
+PlotResolution::GetRatioToPoint(std::vector<TGraph*> InGraphs, Double_t RatioPoint){
+  TGraph *tempGraph;
+  std::vector<TGraph*> outGraphs;
+  for(UInt_t i0 = 0; i0 < InGraphs.size(); i0++){
+    Double_t *GraphX = InGraphs[i0]->GetX();
+    Double_t *GraphY = InGraphs[i0]->GetY();
+    tempGraph = new TGraph(InGraphs[i0]->GetN());
+    for(Int_t i1 = 0; i1 < InGraphs[i0]->GetN(); i1++){
+      tempGraph->SetPoint(i1,GraphX[i1],GraphY[i1]/RatioPoint);
+    }
+    outGraphs.push_back(tempGraph);
+  }
+  return outGraphs;
+}
+
+//--------------------------------------------------------------------
+std::vector<TGraph*>
+PlotResolution::GetRatioToLine(std::vector<TGraph*> InGraphs, TGraph *RatioGraph){
+  TGraph *tempGraph;
+  std::vector<TGraph*> outGraphs;
+  Int_t NumPoints = RatioGraph->GetN();
+  Double_t *RatioY = RatioGraph->GetY();
+  for(UInt_t i0 = 0; i0 < InGraphs.size(); i0++){
+    Double_t *GraphX = InGraphs[i0]->GetX();
+    Double_t *GraphY = InGraphs[i0]->GetY();
+    tempGraph = new TGraph(NumPoints);
+    for(Int_t i1 = 0; i1 < NumPoints; i1++){
+      if(InGraphs[i0]->GetN() != NumPoints){
+        std::cout << "Messed up graph size... Check that out" << std::endl;
+        exit(1);
+      }
+      tempGraph->SetPoint(i1,GraphX[i1],GraphY[i1]/RatioY[i1]);
+    }
+    outGraphs.push_back(tempGraph);
+  }
+  return outGraphs;
+}
+
+//--------------------------------------------------------------------
+std::vector<TGraph*>
+PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
+                              Int_t NumYBins, Double_t MinY, Double_t MaxY,
+                              Int_t ParamNumber){
+
+  UInt_t NumPlots = 0;
+
   if(fInExprX == ""){
     std::cout << "You haven't initialized an x expression yet!" << std::endl;
     exit(1);
   }
-  if(fNumPlots == 0){
-    if(fInTrees.size() > 0) fNumPlots = fInTrees.size();
-    else if(fInCuts.size() > 0) fNumPlots = fInCuts.size();
-    else fNumPlots = fInExprRes.size();
-    if(fNumPlots == 0){
-      std::cout << "Nothing has been initialized in resolution plot." << std::endl;
-      exit(1);
-    }
+  if(fInTrees.size() > 0) NumPlots = fInTrees.size();
+  else if(fInCuts.size() > 0) NumPlots = fInCuts.size();
+  else NumPlots = fInExprRes.size();
+  if(NumPlots == 0){
+    std::cout << "Nothing has been initialized in resolution plot." << std::endl;
+    exit(1);
   }
 
   TTree *inTree = fDefaultTree;
@@ -173,13 +207,13 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
   fitFunc->SetParLimits(2,0,MaxY-MinY);
 
   for(UInt_t i0 = 0; i0 < fParams.size(); i0++){
-      fitFunc->SetParLimits(fParams[i0],fParamLows[i0],fParamHighs[i0]);
+    fitFunc->SetParLimits(fParams[i0],fParamLows[i0],fParamHighs[i0]);
   }
 
-  std::cout <<  fNumPlots << " lines will be made." << std::endl;
+  std::cout <<  NumPlots << " lines will be made." << std::endl;
 
-  for(UInt_t i0 = 0; i0 < fNumPlots; i0++){
-    std::cout << fNumPlots - i0 << " more to go." << std::endl;
+  for(UInt_t i0 = 0; i0 < NumPlots; i0++){
+    std::cout << NumPlots - i0 << " more to go." << std::endl;
     if(fInTrees.size()   != 0) inTree = fInTrees[i0];
     if(fInCuts.size()    != 0) inCut  = fInCuts[i0];
     if(fInExprRes.size() != 0) inExpr = fInExprRes[i0];
@@ -189,6 +223,7 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
     tempHist = new TH2D(tempName,tempName,NumXBins,MinX,MaxX,NumYBins,MinY,MaxY);
     inTree->Draw(inExpr+":"+fInExprX+">>"+tempName,inCut);
     tempGraph = new TGraph(NumXBins);
+
     for(Int_t i1 = 0; i1 < NumXBins; i1++){
       fitFunc->SetParameters(1.,(MaxY + MinY)/2,(MaxY - MinY)/4);
       tempHist->ProjectionY(tempName+"_py",i1+1,i1+1)->Fit(fitFunc,"","",MinY,MaxY);
@@ -197,21 +232,29 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
     theGraphs.push_back(tempGraph);
     delete tempHist;
   }
+  return theGraphs;
+}
 
+//--------------------------------------------------------------------
+TCanvas*
+PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
+                           std::vector<TGraph*> theGraphs,
+                           TString XLabel, TString YLabel,
+                           Double_t YMin, Double_t YMax,Bool_t logY){
+  UInt_t NumPlots = theGraphs.size();
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
   TLegend *theLegend = new TLegend(l1,l2,l3,l4);
-  for(UInt_t i0 = 0; i0 < fNumPlots; i0++){
+  for(UInt_t i0 = 0; i0 < NumPlots; i0++){
     theGraphs[i0]->SetLineWidth(fLineWidth);
     theGraphs[i0]->SetLineColor(theLegendContainer->ReturnColor(i0));
     theLegend->AddEntry(theGraphs[i0],theLegendContainer->ReturnLegendEntry(i0),"l");
   }
-  theGraphs[0]->GetYaxis()->SetRangeUser(FinalMin,FinalMax);
+  theGraphs[0]->GetYaxis()->SetRangeUser(YMin,YMax);
   theGraphs[0]->Draw();
-  for(UInt_t i0 = 1; i0 < theGraphs.size(); i0++){
+  for(UInt_t i0 = 1; i0 < NumPlots; i0++){
     theGraphs[i0]->Draw("same");
   }
   theLegend->Draw();
   if(logY) theCanvas->SetLogy();
   return theCanvas;
 }
-

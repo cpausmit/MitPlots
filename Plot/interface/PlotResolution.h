@@ -12,6 +12,7 @@
 
 #include "TTree.h"
 #include "TString.h"
+#include "TGraph.h"
 #include "TCanvas.h"
 
 #include "MitPlots/Container/interface/LegendContainer.h"
@@ -24,39 +25,43 @@ namespace mithep
     PlotResolution();
     virtual ~PlotResolution();
 
-    void        SetCanvasName         ( TString name )                                { fCanvasName = name;         }
+    void                   SetCanvasName            ( TString name )                                { fCanvasName = name;         }
 
-    void        AddLine               ( TTree *tree, TString cut, TString expr_res );
+    void                   AddLine                  ( TTree *tree, TString cut, TString expr_res );
 
-    void        SetExprX              ( TString expr )                                { fInExprX = expr;            }
-    void        SetDefaultTree        ( TTree *tree )                                 { fDefaultTree = tree;        }
-    void        SetDefaultWeight      ( TString cut )                                 { fDefaultCut = cut;          }
-    void        SetDefaultExprRes     ( TString expr_res )                            { fDefaultExprRes = expr_res; }
+    void                   SetExprX                 ( TString expr )                                { fInExprX = expr;            }
+    void                   SetDefaultTree           ( TTree *tree )                                 { fDefaultTree = tree;        }
+    void                   SetDefaultWeight         ( TString cut )                                 { fDefaultCut = cut;          }
+    void                   SetDefaultExprRes        ( TString expr_res )                            { fDefaultExprRes = expr_res; }
 
-    void        SetTreeList           ( std::vector<TTree*> treelist )                { fInTrees = treelist;        }
-    void        AddTree               ( TTree *tree )                                 { fInTrees.push_back(tree);   }
-    void        AddWeight             ( TString cut )                                 { fInCuts.push_back(cut);     }
-    void        AddExprRes            ( TString expr )                                { fInExprRes.push_back(expr); }
-    void        AddTreeWeight         ( TTree *tree, TString cut );
-    void        AddTreeExprRes        ( TTree *tree, TString expr_res );
-    void        AddWeightExprRes      ( TString cut, TString expr_res );
+    void                   SetTreeList              ( std::vector<TTree*> treelist )                { fInTrees = treelist;        }
+    void                   AddTree                  ( TTree *tree )                                 { fInTrees.push_back(tree);   }
+    void                   AddWeight                ( TString cut )                                 { fInCuts.push_back(cut);     }
+    void                   AddExprRes               ( TString expr )                                { fInExprRes.push_back(expr); }
+    void                   ResetExprRes             ()                                              { fInExprRes.resize(0);       }
+    void                   AddTreeWeight            ( TTree *tree, TString cut );
+    void                   AddTreeExprRes           ( TTree *tree, TString expr_res );
+    void                   AddWeightExprRes         ( TString cut, TString expr_res );
 
-    void        SetLegendLimits       ( Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4 );
+    void                   SetLegendLimits          ( Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4 );
 
-    void        SetLineWidth          ( Int_t width )                                 { fLineWidth = width;         }
-    void        SetParameterLimits    ( Int_t param, Double_t low, Double_t high );
+    void                   SetLineWidth             ( Int_t width )                                 { fLineWidth = width;         }
+    void                   SetParameterLimits       ( Int_t param, Double_t low, Double_t high );
+
+    std::vector<TGraph*>   GetRatioToPoint          ( std::vector<TGraph*> InGraphs, Double_t RatioPoint );
+    std::vector<TGraph*>   GetRatioToLine           ( std::vector<TGraph*> InGraphs, TGraph *RatioGraph );
+
+    std::vector<TGraph*>   MakeFitGraphs            ( Int_t NumXBins, Double_t MinX, Double_t MaxX,
+                                                      Int_t NumYBins, Double_t MinY, Double_t MaxY,
+                                                      Int_t ParamNumber = 1 );
 
     // The defaults are set up for resolution, but response can be gotten too
-    TCanvas*    MakeCanvas            ( LegendContainer *theLegend,
-                                        TString XLabel, TString YLabel,
-                                        Int_t NumXBins, Double_t MinX, Double_t MaxX,
-                                        Int_t NumYBins, Double_t MinY, Double_t MaxY,
-                                        Int_t ParamNumber = 2, Double_t FinalMin = 0, Double_t FinalMax = 2,
-                                        Bool_t logY = false);
+    TCanvas*               MakeCanvas               ( LegendContainer *theLegendContainer,
+                                                      std::vector<TGraph*> theGraphs, TString XLabel, TString YLabel,
+                                                      Double_t YMin, Double_t YMax, Bool_t logY = false);
 
   private:
 
-    UInt_t                     fNumPlots;           // Number of  plots that will be overlayed on the canvas
     TString                    fCanvasName;         // The name of the output canvas
     TTree*                     fDefaultTree;        // Default Tree if needed
     TString                    fDefaultCut;         // Default cut if needed
