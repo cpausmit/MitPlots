@@ -22,7 +22,9 @@ PlotResolution::PlotResolution() :
   l2(0.7),
   l3(0.9),
   l4(0.9),
-  fLineWidth(2)
+  fLineWidth(2),
+  fDumpingFits(false),
+  fNumFitDumps(0)
 {
   fInTrees.resize(0);
   fInCuts.resize(0);
@@ -133,31 +135,14 @@ PlotResolution::SetParameterLimits(Int_t param, Double_t low, Double_t high){
 
 //--------------------------------------------------------------------
 std::vector<TGraph*>
-PlotResolution::GetRatioToPoint(std::vector<TGraph*> InGraphs, Double_t RatioPoint){
+PlotResolution::GetRatioToLines(std::vector<TGraph*> InGraphs, std::vector<TGraph*> RatioGraphs){
   TGraph *tempGraph;
   std::vector<TGraph*> outGraphs;
   for(UInt_t i0 = 0; i0 < InGraphs.size(); i0++){
     Double_t *GraphX = InGraphs[i0]->GetX();
     Double_t *GraphY = InGraphs[i0]->GetY();
-    tempGraph = new TGraph(InGraphs[i0]->GetN());
-    for(Int_t i1 = 0; i1 < InGraphs[i0]->GetN(); i1++){
-      tempGraph->SetPoint(i1,GraphX[i1],GraphY[i1]/RatioPoint);
-    }
-    outGraphs.push_back(tempGraph);
-  }
-  return outGraphs;
-}
-
-//--------------------------------------------------------------------
-std::vector<TGraph*>
-PlotResolution::GetRatioToLine(std::vector<TGraph*> InGraphs, TGraph *RatioGraph){
-  TGraph *tempGraph;
-  std::vector<TGraph*> outGraphs;
-  Int_t NumPoints = RatioGraph->GetN();
-  Double_t *RatioY = RatioGraph->GetY();
-  for(UInt_t i0 = 0; i0 < InGraphs.size(); i0++){
-    Double_t *GraphX = InGraphs[i0]->GetX();
-    Double_t *GraphY = InGraphs[i0]->GetY();
+    Int_t NumPoints = RatioGraphs[i0]->GetN();
+    Double_t *RatioY = RatioGraphs[i0]->GetY();
     tempGraph = new TGraph(NumPoints);
     for(Int_t i1 = 0; i1 < NumPoints; i1++){
       if(InGraphs[i0]->GetN() != NumPoints){
@@ -169,6 +154,24 @@ PlotResolution::GetRatioToLine(std::vector<TGraph*> InGraphs, TGraph *RatioGraph
     outGraphs.push_back(tempGraph);
   }
   return outGraphs;
+}
+
+//--------------------------------------------------------------------
+std::vector<TGraph*>
+PlotResolution::GetRatioToLine(std::vector<TGraph*> InGraphs, TGraph *RatioGraph){
+  std::vector<TGraph*> tempRatioGraphs;
+  for(UInt_t i0 = 0; i0 < InGraphs.size(); i0++) tempRatioGraphs.push_back(RatioGraph);
+  return GetRatioToLines(InGraphs,tempRatioGraphs);
+}
+
+//--------------------------------------------------------------------
+std::vector<TGraph*>
+PlotResolution::GetRatioToPoint(std::vector<TGraph*> InGraphs, Double_t RatioPoint){
+  Int_t NumPoints = InGraphs[0]->GetN();
+  Double_t *GraphX = InGraphs[0]->GetX();
+  TGraph *tempRatioGraph = new TGraph(NumPoints);
+  for(Int_t i0 = 0; i0 < NumPoints; i0++) tempRatioGraph->SetPoint(i0,GraphX[i0],RatioPoint);
+  return GetRatioToLine(InGraphs,tempRatioGraph);
 }
 
 //--------------------------------------------------------------------
@@ -225,8 +228,15 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
     tempGraph = new TGraph(NumXBins);
 
     for(Int_t i1 = 0; i1 < NumXBins; i1++){
+      TCanvas *tempCanvas = new TCanvas();
       fitFunc->SetParameters(1.,(MaxY + MinY)/2,(MaxY - MinY)/4);
       tempHist->ProjectionY(tempName+"_py",i1+1,i1+1)->Fit(fitFunc,"","",MinY,MaxY);
+      if(fDumpingFits){
+        TString dumpName;
+        dumpName.Form("DumpFit_%d",fNumFitDumps);
+        tempCanvas->SaveAs(dumpName+".png");
+        fNumFitDumps++;
+      }
       tempGraph->SetPoint(i1,tempHist->GetXaxis()->GetBinCenter(i1+1),fitFunc->GetParameter(ParamNumber));
     }
     theGraphs.push_back(tempGraph);
@@ -239,12 +249,14 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 TCanvas*
 PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
                            std::vector<TGraph*> theGraphs,
-                           TString XLabel, TString YLabel,
-                           Double_t YMin, Double_t YMax,Bool_t logY){
+                           TString CanvasTitle, TString XLabel, TString YLabel,
+                           Double_t YMin, Double_t YMax, Bool_t logY){
   UInt_t NumPlots = theGraphs.size();
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
+  theCanvas->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
   TLegend *theLegend = new TLegend(l1,l2,l3,l4);
   for(UInt_t i0 = 0; i0 < NumPlots; i0++){
+    theGraphs[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
     theGraphs[i0]->SetLineWidth(fLineWidth);
     theGraphs[i0]->SetLineColor(theLegendContainer->ReturnColor(i0));
     theLegend->AddEntry(theGraphs[i0],theLegendContainer->ReturnLegendEntry(i0),"l");

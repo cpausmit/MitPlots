@@ -44,6 +44,7 @@ void
 TreeContainer::AddFile(TString fileName){
 
   tempFile = TFile::Open(fileName);
+  if(fPrinting) std::cout << "File: " << tempFile << std::endl;
   if(tempFile != NULL)
     fFileList.push_back(tempFile);
 
