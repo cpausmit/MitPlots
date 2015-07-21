@@ -1,0 +1,6 @@
+<use   name="root"/>
+<use   name="roottmva"/>
+<use   root=""/>
+<export>
+  <lib   name="1"/>
+</export>
