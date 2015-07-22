@@ -2,7 +2,6 @@
 
 #ifndef MITPLOTS_CONTAINER_LINKDEF_H
 #define MITPLOTS_CONTAINER_LINKDEF_H
-#include "MitPlots/Container/interface/LegendContainer.h"
 #include "MitPlots/Container/interface/TreeContainer.h"
 #endif
 
@@ -14,6 +13,5 @@
 #pragma link C++ nestedtypedef;
 #pragma link C++ namespace mithep;
 
-#pragma link C++ class mithep::LegendContainer+;
 #pragma link C++ class mithep::TreeContainer+;
 #endif

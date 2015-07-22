@@ -13,22 +13,9 @@ ClassImp(mithep::PlotResolution)
 
 //--------------------------------------------------------------------
 PlotResolution::PlotResolution() :
-  fCanvasName("canvas"),
-  fDefaultTree(0),
-  fDefaultCut(""),
-  fDefaultExprRes(""),
-  fInExprX(""),
-  l1(0.6),
-  l2(0.7),
-  l3(0.9),
-  l4(0.9),
-  fLineWidth(2),
   fDumpingFits(false),
   fNumFitDumps(0)
 {
-  fInTrees.resize(0);
-  fInCuts.resize(0);
-  fInExprRes.resize(0);
   fParams.resize(0);
   fParamLows.resize(0);
   fParamHighs.resize(0);
@@ -37,92 +24,6 @@ PlotResolution::PlotResolution() :
 //--------------------------------------------------------------------
 PlotResolution::~PlotResolution()
 {}
-
-//--------------------------------------------------------------------
-void
-PlotResolution::AddLine(TTree *tree, TString cut, TString expr_res){
-  if(fDefaultTree != NULL){
-    std::cout << "Default tree already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultCut != ""){
-    std::cout << "Default cut already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultExprRes != ""){
-    std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  fInTrees.push_back(tree);
-  fInCuts.push_back(cut);
-  fInExprRes.push_back(expr_res);
-}
-
-//--------------------------------------------------------------------
-void
-PlotResolution::AddTreeWeight(TTree *tree, TString cut){
-  if(fDefaultTree != NULL){
-    std::cout << "Default tree already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultCut != ""){
-    std::cout << "Default cut already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultExprRes == ""){
-    std::cout << "Please set default resolution expression first!" << std::endl;
-    exit(1);
-  }
-  fInTrees.push_back(tree);
-  fInCuts.push_back(cut);
-}
-
-//--------------------------------------------------------------------
-void
-PlotResolution::AddTreeExprRes(TTree *tree, TString expr_res){
-  if(fDefaultTree != NULL){
-    std::cout << "Default tree already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultCut == ""){
-    std::cout << "Please set default cut first!" << std::endl;
-    exit(1);
-  }
-  if(fDefaultExprRes != ""){
-    std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  fInTrees.push_back(tree);
-  fInExprRes.push_back(expr_res);
-}
-
-//--------------------------------------------------------------------
-void
-PlotResolution::AddWeightExprRes(TString cut, TString expr_res){
-  if(fDefaultTree == NULL){
-    std::cout << "Please set default tree first!" << std::endl;
-    exit(1);
-  }
-  if(fDefaultCut != ""){
-    std::cout << "Default cut already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  if(fDefaultExprRes != ""){
-    std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
-    exit(1);
-  }
-  fInCuts.push_back(cut);
-  fInExprRes.push_back(expr_res);
-}
-
-//--------------------------------------------------------------------
-void
-PlotResolution::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4){
-  l1 = lim1;
-  l2 = lim2;
-  l3 = lim3;
-  l4 = lim4;
-}
 
 //--------------------------------------------------------------------
 void
@@ -188,7 +89,7 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
   }
   if(fInTrees.size() > 0) NumPlots = fInTrees.size();
   else if(fInCuts.size() > 0) NumPlots = fInCuts.size();
-  else NumPlots = fInExprRes.size();
+  else NumPlots = fInExprY.size();
   if(NumPlots == 0){
     std::cout << "Nothing has been initialized in resolution plot." << std::endl;
     exit(1);
@@ -196,7 +97,7 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 
   TTree *inTree = fDefaultTree;
   TString inCut = fDefaultCut;
-  TString inExpr = fDefaultExprRes;
+  TString inExpr = fDefaultExprY;
 
   TH2D *tempHist;
 
@@ -217,9 +118,9 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 
   for(UInt_t i0 = 0; i0 < NumPlots; i0++){
     std::cout << NumPlots - i0 << " more to go." << std::endl;
-    if(fInTrees.size()   != 0) inTree = fInTrees[i0];
-    if(fInCuts.size()    != 0) inCut  = fInCuts[i0];
-    if(fInExprRes.size() != 0) inExpr = fInExprRes[i0];
+    if(fInTrees.size() != 0) inTree = fInTrees[i0];
+    if(fInCuts.size()  != 0) inCut  = fInCuts[i0];
+    if(fInExprY.size() != 0) inExpr = fInExprY[i0];
 
     TString tempName;
     tempName.Form("Hist_%d",i0);
@@ -247,8 +148,7 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 
 //--------------------------------------------------------------------
 TCanvas*
-PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
-                           std::vector<TGraph*> theGraphs,
+PlotResolution::MakeCanvas(std::vector<TGraph*> theGraphs,
                            TString CanvasTitle, TString XLabel, TString YLabel,
                            Double_t YMin, Double_t YMax, Bool_t logY){
   UInt_t NumPlots = theGraphs.size();
@@ -258,8 +158,8 @@ PlotResolution::MakeCanvas(LegendContainer *theLegendContainer,
   for(UInt_t i0 = 0; i0 < NumPlots; i0++){
     theGraphs[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
     theGraphs[i0]->SetLineWidth(fLineWidth);
-    theGraphs[i0]->SetLineColor(theLegendContainer->ReturnColor(i0));
-    theLegend->AddEntry(theGraphs[i0],theLegendContainer->ReturnLegendEntry(i0),"l");
+    theGraphs[i0]->SetLineColor(fLineColors[i0]);
+    theLegend->AddEntry(theGraphs[i0],fLegendEntries[i0],"l");
   }
   theGraphs[0]->GetYaxis()->SetRangeUser(YMin,YMax);
   theGraphs[0]->Draw();
