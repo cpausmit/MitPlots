@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "TGraph.h"
 #include "TF1.h"
@@ -155,9 +154,13 @@ PlotResolution::MakeCanvas(std::vector<TGraph*> theGraphs,
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
   theCanvas->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
   TLegend *theLegend = new TLegend(l1,l2,l3,l4);
+  theLegend->SetBorderSize(fLegendBorderSize);
   for(UInt_t i0 = 0; i0 < NumPlots; i0++){
     theGraphs[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
-    theGraphs[i0]->SetLineWidth(fLineWidth);
+    if(fLineWidths.size() != NumPlots) theGraphs[i0]->SetLineWidth(fDefaultLineWidth);
+    else theGraphs[i0]->SetLineWidth(fLineWidths[i0]);
+    if(fLineStyles.size() != NumPlots) theGraphs[i0]->SetLineStyle(fDefaultLineStyle);
+    else theGraphs[i0]->SetLineStyle(fLineStyles[i0]);
     theGraphs[i0]->SetLineColor(fLineColors[i0]);
     theLegend->AddEntry(theGraphs[i0],fLegendEntries[i0],"l");
   }

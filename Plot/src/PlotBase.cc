@@ -13,7 +13,9 @@ ClassImp(mithep::PlotBase)
 //--------------------------------------------------------------------
 PlotBase::PlotBase() :
   fCanvasName("canvas"),
-  fLineWidth(2),
+  fDefaultLineWidth(2),
+  fDefaultLineStyle(1),
+  fIncludeErrorBars(false),
   fDefaultTree(0),
   fDefaultCut(""),
   fDefaultExprY(""),
@@ -21,13 +23,16 @@ PlotBase::PlotBase() :
   l1(0.6),
   l2(0.7),
   l3(0.9),
-  l4(0.9)
+  l4(0.9),
+  fLegendBorderSize(0)
 {
   fInTrees.resize(0);
   fInCuts.resize(0);
   fInExprY.resize(0);
   fLegendEntries.resize(0);
   fLineColors.resize(0);
+  fLineWidths.resize(0);
+  fLineStyles.resize(0);
 }
 
 //--------------------------------------------------------------------
@@ -130,4 +135,12 @@ void
 PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry ){
   fLegendEntries.push_back(LegendEntry);
   fLineColors.push_back(ColorEntry);
+}
+
+//--------------------------------------------------------------------
+void
+PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry, Int_t LineWidth, Int_t LineStyle){
+  AddLegendEntry(LegendEntry,ColorEntry);
+  fLineWidths.push_back(LineWidth);
+  fLineStyles.push_back(LineStyle);
 }
