@@ -1,4 +1,5 @@
 #include <iostream>
+#include "TStyle.h"
 #include "TLegend.h"
 
 #include "MitPlots/Plot/interface/PlotHists.h"
@@ -24,17 +25,12 @@ PlotHists::MakeHists(Int_t NumXBins, Double_t *XBins)
 {
   UInt_t NumPlots = 0;
 
-  if (fInExprX == "") {
-    std::cout << "You haven't initialized an x expression yet!" << std::endl;
-    exit(1);
-  }
-
   if (fInTrees.size() > 0)
     NumPlots = fInTrees.size();
   else if (fInCuts.size() > 0)
     NumPlots = fInCuts.size();
   else
-    NumPlots = fInExprY.size();
+    NumPlots = fInExpr.size();
 
   if(NumPlots == 0){
     std::cout << "Nothing has been initialized in hists plot." << std::endl;
@@ -43,7 +39,7 @@ PlotHists::MakeHists(Int_t NumXBins, Double_t *XBins)
 
   TTree *inTree = fDefaultTree;
   TString inCut = fDefaultCut;
-  TString inExpr = fDefaultExprY;
+  TString inExpr = fDefaultExpr;
 
   TH1D *tempHist;
   std::vector<TH1D*> theHists;
@@ -54,17 +50,29 @@ PlotHists::MakeHists(Int_t NumXBins, Double_t *XBins)
       inTree = fInTrees[i0];
     if (fInCuts.size()  != 0)
       inCut  = fInCuts[i0];
-    if (fInExprY.size() != 0)
-      inExpr = fInExprY[i0];
+    if (fInExpr.size() != 0)
+      inExpr = fInExpr[i0];
 
     TString tempName;
     tempName.Form("Hist_%d",i0);
     tempHist = new TH1D(tempName,tempName,NumXBins,XBins);
-    inTree->Draw(inExpr+":"+fInExprX+">>"+tempName,inCut);
+    inTree->Draw(inExpr+">>"+tempName,inCut);
 
     theHists.push_back(tempHist);
   }
   return theHists;
+}
+
+//--------------------------------------------------------------------
+std::vector<TH1D*>
+PlotHists::MakeHists(Int_t NumXBins, Double_t MinX, Double_t MaxX)
+{
+  Double_t binWidth = (MaxX - MinX)/NumXBins;
+  Double_t XBins[NumXBins+1];
+  for (Int_t i0 = 0; i0 < NumXBins + 1; i0++) {
+    XBins[i0] = MinX + i0 * binWidth;
+  }
+  return MakeHists(NumXBins,XBins);
 }
 
 //--------------------------------------------------------------------
@@ -73,6 +81,7 @@ PlotHists::MakeCanvas(std::vector<TH1D*> theHists,
                       TString CanvasTitle, TString XLabel, TString YLabel,
                       Bool_t logY)
 {
+  gStyle->SetOptStat(0);
   UInt_t NumPlots = theHists.size();
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
   theCanvas->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);

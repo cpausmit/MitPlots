@@ -25,8 +25,8 @@ namespace mithep
     void                   SetFilledHistColors      ( Bool_t b )        { fFilledHistColors = b; }
     void                   SetStackHists            ( Bool_t b )        { fStackHists = b;       }
 
-    std::vector<TH1D*>     MakeHists                ( Int_t NumXBins, Double_t *XBinsK);
-    /* std::vector<TH1D*>     MakeHists                ( Int_t NumXBins, Double_t MinX, Double_t MaxX); */
+    std::vector<TH1D*>     MakeHists                ( Int_t NumXBins, Double_t *XBins);
+    std::vector<TH1D*>     MakeHists                ( Int_t NumXBins, Double_t MinX, Double_t MaxX);
 
     // The defaults are set up for hists, but response can be gotten too
     TCanvas*               MakeCanvas               ( std::vector<TH1D*> theHists,

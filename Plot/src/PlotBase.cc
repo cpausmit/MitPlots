@@ -18,7 +18,7 @@ PlotBase::PlotBase() :
   fIncludeErrorBars(false),
   fDefaultTree(0),
   fDefaultCut(""),
-  fDefaultExprY(""),
+  fDefaultExpr(""),
   fInExprX(""),
   l1(0.6),
   l2(0.7),
@@ -28,7 +28,7 @@ PlotBase::PlotBase() :
 {
   fInTrees.resize(0);
   fInCuts.resize(0);
-  fInExprY.resize(0);
+  fInExpr.resize(0);
   fLegendEntries.resize(0);
   fLineColors.resize(0);
   fLineWidths.resize(0);
@@ -37,14 +37,7 @@ PlotBase::PlotBase() :
 
 //--------------------------------------------------------------------
 PlotBase::~PlotBase()
-{
-  if (fDefaultTree != NULL)
-    delete fDefaultTree;
-  for (UInt_t i0 = 0; i0 < fInTrees.size(); i0++) {
-    if (fInTrees[i0] != NULL) 
-      delete fInTrees[i0];
-  }
-}
+{}
 
 //--------------------------------------------------------------------
 void
@@ -58,13 +51,13 @@ PlotBase::AddLine(TTree *tree, TString cut, TString expr)
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if (fDefaultExprY != "") {
+  if (fDefaultExpr != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
   fInTrees.push_back(tree);
   fInCuts.push_back(cut);
-  fInExprY.push_back(expr);
+  fInExpr.push_back(expr);
 }
 
 //--------------------------------------------------------------------
@@ -79,7 +72,7 @@ PlotBase::AddTreeWeight(TTree *tree, TString cut)
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if (fDefaultExprY == "") {
+  if (fDefaultExpr == "") {
     std::cout << "Please set default resolution expression first!" << std::endl;
     exit(1);
   }
@@ -89,7 +82,7 @@ PlotBase::AddTreeWeight(TTree *tree, TString cut)
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddTreeExprY(TTree *tree, TString expr)
+PlotBase::AddTreeExpr(TTree *tree, TString expr)
 {
   if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
@@ -99,17 +92,17 @@ PlotBase::AddTreeExprY(TTree *tree, TString expr)
     std::cout << "Please set default cut first!" << std::endl;
     exit(1);
   }
-  if (fDefaultExprY != "") {
+  if (fDefaultExpr != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
   fInTrees.push_back(tree);
-  fInExprY.push_back(expr);
+  fInExpr.push_back(expr);
 }
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddWeightExprY(TString cut, TString expr)
+PlotBase::AddWeightExpr(TString cut, TString expr)
 {
   if (fDefaultTree == NULL) {
     std::cout << "Please set default tree first!" << std::endl;
@@ -119,12 +112,12 @@ PlotBase::AddWeightExprY(TString cut, TString expr)
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if (fDefaultExprY != "") {
+  if (fDefaultExpr != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
   fInCuts.push_back(cut);
-  fInExprY.push_back(expr);
+  fInExpr.push_back(expr);
 }
 
 //--------------------------------------------------------------------

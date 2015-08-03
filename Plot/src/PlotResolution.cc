@@ -107,7 +107,7 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
   else if (fInCuts.size() > 0)
     NumPlots = fInCuts.size();
   else
-    NumPlots = fInExprY.size();
+    NumPlots = fInExpr.size();
 
   if(NumPlots == 0){
     std::cout << "Nothing has been initialized in resolution plot." << std::endl;
@@ -116,7 +116,7 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 
   TTree *inTree = fDefaultTree;
   TString inCut = fDefaultCut;
-  TString inExpr = fDefaultExprY;
+  TString inExpr = fDefaultExpr;
 
   TH2D *tempHist;
 
@@ -141,8 +141,8 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
       inTree = fInTrees[i0];
     if (fInCuts.size()  != 0)
       inCut  = fInCuts[i0];
-    if (fInExprY.size() != 0)
-      inExpr = fInExprY[i0];
+    if (fInExpr.size() != 0)
+      inExpr = fInExpr[i0];
 
     TString tempName;
     tempName.Form("Hist_%d",i0);
