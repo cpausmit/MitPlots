@@ -72,7 +72,7 @@ TreeContainer::AddDirectory(TString directoryName,TString searchFor)
         fFileList.push_back(tempFile);
     }
   }
-  delete TSystemDirectory;
+  delete dir;
 }
 
 //--------------------------------------------------------------------
