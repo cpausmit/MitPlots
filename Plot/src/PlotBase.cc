@@ -38,24 +38,27 @@ PlotBase::PlotBase() :
 //--------------------------------------------------------------------
 PlotBase::~PlotBase()
 {
-  if(fDefaultTree != NULL) delete fDefaultTree;
-  for(UInt_t i0 = 0; i0 < fInTrees.size(); i0++){
-    if(fInTrees[i0] != NULL) delete fInTrees[i0];
+  if (fDefaultTree != NULL)
+    delete fDefaultTree;
+  for (UInt_t i0 = 0; i0 < fInTrees.size(); i0++) {
+    if (fInTrees[i0] != NULL) 
+      delete fInTrees[i0];
   }
 }
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddLine(TTree *tree, TString cut, TString expr){
-  if(fDefaultTree != NULL){
+PlotBase::AddLine(TTree *tree, TString cut, TString expr)
+{
+  if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultCut != ""){
+  if (fDefaultCut != "") {
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultExprY != ""){
+  if (fDefaultExprY != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
@@ -66,16 +69,17 @@ PlotBase::AddLine(TTree *tree, TString cut, TString expr){
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddTreeWeight(TTree *tree, TString cut){
-  if(fDefaultTree != NULL){
+PlotBase::AddTreeWeight(TTree *tree, TString cut)
+{
+  if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultCut != ""){
+  if (fDefaultCut != "") {
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultExprY == ""){
+  if (fDefaultExprY == "") {
     std::cout << "Please set default resolution expression first!" << std::endl;
     exit(1);
   }
@@ -85,16 +89,17 @@ PlotBase::AddTreeWeight(TTree *tree, TString cut){
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddTreeExprY(TTree *tree, TString expr){
-  if(fDefaultTree != NULL){
+PlotBase::AddTreeExprY(TTree *tree, TString expr)
+{
+  if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultCut == ""){
+  if (fDefaultCut == "") {
     std::cout << "Please set default cut first!" << std::endl;
     exit(1);
   }
-  if(fDefaultExprY != ""){
+  if (fDefaultExprY != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
@@ -104,16 +109,17 @@ PlotBase::AddTreeExprY(TTree *tree, TString expr){
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddWeightExprY(TString cut, TString expr){
-  if(fDefaultTree == NULL){
+PlotBase::AddWeightExprY(TString cut, TString expr)
+{
+  if (fDefaultTree == NULL) {
     std::cout << "Please set default tree first!" << std::endl;
     exit(1);
   }
-  if(fDefaultCut != ""){
+  if (fDefaultCut != "") {
     std::cout << "Default cut already set! Check configuration..." << std::endl;
     exit(1);
   }
-  if(fDefaultExprY != ""){
+  if (fDefaultExprY != "") {
     std::cout << "Default resolution expression already set! Check configuration..." << std::endl;
     exit(1);
   }
@@ -123,7 +129,8 @@ PlotBase::AddWeightExprY(TString cut, TString expr){
 
 //--------------------------------------------------------------------
 void
-PlotBase::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4){
+PlotBase::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Double_t lim4)
+{
   l1 = lim1;
   l2 = lim2;
   l3 = lim3;
@@ -132,14 +139,16 @@ PlotBase::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Double_t 
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry ){
+PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry )
+{
   fLegendEntries.push_back(LegendEntry);
   fLineColors.push_back(ColorEntry);
 }
 
 //--------------------------------------------------------------------
 void
-PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry, Int_t LineWidth, Int_t LineStyle){
+PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry, Int_t LineWidth, Int_t LineStyle)
+{
   AddLegendEntry(LegendEntry,ColorEntry);
   fLineWidths.push_back(LineWidth);
   fLineStyles.push_back(LineStyle);
