@@ -21,22 +21,22 @@ namespace mithep
     PlotResolution();
     virtual ~PlotResolution();
 
-    void                   SetParameterLimits       ( Int_t param, Double_t low, Double_t high );
+    void                   SetParameterLimits            ( Int_t param, Double_t low, Double_t high );
 
-    std::vector<TGraphErrors*>   GetRatioToPoint    ( std::vector<TGraphErrors*> InGraphs, Double_t RatioPoint, Double_t PointError = 0 );
-    std::vector<TGraphErrors*>   GetRatioToLine     ( std::vector<TGraphErrors*> InGraphs, TGraphErrors *RatioGraph );
-    std::vector<TGraphErrors*>   GetRatioToLines    ( std::vector<TGraphErrors*> InGraphs, std::vector<TGraphErrors*> RatioGraphs );
+    std::vector<TGraphErrors*>   GetRatioToPoint         ( std::vector<TGraphErrors*> InGraphs, Double_t RatioPoint, Double_t PointError = 0 );
+    std::vector<TGraphErrors*>   GetRatioToLine          ( std::vector<TGraphErrors*> InGraphs, TGraphErrors *RatioGraph );
+    std::vector<TGraphErrors*>   GetRatioToLines         ( std::vector<TGraphErrors*> InGraphs, std::vector<TGraphErrors*> RatioGraphs );
 
-    std::vector<TGraphErrors*>   MakeFitGraphs      ( Int_t NumXBins, Double_t MinX, Double_t MaxX,
-                                                      Int_t NumYBins, Double_t MinY, Double_t MaxY,
-                                                      Int_t ParamNumber = 1 );
+    std::vector<TGraphErrors*>   MakeFitGraphs           ( Int_t NumXBins, Double_t MinX, Double_t MaxX,
+                                                           Int_t NumYBins, Double_t MinY, Double_t MaxY,
+                                                           Int_t ParamNumber = 1 );
 
     // The defaults are set up for resolution, but response can be gotten too
-    TCanvas*               MakeCanvas               ( std::vector<TGraphErrors*> theGraphs,
-                                                      TString CanvasTitle, TString XLabel, TString YLabel,
-                                                      Double_t YMin, Double_t YMax, Bool_t logY = false);
+    TCanvas*                     MakeCanvas              ( std::vector<TGraphErrors*> theGraphs,
+                                                           TString CanvasTitle, TString XLabel, TString YLabel,
+                                                           Double_t YMin, Double_t YMax, Bool_t logY = false);
 
-    void                   SetDumpingFits           ( Bool_t dump )                                 { fDumpingFits = dump;        }
+    void                         SetDumpingFits           ( Bool_t dump )                                 { fDumpingFits = dump;        }
 
   private:
 

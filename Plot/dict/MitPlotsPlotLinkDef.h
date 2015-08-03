@@ -4,6 +4,7 @@
 #define MITPLOTS_PLOT_LINKDEF_H
 #include "MitPlots/Plot/interface/PlotTask.h"
 #include "MitPlots/Plot/interface/PlotBase.h"
+#include "MitPlots/Plot/interface/PlotHists.h"
 #include "MitPlots/Plot/interface/PlotResolution.h"
 #endif
 
@@ -17,5 +18,6 @@
 
 #pragma link C++ class mithep::PlotTask+;
 #pragma link C++ class mithep::PlotBase+;
+#pragma link C++ class mithep::PlotHists+;
 #pragma link C++ class mithep::PlotResolution+;
 #endif
