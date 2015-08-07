@@ -6,6 +6,7 @@
 #include "MitPlots/Plot/interface/PlotBase.h"
 #include "MitPlots/Plot/interface/PlotHists.h"
 #include "MitPlots/Plot/interface/PlotResolution.h"
+#include "MitPlots/Plot/interface/PlotROC.h"
 #endif
 
 #ifdef __CINT__
@@ -20,4 +21,5 @@
 #pragma link C++ class mithep::PlotBase+;
 #pragma link C++ class mithep::PlotHists+;
 #pragma link C++ class mithep::PlotResolution+;
+#pragma link C++ class mithep::PlotROC+;
 #endif

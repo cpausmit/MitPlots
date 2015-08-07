@@ -54,7 +54,8 @@ PlotHists::MakeHists(Int_t NumXBins, Double_t *XBins)
       inExpr = fInExpr[i0];
 
     TString tempName;
-    tempName.Form("Hist_%d",i0);
+    tempName.Form("Hist_%d",fPlotCounter);
+    fPlotCounter++;
     tempHist = new TH1D(tempName,tempName,NumXBins,XBins);
     inTree->Draw(inExpr+">>"+tempName,inCut);
 
@@ -69,9 +70,9 @@ PlotHists::MakeHists(Int_t NumXBins, Double_t MinX, Double_t MaxX)
 {
   Double_t binWidth = (MaxX - MinX)/NumXBins;
   Double_t XBins[NumXBins+1];
-  for (Int_t i0 = 0; i0 < NumXBins + 1; i0++) {
+  for (Int_t i0 = 0; i0 < NumXBins + 1; i0++)
     XBins[i0] = MinX + i0 * binWidth;
-  }
+
   return MakeHists(NumXBins,XBins);
 }
 
@@ -106,6 +107,16 @@ PlotHists::MakeCanvas(std::vector<TH1D*> theHists,
   float maxValue = 0.;
   UInt_t plotFirst = 0;
   for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
+    if (fLineWidths.size() != NumPlots)
+      theHists[i0]->SetLineWidth(fDefaultLineWidth);
+    else
+      theHists[i0]->SetLineWidth(fLineWidths[i0]);
+
+    if(fLineStyles.size() != NumPlots)
+      theHists[i0]->SetLineStyle(fDefaultLineStyle);
+    else
+      theHists[i0]->SetLineStyle(fLineStyles[i0]);
+
     if (theHists[i0]->GetMaximum() > maxValue) {
       maxValue = theHists[i0]->GetMaximum();
       plotFirst = i0;
@@ -121,4 +132,38 @@ PlotHists::MakeCanvas(std::vector<TH1D*> theHists,
     theCanvas->SetLogy();
 
   return theCanvas;
+}
+
+//--------------------------------------------------------------------
+void
+PlotHists::MakeCanvas(Int_t NumXBins, Double_t *XBins, TString FileBase,
+                      TString CanvasTitle, TString XLabel, TString YLabel,
+                      Bool_t logY)
+{
+  std::vector<TH1D*> hists = MakeHists(NumXBins,XBins);
+  TCanvas *theCanvas = MakeCanvas(hists,CanvasTitle,
+                                  XLabel,YLabel,logY);
+
+  theCanvas->SaveAs(FileBase+".C");
+  theCanvas->SaveAs(FileBase+".png");
+  theCanvas->SaveAs(FileBase+".pdf");
+
+  delete theCanvas;
+  for (UInt_t i0 = 0; i0 < hists.size(); i0++)
+    delete hists[i0];
+
+}
+
+//--------------------------------------------------------------------
+void
+PlotHists::MakeCanvas(Int_t NumXBins, Double_t MinX, Double_t MaxX, TString FileBase,
+                      TString CanvasTitle, TString XLabel, TString YLabel,
+                      Bool_t logY)
+{
+  Double_t binWidth = (MaxX - MinX)/NumXBins;
+  Double_t XBins[NumXBins+1];
+  for (Int_t i0 = 0; i0 < NumXBins + 1; i0++)
+    XBins[i0] = MinX + i0 * binWidth;
+
+  MakeCanvas(NumXBins,XBins,FileBase,CanvasTitle,XLabel,YLabel,logY);
 }

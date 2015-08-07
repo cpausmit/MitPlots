@@ -33,6 +33,14 @@ namespace mithep
                                                       TString CanvasTitle, TString XLabel, TString YLabel,
                                                       Bool_t logY = false);
 
+    void                   MakeCanvas               ( Int_t NumXBins, Double_t *XBins, TString FileBase,
+                                                      TString CanvasTitle, TString XLabel, TString YLabel,
+                                                      Bool_t logY = false);
+
+    void                   MakeCanvas               ( Int_t NumXBins, Double_t MinX, Double_t MaxX, TString FileBase,
+                                                      TString CanvasTitle, TString XLabel, TString YLabel,
+                                                      Bool_t logY = false);
+
   private:
 
     Bool_t    fNormalizedHists;

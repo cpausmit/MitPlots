@@ -12,6 +12,7 @@ ClassImp(mithep::PlotBase)
 
 //--------------------------------------------------------------------
 PlotBase::PlotBase() :
+  fPlotCounter(0),
   fCanvasName("canvas"),
   fDefaultLineWidth(2),
   fDefaultLineStyle(1),
@@ -136,13 +137,16 @@ PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry )
 {
   fLegendEntries.push_back(LegendEntry);
   fLineColors.push_back(ColorEntry);
+  fLineWidths.push_back(fDefaultLineWidth);
+  fLineStyles.push_back(fDefaultLineStyle);
 }
 
 //--------------------------------------------------------------------
 void
 PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry, Int_t LineWidth, Int_t LineStyle)
 {
-  AddLegendEntry(LegendEntry,ColorEntry);
+  fLegendEntries.push_back(LegendEntry);
+  fLineColors.push_back(ColorEntry);
   fLineWidths.push_back(LineWidth);
   fLineStyles.push_back(LineStyle);
 }

@@ -145,7 +145,8 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
       inExpr = fInExpr[i0];
 
     TString tempName;
-    tempName.Form("Hist_%d",i0);
+    tempName.Form("Hist_%d",fPlotCounter);
+    fPlotCounter++;
     tempHist = new TH2D(tempName,tempName,NumXBins,MinX,MaxX,NumYBins,MinY,MaxY);
     inTree->Draw(inExpr+":"+fInExprX+">>"+tempName,inCut);
     tempGraph = new TGraphErrors(NumXBins);

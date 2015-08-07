@@ -50,6 +50,8 @@ namespace mithep
 
   protected:
 
+    UInt_t                     fPlotCounter;
+
     TString                    fCanvasName;         // The name of the output canvas
     Int_t                      fDefaultLineWidth;
     Int_t                      fDefaultLineStyle;
