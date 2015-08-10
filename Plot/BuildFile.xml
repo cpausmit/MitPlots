@@ -1,5 +1,4 @@
 <use   name="MitCommon/MathTools"/>
-<use   name="MitPlots/Container"/>
 <use   name="MitPlots/Style"/>
 <use   name="MitPlots/Input"/>
 <use   name="rootgraphics"/>

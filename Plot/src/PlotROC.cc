@@ -32,6 +32,8 @@ PlotROC::makeROC(TString CutVar, TTree *sigTree, TTree *backTree,
     }
     TGraph *rocCurve    = new TGraph(numPoints,XVals,YVals);
     TGraph *revRocCurve = new TGraph(numPoints,RevXVals,RevYVals);
+    delete theHists[0];
+    delete theHists[1];
     if (revRocCurve->Integral() > rocCurve->Integral()) {
       delete rocCurve;
       return revRocCurve;
@@ -54,11 +56,14 @@ PlotROC::makeROC(TString CutVar, TTree *sigTree, TTree *backTree,
       Double_t revSigArea  = theHists[0]->Integral(numBins - i0, 0);
       Double_t backArea    = theHists[1]->Integral(i0, numBins + 1);
       Double_t revBackArea = theHists[1]->Integral(numBins - i0, 0);
-      YVals[i0]    = sigArea/sqrt(sigArea + backArea);
-      RevYVals[i0] = revSigArea/sqrt(revSigArea + revBackArea);
+      YVals[i0]    = ((sigArea > 0) ? sigArea/sqrt(sigArea + backArea): 0);
+      RevYVals[i0] = ((revSigArea > 0) ? revSigArea/sqrt(revSigArea + revBackArea) : 0);
     }
+
     TGraph *sigCurve = new TGraph(numPoints,XVals,YVals);
     TGraph *revSigCurve = new TGraph(numPoints,RevXVals,RevYVals);
+    delete theHists[0];
+    delete theHists[1];
     if (revSigCurve->GetMaximum() > sigCurve->GetMaximum()) {
       delete sigCurve;
       return revSigCurve;
@@ -74,31 +79,32 @@ PlotROC::makeROC(TString CutVar, TTree *sigTree, TTree *backTree,
 }
 
 //--------------------------------------------------------------------
-Double_t*
-PlotROC::GetOptimalCut(TString CutVar, TTree *sigTree, TTree *backTree, 
+void
+PlotROC::GetOptimalCut(Double_t &significance, Double_t &cutVal, 
+                       TString CutVar, TTree *sigTree, TTree *backTree, 
                        TString sigCut, TString backCut, Int_t numBins, Double_t *XBins)
 {
   TGraph *theGraph = makeROC(CutVar, sigTree, backTree, sigCut, backCut, numBins, XBins, kSignificance);
   Double_t *YEntries = theGraph->GetY();
   Double_t *XEntries = theGraph->GetX();
-  Double_t YMax = theGraph->GetMaximum();
+  Double_t YMax = 0;
   Double_t XMax = -100;
   for (Int_t i0 = 0; i0 < theGraph->GetN(); i0++) {
-    if (YEntries[i0] == YMax) {
+    if (YEntries[i0] > YMax) {
+      YMax = YEntries[i0];
       XMax = XEntries[i0];
       break;
     }
   }
   delete theGraph;
-  Double_t *returnInfo = new Double_t[2];
-  returnInfo[0] = YMax;
-  returnInfo[1] = XMax;
-  return returnInfo;
+  significance = YMax;
+  cutVal       = XMax;
 }
 
 //--------------------------------------------------------------------
-Double_t*
-PlotROC::GetOptimalCut(TString CutVar, TTree *sigTree, TTree *backTree, 
+void
+PlotROC::GetOptimalCut(Double_t &significance, Double_t &cutVal,
+                       TString CutVar, TTree *sigTree, TTree *backTree, 
                        TString sigCut, TString backCut, Int_t numBins, 
                        Double_t XMin, Double_t XMax)
 {
@@ -107,5 +113,5 @@ PlotROC::GetOptimalCut(TString CutVar, TTree *sigTree, TTree *backTree,
   for (Int_t i0 = 0; i0 < numBins + 1; i0++)
     XBins[i0] = XMin + i0 * binWidth;
 
-  return GetOptimalCut(CutVar,sigTree,backTree,sigCut,backCut,numBins,XBins);
+  GetOptimalCut(significance,cutVal,CutVar,sigTree,backTree,sigCut,backCut,numBins,XBins);
 }

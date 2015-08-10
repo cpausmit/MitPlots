@@ -20,10 +20,12 @@ namespace mithep
       kSignificance
     };
 
-    Double_t       *GetOptimalCut  ( TString CutVar, TTree *sigTree, TTree *backTree, 
+    void            GetOptimalCut  ( Double_t &significance, Double_t &cutVal,
+                                     TString CutVar, TTree *sigTree, TTree *backTree, 
                                      TString sigCut, TString backCut, Int_t NumBins, Double_t *XBins);
 
-    Double_t       *GetOptimalCut  ( TString CutVar, TTree *sigTree, TTree *backTree, 
+    void            GetOptimalCut  ( Double_t &significance, Double_t &cutVal,
+                                     TString CutVar, TTree *sigTree, TTree *backTree, 
                                      TString sigCut, TString backCut, Int_t NumBins,
                                      Double_t XMin, Double_t XMax );
 
