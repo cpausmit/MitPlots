@@ -185,17 +185,8 @@ PlotResolution::MakeCanvas(std::vector<TGraphErrors*> theGraphs,
   theLegend->SetBorderSize(fLegendBorderSize);
   for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
     theGraphs[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
-
-    if (fLineWidths.size() != NumPlots)
-      theGraphs[i0]->SetLineWidth(fDefaultLineWidth);
-    else
-      theGraphs[i0]->SetLineWidth(fLineWidths[i0]);
-
-    if(fLineStyles.size() != NumPlots)
-      theGraphs[i0]->SetLineStyle(fDefaultLineStyle);
-    else
-      theGraphs[i0]->SetLineStyle(fLineStyles[i0]);
-
+    theGraphs[i0]->SetLineWidth(fLineWidths[i0]);
+    theGraphs[i0]->SetLineStyle(fLineStyles[i0]);
     theGraphs[i0]->SetLineColor(fLineColors[i0]);
     theLegend->AddEntry(theGraphs[i0],fLegendEntries[i0],"l");
   }
