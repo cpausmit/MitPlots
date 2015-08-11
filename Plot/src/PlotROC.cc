@@ -92,16 +92,21 @@ PlotROC::MakeCanvas(Int_t NumBins, Bool_t logY, TString CanvasTitle,
 
   for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
     theGraphs[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
-    theGraphs[i0]->SetLineWidth(fLineWidths[i0]);
-    theGraphs[i0]->SetLineStyle(fLineStyles[i0]);
-    theGraphs[i0]->SetLineColor(fLineColors[i0]);
-    theLegend->AddEntry(theGraphs[i0],fLegendEntries[i0],"l");
+    if (fLegendEntries.size() == NumPlots) {
+      theGraphs[i0]->SetLineWidth(fLineWidths[i0]);
+      theGraphs[i0]->SetLineStyle(fLineStyles[i0]);
+      theGraphs[i0]->SetLineColor(fLineColors[i0]);
+      theLegend->AddEntry(theGraphs[i0],fLegendEntries[i0],"l");
+    }
   }
 
+  theGraphs[0]->Draw();                     // This is for drawing the axes
   for (UInt_t i0 = 1; i0 < NumPlots; i0++)
     theGraphs[i0]->Draw("same");
 
-  theLegend->Draw();
+  if (fLegendEntries.size() == NumPlots)
+    theLegend->Draw();
+
   if (logY)
     theCanvas->SetLogy();
 
