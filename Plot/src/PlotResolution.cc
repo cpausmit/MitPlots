@@ -12,6 +12,7 @@ ClassImp(mithep::PlotResolution)
 
 //--------------------------------------------------------------------
 PlotResolution::PlotResolution() :
+  fInExprX(""),
   fDumpingFits(false),
   fNumFitDumps(0)
 {
@@ -175,7 +176,8 @@ PlotResolution::MakeFitGraphs(Int_t NumXBins, Double_t MinX, Double_t MaxX,
 TCanvas*
 PlotResolution::MakeCanvas(std::vector<TGraphErrors*> theGraphs,
                            TString CanvasTitle, TString XLabel, TString YLabel,
-                           Double_t YMin, Double_t YMax, Bool_t logY){
+                           Double_t YMin, Double_t YMax, Bool_t logY)
+{
   UInt_t NumPlots = theGraphs.size();
   TCanvas *theCanvas = new TCanvas(fCanvasName,fCanvasName);
   theCanvas->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
@@ -207,4 +209,19 @@ PlotResolution::MakeCanvas(std::vector<TGraphErrors*> theGraphs,
     theCanvas->SetLogy();
 
   return theCanvas;
+}
+
+//--------------------------------------------------------------------
+void
+PlotResolution::MakeCanvas(TString FileBase, std::vector<TGraphErrors*> theGraphs,
+                           TString CanvasTitle, TString XLabel, TString YLabel,
+                           Double_t YMin, Double_t YMax, Bool_t logY)
+{
+  TCanvas *theCanvas = MakeCanvas(theGraphs, CanvasTitle, XLabel, YLabel, YMin, YMax, logY);
+
+  theCanvas->SaveAs(FileBase+".C");
+  theCanvas->SaveAs(FileBase+".png");
+  theCanvas->SaveAs(FileBase+".pdf");
+
+  delete theCanvas;
 }

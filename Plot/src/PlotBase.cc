@@ -20,7 +20,6 @@ PlotBase::PlotBase() :
   fDefaultTree(0),
   fDefaultCut(""),
   fDefaultExpr(""),
-  fInExprX(""),
   l1(0.6),
   l2(0.7),
   l3(0.9),
@@ -44,6 +43,7 @@ PlotBase::~PlotBase()
 void
 PlotBase::AddLine(TTree *tree, TString cut, TString expr)
 {
+  // Check for defaults. If none, set the values for each line.
   if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
@@ -65,6 +65,7 @@ PlotBase::AddLine(TTree *tree, TString cut, TString expr)
 void
 PlotBase::AddTreeWeight(TTree *tree, TString cut)
 {
+  // Check for defaults. If none, set the values for each line.
   if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
@@ -85,6 +86,7 @@ PlotBase::AddTreeWeight(TTree *tree, TString cut)
 void
 PlotBase::AddTreeExpr(TTree *tree, TString expr)
 {
+  // Check for defaults. If none, set the values for each line.
   if (fDefaultTree != NULL) {
     std::cout << "Default tree already set! Check configuration..." << std::endl;
     exit(1);
@@ -105,6 +107,7 @@ PlotBase::AddTreeExpr(TTree *tree, TString expr)
 void
 PlotBase::AddWeightExpr(TString cut, TString expr)
 {
+  // Check for defaults. If none, set the values for each line.
   if (fDefaultTree == NULL) {
     std::cout << "Please set default tree first!" << std::endl;
     exit(1);
@@ -135,6 +138,7 @@ PlotBase::SetLegendLimits(Double_t lim1, Double_t lim2, Double_t lim3, Double_t 
 void
 PlotBase::AddLegendEntry(TString LegendEntry, Color_t ColorEntry )
 {
+  // Uses default line width and style.
   fLegendEntries.push_back(LegendEntry);
   fLineColors.push_back(ColorEntry);
   fLineWidths.push_back(fDefaultLineWidth);

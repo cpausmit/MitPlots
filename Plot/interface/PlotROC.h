@@ -15,25 +15,19 @@ namespace mithep
     PlotROC()            {};
     virtual ~PlotROC()   {};
 
-    enum ROCType {
-      kROC = 0,
-      kSignificance
-    };
+    void            SetSignalTree( TTree *tree )                             { fSignalTree = tree;           }
+    void            SetBackgroundTree( TTree *tree )                         { fBackgroundTree = tree;       }
 
-    void            GetOptimalCut  ( Double_t &significance, Double_t &cutVal,
-                                     TString CutVar, TTree *sigTree, TTree *backTree, 
+    TGraph         *makeROC        ( TString CutVar, TTree *sigTree, TTree *backTree, 
                                      TString sigCut, TString backCut, Int_t NumBins, Double_t *XBins);
-
-    void            GetOptimalCut  ( Double_t &significance, Double_t &cutVal,
-                                     TString CutVar, TTree *sigTree, TTree *backTree, 
-                                     TString sigCut, TString backCut, Int_t NumBins,
-                                     Double_t XMin, Double_t XMax );
 
   private:
 
-    TGraph         *makeROC        ( TString CutVar, TTree *sigTree, TTree *backTree, 
-                                     TString sigCut, TString backCut, Int_t NumBins, Double_t *XBins,
-                                     ROCType type = kROC );
+    TTree                    *fSignalTree;
+    TTree                    *fBackgroundTree;
+
+    TString                   fSignalCut;
+    TString                   fBackgroundCut;
 
     ClassDef(PlotROC, 1)
   };

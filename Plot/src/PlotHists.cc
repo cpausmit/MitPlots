@@ -10,9 +10,7 @@ ClassImp(mithep::PlotHists)
 
 //--------------------------------------------------------------------
 PlotHists::PlotHists() :
-  fNormalizedHists(kFALSE),
-  fFilledHistColors(kFALSE),
-  fStackHists(kFALSE)
+  fNormalizedHists(kFALSE)
 {}
 
 //--------------------------------------------------------------------
@@ -88,37 +86,22 @@ PlotHists::MakeCanvas(std::vector<TH1D*> theHists,
   theCanvas->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
   TLegend *theLegend = new TLegend(l1,l2,l3,l4);
   theLegend->SetBorderSize(fLegendBorderSize);
-  for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
-    theHists[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
-
-    if (fLineWidths.size() != NumPlots)
-      theHists[i0]->SetLineWidth(fDefaultLineWidth);
-    else
-      theHists[i0]->SetLineWidth(fLineWidths[i0]);
-
-    if(fLineStyles.size() != NumPlots)
-      theHists[i0]->SetLineStyle(fDefaultLineStyle);
-    else
-      theHists[i0]->SetLineStyle(fLineStyles[i0]);
-
-    theHists[i0]->SetLineColor(fLineColors[i0]);
-    theLegend->AddEntry(theHists[i0],fLegendEntries[i0],"l");
-  }
   float maxValue = 0.;
   UInt_t plotFirst = 0;
   for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
-    if (fLineWidths.size() != NumPlots)
-      theHists[i0]->SetLineWidth(fDefaultLineWidth);
-    else
-      theHists[i0]->SetLineWidth(fLineWidths[i0]);
+    theHists[i0]->SetLineWidth(fLineWidths[i0]);
+    theHists[i0]->SetLineStyle(fLineStyles[i0]);
+    theHists[i0]->SetLineColor(fLineColors[i0]);
+    theLegend->AddEntry(theHists[i0],fLegendEntries[i0],"l");
 
-    if(fLineStyles.size() != NumPlots)
-      theHists[i0]->SetLineStyle(fDefaultLineStyle);
+    Double_t checkMax = 0;
+    if (fNormalizedHists)
+      checkMax = theHists[i0]->GetMaximum()/theHists[i0]->Integral("width");
     else
-      theHists[i0]->SetLineStyle(fLineStyles[i0]);
-
-    if (theHists[i0]->GetMaximum() > maxValue) {
-      maxValue = theHists[i0]->GetMaximum();
+      checkMax = theHists[i0]->GetMaximum();
+      
+    if (checkMax > maxValue) {
+      maxValue = checkMax;
       plotFirst = i0;
     }
   }
