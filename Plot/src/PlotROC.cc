@@ -48,15 +48,15 @@ PlotROC::MakeROC(TString CutVar, Int_t NumBins)
     Double_t sigArea  = theHists[0]->Integral();
     Double_t backArea = theHists[1]->Integral();
     XVals[i0]    = theHists[0]->Integral(i0,numPoints)/sigArea;
-    RevXVals[i0] = theHists[0]->Integral(numPoints-i0,numPoints)/sigArea;
+    RevXVals[i0] = theHists[0]->Integral(0,numPoints-i0)/sigArea;
     YVals[i0]    = theHists[1]->Integral(i0,numPoints)/backArea;
-    RevYVals[i0] = theHists[1]->Integral(numPoints-i0,numPoints)/backArea;
+    RevYVals[i0] = theHists[1]->Integral(0,numPoints-i0)/backArea;
   }
   TGraph *rocCurve    = new TGraph(numPoints,XVals,YVals);
   TGraph *revRocCurve = new TGraph(numPoints,RevXVals,RevYVals);
   delete theHists[0];
   delete theHists[1];
-  if (revRocCurve->Integral() > rocCurve->Integral()) {
+  if (revRocCurve->Integral() < rocCurve->Integral()) {
     delete rocCurve;
     return revRocCurve;
   }

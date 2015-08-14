@@ -89,6 +89,7 @@ PlotHists::MakeCanvas(std::vector<TH1D*> theHists,
   float maxValue = 0.;
   UInt_t plotFirst = 0;
   for (UInt_t i0 = 0; i0 < NumPlots; i0++) {
+    theHists[i0]->SetTitle(CanvasTitle+";"+XLabel+";"+YLabel);
     theHists[i0]->SetLineWidth(fLineWidths[i0]);
     theHists[i0]->SetLineStyle(fLineStyles[i0]);
     theHists[i0]->SetLineColor(fLineColors[i0]);

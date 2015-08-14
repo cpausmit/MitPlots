@@ -21,7 +21,7 @@ plotter.AddLegendEntry("All",1)        # Order should match the variable input
 plotter.AddLegendEntry("No Mass",2)    #   (Legend Entry, Color, LineSize=2, LineStyle=1) effectively
 plotter.SetLegendLimits(0.15,0.85,0.5,0.6)
 
-plotter.MakeCanvas("testROC")  # outputs testROC.C, testROC.png, and testROC.pdf
+plotter.MakeCanvas("ROC1")  # outputs testROC.C, testROC.png, and testROC.pdf
 
 del plotter
 del SignalTree
