@@ -13,10 +13,9 @@
 #include <TLegend.h>
 #include <TText.h>
 
-#include "MitPlots/Style/interface/MitStyle.h"
+#include <MitRootStyle.C>
 
 using namespace std;
-using namespace mithep;
 
 void plot(long int xStart = 0, long int xEnd = 0,
 	  TString text = "", TString pngFileName = "failures.png");
@@ -69,8 +68,8 @@ void plotSmartCacheFailures()
 void plot(long int xStart, long int xEnd, TString text, TString pngFileName)
 {
   // Make sure we have the right styles
-  MitStyle::Init();
-  MitStyle::SetStyleWide();
+  MitRootStyle::Init();
+  MitRootStyle::SetStyleWide();
   gStyle->SetPadRightMargin(0.07); // to make sure the exponent is on the picture
 
   // will execute a shell command to get the data
@@ -198,7 +197,7 @@ void plotFrame(Double_t xMin, Double_t xMax, Double_t max)
 {
   // Make a good frame
   TH1D * h = new TH1D("tmp","Time Series of Failures",1,xMin,xMax);
-  MitStyle::InitHistWide(h,"","",kBlack);
+  MitRootStyle::InitHistWide(h,"","",kBlack);
   h->SetTitle("; Epoch Time [sec]; SmartCache Failures / 90 sec");
   h->SetMaximum(max*1.2);
   h->Draw("hist");

@@ -14,10 +14,9 @@
 #include <TLegend.h>
 #include <TText.h>
 
-#include "MitPlots/Style/interface/MitStyle.h"
+#include <MitRootStyle.C>
 
 using namespace std;
-using namespace mithep;
 
 std::vector<std::string> machines;
 
@@ -175,8 +174,8 @@ void plot(long int xStart, long int xStop, TString text, TString save)
   printf("\n");
 
   // Prepare histograms
-  MitStyle::Init();
-  MitStyle::SetStyleWide();
+  MitRootStyle::Init();
+  MitRootStyle::SetStyleWide();
   gStyle->SetPadRightMargin(0.07); // to make sure the exponent is on the picture
 
   TString hist1("hist1"), hist2("hist2");
@@ -184,10 +183,10 @@ void plot(long int xStart, long int xStop, TString text, TString save)
   hist2.Prepend(save.Data());
 
   TH1D* h1 = new TH1D(hist1.Data(),"Lag time between request and start",100,0,maxLag);
-  MitStyle::InitHistWide(h1,"","",kBlack);
+  MitRootStyle::InitHistWide(h1,"","",kBlack);
 
   TH1D* h2 = new TH1D(hist2.Data(),"Average download speed",100,0,maxRate);
-  MitStyle::InitHistWide(h2,"","",kBlack);
+  MitRootStyle::InitHistWide(h2,"","",kBlack);
 
   const Int_t n = Int_t(machines.size());
   Int_t i = 0;
@@ -198,7 +197,7 @@ void plot(long int xStart, long int xStop, TString text, TString save)
     TString machineName = TString(machines[i]);
     machineName.Prepend(save.Data());
     h[i] = new TH1D(machineName.Data(),"Average download speed",100,0,maxRate);
-    MitStyle::InitHistWide(h[i],"","",kBlack);
+    MitRootStyle::InitHistWide(h[i],"","",kBlack);
   }
 
   if (nLines < 1) {
