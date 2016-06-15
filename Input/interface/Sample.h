@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: Sample.h,v 1.2 2011/01/25 11:30:30 paus Exp $
-//
 // Sample
 //
 // This class implements Sample which defines all relevant properties of a data sample needed to

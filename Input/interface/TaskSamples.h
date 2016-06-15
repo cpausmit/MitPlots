@@ -1,6 +1,4 @@
 //--------------------------------------------------------------------------------------------------
-// $Id: TaskSamples.h,v 1.2 2011/01/25 14:24:52 fabstoec Exp $
-//
 // TaskSamples
 //
 // This class implements TaskSamples which fundamentally is a collection of samples used in a given
