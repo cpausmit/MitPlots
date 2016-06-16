@@ -556,8 +556,8 @@ void PlotTask::ScaleHistograms(const char* hist)
     if (*s->Legend() == TString(" "))
       tmp = "  ";
 
-    printf(" %s %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
-           tmp.Data(),s->Name()->Data(),s->SkimName()->Data(),
+    printf(" %s %-40s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
+           tmp.Data(),s->Name()->Data(),
 	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale);
 
     nTotRaw += nEvts;
@@ -653,8 +653,8 @@ void PlotTask::ScaleHistograms(const char* hist)
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
-	printf(" -> %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n",
-	       s->Name()->Data(),s->SkimName()->Data(),
+	printf(" -> %-40s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n",
+	       s->Name()->Data(),
 	       nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
 
 	nTotRaw += nEvts;
