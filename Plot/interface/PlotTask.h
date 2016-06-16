@@ -9,6 +9,7 @@
 #define MITPLOTS_PLOT_PLOTTASK_H
 
 #include <TH1D.h>
+#include <TCanvas.h>
 #include "MitPlots/Input/interface/TaskSamples.h"
 #include "MitPlots/Style/interface/HistStyles.h"
 
@@ -35,10 +36,11 @@ namespace mithep
     void                 SetHistMaximum   (double max)     { fHistMaximum = max; }
     void                 SetHistXMinimum  (double min)     { fHistXMinimum = min; }
     void                 SetHistXMaximum  (double max)     { fHistXMaximum = max; }
-    void                 SetPngFileName   (const char *n)  { fPngFileName = n; }
+    void                 SetPngFileName   (const char *n)  { fImageFileName = n; }
+    void                 SetImageFileName (const char *n)  { fImageFileName = n; }
     // Other plot parameters
     void                 SetHistStyles    (HistStyles *hS) { fHistStyles = hS; }
-    void                 SetAxisTitles    (const char* xtit, const char* ytit = "Number of Events");
+    void                 SetAxisTitles    (const char* xtit, const char* ytit = "Number of Events", const char* xunit = "");
     void                 SetLogy          (bool b)         { fLogy = b; }
     void                 SetXLegend       (double x)       { fXLegend = x; }
     void                 SetYLegend       (double y)       { fYLegend = y; }
@@ -56,6 +58,9 @@ namespace mithep
 					      const char* cuts, const char* samp); 
                                               // last argument to specify sample name for saving histograms to rootfile
                                               // if you don't want to save, put "" for this argument
+
+    // Make an additional image. Use name for the file name if specified. Otherwise use fImageFileName
+    void                 SavePlot(char const* name = 0);
 
   private:
     void                 CollectNormalized   (const char* hist);
@@ -91,17 +96,20 @@ namespace mithep
     double               fHistXMaximum; // histogram x-axis minimum to be displayed
     TString              fAxisTitleX;   // x axis title
     TString              fAxisTitleY;   // y axis title
+    TString              fAxisUnitX;    // x axis unit
     bool                 fLogy;         // use log scale on y axis?
     double               fXLegend;      // x position of upper left legend box
     double               fYLegend;      // y position of upper left legend box
     UInt_t               fNBins;        // number of bins for TTree-derived histograms
     TString              fDrawExp;      // draw expression for TTree::Draw
     TString              fSelExp;       // selection expression for TTree::Draw
-    TString              fPngFileName;  // name of the png file for the plos
+    TString              fImageFileName;// name of the image file for the plots
     std::vector<TH1D*>   fHists;        // list of scaled histograms
     std::vector<TH1D*>   fStackedHists; // list of scaled histograms
 
     std::vector<TH1D*>   fHistsToPlot;  // list histograms ready to plot
+
+    TCanvas             *fCanvas;       // canvas
 
     const TH1D          *fPuTarget;
     static const TH1D   *sPuWeights;
