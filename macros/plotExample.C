@@ -33,9 +33,9 @@ void plotExample(double lumi = 100.0)
   plotTask = new PlotTask(0,lumi);
   plotTask->SetHistRanges(0.0,400.,0.,0.);
   plotTask->SetAxisTitles("Softdrop Mass","Number of Events", "GeV");
-  plotTask->SetPngFileName("/home/yiiyama/public_html/cmsplots/softdropMass.png");
-  plotTask->Plot(Stacked,"SoftDropMassN_1","raw","no-cuts","");
-  plotTask->SavePlot("/home/yiiyama/public_html/cmsplots/softdropMass.pdf");
+  plotTask->SetImageFileName("softdropMass.png");
+  plotTask->Plot(Stacked,"SoftDropMassN_1");
+  plotTask->SavePlot("softdropMass.pdf");
 
   printf("\n  WARNING -- root window might not show the complete plot. Check png file first.\n\n");
 
