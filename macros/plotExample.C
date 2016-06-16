@@ -19,9 +19,9 @@ void plotExample(double lumi = 100.0)
   // Create the basic comparsion plot fullSim versus fastSim
 
   // set the folder containing the input ntuples properly
-  // here you can change the plot sources, these are the defaults
-  gSystem->Setenv("MIT_PROD_CFG","example");
-  gSystem->Setenv("MIT_ANA_HIST","/home/paus/tmp");
+  // here you can change the plot sources
+  // gSystem->Setenv("MIT_PROD_CFG","example");
+  // gSystem->Setenv("MIT_ANA_HIST","/home/paus/tmp");
 
   // setup graphics stuff before starting
   MitStyle::Init();
@@ -32,9 +32,10 @@ void plotExample(double lumi = 100.0)
   // softdrop mass
   plotTask = new PlotTask(0,lumi);
   plotTask->SetHistRanges(0.0,400.,0.,0.);
-  plotTask->SetAxisTitles("Softdrop Mass [GeV]","Number of Events");
-  plotTask->SetPngFileName("softdropMass.png");
-  plotTask->Plot(Stacked,"SoftDropMassN_1","raw","no-cuts","");
+  plotTask->SetAxisTitles("Softdrop Mass","Number of Events", "GeV");
+  plotTask->SetImageFileName("softdropMass.png");
+  plotTask->Plot(Stacked,"SoftDropMassN_1");
+  plotTask->SavePlot("softdropMass.pdf");
 
   printf("\n  WARNING -- root window might not show the complete plot. Check png file first.\n\n");
 

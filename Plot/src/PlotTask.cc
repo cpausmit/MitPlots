@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstring>
 #include <TROOT.h>
 #include <TSystem.h>
 #include <TMath.h>
@@ -38,11 +39,13 @@ PlotTask::PlotTask(TaskSamples *taskSamples, const double lumi) :
   fHistXMaximum(0),
   fAxisTitleX  (""),
   fAxisTitleY  ("Number of Events"),
+  fAxisUnitX   (""),
   fLogy        (false),
   fXLegend     (65.),
   fYLegend     (94.),
   fNBins       (100),
-  fPngFileName ("mitPlotTask.png"),
+  fImageFileName("mitPlotTask.png"),
+  fCanvas      (0),
   fPuTarget    (0)
 {
   // Constructor
@@ -69,14 +72,11 @@ PlotTask::~PlotTask()
 {
   // Destructor
 
-  if (fTask)
-    delete fTask;
-  if (fHistStyles)
-    delete fHistStyles;
-  if (fEmptyHist)
-    delete fEmptyHist;
-  if (fDataHist)
-    delete fDataHist;
+  delete fTask;
+  delete fHistStyles;
+  delete fEmptyHist;
+  delete fDataHist;
+  delete fCanvas;
 
   // I do not understand why when deleting the histograms I get a crash but I do, so I just clear
   // which will leave me all the histograms dangeling around
@@ -96,10 +96,11 @@ PlotTask::~PlotTask()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::SetAxisTitles(const char* xtit, const char* ytit)
+void PlotTask::SetAxisTitles(const char* xtit, const char* ytit/* = "Number of Events"*/, const char* xunit/* = ""*/)
 {
   fAxisTitleX = TString(xtit);
   fAxisTitleY = TString(ytit);
+  fAxisUnitX = TString(xunit);
 
   return;
 }
@@ -130,7 +131,12 @@ void PlotTask::DrawFrame()
 
   // draw the frame
   TH1D *hTmp = new TH1D("FRAME","FRAME",fNBins,fHistXMinimum,fHistXMaximum);
-  MitStyle::InitHist(hTmp,fAxisTitleX.Data(),fAxisTitleY.Data(),kBlack);
+
+  TString xtitle(fAxisTitleX);
+  if (fAxisUnitX.Length() != 0)
+    xtitle += " [" + fAxisUnitX + "]";
+
+  MitStyle::InitHist(hTmp,xtitle.Data(),fAxisTitleY.Data(),kBlack);
   if (fHistMinimum != 0)
     hTmp->SetMinimum(fHistMinimum);
   hTmp->SetMaximum(maximum*1.1);
@@ -158,8 +164,9 @@ void PlotTask::DrawHistograms()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts,
-		    const char* samp)
+void PlotTask::Plot(PlotType pType, const char* obj,
+                    const char* draw/* = ""*/, const char* cuts/* = ""*/,
+		    const char* samp/* = ""*/)
 {
   // Interface to producing all type of plots
 
@@ -183,8 +190,9 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
   }
 
   // use logarithmic scale?
-  TCanvas *canvas = new TCanvas;
-  canvas->SetLogy(fLogy);
+  delete fCanvas;
+  fCanvas = new TCanvas;
+  fCanvas->SetLogy(fLogy);
 
   // before collection histograms make sure to scale them histograms
   ScaleHistograms(obj);
@@ -213,11 +221,20 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
     SaveHistos(obj, samp, draw);
 
   // Store picture in png
-  canvas->SaveAs(fPngFileName.Data());
+  fCanvas->SaveAs(fImageFileName.Data());
+}
 
-  // leave canvas up for display - this is of course a memory leak
-  //if (canvas)
-  //  delete canvas;
+//--------------------------------------------------------------------------------------------------
+void PlotTask::SavePlot(char const* name/* = 0*/)
+{
+  if (!fCanvas)
+    return;
+
+  TString fileName(fImageFileName);
+  if (std::strlen(name) != 0)
+    fileName = name;
+
+  fCanvas->SaveAs(fileName);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -321,8 +338,13 @@ void PlotTask::PlotStack(const char* hist, bool rescale)
 
   // determine the width of one bin
   double binW = fEmptyHist->GetBinWidth(1);
-  char binWStr[7];
-  sprintf(binWStr," /%7.3f",binW);
+  TString binWStr(TString::Format(" /%7.3f", binW));
+  // trim trailing zeros
+  while (binWStr[binWStr.Length() - 1] == '0')
+    binWStr = binWStr(0, binWStr.Length() - 1);
+  // trim if the last character is '.'
+  if (binWStr[binWStr.Length() - 1] == '.')
+    binWStr = binWStr(0, binWStr.Length() - 1);
 
   // say what we are doing
   printf("\n ==== Plotting Stack -- %s ====\n",fTask->Name()->Data());
@@ -341,7 +363,15 @@ void PlotTask::PlotStack(const char* hist, bool rescale)
   else
     hFrame = fEmptyHist;
 
-  MitStyle::InitHist(hFrame,fAxisTitleX.Data(),(fAxisTitleY+TString(binWStr)).Data(),kBlack);
+  TString xtitle(fAxisTitleX);
+  if (fAxisUnitX.Length() != 0)
+    xtitle += " [" + fAxisUnitX + "]";
+
+  TString ytitle(fAxisTitleY + binWStr);
+  if (fAxisUnitX.Length() != 0)
+    ytitle += " " + fAxisUnitX;
+
+  MitStyle::InitHist(hFrame,xtitle.Data(),ytitle.Data(),kBlack);
   hFrame->GetXaxis()->SetNdivisions(505);
   if (fHistMinimum != 0)
     hFrame->SetMinimum(fHistMinimum);
@@ -370,7 +400,12 @@ void PlotTask::PlotStack(const char* hist, bool rescale)
   fHistStyles->ResetStyle();
   for (UInt_t i=fStackedHists.size(); i>0; i--) {
     s = fTask->GetSample(i);
-    MitStyle::InitHist(fStackedHists[i-1],fAxisTitleX.Data(),fAxisTitleY.Data());
+
+    TString xtitle(fAxisTitleX);
+    if (fAxisUnitX.Length() != 0)
+      xtitle += " [" + fAxisUnitX + "]";
+
+    MitStyle::InitHist(fStackedHists[i-1],xtitle.Data(),fAxisTitleY.Data());
     if (rescale)
       fStackedHists[i-1]->Scale(scale);
 
@@ -521,8 +556,8 @@ void PlotTask::ScaleHistograms(const char* hist)
     if (*s->Legend() == TString(" "))
       tmp = "  ";
 
-    printf(" %s %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
-           tmp.Data(),s->Name()->Data(),s->SkimName()->Data(),
+    printf(" %s %-40s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
+           tmp.Data(),s->Name()->Data(),
 	   nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),lumi,factor,scale);
 
     nTotRaw += nEvts;
@@ -618,8 +653,8 @@ void PlotTask::ScaleHistograms(const char* hist)
 	double nEvtsSel    = nEvtsSelRaw;
 	double nEvtsSelErr = TMath::Sqrt(nEvtsSelRaw);
 
-	printf(" -> %-40s %-6s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n",
-	       s->Name()->Data(),s->SkimName()->Data(),
+	printf(" -> %-40s - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n",
+	       s->Name()->Data(),
 	       nEvts,nEvtsSel,nEvtsSelErr,*s->Xsec(),fTargetLumi,1.0);
 
 	nTotRaw += nEvts;

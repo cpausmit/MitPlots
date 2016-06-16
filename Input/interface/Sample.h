@@ -18,12 +18,11 @@ namespace mithep
   {
   public:
     Sample() {}
-    Sample(const char* name,  const char* skimName, const char* file, const char* dir,
+    Sample(const char* name,  const char* file, const char* dir,
 	   const double xsec, const double scale);
     virtual ~Sample() {}
     
     const TString           *Name()                           const { return &fName; }
-    const TString           *SkimName()                       const { return &fSkimName; }
     const TString           *Legend()                         const { return &fLegend; }
     const TString           *File()                           const { return &fFile; }
     const TString           *Dir()                            const { return &fDir; }
@@ -36,7 +35,6 @@ namespace mithep
 
   private:
     TString                  fName;     // name of the sample
-    TString                  fSkimName; // name of the skim
     TString                  fLegend;   // legend used for this sample
     TString                  fFile;     // file name of the histograms etc.
     TString                  fDir;      // directory with sample file

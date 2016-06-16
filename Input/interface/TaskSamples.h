@@ -36,9 +36,8 @@ namespace mithep
     void                    ReadFile     (const char* dir);
 
   private:
-    Sample                 *AddDataSample(const char* name, const char* skimName, const char* file);
-    Sample                 *AddSample    (const char* name, const char* skimName, const char* file,
-                                          double xsec, double scale);
+    Sample                 *AddDataSample(const char* name, const char* file);
+    Sample                 *AddSample    (const char* name, const char* file, double xsec, double scale);
 
     TString                 fName;         // location of production
     TString                 fNameTxt;      // location of configuration (usually same as prod.)

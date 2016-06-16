@@ -62,12 +62,11 @@ const Sample *TaskSamples::GetDataSample(UInt_t iSample) const
 }
 
 //--------------------------------------------------------------------------------------------------
-Sample *TaskSamples::AddSample(const char* name,const char* skimName, const char* file,
-			       double xsec, double scale)
+Sample *TaskSamples::AddSample(const char* name, const char* file, double xsec, double scale)
 {
   // Adding another sample (vector takes care of memory management)
 
-  Sample* tmpSample = new Sample(name,skimName,file,fDir,xsec,scale);
+  Sample* tmpSample = new Sample(name,file,fDir,xsec,scale);
   fMcSamples.push_back(*tmpSample);
   fNMcSamples++;
   // cleanup after yourself
@@ -77,11 +76,11 @@ Sample *TaskSamples::AddSample(const char* name,const char* skimName, const char
 }
 
 //--------------------------------------------------------------------------------------------------
-Sample *TaskSamples::AddDataSample(const char* name, const char* skimName, const char* file)
+Sample *TaskSamples::AddDataSample(const char* name, const char* file)
 {
   // Adding another the data sample (existing definition is overwritten)
 
-  Sample* tmpSample = new Sample(name,skimName,file,fDir,-1.0,1.0);
+  Sample* tmpSample = new Sample(name,file,fDir,-1.0,1.0);
   fDataSamples.push_back(*tmpSample);
   fNDataSamples++;
   // cleanup after yourself
@@ -95,8 +94,8 @@ void TaskSamples::ReadFile(const char* dir)
 {
   // Reading the full task setup from a single file
 
-  char    vers[1024], dset[1024], skim[1024], legend[1024], json[1024];
-  float   xsec,scale,overlap;
+  char    vers[1024], dset[1024], legend[1024], json[1024];
+  float xsec,scale;
 
   Long64_t size;
   Long_t   id, flags, modtime;
@@ -115,25 +114,24 @@ void TaskSamples::ReadFile(const char* dir)
   FILE *f = gSystem->OpenPipe((TString("cat ")+txtFile+TString("| grep -v ^#")).Data(),"r");
   MDB(kGeneral,1) {
     printf("           Cross Section [pb]  Dataset name                              ");
-    printf("Legend               Skim?  \n");
+    printf("Legend               \n");
     printf(" ------------------------------------------------------------------------");
     printf("----------------------------\n");
   }
-  while (fscanf(f,"%s %s %s %s %f %f %f %s",vers,dset,skim,legend,&xsec,&scale,&overlap,json)
+  while (fscanf(f,"%s %s %s %f %f %s",vers,dset,legend,&xsec,&scale,json)
 	 != EOF) {
     // show what was read
     MDB(kGeneral,1)
-      printf(" adding: %3s %-40s %-40s %20.7f %7.3f %7.1f %-70s %-8s\n",
-	     vers,dset,legend,xsec,scale,overlap,json,skim);
+      printf(" adding: %3s %-40s %-40s %20.7f %7.3f %-70s\n",
+	     vers,dset,legend,xsec,scale,json);
     
-    TString histFile = fName + TString("_") + TString(dset) + TString("_")
-      +                        TString(skim) + TString(".root");
+    TString histFile = fName + "_" + dset + ".root";
 
     Sample *tmpSample = 0;
     if (xsec < 0)                                                        // found 'the data sample'
-      tmpSample = AddDataSample(dset,skim,histFile.Data());
+      tmpSample = AddDataSample(dset,histFile.Data());
     else                                                       // define the new Monte Carlo sample
-      tmpSample = AddSample(dset,skim,histFile.Data(), double(xsec), double(scale));
+      tmpSample = AddSample(dset,histFile.Data(), xsec, scale);
 
     // Convert '~' -> ' '
     TString tmpLegend = TString(legend);
