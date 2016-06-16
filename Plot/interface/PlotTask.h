@@ -54,8 +54,9 @@ namespace mithep
     
     
     // Overlay the contribution in a single histogram (no adding/stacking)
-    void                 Plot                (PlotType pType, const char* obj, const char* draw,
-					      const char* cuts, const char* samp); 
+    void                 Plot                (PlotType pType, const char* obj,
+                                              const char* draw = "", const char* cuts = "",
+                                              const char* samp = "");
                                               // last argument to specify sample name for saving histograms to rootfile
                                               // if you don't want to save, put "" for this argument
 

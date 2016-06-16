@@ -164,8 +164,9 @@ void PlotTask::DrawHistograms()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts,
-		    const char* samp)
+void PlotTask::Plot(PlotType pType, const char* obj,
+                    const char* draw/* = ""*/, const char* cuts/* = ""*/,
+		    const char* samp/* = ""*/)
 {
   // Interface to producing all type of plots
 
