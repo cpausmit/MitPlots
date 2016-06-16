@@ -1,5 +1,3 @@
-// $Id: TaskSamples.cc,v 1.2 2011/01/25 14:24:52 fabstoec Exp $
-
 #include <TSystem.h>
 #include "MitAna/DataUtil/interface/Debug.h"
 #include "MitPlots/Input/interface/TaskSamples.h"

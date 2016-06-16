@@ -20,6 +20,7 @@ ClassImp(mithep::PlotTask)
 using namespace std;
 using namespace mithep;
 
+TPad *transPad = 0;
 const TH1D *PlotTask::sPuWeights = 0;
 
 //--------------------------------------------------------------------------------------------------
@@ -48,6 +49,7 @@ PlotTask::PlotTask(TaskSamples *taskSamples, const double lumi) :
 
   // If the task samples samples not yet already defined, do it now
   if (!fTask) {
+
     // read all environment variables
     TString home     = Utils::GetEnv("HOME");
     TString mitMyAna = Utils::GetEnv("MIT_USER_DIR");
@@ -156,7 +158,8 @@ void PlotTask::DrawHistograms()
 }
 
 //--------------------------------------------------------------------------------------------------
-void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts, const char* samp)
+void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const char* cuts,
+		    const char* samp)
 {
   // Interface to producing all type of plots
 
@@ -188,7 +191,7 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
 
   // decide which histograms to make
   if      (pType == Stacked) {        // integrating the stackd contribution is for another day
-    DrawFrame();       // make a proper frame
+    DrawFrame();            // make a proper frame
     PlotStack(obj);
     OverlayStackFrame();    // overlay a frame to put the text and boxes on
   }
@@ -204,8 +207,12 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
     OverlayFrame();    // overlay a frame to put the text and boxes on
   }
 
+  // Save all sample histograms
   TString sample = samp;
-  if (sample.Sizeof()-1) SaveHistos(obj, samp, draw);
+  if (sample.Sizeof()-1)
+    SaveHistos(obj, samp, draw);
+
+  // Store picture in png
   canvas->SaveAs(fPngFileName.Data());
 
   // leave canvas up for display - this is of course a memory leak
@@ -217,6 +224,7 @@ void PlotTask::Plot(PlotType pType, const char* obj, const char* draw, const cha
 void PlotTask::CollectNormalized(const char* hist)
 {
   // Plot the histogram contribution by contribution each normalized to 1
+  const Sample *s = 0;
 
   // say what we are doing
   printf("\n ==== Plotting Normalized Contributions -- %s ====\n\n",fTask->Name()->Data());
@@ -229,7 +237,7 @@ void PlotTask::CollectNormalized(const char* hist)
   TH1D *hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
   Bool_t first  = kTRUE;
   for (UInt_t i=0; i<fHists.size(); i++) {
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     if (*s->Legend() != TString(" ")) {
       if (! first) {
 	fHistsToPlot.push_back(new TH1D(1/hTmp->Integral() * (*hTmp)));
@@ -255,6 +263,7 @@ void PlotTask::CollectNormalized(const char* hist)
 void PlotTask::CollectContributions(const char* hist)
 {
   // Collecting all contributing histograms as requested
+  const Sample *s = 0;
 
   // histograms what we are doing
   printf("\n ==== Plotting Contributions -- %s ====\n\n",fTask->Name()->Data());
@@ -268,7 +277,7 @@ void PlotTask::CollectContributions(const char* hist)
   // loop through samples and collect all histograms
   Bool_t first  = kTRUE;
   for (UInt_t i=0; i<fHists.size(); i++) {
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     // is this a histogram to plot?
     if (*s->Legend() != TString(" ")) {
       if (! first) {
@@ -295,6 +304,7 @@ void PlotTask::CollectContributions(const char* hist)
 void PlotTask::PlotStack(const char* hist, bool rescale)
 {
   // Show present list of defined samples
+  const Sample *s = 0;
 
   // scale the histograms
   FindStackHistMaximum();
@@ -359,7 +369,7 @@ void PlotTask::PlotStack(const char* hist, bool rescale)
   // loop through samples and draw all histograms
   fHistStyles->ResetStyle();
   for (UInt_t i=fStackedHists.size(); i>0; i--) {
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     MitStyle::InitHist(fStackedHists[i-1],fAxisTitleX.Data(),fAxisTitleY.Data());
     if (rescale)
       fStackedHists[i-1]->Scale(scale);
@@ -397,6 +407,10 @@ void PlotTask::ScaleHistograms(const char* hist)
   // Scale the histograms according to the cross section and the desired lumi and store them
   // for later use
 
+  const Sample *s = 0;
+  TDirectory *dirMcTmp = 0;
+  TDirectory *dirDataTmp = 0;
+
   if (fHists.size() > 0) {
     printf(" WARNING - scaled histograms already exist. EXIT.");
     return;
@@ -424,7 +438,7 @@ void PlotTask::ScaleHistograms(const char* hist)
   printf("=======================================================================================\n");
   double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
   for (UInt_t i=0; i<fTask->NSamples(); i++) {
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     // open file belonging to this sample
     TFile *fif = new TFile((*fTask->Dir()+slash+*s->File()).Data());
     // make sure the file exists
@@ -434,8 +448,8 @@ void PlotTask::ScaleHistograms(const char* hist)
       continue;
     }
     // read and determine general properties of this sample
-    TDirectory *dirTmp = (TDirectory*) gROOT->FindObject(dirFwk->Data());
-    if (dirTmp)
+    dirMcTmp = (TDirectory*) gROOT->FindObject(dirFwk->Data());
+    if (dirMcTmp)
       fif->cd(dirFwk->Data());
     TH1D *hAllEvts = (TH1D*) gROOT->FindObject(allEvts->Data());
     if (! hAllEvts) {
@@ -446,14 +460,13 @@ void PlotTask::ScaleHistograms(const char* hist)
     
     // set pileup weights -- adding pileup reweigthing
     if (fPuTarget) {
-      if (sPuWeights) {
+      if (sPuWeights)
         delete sPuWeights;
-      }
-      TH1D *pusource = (TH1D*)dirTmp->Get("hNPU")->Clone();
+      TH1D *pusource = (TH1D*) dirMcTmp->Get("hNPU")->Clone();
       pusource->Scale(1.0/pusource->GetSumOfWeights());
       sPuWeights = new TH1D( (*fPuTarget) / (*pusource) );
     }
-      
+  
     double nEvts   = hAllEvts->GetEntries();
     double lumi    = nEvts / *s->Xsec();
     double factor,scale = *s->Scale();
@@ -467,14 +480,13 @@ void PlotTask::ScaleHistograms(const char* hist)
     TDirectory *fid = 0;
     TString histname = hist;
     if (TString(hist).Contains("/")) {
-      TObjArray *substra = TString(hist).Tokenize("/");
-      fid = (TDirectory*)fif->FindObjectAny(((TObjString*)(substra->At(0)))->GetString());
-      histname = ((TObjString*)substra->At(1))->GetString();
-      delete substra;
+      TObjArray *f = TString(hist).Tokenize("/");
+      fid = (TDirectory*) fif->FindObjectAny(((TObjString*)(f->At(0)))->GetString());
+      histname = ((TObjString*) f->At(1))->GetString();
+      delete f;
     }
-    else {
+    else
       fid = fif;
-    }
    
     // First try to find the histogram explicitely (otherwise it is a variable of the tree)
     TH1D *h = dynamic_cast<TH1D*>(fid->FindObjectAny(histname));
@@ -547,7 +559,7 @@ void PlotTask::ScaleHistograms(const char* hist)
   nTot    = 0.0;
   nTot2   = 0.0;
   for (UInt_t i=0; i<fTask->NDataSamples(); i++) {
-    const Sample *s = fTask->GetDataSample(i);
+    s = fTask->GetDataSample(i);
     // open file belonging to the data sample
     TFile *fif = new TFile((*fTask->Dir()+slash+*s->File()).Data());
     // make sure the file exists
@@ -558,8 +570,8 @@ void PlotTask::ScaleHistograms(const char* hist)
     }
     else {
       // read and determine general properties of this sample
-      TDirectory *dirTmp = (TDirectory*) gROOT->FindObject(dirFwk->Data());
-      if (dirTmp)
+      dirDataTmp = (TDirectory*) gROOT->FindObject(dirFwk->Data());
+      if (dirDataTmp)
         fif->cd(dirFwk->Data());
       TH1D *hAllEvts = (TH1D*) gROOT->FindObject(allEvts->Data());
       if (! hAllEvts) {
@@ -573,14 +585,13 @@ void PlotTask::ScaleHistograms(const char* hist)
         TDirectory *fid = 0;
         TString histname = hist;
         if (TString(hist).Contains("/")) {
-          TObjArray *substra = TString(hist).Tokenize("/");
-          fid = (TDirectory*)fif->FindObjectAny(((TObjString*)(substra->At(0)))->GetString());
-          histname = ((TObjString*)substra->At(1))->GetString();
-          delete substra;
+          TObjArray *f = TString(hist).Tokenize("/");
+          fid = (TDirectory*) fif->FindObjectAny(((TObjString*)(f->At(0)))->GetString());
+          histname = ((TObjString*)f->At(1))->GetString();
+          delete f;
         }
-        else {
+        else
           fid = fif;
-        }
             
 	TH1D *h = dynamic_cast<TH1D*>(fid->FindObjectAny(histname));
         //histogram doesn't exist, try to find TTree instead
@@ -634,6 +645,7 @@ void PlotTask::ScaleHistograms(const char* hist)
 void PlotTask::FindHistMaximum()
 {
   // Find maximum of all histograms
+  const Sample *s = 0;
 
   // first check whether value was overwritten by hand
   if (fHistMaximum>0.)
@@ -644,7 +656,7 @@ void PlotTask::FindHistMaximum()
 
   Bool_t first  = kTRUE;
   for (UInt_t i=0; i<fHists.size(); i++) {
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     // is this a histogram to plot
     if (*s->Legend() != TString(" ")) {
       if (! first) {
@@ -715,9 +727,12 @@ void PlotTask::OverlayEmptyHist() const
 void PlotTask::OverlayFrame() const
 {
   // Overlay a linear frame from user coordinates (0-100,0-100)
+  const Sample *s = 0;
 
   // create new transparent pad for the text
-  TPad *transPad = new TPad("transPad","Transparent Pad",0,0,1,1);
+  if (transPad)
+    delete transPad;
+  transPad = new TPad("transPad","Transparent Pad",0,0,1,1);
   transPad->SetFillStyle(4000);
   transPad->Draw();
   transPad->cd();
@@ -751,7 +766,7 @@ void PlotTask::OverlayFrame() const
   int nLegends = 0;
   for (UInt_t i=0; i<fTask->NSamples(); i++) {
     // attach to the specific sample
-    const Sample *s = fTask->GetSample(i);
+    s = fTask->GetSample(i);
     if (*s->Legend() != TString(" "))
       nLegends++;
   }
@@ -768,7 +783,7 @@ void PlotTask::OverlayFrame() const
   for (UInt_t i=0; i<fTask->NSamples(); i++) {
   //for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
-    const Sample *s = fTask->GetSample(i); //!!!
+    s = fTask->GetSample(i); //!!!
     // calculate corners for the text
     double xText = xCorner+xIndent, yText = yCorner-float((iLeg+iDat)+0.5)*yDelLine;
     // say what goes where
@@ -805,7 +820,7 @@ void PlotTask::OverlayFrame() const
 
   // attach to the data sample
   if (fDataHist) {
-    const Sample *s = fTask->GetDataSample(0);
+    s = fTask->GetDataSample(0);
     // calculate corners for the text
     double xText = xCorner+xIndent, yText = yCorner-float(1-0.7)*yDelLine;
     // say what goes where
@@ -852,12 +867,14 @@ void PlotTask::OverlayFrame() const
 void PlotTask::OverlayStackFrame() const
 {
   // Overlay a linear frame from user coordinates (0-100,0-100)
+  const Sample *s = 0;
 
   // create new transparent pad for the text
-  TPad *transPad = new TPad("transPad","Transparent Pad",0,0,1,1);
+  transPad = new TPad("transPad","Transparent Pad",0,0,1,1);
   transPad->SetFillStyle(4000);
   transPad->Draw();
   transPad->cd();
+
   // find out the right normalization to define the new range (histogram: 0,0 -> 100,100)
   double xtot = 1./(1. - transPad->GetLeftMargin() - transPad->GetRightMargin());
   double ytot = 1./(1. - transPad->GetBottomMargin() - transPad->GetTopMargin());
@@ -888,7 +905,7 @@ void PlotTask::OverlayStackFrame() const
   int nLegends = 0;
   for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
-    const Sample *s = fTask->GetSample(i-1);
+    s = fTask->GetSample(i-1);
     if (*s->Legend() != TString(" "))
       nLegends++;
   }
@@ -904,7 +921,7 @@ void PlotTask::OverlayStackFrame() const
   // loop through the sampels
   for (UInt_t i=fTask->NSamples(); i>0; i--) {
     // attach to the specific sample
-    const Sample *s = fTask->GetSample(i-1);
+    s = fTask->GetSample(i-1);
     // calculate corners for the text
     double xText = xCorner+xIndent, yText = yCorner-float((iLeg+iDat)+0.5)*yDelLine;
     // say what goes where
@@ -941,7 +958,7 @@ void PlotTask::OverlayStackFrame() const
 
   // attach to the data sample
   if (fDataHist) {
-    const Sample *s = fTask->GetDataSample(0);
+    s = fTask->GetDataSample(0);
     // calculate corners for the text
     double xText = xCorner+xIndent, yText = yCorner-float(1-0.7)*yDelLine;
     // say what goes where
@@ -957,19 +974,23 @@ void PlotTask::OverlayStackFrame() const
       m->SetMarkerColor(hStyle->Color      ());
       m->SetMarkerSize (hStyle->MarkerSize ());
       m->SetMarkerStyle(hStyle->MarkerStyle());
-      m->Draw();
+      //m->Draw();
+      m->DrawMarker(xCorner+0.5*xIndent,yText);
+
       // draw text
       char l[1024];
-      sprintf(l,"%4.2f",fTargetLumi);
-      //TString pText = *s->Legend() + TString(" (#int L = ") + TString(l) + TString("/pb)");
-      TString pText = *s->Legend() + TString(" (") + TString(l) + TString("/pb)");
+      sprintf(l,"%.1f",fTargetLumi);
+      TString dText = *s->Legend() + TString(" (") + TString(l) + TString("/pb)");
       MDB(kGeneral,1)
-        printf(" Adding text \"%s\" at: (x,y) = (%6.2f,%6.2f)\n",pText.Data(),xText,yText);
+        printf(" Adding text \"%s\" at: (x,y) = (%6.2f,%6.2f)\n",dText.Data(),xText,yText);
       // set the proper text color
+      text->SetTextFont (42);
+      text->SetTextAlign(12);
+      text->SetTextSize (0.03);
       text->SetTextColor(hStyle->Color());
       // plot the text
       text->SetTextAlign(12);
-      text->DrawLatex(xText,yText,pText.Data());
+      text->DrawLatex(xText,yText,dText.Data());
     }
   }
 
@@ -978,6 +999,8 @@ void PlotTask::OverlayStackFrame() const
   box->SetLineColor(kBlack);
   box->DrawBox(0,0,100,100);
 
+  transPad->Update();
+  
   delete text;
   delete box;
 
@@ -991,72 +1014,35 @@ float PlotTask::PuWeight(Int_t npu)
     return 1.0;
   if (!sPuWeights)
     return 1.0;
-  
+
   return sPuWeights->GetBinContent(sPuWeights->FindFixBin(npu));
 }
-
-
-  // // loop through samples and collect all histograms
-  // hTmp = new TH1D("TMP","TMP",fNBins,fHistXMinimum,fHistXMaximum);
-  // first  = kTRUE;
-  // fHistStyles->ResetStyle();
-  // for (UInt_t i=0; i<fHists.size(); i++) {
-  //   const Sample *s = fTask->GetSample(i);
-  //   if (*s->Legend() != TString(" ")) {
-  //     if (! first) {
-  // 	TH1D *hTmpN = new TH1D(1/hTmp->Integral() * (*hTmp));
-  // 	hStyle = fHistStyles->CurrentStyle();
-  // 	hTmpN->SetLineColor(hStyle->Color());
-  // 	hTmpN->DrawCopy("same,hist");
-  // 	delete hTmpN;
-  // 	fHistStyles->NextStyle();
-  // 	
-  // 	hTmp->Reset();
-  //     }
-  //     first = kFALSE;
-  //   }
-  //   hTmp->Add(fHists[i]);
-  // }
-  // // do not forget to push the last one
-  // TH1D *hTmpN = new TH1D(1/hTmp->Integral() * (*hTmp));
-  // hStyle = fHistStyles->CurrentStyle();
-  // hTmpN->SetLineColor(hStyle->Color());
-  // hTmpN->DrawCopy("same,hist");
-  // delete hTmpN;
-  // fHistStyles->NextStyle();
-  // 
-  // if (hTmp)
-  //   delete hTmp;
 
 //--------------------------------------------------------------------------------------------------
 void PlotTask::SaveHistos(const char* obj, const char* out, const char* obs)
 {
+  // Open new rootfile
 
-  //Open new rootfile
-  TString outname = out;
-  TString obsname = obs;
-  TFile* tempout = new TFile(outname+"_"+obsname+".root", "RECREATE");
-  tempout->cd();
+  TString outName = out;
+  TString obsName = obs;
+  TFile *tmpOut = new TFile(outName+"_"+obsName+".root", "RECREATE");
+  tmpOut->cd();
 
-  //Write data histogram to rootfile
-  if (fTask->NDataSamples())
-    {
-      fDataHist->Write();
-      printf("Wrote data histogram \n");
-    }
+  // Write data histogram to rootfile
+  if (fTask->NDataSamples()) {
+    fDataHist->Write();
+    printf("Wrote data histogram \n");
+  }
   
-  //Read and write MC histograms
-  if (!fHistsToPlot.size()) CollectContributions(obj);
-  for (unsigned int i = 0; i < fHistsToPlot.size(); i++)
-    {
-      fHistsToPlot[i]->Write();
-      //printf("Wrote MC histo %i \n", i);
-    }
+  // Read and write MC histograms
+  if (!fHistsToPlot.size())
+    CollectContributions(obj);
+  for (unsigned int i = 0; i < fHistsToPlot.size(); i++) {
+    fHistsToPlot[i]->Write();
+    // printf("Wrote MC histo %i \n", i);
+  }
   printf("Wrote all MC histograms \n");
   
-  delete tempout;
+  delete tmpOut;
   return;
 }
-  
-
-
