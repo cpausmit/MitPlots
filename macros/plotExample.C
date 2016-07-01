@@ -37,6 +37,8 @@ void plotExample(double lumi = 100.0)
   plotTask->Plot(Stacked,"SoftDropMassN_1");
   plotTask->SavePlot("softdropMass.pdf");
 
+  plotTask->PlotRatio("SoftDropMassN_1");
+
   printf("\n  WARNING -- root window might not show the complete plot. Check png file first.\n\n");
 
   return;

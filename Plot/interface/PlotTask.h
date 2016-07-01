@@ -63,6 +63,11 @@ namespace mithep
     // Make an additional image. Use name for the file name if specified. Otherwise use fImageFileName
     void                 SavePlot(char const* name = 0);
 
+    // Overlay the contribution in a single histogram (no adding/stacking)
+    void                 PlotRatio           (const char* obj,
+                                              const char* draw = "", const char* cuts = "",
+                                              const char* samp = "");
+
   private:
     void                 CollectNormalized   (const char* hist);
     void                 CollectContributions(const char* hist);

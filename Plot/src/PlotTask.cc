@@ -466,11 +466,10 @@ void PlotTask::ScaleHistograms(const char* hist)
   // go through the Monte Carlo samples
   //------------------------------------------------------------------------------------------------
   // loop through samples and determine maximum
-  printf("\n Monte Carlo \n");
-  printf("    SampleName                                 Skim -        nEvents");
+  printf("\n    SampleName                               -        nEvents");
   printf("            nEventsSelected    Cross Section        luminosity      Factor      Scale\n");
   printf(" ===================================================================");
-  printf("=======================================================================================\n");
+  printf("================================================================================\n");
   double nTotRaw = 0.0, nTot = 0.0, nTot2 = 0.0;
   for (UInt_t i=0; i<fTask->NSamples(); i++) {
     s = fTask->GetSample(i);
@@ -580,16 +579,20 @@ void PlotTask::ScaleHistograms(const char* hist)
     }
   }
   // Monte Carlo summary
-  printf(" %-40s           - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f x %8.3f)\n",
-	 "== Monte Carlo Total ==",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0,1.0);
+  printf(" %-40s    - %14.0f %13.2f +- %9.2f\n",
+	 "== Monte Carlo Total ==",nTotRaw,nTot,TMath::Sqrt(nTot2));
 
 
   //------------------------------------------------------------------------------------------------
   // go through the data samples
   //------------------------------------------------------------------------------------------------
   // loop through data samples and add them up, straight away
-  if (fTask->NDataSamples() > 0)
-    printf("\n Data \n");
+  if (fTask->NDataSamples() > 0) {
+    printf("\n    SampleName                               -        nEvents    ");
+    printf("        nEventsSelected    Cross Section        luminosity      Factor\n");
+    printf(" ===================================================================");
+    printf("=====================================================================\n");
+  }
   nTotRaw = 0.0;
   nTot    = 0.0;
   nTot2   = 0.0;
@@ -670,8 +673,8 @@ void PlotTask::ScaleHistograms(const char* hist)
     }
   }
   // Data summary
-  printf(" %-40s           - %14.0f %13.2f +- %9.2f %16.5f: %16.4f (x %8.3f)\n\n",
-	 "== Data Total =========",nTotRaw,nTot,TMath::Sqrt(nTot2),0.0,0.0,1.0);
+  printf(" %-40s    - %14.0f %13.2f +- %9.2f\n\n",
+	 "== Data Total =========",nTotRaw,nTot,TMath::Sqrt(nTot2));
 
   return;
 }
@@ -1079,5 +1082,47 @@ void PlotTask::SaveHistos(const char* obj, const char* out, const char* obs)
   printf("Wrote all MC histograms \n");
   
   delete tmpOut;
+  return;
+}
+
+//--------------------------------------------------------------------------------------------------
+void PlotTask::PlotRatio(const char* obj,
+			 const char* draw/* = ""*/, const char* cuts/* = ""*/,
+			 const char* samp/* = ""*/)
+{
+  // Interface to producing all type of plots
+
+  // give overview of what we plot
+  printf(" PlotTask::PlotRatio -- Plotting\n\n");
+  printf("   source    : %s\n   variable  : %s\n   with cuts : %s\n\n",obj,draw,cuts);
+  printf("   MC samples: %d\n",fTask->NSamples());
+  printf("   data      : %d\n\n",fTask->NDataSamples());
+
+  // make sure there is something to do
+  if (fTask->NSamples() + fTask->NDataSamples() < 1) {
+    printf("    ERROR - no samples to plot. EXIT!\n\n");
+    return;
+  }
+
+  // use logarithmic scale?
+  delete fCanvas;
+  fCanvas = new TCanvas;
+  fCanvas->SetLogy(fLogy);
+
+  // before collection histograms make sure to scale them histograms
+  ScaleHistograms(obj);
+
+  // check for data
+  if (!fDataHist) {
+    printf("    ERROR - no data sample to calculate ratio. EXIT!\n\n");
+    return;
+  }
+
+  fStackedHists[fStackedHists.size()-1]->Draw("Hist");
+  if (fDataHist) {
+    fHistStyles->ApplyDataStyle(fDataHist);
+    fDataHist->Draw("same;E");
+  }
+
   return;
 }
